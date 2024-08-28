@@ -26,8 +26,8 @@
   },
   "packageManager": "bun@1.1.3",
   "workspaces": [
-    "apps/*",
-    "packages/*"
+    "./apps/*",
+    "./packages/*"
   ],
   "trustedDependencies": [
     "@swc/core",
