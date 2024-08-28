@@ -30,7 +30,9 @@
     "packages/*"
   ],
   "trustedDependencies": [
-    "core-js"
+    "@swc/core",
+    "core-js",
+    "esbuild"
   ],
   "resolutions": {
     "react": "18.3.1"
