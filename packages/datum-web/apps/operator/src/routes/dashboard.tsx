@@ -54,6 +54,17 @@ export const NavItems: (NavItem | Separator | NavHeading)[] = [
     ],
   },
   {
+    title: 'Marketing',
+    href: '/marketing',
+    icon: AtSign,
+    isChildren: true,
+    children: [
+      { title: 'Contacts', href: '/marketing/contacts' },
+      { title: 'Lists', href: '/marketing/lists' },
+      { title: 'Email Activity', href: '/marketing/email-activity' },
+    ],
+  },
+  {
     title: 'Documents',
     href: '/documents',
     icon: FileIcon,

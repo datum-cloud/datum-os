@@ -26,6 +26,7 @@ export const config = {
   session: {
     strategy: 'jwt',
   },
+  secret: process.env.AUTH_SECRET,
   providers: [
     GithubProvider({
       clientId: process.env.AUTH_GITHUB_ID,
@@ -87,7 +88,7 @@ export const config = {
       return true
     },
     jwt({ token, user, account, profile, trigger, session }) {
-      /* 
+      /*
       set tokens on user
       */
       if (typeof user !== 'undefined') {

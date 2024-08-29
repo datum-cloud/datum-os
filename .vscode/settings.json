@@ -1,0 +1,4 @@
+{
+  "prettier.configPath": "./packages/datum-web/.prettierrc.json",
+  "prettier.prettierPath": "./packages/datum-web/node_modules/prettier"
+}

@@ -71,7 +71,6 @@ const WorkspaceInviteForm = ({ inviteAdmins }: { inviteAdmins: boolean }) => {
   const [activeTagIndex, setActiveTagIndex] = useState<number | null>(null)
   const [currentValue, setCurrentValue] = useState('')
 
-
   const onSubmit: SubmitHandler<FormData> = async (data) => {
     const inviteInput: InputMaybe<
       Array<CreateInviteInput> | CreateInviteInput
@@ -178,18 +177,17 @@ const WorkspaceInviteForm = ({ inviteAdmins }: { inviteAdmins: boolean }) => {
                             .filter(([key]) => !key.includes('USER'))
                             .filter(([key]) => {
                               if (!inviteAdmins) {
-                                return !key.includes('ADMIN');
+                                return !key.includes('ADMIN')
                               }
 
-                              return true;
+                              return true
                             })
                             .map(([key, value], i) => (
                               <SelectItem key={i} value={value}>
                                 {key[0].toUpperCase() +
                                   key.slice(1).toLowerCase()}
                               </SelectItem>
-                            ))
-                          }
+                            ))}
                         </SelectContent>
                       </Select>
                     </FormControl>

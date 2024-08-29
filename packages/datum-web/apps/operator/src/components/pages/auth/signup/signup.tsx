@@ -179,11 +179,7 @@ export const SignupPage = () => {
           <>
             <div className={input()}>
               <Label htmlFor="password">Password</Label>
-              <PasswordInput
-                name="password"
-                placeholder="password"
-                required
-              />
+              <PasswordInput name="password" placeholder="password" required />
             </div>
             <PasswordInput
               name="confirmedPassword"

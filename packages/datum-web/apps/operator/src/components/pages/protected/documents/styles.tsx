@@ -1,19 +1,18 @@
-import {
-  StyleContext,
-  vanillaRenderers
-} from "@jsonforms/vanilla-renderers";
+import { StyleContext, vanillaRenderers } from '@jsonforms/vanilla-renderers'
 
 export const renderers = [
   ...vanillaRenderers,
   //register custom renderers
-];
+]
 
 // TODO (hannah): update the styling to match the branding
 export const styleContextValue: StyleContext = {
   styles: [
     {
       name: 'control',
-      classNames: ['relative bg-white rounded-lg flex-col  mx-auto my-auto py-2 px-5 w-full max-w-8xl'],
+      classNames: [
+        'relative bg-white rounded-lg flex-col  mx-auto my-auto py-2 px-5 w-full max-w-8xl',
+      ],
     },
     {
       name: 'control.trim',
@@ -21,7 +20,9 @@ export const styleContextValue: StyleContext = {
     },
     {
       name: 'control.input',
-      classNames: ["w-full rounded border border-gray-300 mx-auto focus:border-blackberry-500"],
+      classNames: [
+        'w-full rounded border border-gray-300 mx-auto focus:border-blackberry-500',
+      ],
     },
     {
       name: 'control.select',
@@ -84,16 +85,16 @@ export const styleContextValue: StyleContext = {
       classNames: ['children'],
     },
     {
-      name: "array.button",
-      classNames: ["mr-auto mt-2 w-full"]
+      name: 'array.button',
+      classNames: ['mr-auto mt-2 w-full'],
     },
     {
       name: 'group.layout',
       classNames: ['group-layout'],
     },
     {
-      name: "group.label",
-      classNames: ["text-2xl"],
+      name: 'group.label',
+      classNames: ['text-2xl'],
     },
     {
       name: 'horizontal.layout',
@@ -155,5 +156,5 @@ export const styleContextValue: StyleContext = {
       name: 'input.description',
       classNames: ['mx-auto'],
     },
-  ]
-};
+  ],
+}
