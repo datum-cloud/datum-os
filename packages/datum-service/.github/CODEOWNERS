@@ -1,2 +1,3 @@
-* @datum-cloud/blacksmiths
-* @datum-cloud/ui-overlords
+/*				@datum-cloud/blacksmiths
+/packages/datum-service/** 	@datum-cloud/blacksmiths
+/packages/datum-web/** 		@datum-cloud/ui-overlords
