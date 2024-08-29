@@ -1,52 +1,24 @@
 'use client'
 
-import {
-  GetOrganizationMembersQuery,
-  GetOrganizationMembersQueryVariables,
-  useGetOrganizationMembersQuery,
-} from '@repo/codegen/src/schema'
-import { useSession } from 'next-auth/react'
 import { useState, useEffect } from 'react'
 import { DataTable } from '@repo/ui/data-table'
 import { ColumnDef } from '@tanstack/react-table'
+import { Datum } from '@repo/types'
 
-type Contact = {
-  fullName: string
-  title: string
-  company: string
-  email: string
-  status: string // TODO: enum
-  address: string
-  phoneNumber: string
-  createdAt: Date // TODO: Check this...
+type ContactsTableProps = {
+  contacts: Datum.Contact[]
 }
 
-type Member = NonNullable<
-  NonNullable<GetOrganizationMembersQuery['organization']>['members']
->[number]
-
-export const ContactsTable = () => {
-  const { data: session } = useSession()
-  const [filteredContacts, setFilteredContacts] = useState<Contact[]>([])
-
-  const variables: GetOrganizationMembersQueryVariables = {
-    organizationId: session?.user.organization ?? '',
-  }
-
-  const [{ data, fetching, error }] = useGetOrganizationMembersQuery({
-    variables,
-    pause: !session,
-  })
+export const ContactsTable = ({ contacts }: ContactsTableProps) => {
+  const [filteredContacts, setFilteredContacts] = useState<Datum.Contact[]>(contacts)
 
   useEffect(() => {
-    if (data?.organization?.members) {
-      //   setFilteredContacts(data.organization.members)
+    if (contacts) {
+      setFilteredContacts(contacts)
     }
-  }, [data])
+  }, [contacts])
 
-  if (error || fetching) return null
-
-  const columns: ColumnDef<Contact>[] = [
+  const columns: ColumnDef<Datum.Contact>[] = [
     {
       accessorKey: 'email',
       header: 'Email',
