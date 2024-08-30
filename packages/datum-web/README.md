@@ -10,8 +10,10 @@ This monorepo is run on [Bun](https://bun.sh/) and built using [Turborepo](https
 
 - `docs`: susUI docs repo https://docs.sus-ui.datum.net/
 - `operator`: Datum Operator Portal https://console.datum.net/
-- `@repo/ui`: susUI component library shared by our other applications
 - `@repo/dally`: DAL library for sharing common patterns and functionality in our other apps
+- `@repo/constants`: Constants shared throughout the monorepo
+- `@repo/ui`: susUI component library shared by our other applications
+- `@repo/service-api`: Common API that can be used within NextJS applications, used to make `datum-service` actions accessible via the UI.
 - `@repo/types`: common types used throughout the monorepo
 - `@repo/eslint-config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
 - `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo

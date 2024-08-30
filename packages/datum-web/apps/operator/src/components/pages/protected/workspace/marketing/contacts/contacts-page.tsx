@@ -15,32 +15,41 @@ import {
   DropdownMenuTrigger,
 } from '@repo/ui/dropdown-menu'
 
-import { Datum } from "@repo/types";
+import { Datum } from '@repo/types'
 
 import { ContactsTable } from './contacts-table'
 import { Input } from '@repo/ui/input'
 import { useSession } from 'next-auth/react'
+import { useContactList } from '@repo/service-api/client'
 
 const ContactsPage: React.FC = () => {
   const [showSearch, setShowSearch] = useState(false)
   const [searchTerm, setSearchTerm] = useState('')
   const { data: session } = useSession()
-  const [filteredContacts, setFilteredContacts] = useState<Datum.Contact[]>([])
+  const organizationId =
+    session?.user.organization ?? ('' as Datum.OrganisationId)
+
+  const {
+    data: contacts = [],
+    error,
+    isLoading,
+  } = useContactList(organizationId)
+
+  const [filteredContacts, setFilteredContacts] =
+    useState<Datum.Contact[]>(contacts)
+  console.log('Contacts FILTERED', contacts)
   const { contactsSearchRow, contactsSearchField } = pageStyles()
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     const searchValue = e.target.value.toLowerCase()
     setSearchTerm(searchValue)
 
-    // if (data?.organization?.members) {
-    //   const filtered = data.organization.members.filter(
-    //     ({ user: { firstName, lastName } }) => {
-    //       const fullName = `${firstName?.toLowerCase() ?? ''} ${lastName?.toLowerCase() ?? ''}`
-    //       return fullName.includes(searchValue)
-    //     },
-    //   )
-    //   setFilteredContacts(filtered)
-    // }
+    if (contacts) {
+      // TODO: Filter contacts properly...
+      const filtered = contacts.filter((contact) => !!contact)
+
+      setFilteredContacts(filtered)
+    }
   }
 
   return (
@@ -48,15 +57,6 @@ const ContactsPage: React.FC = () => {
       <div className="flex items-stretch justify-between">
         <PageTitle title="Contacts" />
         <div className="flex justify-start items-stretch gap-[18px]">
-          {/* <div className={membersSearchRow()}>
-            <div className={membersSearchField()}>
-            <Input
-                placeholder="Search for user"
-                value={searchTerm}
-                onChange={handleSearch}
-            />
-            </div>
-        </div> */}
           <Button
             variant="outlineLight"
             onClick={() => setShowSearch(!showSearch)}
@@ -119,8 +119,7 @@ const ContactsPage: React.FC = () => {
           </div> */}
         </div>
       )}
-      {/* {!error && !fetching && <ContactsTable contacts={filteredContacts} />} */}
-      {<ContactsTable contacts={filteredContacts} />}
+      {!error && !isLoading && <ContactsTable contacts={contacts} />}
     </div>
   )
 }

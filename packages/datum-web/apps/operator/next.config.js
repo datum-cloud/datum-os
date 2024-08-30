@@ -3,9 +3,11 @@ module.exports = {
   reactStrictMode: true,
   transpilePackages: [
     '@repo/dally',
-    '@repo/ui',
-    '@repo/types',
     '@repo/codegen',
+    '@repo/constants',
+    '@repo/service-api',
+    '@repo/types',
+    '@repo/ui',
   ],
   experimental: {
     missingSuspenseWithCSRBailout: false,

@@ -1,0 +1,26 @@
+{
+  "private": true,
+  "name": "@repo/service-api",
+  "version": "0.1.0",
+  "sideEffects": false,
+  "exports": {
+    "./client": "./src/client/index.ts",
+    "./server": "./src/server/index.ts",
+    "./shared": "./src/shared/index.ts"
+  },
+  "scripts": {
+    "test:ci": "echo \"No tests\"",
+    "typecheck": "tsc"
+  },
+  "dependencies": {
+    "@repo/constants": "*",
+    "@repo/types": "*",
+    "camelcase-keys": "^9.1.3",
+    "@tanstack/react-query": "^5.29.2",
+    "next": "^14.2.3",
+    "react": "^18.2.0"
+  },
+  "devDependencies": {
+    "@repo/types": "*"
+  }
+}

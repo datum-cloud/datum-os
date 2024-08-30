@@ -7,6 +7,8 @@ export namespace Datum {
 
   export type Id = string
 
+  export type OrganisationId = Brand<Id, 'OrganisationId'>
+
   export type Json = Brand<string, 'Json'>
 
   export type Integer = number

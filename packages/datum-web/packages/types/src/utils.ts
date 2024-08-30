@@ -85,3 +85,7 @@ export type Mutable<T> = {
 export type ArrayKeys<T> = {
   [K in keyof T]: T[K] extends Array<any> ? K : never;
 }[keyof T];
+
+export type SnakeToCamelCase<S extends string> = S extends `${infer T}_${infer U}`
+  ? `${T}${Capitalize<SnakeToCamelCase<U>>}`
+  : S;
