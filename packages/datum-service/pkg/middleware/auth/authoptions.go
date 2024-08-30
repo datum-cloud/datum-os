@@ -7,10 +7,10 @@ import (
 	"github.com/datumforge/echox/middleware"
 	"github.com/lestrrat-go/jwx/v2/jwk"
 
-	ent "github.com/datumforge/datum/internal/ent/generated"
-	api "github.com/datumforge/datum/pkg/models"
-	"github.com/datumforge/datum/pkg/sessions"
-	"github.com/datumforge/datum/pkg/tokens"
+	ent "github.com/datum-cloud/datum-os/internal/ent/generated"
+	api "github.com/datum-cloud/datum-os/pkg/models"
+	"github.com/datum-cloud/datum-os/pkg/sessions"
+	"github.com/datum-cloud/datum-os/pkg/tokens"
 )
 
 // AuthOption allows users to optionally supply configuration to the Authorization middleware.

@@ -4,9 +4,9 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/datumforge/datum/pkg/httpsling"
-	"github.com/datumforge/datum/pkg/rout"
-	"github.com/datumforge/datum/pkg/sessions"
+	"github.com/datum-cloud/datum-os/pkg/httpsling"
+	"github.com/datum-cloud/datum-os/pkg/rout"
+	"github.com/datum-cloud/datum-os/pkg/sessions"
 )
 
 // Credentials provides a basic interface for loading credentials

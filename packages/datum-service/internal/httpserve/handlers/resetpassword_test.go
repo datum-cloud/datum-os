@@ -15,14 +15,14 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	ent "github.com/datumforge/datum/internal/ent/generated"
-	"github.com/datumforge/datum/internal/ent/generated/privacy"
-	_ "github.com/datumforge/datum/internal/ent/generated/runtime"
-	"github.com/datumforge/datum/internal/httpserve/handlers"
-	"github.com/datumforge/datum/pkg/middleware/echocontext"
-	"github.com/datumforge/datum/pkg/models"
-	"github.com/datumforge/datum/pkg/utils/emails"
-	"github.com/datumforge/datum/pkg/utils/emails/mock"
+	ent "github.com/datum-cloud/datum-os/internal/ent/generated"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/privacy"
+	_ "github.com/datum-cloud/datum-os/internal/ent/generated/runtime"
+	"github.com/datum-cloud/datum-os/internal/httpserve/handlers"
+	"github.com/datum-cloud/datum-os/pkg/middleware/echocontext"
+	"github.com/datum-cloud/datum-os/pkg/models"
+	"github.com/datum-cloud/datum-os/pkg/utils/emails"
+	"github.com/datum-cloud/datum-os/pkg/utils/emails/mock"
 )
 
 func (suite *HandlerTestSuite) TestResetPasswordHandler() {
@@ -33,7 +33,7 @@ func (suite *HandlerTestSuite) TestResetPasswordHandler() {
 
 	ec := echocontext.NewTestEchoContext().Request().Context()
 
-	var newPassword = "6z9Fqc-E-9v32NsJzLNU" //nolint:gosec
+	newPassword := "6z9Fqc-E-9v32NsJzLNU" //nolint:gosec
 
 	expiredTTL := time.Now().AddDate(0, 0, -1).Format(time.RFC3339Nano)
 

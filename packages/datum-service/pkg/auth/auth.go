@@ -8,7 +8,7 @@ import (
 
 	echo "github.com/datumforge/echox"
 
-	"github.com/datumforge/datum/pkg/sessions"
+	"github.com/datum-cloud/datum-os/pkg/sessions"
 )
 
 const (

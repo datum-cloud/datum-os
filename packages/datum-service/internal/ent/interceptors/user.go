@@ -9,14 +9,14 @@ import (
 
 	"github.com/datumforge/fgax"
 
-	"github.com/datumforge/datum/internal/ent/generated"
-	"github.com/datumforge/datum/internal/ent/generated/intercept"
-	"github.com/datumforge/datum/internal/ent/generated/organization"
-	"github.com/datumforge/datum/internal/ent/generated/orgmembership"
-	"github.com/datumforge/datum/internal/ent/generated/privacy"
-	"github.com/datumforge/datum/internal/ent/generated/user"
-	"github.com/datumforge/datum/pkg/auth"
-	sliceutil "github.com/datumforge/datum/pkg/utils/slice"
+	"github.com/datum-cloud/datum-os/internal/ent/generated"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/intercept"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/organization"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/orgmembership"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/privacy"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/user"
+	"github.com/datum-cloud/datum-os/pkg/auth"
+	sliceutil "github.com/datum-cloud/datum-os/pkg/utils/slice"
 )
 
 // TraverseUser returns an ent interceptor for user that filters users based on the context of the query

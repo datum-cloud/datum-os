@@ -5,12 +5,12 @@ package enttest
 import (
 	"context"
 
-	"github.com/datumforge/datum/internal/ent/generated"
+	"github.com/datum-cloud/datum-os/internal/ent/generated"
 	// required by schema hooks.
-	_ "github.com/datumforge/datum/internal/ent/generated/runtime"
+	_ "github.com/datum-cloud/datum-os/internal/ent/generated/runtime"
 
 	"entgo.io/ent/dialect/sql/schema"
-	"github.com/datumforge/datum/internal/ent/generated/migrate"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/migrate"
 )
 
 type (

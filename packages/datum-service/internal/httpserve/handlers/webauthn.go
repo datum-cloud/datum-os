@@ -8,13 +8,13 @@ import (
 	"github.com/go-webauthn/webauthn/protocol"
 	"github.com/go-webauthn/webauthn/webauthn"
 
-	"github.com/datumforge/datum/internal/ent/privacy/token"
-	"github.com/datumforge/datum/pkg/auth"
-	"github.com/datumforge/datum/pkg/enums"
-	"github.com/datumforge/datum/pkg/models"
-	provider "github.com/datumforge/datum/pkg/providers/webauthn"
-	"github.com/datumforge/datum/pkg/rout"
-	"github.com/datumforge/datum/pkg/sessions"
+	"github.com/datum-cloud/datum-os/internal/ent/privacy/token"
+	"github.com/datum-cloud/datum-os/pkg/auth"
+	"github.com/datum-cloud/datum-os/pkg/enums"
+	"github.com/datum-cloud/datum-os/pkg/models"
+	provider "github.com/datum-cloud/datum-os/pkg/providers/webauthn"
+	"github.com/datum-cloud/datum-os/pkg/rout"
+	"github.com/datum-cloud/datum-os/pkg/sessions"
 )
 
 const (

@@ -11,15 +11,15 @@ import (
 
 	"github.com/samber/lo"
 
-	ent "github.com/datumforge/datum/internal/ent/generated"
-	"github.com/datumforge/datum/internal/ent/privacy/token"
-	"github.com/datumforge/datum/pkg/enums"
-	"github.com/datumforge/datum/pkg/models"
-	"github.com/datumforge/datum/pkg/providers/github"
-	"github.com/datumforge/datum/pkg/providers/google"
-	oauth "github.com/datumforge/datum/pkg/providers/oauth2"
-	"github.com/datumforge/datum/pkg/providers/webauthn"
-	"github.com/datumforge/datum/pkg/sessions"
+	ent "github.com/datum-cloud/datum-os/internal/ent/generated"
+	"github.com/datum-cloud/datum-os/internal/ent/privacy/token"
+	"github.com/datum-cloud/datum-os/pkg/enums"
+	"github.com/datum-cloud/datum-os/pkg/models"
+	"github.com/datum-cloud/datum-os/pkg/providers/github"
+	"github.com/datum-cloud/datum-os/pkg/providers/google"
+	oauth "github.com/datum-cloud/datum-os/pkg/providers/oauth2"
+	"github.com/datum-cloud/datum-os/pkg/providers/webauthn"
+	"github.com/datum-cloud/datum-os/pkg/sessions"
 )
 
 // OauthProviderConfig represents the configuration for OAuth providers such as Github and Google
@@ -104,7 +104,6 @@ func (h *Handler) issueGoogleSession() http.Handler {
 		}
 
 		googleUser, err := google.UserFromContext(ctx)
-
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return

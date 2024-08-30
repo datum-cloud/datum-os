@@ -16,10 +16,10 @@ import (
 
 	"go.uber.org/zap"
 
-	migratedb "github.com/datumforge/datum/db"
-	ent "github.com/datumforge/datum/internal/ent/generated"
-	"github.com/datumforge/datum/internal/ent/interceptors"
-	"github.com/datumforge/datum/pkg/testutils"
+	migratedb "github.com/datum-cloud/datum-os/db"
+	ent "github.com/datum-cloud/datum-os/internal/ent/generated"
+	"github.com/datum-cloud/datum-os/internal/ent/interceptors"
+	"github.com/datum-cloud/datum-os/pkg/testutils"
 )
 
 const (

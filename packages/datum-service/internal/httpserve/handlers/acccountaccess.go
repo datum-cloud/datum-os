@@ -7,9 +7,9 @@ import (
 	"github.com/datumforge/fgax"
 	"github.com/getkin/kin-openapi/openapi3"
 
-	"github.com/datumforge/datum/pkg/auth"
-	"github.com/datumforge/datum/pkg/models"
-	"github.com/datumforge/datum/pkg/rout"
+	"github.com/datum-cloud/datum-os/pkg/auth"
+	"github.com/datum-cloud/datum-os/pkg/models"
+	"github.com/datum-cloud/datum-os/pkg/rout"
 )
 
 // AccountAccessHandler checks if a subject has access to an object

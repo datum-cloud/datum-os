@@ -10,8 +10,8 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/datumforge/datum/internal/ent/generated/entitlementplan"
-	"github.com/datumforge/datum/internal/ent/generated/organization"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/entitlementplan"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/organization"
 )
 
 // EntitlementPlan is the model entity for the EntitlementPlan schema.

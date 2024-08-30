@@ -9,11 +9,11 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	ent "github.com/datumforge/datum/internal/ent/generated"
-	"github.com/datumforge/datum/internal/ent/generated/privacy"
-	"github.com/datumforge/datum/pkg/datumclient"
-	"github.com/datumforge/datum/pkg/enums"
-	"github.com/datumforge/datum/pkg/utils/ulids"
+	ent "github.com/datum-cloud/datum-os/internal/ent/generated"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/privacy"
+	"github.com/datum-cloud/datum-os/pkg/datumclient"
+	"github.com/datum-cloud/datum-os/pkg/enums"
+	"github.com/datum-cloud/datum-os/pkg/utils/ulids"
 )
 
 func (suite *GraphTestSuite) TestQueryGroupMembers() {
@@ -525,5 +525,4 @@ func (suite *GraphTestSuite) TestMutationDeleteGroupMembers() {
 			assert.Equal(t, tc.idToDelete, resp.DeleteGroupMembership.DeletedID)
 		})
 	}
-
 }

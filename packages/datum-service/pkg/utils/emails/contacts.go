@@ -1,7 +1,7 @@
 package emails
 
 import (
-	sg "github.com/datumforge/datum/pkg/utils/sendgrid"
+	sg "github.com/datum-cloud/datum-os/pkg/utils/sendgrid"
 )
 
 // AddContact adds a contact to SendGrid, adding them to the Datum signup marketing list if

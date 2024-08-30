@@ -9,7 +9,7 @@ import (
 	"github.com/sendgrid/rest"
 	"github.com/sendgrid/sendgrid-go"
 
-	"github.com/datumforge/datum/pkg/rout"
+	"github.com/datum-cloud/datum-os/pkg/rout"
 )
 
 // constants for working with sendgrid; didn't make them configurable as these are dictated by the vendor and this is a vendor specific package

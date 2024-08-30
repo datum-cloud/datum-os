@@ -10,7 +10,7 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/datumforge/datum/internal/ent/generated/organizationhistory"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/organizationhistory"
 	"github.com/datumforge/enthistory"
 )
 

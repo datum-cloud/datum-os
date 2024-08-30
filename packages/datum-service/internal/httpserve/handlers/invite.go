@@ -11,14 +11,14 @@ import (
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/oklog/ulid/v2"
 
-	"github.com/datumforge/datum/internal/ent/generated"
-	"github.com/datumforge/datum/internal/ent/privacy/token"
-	"github.com/datumforge/datum/pkg/auth"
-	"github.com/datumforge/datum/pkg/enums"
-	"github.com/datumforge/datum/pkg/middleware/transaction"
-	"github.com/datumforge/datum/pkg/models"
-	"github.com/datumforge/datum/pkg/rout"
-	"github.com/datumforge/datum/pkg/tokens"
+	"github.com/datum-cloud/datum-os/internal/ent/generated"
+	"github.com/datum-cloud/datum-os/internal/ent/privacy/token"
+	"github.com/datum-cloud/datum-os/pkg/auth"
+	"github.com/datum-cloud/datum-os/pkg/enums"
+	"github.com/datum-cloud/datum-os/pkg/middleware/transaction"
+	"github.com/datum-cloud/datum-os/pkg/models"
+	"github.com/datum-cloud/datum-os/pkg/rout"
+	"github.com/datum-cloud/datum-os/pkg/tokens"
 )
 
 // Invite holds the Token, InviteToken references, and the additional user input to complete acceptance of the invitation

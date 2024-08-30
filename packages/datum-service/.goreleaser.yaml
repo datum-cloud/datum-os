@@ -11,7 +11,7 @@ builds:
       - "-X main.Commit={{ .Env.COMMIT }}"
       - "-X main.CommitDate={{ .Env.COMMIT_DATE }}"
       - "-X main.TreeState={{ .Env.TREE_STATE }}"
-      - "-X github.com/datumforge/datum/internal/constants.CLIVersion={{ .Env.VERSION }}"
+      - "-X github.com/datum-cloud/datum-os/internal/constants.CLIVersion={{ .Env.VERSION }}"
     goos:
       - linux
       - windows
@@ -37,7 +37,7 @@ archives:
       - goos: windows
         format: zip
 brews:
-  - homepage: 'https://github.com/datumforge/datum'
+  - homepage: 'https://github.com/datum-cloud/datum-os'
     description: 'datum is the client CLI for interacting with Datum Server'
     directory: Formula
     license: 'Apache-2.0'

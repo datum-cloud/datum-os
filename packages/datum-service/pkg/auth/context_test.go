@@ -6,10 +6,10 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/datumforge/datum/pkg/middleware/echocontext"
-	"github.com/datumforge/datum/pkg/utils/ulids"
+	"github.com/datum-cloud/datum-os/pkg/middleware/echocontext"
+	"github.com/datum-cloud/datum-os/pkg/utils/ulids"
 
-	"github.com/datumforge/datum/pkg/auth"
+	"github.com/datum-cloud/datum-os/pkg/auth"
 )
 
 func TestGetSubjectIDFromContext(t *testing.T) {

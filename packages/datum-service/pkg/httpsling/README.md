@@ -10,7 +10,7 @@ Creating a new HTTP client and making a request should be straightforward:
 package main
 
 import (
-    "github.com/datumforge/datum/pkg/httpsling"
+    "github.com/datum-cloud/datum-os/pkg/httpsling"
     "log"
 )
 

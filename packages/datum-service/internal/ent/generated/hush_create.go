@@ -10,10 +10,10 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/datumforge/datum/internal/ent/generated/event"
-	"github.com/datumforge/datum/internal/ent/generated/hush"
-	"github.com/datumforge/datum/internal/ent/generated/integration"
-	"github.com/datumforge/datum/internal/ent/generated/organization"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/event"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/hush"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/integration"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/organization"
 )
 
 // HushCreate is the builder for creating a Hush entity.

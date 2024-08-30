@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"sync"
 
-	"github.com/datumforge/datum/pkg/utils/ulids"
+	"github.com/datum-cloud/datum-os/pkg/utils/ulids"
 )
 
 // Config contains the configuration for the session store

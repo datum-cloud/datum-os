@@ -5,8 +5,8 @@ import (
 
 	echo "github.com/datumforge/echox"
 
-	"github.com/datumforge/datum/pkg/middleware/echocontext"
-	"github.com/datumforge/datum/pkg/utils/ulids"
+	"github.com/datum-cloud/datum-os/pkg/middleware/echocontext"
+	"github.com/datum-cloud/datum-os/pkg/utils/ulids"
 )
 
 type AuthenticationType string

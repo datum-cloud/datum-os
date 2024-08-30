@@ -13,7 +13,7 @@ import (
 	emixin "github.com/datumforge/entx/mixin"
 	"github.com/datumforge/fgax/entfga"
 
-	"github.com/datumforge/datum/internal/ent/mixin"
+	"github.com/datum-cloud/datum-os/internal/ent/mixin"
 )
 
 // Webhook holds the schema definition for the Webhook entity

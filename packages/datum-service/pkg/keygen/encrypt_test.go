@@ -3,7 +3,7 @@ package keygen_test
 import (
 	"testing"
 
-	"github.com/datumforge/datum/pkg/keygen"
+	"github.com/datum-cloud/datum-os/pkg/keygen"
 )
 
 func TestEncrypt(t *testing.T) {

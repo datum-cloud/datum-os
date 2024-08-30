@@ -9,7 +9,7 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/datumforge/datum/internal/ent/generated/hush"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/hush"
 )
 
 // Hush is the model entity for the Hush schema.

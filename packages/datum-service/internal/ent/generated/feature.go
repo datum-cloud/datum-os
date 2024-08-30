@@ -10,8 +10,8 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/datumforge/datum/internal/ent/generated/feature"
-	"github.com/datumforge/datum/internal/ent/generated/organization"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/feature"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/organization"
 )
 
 // Feature is the model entity for the Feature schema.

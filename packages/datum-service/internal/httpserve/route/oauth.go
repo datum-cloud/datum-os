@@ -5,7 +5,7 @@ import (
 
 	echo "github.com/datumforge/echox"
 
-	"github.com/datumforge/datum/pkg/httpsling"
+	"github.com/datum-cloud/datum-os/pkg/httpsling"
 )
 
 // registerOAuthRegisterHandler registers the oauth register handler used by the UI to register

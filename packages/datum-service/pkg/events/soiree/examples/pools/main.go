@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/datumforge/datum/pkg/events/soiree"
+	"github.com/datum-cloud/datum-os/pkg/events/soiree"
 )
 
 func main() {

@@ -3,7 +3,7 @@ package handlers
 import (
 	"github.com/getkin/kin-openapi/openapi3"
 
-	"github.com/datumforge/datum/pkg/httpsling"
+	"github.com/datum-cloud/datum-os/pkg/httpsling"
 )
 
 // badRequest is a wrapper for openaAPI bad request response

@@ -6,8 +6,8 @@ import (
 	echo "github.com/datumforge/echox"
 	"github.com/getkin/kin-openapi/openapi3"
 
-	"github.com/datumforge/datum/pkg/models"
-	"github.com/datumforge/datum/pkg/rout"
+	"github.com/datum-cloud/datum-os/pkg/models"
+	"github.com/datum-cloud/datum-os/pkg/rout"
 )
 
 // EventPublisher publishes an event to the configured topic in the message payload - today this can be anything but there is no event consumer on the other side yet

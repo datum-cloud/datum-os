@@ -8,7 +8,7 @@ import (
 	"github.com/go-webauthn/webauthn/protocol"
 	gowebauthn "github.com/go-webauthn/webauthn/webauthn"
 
-	"github.com/datumforge/datum/pkg/providers/webauthn"
+	"github.com/datum-cloud/datum-os/pkg/providers/webauthn"
 )
 
 func TestUserWebAuthnID(t *testing.T) {

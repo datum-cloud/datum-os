@@ -13,7 +13,7 @@ import (
 
 	"github.com/sendgrid/sendgrid-go/helpers/mail"
 
-	"github.com/datumforge/datum/pkg/utils/sendgrid"
+	"github.com/datum-cloud/datum-os/pkg/utils/sendgrid"
 )
 
 const (

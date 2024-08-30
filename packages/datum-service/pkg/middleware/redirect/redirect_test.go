@@ -8,11 +8,11 @@ import (
 	echo "github.com/datumforge/echox"
 	"github.com/stretchr/testify/assert"
 
-	"github.com/datumforge/datum/pkg/middleware/redirect"
+	"github.com/datum-cloud/datum-os/pkg/middleware/redirect"
 )
 
 func TesetRedirectWithConfig(t *testing.T) {
-	var testCases = []struct {
+	testCases := []struct {
 		name           string
 		givenCode      int
 		givenSkipFunc  func(c echo.Context) bool
@@ -80,7 +80,7 @@ func TesetRedirectWithConfig(t *testing.T) {
 }
 
 func TestNewWithConfig(t *testing.T) {
-	var testCases = []struct {
+	testCases := []struct {
 		name           string
 		givenConfig    redirect.Config
 		givenSkipFunc  func(c echo.Context) bool

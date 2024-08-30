@@ -10,8 +10,8 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/datumforge/datum/internal/ent/generated/groupsettinghistory"
-	"github.com/datumforge/datum/pkg/enums"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/groupsettinghistory"
+	"github.com/datum-cloud/datum-os/pkg/enums"
 	"github.com/datumforge/enthistory"
 )
 

@@ -10,8 +10,8 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/datumforge/datum/internal/ent/generated/tfasetting"
-	"github.com/datumforge/datum/internal/ent/generated/user"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/tfasetting"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/user"
 )
 
 // TFASetting is the model entity for the TFASetting schema.

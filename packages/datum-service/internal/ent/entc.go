@@ -21,13 +21,13 @@ import (
 	"github.com/datumforge/entx/genhooks"
 	geodetic "github.com/datumforge/geodetic/pkg/geodeticclient"
 
-	"github.com/datumforge/datum/internal/ent/entconfig"
-	"github.com/datumforge/datum/pkg/analytics"
-	"github.com/datumforge/datum/pkg/sessions"
-	"github.com/datumforge/datum/pkg/tokens"
-	"github.com/datumforge/datum/pkg/utils/emails"
-	"github.com/datumforge/datum/pkg/utils/marionette"
-	"github.com/datumforge/datum/pkg/utils/totp"
+	"github.com/datum-cloud/datum-os/internal/ent/entconfig"
+	"github.com/datum-cloud/datum-os/pkg/analytics"
+	"github.com/datum-cloud/datum-os/pkg/sessions"
+	"github.com/datum-cloud/datum-os/pkg/tokens"
+	"github.com/datum-cloud/datum-os/pkg/utils/emails"
+	"github.com/datum-cloud/datum-os/pkg/utils/marionette"
+	"github.com/datum-cloud/datum-os/pkg/utils/totp"
 )
 
 const (
@@ -67,7 +67,7 @@ func main() {
 			genhooks.GenSchema(graphSchemaDir),
 			genhooks.GenQuery(graphQueryDir),
 		},
-		Package: "github.com/datumforge/datum/internal/ent/generated",
+		Package: "github.com/datum-cloud/datum-os/internal/ent/generated",
 		Features: []gen.Feature{
 			gen.FeatureVersionedMigration,
 			gen.FeaturePrivacy,

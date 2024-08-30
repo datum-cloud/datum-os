@@ -9,7 +9,7 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/datumforge/datum/pkg/enums"
+	"github.com/datum-cloud/datum-os/pkg/enums"
 	"github.com/datumforge/enthistory"
 )
 

@@ -1,4 +1,4 @@
-module github.com/datumforge/datum
+module github.com/datum-cloud/datum-os
 
 go 1.22.6
 

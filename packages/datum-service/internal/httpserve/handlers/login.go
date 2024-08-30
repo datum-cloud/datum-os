@@ -7,11 +7,11 @@ import (
 	"github.com/getkin/kin-openapi/openapi3"
 	ph "github.com/posthog/posthog-go"
 
-	"github.com/datumforge/datum/pkg/auth"
-	"github.com/datumforge/datum/pkg/enums"
-	"github.com/datumforge/datum/pkg/models"
-	"github.com/datumforge/datum/pkg/passwd"
-	"github.com/datumforge/datum/pkg/rout"
+	"github.com/datum-cloud/datum-os/pkg/auth"
+	"github.com/datum-cloud/datum-os/pkg/enums"
+	"github.com/datum-cloud/datum-os/pkg/models"
+	"github.com/datum-cloud/datum-os/pkg/passwd"
+	"github.com/datum-cloud/datum-os/pkg/rout"
 )
 
 // LoginHandler validates the user credentials and returns a valid cookie

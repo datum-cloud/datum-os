@@ -19,8 +19,8 @@ import (
 
 	atlas "ariga.io/atlas/sql/migrate"
 	"ariga.io/atlas/sql/sqltool"
-	"github.com/datumforge/datum/internal/ent/generated/migrate"
-	"github.com/datumforge/datum/pkg/testutils"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/migrate"
+	"github.com/datum-cloud/datum-os/pkg/testutils"
 )
 
 func main() {

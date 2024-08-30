@@ -8,8 +8,8 @@ import (
 	"github.com/google/go-github/v63/github"
 	"golang.org/x/oauth2"
 
-	oauth2Login "github.com/datumforge/datum/pkg/providers/oauth2"
-	"github.com/datumforge/datum/pkg/sessions"
+	oauth2Login "github.com/datum-cloud/datum-os/pkg/providers/oauth2"
+	"github.com/datum-cloud/datum-os/pkg/sessions"
 )
 
 const (
@@ -54,7 +54,6 @@ func githubHandler(config *oauth2.Config, clientConfig *ClientConfig, success, f
 	fn := func(w http.ResponseWriter, req *http.Request) {
 		ctx := req.Context()
 		token, err := oauth2Login.TokenFromContext(ctx)
-
 		if err != nil {
 			ctx = WithError(ctx, err)
 			failure.ServeHTTP(w, req.WithContext(ctx))

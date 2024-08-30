@@ -14,14 +14,14 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/datumforge/datum/internal/ent/generated/privacy"
-	_ "github.com/datumforge/datum/internal/ent/generated/runtime"
-	"github.com/datumforge/datum/pkg/auth"
-	"github.com/datumforge/datum/pkg/datumclient"
-	"github.com/datumforge/datum/pkg/enums"
-	"github.com/datumforge/datum/pkg/models"
-	"github.com/datumforge/datum/pkg/utils/emails"
-	"github.com/datumforge/datum/pkg/utils/emails/mock"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/privacy"
+	_ "github.com/datum-cloud/datum-os/internal/ent/generated/runtime"
+	"github.com/datum-cloud/datum-os/pkg/auth"
+	"github.com/datum-cloud/datum-os/pkg/datumclient"
+	"github.com/datum-cloud/datum-os/pkg/enums"
+	"github.com/datum-cloud/datum-os/pkg/models"
+	"github.com/datum-cloud/datum-os/pkg/utils/emails"
+	"github.com/datum-cloud/datum-os/pkg/utils/emails/mock"
 )
 
 func (suite *HandlerTestSuite) TestOrgInviteAcceptHandler() {
@@ -54,7 +54,7 @@ func (suite *HandlerTestSuite) TestOrgInviteAcceptHandler() {
 	org, err := suite.datum.CreateOrganization(reqCtx, input)
 	require.NoError(t, err)
 
-	var groot = "groot@datum.net"
+	groot := "groot@datum.net"
 
 	// recipient test data
 	recipient := suite.db.User.Create().

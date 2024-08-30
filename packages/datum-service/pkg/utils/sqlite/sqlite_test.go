@@ -10,7 +10,7 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/datumforge/datum/pkg/utils/sqlite"
+	"github.com/datum-cloud/datum-os/pkg/utils/sqlite"
 )
 
 func TestDriver(t *testing.T) {

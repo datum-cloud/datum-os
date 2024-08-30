@@ -3,9 +3,9 @@ package version
 import (
 	"github.com/spf13/cobra"
 
-	datum "github.com/datumforge/datum/cmd/cli/cmd"
-	"github.com/datumforge/datum/internal/constants"
-	"github.com/datumforge/datum/pkg/utils/cli/useragent"
+	datum "github.com/datum-cloud/datum-os/cmd/cli/cmd"
+	"github.com/datum-cloud/datum-os/internal/constants"
+	"github.com/datum-cloud/datum-os/pkg/utils/cli/useragent"
 )
 
 // VersionCmd is the version command

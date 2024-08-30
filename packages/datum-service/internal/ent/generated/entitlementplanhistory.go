@@ -10,7 +10,7 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/datumforge/datum/internal/ent/generated/entitlementplanhistory"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/entitlementplanhistory"
 	"github.com/datumforge/enthistory"
 )
 

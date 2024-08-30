@@ -114,7 +114,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/datumforge/datum/pkg/events/soiree"
+	"github.com/datum-cloud/datum-os/pkg/events/soiree"
 )
 
 func main() {
@@ -222,7 +222,7 @@ Delegate concurrency management to a goroutine pool using the `WithPool` option:
 package main
 
 import (
-	"github.com/datumforge/datum/pkg/events/soiree"
+	"github.com/datum-cloud/datum-os/pkg/events/soiree"
 	"github.com/alitto/pond"
 )
 
@@ -246,7 +246,7 @@ package main
 
 import (
 	"log"
-	"github.com/datumforge/datum/pkg/events/soiree"
+	"github.com/datum-cloud/datum-os/pkg/events/soiree"
 )
 
 func main() {
@@ -272,7 +272,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/datumforge/datum/pkg/events/soiree"
+	"github.com/datum-cloud/datum-os/pkg/events/soiree"
 )
 
 func main() {
@@ -310,7 +310,7 @@ package main
 
 import (
 	"github.com/google/uuid"
-	"github.com/datumforge/datum/pkg/events/soiree"
+	"github.com/datum-cloud/datum-os/pkg/events/soiree"
 )
 
 func main() {
@@ -337,7 +337,7 @@ package main
 
 import (
 	"log"
-	"github.com/datumforge/datum/pkg/events/soiree"
+	"github.com/datum-cloud/datum-os/pkg/events/soiree"
 )
 
 func main() {

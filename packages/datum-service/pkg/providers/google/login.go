@@ -8,8 +8,8 @@ import (
 	google "google.golang.org/api/oauth2/v2"
 	"google.golang.org/api/option"
 
-	oauth2Login "github.com/datumforge/datum/pkg/providers/oauth2"
-	"github.com/datumforge/datum/pkg/sessions"
+	oauth2Login "github.com/datum-cloud/datum-os/pkg/providers/oauth2"
+	"github.com/datum-cloud/datum-os/pkg/sessions"
 )
 
 const (
@@ -46,7 +46,6 @@ func googleHandler(config *oauth2.Config, success, failure http.Handler) http.Ha
 	fn := func(w http.ResponseWriter, req *http.Request) {
 		ctx := req.Context()
 		token, err := oauth2Login.TokenFromContext(ctx)
-
 		if err != nil {
 			ctx = WithError(ctx, err)
 			failure.ServeHTTP(w, req.WithContext(ctx))
@@ -66,7 +65,6 @@ func googleHandler(config *oauth2.Config, success, failure http.Handler) http.Ha
 
 		userInfoPlus, err := googleService.Userinfo.Get().Do()
 		err = validateResponse(userInfoPlus, err)
-
 		if err != nil {
 			ctx = WithError(ctx, err)
 			failure.ServeHTTP(w, req.WithContext(ctx))

@@ -10,7 +10,7 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/datumforge/datum/internal/ent/generated/ohauthtootoken"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/ohauthtootoken"
 )
 
 // OhAuthTooToken is the model entity for the OhAuthTooToken schema.

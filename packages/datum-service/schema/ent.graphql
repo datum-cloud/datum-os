@@ -409,7 +409,7 @@ enum ContactHistoryOpType @goModel(model: "github.com/datumforge/enthistory.OpTy
 """
 ContactHistoryUserStatus is enum for the field status
 """
-enum ContactHistoryUserStatus @goModel(model: "github.com/datumforge/datum/pkg/enums.UserStatus") {
+enum ContactHistoryUserStatus @goModel(model: "github.com/datum-cloud/datum-os/pkg/enums.UserStatus") {
   ACTIVE
   INACTIVE
   DEACTIVATED
@@ -701,7 +701,7 @@ input ContactHistoryWhereInput {
 """
 ContactUserStatus is enum for the field status
 """
-enum ContactUserStatus @goModel(model: "github.com/datumforge/datum/pkg/enums.UserStatus") {
+enum ContactUserStatus @goModel(model: "github.com/datum-cloud/datum-os/pkg/enums.UserStatus") {
   ACTIVE
   INACTIVE
   DEACTIVATED
@@ -7404,7 +7404,7 @@ enum GroupMembershipHistoryOpType @goModel(model: "github.com/datumforge/enthist
 """
 GroupMembershipHistoryRole is enum for the field role
 """
-enum GroupMembershipHistoryRole @goModel(model: "github.com/datumforge/datum/pkg/enums.Role") {
+enum GroupMembershipHistoryRole @goModel(model: "github.com/datum-cloud/datum-os/pkg/enums.Role") {
   ADMIN
   MEMBER
   USER
@@ -7602,7 +7602,7 @@ input GroupMembershipHistoryWhereInput {
 """
 GroupMembershipRole is enum for the field role
 """
-enum GroupMembershipRole @goModel(model: "github.com/datumforge/datum/pkg/enums.Role") {
+enum GroupMembershipRole @goModel(model: "github.com/datum-cloud/datum-os/pkg/enums.Role") {
   ADMIN
   MEMBER
   USER
@@ -7882,7 +7882,7 @@ type GroupSettingHistoryEdge {
 """
 GroupSettingHistoryJoinPolicy is enum for the field join_policy
 """
-enum GroupSettingHistoryJoinPolicy @goModel(model: "github.com/datumforge/datum/pkg/enums.JoinPolicy") {
+enum GroupSettingHistoryJoinPolicy @goModel(model: "github.com/datum-cloud/datum-os/pkg/enums.JoinPolicy") {
   OPEN
   INVITE_ONLY
   APPLICATION_ONLY
@@ -7899,7 +7899,7 @@ enum GroupSettingHistoryOpType @goModel(model: "github.com/datumforge/enthistory
 """
 GroupSettingHistoryVisibility is enum for the field visibility
 """
-enum GroupSettingHistoryVisibility @goModel(model: "github.com/datumforge/datum/pkg/enums.Visibility") {
+enum GroupSettingHistoryVisibility @goModel(model: "github.com/datum-cloud/datum-os/pkg/enums.Visibility") {
   PUBLIC
   PRIVATE
 }
@@ -8103,7 +8103,7 @@ input GroupSettingHistoryWhereInput {
 """
 GroupSettingJoinPolicy is enum for the field join_policy
 """
-enum GroupSettingJoinPolicy @goModel(model: "github.com/datumforge/datum/pkg/enums.JoinPolicy") {
+enum GroupSettingJoinPolicy @goModel(model: "github.com/datum-cloud/datum-os/pkg/enums.JoinPolicy") {
   OPEN
   INVITE_ONLY
   APPLICATION_ONLY
@@ -8112,7 +8112,7 @@ enum GroupSettingJoinPolicy @goModel(model: "github.com/datumforge/datum/pkg/enu
 """
 GroupSettingVisibility is enum for the field visibility
 """
-enum GroupSettingVisibility @goModel(model: "github.com/datumforge/datum/pkg/enums.Visibility") {
+enum GroupSettingVisibility @goModel(model: "github.com/datum-cloud/datum-os/pkg/enums.Visibility") {
   PUBLIC
   PRIVATE
 }
@@ -9672,7 +9672,7 @@ type InviteEdge {
 """
 InviteInviteStatus is enum for the field status
 """
-enum InviteInviteStatus @goModel(model: "github.com/datumforge/datum/pkg/enums.InviteStatus") {
+enum InviteInviteStatus @goModel(model: "github.com/datum-cloud/datum-os/pkg/enums.InviteStatus") {
   INVITATION_SENT
   APPROVAL_REQUIRED
   INVITATION_ACCEPTED
@@ -9681,7 +9681,7 @@ enum InviteInviteStatus @goModel(model: "github.com/datumforge/datum/pkg/enums.I
 """
 InviteRole is enum for the field role
 """
-enum InviteRole @goModel(model: "github.com/datumforge/datum/pkg/enums.Role") {
+enum InviteRole @goModel(model: "github.com/datum-cloud/datum-os/pkg/enums.Role") {
   ADMIN
   MEMBER
   USER
@@ -9913,7 +9913,7 @@ scalar Map
 An object with an ID.
 Follows the [Relay Global Object Identification Specification](https://relay.dev/graphql/objectidentification.htm)
 """
-interface Node @goModel(model: "github.com/datumforge/datum/internal/ent/generated.Noder") {
+interface Node @goModel(model: "github.com/datum-cloud/datum-os/internal/ent/generated.Noder") {
   """
   The id of the object.
   """
@@ -11466,7 +11466,7 @@ enum OrgMembershipHistoryOpType @goModel(model: "github.com/datumforge/enthistor
 """
 OrgMembershipHistoryRole is enum for the field role
 """
-enum OrgMembershipHistoryRole @goModel(model: "github.com/datumforge/datum/pkg/enums.Role") {
+enum OrgMembershipHistoryRole @goModel(model: "github.com/datum-cloud/datum-os/pkg/enums.Role") {
   ADMIN
   MEMBER
   USER
@@ -11665,7 +11665,7 @@ input OrgMembershipHistoryWhereInput {
 """
 OrgMembershipRole is enum for the field role
 """
-enum OrgMembershipRole @goModel(model: "github.com/datumforge/datum/pkg/enums.Role") {
+enum OrgMembershipRole @goModel(model: "github.com/datum-cloud/datum-os/pkg/enums.Role") {
   ADMIN
   MEMBER
   USER
@@ -12410,7 +12410,7 @@ enum OrganizationSettingHistoryOpType @goModel(model: "github.com/datumforge/ent
 """
 OrganizationSettingHistoryRegion is enum for the field geo_location
 """
-enum OrganizationSettingHistoryRegion @goModel(model: "github.com/datumforge/datum/pkg/enums.Region") {
+enum OrganizationSettingHistoryRegion @goModel(model: "github.com/datum-cloud/datum-os/pkg/enums.Region") {
   AMER
   EMEA
   APAC
@@ -12686,7 +12686,7 @@ input OrganizationSettingHistoryWhereInput {
 """
 OrganizationSettingRegion is enum for the field geo_location
 """
-enum OrganizationSettingRegion @goModel(model: "github.com/datumforge/datum/pkg/enums.Region") {
+enum OrganizationSettingRegion @goModel(model: "github.com/datum-cloud/datum-os/pkg/enums.Region") {
   AMER
   EMEA
   APAC
@@ -15539,7 +15539,7 @@ type TemplateConnection {
 """
 TemplateDocumentType is enum for the field template_type
 """
-enum TemplateDocumentType @goModel(model: "github.com/datumforge/datum/pkg/enums.DocumentType") {
+enum TemplateDocumentType @goModel(model: "github.com/datum-cloud/datum-os/pkg/enums.DocumentType") {
   ROOTTEMPLATE
   DOCUMENT
 }
@@ -15616,7 +15616,7 @@ type TemplateHistoryConnection {
 """
 TemplateHistoryDocumentType is enum for the field template_type
 """
-enum TemplateHistoryDocumentType @goModel(model: "github.com/datumforge/datum/pkg/enums.DocumentType") {
+enum TemplateHistoryDocumentType @goModel(model: "github.com/datum-cloud/datum-os/pkg/enums.DocumentType") {
   ROOTTEMPLATE
   DOCUMENT
 }
@@ -17295,7 +17295,7 @@ type User implements Node {
 """
 UserAuthProvider is enum for the field auth_provider
 """
-enum UserAuthProvider @goModel(model: "github.com/datumforge/datum/pkg/enums.AuthProvider") {
+enum UserAuthProvider @goModel(model: "github.com/datum-cloud/datum-os/pkg/enums.AuthProvider") {
   CREDENTIALS
   GOOGLE
   GITHUB
@@ -17385,7 +17385,7 @@ type UserHistory implements Node {
 """
 UserHistoryAuthProvider is enum for the field auth_provider
 """
-enum UserHistoryAuthProvider @goModel(model: "github.com/datumforge/datum/pkg/enums.AuthProvider") {
+enum UserHistoryAuthProvider @goModel(model: "github.com/datum-cloud/datum-os/pkg/enums.AuthProvider") {
   CREDENTIALS
   GOOGLE
   GITHUB
@@ -17453,7 +17453,7 @@ enum UserHistoryOrderField {
 """
 UserHistoryRole is enum for the field role
 """
-enum UserHistoryRole @goModel(model: "github.com/datumforge/datum/pkg/enums.Role") {
+enum UserHistoryRole @goModel(model: "github.com/datum-cloud/datum-os/pkg/enums.Role") {
   ADMIN
   MEMBER
   USER
@@ -17797,7 +17797,7 @@ enum UserOrderField {
 """
 UserRole is enum for the field role
 """
-enum UserRole @goModel(model: "github.com/datumforge/datum/pkg/enums.Role") {
+enum UserRole @goModel(model: "github.com/datum-cloud/datum-os/pkg/enums.Role") {
   ADMIN
   MEMBER
   USER
@@ -17965,7 +17965,7 @@ enum UserSettingHistoryOpType @goModel(model: "github.com/datumforge/enthistory.
 """
 UserSettingHistoryUserStatus is enum for the field status
 """
-enum UserSettingHistoryUserStatus @goModel(model: "github.com/datumforge/datum/pkg/enums.UserStatus") {
+enum UserSettingHistoryUserStatus @goModel(model: "github.com/datum-cloud/datum-os/pkg/enums.UserStatus") {
   ACTIVE
   INACTIVE
   DEACTIVATED
@@ -18201,7 +18201,7 @@ input UserSettingHistoryWhereInput {
 """
 UserSettingUserStatus is enum for the field status
 """
-enum UserSettingUserStatus @goModel(model: "github.com/datumforge/datum/pkg/enums.UserStatus") {
+enum UserSettingUserStatus @goModel(model: "github.com/datum-cloud/datum-os/pkg/enums.UserStatus") {
   ACTIVE
   INACTIVE
   DEACTIVATED

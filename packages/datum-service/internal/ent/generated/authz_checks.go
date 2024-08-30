@@ -7,14 +7,14 @@ import (
 	"entgo.io/ent/privacy"
 	"github.com/99designs/gqlgen/graphql"
 
-	"github.com/datumforge/datum/internal/ent/generated/group"
-	"github.com/datumforge/datum/internal/ent/generated/groupmembership"
-	"github.com/datumforge/datum/internal/ent/generated/groupsetting"
-	"github.com/datumforge/datum/internal/ent/generated/organization"
-	"github.com/datumforge/datum/internal/ent/generated/organizationsetting"
-	"github.com/datumforge/datum/internal/ent/generated/orgmembership"
-	"github.com/datumforge/datum/internal/ent/generated/webhook"
-	"github.com/datumforge/datum/pkg/auth"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/group"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/groupmembership"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/groupsetting"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/organization"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/organizationsetting"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/orgmembership"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/webhook"
+	"github.com/datum-cloud/datum-os/pkg/auth"
 	"github.com/datumforge/fgax"
 )
 

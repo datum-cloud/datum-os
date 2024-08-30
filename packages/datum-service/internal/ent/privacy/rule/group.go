@@ -6,9 +6,9 @@ import (
 	"entgo.io/ent"
 	"github.com/datumforge/fgax"
 
-	"github.com/datumforge/datum/internal/ent/generated"
-	"github.com/datumforge/datum/internal/ent/generated/privacy"
-	"github.com/datumforge/datum/pkg/auth"
+	"github.com/datum-cloud/datum-os/internal/ent/generated"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/privacy"
+	"github.com/datum-cloud/datum-os/pkg/auth"
 )
 
 // CanCreateGroupsInOrg is a rule that returns allow decision if user has edit access in the organization

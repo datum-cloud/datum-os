@@ -8,7 +8,7 @@ import (
 	echo "github.com/datumforge/echox"
 	"go.uber.org/zap"
 
-	ent "github.com/datumforge/datum/internal/ent/generated"
+	ent "github.com/datum-cloud/datum-os/internal/ent/generated"
 )
 
 const (
@@ -17,10 +17,8 @@ const (
 	transactionCommitErr = "error committing transaction"
 )
 
-var (
-	// ErrProcessingRequest is returned when the request cannot be processed
-	ErrProcessingRequest = errors.New("error processing request, please try again")
-)
+// ErrProcessingRequest is returned when the request cannot be processed
+var ErrProcessingRequest = errors.New("error processing request, please try again")
 
 type Client struct {
 	EntDBClient *ent.Client

@@ -79,7 +79,7 @@ func ValidColumn(column string) bool {
 // package on the initialization of the application. Therefore,
 // it should be imported in the main as follows:
 //
-//	import _ "github.com/datumforge/datum/internal/ent/generated/runtime"
+//	import _ "github.com/datum-cloud/datum-os/internal/ent/generated/runtime"
 var (
 	Hooks        [1]ent.Hook
 	Interceptors [1]ent.Interceptor

@@ -8,7 +8,7 @@ import (
 	"github.com/oklog/ulid/v2"
 	"github.com/stretchr/testify/require"
 
-	ulidlib "github.com/datumforge/datum/pkg/utils/ulids"
+	ulidlib "github.com/datum-cloud/datum-os/pkg/utils/ulids"
 )
 
 func TestIsZero(t *testing.T) {

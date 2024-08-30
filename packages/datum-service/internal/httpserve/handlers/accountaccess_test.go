@@ -12,10 +12,10 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/datumforge/datum/internal/ent/generated/privacy"
-	_ "github.com/datumforge/datum/internal/ent/generated/runtime"
-	"github.com/datumforge/datum/pkg/httpsling"
-	"github.com/datumforge/datum/pkg/models"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/privacy"
+	_ "github.com/datum-cloud/datum-os/internal/ent/generated/runtime"
+	"github.com/datum-cloud/datum-os/pkg/httpsling"
+	"github.com/datum-cloud/datum-os/pkg/models"
 )
 
 func (suite *HandlerTestSuite) TestAccountAccessHandler() {

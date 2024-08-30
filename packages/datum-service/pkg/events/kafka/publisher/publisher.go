@@ -3,7 +3,7 @@ package publisher
 import (
 	"github.com/IBM/sarama"
 
-	"github.com/datumforge/datum/pkg/events/kafka/kafkaconfig"
+	"github.com/datum-cloud/datum-os/pkg/events/kafka/kafkaconfig"
 )
 
 // KafkaPublisher is a publisher that sends messages to a Kafka topic

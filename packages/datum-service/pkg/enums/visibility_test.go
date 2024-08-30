@@ -6,7 +6,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/datumforge/datum/pkg/enums"
+	"github.com/datum-cloud/datum-os/pkg/enums"
 )
 
 func TestToVisibility(t *testing.T) {

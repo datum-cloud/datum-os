@@ -4,8 +4,8 @@ import (
 	"context"
 	"testing"
 
-	"github.com/datumforge/datum/pkg/auth"
-	"github.com/datumforge/datum/pkg/datumclient"
+	"github.com/datum-cloud/datum-os/pkg/auth"
+	"github.com/datum-cloud/datum-os/pkg/datumclient"
 	mock_fga "github.com/datumforge/fgax/mockery"
 	"github.com/samber/lo"
 	"github.com/stretchr/testify/assert"
@@ -265,7 +265,6 @@ func (suite *GraphTestSuite) TestMutationCreateSubscriber() {
 
 			// Assert matching fields
 			assert.Equal(t, tc.email, resp.CreateSubscriber.Subscriber.Email)
-
 		})
 	}
 }

@@ -11,9 +11,9 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/datumforge/datum/pkg/datumclient"
+	"github.com/datum-cloud/datum-os/pkg/datumclient"
 
-	"github.com/datumforge/datum/pkg/testutils"
+	"github.com/datum-cloud/datum-os/pkg/testutils"
 )
 
 const (
@@ -255,14 +255,16 @@ func (suite *GraphTestSuite) TestMutationUpdatePersonalAccessToken() {
 	require.NoError(t, err)
 	tokenOther := (&PersonalAccessTokenBuilder{
 		client:  suite.client,
-		OwnerID: user2.ID}).
+		OwnerID: user2.ID,
+	}).
 		MustNew(regCtx2, t)
 
 	token := (&PersonalAccessTokenBuilder{
 		client:          suite.client,
 		OwnerID:         testUser.ID,
 		OrganizationIDs: []string{testPersonalOrgID},
-		ExpiresAt:       lo.ToPtr(time.Now().Add(time.Hour * 24 * 30))}).
+		ExpiresAt:       lo.ToPtr(time.Now().Add(time.Hour * 24 * 30)),
+	}).
 		MustNew(reqCtx, t)
 
 	tokenDescription := gofakeit.Sentence(5)

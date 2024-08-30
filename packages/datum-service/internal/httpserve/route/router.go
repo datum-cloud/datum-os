@@ -7,9 +7,9 @@ import (
 	"github.com/datumforge/echox/middleware"
 	"github.com/getkin/kin-openapi/openapi3"
 
-	"github.com/datumforge/datum/internal/httpserve/handlers"
-	"github.com/datumforge/datum/pkg/middleware/ratelimit"
-	"github.com/datumforge/datum/pkg/middleware/transaction"
+	"github.com/datum-cloud/datum-os/internal/httpserve/handlers"
+	"github.com/datum-cloud/datum-os/pkg/middleware/ratelimit"
+	"github.com/datum-cloud/datum-os/pkg/middleware/transaction"
 )
 
 var (

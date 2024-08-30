@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"net/http/httptest"
 
-	"github.com/datumforge/datum/pkg/testutils"
+	"github.com/datum-cloud/datum-os/pkg/testutils"
 )
 
 // newGoogleTestServer creates a httptest.Server which mocks the Google

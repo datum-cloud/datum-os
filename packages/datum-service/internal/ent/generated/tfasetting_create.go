@@ -10,8 +10,8 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/datumforge/datum/internal/ent/generated/tfasetting"
-	"github.com/datumforge/datum/internal/ent/generated/user"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/tfasetting"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/user"
 )
 
 // TFASettingCreate is the builder for creating a TFASetting entity.

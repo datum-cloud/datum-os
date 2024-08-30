@@ -5,7 +5,7 @@ import (
 
 	"github.com/datumforge/fgax"
 
-	"github.com/datumforge/datum/pkg/enums"
+	"github.com/datum-cloud/datum-os/pkg/enums"
 )
 
 // getTupleKeyFromRole creates a Tuple key with the provided subject, object, and role
