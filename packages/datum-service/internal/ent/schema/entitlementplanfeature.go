@@ -12,7 +12,7 @@ import (
 	"entgo.io/ent/schema/index"
 
 	emixin "github.com/datum-cloud/entx/mixin"
-	"github.com/datumforge/fgax/entfga"
+	"github.com/datum-cloud/fgax/entfga"
 
 	"github.com/datum-cloud/datum-os/internal/ent/generated"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/privacy"

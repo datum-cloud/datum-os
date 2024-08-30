@@ -5,7 +5,7 @@ import (
 
 	"entgo.io/ent"
 
-	"github.com/datumforge/fgax"
+	"github.com/datum-cloud/fgax"
 
 	"github.com/datum-cloud/datum-os/internal/ent/generated"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/intercept"

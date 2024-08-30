@@ -15,8 +15,8 @@ require (
 	github.com/bytedance/sonic v1.12.1
 	github.com/datumforge/echo-prometheus/v5 v5.0.0-20240521143548-d561656e6328
 	github.com/datumforge/echozap v0.0.0-20231205193458-b29cc54cd34c
-	github.com/datumforge/fgax v0.5.3
-	github.com/datumforge/geodetic v0.0.3
+	github.com/datum-cloud/fgax v0.5.3
+	github.com/datum-cloud/geodetic v0.0.3
 	github.com/dustinkirkland/golang-petname v0.0.0-20240428194347-eebcea082ee0
 	github.com/gertd/go-pluralize v0.2.1
 	github.com/gocarina/gocsv v0.0.0-20240520201108-78e41c74b4b1

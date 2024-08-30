@@ -124,10 +124,10 @@ github.com/datumforge/echozap v0.0.0-20231205193458-b29cc54cd34c h1:4ycAoM6MJ8PB
 github.com/datumforge/echozap v0.0.0-20231205193458-b29cc54cd34c/go.mod h1:Tp6J3q+sRxvsMLHCxARnBouLUiwWnquxmDgRjqJaLHw=
 github.com/datum-cloud/entx v0.3.1 h1:dR91+zl5TKnT42qKt9jgLZOI7cdmo1J19yDFxR8kDGo=
 github.com/datum-cloud/entx v0.3.1/go.mod h1:IwllghPmZhlmLy7fCHF/Noeqa3vcrV3oAXxbQOYuT/4=
-github.com/datumforge/fgax v0.5.3 h1:Xl7KmRCnXNrdyItHoFDpUanuh95mwTTtvrCQXy9gaMA=
-github.com/datumforge/fgax v0.5.3/go.mod h1:C1zcmbfeqDXyWzENGL6CFdQZIQDlXqbQi3MnsO5LtsI=
-github.com/datumforge/geodetic v0.0.3 h1:nyUJhUh3+jeezlUoPvUEUQFQI8n5vlb1FuKOhTI3tow=
-github.com/datumforge/geodetic v0.0.3/go.mod h1:LgA3ei9aTK5VBrj/UMWkJGKwpsgg8NYEhzMAXxm9oe4=
+github.com/datum-cloud/fgax v0.5.3 h1:Xl7KmRCnXNrdyItHoFDpUanuh95mwTTtvrCQXy9gaMA=
+github.com/datum-cloud/fgax v0.5.3/go.mod h1:C1zcmbfeqDXyWzENGL6CFdQZIQDlXqbQi3MnsO5LtsI=
+github.com/datum-cloud/geodetic v0.0.3 h1:nyUJhUh3+jeezlUoPvUEUQFQI8n5vlb1FuKOhTI3tow=
+github.com/datum-cloud/geodetic v0.0.3/go.mod h1:LgA3ei9aTK5VBrj/UMWkJGKwpsgg8NYEhzMAXxm9oe4=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/davecgh/go-spew v1.1.2-0.20180830191138-d8f796af33cc h1:U9qPSI2PIWSS1VwoXQT9A3Wy9MM3WgvqSxFWenqJduM=

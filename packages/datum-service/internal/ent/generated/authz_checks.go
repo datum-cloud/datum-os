@@ -15,7 +15,7 @@ import (
 	"github.com/datum-cloud/datum-os/internal/ent/generated/orgmembership"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/webhook"
 	"github.com/datum-cloud/datum-os/pkg/auth"
-	"github.com/datumforge/fgax"
+	"github.com/datum-cloud/fgax"
 )
 
 func (q *APITokenQuery) CheckAccess(ctx context.Context) error {

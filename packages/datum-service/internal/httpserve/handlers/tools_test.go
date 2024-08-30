@@ -10,9 +10,9 @@ import (
 	"github.com/stretchr/testify/require"
 	"github.com/stretchr/testify/suite"
 
+	"github.com/datum-cloud/fgax"
+	mock_fga "github.com/datum-cloud/fgax/mockery"
 	echo "github.com/datumforge/echox"
-	"github.com/datumforge/fgax"
-	mock_fga "github.com/datumforge/fgax/mockery"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zaptest"
 

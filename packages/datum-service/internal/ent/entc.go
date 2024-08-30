@@ -11,14 +11,14 @@ import (
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent/entc"
 	"entgo.io/ent/entc/gen"
-	"github.com/datumforge/fgax"
-	"github.com/datumforge/fgax/entfga"
+	"github.com/datum-cloud/fgax"
+	"github.com/datum-cloud/fgax/entfga"
 	"go.uber.org/zap"
 	"gocloud.dev/secrets"
 
 	"github.com/datum-cloud/entx"
 	"github.com/datum-cloud/entx/genhooks"
-	geodetic "github.com/datumforge/geodetic/pkg/geodeticclient"
+	geodetic "github.com/datum-cloud/geodetic/pkg/geodeticclient"
 	"github.com/flume/enthistory"
 
 	"github.com/datum-cloud/datum-os/internal/ent/entconfig"

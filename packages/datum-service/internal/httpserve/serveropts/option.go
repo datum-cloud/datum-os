@@ -9,11 +9,11 @@ import (
 	"os"
 
 	"github.com/datum-cloud/entx"
+	"github.com/datum-cloud/fgax"
 	echoprometheus "github.com/datumforge/echo-prometheus/v5"
 	echo "github.com/datumforge/echox"
 	"github.com/datumforge/echox/middleware"
 	"github.com/datumforge/echozap"
-	"github.com/datumforge/fgax"
 	"github.com/redis/go-redis/v9"
 	"go.uber.org/zap"
 

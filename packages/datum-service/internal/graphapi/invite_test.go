@@ -5,8 +5,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/datumforge/fgax"
-	mock_fga "github.com/datumforge/fgax/mockery"
+	"github.com/datum-cloud/fgax"
+	mock_fga "github.com/datum-cloud/fgax/mockery"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 

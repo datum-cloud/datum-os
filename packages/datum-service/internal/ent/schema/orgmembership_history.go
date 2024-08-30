@@ -17,7 +17,7 @@ import (
 	"github.com/datum-cloud/datum-os/internal/ent/interceptors"
 	"github.com/flume/enthistory"
 	"github.com/datum-cloud/entx"
-	"github.com/datumforge/fgax/entfga"
+	"github.com/datum-cloud/fgax/entfga"
 )
 
 // OrgMembershipHistory holds the schema definition for the OrgMembershipHistory entity.

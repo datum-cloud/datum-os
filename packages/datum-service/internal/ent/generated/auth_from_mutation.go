@@ -8,8 +8,8 @@ import (
 	"context"
 
 	"github.com/datum-cloud/entx"
-	"github.com/datumforge/fgax"
-	"github.com/datumforge/fgax/entfga"
+	"github.com/datum-cloud/fgax"
+	"github.com/datum-cloud/fgax/entfga"
 )
 
 func (m *GroupMembershipMutation) CreateTuplesFromCreate(ctx context.Context) error {

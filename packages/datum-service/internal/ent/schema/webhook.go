@@ -10,7 +10,7 @@ import (
 	"entgo.io/ent/schema/index"
 
 	emixin "github.com/datum-cloud/entx/mixin"
-	"github.com/datumforge/fgax/entfga"
+	"github.com/datum-cloud/fgax/entfga"
 	"github.com/flume/enthistory"
 
 	"github.com/datum-cloud/datum-os/internal/ent/mixin"

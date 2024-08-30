@@ -10,7 +10,7 @@ import (
 
 	"github.com/datum-cloud/entx"
 	emixin "github.com/datum-cloud/entx/mixin"
-	"github.com/datumforge/fgax/entfga"
+	"github.com/datum-cloud/fgax/entfga"
 
 	"github.com/datum-cloud/datum-os/internal/ent/customtypes"
 	"github.com/datum-cloud/datum-os/internal/ent/generated"

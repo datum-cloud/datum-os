@@ -4,7 +4,7 @@ import (
 	"context"
 	"testing"
 
-	mock_fga "github.com/datumforge/fgax/mockery"
+	mock_fga "github.com/datum-cloud/fgax/mockery"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 

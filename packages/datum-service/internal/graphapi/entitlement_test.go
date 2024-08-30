@@ -7,7 +7,7 @@ import (
 
 	"github.com/datum-cloud/datum-os/pkg/datumclient"
 	"github.com/datum-cloud/datum-os/pkg/utils/ulids"
-	mock_fga "github.com/datumforge/fgax/mockery"
+	mock_fga "github.com/datum-cloud/fgax/mockery"
 	"github.com/samber/lo"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
