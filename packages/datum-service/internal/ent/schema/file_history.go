@@ -11,8 +11,8 @@ import (
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
 
-	"github.com/datumforge/enthistory"
-	"github.com/datumforge/entx"
+	"github.com/flume/enthistory"
+	"github.com/datum-cloud/entx"
 )
 
 // FileHistory holds the schema definition for the FileHistory entity.

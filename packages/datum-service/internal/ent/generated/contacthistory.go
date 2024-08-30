@@ -12,7 +12,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/contacthistory"
 	"github.com/datum-cloud/datum-os/pkg/enums"
-	"github.com/datumforge/enthistory"
+	"github.com/flume/enthistory"
 )
 
 // ContactHistory is the model entity for the ContactHistory schema.

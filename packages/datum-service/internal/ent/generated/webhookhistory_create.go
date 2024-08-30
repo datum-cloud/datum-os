@@ -11,7 +11,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/webhookhistory"
-	"github.com/datumforge/enthistory"
+	"github.com/flume/enthistory"
 )
 
 // WebhookHistoryCreate is the builder for creating a WebhookHistory entity.

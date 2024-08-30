@@ -11,7 +11,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/entitlementhistory"
-	"github.com/datumforge/enthistory"
+	"github.com/flume/enthistory"
 )
 
 // EntitlementHistory is the model entity for the EntitlementHistory schema.

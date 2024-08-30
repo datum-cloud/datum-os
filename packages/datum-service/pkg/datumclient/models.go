@@ -10,7 +10,7 @@ import (
 	"time"
 
 	"github.com/datum-cloud/datum-os/pkg/enums"
-	"github.com/datumforge/enthistory"
+	"github.com/flume/enthistory"
 )
 
 type GlobalSearchResult interface {

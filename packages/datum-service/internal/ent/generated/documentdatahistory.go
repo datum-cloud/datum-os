@@ -12,7 +12,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"github.com/datum-cloud/datum-os/internal/ent/customtypes"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/documentdatahistory"
-	"github.com/datumforge/enthistory"
+	"github.com/flume/enthistory"
 )
 
 // DocumentDataHistory is the model entity for the DocumentDataHistory schema.

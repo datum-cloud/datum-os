@@ -11,7 +11,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/entitlementhistory"
-	"github.com/datumforge/enthistory"
+	"github.com/flume/enthistory"
 )
 
 // EntitlementHistoryCreate is the builder for creating a EntitlementHistory entity.

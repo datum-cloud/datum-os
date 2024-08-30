@@ -12,8 +12,8 @@ import (
 	"entgo.io/ent/schema/index"
 
 	"github.com/datum-cloud/datum-os/internal/ent/interceptors"
-	"github.com/datumforge/enthistory"
-	"github.com/datumforge/entx"
+	"github.com/flume/enthistory"
+	"github.com/datum-cloud/entx"
 )
 
 // UserSettingHistory holds the schema definition for the UserSettingHistory entity.

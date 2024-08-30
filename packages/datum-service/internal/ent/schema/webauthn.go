@@ -6,9 +6,9 @@ import (
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
 
-	"github.com/datumforge/enthistory"
-	"github.com/datumforge/entx"
-	emixin "github.com/datumforge/entx/mixin"
+	"github.com/datum-cloud/entx"
+	emixin "github.com/datum-cloud/entx/mixin"
+	"github.com/flume/enthistory"
 )
 
 // Webauthn holds the schema definition for the Webauthn entity

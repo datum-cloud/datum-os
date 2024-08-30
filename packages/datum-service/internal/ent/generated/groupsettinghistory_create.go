@@ -12,7 +12,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/groupsettinghistory"
 	"github.com/datum-cloud/datum-os/pkg/enums"
-	"github.com/datumforge/enthistory"
+	"github.com/flume/enthistory"
 )
 
 // GroupSettingHistoryCreate is the builder for creating a GroupSettingHistory entity.

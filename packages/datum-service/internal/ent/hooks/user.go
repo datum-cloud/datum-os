@@ -6,7 +6,7 @@ import (
 	"strings"
 
 	"entgo.io/ent"
-	"github.com/datumforge/entx"
+	"github.com/datum-cloud/entx"
 	petname "github.com/dustinkirkland/golang-petname"
 	"golang.org/x/text/cases"
 	"golang.org/x/text/language"

@@ -10,8 +10,8 @@ import (
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
-	"github.com/datumforge/entx"
-	emixin "github.com/datumforge/entx/mixin"
+	"github.com/datum-cloud/entx"
+	emixin "github.com/datum-cloud/entx/mixin"
 	"github.com/datumforge/fgax/entfga"
 
 	"github.com/datum-cloud/datum-os/internal/ent/customtypes"

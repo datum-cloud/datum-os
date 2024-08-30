@@ -12,7 +12,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/usersettinghistory"
 	"github.com/datum-cloud/datum-os/pkg/enums"
-	"github.com/datumforge/enthistory"
+	"github.com/flume/enthistory"
 )
 
 // UserSettingHistoryCreate is the builder for creating a UserSettingHistory entity.

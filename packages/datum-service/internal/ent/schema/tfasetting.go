@@ -6,8 +6,8 @@ import (
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
 
-	"github.com/datumforge/enthistory"
-	emixin "github.com/datumforge/entx/mixin"
+	emixin "github.com/datum-cloud/entx/mixin"
+	"github.com/flume/enthistory"
 
 	"github.com/datum-cloud/datum-os/internal/ent/hooks"
 	"github.com/datum-cloud/datum-os/internal/ent/mixin"

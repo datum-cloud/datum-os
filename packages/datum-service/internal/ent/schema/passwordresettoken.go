@@ -11,9 +11,9 @@ import (
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
 
-	"github.com/datumforge/enthistory"
-	"github.com/datumforge/entx"
-	emixin "github.com/datumforge/entx/mixin"
+	"github.com/datum-cloud/entx"
+	emixin "github.com/datum-cloud/entx/mixin"
+	"github.com/flume/enthistory"
 
 	"github.com/datum-cloud/datum-os/internal/ent/generated"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/privacy"

@@ -236,7 +236,7 @@ require (
 	github.com/coreos/go-oidc/v3 v3.11.0
 	github.com/cpuguy83/go-md2man/v2 v2.0.4 // indirect
 	github.com/datumforge/echox v0.1.2
-	github.com/datumforge/entx v0.3.1
+	github.com/datum-cloud/entx v0.3.1
 	github.com/dlclark/regexp2 v1.11.0 // indirect
 	github.com/fatih/color v1.17.0 // indirect
 	github.com/fsnotify/fsnotify v1.7.0 // indirect

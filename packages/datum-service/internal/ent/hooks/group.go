@@ -6,7 +6,7 @@ import (
 	"strings"
 
 	"entgo.io/ent"
-	"github.com/datumforge/entx"
+	"github.com/datum-cloud/entx"
 	"github.com/datumforge/fgax"
 
 	"github.com/datum-cloud/datum-os/internal/ent/generated"

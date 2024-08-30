@@ -6,7 +6,7 @@ import (
 
 	"entgo.io/ent"
 
-	"github.com/datumforge/entx"
+	"github.com/datum-cloud/entx"
 	"github.com/datumforge/fgax"
 	geodeticenums "github.com/datumforge/geodetic/pkg/enums"
 	geodetic "github.com/datumforge/geodetic/pkg/geodeticclient"

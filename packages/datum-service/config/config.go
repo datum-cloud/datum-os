@@ -5,7 +5,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/datumforge/entx"
+	"github.com/datum-cloud/entx"
 	"github.com/datumforge/fgax"
 	"github.com/datumforge/geodetic/pkg/geodeticclient"
 	"github.com/knadh/koanf/parsers/yaml"

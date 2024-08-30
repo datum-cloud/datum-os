@@ -9,7 +9,7 @@ import (
 	"time"
 
 	// supported ent database drivers
-	_ "github.com/datumforge/entx"                       // overlay for sqlite
+	_ "github.com/datum-cloud/entx"                      // overlay for sqlite
 	_ "github.com/lib/pq"                                // postgres driver
 	_ "github.com/tursodatabase/libsql-client-go/libsql" // libsql driver
 	_ "modernc.org/sqlite"                               // sqlite driver (non-cgo)

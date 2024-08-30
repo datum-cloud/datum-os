@@ -15,8 +15,8 @@ import (
 	"github.com/datum-cloud/datum-os/internal/ent/generated"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/privacy"
 	"github.com/datum-cloud/datum-os/internal/ent/interceptors"
-	"github.com/datumforge/enthistory"
-	"github.com/datumforge/entx"
+	"github.com/flume/enthistory"
+	"github.com/datum-cloud/entx"
 	"github.com/datumforge/fgax/entfga"
 )
 
