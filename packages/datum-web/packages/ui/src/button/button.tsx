@@ -4,12 +4,18 @@ import { buttonStyles, type ButtonProps } from './button.styles'
 import { CheckIcon, LoaderCircle } from 'lucide-react'
 import { cn } from '../../lib/utils'
 
-const Button = forwardRef<HTMLButtonElement, ButtonProps>(
+interface ButtonWithIcons extends Omit<ButtonProps, 'icon'> {
+  iconRight?: React.ReactNode
+  iconLeft?: React.ReactNode
+}
+
+const Button = forwardRef<HTMLButtonElement, ButtonWithIcons>(
   (
     {
       asChild = false,
       className,
-      icon,
+      iconRight,
+      iconLeft,
       loading,
       iconAnimated,
       iconPosition,
@@ -44,17 +50,25 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         ref={ref}
         {...rest}
       >
+        {iconLeft && (
+          <div className={iconOuter()}>
+            <div className={iconInner()}>
+              {iconLeft}
+              {iconLeft}
+            </div>
+          </div>
+        )}
         <span className={cn(childWrapper(), loading && loadingText())}>
           {rest.children}
         </span>
-        {icon ? (
+        {iconRight && (
           <div className={iconOuter()}>
             <div className={iconInner()}>
-              {icon}
-              {icon}
+              {iconRight}
+              {iconRight}
             </div>
           </div>
-        ) : null}
+        )}
         {variant === 'success' ? (
           <div className={iconOuter()}>
             <div className={iconInner()}>

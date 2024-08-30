@@ -14,6 +14,7 @@ export const buttonStyles = tv({
   },
   variants: {
     variant: {
+      ghost: 'text-blackberry-800 font-normal p-0',
       sunglow: '!bg-sunglow-900 hover:!opacity-90',
       blackberry: '!bg-blackberry-900 hover:!opacity-90',
       outline:
@@ -22,7 +23,7 @@ export const buttonStyles = tv({
         'border-blackberry-500 text-blackberry-800 border hover:!opacity-90',
       redOutline:
         'border-util-red-500 text-util-red-500 border bg-white hover:!opacity-90 dark:border-util-red-500 dark:text-util-red-500',
-      white: {},
+      white: 'text-blackberry-800',
       success: 'flex-row-reverse !bg-util-green-500 hover:!opacity-90',
     },
     iconPosition: {

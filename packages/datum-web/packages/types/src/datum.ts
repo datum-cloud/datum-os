@@ -9,6 +9,8 @@ export namespace Datum {
 
   export type OrganisationId = Brand<Id, 'OrganisationId'>
 
+  export type ContactId = Brand<Id, 'ContactId'>
+
   export type Json = Brand<string, 'Json'>
 
   export type Integer = number
@@ -48,14 +50,22 @@ export namespace Datum {
     [K in keyof T]-?: T[K] extends V ? K : never
   }[keyof T]
 
+  export enum Status {
+    active = 'Active',
+    pending = 'Pending',
+    inactive = 'Inactive',
+  }
+
   export type Contact = {
+    id: ContactId
     fullName: string
     title: string
     company: string
-    email: string
-    status: string // TODO: enum
+    email: Email
+    status: Status
     address: string
     phoneNumber: string
-    createdAt: Date // TODO: Check this...
+    createdAt: Date
+    lists: string[]
   }
 }
