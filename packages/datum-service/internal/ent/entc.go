@@ -16,10 +16,10 @@ import (
 	"go.uber.org/zap"
 	"gocloud.dev/secrets"
 
-	"github.com/datumforge/enthistory"
 	"github.com/datumforge/entx"
 	"github.com/datumforge/entx/genhooks"
 	geodetic "github.com/datumforge/geodetic/pkg/geodeticclient"
+	"github.com/flume/enthistory"
 
 	"github.com/datum-cloud/datum-os/internal/ent/entconfig"
 	"github.com/datum-cloud/datum-os/pkg/analytics"
