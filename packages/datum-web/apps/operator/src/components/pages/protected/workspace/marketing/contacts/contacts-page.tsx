@@ -56,7 +56,7 @@ const ContactsPage: React.FC = () => {
     <div className={wrapper()}>
       <div className="flex items-stretch justify-between">
         <PageTitle title="Contacts" />
-        <ContactControls toggleSearch={toggleSearch} />
+        <ContactControls searchOpen={showSearch} toggleSearch={toggleSearch} />
       </div>
       {showSearch && (
         <ContactSearchPanel

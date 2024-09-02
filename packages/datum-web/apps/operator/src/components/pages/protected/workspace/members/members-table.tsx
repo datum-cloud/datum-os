@@ -179,7 +179,7 @@ export const MembersTable = ({ setActiveTab }: MembersTableProps) => {
         </div>
         <div className={membersButtons()}>
           <Button
-            iconRight={<PlusIcon />}
+            icon={<PlusIcon />}
             iconPosition="left"
             onClick={() => setActiveTab('invites')}
           >

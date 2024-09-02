@@ -152,7 +152,7 @@ export const TemplateEditor = ({ id }: { id: string }) => {
         />
       </SimpleForm>
       <Button
-        iconRight={<ArrowUpRight />}
+        icon={<ArrowUpRight />}
         iconAnimated
         type="button"
         size="md"
@@ -172,7 +172,7 @@ export const TemplateEditor = ({ id }: { id: string }) => {
       </Button>
       &nbsp;&nbsp;&nbsp;
       <Button
-        iconRight={<ArrowUpRight />}
+        icon={<ArrowUpRight />}
         iconAnimated
         type="button"
         size="md"

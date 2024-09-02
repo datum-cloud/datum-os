@@ -34,7 +34,7 @@ const DashboardLanding: React.FC = () => {
                 onClick={() => {
                   alert('Coming soon')
                 }}
-                iconRight={<ArrowUpRight />}
+                icon={<ArrowUpRight />}
                 size="md"
                 iconAnimated
               >
@@ -58,7 +58,7 @@ const DashboardLanding: React.FC = () => {
                 onClick={() => {
                   push('/workspace-settings/general-settings')
                 }}
-                iconRight={<ArrowUpRight />}
+                icon={<ArrowUpRight />}
                 size="md"
                 iconAnimated
               >
@@ -84,7 +84,7 @@ const DashboardLanding: React.FC = () => {
                 onClick={() => {
                   push('/workspace-settings/members')
                 }}
-                iconRight={<ArrowUpRight />}
+                icon={<ArrowUpRight />}
                 size="md"
                 iconAnimated
               >

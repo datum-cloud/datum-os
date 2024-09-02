@@ -118,7 +118,7 @@ export const LoginPage = () => {
           <Button
             variant="outline"
             size="md"
-            iconRight={<GoogleIcon />}
+            icon={<GoogleIcon />}
             iconPosition="left"
             onClick={() => {
               google()
@@ -130,7 +130,7 @@ export const LoginPage = () => {
           <Button
             variant="outline"
             size="md"
-            iconRight={<GithubIcon />}
+            icon={<GithubIcon />}
             iconPosition="left"
             onClick={() => {
               github()
@@ -142,7 +142,7 @@ export const LoginPage = () => {
           <Button
             variant="outline"
             size="md"
-            iconRight={<KeyRoundIcon className={keyIcon()} />}
+            icon={<KeyRoundIcon className={keyIcon()} />}
             iconPosition="left"
             onClick={() => {
               passKeySignIn()
@@ -180,7 +180,7 @@ export const LoginPage = () => {
 
           <Button
             className="mr-auto mt-2 w-full"
-            iconRight={<ArrowUpRight />}
+            icon={<ArrowUpRight />}
             size="md"
             type="submit"
             iconAnimated

@@ -3,9 +3,96 @@
 @layer ui_base {
   @import 'tailwindcss/base';
 
+  .text-h1 {
+    @apply text-h1 tracking-h1;
+  }
+
+  .text-h2 {
+    @apply text-h2 tracking-h2;
+  }
+
+  .text-h3 {
+    @apply text-h3 tracking-h3;
+  }
+
+  .text-h4 {
+    @apply text-h4 tracking-h4;
+  }
+
+  .text-h5 {
+    @apply text-h5 tracking-h5;
+  }
+
+  .text-h6 {
+    @apply text-h6 tracking-h6;
+  }
+
+  .text-body-xl {
+    @apply text-body-xl tracking-body-xl;
+  }
+
+  .text-body-l {
+    @apply text-body-l tracking-body-l;
+  }
+
+  .text-body-m {
+    @apply text-body-m tracking-body-m;
+  }
+
+  .text-body-sm {
+    @apply text-body-sm tracking-body-sm;
+  }
+
+  .text-body-xs {
+    @apply text-body-xs tracking-body-xs;
+  }
+
+  .text-smallcaps-l {
+    @apply text-smallcaps-l tracking-smallcaps-l;
+  }
+
+  .text-smallcaps-m {
+    @apply text-smallcaps-m tracking-smallcaps-m;
+  }
+
+  .text-smallcaps-s {
+    @apply text-smallcaps-s tracking-smallcaps-s;
+  }
+
+  .text-button-l {
+    @apply text-button-l tracking-button-l;
+  }
+
+  .text-button-m {
+    @apply text-button-m tracking-button-m;
+  }
+
+  .text-h1,
+  .text-h2,
+  .text-h3,
+  .text-h4,
+  .text-h5,
+  .text-h6,
+  .text-smallcaps-l,
+  .text-smallcaps-m,
+  .text-smallcaps-s,
+  .text-button-l,
+  .text-button-m {
+    @apply font-mono;
+  }
+
+  .text-smallcaps-l,
+  .text-smallcaps-m,
+  .text-smallcaps-s,
+  .text-button-l,
+  .text-button-m {
+    @apply font-semibold;
+  }
+
   body {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+
     @apply text-blackberry-800 dark:text-blackberry-100;
   }
 }

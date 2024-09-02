@@ -76,7 +76,7 @@ export const TemplateEditor = ({ id }: { id: string }) => {
           onChange={({ data }) => setData(data)}
         />
         <Button
-          iconRight={<ArrowUpRight />}
+          icon={<ArrowUpRight />}
           iconAnimated
           type="button"
           size="md"
@@ -89,7 +89,7 @@ export const TemplateEditor = ({ id }: { id: string }) => {
         </Button>
         &nbsp;&nbsp;&nbsp;
         <Button
-          iconRight={<ArrowUpRight />}
+          icon={<ArrowUpRight />}
           iconAnimated
           type="button"
           size="md"

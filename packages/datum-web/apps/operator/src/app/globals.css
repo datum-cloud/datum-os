@@ -3,22 +3,22 @@
 @import 'tailwindcss/utilities';
 
 body {
+  @apply font-sans text-body-m tracking-body-m text-blackberry-800 dark:text-blackberry-100;
+
+  -ms-text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  @apply text-blackberry-800 dark:text-blackberry-100;
 }
 
 h4 {
-  @apply text-3xl tracking-[-0.038rem] mb-10 w-full font-normal font-mono;
+  @apply text-h4 tracking-h4 mb-10 w-full font-normal font-mono;
 }
 
 h5 {
-  @apply text-[1.313rem] tracking-[-0.033rem];
-}
-p {
-  @apply text-blackberry-800/90 dark:text-blackberry-100;
+  @apply text-h5 tracking-h5;
 }
 
-p.red {
-  @apply text-util-red-500;
+p {
+  @apply text-blackberry-800/90 dark:text-blackberry-100;
 }

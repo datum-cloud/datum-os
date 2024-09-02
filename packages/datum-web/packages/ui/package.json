@@ -16,6 +16,7 @@
     "./checkbox": "./src/checkbox/checkbox.tsx",
     "./code": "./src/code.tsx",
     "./data-table": "./src/data-table/data-table.tsx",
+    "./data-column-header": "./src/data-table/data-column-header.tsx",
     "./dialog": "./src/dialog/dialog.tsx",
     "./drawer": "./src/drawer.tsx",
     "./dropdown-menu": "./src/dropdown-menu/dropdown-menu.tsx",

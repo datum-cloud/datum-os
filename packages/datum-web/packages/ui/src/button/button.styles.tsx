@@ -3,41 +3,27 @@ import { tv, type VariantProps } from 'tailwind-variants'
 
 export const buttonStyles = tv({
   slots: {
-    base: 'relative group font-sans font-semibold text-white inline-flex items-center gap-2 justify-center whitespace-nowrap rounded-md leading-none text-sm transition-all duration-500 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-blackberry-300 disabled:pointer-events-none disabled:opacity-50',
-    iconOuter: 'relative h-4 w-4 overflow-hidden',
-    iconInner: 'absolute transition-all duration-500',
+    base: 'relative group text-white font-sans font-semibold gap-[10px] inline-flex items-center justify-center whitespace-nowrap rounded-md leading-none text-sm transition-all duration-500 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-blackberry-300 disabled:pointer-events-none disabled:opacity-50 hover:opacity-90',
+    childWrapper: '',
     loadingWrapper:
       'absolute top-1/2 left-1/2  transform -translate-x-1/2 -translate-y-1/2',
-    loadingIcon: 'animate-spin !h-6 !w-6',
     loadingText: 'opacity-0',
-    childWrapper: '',
+    iconOuter: 'relative h-4 w-4 overflow-hidden',
+    iconInner: 'absolute transition-all duration-500',
   },
   variants: {
     variant: {
-      ghost: 'text-blackberry-800 font-normal p-0',
-      sunglow: '!bg-sunglow-900 hover:!opacity-90',
-      blackberry: '!bg-blackberry-900 hover:!opacity-90',
-      outline:
-        'border-blackberry-800 text-blackberry-800 border hover:!opacity-90',
-      outlineLight:
-        'border-blackberry-500 text-blackberry-800 border hover:!opacity-90',
-      redOutline:
-        'border-util-red-500 text-util-red-500 border bg-white hover:!opacity-90 dark:border-util-red-500 dark:text-util-red-500',
-      white: 'text-blackberry-800',
-      success: 'flex-row-reverse !bg-util-green-500 hover:!opacity-90',
-    },
-    iconPosition: {
-      left: 'flex-row-reverse',
-    },
-    iconAnimated: {
-      true: {
-        iconInner: 'group-hover:-translate-y-4',
-      },
+      sunglow: 'text-white bg-sunglow-900',
+      blackberry: 'text-white bg-blackberry-900',
+      outline: 'border-blackberry-800 text-blackberry-800 border',
+      success: 'flex-row-reverse bg-util-green-500',
+      failure: 'bg-util-red-500 border text-white',
     },
     size: {
-      sm: 'h-auto rounded-none p-0 !bg-transparent font-sans text-lg',
-      md: 'h-12 rounded-md text-base px-5',
-      lg: 'h-16 px-8 text-lg',
+      xs: 'h-auto rounded-none p-0 bg-transparent',
+      sm: 'h-9 rounded-none px-4 bg-transparent',
+      md: 'h-11 rounded-md text-base px-5 text-button-m',
+      lg: 'h-16 px-8 text-button-l',
     },
     full: {
       true: {
@@ -48,6 +34,14 @@ export const buttonStyles = tv({
       true: {
         childWrapper: 'flex w-full',
       },
+    },
+    iconAnimated: {
+      true: {
+        iconInner: 'group-hover:-translate-y-4',
+      },
+    },
+    iconPosition: {
+      left: 'flex-row-reverse',
     },
   },
   compoundVariants: [
@@ -62,7 +56,12 @@ export const buttonStyles = tv({
       class: 'text-blackberry-900',
     },
     {
-      variant: 'white',
+      variant: 'outline',
+      size: 'sm',
+      class: 'text-blackberry-900',
+    },
+    {
+      variant: 'failure',
       size: 'sm',
       class: 'text-white',
     },

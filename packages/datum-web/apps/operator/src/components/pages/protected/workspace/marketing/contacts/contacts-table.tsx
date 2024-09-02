@@ -6,24 +6,21 @@ import { ColumnDef } from '@tanstack/react-table'
 
 import { Checkbox } from '@repo/ui/checkbox'
 import { DataTable } from '@repo/ui/data-table'
+import { DataTableColumnHeader } from '@repo/ui/data-column-header'
 import { cn } from '@repo/ui/lib/utils'
 import { Datum } from '@repo/types'
 
 import ContactDropdownMenu from './contact-dropdown'
 
-import { tagStyles } from './table.styles'
+import { headerStyles, tagStyles } from './table.styles'
 
 type ContactsTableProps = {
   contacts: Datum.Contact[]
 }
 
-type SelectionState = Record<Datum.ContactId, boolean>
-
 export const ContactsTable = ({ contacts }: ContactsTableProps) => {
-  const [selectedContacts, setSelectedContacts] = useState<SelectionState>({})
   const [filteredContacts, setFilteredContacts] =
     useState<Datum.Contact[]>(contacts)
-  const allSelected = !filteredContacts.some(({ id }) => !selectedContacts[id])
 
   useEffect(() => {
     if (contacts) {
@@ -31,53 +28,48 @@ export const ContactsTable = ({ contacts }: ContactsTableProps) => {
     }
   }, [contacts])
 
-  useEffect(() => {
-    setSelectedContacts({})
-  }, [filteredContacts])
-
-  function toggleSelect(id: Datum.ContactId) {
-    const newContacts = { ...selectedContacts }
-    newContacts[id] = !Boolean(selectedContacts[id])
-
-    setSelectedContacts(newContacts)
-  }
-
-  function toggleSelectAll() {
-    const newContacts: SelectionState = {}
-
-    if (!allSelected) {
-      for (const { id } of filteredContacts) {
-        newContacts[id] = true
-      }
-    }
-
-    setSelectedContacts(newContacts)
-  }
-
   const columns: ColumnDef<Datum.Contact>[] = [
     {
       id: 'select',
       accessorKey: 'id',
-      header: () => {
-        return (
-          <Checkbox checked={allSelected} onCheckedChange={toggleSelectAll} />
-        )
-      },
-      cell: ({ cell }) => {
-        const id = cell.getValue() as Datum.ContactId
-
+      size: 80,
+      maxSize: 80,
+      header: ({ table }) => {
         return (
           <Checkbox
-            value={id}
-            checked={selectedContacts[id]}
-            onCheckedChange={() => toggleSelect(id)}
+            checked={table.getIsAllPageRowsSelected()}
+            onCheckedChange={(value) =>
+              table.toggleAllPageRowsSelected(!!value)
+            }
+            className="bg-white"
+            aria-label="Select all contacts"
           />
+        )
+      },
+      cell: ({ row }) => {
+        return (
+          <div className="pr-4">
+            <Checkbox
+              checked={row.getIsSelected()}
+              className="bg-white"
+              onCheckedChange={(value) => row.toggleSelected(!!value)}
+              aria-label="Select contact"
+            />
+          </div>
         )
       },
     },
     {
       accessorKey: 'email',
-      header: 'Email',
+      minSize: 185,
+      enableSorting: true,
+      header: ({ column }) => (
+        <DataTableColumnHeader
+          className={headerStyles()}
+          column={column}
+          children="Email"
+        />
+      ),
       cell: ({ cell }) => {
         const value = cell.getValue() as Datum.Email
 
@@ -94,26 +86,58 @@ export const ContactsTable = ({ contacts }: ContactsTableProps) => {
     },
     {
       accessorKey: 'fullName',
-      header: 'Name',
+      header: ({ column }) => (
+        <DataTableColumnHeader
+          className={headerStyles()}
+          column={column}
+          children="Name"
+        />
+      ),
+      minSize: 185,
+      enableSorting: true,
     },
     {
       accessorKey: 'source',
-      header: 'Source',
+      header: ({ column }) => (
+        <DataTableColumnHeader
+          className={headerStyles()}
+          column={column}
+          children="Source"
+        />
+      ),
+      minSize: 165,
+      enableSorting: true,
     },
     {
       accessorKey: 'createdAt',
-      header: 'Created At',
+      header: ({ column }) => (
+        <DataTableColumnHeader
+          className={headerStyles()}
+          column={column}
+          children="Created At"
+        />
+      ),
+      size: 185,
+      enableSorting: true,
       cell: ({ cell }) => {
         const value = cell.getValue() as string
         const date = format(new Date(value), `MMMM d, yyyy 'at' h:mm`)
         const amPm = format(value, 'a').toLowerCase()
 
-        return `${date}${amPm}`
+        return <div className="w-full">{`${date}${amPm}`}</div>
       },
     },
     {
       accessorKey: 'status',
-      header: 'Status',
+      header: ({ column }) => (
+        <DataTableColumnHeader
+          className={headerStyles()}
+          column={column}
+          children="Status"
+        />
+      ),
+      size: 120,
+      enableSorting: true,
       cell: ({ cell }) => {
         const value = cell.getValue() as string
         const isActive = value === 'Active'
@@ -129,7 +153,15 @@ export const ContactsTable = ({ contacts }: ContactsTableProps) => {
     },
     {
       accessorKey: 'lists',
-      header: 'Lists',
+      header: ({ column }) => (
+        <DataTableColumnHeader
+          className={headerStyles()}
+          column={column}
+          children="Lists"
+        />
+      ),
+      minSize: 165,
+      enableSorting: false,
       cell: ({ cell }) => {
         const lists = cell.getValue() as string[]
         const [first, ...rest] = lists
@@ -140,7 +172,7 @@ export const ContactsTable = ({ contacts }: ContactsTableProps) => {
               {first}
             </span>
             {rest.length > 0 && (
-              <span className={tagStyles({ status: 'default' })}>
+              <span className={tagStyles({ status: 'muted' })}>
                 + {rest.length}
               </span>
             )}
@@ -149,8 +181,9 @@ export const ContactsTable = ({ contacts }: ContactsTableProps) => {
       },
     },
     {
-      header: '',
       accessorKey: 'id',
+      minSize: 50,
+      header: '',
       cell: ({ cell }) => {
         const id = cell.getValue() as Datum.ContactId
 
@@ -159,5 +192,13 @@ export const ContactsTable = ({ contacts }: ContactsTableProps) => {
     },
   ]
 
-  return <DataTable columns={columns} data={filteredContacts} />
+  return (
+    <DataTable
+      bordered
+      highlightHeader
+      columns={columns}
+      data={filteredContacts}
+      showFooter
+    />
+  )
 }

@@ -16,6 +16,19 @@ export const tableStyles = tv({
       'p-4 text-blackberry-800 align-middle [&:has([role=checkbox])]:pr-0',
     tableCaption: 'mt-4 text-sm text-slate-500 dark:text-slate-400',
   },
+  variants: {
+    highlightHeader: {
+      true: {
+        tableHead: 'bg-winter-sky-700',
+      },
+    },
+    bordered: {
+      true: {
+        tableCell: 'border-r border-blackberry-4',
+        tableHead: 'border-r border-blackberry-4',
+      },
+    },
+  },
 })
 
 export type TableVariants = VariantProps<typeof tableStyles>

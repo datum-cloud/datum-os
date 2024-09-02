@@ -10,18 +10,22 @@ import {
 import { Check, ChevronDown, Filter, Import, Search, User } from 'lucide-react'
 
 type ContactControlsProps = {
+  searchOpen: boolean
   toggleSearch(): void
 }
 
-const ContactControls = ({ toggleSearch }: ContactControlsProps) => {
+const ContactControls = ({
+  searchOpen,
+  toggleSearch,
+}: ContactControlsProps) => {
   return (
     <div className="flex justify-start items-stretch gap-[18px]">
-      <Button variant="outlineLight" onClick={toggleSearch}>
+      <Button variant="outline" onClick={toggleSearch}>
         <Search />
       </Button>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="outlineLight" iconRight={<ChevronDown />}>
+          <Button variant="outline" icon={<ChevronDown />}>
             Add
           </Button>
         </DropdownMenuTrigger>
@@ -42,7 +46,7 @@ const ContactControls = ({ toggleSearch }: ContactControlsProps) => {
       </DropdownMenu>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="outlineLight" iconRight={<ChevronDown />}>
+          <Button variant="outline" icon={<ChevronDown />}>
             Actions
           </Button>
         </DropdownMenuTrigger>
@@ -64,7 +68,7 @@ const ContactControls = ({ toggleSearch }: ContactControlsProps) => {
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
-      <Button variant="sunglow" iconRight={<Filter />}>
+      <Button variant="sunglow" icon={<Filter />}>
         Filter
       </Button>
     </div>

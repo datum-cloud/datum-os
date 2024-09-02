@@ -31,11 +31,15 @@ import {
   DropdownMenuTrigger,
 } from '../dropdown-menu/dropdown-menu'
 import { EyeIcon } from 'lucide-react'
+import { DataTablePagination } from './data-table-pagination'
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
+  bordered?: boolean
+  highlightHeader?: boolean
   showFilter?: boolean
+  showFooter?: boolean
   showVisibility?: boolean
   noResultsText?: string
 }
@@ -44,7 +48,10 @@ export function DataTable<TData, TValue>({
   columns,
   data,
   showFilter = false,
+  showFooter = false,
   showVisibility = false,
+  bordered = false,
+  highlightHeader = false,
   noResultsText = 'No results',
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([])
@@ -75,7 +82,7 @@ export function DataTable<TData, TValue>({
   })
 
   return (
-    <div>
+    <>
       {(showFilter || showVisibility) && (
         <div className="flex items-center py-4">
           {showFilter && (
@@ -125,11 +132,19 @@ export function DataTable<TData, TValue>({
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>
-              {headerGroup.headers.map((header) => {
+              {headerGroup.headers.map((header, index) => {
                 const columnWidth =
                   header.getSize() === 20 ? 'auto' : `${header.getSize()}px`
+                console.log('HEADER WIDTH', columnWidth)
+                const hasBorder =
+                  bordered && headerGroup.headers.length - 1 > index
                 return (
-                  <TableHead key={header.id} style={{ width: columnWidth }}>
+                  <TableHead
+                    highlightHeader={highlightHeader}
+                    bordered={hasBorder}
+                    key={header.id}
+                    style={{ width: columnWidth }}
+                  >
                     {header.isPlaceholder
                       ? null
                       : flexRender(
@@ -149,17 +164,41 @@ export function DataTable<TData, TValue>({
                 key={row.id}
                 data-state={row.getIsSelected() && 'selected'}
               >
-                {row.getVisibleCells().map((cell) => (
-                  <TableCell key={cell.id}>
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </TableCell>
-                ))}
+                {row.getVisibleCells().map((cell, index) => {
+                  const hasBorder =
+                    bordered && row.getVisibleCells().length - 1 > index
+                  const columnWidth =
+                    cell.column.getSize() === 20
+                      ? 'auto'
+                      : `${cell.column.getSize()}px`
+                  console.log('CELL WIDTH', columnWidth)
+
+                  return (
+                    <TableCell
+                      bordered={hasBorder}
+                      key={cell.id}
+                      style={{ width: columnWidth }}
+                    >
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext(),
+                      )}
+                    </TableCell>
+                  )
+                })}
               </TableRow>
             ))
           ) : (
             <TableRow>
               <TableCell colSpan={columns.length} className="h-24 text-center">
                 {noResultsText}
+              </TableCell>
+            </TableRow>
+          )}
+          {showFooter && (
+            <TableRow className="hover:bg-transparent">
+              <TableCell colSpan={columns.length}>
+                <DataTablePagination table={table} />
               </TableCell>
             </TableRow>
           )}
@@ -190,6 +229,6 @@ export function DataTable<TData, TValue>({
           </TableRow>
         </TableFooter> */}
       </Table>
-    </div>
+    </>
   )
 }
