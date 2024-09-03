@@ -8,7 +8,7 @@ import (
 	"fmt"
 	"os"
 
-	echoprometheus "github.com/datum-cloud/echo-prometheus/v5"
+	echoprometheus "github.com/datum-cloud/datum-os/pkg/echo-prometheus"
 	echo "github.com/datum-cloud/datum-os/pkg/echox"
 	"github.com/datum-cloud/datum-os/pkg/echox/middleware"
 	"github.com/datum-cloud/datum-os/pkg/echozap"

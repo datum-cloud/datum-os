@@ -6,13 +6,13 @@ import (
 	"strings"
 	"testing"
 
-	echo "github.com/datumforge/echox"
+	echo "github.com/datum-cloud/datum-os/pkg/echox"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestMetric(t *testing.T) {
-	//arrange
+	// arrange
 	e := echo.New()
 	e.Use(MetricsMiddleware())
 	e.GET("/metrics", echo.WrapHandler(promhttp.Handler()))
@@ -20,10 +20,10 @@ func TestMetric(t *testing.T) {
 	request := httptest.NewRequest(http.MethodGet, "/metrics", nil)
 	recorder := httptest.NewRecorder()
 
-	//action
+	// action
 	e.ServeHTTP(recorder, request)
 
-	//assert
+	// assert
 	assert.Equal(t, http.StatusOK, recorder.Code)
 	assert.NotEmpty(t, recorder.Body.String())
 	assert.True(t, strings.Contains(recorder.Body.String(), "echo"))
@@ -31,9 +31,9 @@ func TestMetric(t *testing.T) {
 }
 
 func TestMetricWithCustomConfig(t *testing.T) {
-	//arrange
+	// arrange
 	e := echo.New()
-	var configMetrics = NewConfig()
+	configMetrics := NewConfig()
 	configMetrics.Namespace = "namespace"
 	configMetrics.Subsystem = "test_subsystem"
 	configMetrics.NormalizeHTTPStatus = false
@@ -47,10 +47,10 @@ func TestMetricWithCustomConfig(t *testing.T) {
 	request := httptest.NewRequest(http.MethodGet, "/metrics", nil)
 	recorder := httptest.NewRecorder()
 
-	//action
+	// action
 	e.ServeHTTP(recorder, request)
 
-	//assert
+	// assert
 	assert.Equal(t, http.StatusOK, recorder.Code)
 	assert.NotEmpty(t, recorder.Body.String())
 	assert.True(t, strings.Contains(recorder.Body.String(), "namespace"))
