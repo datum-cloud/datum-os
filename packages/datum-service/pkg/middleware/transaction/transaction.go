@@ -5,7 +5,7 @@ import (
 	"errors"
 	"net/http"
 
-	echo "github.com/datumforge/echox"
+	echo "github.com/datum-cloud/datum-os/pkg/echox"
 	"go.uber.org/zap"
 
 	ent "github.com/datum-cloud/datum-os/internal/ent/generated"

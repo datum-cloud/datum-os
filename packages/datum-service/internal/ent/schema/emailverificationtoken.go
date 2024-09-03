@@ -10,10 +10,10 @@ import (
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
-	"github.com/datum-cloud/entx"
+	"github.com/datum-cloud/datum-os/pkg/entx"
 	"github.com/flume/enthistory"
 
-	emixin "github.com/datum-cloud/entx/mixin"
+	emixin "github.com/datum-cloud/datum-os/pkg/entx/mixin"
 
 	"github.com/datum-cloud/datum-os/internal/ent/generated"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/privacy"

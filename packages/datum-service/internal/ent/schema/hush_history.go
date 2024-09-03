@@ -12,7 +12,7 @@ import (
 	"entgo.io/ent/schema/index"
 
 	"github.com/flume/enthistory"
-	"github.com/datum-cloud/entx"
+	"github.com/datum-cloud/datum-os/pkg/entx"
 )
 
 // HushHistory holds the schema definition for the HushHistory entity.

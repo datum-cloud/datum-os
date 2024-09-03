@@ -10,7 +10,7 @@ import (
 	"reflect"
 
 	"github.com/datum-cloud/datum-os/internal/ent/generated/migrate"
-	"github.com/datum-cloud/fgax/entfga"
+	"github.com/datum-cloud/datum-os/pkg/fgax/entfga"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect"
@@ -80,8 +80,8 @@ import (
 	"github.com/datum-cloud/datum-os/pkg/utils/emails"
 	"github.com/datum-cloud/datum-os/pkg/utils/marionette"
 	"github.com/datum-cloud/datum-os/pkg/utils/totp"
-	"github.com/datum-cloud/fgax"
-	"github.com/datum-cloud/geodetic/pkg/geodeticclient"
+	"github.com/datum-cloud/datum-os/pkg/fgax"
+	"github.com/datum-cloud/datum-os/pkg/geodetic/pkg/geodeticclient"
 	"go.uber.org/zap"
 	"gocloud.dev/secrets"
 

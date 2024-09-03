@@ -3,7 +3,7 @@ package handlers
 import (
 	"net/http"
 
-	echo "github.com/datumforge/echox"
+	echo "github.com/datum-cloud/datum-os/pkg/echox"
 	"github.com/getkin/kin-openapi/openapi3"
 
 	ent "github.com/datum-cloud/datum-os/internal/ent/generated"

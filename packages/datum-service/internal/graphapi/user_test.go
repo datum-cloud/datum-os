@@ -4,8 +4,8 @@ import (
 	"testing"
 
 	"github.com/brianvoe/gofakeit/v7"
-	"github.com/datum-cloud/entx"
-	mock_fga "github.com/datum-cloud/fgax/mockery"
+	"github.com/datum-cloud/datum-os/pkg/entx"
+	mock_fga "github.com/datum-cloud/datum-os/pkg/fgax/mockery"
 	"github.com/samber/lo"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"

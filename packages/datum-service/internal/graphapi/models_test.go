@@ -7,7 +7,7 @@ import (
 	"time"
 
 	"github.com/brianvoe/gofakeit/v7"
-	mock_fga "github.com/datum-cloud/fgax/mockery"
+	mock_fga "github.com/datum-cloud/datum-os/pkg/fgax/mockery"
 
 	ent "github.com/datum-cloud/datum-os/internal/ent/generated"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/privacy"

@@ -7,7 +7,7 @@ import (
 
 	"github.com/99designs/gqlgen/graphql"
 
-	"github.com/datum-cloud/fgax"
+	"github.com/datum-cloud/datum-os/pkg/fgax"
 
 	"github.com/datum-cloud/datum-os/internal/ent/generated"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/intercept"

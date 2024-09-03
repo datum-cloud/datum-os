@@ -16,8 +16,8 @@ import (
 	"github.com/datum-cloud/datum-os/internal/ent/generated/privacy"
 	"github.com/datum-cloud/datum-os/internal/ent/interceptors"
 	"github.com/flume/enthistory"
-	"github.com/datum-cloud/entx"
-	"github.com/datum-cloud/fgax/entfga"
+	"github.com/datum-cloud/datum-os/pkg/entx"
+	"github.com/datum-cloud/datum-os/pkg/fgax/entfga"
 )
 
 // OauthProviderHistory holds the schema definition for the OauthProviderHistory entity.

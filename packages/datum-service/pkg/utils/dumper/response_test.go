@@ -6,7 +6,7 @@ import (
 	"testing"
 
 	"github.com/brianvoe/gofakeit/v7"
-	echo "github.com/datumforge/echox"
+	echo "github.com/datum-cloud/datum-os/pkg/echox"
 	"github.com/stretchr/testify/require"
 )
 

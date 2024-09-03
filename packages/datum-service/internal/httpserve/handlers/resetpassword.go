@@ -9,7 +9,7 @@ import (
 	"time"
 
 	"github.com/cenkalti/backoff/v4"
-	echo "github.com/datumforge/echox"
+	echo "github.com/datum-cloud/datum-os/pkg/echox"
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/oklog/ulid/v2"
 

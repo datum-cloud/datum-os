@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"entgo.io/ent/entql"
-	"github.com/datum-cloud/entx"
+	"github.com/datum-cloud/datum-os/pkg/entx"
 
 	"github.com/datum-cloud/datum-os/internal/ent/generated/privacy"
 	"github.com/datum-cloud/datum-os/pkg/auth"

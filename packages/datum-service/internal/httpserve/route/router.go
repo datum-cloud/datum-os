@@ -3,8 +3,8 @@ package route
 import (
 	"time"
 
-	echo "github.com/datumforge/echox"
-	"github.com/datumforge/echox/middleware"
+	echo "github.com/datum-cloud/datum-os/pkg/echox"
+	"github.com/datum-cloud/datum-os/pkg/echox/middleware"
 	"github.com/getkin/kin-openapi/openapi3"
 
 	"github.com/datum-cloud/datum-os/internal/httpserve/handlers"

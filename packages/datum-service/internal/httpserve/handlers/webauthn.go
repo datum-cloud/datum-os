@@ -3,7 +3,7 @@ package handlers
 import (
 	"context"
 
-	echo "github.com/datumforge/echox"
+	echo "github.com/datum-cloud/datum-os/pkg/echox"
 
 	"github.com/go-webauthn/webauthn/protocol"
 	"github.com/go-webauthn/webauthn/webauthn"

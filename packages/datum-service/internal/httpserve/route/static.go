@@ -4,7 +4,7 @@ import (
 	"embed"
 	"net/http"
 
-	echo "github.com/datumforge/echox"
+	echo "github.com/datum-cloud/datum-os/pkg/echox"
 )
 
 // registerJwksWellKnownHandler supplies the JWKS endpoint

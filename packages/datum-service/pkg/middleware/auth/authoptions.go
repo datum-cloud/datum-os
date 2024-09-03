@@ -4,7 +4,7 @@ import (
 	"context"
 	"time"
 
-	"github.com/datumforge/echox/middleware"
+	"github.com/datum-cloud/datum-os/pkg/echox/middleware"
 	"github.com/lestrrat-go/jwx/v2/jwk"
 
 	ent "github.com/datum-cloud/datum-os/internal/ent/generated"

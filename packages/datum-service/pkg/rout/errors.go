@@ -7,7 +7,7 @@ import (
 	"net/http"
 	"strings"
 
-	echo "github.com/datumforge/echox"
+	echo "github.com/datum-cloud/datum-os/pkg/echox"
 )
 
 // ErrorCode is returned along side error messages for better error handling

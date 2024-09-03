@@ -1,7 +1,7 @@
 package handlers
 
 import (
-	echo "github.com/datumforge/echox"
+	echo "github.com/datum-cloud/datum-os/pkg/echox"
 	"github.com/go-webauthn/webauthn/webauthn"
 	"github.com/lestrrat-go/jwx/v2/jwk"
 	"github.com/redis/go-redis/v9"

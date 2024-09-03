@@ -77,7 +77,7 @@ models:
       - github.com/datum-cloud/datum-os/internal/ent/generated.Noder
   JSON:
     model:
-      - github.com/datum-cloud/entx.RawMessage
+      - github.com/datum-cloud/datum-os/pkg/entx.RawMessage
       - github.com/datum-cloud/datum-os/internal/ent/customtypes.JSONObject
   Any:
     model:

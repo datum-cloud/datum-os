@@ -11,7 +11,7 @@ import (
 	"ariga.io/entcache"
 	"entgo.io/ent/dialect"
 	entsql "entgo.io/ent/dialect/sql"
-	"github.com/datum-cloud/entx"
+	"github.com/datum-cloud/datum-os/pkg/entx"
 	"github.com/pressly/goose/v3"
 
 	"go.uber.org/zap"

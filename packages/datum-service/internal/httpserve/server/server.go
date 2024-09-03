@@ -3,7 +3,7 @@ package server
 import (
 	"context"
 
-	echo "github.com/datumforge/echox"
+	echo "github.com/datum-cloud/datum-os/pkg/echox"
 	"go.uber.org/zap"
 
 	"github.com/datum-cloud/datum-os/internal/httpserve/config"

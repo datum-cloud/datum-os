@@ -7,9 +7,9 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/datum-cloud/datum-os/pkg/auth"
+	echo "github.com/datum-cloud/datum-os/pkg/echox"
 	"github.com/datum-cloud/datum-os/pkg/middleware/echocontext"
 	"github.com/datum-cloud/datum-os/pkg/sessions"
-	echo "github.com/datumforge/echox"
 )
 
 const (

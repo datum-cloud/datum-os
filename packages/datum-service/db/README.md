@@ -4,7 +4,7 @@
 
 1. [ent](https://entgo.io/) - insane entity mapping tool, definitely not an ORM but kind of an ORM
 1. [atlas](https://atlasgo.io/) - Schema generation and migration
-1. [entx](https://github.com/datum-cloud/entx) - Wrapper to interact with the ent
+1. [entx](https://github.com/datum-cloud/datum-os/pkg/entx) - Wrapper to interact with the ent
 
 ## Supported Drivers
 

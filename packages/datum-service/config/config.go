@@ -5,9 +5,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/datum-cloud/entx"
-	"github.com/datum-cloud/fgax"
-	"github.com/datum-cloud/geodetic/pkg/geodeticclient"
+	"github.com/datum-cloud/datum-os/pkg/entx"
+	"github.com/datum-cloud/datum-os/pkg/fgax"
+	"github.com/datum-cloud/datum-os/pkg/geodetic/pkg/geodeticclient"
 	"github.com/knadh/koanf/parsers/yaml"
 	"github.com/knadh/koanf/providers/env"
 	"github.com/knadh/koanf/providers/file"

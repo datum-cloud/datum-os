@@ -6,8 +6,8 @@ import (
 	"github.com/spf13/cobra"
 	"go.uber.org/zap"
 
-	"github.com/datum-cloud/fgax"
-	geodetic "github.com/datum-cloud/geodetic/pkg/geodeticclient"
+	"github.com/datum-cloud/datum-os/pkg/fgax"
+	geodetic "github.com/datum-cloud/datum-os/pkg/geodetic/pkg/geodeticclient"
 
 	ent "github.com/datum-cloud/datum-os/internal/ent/generated"
 	"github.com/datum-cloud/datum-os/internal/entdb"

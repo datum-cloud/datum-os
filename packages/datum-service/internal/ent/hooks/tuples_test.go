@@ -3,7 +3,7 @@ package hooks
 import (
 	"testing"
 
-	"github.com/datum-cloud/fgax"
+	"github.com/datum-cloud/datum-os/pkg/fgax"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 

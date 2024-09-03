@@ -8,12 +8,12 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/datum-cloud/entx"
-	"github.com/datum-cloud/fgax"
-	echoprometheus "github.com/datumforge/echo-prometheus/v5"
-	echo "github.com/datumforge/echox"
-	"github.com/datumforge/echox/middleware"
-	"github.com/datumforge/echozap"
+	echoprometheus "github.com/datum-cloud/echo-prometheus/v5"
+	echo "github.com/datum-cloud/datum-os/pkg/echox"
+	"github.com/datum-cloud/datum-os/pkg/echox/middleware"
+	"github.com/datum-cloud/datum-os/pkg/echozap"
+	"github.com/datum-cloud/datum-os/pkg/entx"
+	"github.com/datum-cloud/datum-os/pkg/fgax"
 	"github.com/redis/go-redis/v9"
 	"go.uber.org/zap"
 

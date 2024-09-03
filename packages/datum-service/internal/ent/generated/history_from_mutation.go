@@ -12,7 +12,7 @@ import (
 
 	"entgo.io/ent"
 	"github.com/flume/enthistory"
-	"github.com/datum-cloud/entx"
+	"github.com/datum-cloud/datum-os/pkg/entx"
 )
 
 var (

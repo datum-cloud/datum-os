@@ -11,10 +11,10 @@ import (
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
-	"github.com/datum-cloud/entx"
-	emixin "github.com/datum-cloud/entx/mixin"
+	"github.com/datum-cloud/datum-os/pkg/entx"
+	emixin "github.com/datum-cloud/datum-os/pkg/entx/mixin"
 
-	"github.com/datum-cloud/fgax/entfga"
+	"github.com/datum-cloud/datum-os/pkg/fgax/entfga"
 
 	"github.com/datum-cloud/datum-os/internal/ent/generated"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/privacy"

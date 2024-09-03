@@ -8,7 +8,7 @@ import (
 	"net"
 	"net/http"
 
-	echo "github.com/datumforge/echox"
+	echo "github.com/datum-cloud/datum-os/pkg/echox"
 )
 
 // Dumper is a response writer that captures the response body
@@ -63,7 +63,6 @@ func (d *Dumper) Hijack() (net.Conn, *bufio.ReadWriter, error) {
 	// Hijack the response writer and return the connection and read writer; does not work with HTTP/2 so needs to be checked
 	if hijacker, ok := d.ResponseWriter.(http.Hijacker); ok {
 		conn, rw, err := hijacker.Hijack()
-
 		if err != nil {
 			err = fmt.Errorf("error hijacking response: %w", err)
 		}

@@ -12,8 +12,8 @@ import (
 	"github.com/stretchr/testify/require"
 	"github.com/stretchr/testify/suite"
 
-	"github.com/datum-cloud/fgax"
-	mock_fga "github.com/datum-cloud/fgax/mockery"
+	"github.com/datum-cloud/datum-os/pkg/fgax"
+	mock_fga "github.com/datum-cloud/datum-os/pkg/fgax/mockery"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 

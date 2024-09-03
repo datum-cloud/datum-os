@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"time"
 
-	echo "github.com/datumforge/echox"
+	echo "github.com/datum-cloud/datum-os/pkg/echox"
 	"go.uber.org/zap"
 	"golang.org/x/crypto/acme"
 	"golang.org/x/crypto/acme/autocert"

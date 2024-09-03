@@ -6,8 +6,8 @@ import (
 	"strings"
 
 	"entgo.io/ent"
-	"github.com/datum-cloud/entx"
-	"github.com/datum-cloud/fgax"
+	"github.com/datum-cloud/datum-os/pkg/entx"
+	"github.com/datum-cloud/datum-os/pkg/fgax"
 
 	"github.com/datum-cloud/datum-os/internal/ent/generated"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/hook"

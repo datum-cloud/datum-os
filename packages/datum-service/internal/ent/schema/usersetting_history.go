@@ -13,7 +13,7 @@ import (
 
 	"github.com/datum-cloud/datum-os/internal/ent/interceptors"
 	"github.com/flume/enthistory"
-	"github.com/datum-cloud/entx"
+	"github.com/datum-cloud/datum-os/pkg/entx"
 )
 
 // UserSettingHistory holds the schema definition for the UserSettingHistory entity.

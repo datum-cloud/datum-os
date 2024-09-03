@@ -14,7 +14,7 @@ import (
 	"github.com/99designs/gqlgen/graphql/handler/lru"
 	"github.com/99designs/gqlgen/graphql/handler/transport"
 	"github.com/alitto/pond"
-	echo "github.com/datumforge/echox"
+	echo "github.com/datum-cloud/datum-os/pkg/echox"
 	"github.com/gorilla/websocket"
 	"github.com/ravilushqa/otelgqlgen"
 	"github.com/vektah/gqlparser/v2/ast"

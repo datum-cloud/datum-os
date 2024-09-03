@@ -4,7 +4,7 @@ import (
 	"context"
 	"time"
 
-	echo "github.com/datumforge/echox"
+	echo "github.com/datum-cloud/datum-os/pkg/echox"
 	"github.com/golang-jwt/jwt/v5"
 
 	"github.com/datum-cloud/datum-os/pkg/middleware/echocontext"

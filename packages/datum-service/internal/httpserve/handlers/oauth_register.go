@@ -4,7 +4,7 @@ import (
 	"context"
 	"strings"
 
-	echo "github.com/datumforge/echox"
+	echo "github.com/datum-cloud/datum-os/pkg/echox"
 	ph "github.com/posthog/posthog-go"
 	"golang.org/x/oauth2"
 

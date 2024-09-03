@@ -3,7 +3,7 @@ package hooks
 import (
 	"strings"
 
-	"github.com/datum-cloud/fgax"
+	"github.com/datum-cloud/datum-os/pkg/fgax"
 
 	"github.com/datum-cloud/datum-os/pkg/enums"
 )

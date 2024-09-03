@@ -10,7 +10,7 @@ import (
 	"time"
 
 	"github.com/brianvoe/gofakeit/v7"
-	mock_fga "github.com/datum-cloud/fgax/mockery"
+	mock_fga "github.com/datum-cloud/datum-os/pkg/fgax/mockery"
 	"github.com/rShetty/asyncwait"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"

@@ -11,9 +11,9 @@ import (
 	"github.com/datum-cloud/datum-os/internal/ent/generated"
 	"github.com/datum-cloud/datum-os/internal/graphapi"
 	"github.com/datum-cloud/datum-os/pkg/datumclient"
+	echo "github.com/datum-cloud/datum-os/pkg/echox"
 	"github.com/datum-cloud/datum-os/pkg/middleware/auth"
 	"github.com/datum-cloud/datum-os/pkg/middleware/echocontext"
-	echo "github.com/datumforge/echox"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zaptest"
 )

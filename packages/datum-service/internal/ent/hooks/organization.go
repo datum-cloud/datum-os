@@ -6,10 +6,10 @@ import (
 
 	"entgo.io/ent"
 
-	"github.com/datum-cloud/entx"
-	"github.com/datum-cloud/fgax"
-	geodeticenums "github.com/datum-cloud/geodetic/pkg/enums"
-	geodetic "github.com/datum-cloud/geodetic/pkg/geodeticclient"
+	"github.com/datum-cloud/datum-os/pkg/entx"
+	"github.com/datum-cloud/datum-os/pkg/fgax"
+	geodeticenums "github.com/datum-cloud/datum-os/pkg/geodetic/pkg/enums"
+	geodetic "github.com/datum-cloud/datum-os/pkg/geodetic/pkg/geodeticclient"
 
 	"github.com/datum-cloud/datum-os/internal/ent/generated"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/hook"

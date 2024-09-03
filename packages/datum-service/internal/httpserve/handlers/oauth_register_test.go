@@ -7,7 +7,7 @@ import (
 	"strings"
 	"testing"
 
-	mock_fga "github.com/datum-cloud/fgax/mockery"
+	mock_fga "github.com/datum-cloud/datum-os/pkg/fgax/mockery"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
