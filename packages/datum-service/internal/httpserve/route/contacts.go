@@ -3,11 +3,11 @@ package route
 import (
 	"net/http"
 
-	echo "github.com/datum-cloud/echox"
+	echo "github.com/datum-cloud/datum-os/pkg/echox"
 )
 
 // registerEventPublisher registers the event publisher endpoint
-func registerContactsGet(router *Router) (err error) {
+func registerContactsGetHandler(router *Router) (err error) {
 	path := "/contacts"
 	method := http.MethodGet
 	name := "ContactsGet"
