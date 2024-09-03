@@ -56,7 +56,7 @@ Flags:
     ```
 1. Add the new package to `cmd/cli/main.go`, in this case it would be:
     ```go
-    	_ "github.com/datumforge/datum/cmd/cli/cmd/contact"
+    	_ "github.com/datum-cloud/datum-os/cmd/cli/cmd/contact"
     ```
 1. Add flags for the `Create` and `Update` commands for input
 1. Add validation to the `createValidation()` and `updateValidation()` functions for the required input

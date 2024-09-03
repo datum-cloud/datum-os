@@ -5,14 +5,14 @@ import (
 	"fmt"
 	"net/http"
 
-	echo "github.com/datumforge/echox"
+	echo "github.com/datum-cloud/datum-os/pkg/echox"
 	"github.com/golang-jwt/jwt/v5"
 
-	"github.com/datumforge/datum/internal/ent/generated"
-	"github.com/datumforge/datum/pkg/httpsling"
-	"github.com/datumforge/datum/pkg/models"
-	"github.com/datumforge/datum/pkg/sessions"
-	"github.com/datumforge/datum/pkg/tokens"
+	"github.com/datum-cloud/datum-os/internal/ent/generated"
+	"github.com/datum-cloud/datum-os/pkg/httpsling"
+	"github.com/datum-cloud/datum-os/pkg/models"
+	"github.com/datum-cloud/datum-os/pkg/sessions"
+	"github.com/datum-cloud/datum-os/pkg/tokens"
 )
 
 type Config struct {

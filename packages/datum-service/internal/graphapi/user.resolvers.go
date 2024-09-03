@@ -8,9 +8,9 @@ import (
 	"context"
 	"errors"
 
-	"github.com/datumforge/datum/internal/ent/generated"
-	_ "github.com/datumforge/datum/internal/ent/generated/runtime"
-	"github.com/datumforge/datum/pkg/auth"
+	"github.com/datum-cloud/datum-os/internal/ent/generated"
+	_ "github.com/datum-cloud/datum-os/internal/ent/generated/runtime"
+	"github.com/datum-cloud/datum-os/pkg/auth"
 )
 
 // CreateUser is the resolver for the createUser field.

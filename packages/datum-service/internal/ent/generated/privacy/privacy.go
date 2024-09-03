@@ -5,7 +5,7 @@ package privacy
 import (
 	"context"
 
-	"github.com/datumforge/datum/internal/ent/generated"
+	"github.com/datum-cloud/datum-os/internal/ent/generated"
 
 	"entgo.io/ent/entql"
 	"entgo.io/ent/privacy"

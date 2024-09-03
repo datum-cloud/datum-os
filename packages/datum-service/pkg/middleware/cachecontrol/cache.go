@@ -3,8 +3,8 @@ package cachecontrol
 import (
 	"time"
 
-	echo "github.com/datumforge/echox"
-	"github.com/datumforge/echox/middleware"
+	echo "github.com/datum-cloud/datum-os/pkg/echox"
+	"github.com/datum-cloud/datum-os/pkg/echox/middleware"
 )
 
 var epoch = time.Unix(0, 0).Format(time.RFC1123)

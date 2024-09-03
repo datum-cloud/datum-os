@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"net/http/httptest"
 
-	"github.com/datumforge/datum/pkg/testutils"
+	"github.com/datum-cloud/datum-os/pkg/testutils"
 )
 
 // newGithubTestServer mocks the GitHub user endpoint and a client

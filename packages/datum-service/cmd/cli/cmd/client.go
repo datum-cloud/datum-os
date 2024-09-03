@@ -10,9 +10,9 @@ import (
 	"github.com/99designs/keyring"
 	"golang.org/x/oauth2"
 
-	"github.com/datumforge/datum/pkg/datumclient"
-	"github.com/datumforge/datum/pkg/models"
-	"github.com/datumforge/datum/pkg/tokens"
+	"github.com/datum-cloud/datum-os/pkg/datumclient"
+	"github.com/datum-cloud/datum-os/pkg/models"
+	"github.com/datum-cloud/datum-os/pkg/tokens"
 )
 
 const (

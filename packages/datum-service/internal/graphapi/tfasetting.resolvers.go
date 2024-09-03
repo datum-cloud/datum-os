@@ -7,9 +7,9 @@ package graphapi
 import (
 	"context"
 
-	"github.com/datumforge/datum/internal/ent/generated"
-	"github.com/datumforge/datum/internal/ent/generated/tfasetting"
-	"github.com/datumforge/datum/pkg/auth"
+	"github.com/datum-cloud/datum-os/internal/ent/generated"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/tfasetting"
+	"github.com/datum-cloud/datum-os/pkg/auth"
 )
 
 // CreateTFASetting is the resolver for the createTFASetting field.

@@ -5,9 +5,9 @@ import (
 
 	"github.com/go-webauthn/webauthn/protocol"
 
-	"github.com/datumforge/datum/pkg/passwd"
-	"github.com/datumforge/datum/pkg/rout"
-	"github.com/datumforge/datum/pkg/utils/ulids"
+	"github.com/datum-cloud/datum-os/pkg/passwd"
+	"github.com/datum-cloud/datum-os/pkg/rout"
+	"github.com/datum-cloud/datum-os/pkg/utils/ulids"
 )
 
 // =========

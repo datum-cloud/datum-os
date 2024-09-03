@@ -4,7 +4,7 @@ import (
 	jwt "github.com/golang-jwt/jwt/v5"
 	"github.com/oklog/ulid/v2"
 
-	"github.com/datumforge/datum/pkg/utils/ulids"
+	"github.com/datum-cloud/datum-os/pkg/utils/ulids"
 )
 
 // Claims implements custom claims and extends the `jwt.RegisteredClaims` struct; we will store user-related elements here (and thus in the JWT Token) for reference / validation

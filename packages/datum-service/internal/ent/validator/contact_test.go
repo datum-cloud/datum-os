@@ -6,7 +6,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/datumforge/datum/internal/ent/validator"
+	"github.com/datum-cloud/datum-os/internal/ent/validator"
 )
 
 func TestValidatePhoneNumber(t *testing.T) {

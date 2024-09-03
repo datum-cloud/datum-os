@@ -5,12 +5,12 @@ import (
 
 	"entgo.io/ent"
 
-	"github.com/datumforge/datum/internal/ent/generated"
-	"github.com/datumforge/datum/internal/ent/generated/hook"
-	"github.com/datumforge/datum/pkg/tokens"
-	"github.com/datumforge/datum/pkg/utils/emails"
-	"github.com/datumforge/datum/pkg/utils/marionette"
-	"github.com/datumforge/datum/pkg/utils/sendgrid"
+	"github.com/datum-cloud/datum-os/internal/ent/generated"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/hook"
+	"github.com/datum-cloud/datum-os/pkg/tokens"
+	"github.com/datum-cloud/datum-os/pkg/utils/emails"
+	"github.com/datum-cloud/datum-os/pkg/utils/marionette"
+	"github.com/datum-cloud/datum-os/pkg/utils/sendgrid"
 )
 
 // HookSubscriber runs on subscriber create mutations

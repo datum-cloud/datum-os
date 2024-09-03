@@ -6,9 +6,9 @@ import (
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
-	emixin "github.com/datumforge/entx/mixin"
+	emixin "github.com/datum-cloud/datum-os/pkg/entx/mixin"
 
-	"github.com/datumforge/datum/internal/ent/mixin"
+	"github.com/datum-cloud/datum-os/internal/ent/mixin"
 )
 
 // File defines the file schema.

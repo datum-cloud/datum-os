@@ -7,11 +7,11 @@ import (
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 
-	emixin "github.com/datumforge/entx/mixin"
+	emixin "github.com/datum-cloud/datum-os/pkg/entx/mixin"
 
-	"github.com/datumforge/datum/internal/ent/hooks"
-	"github.com/datumforge/datum/internal/ent/interceptors"
-	"github.com/datumforge/datum/internal/ent/mixin"
+	"github.com/datum-cloud/datum-os/internal/ent/hooks"
+	"github.com/datum-cloud/datum-os/internal/ent/interceptors"
+	"github.com/datum-cloud/datum-os/internal/ent/mixin"
 )
 
 // Hush maps configured integrations (github, slack, etc.) to organizations

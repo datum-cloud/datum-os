@@ -7,7 +7,7 @@ package graphapi
 import (
 	"context"
 
-	"github.com/datumforge/datum/internal/ent/generated"
+	"github.com/datum-cloud/datum-os/internal/ent/generated"
 )
 
 // Search is the resolver for the search field.

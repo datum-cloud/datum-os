@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"net/url"
 
-	"github.com/datumforge/datum/pkg/utils/totp/testing/views"
+	"github.com/datum-cloud/datum-os/pkg/utils/totp/testing/views"
 )
 
 const (

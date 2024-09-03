@@ -5,8 +5,8 @@ package generated
 import (
 	"time"
 
-	"github.com/datumforge/datum/internal/ent/customtypes"
-	"github.com/datumforge/datum/pkg/enums"
+	"github.com/datum-cloud/datum-os/internal/ent/customtypes"
+	"github.com/datum-cloud/datum-os/pkg/enums"
 )
 
 // CreateAPITokenInput represents a mutation input for creating apitokens.

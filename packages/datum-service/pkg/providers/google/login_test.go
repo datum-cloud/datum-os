@@ -11,8 +11,8 @@ import (
 	"golang.org/x/oauth2"
 	google "google.golang.org/api/oauth2/v2"
 
-	oauth2Login "github.com/datumforge/datum/pkg/providers/oauth2"
-	"github.com/datumforge/datum/pkg/testutils"
+	oauth2Login "github.com/datum-cloud/datum-os/pkg/providers/oauth2"
+	"github.com/datum-cloud/datum-os/pkg/testutils"
 )
 
 const (

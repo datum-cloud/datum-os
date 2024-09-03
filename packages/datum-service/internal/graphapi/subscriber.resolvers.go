@@ -8,9 +8,9 @@ import (
 	"context"
 
 	"github.com/99designs/gqlgen/graphql"
-	"github.com/datumforge/datum/internal/ent/generated"
-	"github.com/datumforge/datum/internal/ent/generated/subscriber"
-	"github.com/datumforge/datum/pkg/rout"
+	"github.com/datum-cloud/datum-os/internal/ent/generated"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/subscriber"
+	"github.com/datum-cloud/datum-os/pkg/rout"
 )
 
 // CreateSubscriber is the resolver for the createSubscriber field.

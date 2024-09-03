@@ -6,9 +6,9 @@ import (
 	"time"
 
 	"entgo.io/ent/dialect/sql"
-	"github.com/datumforge/datum/internal/ent/generated/predicate"
-	"github.com/datumforge/datum/pkg/enums"
-	"github.com/datumforge/enthistory"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/predicate"
+	"github.com/datum-cloud/datum-os/pkg/enums"
+	"github.com/flume/enthistory"
 )
 
 // ID filters vertices based on their ID field.

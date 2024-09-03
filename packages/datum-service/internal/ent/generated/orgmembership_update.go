@@ -11,12 +11,12 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/datumforge/datum/internal/ent/generated/event"
-	"github.com/datumforge/datum/internal/ent/generated/orgmembership"
-	"github.com/datumforge/datum/internal/ent/generated/predicate"
-	"github.com/datumforge/datum/pkg/enums"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/event"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/orgmembership"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/predicate"
+	"github.com/datum-cloud/datum-os/pkg/enums"
 
-	"github.com/datumforge/datum/internal/ent/generated/internal"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/internal"
 )
 
 // OrgMembershipUpdate is the builder for updating OrgMembership entities.

@@ -10,7 +10,7 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/datumforge/datum/internal/ent/generated/event"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/event"
 )
 
 // Event is the model entity for the Event schema.

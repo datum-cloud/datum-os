@@ -5,9 +5,9 @@ import (
 
 	"github.com/spf13/cobra"
 
-	datum "github.com/datumforge/datum/cmd/cli/cmd"
-	"github.com/datumforge/datum/pkg/datumclient"
-	"github.com/datumforge/datum/pkg/enums"
+	datum "github.com/datum-cloud/datum-os/cmd/cli/cmd"
+	"github.com/datum-cloud/datum-os/pkg/datumclient"
+	"github.com/datum-cloud/datum-os/pkg/enums"
 )
 
 var createCmd = &cobra.Command{

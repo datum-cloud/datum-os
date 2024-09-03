@@ -8,8 +8,8 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/datumforge/datum/pkg/middleware/auth"
-	"github.com/datumforge/datum/pkg/tokens"
+	"github.com/datum-cloud/datum-os/pkg/middleware/auth"
+	"github.com/datum-cloud/datum-os/pkg/tokens"
 )
 
 func TestDefaultAuthOptions(t *testing.T) {

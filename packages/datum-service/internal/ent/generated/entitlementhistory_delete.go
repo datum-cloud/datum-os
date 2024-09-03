@@ -8,10 +8,10 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/datumforge/datum/internal/ent/generated/predicate"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/predicate"
 
-	"github.com/datumforge/datum/internal/ent/generated/entitlementhistory"
-	"github.com/datumforge/datum/internal/ent/generated/internal"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/entitlementhistory"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/internal"
 )
 
 // EntitlementHistoryDelete is the builder for deleting a EntitlementHistory entity.

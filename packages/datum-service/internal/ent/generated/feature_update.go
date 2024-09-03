@@ -12,14 +12,14 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
-	"github.com/datumforge/datum/internal/ent/generated/entitlementplan"
-	"github.com/datumforge/datum/internal/ent/generated/entitlementplanfeature"
-	"github.com/datumforge/datum/internal/ent/generated/event"
-	"github.com/datumforge/datum/internal/ent/generated/feature"
-	"github.com/datumforge/datum/internal/ent/generated/organization"
-	"github.com/datumforge/datum/internal/ent/generated/predicate"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/entitlementplan"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/entitlementplanfeature"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/event"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/feature"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/organization"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/predicate"
 
-	"github.com/datumforge/datum/internal/ent/generated/internal"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/internal"
 )
 
 // FeatureUpdate is the builder for updating Feature entities.

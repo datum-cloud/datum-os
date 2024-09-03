@@ -9,9 +9,9 @@ import (
 	"golang.org/x/oauth2"
 	"golang.org/x/term"
 
-	datum "github.com/datumforge/datum/cmd/cli/cmd"
-	"github.com/datumforge/datum/pkg/datumclient"
-	"github.com/datumforge/datum/pkg/models"
+	datum "github.com/datum-cloud/datum-os/cmd/cli/cmd"
+	"github.com/datum-cloud/datum-os/pkg/datumclient"
+	"github.com/datum-cloud/datum-os/pkg/models"
 )
 
 var cmd = &cobra.Command{

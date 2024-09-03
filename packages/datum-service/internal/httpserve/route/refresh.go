@@ -3,7 +3,7 @@ package route
 import (
 	"net/http"
 
-	echo "github.com/datumforge/echox"
+	echo "github.com/datum-cloud/datum-os/pkg/echox"
 )
 
 // registerRefreshHandler registers the refresh handler and route

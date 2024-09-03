@@ -13,17 +13,17 @@ import (
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
 
-	"github.com/datumforge/enthistory"
-	emixin "github.com/datumforge/entx/mixin"
-	"github.com/datumforge/fgax/entfga"
+	emixin "github.com/datum-cloud/datum-os/pkg/entx/mixin"
+	"github.com/datum-cloud/datum-os/pkg/fgax/entfga"
+	"github.com/flume/enthistory"
 
-	"github.com/datumforge/datum/internal/ent/generated"
-	"github.com/datumforge/datum/internal/ent/generated/privacy"
-	"github.com/datumforge/datum/internal/ent/hooks"
-	"github.com/datumforge/datum/internal/ent/mixin"
-	"github.com/datumforge/datum/internal/ent/privacy/rule"
-	"github.com/datumforge/datum/internal/ent/privacy/token"
-	"github.com/datumforge/datum/pkg/enums"
+	"github.com/datum-cloud/datum-os/internal/ent/generated"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/privacy"
+	"github.com/datum-cloud/datum-os/internal/ent/hooks"
+	"github.com/datum-cloud/datum-os/internal/ent/mixin"
+	"github.com/datum-cloud/datum-os/internal/ent/privacy/rule"
+	"github.com/datum-cloud/datum-os/internal/ent/privacy/token"
+	"github.com/datum-cloud/datum-os/pkg/enums"
 )
 
 const (

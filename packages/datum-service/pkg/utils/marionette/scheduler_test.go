@@ -13,7 +13,7 @@ import (
 	"go.uber.org/zap"
 	"golang.org/x/exp/slices"
 
-	. "github.com/datumforge/datum/pkg/utils/marionette"
+	. "github.com/datum-cloud/datum-os/pkg/utils/marionette"
 )
 
 var discard = zap.NewNop().Sugar()

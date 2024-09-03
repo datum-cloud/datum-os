@@ -6,10 +6,10 @@ import (
 	"net/http"
 	"strings"
 
-	echo "github.com/datumforge/echox"
+	echo "github.com/datum-cloud/datum-os/pkg/echox"
 
-	"github.com/datumforge/datum/internal/ent/generated"
-	"github.com/datumforge/datum/pkg/rout"
+	"github.com/datum-cloud/datum-os/internal/ent/generated"
+	"github.com/datum-cloud/datum-os/pkg/rout"
 )
 
 var (

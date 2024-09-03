@@ -10,8 +10,8 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/datumforge/datum/internal/ent/generated/apitoken"
-	"github.com/datumforge/datum/internal/ent/generated/organization"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/apitoken"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/organization"
 )
 
 // APITokenCreate is the builder for creating a APIToken entity.

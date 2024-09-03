@@ -10,8 +10,8 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/datumforge/datum/internal/ent/generated/apitoken"
-	"github.com/datumforge/datum/internal/ent/generated/organization"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/apitoken"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/organization"
 )
 
 // APIToken is the model entity for the APIToken schema.

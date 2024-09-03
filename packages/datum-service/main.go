@@ -2,8 +2,8 @@
 package main
 
 import (
-	"github.com/datumforge/datum/cmd"
-	_ "github.com/datumforge/datum/internal/ent/generated/runtime"
+	"github.com/datum-cloud/datum-os/cmd"
+	_ "github.com/datum-cloud/datum-os/internal/ent/generated/runtime"
 )
 
 func main() {

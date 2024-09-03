@@ -9,8 +9,8 @@ import (
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 
-	"github.com/datumforge/enthistory"
-	emixin "github.com/datumforge/entx/mixin"
+	emixin "github.com/datum-cloud/datum-os/pkg/entx/mixin"
+	"github.com/flume/enthistory"
 )
 
 // OhAuthTooToken holds the schema definition for the OhAuthTooToken entity

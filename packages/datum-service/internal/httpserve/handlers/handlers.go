@@ -1,21 +1,21 @@
 package handlers
 
 import (
-	echo "github.com/datumforge/echox"
+	echo "github.com/datum-cloud/datum-os/pkg/echox"
 	"github.com/go-webauthn/webauthn/webauthn"
 	"github.com/lestrrat-go/jwx/v2/jwk"
 	"github.com/redis/go-redis/v9"
 	"go.uber.org/zap"
 
-	ent "github.com/datumforge/datum/internal/ent/generated"
-	"github.com/datumforge/datum/internal/httpserve/authmanager"
-	"github.com/datumforge/datum/pkg/analytics"
-	"github.com/datumforge/datum/pkg/events/kafka/publisher"
-	"github.com/datumforge/datum/pkg/sessions"
-	"github.com/datumforge/datum/pkg/tokens"
-	"github.com/datumforge/datum/pkg/utils/emails"
-	"github.com/datumforge/datum/pkg/utils/marionette"
-	"github.com/datumforge/datum/pkg/utils/totp"
+	ent "github.com/datum-cloud/datum-os/internal/ent/generated"
+	"github.com/datum-cloud/datum-os/internal/httpserve/authmanager"
+	"github.com/datum-cloud/datum-os/pkg/analytics"
+	"github.com/datum-cloud/datum-os/pkg/events/kafka/publisher"
+	"github.com/datum-cloud/datum-os/pkg/sessions"
+	"github.com/datum-cloud/datum-os/pkg/tokens"
+	"github.com/datum-cloud/datum-os/pkg/utils/emails"
+	"github.com/datum-cloud/datum-os/pkg/utils/marionette"
+	"github.com/datum-cloud/datum-os/pkg/utils/totp"
 )
 
 // Handler contains configuration options for handlers

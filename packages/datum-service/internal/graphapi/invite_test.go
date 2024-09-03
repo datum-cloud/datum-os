@@ -5,14 +5,14 @@ import (
 	"testing"
 	"time"
 
-	"github.com/datumforge/fgax"
-	mock_fga "github.com/datumforge/fgax/mockery"
+	"github.com/datum-cloud/datum-os/pkg/fgax"
+	mock_fga "github.com/datum-cloud/datum-os/pkg/fgax/mockery"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/datumforge/datum/pkg/auth"
-	"github.com/datumforge/datum/pkg/datumclient"
-	"github.com/datumforge/datum/pkg/enums"
+	"github.com/datum-cloud/datum-os/pkg/auth"
+	"github.com/datum-cloud/datum-os/pkg/datumclient"
+	"github.com/datum-cloud/datum-os/pkg/enums"
 )
 
 func (suite *GraphTestSuite) TestQueryInvite() {

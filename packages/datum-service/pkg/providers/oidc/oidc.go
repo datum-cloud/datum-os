@@ -7,7 +7,7 @@ import (
 	"github.com/coreos/go-oidc/v3/oidc"
 	"golang.org/x/oauth2"
 
-	echo "github.com/datumforge/echox"
+	echo "github.com/datum-cloud/datum-os/pkg/echox"
 )
 
 type User struct {
@@ -62,7 +62,6 @@ func ExchangeCode(ctx context.Context, r *http.Request, config *oauth2.Config, p
 
 	verifier := provider.Verifier(oidcConfig)
 	idToken, err := verifier.Verify(ctx, rawIDToken)
-
 	if err != nil {
 		return nil, echo.NewHTTPError(http.StatusInternalServerError, "Unable to verify ID Token: "+err.Error())
 	}

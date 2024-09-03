@@ -12,10 +12,10 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/datumforge/datum/internal/ent/generated/integrationhistory"
-	"github.com/datumforge/datum/internal/ent/generated/predicate"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/integrationhistory"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/predicate"
 
-	"github.com/datumforge/datum/internal/ent/generated/internal"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/internal"
 )
 
 // IntegrationHistoryQuery is the builder for querying IntegrationHistory entities.

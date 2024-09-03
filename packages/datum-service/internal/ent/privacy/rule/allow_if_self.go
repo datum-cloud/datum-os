@@ -4,10 +4,10 @@ import (
 	"context"
 
 	"entgo.io/ent/entql"
-	"github.com/datumforge/entx"
+	"github.com/datum-cloud/datum-os/pkg/entx"
 
-	"github.com/datumforge/datum/internal/ent/generated/privacy"
-	"github.com/datumforge/datum/pkg/auth"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/privacy"
+	"github.com/datum-cloud/datum-os/pkg/auth"
 )
 
 // AllowIfSelf determines whether a query or mutation operation should be allowed based on whether the requested data is for the viewer

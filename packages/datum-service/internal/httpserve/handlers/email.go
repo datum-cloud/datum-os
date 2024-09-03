@@ -1,8 +1,8 @@
 package handlers
 
 import (
-	"github.com/datumforge/datum/pkg/utils/emails"
-	"github.com/datumforge/datum/pkg/utils/sendgrid"
+	"github.com/datum-cloud/datum-os/pkg/utils/emails"
+	"github.com/datum-cloud/datum-os/pkg/utils/sendgrid"
 )
 
 // SendVerificationEmail sends an email to a user to verify their email address

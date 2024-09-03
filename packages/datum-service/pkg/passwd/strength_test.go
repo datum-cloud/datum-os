@@ -5,7 +5,7 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/datumforge/datum/pkg/passwd"
+	"github.com/datum-cloud/datum-os/pkg/passwd"
 )
 
 func TestStrength(t *testing.T) {

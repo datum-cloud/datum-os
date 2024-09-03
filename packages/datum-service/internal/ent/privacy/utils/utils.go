@@ -1,7 +1,7 @@
 package utils
 
 import (
-	"github.com/datumforge/datum/internal/ent/generated/privacy"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/privacy"
 )
 
 // NewMutationPolicyWithoutNil is creating a new slice of `privacy.MutationPolicy` by

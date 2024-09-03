@@ -5,9 +5,9 @@ import (
 
 	"entgo.io/ent"
 
-	"github.com/datumforge/datum/internal/ent/generated/intercept"
-	"github.com/datumforge/datum/internal/ent/generated/organizationsetting"
-	"github.com/datumforge/datum/pkg/auth"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/intercept"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/organizationsetting"
+	"github.com/datum-cloud/datum-os/pkg/auth"
 )
 
 // InterceptorOrganizationSetting is middleware to change the org setting query

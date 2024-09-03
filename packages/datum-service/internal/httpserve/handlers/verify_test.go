@@ -9,15 +9,15 @@ import (
 	"time"
 
 	"github.com/brianvoe/gofakeit/v7"
-	mock_fga "github.com/datumforge/fgax/mockery"
+	mock_fga "github.com/datum-cloud/datum-os/pkg/fgax/mockery"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/datumforge/datum/internal/ent/generated/privacy"
-	_ "github.com/datumforge/datum/internal/ent/generated/runtime"
-	"github.com/datumforge/datum/internal/httpserve/handlers"
-	"github.com/datumforge/datum/pkg/middleware/echocontext"
-	"github.com/datumforge/datum/pkg/models"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/privacy"
+	_ "github.com/datum-cloud/datum-os/internal/ent/generated/runtime"
+	"github.com/datum-cloud/datum-os/internal/httpserve/handlers"
+	"github.com/datum-cloud/datum-os/pkg/middleware/echocontext"
+	"github.com/datum-cloud/datum-os/pkg/models"
 )
 
 func (suite *HandlerTestSuite) TestVerifyHandler() {

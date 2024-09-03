@@ -8,7 +8,7 @@ import (
 	"context"
 
 	"github.com/99designs/gqlgen/graphql"
-	"github.com/datumforge/datum/internal/ent/generated"
+	"github.com/datum-cloud/datum-os/internal/ent/generated"
 )
 
 // CreatePersonalAccessToken is the resolver for the createPersonalAccessToken field.

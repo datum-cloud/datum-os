@@ -6,7 +6,7 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/datumforge/datum/pkg/utils/totp"
+	"github.com/datum-cloud/datum-os/pkg/utils/totp"
 )
 
 func TestDefaultName(t *testing.T) {
@@ -39,6 +39,7 @@ func TestDefaultName(t *testing.T) {
 	actualName = userWithPhone.DefaultName()
 	require.Equal(t, expectedName, actualName, "DefaultName() returned incorrect name")
 }
+
 func TestDefaultOTPDelivery(t *testing.T) {
 	userWithEmail := &totp.User{
 		Email: sql.NullString{

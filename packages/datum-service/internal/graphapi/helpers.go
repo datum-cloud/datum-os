@@ -8,12 +8,12 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/gocarina/gocsv"
 
-	ent "github.com/datumforge/datum/internal/ent/generated"
-	"github.com/datumforge/datum/pkg/auth"
-	"github.com/datumforge/datum/pkg/events/soiree"
-	"github.com/datumforge/datum/pkg/middleware/echocontext"
-	"github.com/datumforge/datum/pkg/rout"
-	sliceutil "github.com/datumforge/datum/pkg/utils/slice"
+	ent "github.com/datum-cloud/datum-os/internal/ent/generated"
+	"github.com/datum-cloud/datum-os/pkg/auth"
+	"github.com/datum-cloud/datum-os/pkg/events/soiree"
+	"github.com/datum-cloud/datum-os/pkg/middleware/echocontext"
+	"github.com/datum-cloud/datum-os/pkg/rout"
+	sliceutil "github.com/datum-cloud/datum-os/pkg/utils/slice"
 )
 
 const (

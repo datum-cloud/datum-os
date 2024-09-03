@@ -10,15 +10,15 @@ import (
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 
-	emixin "github.com/datumforge/entx/mixin"
-	"github.com/datumforge/fgax/entfga"
+	emixin "github.com/datum-cloud/datum-os/pkg/entx/mixin"
+	"github.com/datum-cloud/datum-os/pkg/fgax/entfga"
 
-	"github.com/datumforge/datum/internal/ent/generated"
-	"github.com/datumforge/datum/internal/ent/generated/privacy"
-	"github.com/datumforge/datum/internal/ent/mixin"
-	"github.com/datumforge/datum/internal/ent/validator"
-	"github.com/datumforge/datum/pkg/enums"
-	"github.com/datumforge/datum/pkg/rout"
+	"github.com/datum-cloud/datum-os/internal/ent/generated"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/privacy"
+	"github.com/datum-cloud/datum-os/internal/ent/mixin"
+	"github.com/datum-cloud/datum-os/internal/ent/validator"
+	"github.com/datum-cloud/datum-os/pkg/enums"
+	"github.com/datum-cloud/datum-os/pkg/rout"
 )
 
 // Contact holds the schema definition for the Contact entity

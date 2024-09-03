@@ -1,8 +1,8 @@
 package serveropts
 
 import (
-	"github.com/datumforge/datum/config"
-	serverconfig "github.com/datumforge/datum/internal/httpserve/config"
+	"github.com/datum-cloud/datum-os/config"
+	serverconfig "github.com/datum-cloud/datum-os/internal/httpserve/config"
 )
 
 type ServerOptions struct {

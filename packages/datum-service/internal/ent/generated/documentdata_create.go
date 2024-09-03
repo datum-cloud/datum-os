@@ -10,11 +10,11 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/datumforge/datum/internal/ent/customtypes"
-	"github.com/datumforge/datum/internal/ent/generated/documentdata"
-	"github.com/datumforge/datum/internal/ent/generated/entity"
-	"github.com/datumforge/datum/internal/ent/generated/organization"
-	"github.com/datumforge/datum/internal/ent/generated/template"
+	"github.com/datum-cloud/datum-os/internal/ent/customtypes"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/documentdata"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/entity"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/organization"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/template"
 )
 
 // DocumentDataCreate is the builder for creating a DocumentData entity.

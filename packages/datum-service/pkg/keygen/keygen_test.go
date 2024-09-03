@@ -9,7 +9,7 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/datumforge/datum/pkg/keygen"
+	"github.com/datum-cloud/datum-os/pkg/keygen"
 )
 
 func TestAlpha(t *testing.T) {

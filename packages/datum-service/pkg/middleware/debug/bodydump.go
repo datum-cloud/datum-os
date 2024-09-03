@@ -6,8 +6,8 @@ import (
 	"net/http"
 	"time"
 
-	echo "github.com/datumforge/echox"
-	"github.com/datumforge/echox/middleware"
+	echo "github.com/datum-cloud/datum-os/pkg/echox"
+	"github.com/datum-cloud/datum-os/pkg/echox/middleware"
 	"go.uber.org/zap"
 )
 

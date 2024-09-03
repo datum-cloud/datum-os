@@ -3,7 +3,7 @@ package soiree
 import (
 	"fmt"
 
-	"github.com/datumforge/datum/pkg/utils/ulids"
+	"github.com/datum-cloud/datum-os/pkg/utils/ulids"
 )
 
 // EventPoolOption defines a function type for Soiree configuration options

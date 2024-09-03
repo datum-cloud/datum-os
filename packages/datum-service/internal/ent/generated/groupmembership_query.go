@@ -13,13 +13,13 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/datumforge/datum/internal/ent/generated/event"
-	"github.com/datumforge/datum/internal/ent/generated/group"
-	"github.com/datumforge/datum/internal/ent/generated/groupmembership"
-	"github.com/datumforge/datum/internal/ent/generated/predicate"
-	"github.com/datumforge/datum/internal/ent/generated/user"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/event"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/group"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/groupmembership"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/predicate"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/user"
 
-	"github.com/datumforge/datum/internal/ent/generated/internal"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/internal"
 )
 
 // GroupMembershipQuery is the builder for querying GroupMembership entities.

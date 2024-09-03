@@ -8,10 +8,10 @@ import (
 	"github.com/stretchr/testify/require"
 	"go.uber.org/zap"
 
-	"github.com/datumforge/datum/internal/ent/generated"
-	"github.com/datumforge/datum/pkg/auth"
-	"github.com/datumforge/datum/pkg/middleware/echocontext"
-	"github.com/datumforge/datum/pkg/utils/ulids"
+	"github.com/datum-cloud/datum-os/internal/ent/generated"
+	"github.com/datum-cloud/datum-os/pkg/auth"
+	"github.com/datum-cloud/datum-os/pkg/middleware/echocontext"
+	"github.com/datum-cloud/datum-os/pkg/utils/ulids"
 )
 
 func TestSetRequestor(t *testing.T) {

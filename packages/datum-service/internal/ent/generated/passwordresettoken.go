@@ -9,8 +9,8 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/datumforge/datum/internal/ent/generated/passwordresettoken"
-	"github.com/datumforge/datum/internal/ent/generated/user"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/passwordresettoken"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/user"
 )
 
 // PasswordResetToken is the model entity for the PasswordResetToken schema.

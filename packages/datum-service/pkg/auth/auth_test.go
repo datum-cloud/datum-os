@@ -7,12 +7,12 @@ import (
 	"testing"
 	"time"
 
-	echo "github.com/datumforge/echox"
+	echo "github.com/datum-cloud/datum-os/pkg/echox"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/datumforge/datum/pkg/auth"
-	"github.com/datumforge/datum/pkg/sessions"
+	"github.com/datum-cloud/datum-os/pkg/auth"
+	"github.com/datum-cloud/datum-os/pkg/sessions"
 )
 
 var happy = "happy path"
@@ -20,7 +20,7 @@ var happy = "happy path"
 func TestGetAccessToken(t *testing.T) {
 	testAccessToken := "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJodHRwczovL2F1dGguZGF0dW0ubmV0IiwiYXVkIjoiaHR0cHM6Ly9kYXR1bS5uZXQiLCJzdWIiOiJVMVdNNHVGLTNxcGRsLWRtS0lISjQiLCJpYXQiOjE0NTg3ODU3OTYsImV4cCI6MTQ1ODg3MjE5Nn0.oXIjG4PauoHXEmZRDKRE018bkMv9rdZTjn563ujUh6o" // nolint:gosec
 
-	var bear = "Bearer %s"
+	bear := "Bearer %s"
 
 	tests := []struct {
 		name        string
@@ -147,7 +147,6 @@ func TestGetRefreshToken(t *testing.T) {
 		wantErr bool
 		err     error
 	}{
-
 		{
 			name: "happy path from cookie",
 			cookie: &http.Cookie{
@@ -226,7 +225,6 @@ func TestSetAuthCookies(t *testing.T) {
 		accessToken  string
 		refreshToken string
 	}{
-
 		{
 			name:         happy,
 			ctx:          validCtx,
@@ -256,7 +254,6 @@ func TestClearAuthCookies(t *testing.T) {
 		wantErr      bool
 		err          error
 	}{
-
 		{
 			name: happy,
 			ctx:  validCtx,

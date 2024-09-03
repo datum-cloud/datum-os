@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/datumforge/datum/config/config.-config",
+  "$id": "https://github.com/datum-cloud/datum-os/config/config.-config",
   "$defs": {
     "[]string": {
       "items": {

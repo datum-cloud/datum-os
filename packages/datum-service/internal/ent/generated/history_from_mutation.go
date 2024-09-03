@@ -11,8 +11,8 @@ import (
 	"time"
 
 	"entgo.io/ent"
-	"github.com/datumforge/enthistory"
-	"github.com/datumforge/entx"
+	"github.com/flume/enthistory"
+	"github.com/datum-cloud/datum-os/pkg/entx"
 )
 
 var (

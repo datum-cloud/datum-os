@@ -11,8 +11,8 @@ import (
 	"github.com/invopop/yaml"
 	"github.com/mcuadros/go-defaults"
 
-	"github.com/datumforge/datum/config"
-	"github.com/datumforge/datum/jsonschema/envparse"
+	"github.com/datum-cloud/datum-os/config"
+	"github.com/datum-cloud/datum-os/jsonschema/envparse"
 )
 
 // const values used for the schema generator
@@ -25,7 +25,7 @@ const (
 	envConfigPath  = "./config/.env.example"
 	configMapPath  = "./config/configmap.yaml"
 	varPrefix      = "DATUM"
-	ownerReadWrite = 0600
+	ownerReadWrite = 0o600
 )
 
 // includedPackages is a list of packages to include in the schema generation
@@ -84,7 +84,7 @@ func generateSchema(c schemaConfig, structure interface{}) error {
 
 	// add go comments to the schema
 	for _, pkg := range includedPackages {
-		if err := r.AddGoComments("github.com/datumforge/datum/", pkg); err != nil {
+		if err := r.AddGoComments("github.com/datum-cloud/datum-os/", pkg); err != nil {
 			panic(err.Error())
 		}
 	}

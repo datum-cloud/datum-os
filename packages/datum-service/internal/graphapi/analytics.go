@@ -8,11 +8,11 @@ import (
 
 	ph "github.com/posthog/posthog-go"
 
-	ent "github.com/datumforge/datum/internal/ent/generated"
-	"github.com/datumforge/datum/internal/ent/generated/integration"
-	"github.com/datumforge/datum/internal/ent/generated/webhook"
-	"github.com/datumforge/datum/pkg/events/soiree"
-	"github.com/datumforge/datum/pkg/utils/slack"
+	ent "github.com/datum-cloud/datum-os/internal/ent/generated"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/integration"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/webhook"
+	"github.com/datum-cloud/datum-os/pkg/events/soiree"
+	"github.com/datum-cloud/datum-os/pkg/utils/slack"
 )
 
 // CreateEvent creates an event for the mutation with the properties

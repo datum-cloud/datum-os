@@ -6,11 +6,11 @@ import (
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
 
-	"github.com/datumforge/enthistory"
-	emixin "github.com/datumforge/entx/mixin"
+	emixin "github.com/datum-cloud/datum-os/pkg/entx/mixin"
+	"github.com/flume/enthistory"
 
-	"github.com/datumforge/datum/internal/ent/hooks"
-	"github.com/datumforge/datum/internal/ent/mixin"
+	"github.com/datum-cloud/datum-os/internal/ent/hooks"
+	"github.com/datum-cloud/datum-os/internal/ent/mixin"
 )
 
 // TFASetting holds the schema definition for the TFASetting entity

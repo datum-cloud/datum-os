@@ -10,9 +10,9 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/datumforge/datum/internal/ent/generated/entity"
-	"github.com/datumforge/datum/internal/ent/generated/note"
-	"github.com/datumforge/datum/internal/ent/generated/organization"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/entity"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/note"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/organization"
 )
 
 // NoteCreate is the builder for creating a Note entity.

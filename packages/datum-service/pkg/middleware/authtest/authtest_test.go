@@ -5,9 +5,9 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	authtest "github.com/datumforge/datum/pkg/middleware/authtest"
-	"github.com/datumforge/datum/pkg/tokens"
-	"github.com/datumforge/datum/pkg/utils/ulids"
+	authtest "github.com/datum-cloud/datum-os/pkg/middleware/authtest"
+	"github.com/datum-cloud/datum-os/pkg/tokens"
+	"github.com/datum-cloud/datum-os/pkg/utils/ulids"
 )
 
 // This test generates an example token with fake RSA keys for use in examples,

@@ -8,8 +8,8 @@ import (
 	"entgo.io/ent"
 	"gocloud.dev/secrets"
 
-	"github.com/datumforge/datum/internal/ent/generated"
-	"github.com/datumforge/datum/internal/ent/generated/hook"
+	"github.com/datum-cloud/datum-os/internal/ent/generated"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/hook"
 )
 
 // HookHush runs on invite create mutations
@@ -29,7 +29,6 @@ func HookHush() ent.Hook {
 
 				m.SetName(hex.EncodeToString(c))
 				u, err := next.Mutate(ctx, m)
-
 				if err != nil {
 					return nil, err
 				}

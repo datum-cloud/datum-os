@@ -4,16 +4,16 @@ import (
 	"context"
 	"strings"
 
-	echo "github.com/datumforge/echox"
+	echo "github.com/datum-cloud/datum-os/pkg/echox"
 	ph "github.com/posthog/posthog-go"
 	"golang.org/x/oauth2"
 
-	"github.com/datumforge/datum/internal/ent/privacy/token"
-	"github.com/datumforge/datum/pkg/enums"
-	"github.com/datumforge/datum/pkg/models"
-	"github.com/datumforge/datum/pkg/providers/github"
-	"github.com/datumforge/datum/pkg/providers/google"
-	"github.com/datumforge/datum/pkg/rout"
+	"github.com/datum-cloud/datum-os/internal/ent/privacy/token"
+	"github.com/datum-cloud/datum-os/pkg/enums"
+	"github.com/datum-cloud/datum-os/pkg/models"
+	"github.com/datum-cloud/datum-os/pkg/providers/github"
+	"github.com/datum-cloud/datum-os/pkg/providers/google"
+	"github.com/datum-cloud/datum-os/pkg/rout"
 )
 
 // OauthRegister returns the TokenResponse for a verified authenticated external oauth user

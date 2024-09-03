@@ -8,8 +8,8 @@ import (
 	"time"
 
 	"github.com/alicebob/miniredis/v2"
-	"github.com/datumforge/datum/pkg/sessions"
-	"github.com/datumforge/datum/pkg/tokens"
+	"github.com/datum-cloud/datum-os/pkg/sessions"
+	"github.com/datum-cloud/datum-os/pkg/tokens"
 	"github.com/redis/go-redis/v9"
 )
 

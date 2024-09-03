@@ -5,7 +5,7 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/datumforge/datum/pkg/utils/emails"
+	"github.com/datum-cloud/datum-os/pkg/utils/emails"
 )
 
 const adminEmail = "meow@mattthecat.com"

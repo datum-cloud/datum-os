@@ -5,7 +5,7 @@ import (
 	"log"
 	"time"
 
-	"github.com/datumforge/datum/pkg/httpsling"
+	"github.com/datum-cloud/datum-os/pkg/httpsling"
 )
 
 // Post represents a simple structure to map JSON Placeholder posts

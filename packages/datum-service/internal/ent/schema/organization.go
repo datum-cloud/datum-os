@@ -11,18 +11,18 @@ import (
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
-	"github.com/datumforge/entx"
-	emixin "github.com/datumforge/entx/mixin"
+	"github.com/datum-cloud/datum-os/pkg/entx"
+	emixin "github.com/datum-cloud/datum-os/pkg/entx/mixin"
 
-	"github.com/datumforge/fgax/entfga"
+	"github.com/datum-cloud/datum-os/pkg/fgax/entfga"
 
-	"github.com/datumforge/datum/internal/ent/generated"
-	"github.com/datumforge/datum/internal/ent/generated/privacy"
-	"github.com/datumforge/datum/internal/ent/hooks"
-	"github.com/datumforge/datum/internal/ent/interceptors"
-	"github.com/datumforge/datum/internal/ent/mixin"
-	"github.com/datumforge/datum/internal/ent/privacy/rule"
-	"github.com/datumforge/datum/internal/ent/privacy/token"
+	"github.com/datum-cloud/datum-os/internal/ent/generated"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/privacy"
+	"github.com/datum-cloud/datum-os/internal/ent/hooks"
+	"github.com/datum-cloud/datum-os/internal/ent/interceptors"
+	"github.com/datum-cloud/datum-os/internal/ent/mixin"
+	"github.com/datum-cloud/datum-os/internal/ent/privacy/rule"
+	"github.com/datum-cloud/datum-os/internal/ent/privacy/token"
 )
 
 const (
@@ -81,7 +81,7 @@ func (Organization) Fields() []ent.Field {
 		field.Bool("dedicated_db").
 			Comment("Whether the organization has a dedicated database").
 			Default(false). // default to shared db
-			// TODO: https://github.com/datumforge/datum/issues/734
+			// TODO: https://github.com/datum-cloud/datum-os/issues/734
 			// update this once feature functionality is enabled
 			// Annotations(
 			// 	entgql.Skip(),

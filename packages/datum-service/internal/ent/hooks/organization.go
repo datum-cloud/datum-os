@@ -6,19 +6,19 @@ import (
 
 	"entgo.io/ent"
 
-	"github.com/datumforge/entx"
-	"github.com/datumforge/fgax"
-	geodeticenums "github.com/datumforge/geodetic/pkg/enums"
-	geodetic "github.com/datumforge/geodetic/pkg/geodeticclient"
+	"github.com/datum-cloud/datum-os/pkg/entx"
+	"github.com/datum-cloud/datum-os/pkg/fgax"
+	geodeticenums "github.com/datum-cloud/datum-os/pkg/geodetic/pkg/enums"
+	geodetic "github.com/datum-cloud/datum-os/pkg/geodetic/pkg/geodeticclient"
 
-	"github.com/datumforge/datum/internal/ent/generated"
-	"github.com/datumforge/datum/internal/ent/generated/hook"
-	"github.com/datumforge/datum/internal/ent/generated/privacy"
-	"github.com/datumforge/datum/internal/ent/generated/usersetting"
-	"github.com/datumforge/datum/pkg/auth"
-	"github.com/datumforge/datum/pkg/enums"
-	"github.com/datumforge/datum/pkg/utils/gravatar"
-	"github.com/datumforge/datum/pkg/utils/marionette"
+	"github.com/datum-cloud/datum-os/internal/ent/generated"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/hook"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/privacy"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/usersetting"
+	"github.com/datum-cloud/datum-os/pkg/auth"
+	"github.com/datum-cloud/datum-os/pkg/enums"
+	"github.com/datum-cloud/datum-os/pkg/utils/gravatar"
+	"github.com/datum-cloud/datum-os/pkg/utils/marionette"
 )
 
 // HookOrganization runs on org mutations to set default values that are not provided

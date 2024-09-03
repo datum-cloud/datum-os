@@ -6,18 +6,18 @@ import (
 	"strings"
 
 	"entgo.io/ent"
-	"github.com/datumforge/entx"
+	"github.com/datum-cloud/datum-os/pkg/entx"
 	petname "github.com/dustinkirkland/golang-petname"
 	"golang.org/x/text/cases"
 	"golang.org/x/text/language"
 
-	"github.com/datumforge/datum/internal/ent/generated"
-	"github.com/datumforge/datum/internal/ent/generated/hook"
-	"github.com/datumforge/datum/internal/ent/generated/organization"
-	"github.com/datumforge/datum/internal/ent/generated/privacy"
-	"github.com/datumforge/datum/pkg/auth"
-	"github.com/datumforge/datum/pkg/enums"
-	"github.com/datumforge/datum/pkg/passwd"
+	"github.com/datum-cloud/datum-os/internal/ent/generated"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/hook"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/organization"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/privacy"
+	"github.com/datum-cloud/datum-os/pkg/auth"
+	"github.com/datum-cloud/datum-os/pkg/enums"
+	"github.com/datum-cloud/datum-os/pkg/passwd"
 )
 
 const (

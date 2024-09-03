@@ -5,14 +5,14 @@ import (
 	"net/http"
 	"time"
 
-	echo "github.com/datumforge/echox"
+	echo "github.com/datum-cloud/datum-os/pkg/echox"
 	"go.uber.org/zap"
 	"golang.org/x/crypto/acme"
 	"golang.org/x/crypto/acme/autocert"
 
-	"github.com/datumforge/datum/config"
-	"github.com/datumforge/datum/internal/httpserve/handlers"
-	"github.com/datumforge/datum/pkg/sessions"
+	"github.com/datum-cloud/datum-os/config"
+	"github.com/datum-cloud/datum-os/internal/httpserve/handlers"
+	"github.com/datum-cloud/datum-os/pkg/sessions"
 )
 
 var (

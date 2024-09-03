@@ -12,9 +12,9 @@ import (
 	"github.com/stretchr/testify/suite"
 	"github.com/trisacrypto/directory/pkg/utils/logger"
 
-	"github.com/datumforge/datum/pkg/utils/emails"
-	"github.com/datumforge/datum/pkg/utils/emails/mock"
-	"github.com/datumforge/datum/pkg/utils/sendgrid"
+	"github.com/datum-cloud/datum-os/pkg/utils/emails"
+	"github.com/datum-cloud/datum-os/pkg/utils/emails/mock"
+	"github.com/datum-cloud/datum-os/pkg/utils/sendgrid"
 )
 
 // If the eyeball flag is set, then the tests will write MIME emails to the testdata directory
@@ -62,7 +62,7 @@ func setupMIMEDir(t *testing.T) {
 		path := filepath.Join("testdata", fmt.Sprintf("eyeball%s", t.Name()))
 		err := os.RemoveAll(path)
 		require.NoError(t, err)
-		err = os.MkdirAll(path, 0755)
+		err = os.MkdirAll(path, 0o755)
 		require.NoError(t, err)
 	}
 }

@@ -7,8 +7,8 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/spf13/cobra"
 
-	datum "github.com/datumforge/datum/cmd/cli/cmd"
-	"github.com/datumforge/datum/pkg/datumclient"
+	datum "github.com/datum-cloud/datum-os/cmd/cli/cmd"
+	"github.com/datum-cloud/datum-os/pkg/datumclient"
 )
 
 var createCmd = &cobra.Command{

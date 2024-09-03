@@ -4,7 +4,7 @@ import (
 	"net/mail"
 	"net/url"
 
-	"github.com/datumforge/datum/pkg/utils/sendgrid"
+	"github.com/datum-cloud/datum-os/pkg/utils/sendgrid"
 )
 
 // Config for sending emails via SendGrid and managing marketing contacts

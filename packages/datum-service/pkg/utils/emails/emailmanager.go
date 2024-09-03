@@ -5,9 +5,9 @@ import (
 	sg "github.com/sendgrid/sendgrid-go"
 	sgmail "github.com/sendgrid/sendgrid-go/helpers/mail"
 
-	"github.com/datumforge/datum/pkg/rout"
-	"github.com/datumforge/datum/pkg/utils/emails/mock"
-	"github.com/datumforge/datum/pkg/utils/sendgrid"
+	"github.com/datum-cloud/datum-os/pkg/rout"
+	"github.com/datum-cloud/datum-os/pkg/utils/emails/mock"
+	"github.com/datum-cloud/datum-os/pkg/utils/sendgrid"
 )
 
 // EmailManager allows a server to send rich emails using the SendGrid service
@@ -146,7 +146,6 @@ func (m *EmailManager) SendOrgInvitationEmail(i *Invite) error {
 	}
 
 	msg, err := InviteEmail(data)
-
 	if err != nil {
 		return err
 	}
@@ -168,7 +167,6 @@ func (m *EmailManager) SendAddedtoOrgEmail(i *Invite) error {
 	}
 
 	msg, err := InviteAccepted(data)
-
 	if err != nil {
 		return err
 	}

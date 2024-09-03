@@ -7,8 +7,8 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/datumforge/datum/pkg/tokens"
-	ulids "github.com/datumforge/datum/pkg/utils/ulids"
+	"github.com/datum-cloud/datum-os/pkg/tokens"
+	ulids "github.com/datum-cloud/datum-os/pkg/utils/ulids"
 )
 
 var rusty = "rusty.shackleford@gmail.com"

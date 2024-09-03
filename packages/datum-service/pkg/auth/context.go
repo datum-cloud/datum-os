@@ -3,10 +3,10 @@ package auth
 import (
 	"context"
 
-	echo "github.com/datumforge/echox"
+	echo "github.com/datum-cloud/datum-os/pkg/echox"
 
-	"github.com/datumforge/datum/pkg/middleware/echocontext"
-	"github.com/datumforge/datum/pkg/utils/ulids"
+	"github.com/datum-cloud/datum-os/pkg/middleware/echocontext"
+	"github.com/datum-cloud/datum-os/pkg/utils/ulids"
 )
 
 type AuthenticationType string

@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 
-	"github.com/datumforge/datum/pkg/events/soiree"
+	"github.com/datum-cloud/datum-os/pkg/events/soiree"
 	"github.com/google/uuid"
 )
 

@@ -10,10 +10,10 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/datumforge/datum/internal/ent/customtypes"
-	"github.com/datumforge/datum/internal/ent/generated/templatehistory"
-	"github.com/datumforge/datum/pkg/enums"
-	"github.com/datumforge/enthistory"
+	"github.com/datum-cloud/datum-os/internal/ent/customtypes"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/templatehistory"
+	"github.com/datum-cloud/datum-os/pkg/enums"
+	"github.com/flume/enthistory"
 )
 
 // TemplateHistoryCreate is the builder for creating a TemplateHistory entity.

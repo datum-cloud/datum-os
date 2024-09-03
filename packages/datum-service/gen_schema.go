@@ -8,7 +8,7 @@ import (
 
 	"github.com/vektah/gqlparser/v2/formatter"
 
-	"github.com/datumforge/datum/internal/graphapi"
+	"github.com/datum-cloud/datum-os/internal/graphapi"
 )
 
 // read in schema from internal package and save it to the schema file
