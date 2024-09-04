@@ -1,9 +1,7 @@
 'use client'
 
-import { signOut } from 'next-auth/react'
 import { Menu, Transition } from '@headlessui/react'
 import { Fragment } from 'react'
-import Link from 'next/link'
 import Image from 'next/image'
 import bellIcon from './assets/bell.svg'
 

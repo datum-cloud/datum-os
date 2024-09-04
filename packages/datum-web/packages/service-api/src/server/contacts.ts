@@ -115,9 +115,14 @@ const formatResponse = camelCaseKeys
 export async function listContacts(
   organisationId: Datum.OrganisationId,
 ): Promise<Datum.Contact[]> {
-  const contacts = formatResponse(MOCK_CONTACTS_DATA, {
-    deep: true,
-  }).contactList as unknown as Datum.Contact[]
+  const contactList = MOCK_CONTACTS_DATA.contact_list
+
+  const contacts = contactList.map(
+    (contact) =>
+      formatResponse(contact, {
+        deep: true,
+      }) as unknown as Datum.Contact,
+  )
 
   return contacts
 }

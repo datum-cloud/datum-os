@@ -6,7 +6,7 @@
   "main": "./src/index.ts",
   "scripts": {
     "test:ci": "echo \"No tests\"",
-    "typecheck": "tsc"
+    "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
     "@repo/types": "*"

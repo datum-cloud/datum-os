@@ -1,3 +1,4 @@
+import React from 'react'
 import { Column } from '@tanstack/react-table'
 
 import { cn } from '../../lib/utils'
@@ -21,8 +22,8 @@ export function DataTableColumnHeader<TData, TValue>({
 
   return (
     <Button
-      variant="blackberryGhost"
-      size="content"
+      variant="blackberryXs"
+      size="xs"
       className={cn(className)}
       icon={<ChevronsUpDown />}
       onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
