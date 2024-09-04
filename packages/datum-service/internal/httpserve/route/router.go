@@ -146,6 +146,7 @@ func RegisterRoutes(router *Router) error {
 		registerAccountAccessHandler,
 		registerAccountRolesHandler,
 		registerAccountRolesOrganizationHandler,
+		registerContactsGetHandler,
 	}
 
 	for _, route := range routeHandlers {
