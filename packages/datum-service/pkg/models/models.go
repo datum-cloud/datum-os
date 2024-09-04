@@ -6,6 +6,7 @@ import (
 
 	"github.com/go-webauthn/webauthn/protocol"
 
+	"github.com/datum-cloud/datum-os/internal/ent/generated"
 	"github.com/datum-cloud/datum-os/pkg/passwd"
 	"github.com/datum-cloud/datum-os/pkg/rout"
 	"github.com/datum-cloud/datum-os/pkg/utils/ulids"
@@ -721,8 +722,22 @@ var ExampleAccountRolesOrganizationReply = AccountRolesOrganizationReply{
 
 type ContactsGetResponse struct {
 	rout.Reply
-	Count    int           `json:"count"`
-	Contacts []ContactData `json:"contacts"`
+	// the number of contacts returned in `Contacts`
+	Count int `json:"count"`
+	// the array of contacts
+	Contacts []*ContactData `json:"contacts"`
+}
+
+func ContactsGetResponseFromEntContacts(genContacts []*generated.Contact) *ContactsGetResponse {
+	cgr := &ContactsGetResponse{}
+	cgr.Count = len(genContacts)
+	cgr.Contacts = make([]*ContactData, cgr.Count)
+	for i, genContact := range genContacts {
+		cgr.Contacts[i] = ContactDataFromEntContact(genContact)
+		cgr.Contacts[i].Tags = append(cgr.Contacts[i].Tags, genContact.Tags...)
+	}
+
+	return cgr
 }
 
 type ContactData struct {
@@ -761,8 +776,34 @@ type ContactData struct {
 	Status string `json:"status,omitempty"`
 }
 
+func ContactDataFromEntContact(genContact *generated.Contact) *ContactData {
+	cd := &ContactData{}
+
+	cd.ID = genContact.ID
+	cd.CreatedAt = genContact.CreatedAt
+	cd.UpdatedAt = genContact.UpdatedAt
+	cd.CreatedBy = genContact.CreatedBy
+	cd.UpdatedBy = genContact.UpdatedBy
+	cd.MappingID = genContact.MappingID
+	cd.DeletedAt = genContact.DeletedAt
+	cd.DeletedBy = genContact.DeletedBy
+	cd.OwnerID = genContact.OwnerID
+	cd.FullName = genContact.FullName
+	cd.Title = genContact.Title
+	cd.Company = genContact.Company
+	cd.Email = genContact.Email
+	cd.PhoneNumber = genContact.PhoneNumber
+	cd.Address = genContact.Address
+	cd.Status = string(genContact.Status)
+
+	return cd
+}
+
 var ExampleContactsGetSuccessResponse = ContactsGetResponse{
-	Reply:    rout.Reply{Success: true},
-	Count:    1,
-	Contacts: []ContactData{},
+	Reply: rout.Reply{Success: true},
+	Count: 2,
+	Contacts: []*ContactData{
+		{ID: "01J6X14S34TP3H6Z4S3AVHJSMY", FullName: "Serene Ilsley", Address: "66195 Gateway Junction", Email: "silsley0@harvard.edu", Title: "Web Designer III", Company: "Crona-Dooley", PhoneNumber: "694-566-6857"},
+		{ID: "01J6X14S355M2R0GP5WFX6QX91", FullName: "Bobbie Kolyagin", Address: "467 Magdeline Hill", Email: "bkolyagin1@blogs.com", Title: "VP Sales", Company: "Mosciski Group", PhoneNumber: "228-669-6638"},
+	},
 }

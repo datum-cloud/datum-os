@@ -16,6 +16,7 @@ import (
 	"github.com/datum-cloud/datum-os/internal/ent/generated"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/privacy"
 	"github.com/datum-cloud/datum-os/internal/ent/mixin"
+	"github.com/datum-cloud/datum-os/internal/ent/privacy/rule"
 	"github.com/datum-cloud/datum-os/internal/ent/validator"
 	"github.com/datum-cloud/datum-os/pkg/enums"
 	"github.com/datum-cloud/datum-os/pkg/rout"
@@ -126,13 +127,13 @@ func (Contact) Policy() ent.Policy {
 			privacy.ContactMutationRuleFunc(func(ctx context.Context, m *generated.ContactMutation) error {
 				return m.CheckAccessForEdit(ctx)
 			}),
-
 			privacy.AlwaysDenyRule(),
 		},
 		Query: privacy.QueryPolicy{
 			privacy.ContactQueryRuleFunc(func(ctx context.Context, q *generated.ContactQuery) error {
 				return q.CheckAccess(ctx)
 			}),
+			rule.AllowIfOrgViewer(),
 			privacy.AlwaysDenyRule(),
 		},
 	}
