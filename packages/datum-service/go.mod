@@ -14,8 +14,6 @@ require (
 	github.com/alicebob/miniredis/v2 v2.33.0
 	github.com/brianvoe/gofakeit/v7 v7.0.4
 	github.com/bytedance/sonic v1.12.1
-	github.com/datum-cloud/echo-prometheus/v5 v5.0.1
-	github.com/datumforge/echox v0.0.0-20231205180954-6e7ee4c4d965
 	github.com/dustinkirkland/golang-petname v0.0.0-20240428194347-eebcea082ee0
 	github.com/flume/enthistory v0.15.3
 	github.com/gertd/go-pluralize v0.2.1
@@ -176,7 +174,7 @@ require (
 	github.com/ogen-go/ogen v1.2.1 // indirect
 	github.com/opencontainers/go-digest v1.0.0 // indirect
 	github.com/opencontainers/image-spec v1.1.0 // indirect
-	github.com/opencontainers/runc v1.1.12 // indirect
+	github.com/opencontainers/runc v1.1.14 // indirect
 	github.com/openfga/api/proto v0.0.0-20240807201305-c96ec773cae9 // indirect
 	github.com/perimeterx/marshmallow v1.1.5 // indirect
 	github.com/pierrec/lz4/v4 v4.1.21 // indirect
