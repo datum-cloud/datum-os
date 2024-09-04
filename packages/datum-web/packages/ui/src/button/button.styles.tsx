@@ -13,10 +13,10 @@ export const buttonStyles = tv({
   },
   variants: {
     variant: {
-      sunglowGhost: '!text-sunglow-900',
-      blackberryGhost: '!text-blackberry-900',
-      successGhost: '!text-util-green-500',
-      failureGhost: '!text-util-red-500',
+      sunglowXs: '!text-sunglow-900',
+      blackberryXs: '!text-blackberry-900',
+      successXs: '!text-util-green-500',
+      failureXs: '!text-util-red-500',
       sunglow: '!text-white !bg-sunglow-900',
       blackberry: '!text-white !bg-blackberry-900',
       outline: 'border border-blackberry-800 text-blackberry-800',
@@ -33,7 +33,7 @@ export const buttonStyles = tv({
       },
     },
     size: {
-      content: 'h-auto rounded-none p-0',
+      xs: 'h-auto rounded-none p-0',
       sm: 'h-9 rounded-md px-4 text-button-s',
       md: 'h-11 rounded-md px-5 text-button-m',
       lg: 'h-16 px-8 text-button-l',
