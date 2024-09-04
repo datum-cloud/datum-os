@@ -3,7 +3,7 @@ import { tv, type VariantProps } from 'tailwind-variants'
 
 export const buttonStyles = tv({
   slots: {
-    base: 'relative group text-white font-sans font-semibold gap-[10px] inline-flex items-center justify-center whitespace-nowrap rounded-md leading-none text-sm transition-all duration-500 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-blackberry-300 disabled:pointer-events-none disabled:opacity-50 hover:opacity-90',
+    base: 'relative group font-sans font-semibold inline-flex items-center gap-2 justify-center whitespace-nowrap rounded-md leading-none transition-all duration-500 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-blackberry-300 disabled:pointer-events-none disabled:opacity-50 hover:!opacity-90',
     childWrapper: '',
     loadingWrapper:
       'absolute top-1/2 left-1/2  transform -translate-x-1/2 -translate-y-1/2',
@@ -13,16 +13,29 @@ export const buttonStyles = tv({
   },
   variants: {
     variant: {
-      sunglow: 'text-white bg-sunglow-900',
-      blackberry: 'text-white bg-blackberry-900',
-      outline: 'border-blackberry-800 text-blackberry-800 border',
-      success: 'flex-row-reverse bg-util-green-500',
-      failure: 'bg-util-red-500 border text-white',
+      sunglowGhost: '!text-sunglow-900',
+      blackberryGhost: '!text-blackberry-900',
+      successGhost: '!text-util-green-500',
+      failureGhost: '!text-util-red-500',
+      sunglow: '!text-white !bg-sunglow-900',
+      blackberry: '!text-white !bg-blackberry-900',
+      outline: 'border border-blackberry-800 text-blackberry-800',
+      success: '!bg-util-green-500 !text-white',
+      failure: '!bg-util-red-500 !text-white',
+    },
+    iconPosition: {
+      left: 'flex-row-reverse',
+      right: 'flex-row',
+    },
+    iconAnimated: {
+      true: {
+        iconInner: 'group-hover:-translate-y-4',
+      },
     },
     size: {
-      xs: 'h-auto rounded-none p-0 bg-transparent',
-      sm: 'h-9 rounded-none px-4 bg-transparent',
-      md: 'h-11 rounded-md text-base px-5 text-button-m',
+      content: 'h-auto rounded-none p-0',
+      sm: 'h-9 rounded-md px-4 text-button-s',
+      md: 'h-11 rounded-md px-5 text-button-m',
       lg: 'h-16 px-8 text-button-l',
     },
     full: {
@@ -35,49 +48,14 @@ export const buttonStyles = tv({
         childWrapper: 'flex w-full',
       },
     },
-    iconAnimated: {
-      true: {
-        iconInner: 'group-hover:-translate-y-4',
-      },
-    },
-    iconPosition: {
-      left: 'flex-row-reverse',
-    },
   },
-  compoundVariants: [
-    {
-      variant: 'sunglow',
-      size: 'sm',
-      class: 'text-sunglow-900',
-    },
-    {
-      variant: 'blackberry',
-      size: 'sm',
-      class: 'text-blackberry-900',
-    },
-    {
-      variant: 'outline',
-      size: 'sm',
-      class: 'text-blackberry-900',
-    },
-    {
-      variant: 'failure',
-      size: 'sm',
-      class: 'text-white',
-    },
-    {
-      variant: 'success',
-      size: 'sm',
-      class: 'text-white',
-    },
-  ],
   defaultVariants: {
     variant: 'sunglow',
     size: 'md',
   },
 })
 
-//TODO: Important is needed here for backgrounds due to https://github.com/tailwindlabs/tailwindcss/issues/12734
+//TODO: Important is needed here due to https://github.com/tailwindlabs/tailwindcss/issues/12734
 
 export type ButtonVariants = VariantProps<typeof buttonStyles>
 

@@ -40,6 +40,7 @@ export const config: Omit<Config, 'content'> = {
         'smallcaps-s': ['0.75rem', '2rem'],
         'button-l': ['1.125rem', '0.75rem'],
         'button-m': ['1rem', '0.75rem'],
+        'button-s': ['0.875rem', '0.75rem'],
       },
       letterSpacing: {
         h1: '-1.53px',
@@ -58,6 +59,7 @@ export const config: Omit<Config, 'content'> = {
         'smallcaps-s': '0.48px',
         'button-l': '-0.2px',
         'button-m': '-0.2px',
+        'button-s': '-0.2px',
         tighter: '-0.01rem',
         heading: '-0.038rem',
       },

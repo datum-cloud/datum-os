@@ -52,6 +52,8 @@ const Button = forwardRef<HTMLButtonElement, ButtonWithIcons>(
       variant,
       full,
       childFull,
+      iconPosition,
+      iconAnimated,
       ...rest,
     })
 
@@ -71,15 +73,17 @@ const Button = forwardRef<HTMLButtonElement, ButtonWithIcons>(
         </span>
         {loading ? (
           <div className={loadingWrapper()}>
-            <LoaderCircleIcon className="animate-spin shrink-0" size={20} />
+            <LoaderCircleIcon className="animate-spin shrink-0 !h-6 !w-6" />
           </div>
-        ) : (
-          icon && (
-            <div className={iconOuter()}>
-              <div className={iconInner()}>{icon}</div>
+        ) : null}
+        {icon && !loading ? (
+          <div className={iconOuter()}>
+            <div className={iconInner()}>
+              {icon}
+              {icon}
             </div>
-          )
-        )}
+          </div>
+        ) : null}
       </Comp>
     )
   },
