@@ -8,7 +8,7 @@ import (
 	"context"
 
 	"github.com/99designs/gqlgen/graphql"
-	"github.com/datumforge/datum/internal/ent/generated"
+	"github.com/datum-cloud/datum-os/internal/ent/generated"
 )
 
 // CreateGroupMembership is the resolver for the createGroupMembership field.

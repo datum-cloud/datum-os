@@ -10,8 +10,8 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/datumforge/datum/internal/ent/generated/entityhistory"
-	"github.com/datumforge/enthistory"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/entityhistory"
+	"github.com/flume/enthistory"
 )
 
 // EntityHistory is the model entity for the EntityHistory schema.

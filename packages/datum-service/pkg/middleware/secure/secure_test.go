@@ -5,10 +5,10 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	echo "github.com/datumforge/echox"
+	echo "github.com/datum-cloud/datum-os/pkg/echox"
 	"github.com/stretchr/testify/assert"
 
-	"github.com/datumforge/datum/pkg/middleware/secure"
+	"github.com/datum-cloud/datum-os/pkg/middleware/secure"
 )
 
 func TestSecureMiddleware(t *testing.T) {

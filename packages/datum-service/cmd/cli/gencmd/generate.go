@@ -13,13 +13,11 @@ import (
 	"github.com/stoewer/go-strcase"
 	"golang.org/x/tools/imports"
 
-	sliceutil "github.com/datumforge/datum/pkg/utils/slice"
+	sliceutil "github.com/datum-cloud/datum-os/pkg/utils/slice"
 )
 
-var (
-	//go:embed templates/*
-	_templates embed.FS
-)
+//go:embed templates/*
+var _templates embed.FS
 
 const (
 	templateSuffix = ".tmpl"
@@ -35,9 +33,7 @@ type cmd struct {
 	HistoryCmd bool
 }
 
-var (
-	mutationTemplates = []string{"create.tmpl", "update.tmpl", "delete.tmpl"}
-)
+var mutationTemplates = []string{"create.tmpl", "update.tmpl", "delete.tmpl"}
 
 // Generate generates the cli command files for the given command name
 func Generate(cmdName string, cmdDirName string, readOnly bool, force bool) error {

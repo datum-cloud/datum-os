@@ -10,8 +10,8 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/datumforge/datum/internal/ent/generated/filehistory"
-	"github.com/datumforge/enthistory"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/filehistory"
+	"github.com/flume/enthistory"
 )
 
 // FileHistoryCreate is the builder for creating a FileHistory entity.

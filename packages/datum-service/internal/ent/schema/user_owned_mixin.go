@@ -14,13 +14,13 @@ import (
 	"entgo.io/ent/schema/index"
 	"entgo.io/ent/schema/mixin"
 
-	"github.com/datumforge/datum/internal/ent/generated"
-	"github.com/datumforge/datum/internal/ent/generated/intercept"
-	"github.com/datumforge/datum/internal/ent/generated/privacy"
-	"github.com/datumforge/datum/internal/ent/interceptors"
-	"github.com/datumforge/datum/internal/ent/privacy/rule"
-	"github.com/datumforge/datum/internal/ent/privacy/token"
-	"github.com/datumforge/datum/pkg/auth"
+	"github.com/datum-cloud/datum-os/internal/ent/generated"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/intercept"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/privacy"
+	"github.com/datum-cloud/datum-os/internal/ent/interceptors"
+	"github.com/datum-cloud/datum-os/internal/ent/privacy/rule"
+	"github.com/datum-cloud/datum-os/internal/ent/privacy/token"
+	"github.com/datum-cloud/datum-os/pkg/auth"
 )
 
 type UserOwnedMixin struct {

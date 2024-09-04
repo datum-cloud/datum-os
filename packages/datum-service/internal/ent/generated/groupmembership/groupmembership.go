@@ -10,7 +10,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"github.com/99designs/gqlgen/graphql"
-	"github.com/datumforge/datum/pkg/enums"
+	"github.com/datum-cloud/datum-os/pkg/enums"
 )
 
 const (
@@ -102,7 +102,7 @@ func ValidColumn(column string) bool {
 // package on the initialization of the application. Therefore,
 // it should be imported in the main as follows:
 //
-//	import _ "github.com/datumforge/datum/internal/ent/generated/runtime"
+//	import _ "github.com/datum-cloud/datum-os/internal/ent/generated/runtime"
 var (
 	Hooks        [4]ent.Hook
 	Interceptors [1]ent.Interceptor

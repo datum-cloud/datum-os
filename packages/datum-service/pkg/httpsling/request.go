@@ -14,7 +14,7 @@ import (
 
 	"github.com/google/go-querystring/query"
 
-	"github.com/datumforge/datum/pkg/rout"
+	"github.com/datum-cloud/datum-os/pkg/rout"
 )
 
 // RequestBuilder facilitates building and executing HTTP requests
@@ -303,7 +303,6 @@ func (b *RequestBuilder) Auth(auth AuthMethod) *RequestBuilder {
 // Form sets form fields and files for the request
 func (b *RequestBuilder) Form(v any) *RequestBuilder {
 	formFields, formFiles, err := parseForm(v)
-
 	if err != nil {
 		if b.client.Logger != nil {
 			b.client.Logger.Errorf("Error parsing form: %v", err)
@@ -484,18 +483,18 @@ func (b *RequestBuilder) RetryIf(retryIf RetryIfFunc) *RequestBuilder {
 
 func (b *RequestBuilder) do(ctx context.Context, req *http.Request) (*http.Response, error) {
 	finalHandler := MiddlewareHandlerFunc(func(req *http.Request) (*http.Response, error) {
-		var maxRetries = b.client.MaxRetries
+		maxRetries := b.client.MaxRetries
 		if b.maxRetries > 0 {
 			maxRetries = b.maxRetries
 		}
 
-		var retryStrategy = b.client.RetryStrategy
+		retryStrategy := b.client.RetryStrategy
 
 		if b.retryStrategy != nil {
 			retryStrategy = b.retryStrategy
 		}
 
-		var retryIf = b.client.RetryIf
+		retryIf := b.client.RetryIf
 
 		if b.retryIf != nil {
 			retryIf = b.retryIf
@@ -764,7 +763,6 @@ func (b *RequestBuilder) prepareMultipartBody() (io.Reader, string, error) {
 	for _, file := range b.formFiles {
 		// create a new multipart part for the file
 		part, err := writer.CreateFormFile(file.Name, file.FileName)
-
 		if err != nil {
 			return nil, "", rout.HTTPErrorResponse(err)
 		}

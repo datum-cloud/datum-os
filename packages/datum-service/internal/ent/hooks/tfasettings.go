@@ -7,11 +7,11 @@ import (
 	"entgo.io/ent"
 	"github.com/99designs/gqlgen/graphql"
 
-	"github.com/datumforge/datum/internal/ent/generated"
-	"github.com/datumforge/datum/internal/ent/generated/hook"
-	"github.com/datumforge/datum/internal/ent/generated/usersetting"
-	"github.com/datumforge/datum/pkg/auth"
-	"github.com/datumforge/datum/pkg/utils/totp"
+	"github.com/datum-cloud/datum-os/internal/ent/generated"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/hook"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/usersetting"
+	"github.com/datum-cloud/datum-os/pkg/auth"
+	"github.com/datum-cloud/datum-os/pkg/utils/totp"
 )
 
 func HookEnableTFA() ent.Hook {

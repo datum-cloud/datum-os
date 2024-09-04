@@ -7,7 +7,7 @@ import (
 	"github.com/brianvoe/gofakeit/v7"
 	"github.com/stretchr/testify/assert"
 
-	"github.com/datumforge/datum/internal/ent/validator"
+	"github.com/datum-cloud/datum-os/internal/ent/validator"
 )
 
 func TestValidateDomains(t *testing.T) {

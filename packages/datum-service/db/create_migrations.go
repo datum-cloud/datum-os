@@ -9,7 +9,7 @@ import (
 	"time"
 
 	// supported ent database drivers
-	_ "github.com/datumforge/entx"                       // overlay for sqlite
+	_ "github.com/datum-cloud/datum-os/pkg/entx"         // overlay for sqlite
 	_ "github.com/lib/pq"                                // postgres driver
 	_ "github.com/tursodatabase/libsql-client-go/libsql" // libsql driver
 	_ "modernc.org/sqlite"                               // sqlite driver (non-cgo)
@@ -19,8 +19,8 @@ import (
 
 	atlas "ariga.io/atlas/sql/migrate"
 	"ariga.io/atlas/sql/sqltool"
-	"github.com/datumforge/datum/internal/ent/generated/migrate"
-	"github.com/datumforge/datum/pkg/testutils"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/migrate"
+	"github.com/datum-cloud/datum-os/pkg/testutils"
 )
 
 func main() {

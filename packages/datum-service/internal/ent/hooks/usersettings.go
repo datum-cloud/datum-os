@@ -5,18 +5,18 @@ import (
 
 	"entgo.io/ent"
 
-	"github.com/datumforge/fgax"
+	"github.com/datum-cloud/datum-os/pkg/fgax"
 
-	"github.com/datumforge/datum/internal/ent/generated"
-	"github.com/datumforge/datum/internal/ent/generated/hook"
-	"github.com/datumforge/datum/internal/ent/generated/privacy"
-	"github.com/datumforge/datum/internal/ent/generated/tfasetting"
-	"github.com/datumforge/datum/internal/ent/generated/user"
-	"github.com/datumforge/datum/internal/ent/generated/usersetting"
-	"github.com/datumforge/datum/internal/ent/privacy/rule"
-	"github.com/datumforge/datum/internal/ent/privacy/token"
-	"github.com/datumforge/datum/pkg/auth"
-	"github.com/datumforge/datum/pkg/rout"
+	"github.com/datum-cloud/datum-os/internal/ent/generated"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/hook"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/privacy"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/tfasetting"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/user"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/usersetting"
+	"github.com/datum-cloud/datum-os/internal/ent/privacy/rule"
+	"github.com/datum-cloud/datum-os/internal/ent/privacy/token"
+	"github.com/datum-cloud/datum-os/pkg/auth"
+	"github.com/datum-cloud/datum-os/pkg/rout"
 )
 
 // HookUserSetting runs on user settings mutations and validates input on update

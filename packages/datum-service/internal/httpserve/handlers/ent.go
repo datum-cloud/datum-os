@@ -6,17 +6,17 @@ import (
 
 	gowebauthn "github.com/go-webauthn/webauthn/webauthn"
 
-	ent "github.com/datumforge/datum/internal/ent/generated"
-	"github.com/datumforge/datum/internal/ent/generated/emailverificationtoken"
-	"github.com/datumforge/datum/internal/ent/generated/invite"
-	"github.com/datumforge/datum/internal/ent/generated/passwordresettoken"
-	"github.com/datumforge/datum/internal/ent/generated/privacy"
-	"github.com/datumforge/datum/internal/ent/generated/subscriber"
-	"github.com/datumforge/datum/internal/ent/generated/user"
-	"github.com/datumforge/datum/internal/ent/generated/usersetting"
-	"github.com/datumforge/datum/internal/ent/generated/webauthn"
-	"github.com/datumforge/datum/pkg/enums"
-	"github.com/datumforge/datum/pkg/middleware/transaction"
+	ent "github.com/datum-cloud/datum-os/internal/ent/generated"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/emailverificationtoken"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/invite"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/passwordresettoken"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/privacy"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/subscriber"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/user"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/usersetting"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/webauthn"
+	"github.com/datum-cloud/datum-os/pkg/enums"
+	"github.com/datum-cloud/datum-os/pkg/middleware/transaction"
 )
 
 // updateUserLastSeen updates the last seen timestamp of the user
@@ -263,7 +263,6 @@ func (h *Handler) getUserByInviteToken(ctx context.Context, token string) (*ent.
 		Where(
 			invite.Token(token),
 		).WithOwner().Only(ctx)
-
 	if err != nil {
 		h.Logger.Errorw("error obtaining user from token", "error", err)
 

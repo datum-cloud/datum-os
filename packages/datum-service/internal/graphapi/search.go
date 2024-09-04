@@ -4,17 +4,15 @@ import (
 	"context"
 	"time"
 
-	"github.com/datumforge/datum/internal/ent/generated"
-	"github.com/datumforge/datum/internal/ent/generated/group"
-	"github.com/datumforge/datum/internal/ent/generated/organization"
-	"github.com/datumforge/datum/internal/ent/generated/orgmembership"
-	"github.com/datumforge/datum/internal/ent/generated/subscriber"
-	"github.com/datumforge/datum/internal/ent/generated/user"
+	"github.com/datum-cloud/datum-os/internal/ent/generated"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/group"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/organization"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/orgmembership"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/subscriber"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/user"
 )
 
-var (
-	maxSearchTime = time.Duration(30 * time.Second)
-)
+var maxSearchTime = time.Duration(30 * time.Second)
 
 // searchResult is a generic struct to hold the result of a search operation
 type searchResult[T any] struct {

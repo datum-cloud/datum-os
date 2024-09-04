@@ -9,13 +9,13 @@ import (
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 
-	emixin "github.com/datumforge/entx/mixin"
-	"github.com/datumforge/fgax/entfga"
+	emixin "github.com/datum-cloud/datum-os/pkg/entx/mixin"
+	"github.com/datum-cloud/datum-os/pkg/fgax/entfga"
 
-	"github.com/datumforge/datum/internal/ent/customtypes"
-	"github.com/datumforge/datum/internal/ent/generated"
-	"github.com/datumforge/datum/internal/ent/generated/privacy"
-	"github.com/datumforge/datum/internal/ent/mixin"
+	"github.com/datum-cloud/datum-os/internal/ent/customtypes"
+	"github.com/datum-cloud/datum-os/internal/ent/generated"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/privacy"
+	"github.com/datum-cloud/datum-os/internal/ent/mixin"
 )
 
 // DocumentData holds the schema definition for the DocumentData entity

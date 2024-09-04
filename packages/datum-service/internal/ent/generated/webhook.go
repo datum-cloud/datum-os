@@ -10,8 +10,8 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/datumforge/datum/internal/ent/generated/organization"
-	"github.com/datumforge/datum/internal/ent/generated/webhook"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/organization"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/webhook"
 )
 
 // Webhook is the model entity for the Webhook schema.

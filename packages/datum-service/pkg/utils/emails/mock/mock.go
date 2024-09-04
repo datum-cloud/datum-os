@@ -17,7 +17,7 @@ import (
 	sgmail "github.com/sendgrid/sendgrid-go/helpers/mail"
 	"github.com/stretchr/testify/require"
 
-	"github.com/datumforge/datum/pkg/utils/sendgrid"
+	"github.com/datum-cloud/datum-os/pkg/utils/sendgrid"
 )
 
 // EmailLog combines email data with a mutex to ensure that tests can safely access the mock concurrently for that email blastertons
@@ -176,7 +176,7 @@ func (c *SendGridClient) Send(msg *sgmail.SGMailV3) (rep *rest.Response, err err
 	if c.Storage != "" {
 		// Save the email to disk for manual inspection
 		dir := filepath.Join(c.Storage, toAddress)
-		if err = os.MkdirAll(dir, 0755); err != nil { //nolint:mnd
+		if err = os.MkdirAll(dir, 0o755); err != nil { //nolint:mnd
 			return &rest.Response{
 				StatusCode: http.StatusInternalServerError,
 				Body:       fmt.Sprintf("could not create archive directory at %s", dir),

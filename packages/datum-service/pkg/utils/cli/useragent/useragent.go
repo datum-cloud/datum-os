@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"runtime"
 
-	"github.com/datumforge/datum/internal/constants"
+	"github.com/datum-cloud/datum-os/internal/constants"
 )
 
 // GetUserAgent returns the user agent string for the CLI

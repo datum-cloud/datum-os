@@ -5,7 +5,7 @@ import (
 
 	"github.com/spf13/cobra"
 
-	datum "github.com/datumforge/datum/cmd/cli/cmd"
+	datum "github.com/datum-cloud/datum-os/cmd/cli/cmd"
 )
 
 var deleteCmd = &cobra.Command{

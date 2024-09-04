@@ -12,8 +12,8 @@ import (
 	"github.com/sendgrid/sendgrid-go/helpers/mail"
 	"github.com/stretchr/testify/require"
 
-	emails "github.com/datumforge/datum/pkg/utils/emails"
-	"github.com/datumforge/datum/pkg/utils/sendgrid"
+	emails "github.com/datum-cloud/datum-os/pkg/utils/emails"
+	"github.com/datum-cloud/datum-os/pkg/utils/sendgrid"
 )
 
 func TestEmailBuilders(t *testing.T) {

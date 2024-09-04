@@ -7,16 +7,16 @@ import (
 	"testing"
 
 	"github.com/brianvoe/gofakeit/v7"
-	"github.com/datumforge/entx"
-	mock_fga "github.com/datumforge/fgax/mockery"
+	"github.com/datum-cloud/datum-os/pkg/entx"
+	mock_fga "github.com/datum-cloud/datum-os/pkg/fgax/mockery"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	ent "github.com/datumforge/datum/internal/ent/generated"
-	"github.com/datumforge/datum/internal/ent/generated/privacy"
-	"github.com/datumforge/datum/pkg/auth"
-	"github.com/datumforge/datum/pkg/datumclient"
-	"github.com/datumforge/datum/pkg/enums"
+	ent "github.com/datum-cloud/datum-os/internal/ent/generated"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/privacy"
+	"github.com/datum-cloud/datum-os/pkg/auth"
+	"github.com/datum-cloud/datum-os/pkg/datumclient"
+	"github.com/datum-cloud/datum-os/pkg/enums"
 )
 
 func (suite *GraphTestSuite) TestQueryOrganization() {

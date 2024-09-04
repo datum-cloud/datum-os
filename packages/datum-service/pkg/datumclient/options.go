@@ -6,7 +6,7 @@ import (
 
 	"github.com/Yamashou/gqlgenc/clientv2"
 
-	"github.com/datumforge/datum/pkg/httpsling"
+	"github.com/datum-cloud/datum-os/pkg/httpsling"
 )
 
 // ClientOption allows us to configure the APIv1 client when it is created

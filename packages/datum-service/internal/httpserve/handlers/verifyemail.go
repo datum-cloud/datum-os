@@ -6,16 +6,16 @@ import (
 	"time"
 
 	"entgo.io/ent/dialect/sql"
-	echo "github.com/datumforge/echox"
+	echo "github.com/datum-cloud/datum-os/pkg/echox"
 	"github.com/getkin/kin-openapi/openapi3"
 	ph "github.com/posthog/posthog-go"
 
-	"github.com/datumforge/datum/internal/ent/generated"
-	"github.com/datumforge/datum/internal/ent/privacy/token"
-	"github.com/datumforge/datum/pkg/auth"
-	"github.com/datumforge/datum/pkg/models"
-	"github.com/datumforge/datum/pkg/rout"
-	"github.com/datumforge/datum/pkg/tokens"
+	"github.com/datum-cloud/datum-os/internal/ent/generated"
+	"github.com/datum-cloud/datum-os/internal/ent/privacy/token"
+	"github.com/datum-cloud/datum-os/pkg/auth"
+	"github.com/datum-cloud/datum-os/pkg/models"
+	"github.com/datum-cloud/datum-os/pkg/rout"
+	"github.com/datum-cloud/datum-os/pkg/tokens"
 )
 
 // VerifyEmail is the handler for the email verification endpoint

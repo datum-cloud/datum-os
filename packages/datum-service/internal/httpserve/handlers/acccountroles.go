@@ -3,13 +3,13 @@ package handlers
 import (
 	"net/http"
 
-	echo "github.com/datumforge/echox"
-	"github.com/datumforge/fgax"
+	echo "github.com/datum-cloud/datum-os/pkg/echox"
+	"github.com/datum-cloud/datum-os/pkg/fgax"
 	"github.com/getkin/kin-openapi/openapi3"
 
-	"github.com/datumforge/datum/pkg/auth"
-	"github.com/datumforge/datum/pkg/models"
-	"github.com/datumforge/datum/pkg/rout"
+	"github.com/datum-cloud/datum-os/pkg/auth"
+	"github.com/datum-cloud/datum-os/pkg/models"
+	"github.com/datum-cloud/datum-os/pkg/rout"
 )
 
 // DefaultAllRelations is the default list of relations to check

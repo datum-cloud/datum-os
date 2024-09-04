@@ -4,8 +4,8 @@ import (
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/getkin/kin-openapi/openapi3gen"
 
-	"github.com/datumforge/datum/pkg/models"
-	"github.com/datumforge/datum/pkg/rout"
+	"github.com/datum-cloud/datum-os/pkg/models"
+	"github.com/datum-cloud/datum-os/pkg/rout"
 )
 
 // NewOpenAPISpec creates a new OpenAPI 3.1.0 specification based on the configured go interfaces and the operation types appended within the individual handlers

@@ -3,7 +3,7 @@ package otelx_test
 import (
 	"testing"
 
-	"github.com/datumforge/datum/pkg/otelx"
+	"github.com/datum-cloud/datum-os/pkg/otelx"
 
 	"github.com/stretchr/testify/assert"
 	"go.uber.org/zap"

@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/datumforge/datum/pkg/keygen"
+	"github.com/datum-cloud/datum-os/pkg/keygen"
 )
 
 func TestS256Challenge(t *testing.T) {

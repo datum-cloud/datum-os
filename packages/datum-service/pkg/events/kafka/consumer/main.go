@@ -14,7 +14,7 @@ import (
 
 	"github.com/IBM/sarama"
 
-	"github.com/datumforge/datum/pkg/utils/slack"
+	"github.com/datum-cloud/datum-os/pkg/utils/slack"
 )
 
 var (

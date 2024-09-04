@@ -10,9 +10,9 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/datumforge/datum/internal/ent/generated/group"
-	"github.com/datumforge/datum/internal/ent/generated/groupsetting"
-	"github.com/datumforge/datum/internal/ent/generated/organization"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/group"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/groupsetting"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/organization"
 )
 
 // Group is the model entity for the Group schema.

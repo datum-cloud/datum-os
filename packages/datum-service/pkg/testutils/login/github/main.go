@@ -10,8 +10,8 @@ import (
 	"golang.org/x/oauth2"
 	githubOAuth2 "golang.org/x/oauth2/github"
 
-	"github.com/datumforge/datum/pkg/providers/github"
-	"github.com/datumforge/datum/pkg/sessions"
+	"github.com/datum-cloud/datum-os/pkg/providers/github"
+	"github.com/datum-cloud/datum-os/pkg/sessions"
 )
 
 const (

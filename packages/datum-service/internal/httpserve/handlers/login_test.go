@@ -8,17 +8,17 @@ import (
 	"testing"
 
 	"github.com/brianvoe/gofakeit/v7"
-	mock_fga "github.com/datumforge/fgax/mockery"
+	mock_fga "github.com/datum-cloud/datum-os/pkg/fgax/mockery"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/datumforge/datum/internal/ent/generated/privacy"
-	_ "github.com/datumforge/datum/internal/ent/generated/runtime"
-	"github.com/datumforge/datum/pkg/auth"
-	"github.com/datumforge/datum/pkg/httpsling"
-	"github.com/datumforge/datum/pkg/middleware/echocontext"
-	"github.com/datumforge/datum/pkg/models"
-	"github.com/datumforge/datum/pkg/rout"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/privacy"
+	_ "github.com/datum-cloud/datum-os/internal/ent/generated/runtime"
+	"github.com/datum-cloud/datum-os/pkg/auth"
+	"github.com/datum-cloud/datum-os/pkg/httpsling"
+	"github.com/datum-cloud/datum-os/pkg/middleware/echocontext"
+	"github.com/datum-cloud/datum-os/pkg/models"
+	"github.com/datum-cloud/datum-os/pkg/rout"
 )
 
 func (suite *HandlerTestSuite) TestLoginHandler() {

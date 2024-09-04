@@ -10,8 +10,8 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/datumforge/datum/internal/ent/generated/organization"
-	"github.com/datumforge/datum/internal/ent/generated/organizationsetting"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/organization"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/organizationsetting"
 )
 
 // Organization is the model entity for the Organization schema.

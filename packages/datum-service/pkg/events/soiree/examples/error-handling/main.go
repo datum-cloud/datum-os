@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/datumforge/datum/pkg/events/soiree"
+	"github.com/datum-cloud/datum-os/pkg/events/soiree"
 )
 
 // CustomErrorHandler logs and handles errors that occur during event processing

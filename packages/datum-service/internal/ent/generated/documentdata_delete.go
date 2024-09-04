@@ -8,10 +8,10 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/datumforge/datum/internal/ent/generated/predicate"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/predicate"
 
-	"github.com/datumforge/datum/internal/ent/generated/documentdata"
-	"github.com/datumforge/datum/internal/ent/generated/internal"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/documentdata"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/internal"
 )
 
 // DocumentDataDelete is the builder for deleting a DocumentData entity.

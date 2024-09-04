@@ -7,8 +7,8 @@ import (
 	"entgo.io/ent/entc/gen"
 	"github.com/spf13/cobra"
 
-	"github.com/datumforge/datum/cmd/cli/gencmd"
-	"github.com/datumforge/datum/cmd/cli/gencmd/generate/prompts"
+	"github.com/datum-cloud/datum-os/cmd/cli/gencmd"
+	"github.com/datum-cloud/datum-os/cmd/cli/gencmd/generate/prompts"
 )
 
 const (

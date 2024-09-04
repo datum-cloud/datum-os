@@ -6,7 +6,7 @@ import (
 
 	"github.com/Yamashou/gqlgenc/clientv2"
 
-	"github.com/datumforge/datum/pkg/httpsling"
+	"github.com/datum-cloud/datum-os/pkg/httpsling"
 )
 
 // Config is the configuration for the Datum API client

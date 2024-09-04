@@ -10,9 +10,9 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/datumforge/datum/internal/ent/generated/entity"
-	"github.com/datumforge/datum/internal/ent/generated/entitytype"
-	"github.com/datumforge/datum/internal/ent/generated/organization"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/entity"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/entitytype"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/organization"
 )
 
 // Entity is the model entity for the Entity schema.

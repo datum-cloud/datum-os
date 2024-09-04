@@ -10,10 +10,10 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/datumforge/datum/internal/ent/customtypes"
-	"github.com/datumforge/datum/internal/ent/generated/documentdata"
-	"github.com/datumforge/datum/internal/ent/generated/organization"
-	"github.com/datumforge/datum/internal/ent/generated/template"
+	"github.com/datum-cloud/datum-os/internal/ent/customtypes"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/documentdata"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/organization"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/template"
 )
 
 // DocumentData is the model entity for the DocumentData schema.

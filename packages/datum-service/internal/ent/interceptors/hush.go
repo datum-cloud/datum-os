@@ -5,9 +5,9 @@ import (
 
 	"entgo.io/ent"
 
-	"github.com/datumforge/datum/internal/ent/generated"
-	"github.com/datumforge/datum/internal/ent/generated/intercept"
-	"github.com/datumforge/datum/internal/ent/hooks"
+	"github.com/datum-cloud/datum-os/internal/ent/generated"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/intercept"
+	"github.com/datum-cloud/datum-os/internal/ent/hooks"
 )
 
 // InterceptorHush keeps it secret, keeps it safe

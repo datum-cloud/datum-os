@@ -7,8 +7,8 @@ import (
 	"github.com/spf13/cobra"
 	"golang.org/x/oauth2"
 
-	datum "github.com/datumforge/datum/cmd/cli/cmd"
-	"github.com/datumforge/datum/pkg/models"
+	datum "github.com/datum-cloud/datum-os/cmd/cli/cmd"
+	"github.com/datum-cloud/datum-os/pkg/models"
 )
 
 var acceptCmd = &cobra.Command{

@@ -7,8 +7,8 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/datumforge/datum/pkg/providers/google"
-	"github.com/datumforge/datum/pkg/sessions"
+	"github.com/datum-cloud/datum-os/pkg/providers/google"
+	"github.com/datum-cloud/datum-os/pkg/sessions"
 
 	"golang.org/x/oauth2"
 	googleOAuth2 "golang.org/x/oauth2/google"

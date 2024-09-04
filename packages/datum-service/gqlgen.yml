@@ -50,8 +50,8 @@ omit_gqlgen_version_in_file_notice: true
 # gqlgen will search for any type names in the schema in these go packages
 # if they match it will use them, otherwise it will generate them.
 autobind:
-  - "github.com/datumforge/datum/internal/graphapi"
-  - "github.com/datumforge/datum/internal/ent/generated"
+  - "github.com/datum-cloud/datum-os/internal/graphapi"
+  - "github.com/datum-cloud/datum-os/internal/ent/generated"
 # This section declares type mapping between the GraphQL and go type systems
 #
 # The first line in each type will be used as defaults for resolver arguments and
@@ -71,14 +71,14 @@ models:
       - github.com/99designs/gqlgen/graphql.Uint
       - github.com/99designs/gqlgen/graphql.Uint64
       - github.com/99designs/gqlgen/graphql.Uint32
-      - github.com/datumforge/datum/internal/ent/customtypes.Uint8
+      - github.com/datum-cloud/datum-os/internal/ent/customtypes.Uint8
   Node:
     model:
-      - github.com/datumforge/datum/internal/ent/generated.Noder
+      - github.com/datum-cloud/datum-os/internal/ent/generated.Noder
   JSON:
     model:
-      - github.com/datumforge/entx.RawMessage
-      - github.com/datumforge/datum/internal/ent/customtypes.JSONObject
+      - github.com/datum-cloud/datum-os/pkg/entx.RawMessage
+      - github.com/datum-cloud/datum-os/internal/ent/customtypes.JSONObject
   Any:
     model:
       - github.com/99designs/gqlgen/graphql.Any

@@ -4,9 +4,9 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/schema/mixin"
 
-	"github.com/datumforge/datum/internal/ent/generated/privacy"
-	"github.com/datumforge/datum/internal/ent/privacy/rule"
-	"github.com/datumforge/datum/internal/ent/privacy/utils"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/privacy"
+	"github.com/datum-cloud/datum-os/internal/ent/privacy/rule"
+	"github.com/datum-cloud/datum-os/internal/ent/privacy/utils"
 )
 
 type (

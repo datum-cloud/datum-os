@@ -10,13 +10,13 @@ import (
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
-	emixin "github.com/datumforge/entx/mixin"
-	"github.com/datumforge/fgax/entfga"
+	emixin "github.com/datum-cloud/datum-os/pkg/entx/mixin"
+	"github.com/datum-cloud/datum-os/pkg/fgax/entfga"
 
-	"github.com/datumforge/datum/internal/ent/generated"
-	"github.com/datumforge/datum/internal/ent/generated/privacy"
-	"github.com/datumforge/datum/internal/ent/hooks"
-	"github.com/datumforge/datum/internal/ent/mixin"
+	"github.com/datum-cloud/datum-os/internal/ent/generated"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/privacy"
+	"github.com/datum-cloud/datum-os/internal/ent/hooks"
+	"github.com/datum-cloud/datum-os/internal/ent/mixin"
 )
 
 // Feature defines the feature schema

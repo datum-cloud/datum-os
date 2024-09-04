@@ -9,8 +9,8 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/datumforge/datum/internal/ent/generated/emailverificationtoken"
-	"github.com/datumforge/datum/internal/ent/generated/user"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/emailverificationtoken"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/user"
 )
 
 // EmailVerificationToken is the model entity for the EmailVerificationToken schema.

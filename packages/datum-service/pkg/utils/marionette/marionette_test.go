@@ -12,7 +12,7 @@ import (
 	"github.com/stretchr/testify/require"
 	"go.uber.org/zap"
 
-	"github.com/datumforge/datum/pkg/utils/marionette"
+	"github.com/datum-cloud/datum-os/pkg/utils/marionette"
 )
 
 // TestMain is a special function in Go that is used to control the execution of test functions.
@@ -59,8 +59,10 @@ func TestTasks(t *testing.T) {
 	require.ErrorIs(t, err, marionette.ErrTaskManagerStopped)
 }
 
-var skip = "skipping long running test in short mode"
-var retry = "expected all tasks to have failed twice before no more retries"
+var (
+	skip  = "skipping long running test in short mode"
+	retry = "expected all tasks to have failed twice before no more retries"
+)
 
 func TestTasksRetry(t *testing.T) {
 	// This is a long running test, skip if in short mode

@@ -5,8 +5,8 @@ import (
 
 	"entgo.io/ent"
 
-	"github.com/datumforge/datum/internal/ent/generated"
-	"github.com/datumforge/datum/internal/ent/generated/hook"
+	"github.com/datum-cloud/datum-os/internal/ent/generated"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/hook"
 )
 
 func HookFeature() ent.Hook {

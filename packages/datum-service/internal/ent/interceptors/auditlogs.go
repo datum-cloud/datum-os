@@ -6,12 +6,12 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 
-	"github.com/datumforge/fgax"
+	"github.com/datum-cloud/datum-os/pkg/fgax"
 
-	"github.com/datumforge/datum/internal/ent/generated"
-	"github.com/datumforge/datum/internal/ent/generated/intercept"
-	"github.com/datumforge/datum/pkg/auth"
-	"github.com/datumforge/datum/pkg/rout"
+	"github.com/datum-cloud/datum-os/internal/ent/generated"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/intercept"
+	"github.com/datum-cloud/datum-os/pkg/auth"
+	"github.com/datum-cloud/datum-os/pkg/rout"
 )
 
 // HistoryAccess is a traversal interceptor that checks if the user has the required role for the organization

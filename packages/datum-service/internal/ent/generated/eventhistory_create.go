@@ -10,8 +10,8 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/datumforge/datum/internal/ent/generated/eventhistory"
-	"github.com/datumforge/enthistory"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/eventhistory"
+	"github.com/flume/enthistory"
 )
 
 // EventHistoryCreate is the builder for creating a EventHistory entity.

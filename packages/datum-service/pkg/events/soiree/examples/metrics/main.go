@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/datumforge/datum/pkg/events/soiree"
+	"github.com/datum-cloud/datum-os/pkg/events/soiree"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 )

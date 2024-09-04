@@ -5,9 +5,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/datumforge/datum/pkg/datumclient"
-	"github.com/datumforge/datum/pkg/utils/ulids"
-	mock_fga "github.com/datumforge/fgax/mockery"
+	"github.com/datum-cloud/datum-os/pkg/datumclient"
+	mock_fga "github.com/datum-cloud/datum-os/pkg/fgax/mockery"
+	"github.com/datum-cloud/datum-os/pkg/utils/ulids"
 	"github.com/samber/lo"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"

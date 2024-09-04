@@ -6,9 +6,9 @@ import (
 	"regexp"
 	"time"
 
-	echo "github.com/datumforge/echox"
+	echo "github.com/datum-cloud/datum-os/pkg/echox"
 
-	"github.com/datumforge/datum/pkg/sessions"
+	"github.com/datum-cloud/datum-os/pkg/sessions"
 )
 
 const (

@@ -5,7 +5,7 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/datumforge/datum/pkg/utils/gravatar"
+	"github.com/datum-cloud/datum-os/pkg/utils/gravatar"
 )
 
 func TestGravatar(t *testing.T) {

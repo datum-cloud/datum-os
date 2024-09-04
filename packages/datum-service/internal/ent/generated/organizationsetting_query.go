@@ -12,11 +12,11 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/datumforge/datum/internal/ent/generated/organization"
-	"github.com/datumforge/datum/internal/ent/generated/organizationsetting"
-	"github.com/datumforge/datum/internal/ent/generated/predicate"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/organization"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/organizationsetting"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/predicate"
 
-	"github.com/datumforge/datum/internal/ent/generated/internal"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/internal"
 )
 
 // OrganizationSettingQuery is the builder for querying OrganizationSetting entities.

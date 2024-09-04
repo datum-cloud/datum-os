@@ -10,8 +10,8 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/datumforge/datum/internal/ent/generated/webhookhistory"
-	"github.com/datumforge/enthistory"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/webhookhistory"
+	"github.com/flume/enthistory"
 )
 
 // WebhookHistory is the model entity for the WebhookHistory schema.

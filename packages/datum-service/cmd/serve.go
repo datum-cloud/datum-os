@@ -6,17 +6,17 @@ import (
 	"github.com/spf13/cobra"
 	"go.uber.org/zap"
 
-	"github.com/datumforge/fgax"
-	geodetic "github.com/datumforge/geodetic/pkg/geodeticclient"
+	"github.com/datum-cloud/datum-os/pkg/fgax"
+	geodetic "github.com/datum-cloud/datum-os/pkg/geodetic/pkg/geodeticclient"
 
-	ent "github.com/datumforge/datum/internal/ent/generated"
-	"github.com/datumforge/datum/internal/entdb"
-	"github.com/datumforge/datum/internal/httpserve/authmanager"
-	"github.com/datumforge/datum/internal/httpserve/config"
-	"github.com/datumforge/datum/internal/httpserve/server"
-	"github.com/datumforge/datum/internal/httpserve/serveropts"
-	"github.com/datumforge/datum/pkg/cache"
-	"github.com/datumforge/datum/pkg/otelx"
+	ent "github.com/datum-cloud/datum-os/internal/ent/generated"
+	"github.com/datum-cloud/datum-os/internal/entdb"
+	"github.com/datum-cloud/datum-os/internal/httpserve/authmanager"
+	"github.com/datum-cloud/datum-os/internal/httpserve/config"
+	"github.com/datum-cloud/datum-os/internal/httpserve/server"
+	"github.com/datum-cloud/datum-os/internal/httpserve/serveropts"
+	"github.com/datum-cloud/datum-os/pkg/cache"
+	"github.com/datum-cloud/datum-os/pkg/otelx"
 )
 
 var serveCmd = &cobra.Command{

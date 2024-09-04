@@ -7,9 +7,9 @@ import (
 
 	ph "github.com/posthog/posthog-go"
 
-	"github.com/datumforge/datum/internal/ent/generated"
-	"github.com/datumforge/datum/internal/ent/generated/hook"
-	"github.com/datumforge/datum/internal/ent/generated/orgmembership"
+	"github.com/datum-cloud/datum-os/internal/ent/generated"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/hook"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/orgmembership"
 )
 
 func HookGroupMembers() ent.Hook {

@@ -4,8 +4,8 @@ import (
 	"context"
 	"reflect"
 
-	"github.com/datumforge/datum/internal/ent/generated/privacy"
-	"github.com/datumforge/datum/internal/ent/privacy/token"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/privacy"
+	"github.com/datum-cloud/datum-os/internal/ent/privacy/token"
 )
 
 // AllowIfContextHasPrivacyTokenOfType allows a mutation

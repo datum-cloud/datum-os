@@ -10,18 +10,18 @@ import (
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
-	"github.com/datumforge/enthistory"
-	"github.com/datumforge/entx"
+	"github.com/datum-cloud/datum-os/pkg/entx"
+	"github.com/flume/enthistory"
 
-	emixin "github.com/datumforge/entx/mixin"
+	emixin "github.com/datum-cloud/datum-os/pkg/entx/mixin"
 
-	"github.com/datumforge/datum/internal/ent/generated"
-	"github.com/datumforge/datum/internal/ent/generated/privacy"
-	"github.com/datumforge/datum/internal/ent/hooks"
-	"github.com/datumforge/datum/internal/ent/interceptors"
-	"github.com/datumforge/datum/internal/ent/mixin"
-	"github.com/datumforge/datum/internal/ent/privacy/rule"
-	"github.com/datumforge/datum/internal/ent/privacy/token"
+	"github.com/datum-cloud/datum-os/internal/ent/generated"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/privacy"
+	"github.com/datum-cloud/datum-os/internal/ent/hooks"
+	"github.com/datum-cloud/datum-os/internal/ent/interceptors"
+	"github.com/datum-cloud/datum-os/internal/ent/mixin"
+	"github.com/datum-cloud/datum-os/internal/ent/privacy/rule"
+	"github.com/datum-cloud/datum-os/internal/ent/privacy/token"
 )
 
 // EmailVerificationToken holds the schema definition for the EmailVerificationToken entity

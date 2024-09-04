@@ -5,7 +5,7 @@ import (
 
 	"github.com/posthog/posthog-go"
 
-	"github.com/datumforge/datum/pkg/analytics/machine"
+	"github.com/datum-cloud/datum-os/pkg/analytics/machine"
 )
 
 // Config is the configuration for PostHog

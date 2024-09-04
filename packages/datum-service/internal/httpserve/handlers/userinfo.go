@@ -1,9 +1,9 @@
 package handlers
 
 import (
-	echo "github.com/datumforge/echox"
+	echo "github.com/datum-cloud/datum-os/pkg/echox"
 
-	"github.com/datumforge/datum/pkg/auth"
+	"github.com/datum-cloud/datum-os/pkg/auth"
 )
 
 // UserInfo returns the user information for the authenticated user

@@ -9,8 +9,8 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/99designs/gqlgen/graphql"
-	"github.com/datumforge/datum/pkg/enums"
-	"github.com/datumforge/enthistory"
+	"github.com/datum-cloud/datum-os/pkg/enums"
+	"github.com/flume/enthistory"
 )
 
 const (
@@ -110,7 +110,7 @@ func ValidColumn(column string) bool {
 // package on the initialization of the application. Therefore,
 // it should be imported in the main as follows:
 //
-//	import _ "github.com/datumforge/datum/internal/ent/generated/runtime"
+//	import _ "github.com/datum-cloud/datum-os/internal/ent/generated/runtime"
 var (
 	Interceptors [1]ent.Interceptor
 	// DefaultHistoryTime holds the default value on creation for the "history_time" field.

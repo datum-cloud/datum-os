@@ -2,4 +2,4 @@
 
 package generated
 
-// The schema-stitching logic is generated in github.com/datumforge/datum/internal/ent/generated/runtime/runtime.go
+// The schema-stitching logic is generated in github.com/datum-cloud/datum-os/internal/ent/generated/runtime/runtime.go

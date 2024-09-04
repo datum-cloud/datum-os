@@ -3,12 +3,12 @@ package server
 import (
 	"context"
 
-	echo "github.com/datumforge/echox"
+	echo "github.com/datum-cloud/datum-os/pkg/echox"
 	"go.uber.org/zap"
 
-	"github.com/datumforge/datum/internal/httpserve/config"
-	"github.com/datumforge/datum/internal/httpserve/route"
-	echodebug "github.com/datumforge/datum/pkg/middleware/debug"
+	"github.com/datum-cloud/datum-os/internal/httpserve/config"
+	"github.com/datum-cloud/datum-os/internal/httpserve/route"
+	echodebug "github.com/datum-cloud/datum-os/pkg/middleware/debug"
 )
 
 type Server struct {

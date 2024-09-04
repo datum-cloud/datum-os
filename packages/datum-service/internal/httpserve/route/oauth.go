@@ -3,9 +3,9 @@ package route
 import (
 	"net/http"
 
-	echo "github.com/datumforge/echox"
+	echo "github.com/datum-cloud/datum-os/pkg/echox"
 
-	"github.com/datumforge/datum/pkg/httpsling"
+	"github.com/datum-cloud/datum-os/pkg/httpsling"
 )
 
 // registerOAuthRegisterHandler registers the oauth register handler used by the UI to register

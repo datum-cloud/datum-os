@@ -510,7 +510,7 @@ type ContactHistoryEdge {
 """
 ContactHistoryOpType is enum for the field operation
 """
-enum ContactHistoryOpType @goModel(model: "github.com/datumforge/enthistory.OpType") {
+enum ContactHistoryOpType @goModel(model: "github.com/flume/enthistory.OpType") {
 	INSERT
 	UPDATE
 	DELETE
@@ -518,7 +518,7 @@ enum ContactHistoryOpType @goModel(model: "github.com/datumforge/enthistory.OpTy
 """
 ContactHistoryUserStatus is enum for the field status
 """
-enum ContactHistoryUserStatus @goModel(model: "github.com/datumforge/datum/pkg/enums.UserStatus") {
+enum ContactHistoryUserStatus @goModel(model: "github.com/datum-cloud/datum-os/pkg/enums.UserStatus") {
 	ACTIVE
 	INACTIVE
 	DEACTIVATED
@@ -819,7 +819,7 @@ type ContactUpdatePayload {
 """
 ContactUserStatus is enum for the field status
 """
-enum ContactUserStatus @goModel(model: "github.com/datumforge/datum/pkg/enums.UserStatus") {
+enum ContactUserStatus @goModel(model: "github.com/datum-cloud/datum-os/pkg/enums.UserStatus") {
 	ACTIVE
 	INACTIVE
 	DEACTIVATED
@@ -2116,7 +2116,7 @@ type DocumentDataHistoryEdge {
 """
 DocumentDataHistoryOpType is enum for the field operation
 """
-enum DocumentDataHistoryOpType @goModel(model: "github.com/datumforge/enthistory.OpType") {
+enum DocumentDataHistoryOpType @goModel(model: "github.com/flume/enthistory.OpType") {
 	INSERT
 	UPDATE
 	DELETE
@@ -2666,7 +2666,7 @@ type EntitlementHistoryEdge {
 """
 EntitlementHistoryOpType is enum for the field operation
 """
-enum EntitlementHistoryOpType @goModel(model: "github.com/datumforge/enthistory.OpType") {
+enum EntitlementHistoryOpType @goModel(model: "github.com/flume/enthistory.OpType") {
 	INSERT
 	UPDATE
 	DELETE
@@ -3173,7 +3173,7 @@ type EntitlementPlanFeatureHistoryEdge {
 """
 EntitlementPlanFeatureHistoryOpType is enum for the field operation
 """
-enum EntitlementPlanFeatureHistoryOpType @goModel(model: "github.com/datumforge/enthistory.OpType") {
+enum EntitlementPlanFeatureHistoryOpType @goModel(model: "github.com/flume/enthistory.OpType") {
 	INSERT
 	UPDATE
 	DELETE
@@ -3576,7 +3576,7 @@ type EntitlementPlanHistoryEdge {
 """
 EntitlementPlanHistoryOpType is enum for the field operation
 """
-enum EntitlementPlanHistoryOpType @goModel(model: "github.com/datumforge/enthistory.OpType") {
+enum EntitlementPlanHistoryOpType @goModel(model: "github.com/flume/enthistory.OpType") {
 	INSERT
 	UPDATE
 	DELETE
@@ -4487,7 +4487,7 @@ type EntityHistoryEdge {
 """
 EntityHistoryOpType is enum for the field operation
 """
-enum EntityHistoryOpType @goModel(model: "github.com/datumforge/enthistory.OpType") {
+enum EntityHistoryOpType @goModel(model: "github.com/flume/enthistory.OpType") {
 	INSERT
 	UPDATE
 	DELETE
@@ -4910,7 +4910,7 @@ type EntityTypeHistoryEdge {
 """
 EntityTypeHistoryOpType is enum for the field operation
 """
-enum EntityTypeHistoryOpType @goModel(model: "github.com/datumforge/enthistory.OpType") {
+enum EntityTypeHistoryOpType @goModel(model: "github.com/flume/enthistory.OpType") {
 	INSERT
 	UPDATE
 	DELETE
@@ -5689,7 +5689,7 @@ type EventHistoryEdge {
 """
 EventHistoryOpType is enum for the field operation
 """
-enum EventHistoryOpType @goModel(model: "github.com/datumforge/enthistory.OpType") {
+enum EventHistoryOpType @goModel(model: "github.com/flume/enthistory.OpType") {
 	INSERT
 	UPDATE
 	DELETE
@@ -6262,7 +6262,7 @@ type FeatureHistoryEdge {
 """
 FeatureHistoryOpType is enum for the field operation
 """
-enum FeatureHistoryOpType @goModel(model: "github.com/datumforge/enthistory.OpType") {
+enum FeatureHistoryOpType @goModel(model: "github.com/flume/enthistory.OpType") {
 	INSERT
 	UPDATE
 	DELETE
@@ -6849,7 +6849,7 @@ type FileHistoryEdge {
 """
 FileHistoryOpType is enum for the field operation
 """
-enum FileHistoryOpType @goModel(model: "github.com/datumforge/enthistory.OpType") {
+enum FileHistoryOpType @goModel(model: "github.com/flume/enthistory.OpType") {
 	INSERT
 	UPDATE
 	DELETE
@@ -7554,7 +7554,7 @@ type GroupHistoryEdge {
 """
 GroupHistoryOpType is enum for the field operation
 """
-enum GroupHistoryOpType @goModel(model: "github.com/datumforge/enthistory.OpType") {
+enum GroupHistoryOpType @goModel(model: "github.com/flume/enthistory.OpType") {
 	INSERT
 	UPDATE
 	DELETE
@@ -7900,7 +7900,7 @@ type GroupMembershipHistoryEdge {
 """
 GroupMembershipHistoryOpType is enum for the field operation
 """
-enum GroupMembershipHistoryOpType @goModel(model: "github.com/datumforge/enthistory.OpType") {
+enum GroupMembershipHistoryOpType @goModel(model: "github.com/flume/enthistory.OpType") {
 	INSERT
 	UPDATE
 	DELETE
@@ -7908,7 +7908,7 @@ enum GroupMembershipHistoryOpType @goModel(model: "github.com/datumforge/enthist
 """
 GroupMembershipHistoryRole is enum for the field role
 """
-enum GroupMembershipHistoryRole @goModel(model: "github.com/datumforge/datum/pkg/enums.Role") {
+enum GroupMembershipHistoryRole @goModel(model: "github.com/datum-cloud/datum-os/pkg/enums.Role") {
 	ADMIN
 	MEMBER
 	USER
@@ -8106,7 +8106,7 @@ input GroupMembershipHistoryWhereInput {
 """
 GroupMembershipRole is enum for the field role
 """
-enum GroupMembershipRole @goModel(model: "github.com/datumforge/datum/pkg/enums.Role") {
+enum GroupMembershipRole @goModel(model: "github.com/datum-cloud/datum-os/pkg/enums.Role") {
 	ADMIN
 	MEMBER
 	USER
@@ -8427,7 +8427,7 @@ type GroupSettingHistoryEdge {
 """
 GroupSettingHistoryJoinPolicy is enum for the field join_policy
 """
-enum GroupSettingHistoryJoinPolicy @goModel(model: "github.com/datumforge/datum/pkg/enums.JoinPolicy") {
+enum GroupSettingHistoryJoinPolicy @goModel(model: "github.com/datum-cloud/datum-os/pkg/enums.JoinPolicy") {
 	OPEN
 	INVITE_ONLY
 	APPLICATION_ONLY
@@ -8436,7 +8436,7 @@ enum GroupSettingHistoryJoinPolicy @goModel(model: "github.com/datumforge/datum/
 """
 GroupSettingHistoryOpType is enum for the field operation
 """
-enum GroupSettingHistoryOpType @goModel(model: "github.com/datumforge/enthistory.OpType") {
+enum GroupSettingHistoryOpType @goModel(model: "github.com/flume/enthistory.OpType") {
 	INSERT
 	UPDATE
 	DELETE
@@ -8444,7 +8444,7 @@ enum GroupSettingHistoryOpType @goModel(model: "github.com/datumforge/enthistory
 """
 GroupSettingHistoryVisibility is enum for the field visibility
 """
-enum GroupSettingHistoryVisibility @goModel(model: "github.com/datumforge/datum/pkg/enums.Visibility") {
+enum GroupSettingHistoryVisibility @goModel(model: "github.com/datum-cloud/datum-os/pkg/enums.Visibility") {
 	PUBLIC
 	PRIVATE
 }
@@ -8648,7 +8648,7 @@ input GroupSettingHistoryWhereInput {
 """
 GroupSettingJoinPolicy is enum for the field join_policy
 """
-enum GroupSettingJoinPolicy @goModel(model: "github.com/datumforge/datum/pkg/enums.JoinPolicy") {
+enum GroupSettingJoinPolicy @goModel(model: "github.com/datum-cloud/datum-os/pkg/enums.JoinPolicy") {
 	OPEN
 	INVITE_ONLY
 	APPLICATION_ONLY
@@ -8666,7 +8666,7 @@ type GroupSettingUpdatePayload {
 """
 GroupSettingVisibility is enum for the field visibility
 """
-enum GroupSettingVisibility @goModel(model: "github.com/datumforge/datum/pkg/enums.Visibility") {
+enum GroupSettingVisibility @goModel(model: "github.com/datum-cloud/datum-os/pkg/enums.Visibility") {
 	PUBLIC
 	PRIVATE
 }
@@ -9194,7 +9194,7 @@ type HushHistoryEdge {
 """
 HushHistoryOpType is enum for the field operation
 """
-enum HushHistoryOpType @goModel(model: "github.com/datumforge/enthistory.OpType") {
+enum HushHistoryOpType @goModel(model: "github.com/flume/enthistory.OpType") {
 	INSERT
 	UPDATE
 	DELETE
@@ -9789,7 +9789,7 @@ type IntegrationHistoryEdge {
 """
 IntegrationHistoryOpType is enum for the field operation
 """
-enum IntegrationHistoryOpType @goModel(model: "github.com/datumforge/enthistory.OpType") {
+enum IntegrationHistoryOpType @goModel(model: "github.com/flume/enthistory.OpType") {
 	INSERT
 	UPDATE
 	DELETE
@@ -10334,7 +10334,7 @@ type InviteEdge {
 """
 InviteInviteStatus is enum for the field status
 """
-enum InviteInviteStatus @goModel(model: "github.com/datumforge/datum/pkg/enums.InviteStatus") {
+enum InviteInviteStatus @goModel(model: "github.com/datum-cloud/datum-os/pkg/enums.InviteStatus") {
 	INVITATION_SENT
 	APPROVAL_REQUIRED
 	INVITATION_ACCEPTED
@@ -10343,7 +10343,7 @@ enum InviteInviteStatus @goModel(model: "github.com/datumforge/datum/pkg/enums.I
 """
 InviteRole is enum for the field role
 """
-enum InviteRole @goModel(model: "github.com/datumforge/datum/pkg/enums.Role") {
+enum InviteRole @goModel(model: "github.com/datum-cloud/datum-os/pkg/enums.Role") {
 	ADMIN
 	MEMBER
 	USER
@@ -11982,7 +11982,7 @@ type Mutation {
 An object with an ID.
 Follows the [Relay Global Object Identification Specification](https://relay.dev/graphql/objectidentification.htm)
 """
-interface Node @goModel(model: "github.com/datumforge/datum/internal/ent/generated.Noder") {
+interface Node @goModel(model: "github.com/datum-cloud/datum-os/internal/ent/generated.Noder") {
 	"""
 	The id of the object.
 	"""
@@ -12098,7 +12098,7 @@ type NoteHistoryEdge {
 """
 NoteHistoryOpType is enum for the field operation
 """
-enum NoteHistoryOpType @goModel(model: "github.com/datumforge/enthistory.OpType") {
+enum NoteHistoryOpType @goModel(model: "github.com/flume/enthistory.OpType") {
 	INSERT
 	UPDATE
 	DELETE
@@ -12647,7 +12647,7 @@ type OauthProviderHistoryEdge {
 """
 OauthProviderHistoryOpType is enum for the field operation
 """
-enum OauthProviderHistoryOpType @goModel(model: "github.com/datumforge/enthistory.OpType") {
+enum OauthProviderHistoryOpType @goModel(model: "github.com/flume/enthistory.OpType") {
 	INSERT
 	UPDATE
 	DELETE
@@ -13626,7 +13626,7 @@ type OrgMembershipHistoryEdge {
 """
 OrgMembershipHistoryOpType is enum for the field operation
 """
-enum OrgMembershipHistoryOpType @goModel(model: "github.com/datumforge/enthistory.OpType") {
+enum OrgMembershipHistoryOpType @goModel(model: "github.com/flume/enthistory.OpType") {
 	INSERT
 	UPDATE
 	DELETE
@@ -13634,7 +13634,7 @@ enum OrgMembershipHistoryOpType @goModel(model: "github.com/datumforge/enthistor
 """
 OrgMembershipHistoryRole is enum for the field role
 """
-enum OrgMembershipHistoryRole @goModel(model: "github.com/datumforge/datum/pkg/enums.Role") {
+enum OrgMembershipHistoryRole @goModel(model: "github.com/datum-cloud/datum-os/pkg/enums.Role") {
 	ADMIN
 	MEMBER
 	USER
@@ -13833,7 +13833,7 @@ input OrgMembershipHistoryWhereInput {
 """
 OrgMembershipRole is enum for the field role
 """
-enum OrgMembershipRole @goModel(model: "github.com/datumforge/datum/pkg/enums.Role") {
+enum OrgMembershipRole @goModel(model: "github.com/datum-cloud/datum-os/pkg/enums.Role") {
 	ADMIN
 	MEMBER
 	USER
@@ -14196,7 +14196,7 @@ type OrganizationHistoryEdge {
 """
 OrganizationHistoryOpType is enum for the field operation
 """
-enum OrganizationHistoryOpType @goModel(model: "github.com/datumforge/enthistory.OpType") {
+enum OrganizationHistoryOpType @goModel(model: "github.com/flume/enthistory.OpType") {
 	INSERT
 	UPDATE
 	DELETE
@@ -14638,7 +14638,7 @@ type OrganizationSettingHistoryEdge {
 """
 OrganizationSettingHistoryOpType is enum for the field operation
 """
-enum OrganizationSettingHistoryOpType @goModel(model: "github.com/datumforge/enthistory.OpType") {
+enum OrganizationSettingHistoryOpType @goModel(model: "github.com/flume/enthistory.OpType") {
 	INSERT
 	UPDATE
 	DELETE
@@ -14646,7 +14646,7 @@ enum OrganizationSettingHistoryOpType @goModel(model: "github.com/datumforge/ent
 """
 OrganizationSettingHistoryRegion is enum for the field geo_location
 """
-enum OrganizationSettingHistoryRegion @goModel(model: "github.com/datumforge/datum/pkg/enums.Region") {
+enum OrganizationSettingHistoryRegion @goModel(model: "github.com/datum-cloud/datum-os/pkg/enums.Region") {
 	AMER
 	EMEA
 	APAC
@@ -14922,7 +14922,7 @@ input OrganizationSettingHistoryWhereInput {
 """
 OrganizationSettingRegion is enum for the field geo_location
 """
-enum OrganizationSettingRegion @goModel(model: "github.com/datumforge/datum/pkg/enums.Region") {
+enum OrganizationSettingRegion @goModel(model: "github.com/datum-cloud/datum-os/pkg/enums.Region") {
 	AMER
 	EMEA
 	APAC
@@ -18209,7 +18209,7 @@ type TemplateDeletePayload {
 """
 TemplateDocumentType is enum for the field template_type
 """
-enum TemplateDocumentType @goModel(model: "github.com/datumforge/datum/pkg/enums.DocumentType") {
+enum TemplateDocumentType @goModel(model: "github.com/datum-cloud/datum-os/pkg/enums.DocumentType") {
 	ROOTTEMPLATE
 	DOCUMENT
 }
@@ -18286,7 +18286,7 @@ type TemplateHistoryConnection {
 """
 TemplateHistoryDocumentType is enum for the field template_type
 """
-enum TemplateHistoryDocumentType @goModel(model: "github.com/datumforge/datum/pkg/enums.DocumentType") {
+enum TemplateHistoryDocumentType @goModel(model: "github.com/datum-cloud/datum-os/pkg/enums.DocumentType") {
 	ROOTTEMPLATE
 	DOCUMENT
 }
@@ -18306,7 +18306,7 @@ type TemplateHistoryEdge {
 """
 TemplateHistoryOpType is enum for the field operation
 """
-enum TemplateHistoryOpType @goModel(model: "github.com/datumforge/enthistory.OpType") {
+enum TemplateHistoryOpType @goModel(model: "github.com/flume/enthistory.OpType") {
 	INSERT
 	UPDATE
 	DELETE
@@ -19984,7 +19984,7 @@ type User implements Node {
 """
 UserAuthProvider is enum for the field auth_provider
 """
-enum UserAuthProvider @goModel(model: "github.com/datumforge/datum/pkg/enums.AuthProvider") {
+enum UserAuthProvider @goModel(model: "github.com/datum-cloud/datum-os/pkg/enums.AuthProvider") {
 	CREDENTIALS
 	GOOGLE
 	GITHUB
@@ -20101,7 +20101,7 @@ type UserHistory implements Node {
 """
 UserHistoryAuthProvider is enum for the field auth_provider
 """
-enum UserHistoryAuthProvider @goModel(model: "github.com/datumforge/datum/pkg/enums.AuthProvider") {
+enum UserHistoryAuthProvider @goModel(model: "github.com/datum-cloud/datum-os/pkg/enums.AuthProvider") {
 	CREDENTIALS
 	GOOGLE
 	GITHUB
@@ -20140,7 +20140,7 @@ type UserHistoryEdge {
 """
 UserHistoryOpType is enum for the field operation
 """
-enum UserHistoryOpType @goModel(model: "github.com/datumforge/enthistory.OpType") {
+enum UserHistoryOpType @goModel(model: "github.com/flume/enthistory.OpType") {
 	INSERT
 	UPDATE
 	DELETE
@@ -20169,7 +20169,7 @@ enum UserHistoryOrderField {
 """
 UserHistoryRole is enum for the field role
 """
-enum UserHistoryRole @goModel(model: "github.com/datumforge/datum/pkg/enums.Role") {
+enum UserHistoryRole @goModel(model: "github.com/datum-cloud/datum-os/pkg/enums.Role") {
 	ADMIN
 	MEMBER
 	USER
@@ -20513,7 +20513,7 @@ enum UserOrderField {
 """
 UserRole is enum for the field role
 """
-enum UserRole @goModel(model: "github.com/datumforge/datum/pkg/enums.Role") {
+enum UserRole @goModel(model: "github.com/datum-cloud/datum-os/pkg/enums.Role") {
 	ADMIN
 	MEMBER
 	USER
@@ -20694,7 +20694,7 @@ type UserSettingHistoryEdge {
 """
 UserSettingHistoryOpType is enum for the field operation
 """
-enum UserSettingHistoryOpType @goModel(model: "github.com/datumforge/enthistory.OpType") {
+enum UserSettingHistoryOpType @goModel(model: "github.com/flume/enthistory.OpType") {
 	INSERT
 	UPDATE
 	DELETE
@@ -20702,7 +20702,7 @@ enum UserSettingHistoryOpType @goModel(model: "github.com/datumforge/enthistory.
 """
 UserSettingHistoryUserStatus is enum for the field status
 """
-enum UserSettingHistoryUserStatus @goModel(model: "github.com/datumforge/datum/pkg/enums.UserStatus") {
+enum UserSettingHistoryUserStatus @goModel(model: "github.com/datum-cloud/datum-os/pkg/enums.UserStatus") {
 	ACTIVE
 	INACTIVE
 	DEACTIVATED
@@ -20947,7 +20947,7 @@ type UserSettingUpdatePayload {
 """
 UserSettingUserStatus is enum for the field status
 """
-enum UserSettingUserStatus @goModel(model: "github.com/datumforge/datum/pkg/enums.UserStatus") {
+enum UserSettingUserStatus @goModel(model: "github.com/datum-cloud/datum-os/pkg/enums.UserStatus") {
 	ACTIVE
 	INACTIVE
 	DEACTIVATED
@@ -21673,7 +21673,7 @@ type WebhookHistoryEdge {
 """
 WebhookHistoryOpType is enum for the field operation
 """
-enum WebhookHistoryOpType @goModel(model: "github.com/datumforge/enthistory.OpType") {
+enum WebhookHistoryOpType @goModel(model: "github.com/flume/enthistory.OpType") {
 	INSERT
 	UPDATE
 	DELETE

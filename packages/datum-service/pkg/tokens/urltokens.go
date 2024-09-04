@@ -10,7 +10,7 @@ import (
 	"github.com/oklog/ulid/v2"
 	"github.com/vmihailenco/msgpack/v5"
 
-	ulids "github.com/datumforge/datum/pkg/utils/ulids"
+	ulids "github.com/datum-cloud/datum-os/pkg/utils/ulids"
 )
 
 const (

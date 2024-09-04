@@ -9,13 +9,13 @@ import (
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 
-	"github.com/datumforge/entx"
-	emixin "github.com/datumforge/entx/mixin"
-	"github.com/datumforge/fgax/entfga"
+	"github.com/datum-cloud/datum-os/pkg/entx"
+	emixin "github.com/datum-cloud/datum-os/pkg/entx/mixin"
+	"github.com/datum-cloud/datum-os/pkg/fgax/entfga"
 
-	"github.com/datumforge/datum/internal/ent/generated"
-	"github.com/datumforge/datum/internal/ent/generated/privacy"
-	"github.com/datumforge/datum/internal/ent/mixin"
+	"github.com/datum-cloud/datum-os/internal/ent/generated"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/privacy"
+	"github.com/datum-cloud/datum-os/internal/ent/mixin"
 )
 
 // Note holds the schema definition for the Note entity

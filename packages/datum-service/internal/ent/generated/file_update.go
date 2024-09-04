@@ -12,14 +12,14 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
-	"github.com/datumforge/datum/internal/ent/generated/entity"
-	"github.com/datumforge/datum/internal/ent/generated/file"
-	"github.com/datumforge/datum/internal/ent/generated/group"
-	"github.com/datumforge/datum/internal/ent/generated/organization"
-	"github.com/datumforge/datum/internal/ent/generated/predicate"
-	"github.com/datumforge/datum/internal/ent/generated/user"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/entity"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/file"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/group"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/organization"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/predicate"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/user"
 
-	"github.com/datumforge/datum/internal/ent/generated/internal"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/internal"
 )
 
 // FileUpdate is the builder for updating File entities.

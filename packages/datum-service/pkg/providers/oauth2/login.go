@@ -5,8 +5,8 @@ import (
 
 	"golang.org/x/oauth2"
 
-	"github.com/datumforge/datum/pkg/keygen"
-	"github.com/datumforge/datum/pkg/sessions"
+	"github.com/datum-cloud/datum-os/pkg/keygen"
+	"github.com/datum-cloud/datum-os/pkg/sessions"
 )
 
 // StateHandler checks for a state cookie, if found, adds to context; if missing, a
@@ -54,7 +54,6 @@ func LoginHandler(config *oauth2.Config, failure http.Handler) http.Handler {
 	fn := func(w http.ResponseWriter, req *http.Request) {
 		ctx := req.Context()
 		state, err := StateFromContext(ctx)
-
 		if err != nil {
 			ctx = WithError(ctx, err)
 			failure.ServeHTTP(w, req.WithContext(ctx))

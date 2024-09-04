@@ -6,10 +6,10 @@ import (
 	"testing"
 	"time"
 
-	echo "github.com/datumforge/echox"
+	echo "github.com/datum-cloud/datum-os/pkg/echox"
 	"github.com/stretchr/testify/assert"
 
-	"github.com/datumforge/datum/pkg/middleware/cachecontrol"
+	"github.com/datum-cloud/datum-os/pkg/middleware/cachecontrol"
 )
 
 var epoch = time.Unix(0, 0).Format(time.RFC1123)

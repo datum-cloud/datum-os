@@ -6,16 +6,16 @@ import (
 	"fmt"
 	"time"
 
-	echo "github.com/datumforge/echox"
+	echo "github.com/datum-cloud/datum-os/pkg/echox"
 
-	"github.com/datumforge/datum/internal/ent/generated"
-	"github.com/datumforge/datum/internal/ent/generated/apitoken"
-	"github.com/datumforge/datum/internal/ent/generated/personalaccesstoken"
-	"github.com/datumforge/datum/internal/ent/generated/privacy"
-	"github.com/datumforge/datum/pkg/auth"
-	api "github.com/datumforge/datum/pkg/models"
-	"github.com/datumforge/datum/pkg/rout"
-	"github.com/datumforge/datum/pkg/tokens"
+	"github.com/datum-cloud/datum-os/internal/ent/generated"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/apitoken"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/personalaccesstoken"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/privacy"
+	"github.com/datum-cloud/datum-os/pkg/auth"
+	api "github.com/datum-cloud/datum-os/pkg/models"
+	"github.com/datum-cloud/datum-os/pkg/rout"
+	"github.com/datum-cloud/datum-os/pkg/tokens"
 )
 
 // SessionSkipperFunc is the function that determines if the session check should be skipped

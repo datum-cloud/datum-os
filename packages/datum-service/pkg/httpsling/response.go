@@ -13,7 +13,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/datumforge/datum/pkg/rout"
+	"github.com/datum-cloud/datum-os/pkg/rout"
 )
 
 // Response represents an HTTP response
@@ -231,7 +231,7 @@ func (r *Response) ScanYAML(v interface{}) error {
 	return r.Client.YAMLDecoder.Decode(bytes.NewReader(r.BodyBytes), v)
 }
 
-const dirPermissions = 0755
+const dirPermissions = 0o755
 
 // Save saves the response body to a file or io.Writer
 func (r *Response) Save(v any) error {

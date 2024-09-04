@@ -13,7 +13,7 @@ import (
 
 	"github.com/golang-jwt/jwt/v5"
 
-	"github.com/datumforge/datum/pkg/tokens"
+	"github.com/datum-cloud/datum-os/pkg/tokens"
 )
 
 const (

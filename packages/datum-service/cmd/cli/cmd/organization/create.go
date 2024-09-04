@@ -5,8 +5,8 @@ import (
 
 	"github.com/spf13/cobra"
 
-	datum "github.com/datumforge/datum/cmd/cli/cmd"
-	"github.com/datumforge/datum/pkg/datumclient"
+	datum "github.com/datum-cloud/datum-os/cmd/cli/cmd"
+	"github.com/datum-cloud/datum-os/pkg/datumclient"
 )
 
 var createCmd = &cobra.Command{
@@ -26,7 +26,7 @@ func init() {
 	createCmd.Flags().StringP("description", "d", "", "description of the organization")
 	createCmd.Flags().StringP("parent-org-id", "p", "", "parent organization id, leave empty to create a root org")
 
-	// TODO: https://github.com/datumforge/datum/issues/734
+	// TODO: https://github.com/datum-cloud/datum-os/issues/734
 	// remove flag once the feature is implemented
 	createCmd.Flags().BoolP("dedicated-db", "D", false, "create a dedicated database for the organization")
 }

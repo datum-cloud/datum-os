@@ -4,8 +4,8 @@ import (
 	"net/url"
 	"regexp"
 
-	"github.com/datumforge/datum/pkg/rout"
-	sliceutil "github.com/datumforge/datum/pkg/utils/slice"
+	"github.com/datum-cloud/datum-os/pkg/rout"
+	sliceutil "github.com/datum-cloud/datum-os/pkg/utils/slice"
 )
 
 var (

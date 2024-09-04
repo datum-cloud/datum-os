@@ -1,4 +1,4 @@
-{{ reserveImport "github.com/datumforge/datum/pkg/rout" }}
+{{ reserveImport "github.com/datum-cloud/datum-os/pkg/rout" }}
 
 {{ $entity := .Field.TypeReference.Definition.Name | getEntityName  -}}
 {{ $isOrgOwned := .Field | hasOwnerField  -}}

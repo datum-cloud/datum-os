@@ -2,12 +2,13 @@ package models
 
 import (
 	"strings"
+	"time"
 
 	"github.com/go-webauthn/webauthn/protocol"
 
-	"github.com/datumforge/datum/pkg/passwd"
-	"github.com/datumforge/datum/pkg/rout"
-	"github.com/datumforge/datum/pkg/utils/ulids"
+	"github.com/datum-cloud/datum-os/pkg/passwd"
+	"github.com/datum-cloud/datum-os/pkg/rout"
+	"github.com/datum-cloud/datum-os/pkg/utils/ulids"
 )
 
 // =========
@@ -712,4 +713,56 @@ var ExampleAccountRolesOrganizationReply = AccountRolesOrganizationReply{
 	Reply:          rout.Reply{Success: true},
 	Roles:          []string{"can_view", "can_edit", "audit_log_viewer"},
 	OrganizationID: "01J4HMNDSZCCQBTY93BF9CBF5D",
+}
+
+// =========
+// CONTACTS
+// =========
+
+type ContactsGetResponse struct {
+	rout.Reply
+	Count    int           `json:"count"`
+	Contacts []ContactData `json:"contacts"`
+}
+
+type ContactData struct {
+	ID string `json:"id,omitempty"`
+	// CreatedAt holds the value of the "created_at" field.
+	CreatedAt time.Time `json:"created_at,omitempty"`
+	// UpdatedAt holds the value of the "updated_at" field.
+	UpdatedAt time.Time `json:"updated_at,omitempty"`
+	// CreatedBy holds the value of the "created_by" field.
+	CreatedBy string `json:"created_by,omitempty"`
+	// UpdatedBy holds the value of the "updated_by" field.
+	UpdatedBy string `json:"updated_by,omitempty"`
+	// MappingID holds the value of the "mapping_id" field.
+	MappingID string `json:"mapping_id,omitempty"`
+	// DeletedAt holds the value of the "deleted_at" field.
+	DeletedAt time.Time `json:"deleted_at,omitempty"`
+	// DeletedBy holds the value of the "deleted_by" field.
+	DeletedBy string `json:"deleted_by,omitempty"`
+	// tags associated with the object
+	Tags []string `json:"tags,omitempty"`
+	// The organization id that owns the object
+	OwnerID string `json:"owner_id,omitempty"`
+	// the full name of the contact
+	FullName string `json:"full_name,omitempty"`
+	// the title of the contact
+	Title string `json:"title,omitempty"`
+	// the company of the contact
+	Company string `json:"company,omitempty"`
+	// the email of the contact
+	Email string `json:"email,omitempty"`
+	// the phone number of the contact
+	PhoneNumber string `json:"phone_number,omitempty"`
+	// the address of the contact
+	Address string `json:"address,omitempty"`
+	// status of the contact
+	Status string `json:"status,omitempty"`
+}
+
+var ExampleContactsGetSuccessResponse = ContactsGetResponse{
+	Reply:    rout.Reply{Success: true},
+	Count:    1,
+	Contacts: []ContactData{},
 }

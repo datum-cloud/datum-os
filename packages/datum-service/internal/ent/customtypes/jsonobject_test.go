@@ -7,7 +7,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/datumforge/datum/internal/ent/customtypes"
+	"github.com/datum-cloud/datum-os/internal/ent/customtypes"
 )
 
 func TestJSONObjectMarshalGQL(t *testing.T) {

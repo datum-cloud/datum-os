@@ -11,8 +11,8 @@ import (
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
 
-	"github.com/datumforge/enthistory"
-	"github.com/datumforge/entx"
+	"github.com/flume/enthistory"
+	"github.com/datum-cloud/datum-os/pkg/entx"
 )
 
 // HushHistory holds the schema definition for the HushHistory entity.

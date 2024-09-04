@@ -9,18 +9,18 @@ import (
 	"time"
 
 	"github.com/cenkalti/backoff/v4"
-	echo "github.com/datumforge/echox"
+	echo "github.com/datum-cloud/datum-os/pkg/echox"
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/oklog/ulid/v2"
 
-	"github.com/datumforge/datum/internal/ent/generated"
-	"github.com/datumforge/datum/internal/ent/privacy/token"
-	"github.com/datumforge/datum/pkg/auth"
-	"github.com/datumforge/datum/pkg/models"
-	"github.com/datumforge/datum/pkg/passwd"
-	"github.com/datumforge/datum/pkg/rout"
-	"github.com/datumforge/datum/pkg/tokens"
-	"github.com/datumforge/datum/pkg/utils/marionette"
+	"github.com/datum-cloud/datum-os/internal/ent/generated"
+	"github.com/datum-cloud/datum-os/internal/ent/privacy/token"
+	"github.com/datum-cloud/datum-os/pkg/auth"
+	"github.com/datum-cloud/datum-os/pkg/models"
+	"github.com/datum-cloud/datum-os/pkg/passwd"
+	"github.com/datum-cloud/datum-os/pkg/rout"
+	"github.com/datum-cloud/datum-os/pkg/tokens"
+	"github.com/datum-cloud/datum-os/pkg/utils/marionette"
 )
 
 // ResetPassword allows the user (after requesting a password reset) to

@@ -4,7 +4,7 @@ import (
 	"context"
 	"net/http"
 
-	"github.com/datumforge/datum/pkg/models"
+	"github.com/datum-cloud/datum-os/pkg/models"
 )
 
 // DatumRestClient is the interface that wraps the Datum API REST client methods

@@ -3,11 +3,11 @@ package hooks
 import (
 	"testing"
 
-	"github.com/datumforge/fgax"
+	"github.com/datum-cloud/datum-os/pkg/fgax"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/datumforge/datum/pkg/enums"
+	"github.com/datum-cloud/datum-os/pkg/enums"
 )
 
 func TestGetTupleKeyFromRole(t *testing.T) {

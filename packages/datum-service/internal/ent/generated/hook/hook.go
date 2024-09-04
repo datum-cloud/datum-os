@@ -6,7 +6,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/datumforge/datum/internal/ent/generated"
+	"github.com/datum-cloud/datum-os/internal/ent/generated"
 )
 
 // The APITokenFunc type is an adapter to allow the use of ordinary

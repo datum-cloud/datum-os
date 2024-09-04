@@ -7,15 +7,15 @@ import (
 	"strings"
 	"testing"
 
-	mock_fga "github.com/datumforge/fgax/mockery"
+	mock_fga "github.com/datum-cloud/datum-os/pkg/fgax/mockery"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/datumforge/datum/internal/httpserve/handlers"
-	"github.com/datumforge/datum/pkg/enums"
-	"github.com/datumforge/datum/pkg/httpsling"
-	"github.com/datumforge/datum/pkg/models"
-	"github.com/datumforge/datum/pkg/rout"
+	"github.com/datum-cloud/datum-os/internal/httpserve/handlers"
+	"github.com/datum-cloud/datum-os/pkg/enums"
+	"github.com/datum-cloud/datum-os/pkg/httpsling"
+	"github.com/datum-cloud/datum-os/pkg/models"
+	"github.com/datum-cloud/datum-os/pkg/rout"
 )
 
 func (suite *HandlerTestSuite) TestOauthRegister() {

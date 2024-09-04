@@ -7,17 +7,17 @@ import (
 
 	ph "github.com/posthog/posthog-go"
 
-	"github.com/datumforge/datum/internal/ent/generated"
-	"github.com/datumforge/datum/internal/ent/generated/hook"
-	"github.com/datumforge/datum/internal/ent/generated/invite"
-	"github.com/datumforge/datum/internal/ent/generated/organization"
-	"github.com/datumforge/datum/pkg/auth"
-	"github.com/datumforge/datum/pkg/enums"
-	"github.com/datumforge/datum/pkg/tokens"
-	"github.com/datumforge/datum/pkg/utils/emails"
-	"github.com/datumforge/datum/pkg/utils/marionette"
-	"github.com/datumforge/datum/pkg/utils/sendgrid"
-	"github.com/datumforge/datum/pkg/utils/ulids"
+	"github.com/datum-cloud/datum-os/internal/ent/generated"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/hook"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/invite"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/organization"
+	"github.com/datum-cloud/datum-os/pkg/auth"
+	"github.com/datum-cloud/datum-os/pkg/enums"
+	"github.com/datum-cloud/datum-os/pkg/tokens"
+	"github.com/datum-cloud/datum-os/pkg/utils/emails"
+	"github.com/datum-cloud/datum-os/pkg/utils/marionette"
+	"github.com/datum-cloud/datum-os/pkg/utils/sendgrid"
+	"github.com/datum-cloud/datum-os/pkg/utils/ulids"
 )
 
 // HookInvite runs on invite create mutations

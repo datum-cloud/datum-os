@@ -3,7 +3,7 @@ package echocontext
 import (
 	"context"
 
-	echo "github.com/datumforge/echox"
+	echo "github.com/datum-cloud/datum-os/pkg/echox"
 )
 
 // EchoContextKey is the context key for the echo.Context
