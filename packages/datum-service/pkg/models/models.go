@@ -807,3 +807,7 @@ var ExampleContactsGetSuccessResponse = ContactsGetResponse{
 		{ID: "01J6X14S355M2R0GP5WFX6QX91", FullName: "Bobbie Kolyagin", Address: "467 Magdeline Hill", Email: "bkolyagin1@blogs.com", Title: "VP Sales", Company: "Mosciski Group", PhoneNumber: "228-669-6638"},
 	},
 }
+
+type ContactsPostRequest struct {
+	Contacts []ContactData `json:"contacts"`
+}

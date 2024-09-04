@@ -24,7 +24,7 @@ func (h *Handler) ContactsGet(ctx echo.Context) error {
 	return h.Success(ctx, out)
 }
 
-// BindOrganizationInviteAccept returns the OpenAPI3 operation for accepting an organization invite
+// BindContactsGet returns the OpenAPI3 operation for getting an orgs contacts'
 func (h *Handler) BindContactsGet() *openapi3.Operation {
 	contactsGet := openapi3.NewOperation()
 	contactsGet.Description = "Get Contacts"
@@ -42,6 +42,31 @@ func (h *Handler) BindContactsGet() *openapi3.Operation {
 	return contactsGet
 }
 
+<<<<<<< HEAD
 func (h *Handler) ContactsPost() error {
 	return nil
 }
+=======
+func (h *Handler) ContactsPost(ctx echo.Context) error {
+	return nil
+}
+
+func (h *Handler) BindContactsPost() *openapi3.Operation {
+	contactsPost := openapi3.NewOperation()
+	contactsPost.Description = "Create Contacts"
+	contactsPost.OperationID = "ContactsPost"
+	contactsPost.Security = &openapi3.SecurityRequirements{
+		openapi3.SecurityRequirement{
+			"bearerAuth": []string{},
+		},
+	}
+
+	// h.AddRequestBody("ContactsPostRequest", models.ExampleContactsPostRequest, contactsPost)
+
+	// h.AddResponse("ContactsPostResponse", "success", models.ExampleContactsPostSuccessResponse, contactsPost, http.StatusOK)
+	contactsPost.AddResponse(http.StatusInternalServerError, internalServerError())
+	contactsPost.AddResponse(http.StatusUnauthorized, unauthorized())
+
+	return contactsPost
+}
+>>>>>>> 066bd87d (Add ContactsPost handler stub. Add ContactsPostRequest model. Add BindContactsPost openapi spec. Add AllowIfOrgEditor authz check function.)
