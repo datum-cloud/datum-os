@@ -1,3 +1,4 @@
+import React from 'react'
 import {
   ChevronLeftIcon,
   ChevronRightIcon,
@@ -24,20 +25,20 @@ export function DataTablePagination<TData>({
 }: DataTablePaginationProps<TData>) {
   return (
     <div className="w-full flex items-center justify-between gap-4 space-x-6 lg:space-x-8">
-      <div className="w-1/3 shrink-0">
+      <div className="flex flex-row justify-start items-stretch">
         <Select
           value={`${table.getState().pagination.pageSize}`}
           onValueChange={(value) => {
             table.setPageSize(Number(value))
           }}
         >
-          <SelectTrigger className="h-8">
+          <SelectTrigger className="h-8" style={{ width: 186 }}>
             <SelectValue
-              className="text-blackberry-400"
+              className="text-blackberry-400 "
               placeholder={`Show ${table.getState().pagination.pageSize} rows`}
             />
           </SelectTrigger>
-          <SelectContent side="top" className="w-[186px]">
+          <SelectContent side="top" className="">
             {[10, 20, 30, 40, 50].map((pageSize) => (
               <SelectItem key={pageSize} value={`${pageSize}`}>
                 Show {pageSize} rows
@@ -46,7 +47,7 @@ export function DataTablePagination<TData>({
           </SelectContent>
         </Select>
       </div>
-      <div className="w-2/3 shrink-0 basis-auto flex items-center justify-end space-x-2">
+      <div className="w-full flex items-center justify-end space-x-2">
         <Button
           variant="outline"
           className="hidden h-8 w-8 p-0 lg:flex"

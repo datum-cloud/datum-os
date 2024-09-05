@@ -24,8 +24,8 @@ export const tableStyles = tv({
     },
     bordered: {
       true: {
-        tableCell: 'border-r border-blackberry-4',
-        tableHead: 'border-r border-blackberry-4',
+        tableCell: 'border-r border-blackberry-4 [&:has([role=checkbox])]:pr-4',
+        tableHead: 'border-r border-blackberry-4 [&:has([role=checkbox])]:pr-4',
       },
     },
   },

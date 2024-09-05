@@ -1,3 +1,5 @@
+import { ColumnDef } from '@tanstack/react-table'
+
 import { Input } from '@repo/ui/input'
 import { Panel } from '@repo/ui/panel'
 import {
@@ -8,20 +10,23 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@repo/ui/select'
+import { Datum } from '@repo/types'
 
 import { pageStyles } from './page.styles'
 
 type ContactSearchPanelProps = {
-  searchTerm: string
-  setSearchTerm(input: string): void
+  columns: ColumnDef<Datum.Contact>[]
+  query: string
+  setQuery(input: string): void
 }
 
 const ContactSearchPanel = ({
-  searchTerm,
-  setSearchTerm,
+  columns,
+  query,
+  setQuery,
 }: ContactSearchPanelProps) => {
   const { contactsSearchRow, contactSearchSelect } = pageStyles()
-  const fields = ['name', 'email']
+  const fields = ['Email', 'Name', '']
   const operators = [
     'contains',
     'does not contain',
@@ -33,7 +38,7 @@ const ContactSearchPanel = ({
 
   function handleSearchTerm(event: React.ChangeEvent<HTMLInputElement>) {
     const term = event.target?.value || ''
-    setSearchTerm(term)
+    setQuery(term)
   }
   return (
     <Panel>
@@ -69,7 +74,7 @@ const ContactSearchPanel = ({
         <div className="w-full">
           <Input
             placeholder="Type to start filtering"
-            value={searchTerm}
+            value={query}
             className="w-full flex-grow"
             onChange={handleSearchTerm}
           />

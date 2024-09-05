@@ -71,7 +71,7 @@ const WorkspaceDelete = async () => {
           <p className="red">Deleting your workspace is irreversible.</p>
           <AlertDialog>
             <AlertDialogTrigger asChild>
-              <Button variant="redOutline" type="button" loading={isSubmitting}>
+              <Button variant="failure" type="button" loading={isSubmitting}>
                 Delete this workspace
               </Button>
             </AlertDialogTrigger>

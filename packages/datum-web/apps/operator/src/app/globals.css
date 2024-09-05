@@ -22,3 +22,95 @@ h5 {
 p {
   @apply text-blackberry-800/90 dark:text-blackberry-100;
 }
+
+.type-h1 {
+  @apply text-h1 tracking-h1;
+}
+
+.type-h2 {
+  @apply text-h2 tracking-h2;
+}
+
+.type-h3 {
+  @apply text-h3 tracking-h3;
+}
+
+.type-h4 {
+  @apply text-h4 tracking-h4;
+}
+
+.type-h5 {
+  @apply text-h5 tracking-h5;
+}
+
+.type-h6 {
+  @apply text-h6 tracking-h6;
+}
+
+.type-body-xl {
+  @apply text-body-xl tracking-body-xl;
+}
+
+.type-body-l {
+  @apply text-body-l tracking-body-l;
+}
+
+.type-body-m {
+  @apply text-body-m tracking-body-m;
+}
+
+.type-body-sm {
+  @apply text-body-sm tracking-body-sm;
+}
+
+.type-body-xs {
+  @apply text-body-xs tracking-body-xs;
+}
+
+.type-smallcaps-l {
+  @apply text-smallcaps-l tracking-smallcaps-l;
+}
+
+.type-smallcaps-m {
+  @apply text-smallcaps-m tracking-smallcaps-m;
+}
+
+.type-smallcaps-s {
+  @apply text-smallcaps-s tracking-smallcaps-s;
+}
+
+.type-button-l {
+  @apply text-button-l tracking-button-l;
+}
+
+.type-button-m {
+  @apply text-button-m tracking-button-m;
+}
+
+.type-h1,
+.type-h2,
+.type-h3,
+.type-h4,
+.type-h5,
+.type-h6,
+.type-smallcaps-l,
+.type-smallcaps-m,
+.type-smallcaps-s,
+.type-button-l,
+.type-button-m {
+  @apply font-mono;
+}
+
+.type-smallcaps-l,
+.type-smallcaps-m,
+.type-smallcaps-s,
+.type-button-l,
+.type-button-m {
+  @apply font-semibold;
+}
+
+.type-smallcaps-l,
+.type-smallcaps-m,
+.type-smallcaps-s {
+  text-transform: uppercase;
+}

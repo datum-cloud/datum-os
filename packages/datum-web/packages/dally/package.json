@@ -16,7 +16,7 @@
     "./user": "./src/lib/user.ts"
   },
   "peerDependencies": {
-    "react": "latest"
+    "react": "18.3.1"
   },
   "devDependencies": {
     "swr": "latest",
@@ -25,7 +25,7 @@
     "@types/node": "latest",
     "@types/eslint": "latest",
     "eslint": "latest",
-    "react": "latest",
+    "react": "18.3.1",
     "tsup": "latest",
     "typescript": "latest"
   }

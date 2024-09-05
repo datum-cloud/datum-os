@@ -12,7 +12,6 @@
 		"declaration": false,
 		"declarationMap": false,
 		"incremental": true,
-		"jsx": "preserve",
 		"lib": [
 			"DOM",
 			"DOM.Iterable",

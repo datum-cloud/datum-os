@@ -37,6 +37,7 @@ interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
   bordered?: boolean
+  layoutFixed?: boolean
   highlightHeader?: boolean
   showFilter?: boolean
   showFooter?: boolean
@@ -47,6 +48,7 @@ interface DataTableProps<TData, TValue> {
 export function DataTable<TData, TValue>({
   columns,
   data,
+  layoutFixed,
   showFilter = false,
   showFooter = false,
   showVisibility = false,
@@ -128,7 +130,7 @@ export function DataTable<TData, TValue>({
           )}
         </div>
       )}
-      <Table>
+      <Table layoutFixed={layoutFixed}>
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>

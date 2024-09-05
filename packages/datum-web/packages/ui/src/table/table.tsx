@@ -22,14 +22,22 @@ interface TableCellProps extends React.TdHTMLAttributes<HTMLTableCellElement> {
   bordered?: boolean
 }
 
-const Table = React.forwardRef<
-  HTMLTableElement,
-  React.HTMLAttributes<HTMLTableElement>
->(({ className, ...props }, ref) => (
-  <div className={cn(container())}>
-    <table ref={ref} className={cn(table(), className)} {...props} />
-  </div>
-))
+interface TableProps extends React.HTMLAttributes<HTMLTableElement> {
+  layoutFixed?: boolean
+}
+
+const Table = React.forwardRef<HTMLTableElement, TableProps>(
+  ({ className, layoutFixed, ...props }, ref) => (
+    <div className={cn(container())}>
+      <table
+        ref={ref}
+        className={cn(table(), className)}
+        style={layoutFixed ? { tableLayout: 'fixed' } : {}}
+        {...props}
+      />
+    </div>
+  ),
+)
 Table.displayName = 'Table'
 
 const TableHeader = React.forwardRef<

@@ -6,7 +6,6 @@
     "lib": ["ES2015", "DOM", "DOM.Iterable"],
     "module": "ESNext",
     "target": "ES6",
-    "jsx": "preserve",
     "noEmit": true,
     "downlevelIteration": true
   }

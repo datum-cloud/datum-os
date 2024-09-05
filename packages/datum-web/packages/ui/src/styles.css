@@ -3,89 +3,89 @@
 @layer ui_base {
   @import 'tailwindcss/base';
 
-  .text-h1 {
+  .type-h1 {
     @apply text-h1 tracking-h1;
   }
 
-  .text-h2 {
+  .type-h2 {
     @apply text-h2 tracking-h2;
   }
 
-  .text-h3 {
+  .type-h3 {
     @apply text-h3 tracking-h3;
   }
 
-  .text-h4 {
+  .type-h4 {
     @apply text-h4 tracking-h4;
   }
 
-  .text-h5 {
+  .type-h5 {
     @apply text-h5 tracking-h5;
   }
 
-  .text-h6 {
+  .type-h6 {
     @apply text-h6 tracking-h6;
   }
 
-  .text-body-xl {
+  .type-body-xl {
     @apply text-body-xl tracking-body-xl;
   }
 
-  .text-body-l {
+  .type-body-l {
     @apply text-body-l tracking-body-l;
   }
 
-  .text-body-m {
+  .type-body-m {
     @apply text-body-m tracking-body-m;
   }
 
-  .text-body-sm {
+  .type-body-sm {
     @apply text-body-sm tracking-body-sm;
   }
 
-  .text-body-xs {
+  .type-body-xs {
     @apply text-body-xs tracking-body-xs;
   }
 
-  .text-smallcaps-l {
+  .type-smallcaps-l {
     @apply text-smallcaps-l tracking-smallcaps-l;
   }
 
-  .text-smallcaps-m {
+  .type-smallcaps-m {
     @apply text-smallcaps-m tracking-smallcaps-m;
   }
 
-  .text-smallcaps-s {
+  .type-smallcaps-s {
     @apply text-smallcaps-s tracking-smallcaps-s;
   }
 
-  .text-button-l {
+  .type-button-l {
     @apply text-button-l tracking-button-l;
   }
 
-  .text-button-m {
+  .type-button-m {
     @apply text-button-m tracking-button-m;
   }
 
-  .text-h1,
-  .text-h2,
-  .text-h3,
-  .text-h4,
-  .text-h5,
-  .text-h6,
-  .text-smallcaps-l,
-  .text-smallcaps-m,
-  .text-smallcaps-s,
-  .text-button-l,
-  .text-button-m {
+  .type-h1,
+  .type-h2,
+  .type-h3,
+  .type-h4,
+  .type-h5,
+  .type-h6,
+  .type-smallcaps-l,
+  .type-smallcaps-m,
+  .type-smallcaps-s,
+  .type-button-l,
+  .type-button-m {
     @apply font-mono;
   }
 
-  .text-smallcaps-l,
-  .text-smallcaps-m,
-  .text-smallcaps-s,
-  .text-button-l,
-  .text-button-m {
+  .type-smallcaps-l,
+  .type-smallcaps-m,
+  .type-smallcaps-s,
+  .type-button-l,
+  .type-button-m {
     @apply font-semibold;
   }
 
