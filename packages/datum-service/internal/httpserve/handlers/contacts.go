@@ -1,8 +1,10 @@
 package handlers
 
 import (
+	"fmt"
 	"net/http"
 
+	"github.com/datum-cloud/datum-os/internal/ent/generated"
 	echo "github.com/datum-cloud/datum-os/pkg/echox"
 	"github.com/datum-cloud/datum-os/pkg/middleware/transaction"
 	"github.com/getkin/kin-openapi/openapi3"
@@ -48,6 +50,23 @@ func (h *Handler) ContactsPost() error {
 }
 =======
 func (h *Handler) ContactsPost(ctx echo.Context) error {
+	contacts := models.ContactsPostRequest{}
+	err := ctx.Bind(&contacts)
+	if err != nil {
+		return h.BadRequest(ctx, err)
+	}
+
+	createdContacts, err := transaction.FromContext(ctx.Request().Context()).
+		Contact.
+		MapCreateBulk(contacts.Contacts, func(builder *generated.ContactCreate, i int) {
+		}).
+		Save(ctx.Request().Context())
+	if err != nil {
+		return h.InternalServerError(ctx, err)
+	}
+
+	fmt.Println("created contacts", createdContacts)
+
 	return nil
 }
 
