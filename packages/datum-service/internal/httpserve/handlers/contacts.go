@@ -19,7 +19,7 @@ func (h *Handler) ContactsGet(ctx echo.Context) error {
 		return h.InternalServerError(ctx, err)
 	}
 
-	contactsGetResponse := models.ContactsGetResponseFromEntContacts(contacts)
+	contactsGetResponse := models.ContactsGetResponseFromGeneratedContacts(contacts)
 	contactsGetResponse.Reply = rout.Reply{Success: true}
 	out := contactsGetResponse
 
@@ -44,7 +44,7 @@ func (h *Handler) BindContactsGet() *openapi3.Operation {
 	return contactsGet
 }
 
-func contactCreateFromContactData(cd *models.ContactData, cc *generated.ContactCreate,
+func contactCreateFromContactData(cd *models.Contact, cc *generated.ContactCreate,
 ) *generated.ContactCreate {
 	c := func(from *string, to func(string)) {
 		if len(*from) > 0 {
@@ -86,7 +86,7 @@ func (h *Handler) ContactsPost(ctx echo.Context) error {
 
 	h.Logger.Debugf("Created Contacts, %s", createdContacts)
 
-	return h.Created(ctx, nil)
+	return h.Created(ctx, models.ContactsGetResponseFromGeneratedContacts(createdContacts))
 }
 
 func (h *Handler) BindContactsPost() *openapi3.Operation {
@@ -99,9 +99,10 @@ func (h *Handler) BindContactsPost() *openapi3.Operation {
 		},
 	}
 
-	// h.AddRequestBody("ContactsPostRequest", models.ExampleContactsPostRequest, contactsPost)
+	h.AddRequestBody("ContactsPostRequest", models.ExampleContactsPostRequest, contactsPost)
 
-	// h.AddResponse("ContactsPostResponse", "success", models.ExampleContactsPostSuccessResponse, contactsPost, http.StatusOK)
+	h.AddResponse("ContactsPostResponse", "success", models.ExampleContactsPostSuccessResponse, contactsPost, http.StatusOK)
+	contactsPost.AddResponse(http.StatusBadRequest, badRequest())
 	contactsPost.AddResponse(http.StatusInternalServerError, internalServerError())
 	contactsPost.AddResponse(http.StatusUnauthorized, unauthorized())
 

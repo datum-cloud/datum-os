@@ -720,27 +720,30 @@ var ExampleAccountRolesOrganizationReply = AccountRolesOrganizationReply{
 // CONTACTS
 // =========
 
+// ContactsGetResponse is the body for a GET request response from the `/contacts` endpoint
 type ContactsGetResponse struct {
 	rout.Reply
 	// the number of contacts returned in `Contacts`
 	Count int `json:"count"`
 	// the array of contacts
-	Contacts []*ContactData `json:"contacts"`
+	Contacts []*Contact `json:"contacts"`
 }
 
-func ContactsGetResponseFromEntContacts(genContacts []*generated.Contact) *ContactsGetResponse {
+// ContactsGetResponseFromGeneratedContacts is a helper function to return a `ContactsGetResponse` body from a `generated.Contact` slice
+func ContactsGetResponseFromGeneratedContacts(genContacts []*generated.Contact) *ContactsGetResponse {
 	cgr := &ContactsGetResponse{}
 	cgr.Count = len(genContacts)
-	cgr.Contacts = make([]*ContactData, cgr.Count)
+	cgr.Contacts = make([]*Contact, cgr.Count)
 	for i, genContact := range genContacts {
-		cgr.Contacts[i] = ContactDataFromEntContact(genContact)
+		cgr.Contacts[i] = ContactFromGeneratedContact(genContact)
 		cgr.Contacts[i].Tags = append(cgr.Contacts[i].Tags, genContact.Tags...)
 	}
 
 	return cgr
 }
 
-type ContactData struct {
+// Contact holds the fields for a contact object that is sent as part of a POST or received as part of a GET request to `/contacts`
+type Contact struct {
 	ID string `json:"id,omitempty"`
 	// CreatedAt holds the value of the "created_at" field.
 	CreatedAt time.Time `json:"created_at,omitempty"`
@@ -753,7 +756,7 @@ type ContactData struct {
 	// MappingID holds the value of the "mapping_id" field.
 	MappingID string `json:"mapping_id,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
-	DeletedAt time.Time `json:"deleted_at,omitempty"`
+	DeletedAt *time.Time `json:"deleted_at,omitempty"`
 	// DeletedBy holds the value of the "deleted_by" field.
 	DeletedBy string `json:"deleted_by,omitempty"`
 	// tags associated with the object
@@ -776,8 +779,9 @@ type ContactData struct {
 	Status string `json:"status,omitempty"`
 }
 
-func ContactDataFromEntContact(genContact *generated.Contact) *ContactData {
-	cd := &ContactData{}
+// ContactFromGeneratedContact is a helper function to return a `Contact` from a `generated.Contact`
+func ContactFromGeneratedContact(genContact *generated.Contact) *Contact {
+	cd := &Contact{}
 
 	cd.ID = genContact.ID
 	cd.CreatedAt = genContact.CreatedAt
@@ -785,7 +789,9 @@ func ContactDataFromEntContact(genContact *generated.Contact) *ContactData {
 	cd.CreatedBy = genContact.CreatedBy
 	cd.UpdatedBy = genContact.UpdatedBy
 	cd.MappingID = genContact.MappingID
-	cd.DeletedAt = genContact.DeletedAt
+	if !genContact.DeletedAt.IsZero() {
+		cd.DeletedAt = &genContact.DeletedAt
+	}
 	cd.DeletedBy = genContact.DeletedBy
 	cd.OwnerID = genContact.OwnerID
 	cd.FullName = genContact.FullName
@@ -799,15 +805,56 @@ func ContactDataFromEntContact(genContact *generated.Contact) *ContactData {
 	return cd
 }
 
+// ExampleContactsGetSuccessResponse is an example response body for a GET request to `/contacts`
 var ExampleContactsGetSuccessResponse = ContactsGetResponse{
 	Reply: rout.Reply{Success: true},
 	Count: 2,
-	Contacts: []*ContactData{
-		{ID: "01J6X14S34TP3H6Z4S3AVHJSMY", FullName: "Serene Ilsley", Address: "66195 Gateway Junction", Email: "silsley0@harvard.edu", Title: "Web Designer III", Company: "Crona-Dooley", PhoneNumber: "694-566-6857"},
-		{ID: "01J6X14S355M2R0GP5WFX6QX91", FullName: "Bobbie Kolyagin", Address: "467 Magdeline Hill", Email: "bkolyagin1@blogs.com", Title: "VP Sales", Company: "Mosciski Group", PhoneNumber: "228-669-6638"},
+	Contacts: []*Contact{
+		{
+			ID: "01J6X14S34TP3H6Z4S3AVHJSMY", FullName: "Serene Ilsley", Address: "66195 Gateway Junction",
+			Email: "silsley0@harvard.edu", Title: "Web Designer III", Company: "Crona-Dooley", PhoneNumber: "694-566-6857",
+		},
+		{
+			ID: "01J6X14S355M2R0GP5WFX6QX91", FullName: "Bobbie Kolyagin", Address: "467 Magdeline Hill",
+			Email: "bkolyagin1@blogs.com", Title: "VP Sales", Company: "Mosciski Group", PhoneNumber: "228-669-6638",
+		},
 	},
 }
 
+// ContactsPostRequest is the body for a POST request to `/contacts`
 type ContactsPostRequest struct {
-	Contacts []ContactData `json:"contacts"`
+	Contacts []Contact `json:"contacts"`
+}
+
+// ContactsPostResponse is the body for a POST request response from `/contacts`
+type ContactsPostResponse = ContactsGetResponse
+
+// ExampleContactsPostRequest is an example of a valid body for a POST request to `/contacts`
+var ExampleContactsPostRequest = ContactsPostRequest{
+	Contacts: []Contact{
+		{
+			ID: "01J6X14S34TP3H6Z4S3AVHJSMY", FullName: "Serene Ilsley", Address: "66195 Gateway Junction",
+			Email: "silsley0@harvard.edu", Title: "Web Designer III", Company: "Crona-Dooley", PhoneNumber: "694-566-6857",
+		},
+		{
+			ID: "01J6X14S355M2R0GP5WFX6QX91", FullName: "Bobbie Kolyagin", Address: "467 Magdeline Hill",
+			Email: "bkolyagin1@blogs.com", Title: "VP Sales", Company: "Mosciski Group", PhoneNumber: "228-669-6638",
+		},
+	},
+}
+
+// ExampleContactsPostSuccessResponse is an example of a POST request response body from `/contacts`
+var ExampleContactsPostSuccessResponse = ContactsPostResponse{
+	Reply: rout.Reply{Success: true},
+	Count: 2,
+	Contacts: []*Contact{
+		{
+			FullName: "Serene Ilsley", Address: "66195 Gateway Junction", Email: "silsley0@harvard.edu",
+			Title: "Web Designer III", Company: "Crona-Dooley", PhoneNumber: "694-566-6857",
+		},
+		{
+			FullName: "Bobbie Kolyagin", Address: "467 Magdeline Hill", Email: "bkolyagin1@blogs.com",
+			Title: "VP Sales", Company: "Mosciski Group", PhoneNumber: "228-669-6638",
+		},
+	},
 }
