@@ -62,10 +62,13 @@ export namespace Datum {
     title: string
     company: string
     email: Email
-    status: Status
     address: string
     phoneNumber: string
     createdAt: Date
-    lists: string[]
+    updatedAt: Date
+    deletedAt: Date
+    source: string // Missing from API
+    status: Status // Missing from API
+    lists: string[] // Missing from API
   }
 }

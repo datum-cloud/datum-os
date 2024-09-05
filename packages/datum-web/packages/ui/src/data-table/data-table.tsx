@@ -135,7 +135,7 @@ export function DataTable<TData, TValue>({
               {headerGroup.headers.map((header, index) => {
                 const columnWidth =
                   header.getSize() === 20 ? 'auto' : `${header.getSize()}px`
-                console.log('HEADER WIDTH', columnWidth)
+
                 const hasBorder =
                   bordered && headerGroup.headers.length - 1 > index
                 return (
@@ -171,7 +171,6 @@ export function DataTable<TData, TValue>({
                     cell.column.getSize() === 20
                       ? 'auto'
                       : `${cell.column.getSize()}px`
-                  console.log('CELL WIDTH', columnWidth)
 
                   return (
                     <TableCell

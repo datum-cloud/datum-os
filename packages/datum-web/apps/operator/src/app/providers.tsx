@@ -4,7 +4,7 @@ import { Provider as GraphqlProvider } from 'urql'
 import { createClient } from '@/lib/urql'
 import { useSession } from 'next-auth/react'
 import { ThemeProvider } from '@/providers/theme'
-import { ClientProvider } from '@repo/service-api/client'
+import { ClientProvider } from '@/query/client-provider'
 
 interface ProvidersProps {
   children: any

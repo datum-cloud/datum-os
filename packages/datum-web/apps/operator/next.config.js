@@ -5,11 +5,11 @@ module.exports = {
     '@repo/dally',
     '@repo/codegen',
     '@repo/constants',
-    '@repo/service-api',
     '@repo/types',
     '@repo/ui',
   ],
   experimental: {
     missingSuspenseWithCSRBailout: false,
+    serverComponents: true,
   },
 }

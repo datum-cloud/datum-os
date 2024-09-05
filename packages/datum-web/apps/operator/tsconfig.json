@@ -7,6 +7,7 @@
       }
     ],
     "paths": {
+      "@query": ["./src/query"],
       "@/*": ["./src/*"]
     },
     "strictNullChecks": true

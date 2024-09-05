@@ -1,16 +1,16 @@
 'use client'
 
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { useSession } from 'next-auth/react'
 
 import PageTitle from '@/components/page-title'
-import { useContactList } from '@repo/service-api/client'
 import { Datum } from '@repo/types'
 
 import ContactControls from './contact-controls'
 import ContactSearchPanel from './contact-search-panel'
 import { ContactsTable } from './contacts-table'
 import { pageStyles } from './page.styles'
+import { useContacts } from '@/hooks/useContacts'
 
 const ContactsPage: React.FC = () => {
   const [showSearch, setShowSearch] = useState(false)
@@ -18,35 +18,24 @@ const ContactsPage: React.FC = () => {
   const { data: session } = useSession()
   const organizationId =
     session?.user.organization ?? ('' as Datum.OrganisationId)
+  const { data: contacts = [], error, isLoading } = useContacts(organizationId)
 
-  const {
-    data: contacts = [],
-    error,
-    isLoading,
-  } = useContactList(organizationId)
-
-  const [filteredContacts, setFilteredContacts] =
-    useState<Datum.Contact[]>(contacts)
-  console.log('Contacts FILTERED', contacts)
   const { wrapper } = pageStyles()
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     const searchValue = e.target.value.toLowerCase()
     setSearchTerm(searchValue)
-
-    if (contacts) {
-      // TODO: Filter contacts properly...
-      const filtered = contacts.filter((contact) => !!contact)
-
-      setFilteredContacts(filtered)
-    }
   }
 
-  // useEffect(() => {
-  //   if (searchTerm.length > 0) {
-
-  //   }
-  // }, [searchTerm])
+  const filteredContacts = useMemo(() => {
+    if (searchTerm.length > 0) {
+      // TODO: implement search
+      // return contacts.filter((contact) =>
+      //   contact.name.toLowerCase().includes(searchTerm) // Adjust based on how you search contacts
+      // )
+    }
+    return contacts
+  }, [contacts, searchTerm])
 
   function toggleSearch() {
     setShowSearch(!showSearch)
@@ -64,8 +53,7 @@ const ContactsPage: React.FC = () => {
           setSearchTerm={setSearchTerm}
         />
       )}
-      {/* TODO: Use filtered contacts here... */}
-      {!error && !isLoading && <ContactsTable contacts={contacts} />}
+      {!error && !isLoading && <ContactsTable contacts={filteredContacts} />}
     </div>
   )
 }

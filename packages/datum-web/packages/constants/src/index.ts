@@ -1,8 +1,17 @@
-export const IS_DEV = process.env.NODE_ENV !== "production";
-export const IS_PROD = process.env.NEXT_PUBLIC_VERCEL_ENV === "production";
-export const IS_SERVER = typeof globalThis?.window === "undefined";
-export const IS_PREVIEW = process.env.NEXT_PUBLIC_VERCEL_ENV === "preview";
-export const API_BASE = process.env.NEXT_PUBLIC_API_BASE || "";
+export const IS_DEV = process.env.NODE_ENV !== 'production'
+export const IS_PROD = process.env.NEXT_PUBLIC_VERCEL_ENV === 'production'
+export const IS_SERVER = typeof globalThis?.window === 'undefined'
+export const IS_PREVIEW = process.env.NEXT_PUBLIC_VERCEL_ENV === 'preview'
+export const API_BASE = process.env.NEXT_PUBLIC_API_BASE || ''
+
+export const SERVICE_REST_API = process.env.API_REST_URL || ''
+export const SERVICE_APP_ROUTES = {
+  contacts: `${SERVICE_REST_API}/v1/contacts`,
+}
+
+export const OPERATOR_APP_ROUTES = {
+  contacts: '/api/auth/contacts',
+}
 
 export enum HttpStatus {
   Ok = 200,
