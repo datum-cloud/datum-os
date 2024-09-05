@@ -3,7 +3,6 @@ package rule
 import (
 	"context"
 
-	"github.com/datum-cloud/datum-os/internal/ent/generated"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/privacy"
 	"github.com/datum-cloud/datum-os/pkg/auth"
 	"github.com/datum-cloud/datum-os/pkg/fgax"
@@ -11,9 +10,9 @@ import (
 )
 
 // AllowIfOrgEditor ensures that a given user has edit permissions in their currently active organization
-func AllowIfOrgEditor() privacy.QueryRuleFunc {
-	return privacy.QueryRuleFunc(
-		func(ctx context.Context, q generated.Query) error {
+func AllowIfOrgEditor() privacy.MutationRule {
+	return privacy.ContextQueryMutationRule(
+		func(ctx context.Context) error {
 			ac := fgax.AccessCheck{
 				Relation:    fgax.CanEdit,
 				ObjectType:  "organization",

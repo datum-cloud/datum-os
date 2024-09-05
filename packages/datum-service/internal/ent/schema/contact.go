@@ -127,6 +127,7 @@ func (Contact) Policy() ent.Policy {
 			privacy.ContactMutationRuleFunc(func(ctx context.Context, m *generated.ContactMutation) error {
 				return m.CheckAccessForEdit(ctx)
 			}),
+			rule.AllowIfOrgEditor(),
 			privacy.AlwaysDenyRule(),
 		},
 		Query: privacy.QueryPolicy{

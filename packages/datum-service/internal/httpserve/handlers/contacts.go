@@ -1,11 +1,11 @@
 package handlers
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/datum-cloud/datum-os/internal/ent/generated"
 	echo "github.com/datum-cloud/datum-os/pkg/echox"
+	"github.com/datum-cloud/datum-os/pkg/enums"
 	"github.com/datum-cloud/datum-os/pkg/middleware/transaction"
 	"github.com/getkin/kin-openapi/openapi3"
 
@@ -44,11 +44,29 @@ func (h *Handler) BindContactsGet() *openapi3.Operation {
 	return contactsGet
 }
 
-<<<<<<< HEAD
-func (h *Handler) ContactsPost() error {
-	return nil
+func contactCreateFromContactData(cd *models.ContactData, cc *generated.ContactCreate,
+) *generated.ContactCreate {
+	c := func(from *string, to func(string)) {
+		if len(*from) > 0 {
+			to(*from)
+		}
+	}
+
+	m := cc.Mutation()
+	c(&cd.FullName, m.SetFullName)
+	c(&cd.Title, m.SetTitle)
+	c(&cd.Company, m.SetCompany)
+	c(&cd.Email, m.SetEmail)
+	c(&cd.PhoneNumber, m.SetPhoneNumber)
+	c(&cd.Address, m.SetAddress)
+
+	if len(cd.Status) > 0 {
+		m.SetStatus(*enums.ToUserStatus(cd.Status))
+	}
+
+	return cc
 }
-=======
+
 func (h *Handler) ContactsPost(ctx echo.Context) error {
 	contacts := models.ContactsPostRequest{}
 	err := ctx.Bind(&contacts)
@@ -59,15 +77,16 @@ func (h *Handler) ContactsPost(ctx echo.Context) error {
 	createdContacts, err := transaction.FromContext(ctx.Request().Context()).
 		Contact.
 		MapCreateBulk(contacts.Contacts, func(builder *generated.ContactCreate, i int) {
+			contactCreateFromContactData(&contacts.Contacts[i], builder)
 		}).
 		Save(ctx.Request().Context())
 	if err != nil {
 		return h.InternalServerError(ctx, err)
 	}
 
-	fmt.Println("created contacts", createdContacts)
+	h.Logger.Debugf("Created Contacts, %s", createdContacts)
 
-	return nil
+	return h.Created(ctx, nil)
 }
 
 func (h *Handler) BindContactsPost() *openapi3.Operation {
@@ -88,4 +107,3 @@ func (h *Handler) BindContactsPost() *openapi3.Operation {
 
 	return contactsPost
 }
->>>>>>> 066bd87d (Add ContactsPost handler stub. Add ContactsPostRequest model. Add BindContactsPost openapi spec. Add AllowIfOrgEditor authz check function.)
