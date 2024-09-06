@@ -3,7 +3,7 @@ import { tv, type VariantProps } from 'tailwind-variants'
 
 export const buttonStyles = tv({
   slots: {
-    base: 'relative group font-sans font-semibold inline-flex items-center gap-2 justify-center whitespace-nowrap rounded-md leading-none transition-all duration-500 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-blackberry-300 disabled:pointer-events-none disabled:opacity-50 hover:!opacity-90',
+    base: 'relative group font-semibold inline-flex items-center gap-2 justify-center whitespace-nowrap rounded-md leading-none transition-all duration-500 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-blackberry-300 disabled:pointer-events-none disabled:opacity-50 hover:!opacity-90',
     childWrapper: '',
     loadingWrapper:
       'absolute top-1/2 left-1/2  transform -translate-x-1/2 -translate-y-1/2',
@@ -13,8 +13,9 @@ export const buttonStyles = tv({
   },
   variants: {
     variant: {
+      tableHeader: '!text-blackberry-500 !font-mono',
       sunglowXs: '!text-sunglow-900',
-      blackberryXs: '!text-blackberry-900',
+      blackberryXs: 'text-blackberry-900',
       successXs: '!text-util-green-500',
       failureXs: '!text-util-red-500',
       sunglow: '!text-white !bg-sunglow-900',
@@ -34,9 +35,9 @@ export const buttonStyles = tv({
     },
     size: {
       xs: 'h-auto rounded-none p-0',
-      sm: 'h-9 rounded-md px-4 text-button-s',
-      md: 'h-11 rounded-md px-5 text-button-m',
-      lg: 'h-16 px-8 text-button-l',
+      sm: 'h-9 rounded-md px-4 text-button-s font-sans',
+      md: 'h-11 rounded-md px-5 text-button-m font-sans',
+      lg: 'h-16 px-8 text-button-l font-sans',
     },
     full: {
       true: {

@@ -1,5 +1,16 @@
 'use client'
 
+import { useMemo, useState } from 'react'
+import {
+  ChevronDown,
+  Filter,
+  Import,
+  Plus,
+  Search,
+  Trash,
+  User,
+} from 'lucide-react'
+
 import { Button } from '@repo/ui/button'
 import {
   DropdownMenu,
@@ -7,21 +18,31 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@repo/ui/dropdown-menu'
-import { Check, ChevronDown, Filter, Import, Search } from 'lucide-react'
+import { Dialog, DialogContent, DialogTrigger } from '@repo/ui/dialog'
+
 import AddContactDialog from './contact-add-dialog'
-import { Dialog } from '@repo/ui/dialog'
+import ImportContactsDialog from './contact-import-dialog'
 
 type ContactControlsProps = {
   searchOpen: boolean
   toggleSearch(): void
 }
 
+type DialogContent = 'add' | 'import'
+
 const ContactControls = ({
   searchOpen,
   toggleSearch,
 }: ContactControlsProps) => {
-  // const [openContactDialog, setOpenContactDialog] = useState(false)
-  // console.log('ISOPEN', openContactDialog)
+  const [dialogContent, setDialogContent] = useState<DialogContent>('add')
+
+  const dialogInner = useMemo(() => {
+    if (dialogContent === 'add') {
+      return <AddContactDialog />
+    }
+
+    return <ImportContactsDialog />
+  }, [dialogContent])
 
   return (
     <Dialog>
@@ -36,14 +57,23 @@ const ContactControls = ({
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="px-2 py-2.5">
-            <DropdownMenuItem className="w-full" asChild>
-              <AddContactDialog />
+            <DropdownMenuItem asChild>
+              <DialogTrigger
+                className="w-full flex items-center justify-start gap-3 text-button-m cursor-pointer"
+                onClick={() => setDialogContent('add')}
+              >
+                <User size={18} className="text-blackberry-400" />
+                Add single contact
+              </DialogTrigger>
             </DropdownMenuItem>
-            <DropdownMenuItem>
-              <div className="w-full flex items-center justify-start gap-3 text-base cursor-pointer">
+            <DropdownMenuItem asChild>
+              <DialogTrigger
+                className="w-full flex items-center justify-start gap-3 text-button-m cursor-pointer"
+                onClick={() => setDialogContent('import')}
+              >
                 <Import size={18} className="text-blackberry-400" />
                 Import
-              </div>
+              </DialogTrigger>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
@@ -54,20 +84,20 @@ const ContactControls = ({
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="px-2 py-2.5">
-            <DropdownMenuItem>
-              <div className="w-full flex items-center justify-start gap-3 text-base cursor-pointer">
-                <Import
-                  size={18}
-                  className="text-blackberry-400 transform rotate-180"
-                />
-                Export all
-              </div>
+            <DropdownMenuItem className="w-full flex items-center justify-start gap-3 text-button-m cursor-pointer">
+              <Import
+                size={18}
+                className="text-blackberry-400 transform rotate-180"
+              />
+              Export
             </DropdownMenuItem>
-            <DropdownMenuItem>
-              <div className="w-full flex items-center justify-start gap-3 text-base cursor-pointer">
-                <Check size={18} className="text-blackberry-400" />
-                Select all
-              </div>
+            <DropdownMenuItem className="w-full flex items-center justify-start gap-3 text-button-m cursor-pointer">
+              <Trash size={18} className="text-blackberry-400" />
+              Delete items
+            </DropdownMenuItem>
+            <DropdownMenuItem className="w-full flex items-center justify-start gap-3 text-button-m cursor-pointer">
+              <Plus size={18} className="text-blackberry-400" />
+              Add to list
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
@@ -75,6 +105,7 @@ const ContactControls = ({
           Filter
         </Button>
       </div>
+      <DialogContent>{dialogInner}</DialogContent>
     </Dialog>
   )
 }

@@ -34,13 +34,17 @@ export function DataTablePagination<TData>({
         >
           <SelectTrigger className="h-8" style={{ width: 186 }}>
             <SelectValue
-              className="text-blackberry-400 "
+              className="!text-blackberry-400 placeholder-blackberry-400"
               placeholder={`Show ${table.getState().pagination.pageSize} rows`}
             />
           </SelectTrigger>
           <SelectContent side="top" className="">
             {[10, 20, 30, 40, 50].map((pageSize) => (
-              <SelectItem key={pageSize} value={`${pageSize}`}>
+              <SelectItem
+                key={pageSize}
+                value={`${pageSize}`}
+                className="text-blackberry-400"
+              >
                 Show {pageSize} rows
               </SelectItem>
             ))}

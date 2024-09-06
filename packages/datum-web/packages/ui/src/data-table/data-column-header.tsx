@@ -17,14 +17,14 @@ export function DataTableColumnHeader<TData, TValue>({
   className,
 }: DataTableColumnHeaderProps<TData, TValue>) {
   if (!column.getCanSort()) {
-    return <div className={cn(className, 'h-3')}>{children}</div>
+    return <div className={cn(className, 'h-4 font-mono')}>{children}</div>
   }
 
   return (
     <Button
-      variant="blackberryXs"
+      variant="tableHeader"
       size="xs"
-      className={cn(className)}
+      className={cn(className, 'font-mono !text-blackberry-500')}
       icon={<ChevronsUpDown />}
       onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
     >

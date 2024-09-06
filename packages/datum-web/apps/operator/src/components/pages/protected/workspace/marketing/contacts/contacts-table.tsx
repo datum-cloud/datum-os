@@ -52,7 +52,7 @@ export const CONTACT_COLUMNS: ColumnDef<Datum.Contact>[] = [
   },
   {
     accessorKey: 'email',
-    minSize: 185,
+    minSize: 225,
     enableSorting: true,
     header: ({ column }) => (
       <DataTableColumnHeader
@@ -67,7 +67,7 @@ export const CONTACT_COLUMNS: ColumnDef<Datum.Contact>[] = [
       return (
         <a
           href={`mailto:${value}`}
-          className="text-sunglow-900 hover:underline"
+          className="block truncate text-sunglow-900 hover:underline"
           rel="noopener noreferrer"
         >
           {value}
@@ -96,7 +96,7 @@ export const CONTACT_COLUMNS: ColumnDef<Datum.Contact>[] = [
         children="Source"
       />
     ),
-    minSize: 165,
+    minSize: 140,
     enableSorting: true,
   },
   {

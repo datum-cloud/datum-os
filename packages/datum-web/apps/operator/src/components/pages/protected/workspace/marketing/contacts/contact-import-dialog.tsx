@@ -1,6 +1,5 @@
 import {
   Dialog,
-  DialogContent,
   DialogFooter,
   DialogHeader,
   DialogTitle,
@@ -9,11 +8,11 @@ import { Label } from '@repo/ui/label'
 import { Input } from '@repo/ui/input'
 import { Button } from '@repo/ui/button'
 
-const AddContactDialog = () => {
+const ImportContactsDialog = () => {
   return (
     <>
       <DialogHeader>
-        <DialogTitle>Add a contact</DialogTitle>
+        <DialogTitle>Import contacts</DialogTitle>
       </DialogHeader>
       <div className="w-full flex flex-col gap-6">
         <div className="w-full flex flex-col justify-start gap-2.5">
@@ -46,4 +45,4 @@ const AddContactDialog = () => {
   )
 }
 
-export default AddContactDialog
+export default ImportContactsDialog
