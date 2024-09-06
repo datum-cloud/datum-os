@@ -9,6 +9,8 @@ on:
     types: ["published"]
 
 env:
+  CONTEXT_DATUM_SERVICE: ./packages/datum-service
+  DOCKERFILE_DATUM_SERVICE: ./packages/datum-service/docker/Dockerfile
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{github.repository}}
 
@@ -43,8 +45,8 @@ jobs:
         id: push
         uses: docker/build-push-action@v6.7.0
         with:
-          context: ./packages/datum-service
-          file: ./docker/Dockerfile
+          context: ${{ env.CONTEXT_DATUM_SERVICE }}
+          file: ${{ env.DOCKERFILE_DATUM_SERVICE }}
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
