@@ -5,6 +5,7 @@ module.exports = {
     '@repo/dally',
     '@repo/codegen',
     '@repo/constants',
+    '@repo/common',
     '@repo/types',
     '@repo/ui',
   ],

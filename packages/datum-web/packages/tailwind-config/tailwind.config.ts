@@ -95,6 +95,10 @@ export const config: Omit<Config, 'content'> = {
         tangerine: {
           900: '#F08C00',
         },
+        butter: {
+          800: '#FFF6D7',
+          900: '#F2E6BC',
+        },
         sunglow: {
           900: '#F27A67',
           800: '#F39182',

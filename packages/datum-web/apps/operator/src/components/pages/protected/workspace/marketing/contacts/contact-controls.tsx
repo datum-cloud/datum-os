@@ -44,6 +44,21 @@ const ContactControls = ({
     return <ImportContactsDialog />
   }, [dialogContent])
 
+  function handleExport() {
+    // TODO:Export files
+    console.log('Export Selected Files')
+  }
+
+  function handleDeletion() {
+    // TODO:Delete files
+    console.log('Delete Selected Files')
+  }
+
+  function handleListAddition() {
+    // TODO: Add to list
+    console.log('Add to list')
+  }
+
   return (
     <Dialog>
       <div className="flex justify-start items-stretch gap-[18px]">
@@ -68,7 +83,7 @@ const ContactControls = ({
             </DropdownMenuItem>
             <DropdownMenuItem asChild>
               <DialogTrigger
-                className="w-full flex items-center justify-start gap-3 text-button-m cursor-pointer"
+                className="w-full flex items-center justify-start gap-3 cursor-pointer"
                 onClick={() => setDialogContent('import')}
               >
                 <Import size={18} className="text-blackberry-400" />
@@ -84,14 +99,20 @@ const ContactControls = ({
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="px-2 py-2.5">
-            <DropdownMenuItem className="w-full flex items-center justify-start gap-3 text-button-m cursor-pointer">
+            <DropdownMenuItem
+              onClick={handleExport}
+              className="w-full flex items-center justify-start gap-3 text-button-m cursor-pointer"
+            >
               <Import
                 size={18}
                 className="text-blackberry-400 transform rotate-180"
               />
               Export
             </DropdownMenuItem>
-            <DropdownMenuItem className="w-full flex items-center justify-start gap-3 text-button-m cursor-pointer">
+            <DropdownMenuItem
+              onClick={handleDeletion}
+              className="w-full flex items-center justify-start gap-3 text-button-m cursor-pointer"
+            >
               <Trash size={18} className="text-blackberry-400" />
               Delete items
             </DropdownMenuItem>

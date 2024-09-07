@@ -3,7 +3,7 @@ import { tv, type VariantProps } from 'tailwind-variants'
 
 export const buttonStyles = tv({
   slots: {
-    base: 'relative group font-semibold inline-flex items-center gap-2 justify-center whitespace-nowrap rounded-md leading-none transition-all duration-500 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-blackberry-300 disabled:pointer-events-none disabled:opacity-50 hover:!opacity-90',
+    base: 'relative group inline-flex items-center gap-2 justify-center whitespace-nowrap rounded-md leading-none transition-all duration-500 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-blackberry-300 disabled:pointer-events-none disabled:opacity-50 hover:!opacity-90',
     childWrapper: '',
     loadingWrapper:
       'absolute top-1/2 left-1/2  transform -translate-x-1/2 -translate-y-1/2',
@@ -13,16 +13,16 @@ export const buttonStyles = tv({
   },
   variants: {
     variant: {
-      tableHeader: '!text-blackberry-500 !font-mono',
+      tableHeader: '!text-blackberry-600 !font-mono',
       sunglowXs: '!text-sunglow-900',
       blackberryXs: 'text-blackberry-900',
       successXs: '!text-util-green-500',
       failureXs: '!text-util-red-500',
-      sunglow: '!text-white !bg-sunglow-900',
-      blackberry: '!text-white !bg-blackberry-900',
-      outline: 'border border-blackberry-800 text-blackberry-800',
-      success: '!bg-util-green-500 !text-white',
-      failure: '!bg-util-red-500 !text-white',
+      sunglow: '!text-white !bg-sunglow-900 font-semibold',
+      blackberry: '!text-white !bg-blackberry-900 font-semibold',
+      outline: 'border border-blackberry-800 text-blackberry-800 font-semibold',
+      success: '!bg-util-green-500 !text-white font-semibold',
+      failure: '!bg-util-red-500 !text-white font-semibold',
     },
     iconPosition: {
       left: 'flex-row-reverse',

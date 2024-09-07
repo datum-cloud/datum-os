@@ -7,11 +7,18 @@ export const API_BASE = process.env.NEXT_PUBLIC_API_BASE || ''
 export const SERVICE_REST_API = process.env.API_REST_URL || ''
 export const SERVICE_APP_ROUTES = {
   contacts: `${SERVICE_REST_API}/v1/contacts`,
+  lists: `${SERVICE_REST_API}/v1/lists`,
 }
 
 export const OPERATOR_APP_ROUTES = {
   contacts: '/api/auth/contacts',
+  contact: '/api/auth/[id]',
+  createContacts: '/api/auth/contacts/create',
+  lists: '/api/auth/lists',
 }
+
+export const TEL_REGEX =
+  /^([+]?[\s0-9]+)?(\d{3}|[(]?[0-9]+[)])?([-]?[\s]?[0-9])+$/
 
 export enum HttpStatus {
   Ok = 200,

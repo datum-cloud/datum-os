@@ -130,8 +130,8 @@ export const CONTACT_COLUMNS: ColumnDef<Datum.Contact>[] = [
     size: 120,
     enableSorting: true,
     cell: ({ cell }) => {
-      const value = cell.getValue() as string
-      const isActive = value === 'Active'
+      const value = cell.getValue() as Datum.Status
+      const isActive = value === 'ACTIVE'
 
       return (
         <span

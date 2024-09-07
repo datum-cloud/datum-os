@@ -24,7 +24,7 @@ export function DataTableColumnHeader<TData, TValue>({
     <Button
       variant="tableHeader"
       size="xs"
-      className={cn(className, 'font-mono !text-blackberry-500')}
+      className={cn(className, 'font-mono')}
       icon={<ChevronsUpDown />}
       onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
     >

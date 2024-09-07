@@ -26,7 +26,7 @@ const ContactSearchPanel = ({
   setQuery,
 }: ContactSearchPanelProps) => {
   const { contactsSearchRow, contactSearchSelect } = pageStyles()
-  const fields = ['Email', 'Name', '']
+  const fields = ['email', 'name', 'source', 'created at', 'status', 'lists']
   const operators = [
     'contains',
     'does not contain',
@@ -45,7 +45,7 @@ const ContactSearchPanel = ({
       <div className={contactsSearchRow()}>
         <Select defaultValue="email">
           <SelectTrigger className={contactSearchSelect()}>
-            <SelectValue />
+            <SelectValue className="capitalize" />
           </SelectTrigger>
           <SelectContent className="w-full">
             <SelectGroup>

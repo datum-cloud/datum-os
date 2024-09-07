@@ -11,6 +11,7 @@ This monorepo is run on [Bun](https://bun.sh/) and built using [Turborepo](https
 - `docs`: susUI docs repo https://docs.sus-ui.datum.net/
 - `operator`: Datum Operator Portal https://console.datum.net/
 - `@repo/dally`: DAL library for sharing common patterns and functionality in our other apps
+- `@repo/common`: Common functions shared throughout the monorepo
 - `@repo/constants`: Constants shared throughout the monorepo
 - `@repo/ui`: susUI component library shared by our other applications
 - `@repo/types`: common types used throughout the monorepo

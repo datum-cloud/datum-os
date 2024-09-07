@@ -11,6 +11,8 @@ export namespace Datum {
 
   export type ContactId = Brand<Id, 'ContactId'>
 
+  export type ListId = Brand<Id, 'ListId'>
+
   export type Json = Brand<string, 'Json'>
 
   export type Integer = number
@@ -38,6 +40,8 @@ export namespace Datum {
 
   export type Slug = Brand<string, 'Slug'>
 
+  export type Path = Brand<string, 'Path'>
+
   export type PartialWithField<
     T,
     U = { [K in keyof T]: Pick<T, K> },
@@ -51,9 +55,17 @@ export namespace Datum {
   }[keyof T]
 
   export enum Status {
-    active = 'Active',
-    pending = 'Pending',
-    inactive = 'Inactive',
+    active = 'ACTIVE',
+    onboarding = 'ONBOARDING',
+    inactive = 'INACTIVE',
+    suspended = 'SUSPENDED',
+    deactivated = 'SUSPENDED',
+  }
+
+  // TODO extend list type
+  export type List = {
+    id: ListId
+    name: string
   }
 
   export type Contact = {
@@ -67,8 +79,8 @@ export namespace Datum {
     createdAt: Date
     updatedAt: Date
     deletedAt: Date
-    source: string // Missing from API
-    status: Status // Missing from API
-    lists: string[] // Missing from API
+    source: string
+    status: Status
+    lists: string[]
   }
 }

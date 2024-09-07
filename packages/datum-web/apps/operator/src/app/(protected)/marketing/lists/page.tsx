@@ -2,26 +2,26 @@ import React from 'react'
 
 import { Datum } from '@repo/types'
 
-import ContactsPage from '@/components/pages/protected/workspace/marketing/contacts/contacts-page'
+import ListsPage from '@/components/pages/protected/workspace/marketing/lists/lists-page'
 import { HydrationBoundary } from '@/query/hydration-boundary'
 import { getServerQueryClient } from '@/query/client'
-import { getContacts, getContactsKey } from '@/query/contacts'
+import { getLists, getListsKey } from '@/query/lists'
 
-type ContactsPageProps = {
+type ListsPageProps = {
   organisationId: Datum.OrganisationId
 }
 
-const Page = async ({ organisationId }: ContactsPageProps) => {
+const Page = async ({ organisationId }: ListsPageProps) => {
   const client = getServerQueryClient()
 
   await client.prefetchQuery({
-    queryKey: getContactsKey(organisationId),
-    queryFn: getContacts,
+    queryKey: getListsKey(organisationId),
+    queryFn: getLists,
   })
 
   return (
     <HydrationBoundary queryClient={client}>
-      <ContactsPage />
+      <ListsPage />
     </HydrationBoundary>
   )
 }
