@@ -44,4 +44,11 @@ export const ContactCreationSchema = z.object({
     .optional(),
 })
 
+export const ContactCreationFormSchema = ContactCreationSchema.extend({
+  firstName: z.string().describe('First name of the contact').optional(),
+  lastName: z.string().describe('Last name of the contact').optional(),
+})
+
 export type ContactCreationInput = z.infer<typeof ContactCreationSchema>
+
+export type ContactCreationFormInput = z.infer<typeof ContactCreationFormSchema>

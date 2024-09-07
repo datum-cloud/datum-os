@@ -18,7 +18,6 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@repo/ui/dropdown-menu'
-import { Dialog, DialogContent, DialogTrigger } from '@repo/ui/dialog'
 
 import AddContactDialog from './contact-add-dialog'
 import ImportContactsDialog from './contact-import-dialog'
@@ -28,21 +27,12 @@ type ContactControlsProps = {
   toggleSearch(): void
 }
 
-type DialogContent = 'add' | 'import'
-
 const ContactControls = ({
   searchOpen,
   toggleSearch,
 }: ContactControlsProps) => {
-  const [dialogContent, setDialogContent] = useState<DialogContent>('add')
-
-  const dialogInner = useMemo(() => {
-    if (dialogContent === 'add') {
-      return <AddContactDialog />
-    }
-
-    return <ImportContactsDialog />
-  }, [dialogContent])
+  const [_openContactDialog, _setOpenContactDialog] = useState(false)
+  const [_openImportDialog, _setOpenImportDialog] = useState(false)
 
   function handleExport() {
     // TODO:Export files
@@ -59,8 +49,28 @@ const ContactControls = ({
     console.log('Add to list')
   }
 
+  function openContactDialog() {
+    _setOpenContactDialog(true)
+  }
+
+  function openImportDialog() {
+    _setOpenImportDialog(true)
+  }
+
+  function setOpenContactDialog(input: boolean) {
+    _setOpenContactDialog(input)
+    // NOTE: This is needed to close the dialog without removing pointer events per https://github.com/shadcn-ui/ui/issues/468
+    setTimeout(() => (document.body.style.pointerEvents = ''), 500)
+  }
+
+  function setOpenImportDialog(input: boolean) {
+    _setOpenImportDialog(input)
+    // NOTE: This is needed to close the dialog without removing pointer events per https://github.com/shadcn-ui/ui/issues/468
+    setTimeout(() => (document.body.style.pointerEvents = ''), 500)
+  }
+
   return (
-    <Dialog>
+    <>
       <div className="flex justify-start items-stretch gap-[18px]">
         <Button variant="outline" onClick={toggleSearch}>
           <Search />
@@ -72,23 +82,19 @@ const ContactControls = ({
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="px-2 py-2.5">
-            <DropdownMenuItem asChild>
-              <DialogTrigger
-                className="w-full flex items-center justify-start gap-3 text-button-m cursor-pointer"
-                onClick={() => setDialogContent('add')}
-              >
-                <User size={18} className="text-blackberry-400" />
-                Add single contact
-              </DialogTrigger>
+            <DropdownMenuItem
+              className="w-full flex items-center justify-start gap-3 text-button-m cursor-pointer"
+              onClick={openContactDialog}
+            >
+              <User size={18} className="text-blackberry-400" />
+              Add single contact
             </DropdownMenuItem>
-            <DropdownMenuItem asChild>
-              <DialogTrigger
-                className="w-full flex items-center justify-start gap-3 cursor-pointer"
-                onClick={() => setDialogContent('import')}
-              >
-                <Import size={18} className="text-blackberry-400" />
-                Import
-              </DialogTrigger>
+            <DropdownMenuItem
+              className="w-full flex items-center justify-start gap-3 text-button-m cursor-pointer"
+              onClick={openImportDialog}
+            >
+              <Import size={18} className="text-blackberry-400" />
+              Import
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
@@ -126,8 +132,15 @@ const ContactControls = ({
           Filter
         </Button>
       </div>
-      <DialogContent>{dialogInner}</DialogContent>
-    </Dialog>
+      <AddContactDialog
+        open={_openContactDialog}
+        setOpen={setOpenContactDialog}
+      />
+      <ImportContactsDialog
+        open={_openImportDialog}
+        setOpen={setOpenImportDialog}
+      />
+    </>
   )
 }
 

@@ -3,7 +3,9 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 
 import {
+  Dialog,
   DialogClose,
+  DialogContent,
   DialogFooter,
   DialogHeader,
   DialogTitle,
@@ -18,108 +20,142 @@ import {
   FormLabel,
 } from '@repo/ui/form'
 import { useForm } from 'react-hook-form'
-import { ContactCreationInput, ContactCreationSchema } from '@/utils/schemas'
+import {
+  ContactCreationFormInput,
+  ContactCreationFormSchema,
+} from '@/utils/schemas'
 import { useSession } from 'next-auth/react'
 import { Datum } from '@repo/types'
+import { useEffect } from 'react'
+import { createContacts } from '@/query/contacts'
 
-interface ContactCreationForm extends ContactCreationInput {
-  firstName: string
-  lastName: string
+type AddContactDialogProps = {
+  open: boolean
+  setOpen(input: boolean): void
 }
 
-const AddContactDialog = () => {
+const AddContactDialog = ({ open, setOpen }: AddContactDialogProps) => {
   const { data: session } = useSession()
   const organizationId =
     session?.user.organization ?? ('' as Datum.OrganisationId)
 
-  const form = useForm<ContactCreationForm>({
-    resolver: zodResolver(ContactCreationSchema),
+  const form = useForm<ContactCreationFormInput>({
+    resolver: zodResolver(ContactCreationFormSchema),
     mode: 'onChange',
+    defaultValues: {
+      status: 'INACTIVE',
+      email: '',
+    },
   })
 
   const {
     control,
     handleSubmit,
     watch,
-    formState: { isValid },
+    setValue,
+    reset,
+    formState: { errors },
   } = form
+  const isValid = Object.keys(errors).length === 0
   const { firstName, lastName } = watch()
-  console.log(firstName, lastName)
 
-  async function onSubmit(data: ContactCreationForm) {
+  useEffect(() => {
+    setValue('fullName', `${firstName || ''} ${lastName || ''}`)
+  }, [firstName, lastName])
+
+  async function onSubmit(data: ContactCreationFormInput) {
     console.log(data)
-    const fullName = `${data?.firstName?.trim() || ''} ${data?.lastName?.trim() || ''}`
-    const contact = { ...data, fullName, status: 'INACTIVE' }
-    console.log('CONTACT:', contact)
+    await createContacts(organizationId, [data])
+    setOpen(false)
+  }
 
-    // await createContacts(organizationId, [contact])
+  function handleCancel() {
+    reset()
+    setOpen(false)
   }
 
   return (
-    <Form {...form}>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="w-full flex flex-col gap-6">
-          <DialogHeader>
-            <DialogTitle>Add a contact</DialogTitle>
-          </DialogHeader>
-          <div className="w-full flex flex-col justify-start gap-2.5">
-            <FormField
-              name="email"
-              control={control}
-              render={({ field }) => (
-                <FormItem>
-                  <div className="w-full flex items-center justify-between">
-                    <FormLabel>Email</FormLabel>
-                    <span className="type-smallcaps-s text-blackberry-500">
-                      Required
-                    </span>
-                  </div>
-                  <FormControl>
-                    <Input {...field} value={field.value || ''} />
-                  </FormControl>
-                </FormItem>
-              )}
-            />
-            <FormField
-              name="firstName"
-              control={control}
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>First Name</FormLabel>
-                  <FormControl>
-                    <Input {...field} value={field.value || ''} />
-                  </FormControl>
-                </FormItem>
-              )}
-            />
-            <FormField
-              name="lastName"
-              control={control}
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Last Name</FormLabel>
-                  <FormControl>
-                    <Input {...field} value={field.value || ''} />
-                  </FormControl>
-                </FormItem>
-              )}
-            />
-          </div>
-          <DialogFooter className="flex gap-5">
-            <DialogClose asChild>
-              <Button disabled={undefined} full className="w-2/3" type="submit">
-                Add contact
-              </Button>
-            </DialogClose>
-            <DialogClose asChild>
-              <Button type="button" className="w-1/3 ml-0" variant="outline">
-                Cancel
-              </Button>
-            </DialogClose>
-          </DialogFooter>
-        </div>
-      </form>
-    </Form>
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Add a contact</DialogTitle>
+          <DialogClose onClick={handleCancel} />
+        </DialogHeader>
+        <Form {...form}>
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <div className="w-full flex flex-col gap-6">
+              <div className="w-full flex flex-col justify-start gap-2.5">
+                <FormField
+                  name="email"
+                  control={control}
+                  render={({ field }) => (
+                    <FormItem>
+                      <div className="w-full flex items-center justify-between">
+                        <FormLabel>Email</FormLabel>
+                        <span className="type-smallcaps-s text-blackberry-500">
+                          Required
+                        </span>
+                      </div>
+                      <FormControl>
+                        <Input {...field} value={field.value || ''} />
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  name="firstName"
+                  control={control}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>First Name</FormLabel>
+                      <FormControl>
+                        <Input {...field} value={field.value || ''} />
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  name="lastName"
+                  control={control}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Last Name</FormLabel>
+                      <FormControl>
+                        <Input {...field} value={field.value || ''} />
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+              </div>
+              <DialogFooter className="flex gap-5">
+                <DialogClose
+                  asChild
+                  disabled={!isValid}
+                  onClick={handleSubmit(onSubmit)}
+                >
+                  <Button
+                    type="button"
+                    disabled={!isValid}
+                    full
+                    className="w-2/3"
+                  >
+                    Add contact
+                  </Button>
+                </DialogClose>
+                <Button
+                  type="button"
+                  onClick={handleCancel}
+                  className="w-1/3 ml-0"
+                  variant="outline"
+                >
+                  Cancel
+                </Button>
+              </DialogFooter>
+            </div>
+          </form>
+        </Form>
+      </DialogContent>
+    </Dialog>
   )
 }
 
