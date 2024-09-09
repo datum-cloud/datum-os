@@ -78,7 +78,7 @@ export namespace Datum {
     phoneNumber: string
     createdAt: Date
     updatedAt: Date
-    deletedAt: Date
+    deletedAt?: Date
     source: string
     status: Status
     lists: string[]

@@ -12,7 +12,7 @@ const ListsPage = () => {
   return (
     <div className={wrapper()}>
       <div className="flex items-stretch justify-between">
-        <PageTitle title="Contacts" />
+        <PageTitle title="Lists" />
       </div>
     </div>
   )

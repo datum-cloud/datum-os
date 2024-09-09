@@ -75,9 +75,7 @@ const ContactControls = ({ search }: ContactControlsProps) => {
   return (
     <>
       <div className="flex justify-start items-stretch gap-[18px]">
-        <div>
-          <ContactSearch search={search} />
-        </div>
+        <ContactSearch search={search} />
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" icon={<ChevronDown />}>

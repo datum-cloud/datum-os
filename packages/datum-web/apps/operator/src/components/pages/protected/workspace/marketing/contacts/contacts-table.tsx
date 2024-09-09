@@ -1,14 +1,13 @@
 'use client'
 
-import { format } from 'date-fns'
 import { useState, useEffect } from 'react'
+import { rankItem, compareItems } from '@tanstack/match-sorter-utils'
 import {
   ColumnDef,
   FilterFn,
   SortingFn,
   sortingFns,
 } from '@tanstack/react-table'
-import { rankItem, compareItems } from '@tanstack/match-sorter-utils'
 
 import { Checkbox } from '@repo/ui/checkbox'
 import { DataTable } from '@repo/ui/data-table'
@@ -16,8 +15,9 @@ import { DataTableColumnHeader } from '@repo/ui/data-column-header'
 import { Datum } from '@repo/types'
 import { cn } from '@repo/ui/lib/utils'
 
-import ContactDropdownMenu from './contact-dropdown'
+import { formatDate } from '@/utils/date'
 
+import ContactDropdownMenu from './contact-dropdown'
 import { headerStyles, tagStyles } from './table.styles'
 
 type ContactsTableProps = {
@@ -152,13 +152,7 @@ export const CONTACT_COLUMNS: ColumnDef<Datum.Contact>[] = [
   },
   {
     id: 'createdAt',
-    accessorFn: (row) => {
-      const value = row.createdAt
-      const date = format(new Date(value), `MMMM d, yyyy 'at' h:mm`)
-      const amPm = format(value, 'a').toLowerCase()
-
-      return `${date}${amPm}`
-    },
+    accessorFn: (row) => formatDate(row.createdAt),
     header: ({ column }) => (
       <DataTableColumnHeader
         className={headerStyles()}
