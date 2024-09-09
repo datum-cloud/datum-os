@@ -1,30 +1,34 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { rankItem, compareItems } from '@tanstack/match-sorter-utils'
+
+import { Checkbox } from '@repo/ui/checkbox'
 import {
   ColumnDef,
   FilterFn,
   SortingFn,
+  DataTable,
+  DataTableColumnHeader,
   sortingFns,
-} from '@tanstack/react-table'
-
-import { Checkbox } from '@repo/ui/checkbox'
-import { DataTable } from '@repo/ui/data-table'
-import { DataTableColumnHeader } from '@repo/ui/data-column-header'
-import { Datum } from '@repo/types'
+  rankItem,
+  compareItems,
+} from '@repo/ui/data-table'
 import { cn } from '@repo/ui/lib/utils'
+import { Datum } from '@repo/types'
 
 import { formatDate } from '@/utils/date'
 
 import ContactDropdownMenu from './contact-dropdown'
-import { headerStyles, tagStyles } from './table.styles'
+import { tableStyles } from './table.styles'
+import { tagStyles } from './tag.styles'
 
 type ContactsTableProps = {
   contacts: Datum.Contact[]
   globalFilter: string
   setGlobalFilter(input: string): void
 }
+
+const { header, checkboxContainer, link } = tableStyles()
 
 const fuzzyFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
   if (!value || value === '') return true
@@ -68,7 +72,7 @@ export const CONTACT_COLUMNS: ColumnDef<Datum.Contact>[] = [
     enableSorting: false,
     header: ({ table }) => {
       return (
-        <div className="flex items-center justify-center">
+        <div className={checkboxContainer()}>
           <Checkbox
             checked={table.getIsAllPageRowsSelected()}
             onCheckedChange={(value) =>
@@ -82,7 +86,7 @@ export const CONTACT_COLUMNS: ColumnDef<Datum.Contact>[] = [
     },
     cell: ({ row }) => {
       return (
-        <div className="flex items-center justify-center">
+        <div className={checkboxContainer()}>
           <Checkbox
             checked={row.getIsSelected()}
             className="bg-white"
@@ -101,7 +105,7 @@ export const CONTACT_COLUMNS: ColumnDef<Datum.Contact>[] = [
     sortingFn: fuzzySort,
     header: ({ column }) => (
       <DataTableColumnHeader
-        className={headerStyles()}
+        className={header()}
         column={column}
         children="Email"
       />
@@ -112,7 +116,7 @@ export const CONTACT_COLUMNS: ColumnDef<Datum.Contact>[] = [
       return (
         <a
           href={`mailto:${value}`}
-          className="block truncate text-sunglow-900 hover:underline"
+          className={link()}
           rel="noopener noreferrer"
         >
           {value}
@@ -125,7 +129,7 @@ export const CONTACT_COLUMNS: ColumnDef<Datum.Contact>[] = [
     accessorKey: 'fullName',
     header: ({ column }) => (
       <DataTableColumnHeader
-        className={headerStyles()}
+        className={header()}
         column={column}
         children="Name"
       />
@@ -140,7 +144,7 @@ export const CONTACT_COLUMNS: ColumnDef<Datum.Contact>[] = [
     accessorKey: 'source',
     header: ({ column }) => (
       <DataTableColumnHeader
-        className={headerStyles()}
+        className={header()}
         column={column}
         children="Source"
       />
@@ -155,7 +159,7 @@ export const CONTACT_COLUMNS: ColumnDef<Datum.Contact>[] = [
     accessorFn: (row) => formatDate(row.createdAt),
     header: ({ column }) => (
       <DataTableColumnHeader
-        className={headerStyles()}
+        className={header()}
         column={column}
         children="Created At"
       />
@@ -173,7 +177,7 @@ export const CONTACT_COLUMNS: ColumnDef<Datum.Contact>[] = [
     accessorKey: 'status',
     header: ({ column }) => (
       <DataTableColumnHeader
-        className={headerStyles()}
+        className={header()}
         column={column}
         children="Status"
       />
@@ -199,7 +203,7 @@ export const CONTACT_COLUMNS: ColumnDef<Datum.Contact>[] = [
     accessorKey: 'lists',
     header: ({ column }) => (
       <DataTableColumnHeader
-        className={headerStyles()}
+        className={header()}
         column={column}
         children="Lists"
       />

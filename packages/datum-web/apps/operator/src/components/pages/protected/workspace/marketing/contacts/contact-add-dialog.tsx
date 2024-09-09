@@ -1,6 +1,9 @@
 'use client'
 
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useSession } from 'next-auth/react'
+import { useEffect } from 'react'
+import { useForm } from 'react-hook-form'
 
 import {
   Dialog,
@@ -19,15 +22,14 @@ import {
   FormItem,
   FormLabel,
 } from '@repo/ui/form'
-import { useForm } from 'react-hook-form'
 import {
   ContactCreationFormInput,
   ContactCreationFormSchema,
 } from '@/utils/schemas'
-import { useSession } from 'next-auth/react'
 import { Datum } from '@repo/types'
-import { useEffect } from 'react'
 import { createContacts } from '@/query/contacts'
+
+import { formStyles } from './form.styles'
 
 type AddContactDialogProps = {
   open: boolean
@@ -35,6 +37,12 @@ type AddContactDialogProps = {
 }
 
 const AddContactDialog = ({ open, setOpen }: AddContactDialogProps) => {
+  const {
+    form: formStyle,
+    fieldsContainer,
+    labelContainer,
+    requiredText,
+  } = formStyles()
   const { data: session } = useSession()
   const organizationId =
     session?.user.organization ?? ('' as Datum.OrganisationId)
@@ -43,9 +51,9 @@ const AddContactDialog = ({ open, setOpen }: AddContactDialogProps) => {
     resolver: zodResolver(ContactCreationFormSchema),
     mode: 'onChange',
     defaultValues: {
-      status: 'INACTIVE',
       email: '',
-      source: 'Google',
+      status: 'INACTIVE',
+      source: 'form',
     },
   })
 
@@ -65,7 +73,6 @@ const AddContactDialog = ({ open, setOpen }: AddContactDialogProps) => {
   }, [firstName, lastName])
 
   async function onSubmit(data: ContactCreationFormInput) {
-    console.log(data)
     await createContacts(organizationId, [data])
     setOpen(false)
     reset()
@@ -84,76 +91,72 @@ const AddContactDialog = ({ open, setOpen }: AddContactDialogProps) => {
           <DialogClose onClick={handleCancel} />
         </DialogHeader>
         <Form {...form}>
-          <form onSubmit={handleSubmit(onSubmit)}>
-            <div className="w-full flex flex-col gap-6">
-              <div className="w-full flex flex-col justify-start gap-2.5">
-                <FormField
-                  name="email"
-                  control={control}
-                  render={({ field }) => (
-                    <FormItem>
-                      <div className="w-full flex items-center justify-between">
-                        <FormLabel>Email</FormLabel>
-                        <span className="type-smallcaps-s text-blackberry-500">
-                          Required
-                        </span>
-                      </div>
-                      <FormControl>
-                        <Input {...field} value={field.value || ''} />
-                      </FormControl>
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  name="firstName"
-                  control={control}
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>First Name</FormLabel>
-                      <FormControl>
-                        <Input {...field} value={field.value || ''} />
-                      </FormControl>
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  name="lastName"
-                  control={control}
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Last Name</FormLabel>
-                      <FormControl>
-                        <Input {...field} value={field.value || ''} />
-                      </FormControl>
-                    </FormItem>
-                  )}
-                />
-              </div>
-              <DialogFooter className="flex gap-5">
-                <DialogClose
-                  asChild
-                  disabled={!isValid}
-                  onClick={handleSubmit(onSubmit)}
-                >
-                  <Button
-                    type="button"
-                    disabled={!isValid}
-                    full
-                    className="w-2/3"
-                  >
-                    Add contact
-                  </Button>
-                </DialogClose>
+          <form onSubmit={handleSubmit(onSubmit)} className={formStyle()}>
+            <div className={fieldsContainer()}>
+              <FormField
+                name="email"
+                control={control}
+                render={({ field }) => (
+                  <FormItem>
+                    <div className={labelContainer()}>
+                      <FormLabel>Email</FormLabel>
+                      <span className={requiredText()}>Required</span>
+                    </div>
+                    <FormControl>
+                      <Input {...field} value={field.value || ''} />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
+              <FormField
+                name="firstName"
+                control={control}
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>First Name</FormLabel>
+                    <FormControl>
+                      <Input {...field} value={field.value || ''} />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
+              <FormField
+                name="lastName"
+                control={control}
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Last Name</FormLabel>
+                    <FormControl>
+                      <Input {...field} value={field.value || ''} />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
+            </div>
+            <DialogFooter className="flex gap-5">
+              <DialogClose
+                asChild
+                disabled={!isValid}
+                onClick={handleSubmit(onSubmit)}
+              >
                 <Button
                   type="button"
-                  onClick={handleCancel}
-                  className="w-1/3 ml-0"
-                  variant="outline"
+                  disabled={!isValid}
+                  full
+                  className="w-2/3"
                 >
-                  Cancel
+                  Add contact
                 </Button>
-              </DialogFooter>
-            </div>
+              </DialogClose>
+              <Button
+                type="button"
+                onClick={handleCancel}
+                className="w-1/3 ml-0"
+                variant="outline"
+              >
+                Cancel
+              </Button>
+            </DialogFooter>
           </form>
         </Form>
       </DialogContent>

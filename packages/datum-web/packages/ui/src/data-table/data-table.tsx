@@ -1,5 +1,7 @@
 'use client'
 
+import { EyeIcon } from 'lucide-react'
+import { useState } from 'react'
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -12,8 +14,14 @@ import {
   getSortedRowModel,
   useReactTable,
   FilterFn,
+  SortingFn,
+  sortingFns,
 } from '@tanstack/react-table'
-import { RankingInfo } from '@tanstack/match-sorter-utils'
+import {
+  RankingInfo,
+  rankItem,
+  compareItems,
+} from '@tanstack/match-sorter-utils'
 
 import {
   Table,
@@ -24,7 +32,6 @@ import {
   TableRow,
 } from '../table/table'
 import { Button } from '../button/button'
-import { useEffect, useState } from 'react'
 import { Input } from '../input/input'
 import {
   DropdownMenu,
@@ -32,7 +39,7 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from '../dropdown-menu/dropdown-menu'
-import { EyeIcon } from 'lucide-react'
+import { DataTableColumnHeader } from './data-column-header'
 import { DataTablePagination } from './data-table-pagination'
 
 interface DataTableProps<TData, TValue> {
@@ -256,4 +263,25 @@ export function DataTable<TData, TValue>({
       </Table>
     </>
   )
+}
+
+export {
+  type ColumnDef,
+  type ColumnFiltersState,
+  type SortingState,
+  type VisibilityState,
+  type FilterFn,
+  type SortingFn,
+  type RankingInfo,
+  DataTableColumnHeader,
+  DataTablePagination,
+  flexRender,
+  getCoreRowModel,
+  getFilteredRowModel,
+  getPaginationRowModel,
+  getSortedRowModel,
+  useReactTable,
+  rankItem,
+  compareItems,
+  sortingFns,
 }

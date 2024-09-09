@@ -3,9 +3,10 @@
 import React, { useState } from 'react'
 import { useSession } from 'next-auth/react'
 
-import PageTitle from '@/components/page-title'
+import type { Datum } from '@repo/types'
+
 import { useContacts } from '@/hooks/useContacts'
-import { Datum } from '@repo/types'
+import PageTitle from '@/components/page-title'
 
 import ContactControls from './contact-controls'
 import { ContactsTable } from './contacts-table'
@@ -17,11 +18,11 @@ const ContactsPage: React.FC = () => {
   const organizationId =
     session?.user.organization ?? ('' as Datum.OrganisationId)
   const { data: contacts = [], error, isLoading } = useContacts(organizationId)
-  const { wrapper } = pageStyles()
+  const { wrapper, header } = pageStyles()
 
   return (
     <div className={wrapper()}>
-      <div className="flex items-stretch justify-between">
+      <div className={header()}>
         <PageTitle title="Contacts" />
         <ContactControls search={setQuery} />
       </div>

@@ -28,12 +28,21 @@ import {
 import AddContactDialog from './contact-add-dialog'
 import ImportContactsDialog from './contact-import-dialog'
 import ContactSearch from './contact-search'
+import { pageStyles } from './page.styles'
 
 type ContactControlsProps = {
   search(query: string): void
 }
 
 const ContactControls = ({ search }: ContactControlsProps) => {
+  const {
+    accordionContainer,
+    accordionContent,
+    accordionTrigger,
+    contactControls,
+    contactDropdownItem,
+    contactDropdownIcon,
+  } = pageStyles()
   const [_openContactDialog, _setOpenContactDialog] = useState(false)
   const [_openImportDialog, _setOpenImportDialog] = useState(false)
 
@@ -74,7 +83,7 @@ const ContactControls = ({ search }: ContactControlsProps) => {
 
   return (
     <>
-      <div className="flex justify-start items-stretch gap-[18px]">
+      <div className={contactControls()}>
         <ContactSearch search={search} />
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -84,17 +93,17 @@ const ContactControls = ({ search }: ContactControlsProps) => {
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="px-2 py-2.5">
             <DropdownMenuItem
-              className="w-full flex items-center justify-start gap-3 text-button-m cursor-pointer"
+              className={contactDropdownItem()}
               onClick={openContactDialog}
             >
-              <User size={18} className="text-blackberry-400" />
+              <User size={18} className={contactDropdownIcon()} />
               Add single contact
             </DropdownMenuItem>
             <DropdownMenuItem
-              className="w-full flex items-center justify-start gap-3 text-button-m cursor-pointer"
+              className={contactDropdownItem()}
               onClick={openImportDialog}
             >
-              <Import size={18} className="text-blackberry-400" />
+              <Import size={18} className={contactDropdownIcon()} />
               Import
             </DropdownMenuItem>
           </DropdownMenuContent>
@@ -108,7 +117,7 @@ const ContactControls = ({ search }: ContactControlsProps) => {
           <DropdownMenuContent align="end" className="px-2 py-2.5">
             <DropdownMenuItem
               onClick={handleExport}
-              className="w-full flex items-center justify-start gap-3 text-button-m cursor-pointer"
+              className={contactDropdownItem()}
             >
               <Import
                 size={18}
@@ -118,21 +127,21 @@ const ContactControls = ({ search }: ContactControlsProps) => {
             </DropdownMenuItem>
             <DropdownMenuItem
               onClick={handleDeletion}
-              className="w-full flex items-center justify-start gap-3 text-button-m cursor-pointer"
+              className={contactDropdownItem()}
             >
-              <Trash size={18} className="text-blackberry-400" />
+              <Trash size={18} className={contactDropdownIcon()} />
               Delete items
             </DropdownMenuItem>
             <Accordion type="single" collapsible className="w-full px-2">
-              <AccordionItem value="lists" className="w-full border-b-0">
-                <AccordionTrigger className="w-full !h-[30px] py-1.5 px-0 flex items-center font-normal hover:no-underline justify-between gap-3 text-base cursor-pointer">
+              <AccordionItem value="lists" className={accordionContainer()}>
+                <AccordionTrigger className={accordionTrigger()}>
                   <div className="flex items-center justify-start gap-3">
-                    <Plus size={18} className="text-blackberry-400" />
+                    <Plus size={18} className={contactDropdownIcon()} />
                     Add to list
                   </div>
-                  <ChevronDown size={18} className="text-blackberry-400" />
+                  <ChevronDown size={18} className={contactDropdownIcon()} />
                 </AccordionTrigger>
-                <AccordionContent className="w-full flex flex-col items-start justify-start gap-2 max-w-full truncate pt-2 pb-0">
+                <AccordionContent className={accordionContent()}>
                   <Button
                     variant="success"
                     icon={<Check size={10} className="leading-none" />}
