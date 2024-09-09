@@ -24,6 +24,7 @@
     "@repo/ui": "workspace:*",
     "@simplewebauthn/browser": "^10.0.0",
     "@simplewebauthn/server": "^10.0.0",
+    "@tanstack/match-sorter-utils": "^8.19.4",
     "@types/jsonwebtoken": "^9.0.6",
     "@uidotdev/usehooks": "^2.4.1",
     "camelcase-keys": "^9.1.3",

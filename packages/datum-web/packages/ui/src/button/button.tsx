@@ -13,6 +13,8 @@ interface IconInformationProps
   extends Pick<ButtonWithIcons, 'variant' | 'icon'> {}
 
 function getIcon({ icon, variant }: IconInformationProps) {
+  if (icon) return icon
+
   if (variant === 'success') {
     return <CheckIcon />
   }
@@ -21,7 +23,7 @@ function getIcon({ icon, variant }: IconInformationProps) {
     return <X />
   }
 
-  return icon
+  return null
 }
 
 const Button = forwardRef<HTMLButtonElement, ButtonWithIcons>(

@@ -45,6 +45,7 @@ const AddContactDialog = ({ open, setOpen }: AddContactDialogProps) => {
     defaultValues: {
       status: 'INACTIVE',
       email: '',
+      source: 'Google',
     },
   })
 
@@ -67,6 +68,7 @@ const AddContactDialog = ({ open, setOpen }: AddContactDialogProps) => {
     console.log(data)
     await createContacts(organizationId, [data])
     setOpen(false)
+    reset()
   }
 
   function handleCancel() {

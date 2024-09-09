@@ -11,7 +11,9 @@ import {
   getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
+  FilterFn,
 } from '@tanstack/react-table'
+import { RankingInfo } from '@tanstack/match-sorter-utils'
 
 import {
   Table,
@@ -22,7 +24,7 @@ import {
   TableRow,
 } from '../table/table'
 import { Button } from '../button/button'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Input } from '../input/input'
 import {
   DropdownMenu,
@@ -43,6 +45,20 @@ interface DataTableProps<TData, TValue> {
   showFooter?: boolean
   showVisibility?: boolean
   noResultsText?: string
+  filterFns?: Record<string, FilterFn<any>>
+  globalFilterFn?: any
+  globalFilter?: string
+  setGlobalFilter?(input: string): void
+}
+
+declare module '@tanstack/react-table' {
+  //add fuzzy filter to the filterFns
+  interface FilterFns {
+    fuzzy: FilterFn<unknown>
+  }
+  interface FilterMeta {
+    itemRank: RankingInfo
+  }
 }
 
 export function DataTable<TData, TValue>({
@@ -55,6 +71,10 @@ export function DataTable<TData, TValue>({
   bordered = false,
   highlightHeader = false,
   noResultsText = 'No results',
+  filterFns = {},
+  globalFilterFn,
+  setGlobalFilter,
+  globalFilter,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([])
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
@@ -72,11 +92,15 @@ export function DataTable<TData, TValue>({
     getFilteredRowModel: getFilteredRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
     onRowSelectionChange: setRowSelection,
+    onGlobalFilterChange: setGlobalFilter,
+    filterFns,
+    globalFilterFn,
     state: {
       sorting,
       columnFilters,
       columnVisibility,
       rowSelection,
+      globalFilter,
     },
     defaultColumn: {
       size: 0,

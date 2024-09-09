@@ -13,6 +13,7 @@ export const buttonStyles = tv({
   },
   variants: {
     variant: {
+      tag: '!text-blackberry-500 !font-mono border font-bold border-blackberry-500 uppercase',
       tableHeader: '!text-blackberry-600 !font-mono',
       sunglowXs: '!text-sunglow-900',
       blackberryXs: 'text-blackberry-900',
@@ -34,6 +35,7 @@ export const buttonStyles = tv({
       },
     },
     size: {
+      tag: 'py-0.5 px-[7px] text-[10px]',
       xs: 'h-auto rounded-none p-0',
       sm: 'h-9 rounded-md px-4 text-button-s font-sans',
       md: 'h-11 rounded-md px-5 text-button-m font-sans',
@@ -50,6 +52,14 @@ export const buttonStyles = tv({
       },
     },
   },
+  compoundVariants: [
+    {
+      variant: 'success',
+      size: 'tag',
+      class:
+        '!text-white bg-util-green-500 border border-util-green-500 uppercase gap-1',
+    },
+  ],
   defaultVariants: {
     variant: 'sunglow',
     size: 'md',

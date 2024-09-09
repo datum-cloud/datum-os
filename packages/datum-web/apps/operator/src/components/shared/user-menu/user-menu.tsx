@@ -53,21 +53,17 @@ export const UserMenu = () => {
         </div>
       </DropdownMenuTrigger>
       <DropdownMenuContent>
-        <DropdownMenuItem asChild>
-          <div>
-            <div>
-              <div>
-                {sessionData?.user.name}
-                <br />
-                <div className={email()}>{sessionData?.user.email}</div>
-              </div>
-              <div>
-                <Link href="/profile" className={userSettingsLink()}>
-                  User Settings
-                </Link>
-              </div>
-            </div>
-          </div>
+        <DropdownMenuItem
+          className="flex items-start justify-start flex-col gap-2"
+          asChild
+        >
+          <>
+            {sessionData?.user?.name}
+            <p className={email()}>{sessionData?.user.email}</p>
+            <Link href="/profile" className={userSettingsLink()}>
+              User Settings
+            </Link>
+          </>
         </DropdownMenuItem>
         <DropdownMenuSeparator spacing="md" />
         <div className={commandRow()}>

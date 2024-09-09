@@ -1,12 +1,12 @@
 'use client'
 
-import { useMemo, useState } from 'react'
+import { useState } from 'react'
 import {
+  Check,
   ChevronDown,
   Filter,
   Import,
   Plus,
-  Search,
   Trash,
   User,
 } from 'lucide-react'
@@ -18,19 +18,22 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@repo/ui/dropdown-menu'
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from '@/components/shared/sidebar/sidebar-accordion/sidebar-accordion'
 
 import AddContactDialog from './contact-add-dialog'
 import ImportContactsDialog from './contact-import-dialog'
+import ContactSearch from './contact-search'
 
 type ContactControlsProps = {
-  searchOpen: boolean
-  toggleSearch(): void
+  search(query: string): void
 }
 
-const ContactControls = ({
-  searchOpen,
-  toggleSearch,
-}: ContactControlsProps) => {
+const ContactControls = ({ search }: ContactControlsProps) => {
   const [_openContactDialog, _setOpenContactDialog] = useState(false)
   const [_openImportDialog, _setOpenImportDialog] = useState(false)
 
@@ -72,9 +75,9 @@ const ContactControls = ({
   return (
     <>
       <div className="flex justify-start items-stretch gap-[18px]">
-        <Button variant="outline" onClick={toggleSearch}>
-          <Search />
-        </Button>
+        <div>
+          <ContactSearch search={search} />
+        </div>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" icon={<ChevronDown />}>
@@ -122,10 +125,42 @@ const ContactControls = ({
               <Trash size={18} className="text-blackberry-400" />
               Delete items
             </DropdownMenuItem>
-            <DropdownMenuItem className="w-full flex items-center justify-start gap-3 text-button-m cursor-pointer">
-              <Plus size={18} className="text-blackberry-400" />
-              Add to list
-            </DropdownMenuItem>
+            <Accordion type="single" collapsible className="w-full px-2">
+              <AccordionItem value="lists" className="w-full border-b-0">
+                <AccordionTrigger className="w-full !h-[30px] py-1.5 px-0 flex items-center font-normal hover:no-underline justify-between gap-3 text-base cursor-pointer">
+                  <div className="flex items-center justify-start gap-3">
+                    <Plus size={18} className="text-blackberry-400" />
+                    Add to list
+                  </div>
+                  <ChevronDown size={18} className="text-blackberry-400" />
+                </AccordionTrigger>
+                <AccordionContent className="w-full flex flex-col items-start justify-start gap-2 max-w-full truncate pt-2 pb-0">
+                  <Button
+                    variant="success"
+                    icon={<Check size={10} className="leading-none" />}
+                    iconPosition="left"
+                    size="tag"
+                  >
+                    Newsletter
+                  </Button>
+                  <Button variant="tag" size="tag">
+                    Admin
+                  </Button>
+                  <Button variant="tag" size="tag">
+                    Cardholders
+                  </Button>
+                  <Button variant="tag" size="tag">
+                    Developers
+                  </Button>
+                  <Button variant="tag" size="tag">
+                    Free Plan
+                  </Button>
+                  <Button variant="tag" size="tag">
+                    To Renew
+                  </Button>
+                </AccordionContent>
+              </AccordionItem>
+            </Accordion>
           </DropdownMenuContent>
         </DropdownMenu>
         <Button variant="sunglow" icon={<Filter />}>

@@ -32,9 +32,11 @@ export function DataTablePagination<TData>({
             table.setPageSize(Number(value))
           }}
         >
-          <SelectTrigger className="h-8" style={{ width: 186 }}>
+          <SelectTrigger
+            className="h-8 !text-blackberry-400 placeholder-blackberry-400"
+            style={{ width: 186 }}
+          >
             <SelectValue
-              className="!text-blackberry-400 placeholder-blackberry-400"
               placeholder={`Show ${table.getState().pagination.pageSize} rows`}
             />
           </SelectTrigger>
