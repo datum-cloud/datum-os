@@ -1,16 +1,39 @@
 'use client'
 
 import React from 'react'
-import { ArrowLeft, ChevronDown, User } from 'lucide-react'
+import {
+  ArrowLeft,
+  BellMinus,
+  Check,
+  ChevronDown,
+  Ellipsis,
+  Plus,
+  User,
+} from 'lucide-react'
 import Link from 'next/link'
 
 import { OPERATOR_APP_ROUTES } from '@repo/constants'
-import { Datum } from '@repo/types'
-
-import { pageStyles } from './page.styles'
-import { formatDate } from '@/utils/date'
 import { Button } from '@repo/ui/button'
 import { Panel, PanelHeader } from '@repo/ui/panel'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@repo/ui/dropdown-menu'
+import { Datum } from '@repo/types'
+
+import {
+  Accordion,
+  AccordionItem,
+  AccordionContent,
+  AccordionTrigger,
+} from '@/components/shared/sidebar/sidebar-accordion/sidebar-accordion'
+import { formatDate } from '@/utils/date'
+
+import { pageStyles as contactsStyles } from '../contacts/page.styles'
+import { tagStyles } from '../contacts/tag.styles'
+import { pageStyles } from './page.styles'
 
 type ContactPageProps = {
   id: Datum.ContactId
@@ -18,6 +41,13 @@ type ContactPageProps = {
 
 const ContactPage = ({ id }: ContactPageProps) => {
   const { wrapper } = pageStyles()
+  const {
+    accordionContainer,
+    accordionTrigger,
+    accordionContent,
+    contactDropdownItem,
+    contactDropdownIcon,
+  } = contactsStyles()
 
   //   TODO: Replace mock data...
   //   const { error, isLoading, data: contact } = useContact(id)
@@ -33,10 +63,10 @@ const ContactPage = ({ id }: ContactPageProps) => {
     address: '',
     phoneNumber: '+1234567890',
     source: 'form',
-    lists: [],
+    lists: ['Newsletter', 'Admin', 'Cardholders', 'Developers'],
   } as Datum.Contact
 
-  const { email, source, createdAt } = MOCK_CONTACT
+  const { email, source, lists, createdAt } = MOCK_CONTACT
 
   return (
     <div className={wrapper()}>
@@ -71,11 +101,65 @@ const ContactPage = ({ id }: ContactPageProps) => {
         <PanelHeader heading="Latest activity" noBorder />
         {/* TODO Table */}
       </Panel>
-      <Panel className="bg-blackberry-100">
-        <PanelHeader heading="Enriched Data" />
+      <Panel className="bg-blackberry-300/50">
+        <PanelHeader heading="Enriched Data" noBorder />
       </Panel>
-      <Panel className="bg-blackberry-100">
-        <PanelHeader heading="Current Lists" />
+      <Panel className="bg-blackberry-100/50 gap-4">
+        <div className="flex items-start justify-between">
+          <h2 className="text-xl font-semibold">Current Lists</h2>
+          <DropdownMenu>
+            <DropdownMenuTrigger>
+              <Ellipsis className={contactDropdownIcon()} />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="py-2.5 px-2" side="top" align="end">
+              <DropdownMenuItem className={contactDropdownItem()}>
+                <BellMinus size={18} className={contactDropdownIcon()} />
+                Unsubscribe from all
+              </DropdownMenuItem>
+              <Accordion type="single" collapsible className="w-full px-2">
+                <AccordionItem value="lists" className={accordionContainer()}>
+                  <AccordionTrigger className={accordionTrigger()}>
+                    <div className="flex items-center justify-start gap-3">
+                      <Plus size={18} className={contactDropdownIcon()} />
+                      Manage Lists
+                    </div>
+                    <ChevronDown size={18} className={contactDropdownIcon()} />
+                  </AccordionTrigger>
+                  <AccordionContent className={accordionContent()}>
+                    <Button
+                      variant="success"
+                      icon={<Check size={10} className="leading-none" />}
+                      iconPosition="left"
+                      size="tag"
+                    >
+                      Newsletter
+                    </Button>
+                    <Button variant="tag" size="tag">
+                      Admin
+                    </Button>
+                    <Button variant="tag" size="tag">
+                      Cardholders
+                    </Button>
+                    <Button variant="tag" size="tag">
+                      Developers
+                    </Button>
+                    <Button variant="tag" size="tag">
+                      Free Plan
+                    </Button>
+                    <Button variant="tag" size="tag">
+                      To Renew
+                    </Button>
+                  </AccordionContent>
+                </AccordionItem>
+              </Accordion>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+        <div className="w-full flex gap-2 flex-wrap">
+          {lists.map((list) => (
+            <span className={tagStyles()}>{list}</span>
+          ))}
+        </div>
       </Panel>
     </div>
   )

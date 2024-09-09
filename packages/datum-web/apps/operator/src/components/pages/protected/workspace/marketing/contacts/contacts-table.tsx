@@ -17,6 +17,7 @@ import { cn } from '@repo/ui/lib/utils'
 import { Datum } from '@repo/types'
 
 import { formatDate } from '@/utils/date'
+import { sortAlphabetically } from '@/utils/sort'
 
 import ContactsTableDropdown from './contacts-table-dropdown'
 import { tableStyles } from './table.styles'
@@ -214,7 +215,8 @@ export const CONTACT_COLUMNS: ColumnDef<Datum.Contact>[] = [
     enableSorting: false,
     cell: ({ cell }) => {
       const lists = cell.getValue() as string[]
-      const [first, ...rest] = lists
+      const sortedLists = lists.sort(sortAlphabetically)
+      const [first, ...rest] = sortedLists
 
       return (
         <div className="text-nowrap">

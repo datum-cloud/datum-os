@@ -1,6 +1,6 @@
 import type { QueryKey } from '@tanstack/react-query'
 
-import { OPERATOR_APP_ROUTES } from '@repo/constants'
+import { OPERATOR_API_ROUTES } from '@repo/constants'
 import { camelize, decamelize } from '@repo/common/keys'
 import { getPathWithParams } from '@repo/common/routes'
 import { Datum } from '@repo/types'
@@ -11,7 +11,7 @@ export async function getContact(
   id: Datum.ContactId,
 ): Promise<Datum.Contact | undefined> {
   const response = await fetch(
-    getPathWithParams(OPERATOR_APP_ROUTES.contact, { id }),
+    getPathWithParams(OPERATOR_API_ROUTES.contact, { id }),
   )
 
   if (!response.ok) {
@@ -28,7 +28,7 @@ export async function getContact(
 }
 
 export async function getContacts(): Promise<Datum.Contact[]> {
-  const response = await fetch(OPERATOR_APP_ROUTES.contacts)
+  const response = await fetch(OPERATOR_API_ROUTES.contacts)
 
   if (!response.ok) {
     const result = await response.json()
@@ -56,7 +56,7 @@ export async function createContacts(
 ) {
   const formattedContacts = input.map((contact) => decamelize(contact))
 
-  const response = await fetch(OPERATOR_APP_ROUTES.createContacts, {
+  const response = await fetch(OPERATOR_API_ROUTES.createContacts, {
     method: 'POST',
     body: JSON.stringify({
       contacts: formattedContacts,

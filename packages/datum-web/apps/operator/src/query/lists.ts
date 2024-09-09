@@ -1,11 +1,11 @@
 import type { QueryKey } from '@tanstack/react-query'
 
-import { OPERATOR_APP_ROUTES } from '@repo/constants'
-import { camelize, decamelize } from '@repo/common/keys'
+import { OPERATOR_API_ROUTES } from '@repo/constants'
+import { camelize } from '@repo/common/keys'
 import { Datum } from '@repo/types'
 
 export async function getLists(): Promise<Datum.List[]> {
-  const response = await fetch(OPERATOR_APP_ROUTES.contacts)
+  const response = await fetch(OPERATOR_API_ROUTES.contacts)
 
   if (!response.ok) {
     const result = await response.json()

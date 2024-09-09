@@ -11,6 +11,10 @@ export const SERVICE_APP_ROUTES = {
 }
 
 export const OPERATOR_APP_ROUTES = {
+  contacts: '/marketing/contacts',
+  contact: '/marketing/contacts/[id]',
+}
+export const OPERATOR_API_ROUTES = {
   contacts: '/api/auth/contacts',
   contact: '/api/auth/[id]',
   createContacts: '/api/auth/contacts/create',
