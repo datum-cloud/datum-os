@@ -139,21 +139,22 @@ export const CONTACT_COLUMNS: ColumnDef<Datum.Contact>[] = [
     enableSorting: true,
     sortingFn: fuzzySort,
   },
-  {
-    id: 'source',
-    accessorKey: 'source',
-    header: ({ column }) => (
-      <DataTableColumnHeader
-        className={header()}
-        column={column}
-        children="Source"
-      />
-    ),
-    minSize: 140,
-    enableGlobalFilter: true,
-    enableSorting: true,
-    sortingFn: fuzzySort,
-  },
+  // NOTE: Removing temporarily per Chris' request
+  // {
+  //   id: 'source',
+  //   accessorKey: 'source',
+  //   header: ({ column }) => (
+  //     <DataTableColumnHeader
+  //       className={header()}
+  //       column={column}
+  //       children="Source"
+  //     />
+  //   ),
+  //   minSize: 140,
+  //   enableGlobalFilter: true,
+  //   enableSorting: true,
+  //   sortingFn: fuzzySort,
+  // },
   {
     id: 'createdAt',
     accessorFn: (row) => formatDate(row.createdAt),
