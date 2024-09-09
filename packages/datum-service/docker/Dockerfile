@@ -1,4 +1,4 @@
-FROM golang:1.22.6 AS builder
+FROM golang:1.23 AS builder
 
 WORKDIR /go/src/app
 COPY . .
@@ -16,6 +16,9 @@ COPY --from=builder /go/bin/datum /bin/datum
 
 # Copy default model into image
 COPY fga/model/datum.fga fga/model/datum.fga
+
+# Copy empty config to allow for environment only configuration
+COPY config/config-empty.yaml config/.config.yaml
 
 # Run the web service on container startup.
 ENTRYPOINT [ "/bin/datum" ]
