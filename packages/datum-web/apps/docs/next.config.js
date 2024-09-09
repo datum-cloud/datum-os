@@ -5,5 +5,10 @@ const withNextra = require('nextra')({
 
 module.exports = withNextra({
   reactStrictMode: true,
-  transpilePackages: ['@repo/dally', '@repo/ui', '@repo/codegen'],
+  transpilePackages: [
+    '@repo/dally',
+    '@repo/ui',
+    '@repo/codegen',
+    '@repo/types',
+  ],
 })

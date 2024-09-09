@@ -1,18 +1,40 @@
 import { Slot } from '@radix-ui/react-slot'
 import { forwardRef } from 'react'
 import { buttonStyles, type ButtonProps } from './button.styles'
-import { CheckIcon, LoaderCircle } from 'lucide-react'
+import { CheckIcon, LoaderCircleIcon, X } from 'lucide-react'
 import { cn } from '../../lib/utils'
 
-const Button = forwardRef<HTMLButtonElement, ButtonProps>(
+interface ButtonWithIcons extends Omit<ButtonProps, 'icon' | 'iconPosition'> {
+  icon?: React.ReactNode
+  iconPosition?: 'left' | 'right'
+}
+
+interface IconInformationProps
+  extends Pick<ButtonWithIcons, 'variant' | 'icon'> {}
+
+function getIcon({ icon, variant }: IconInformationProps) {
+  if (icon) return icon
+
+  if (variant === 'success') {
+    return <CheckIcon />
+  }
+
+  if (variant === 'failure') {
+    return <X />
+  }
+
+  return null
+}
+
+const Button = forwardRef<HTMLButtonElement, ButtonWithIcons>(
   (
     {
       asChild = false,
       className,
-      icon,
       loading,
+      icon: iconProp,
+      iconPosition = 'right',
       iconAnimated,
-      iconPosition,
       variant,
       full,
       childFull,
@@ -23,19 +45,23 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     const Comp = asChild ? Slot : 'button'
     const {
       base,
-      iconOuter,
+      childWrapper,
       iconInner,
-      loadingIcon,
       loadingWrapper,
       loadingText,
-      childWrapper,
+      iconOuter,
     } = buttonStyles({
-      iconAnimated,
-      iconPosition,
       variant,
       full,
       childFull,
+      iconPosition,
+      iconAnimated,
       ...rest,
+    })
+
+    const icon = getIcon({
+      variant,
+      icon: iconProp,
     })
 
     return (
@@ -47,26 +73,19 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         <span className={cn(childWrapper(), loading && loadingText())}>
           {rest.children}
         </span>
-        {icon ? (
-          <div className={iconOuter()}>
-            <div className={iconInner()}>
-              {icon}
-              {icon}
-            </div>
-          </div>
-        ) : null}
-        {variant === 'success' ? (
-          <div className={iconOuter()}>
-            <div className={iconInner()}>
-              <CheckIcon />
-            </div>
-          </div>
-        ) : null}
-        {loading && (
+        {loading ? (
           <div className={loadingWrapper()}>
-            <LoaderCircle className={loadingIcon()} size={20} />
+            <LoaderCircleIcon className="animate-spin shrink-0 !h-6 !w-6" />
           </div>
-        )}
+        ) : null}
+        {icon && !loading ? (
+          <div className={iconOuter()}>
+            <div className={iconInner()}>
+              {icon}
+              {icon}
+            </div>
+          </div>
+        ) : null}
       </Comp>
     )
   },

@@ -13,7 +13,7 @@ const meta: Meta<typeof Slider> = {
     },
     backgrounds: { default: 'white' },
   },
-  render: (args) => <Slider {...args} />,
+  render: (args: any) => <Slider {...args} />,
 } satisfies Meta<typeof Slider>
 
 export default meta

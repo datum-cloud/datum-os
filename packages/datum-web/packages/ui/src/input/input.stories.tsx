@@ -14,7 +14,7 @@ const meta: Meta<typeof Input> = {
     },
     backgrounds: { default: 'white' },
   },
-  render: ({ children, ...args }) => {
+  render: ({ children, ...args }: any) => {
     return <Input {...args}>{children}</Input>
   },
 } satisfies Meta<typeof Input>

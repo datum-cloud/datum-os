@@ -44,7 +44,7 @@ const meta: Meta<typeof Button> = {
       defaultValue: 'Button',
     },
   },
-  render: ({ children, ...args }) => {
+  render: ({ children, ...args }: any) => {
     return <Button {...args}>{children}</Button>
   },
 } satisfies Meta<typeof Button>
@@ -82,29 +82,18 @@ export const Medium: Story = {
   },
 }
 
-export const SmallSunglow: Story = {
+export const XsSunglow: Story = {
   args: {
     variant: 'sunglow',
-    size: 'sm',
+    size: 'xs',
     icon: <ArrowRight />,
   },
 }
 
-export const SmallBlackberry: Story = {
+export const XsBlackberry: Story = {
   args: {
     variant: 'blackberry',
-    size: 'sm',
-    icon: <ArrowRight />,
-  },
-}
-
-export const SmallWhite: Story = {
-  parameters: {
-    backgrounds: { default: 'dark' },
-  },
-  args: {
-    variant: 'white',
-    size: 'sm',
+    size: 'xs',
     icon: <ArrowRight />,
   },
 }
@@ -144,5 +133,12 @@ export const Success: Story = {
   name: 'In a success state',
   args: {
     variant: 'success',
+  },
+}
+
+export const Failure: Story = {
+  name: 'In a failure state',
+  args: {
+    variant: 'failure',
   },
 }

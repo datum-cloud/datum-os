@@ -1,6 +1,7 @@
+import { zodResolver } from '@hookform/resolvers/zod'
+import { Slot } from '@radix-ui/react-slot'
 import * as React from 'react'
 import * as LabelPrimitive from '@radix-ui/react-label'
-import { Slot } from '@radix-ui/react-slot'
 import {
   Controller,
   ControllerProps,
@@ -8,6 +9,7 @@ import {
   FieldValues,
   FormProvider,
   useFormContext,
+  useForm,
 } from 'react-hook-form'
 
 import { cn } from '../../lib/utils'
@@ -191,6 +193,8 @@ const FormMessage = React.forwardRef<
 FormMessage.displayName = 'FormMessage'
 
 export {
+  useForm,
+  zodResolver,
   useFormField,
   Form,
   FormItem,

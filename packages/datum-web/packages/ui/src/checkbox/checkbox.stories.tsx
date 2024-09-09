@@ -13,7 +13,7 @@ const meta: Meta<typeof Checkbox> = {
     },
     backgrounds: { default: 'white' },
   },
-  render: (args) => <Checkbox {...args} />,
+  render: (args: any) => <Checkbox {...args} />,
 } satisfies Meta<typeof Checkbox>
 
 export default meta

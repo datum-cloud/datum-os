@@ -179,11 +179,11 @@ export const LoginPage = () => {
           )}
 
           <Button
-            className="mr-auto mt-2 w-full"
+            className="mr-auto mt-2"
+            full
             icon={<ArrowUpRight />}
-            size="md"
-            type="submit"
             iconAnimated
+            type="submit"
           >
             Login
           </Button>

@@ -11,7 +11,7 @@ const meta: Meta<typeof Kbd> = {
       },
     },
   },
-  render: (args) => {
+  render: (args: any) => {
     return <Kbd {...args} />
   },
 } satisfies Meta<typeof Kbd>

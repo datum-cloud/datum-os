@@ -9,7 +9,7 @@
 		"forceConsistentCasingInFileNames": true,
 		"allowImportingTsExtensions": true,
 		"noEmit": true,
-		"jsx": "react",
+		"jsx": "react-jsxdev",
 		"inlineSources": false,
 		"isolatedModules": true,
 		"module": "ESNext",

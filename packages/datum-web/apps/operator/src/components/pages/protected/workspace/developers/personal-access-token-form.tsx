@@ -192,7 +192,7 @@ const PersonalAccessTokenForm = () => {
                         <PopoverTrigger asChild>
                           <FormControl>
                             <Button
-                              variant="outlineLight"
+                              variant="outline"
                               childFull
                               onClick={() => setIsCalendarOpen(!isCalendarOpen)}
                             >

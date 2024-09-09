@@ -12,7 +12,7 @@ const meta: Meta = {
     },
     backgrounds: { default: 'white' },
   },
-  render: ({ children, ...args }) => {
+  render: ({ children, ...args }: any) => {
     return (
       <Avatar {...args}>
         <AvatarImage src="https://github.com/datumforge.png" />

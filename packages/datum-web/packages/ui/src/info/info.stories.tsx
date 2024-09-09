@@ -12,7 +12,7 @@ const meta: Meta<typeof Info> = {
     },
     backgrounds: { default: 'white' },
   },
-  render: (args) => {
+  render: (args: any) => {
     return <Info {...args} />
   },
 } satisfies Meta<typeof Info>

@@ -7,9 +7,15 @@
       }
     ],
     "paths": {
-      "@/*": ["./src/*"]
+      "@query": [
+        "./src/query"
+      ],
+      "@/*": [
+        "./src/*"
+      ]
     },
-    "strictNullChecks": true
+    "strictNullChecks": true,
+    "jsx": "preserve"
   },
   "include": [
     "next-env.d.ts",
@@ -20,5 +26,12 @@
     "postcss.config.js",
     "../../packages/config-typescript/typings.d.ts"
   ],
-  "exclude": ["node_modules", "dist", "build", "coverage", ".next", ".turbo"]
+  "exclude": [
+    "node_modules",
+    "dist",
+    "build",
+    "coverage",
+    ".next",
+    ".turbo"
+  ]
 }

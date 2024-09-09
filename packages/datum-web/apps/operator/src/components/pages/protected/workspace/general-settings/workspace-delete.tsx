@@ -20,7 +20,6 @@ import { useToast } from '@repo/ui/use-toast'
 import { userHasWorkspaceDeletePermissions } from '@/lib/authz/utils'
 import { useGetOrganizationNameByIdQuery } from '@repo/codegen/src/schema'
 
-
 const WorkspaceDelete = async () => {
   const { toast } = useToast()
   const { push } = useRouter()
@@ -72,7 +71,7 @@ const WorkspaceDelete = async () => {
           <p className="red">Deleting your workspace is irreversible.</p>
           <AlertDialog>
             <AlertDialogTrigger asChild>
-              <Button variant="redOutline" type="button" loading={isSubmitting}>
+              <Button variant="failure" type="button" loading={isSubmitting}>
                 Delete this workspace
               </Button>
             </AlertDialogTrigger>
@@ -81,7 +80,8 @@ const WorkspaceDelete = async () => {
                 <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
                 <AlertDialogDescription>
                   This action cannot be undone. This will permanently delete
-                  your workspace <b>({org.data?.organization?.displayName})</b> and remove your data from our servers.
+                  your workspace <b>({org.data?.organization?.displayName})</b>{' '}
+                  and remove your data from our servers.
                 </AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter>

@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+
 import { DashboardLayout } from '@/components/layouts/dashboard/dashboard'
 
 export const metadata: Metadata = {

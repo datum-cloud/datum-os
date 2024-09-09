@@ -1,5 +1,7 @@
 'use client'
 
+import { EyeIcon } from 'lucide-react'
+import { useState } from 'react'
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -11,7 +13,15 @@ import {
   getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
+  FilterFn,
+  SortingFn,
+  sortingFns,
 } from '@tanstack/react-table'
+import {
+  RankingInfo,
+  rankItem,
+  compareItems,
+} from '@tanstack/match-sorter-utils'
 
 import {
   Table,
@@ -22,7 +32,6 @@ import {
   TableRow,
 } from '../table/table'
 import { Button } from '../button/button'
-import { useState } from 'react'
 import { Input } from '../input/input'
 import {
   DropdownMenu,
@@ -30,22 +39,49 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from '../dropdown-menu/dropdown-menu'
-import { EyeIcon } from 'lucide-react'
+import { DataTableColumnHeader } from './data-column-header'
+import { DataTablePagination } from './data-table-pagination'
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
+  bordered?: boolean
+  layoutFixed?: boolean
+  highlightHeader?: boolean
   showFilter?: boolean
+  showFooter?: boolean
   showVisibility?: boolean
   noResultsText?: string
+  filterFns?: Record<string, FilterFn<any>>
+  globalFilterFn?: any
+  globalFilter?: string
+  setGlobalFilter?(input: string): void
+}
+
+declare module '@tanstack/react-table' {
+  //add fuzzy filter to the filterFns
+  interface FilterFns {
+    fuzzy: FilterFn<unknown>
+  }
+  interface FilterMeta {
+    itemRank: RankingInfo
+  }
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
+  layoutFixed,
   showFilter = false,
+  showFooter = false,
   showVisibility = false,
+  bordered = false,
+  highlightHeader = false,
   noResultsText = 'No results',
+  filterFns = {},
+  globalFilterFn,
+  setGlobalFilter,
+  globalFilter,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([])
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
@@ -63,11 +99,15 @@ export function DataTable<TData, TValue>({
     getFilteredRowModel: getFilteredRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
     onRowSelectionChange: setRowSelection,
+    onGlobalFilterChange: setGlobalFilter,
+    filterFns,
+    globalFilterFn,
     state: {
       sorting,
       columnFilters,
       columnVisibility,
       rowSelection,
+      globalFilter,
     },
     defaultColumn: {
       size: 0,
@@ -75,7 +115,7 @@ export function DataTable<TData, TValue>({
   })
 
   return (
-    <div>
+    <>
       {(showFilter || showVisibility) && (
         <div className="flex items-center py-4">
           {showFilter && (
@@ -121,15 +161,23 @@ export function DataTable<TData, TValue>({
           )}
         </div>
       )}
-      <Table>
+      <Table layoutFixed={layoutFixed}>
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>
-              {headerGroup.headers.map((header) => {
+              {headerGroup.headers.map((header, index) => {
                 const columnWidth =
                   header.getSize() === 20 ? 'auto' : `${header.getSize()}px`
+
+                const hasBorder =
+                  bordered && headerGroup.headers.length - 1 > index
                 return (
-                  <TableHead key={header.id} style={{ width: columnWidth }}>
+                  <TableHead
+                    highlightHeader={highlightHeader}
+                    bordered={hasBorder}
+                    key={header.id}
+                    style={{ width: columnWidth }}
+                  >
                     {header.isPlaceholder
                       ? null
                       : flexRender(
@@ -149,17 +197,40 @@ export function DataTable<TData, TValue>({
                 key={row.id}
                 data-state={row.getIsSelected() && 'selected'}
               >
-                {row.getVisibleCells().map((cell) => (
-                  <TableCell key={cell.id}>
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </TableCell>
-                ))}
+                {row.getVisibleCells().map((cell, index) => {
+                  const hasBorder =
+                    bordered && row.getVisibleCells().length - 1 > index
+                  const columnWidth =
+                    cell.column.getSize() === 20
+                      ? 'auto'
+                      : `${cell.column.getSize()}px`
+
+                  return (
+                    <TableCell
+                      bordered={hasBorder}
+                      key={cell.id}
+                      style={{ width: columnWidth }}
+                    >
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext(),
+                      )}
+                    </TableCell>
+                  )
+                })}
               </TableRow>
             ))
           ) : (
             <TableRow>
               <TableCell colSpan={columns.length} className="h-24 text-center">
                 {noResultsText}
+              </TableCell>
+            </TableRow>
+          )}
+          {showFooter && (
+            <TableRow className="hover:bg-transparent">
+              <TableCell colSpan={columns.length}>
+                <DataTablePagination table={table} />
               </TableCell>
             </TableRow>
           )}
@@ -190,6 +261,27 @@ export function DataTable<TData, TValue>({
           </TableRow>
         </TableFooter> */}
       </Table>
-    </div>
+    </>
   )
+}
+
+export {
+  type ColumnDef,
+  type ColumnFiltersState,
+  type SortingState,
+  type VisibilityState,
+  type FilterFn,
+  type SortingFn,
+  type RankingInfo,
+  DataTableColumnHeader,
+  DataTablePagination,
+  flexRender,
+  getCoreRowModel,
+  getFilteredRowModel,
+  getPaginationRowModel,
+  getSortedRowModel,
+  useReactTable,
+  rankItem,
+  compareItems,
+  sortingFns,
 }

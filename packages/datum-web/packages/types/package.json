@@ -1,0 +1,14 @@
+{
+  "private": true,
+  "name": "@repo/types",
+  "version": "0.0.0",
+  "main": "./src/index.ts",
+  "scripts": {
+    "test:ci": "echo \"No tests\"",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@types/react": "18.3.3",
+    "next": "^14.1.0"
+  }
+}

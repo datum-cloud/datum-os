@@ -16,6 +16,7 @@
     "./checkbox": "./src/checkbox/checkbox.tsx",
     "./code": "./src/code.tsx",
     "./data-table": "./src/data-table/data-table.tsx",
+    "./data-column-header": "./src/data-table/data-column-header.tsx",
     "./dialog": "./src/dialog/dialog.tsx",
     "./drawer": "./src/drawer.tsx",
     "./dropdown-menu": "./src/dropdown-menu/dropdown-menu.tsx",
@@ -53,10 +54,10 @@
     "build": "tailwindcss -i ./src/styles.css -o dist/index.css",
     "lint": "eslint src/",
     "dev": "tailwindcss -i ./src/styles.css -o ./dist/index.css --watch",
-    "type-check": "tsc --noEmit"
+    "typecheck": "tsc --noEmit"
   },
   "peerDependencies": {
-    "react": "latest"
+    "react": "18.3.1"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.5.0",
@@ -100,7 +101,7 @@
     "clsx": "latest",
     "eslint": "latest",
     "postcss": "latest",
-    "react": "latest",
+    "react": "18.3.1",
     "tailwindcss": "latest",
     "tailwind-variants": "latest",
     "tsup": "latest",

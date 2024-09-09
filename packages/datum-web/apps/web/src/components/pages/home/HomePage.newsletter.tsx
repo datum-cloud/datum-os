@@ -91,7 +91,7 @@ export const HomePageNewsletter = () => {
                 </>
               )}
             />
-            <Button type="submit" variant="white" className={button()}>
+            <Button type="submit" variant="outline" className={button()}>
               {isLoading && <LoaderCircle className="animate-spin" size={20} />}
               {isLoading ? 'Loading' : 'Stay in the loop'}
             </Button>
