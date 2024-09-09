@@ -1,9 +1,7 @@
 'use client'
 
-import { zodResolver } from '@hookform/resolvers/zod'
 import { useSession } from 'next-auth/react'
 import { useEffect } from 'react'
-import { useForm } from 'react-hook-form'
 
 import {
   Dialog,
@@ -21,6 +19,8 @@ import {
   FormField,
   FormItem,
   FormLabel,
+  useForm,
+  zodResolver,
 } from '@repo/ui/form'
 import {
   ContactCreationFormInput,

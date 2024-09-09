@@ -26,41 +26,51 @@ import {
 } from '@/components/shared/sidebar/sidebar-accordion/sidebar-accordion'
 import { Button } from '@repo/ui/button'
 
+import { pageStyles } from './page.styles'
+
 type ContactDropdownProps = {
   id: Datum.ContactId
 }
 
 const ContactDropdownMenu = ({ id }: ContactDropdownProps) => {
+  const {
+    accordionContainer,
+    accordionContent,
+    accordionTrigger,
+    contactDropdownItem,
+    contactDropdownIcon,
+  } = pageStyles()
+
   // TODO: Add actions...
   return (
     <div className="flex items-center justify-center">
       <DropdownMenu>
         <DropdownMenuTrigger className="p-3">
-          <Ellipsis className="text-blackberry-400" />
+          <Ellipsis className={contactDropdownIcon()} />
         </DropdownMenuTrigger>
         <DropdownMenuContent className="py-2.5 px-2" align="end">
-          <DropdownMenuItem className="w-full flex items-center justify-start gap-3 text-base cursor-pointer">
-            <BellMinus size={18} className="text-blackberry-400" />
+          <DropdownMenuItem className={contactDropdownItem()}>
+            <BellMinus size={18} className={contactDropdownIcon()} />
             Unsubscribe from all
           </DropdownMenuItem>
-          <DropdownMenuItem className="w-full flex items-center justify-start gap-3 text-base cursor-pointer">
-            <Pencil size={18} className="text-blackberry-400" />
+          <DropdownMenuItem className={contactDropdownItem()}>
+            <Pencil size={18} className={contactDropdownIcon()} />
             Edit
           </DropdownMenuItem>
-          <DropdownMenuItem className="w-full flex items-center justify-start gap-3 text-base cursor-pointer">
-            <Trash size={18} className="text-blackberry-400" />
+          <DropdownMenuItem className={contactDropdownItem()}>
+            <Trash size={18} className={contactDropdownIcon()} />
             Delete Item
           </DropdownMenuItem>
           <Accordion type="single" collapsible className="w-full px-2">
-            <AccordionItem value="lists" className="w-full border-b-0">
-              <AccordionTrigger className="w-full !h-[30px] flex items-center font-normal hover:no-underline justify-between gap-3 py-1.5 text-base cursor-pointer">
+            <AccordionItem value="lists" className={accordionContainer()}>
+              <AccordionTrigger className={accordionTrigger()}>
                 <div className="flex items-center justify-start gap-3">
-                  <Plus size={18} className="text-blackberry-400" />
+                  <Plus size={18} className={contactDropdownIcon()} />
                   Manage Lists
                 </div>
-                <ChevronDown size={18} className="text-blackberry-400" />
+                <ChevronDown size={18} className={contactDropdownIcon()} />
               </AccordionTrigger>
-              <AccordionContent className="w-full flex flex-col items-start justify-start gap-2 max-w-full truncate pt-2 pb-0">
+              <AccordionContent className={accordionContent()}>
                 <Button
                   variant="success"
                   icon={<Check size={10} className="leading-none" />}

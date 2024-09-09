@@ -1,12 +1,10 @@
-import { zodResolver } from '@hookform/resolvers/zod'
 import { Search } from 'lucide-react'
 import { useState } from 'react'
-import { useForm } from 'react-hook-form'
 
 import { Button } from '@repo/ui/button'
 import { Input } from '@repo/ui/input'
 import { cn } from '@repo/ui/lib/utils'
-import { Form } from '@repo/ui/form'
+import { Form, useForm, zodResolver } from '@repo/ui/form'
 
 import { SearchFormInput, SearchFormSchema } from '@/utils/schemas'
 
