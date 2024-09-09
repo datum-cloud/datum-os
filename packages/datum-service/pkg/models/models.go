@@ -739,6 +739,7 @@ func ContactsGetResponseFromGeneratedContacts(genContacts []*generated.Contact) 
 		cgr.Contacts[i].Tags = append(cgr.Contacts[i].Tags, genContact.Tags...)
 	}
 
+	cgr.Reply = rout.Created().Reply
 	return cgr
 }
 
@@ -845,7 +846,7 @@ var ExampleContactsPostRequest = ContactsPostRequest{
 
 // ExampleContactsPostSuccessResponse is an example of a POST request response body from `/contacts`
 var ExampleContactsPostSuccessResponse = ContactsPostResponse{
-	Reply: rout.Reply{Success: true},
+	Reply: rout.Created().Reply,
 	Count: 2,
 	Contacts: []*Contact{
 		{
@@ -857,4 +858,28 @@ var ExampleContactsPostSuccessResponse = ContactsPostResponse{
 			Title: "VP Sales", Company: "Mosciski Group", PhoneNumber: "228-669-6638",
 		},
 	},
+}
+
+// ContactsDeleteRequest is the body for a DELETE request to `/contacts`
+type ContactsDeleteRequest struct {
+	ContactIDs []string `json:"contact_ids"`
+}
+
+// ExampleContactsDeleteRequest is an example of a valid body for a DELETE request to `/contacts`
+var ExampleContactsDeleteRequest = ContactsDeleteRequest{
+	ContactIDs: []string{
+		"01J6X14S34TP3H6Z4S3AVHJSMY",
+		"01J6X14S355M2R0GP5WFX6QX91",
+	},
+}
+
+// ContactsDeleteResponse is the body for a DELETE request response from `/contacts`
+type ContactsDeleteResponse struct {
+	CountAffected int `json:"count"`
+	rout.Reply
+}
+
+// ExampleContactsDeleteSuccessResponse is an example of a DELETE request response body from `/contacts`
+var ExampleContactsDeleteSuccessResponse = ContactsDeleteResponse{
+	Reply: rout.Reply{Success: true},
 }
