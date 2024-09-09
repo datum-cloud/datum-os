@@ -14,8 +14,6 @@ require (
 	github.com/alicebob/miniredis/v2 v2.33.0
 	github.com/brianvoe/gofakeit/v7 v7.0.4
 	github.com/bytedance/sonic v1.12.1
-	github.com/datum-cloud/echo-prometheus/v5 v5.0.1
-	github.com/datumforge/echox v0.0.0-20231205180954-6e7ee4c4d965
 	github.com/dustinkirkland/golang-petname v0.0.0-20240428194347-eebcea082ee0
 	github.com/flume/enthistory v0.15.3
 	github.com/gertd/go-pluralize v0.2.1
@@ -62,7 +60,7 @@ require (
 	go.opentelemetry.io/otel/sdk v1.28.0
 	go.uber.org/zap v1.27.0
 	golang.org/x/oauth2 v0.22.0
-	golang.org/x/term v0.23.0
+	golang.org/x/term v0.24.0
 	google.golang.org/api v0.192.0
 	google.golang.org/protobuf v1.34.2
 	modernc.org/sqlite v1.32.0
@@ -282,13 +280,13 @@ require (
 	go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracehttp v1.28.0
 	go.opentelemetry.io/otel/exporters/stdout/stdouttrace v1.28.0
 	gocloud.dev v0.37.0
-	golang.org/x/crypto v0.26.0
-	golang.org/x/exp v0.0.0-20240808152545-0cdaa3abc0fa
-	golang.org/x/mod v0.20.0 // indirect
-	golang.org/x/net v0.28.0
-	golang.org/x/sys v0.23.0 // indirect
-	golang.org/x/text v0.17.0
+	golang.org/x/crypto v0.27.0
+	golang.org/x/exp v0.0.0-20240909161429-701f63a606c0
+	golang.org/x/mod v0.21.0 // indirect
+	golang.org/x/net v0.29.0
+	golang.org/x/sys v0.25.0 // indirect
+	golang.org/x/text v0.18.0
 	golang.org/x/time v0.6.0
-	golang.org/x/tools v0.24.0
+	golang.org/x/tools v0.25.0
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
