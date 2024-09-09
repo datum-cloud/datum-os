@@ -18,7 +18,7 @@ import { Datum } from '@repo/types'
 
 import { formatDate } from '@/utils/date'
 
-import ContactDropdownMenu from './contact-dropdown'
+import ContactsTableDropdown from './contacts-table-dropdown'
 import { tableStyles } from './table.styles'
 import { tagStyles } from './tag.styles'
 
@@ -239,12 +239,12 @@ export const CONTACT_COLUMNS: ColumnDef<Datum.Contact>[] = [
     cell: ({ cell }) => {
       const id = cell.getValue() as Datum.ContactId
 
-      return <ContactDropdownMenu id={id} />
+      return <ContactsTableDropdown id={id} />
     },
   },
 ]
 
-export const ContactsTable = ({
+const ContactsTable = ({
   contacts,
   globalFilter,
   setGlobalFilter,
@@ -273,3 +273,5 @@ export const ContactsTable = ({
     />
   )
 }
+
+export default ContactsTable

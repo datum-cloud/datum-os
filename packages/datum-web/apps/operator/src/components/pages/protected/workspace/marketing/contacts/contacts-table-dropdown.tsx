@@ -28,11 +28,11 @@ import { Button } from '@repo/ui/button'
 
 import { pageStyles } from './page.styles'
 
-type ContactDropdownProps = {
+type ContactsTableDropdownProps = {
   id: Datum.ContactId
 }
 
-const ContactDropdownMenu = ({ id }: ContactDropdownProps) => {
+const ContactsTableDropdown = ({ id }: ContactsTableDropdownProps) => {
   const {
     accordionContainer,
     accordionContent,
@@ -103,4 +103,4 @@ const ContactDropdownMenu = ({ id }: ContactDropdownProps) => {
   )
 }
 
-export default ContactDropdownMenu
+export default ContactsTableDropdown

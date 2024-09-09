@@ -8,11 +8,11 @@ import { Form, useForm, zodResolver } from '@repo/ui/form'
 
 import { SearchFormInput, SearchFormSchema } from '@/utils/schemas'
 
-type ContactSearchProps = {
+type ContactsSearchProps = {
   search(input: string): void
 }
 
-const ContactSearch = ({ search }: ContactSearchProps) => {
+const ContactsSearch = ({ search }: ContactsSearchProps) => {
   const [openSearch, setOpenSearch] = useState(false)
   const form = useForm<SearchFormInput>({
     mode: 'onSubmit',
@@ -66,4 +66,4 @@ const ContactSearch = ({ search }: ContactSearchProps) => {
   )
 }
 
-export default ContactSearch
+export default ContactsSearch

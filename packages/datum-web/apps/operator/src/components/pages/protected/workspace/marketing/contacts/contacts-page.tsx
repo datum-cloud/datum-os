@@ -8,8 +8,8 @@ import type { Datum } from '@repo/types'
 import { useContacts } from '@/hooks/useContacts'
 import PageTitle from '@/components/page-title'
 
-import ContactControls from './contact-controls'
-import { ContactsTable } from './contacts-table'
+import ContactsControls from './contacts-controls'
+import ContactsTable from './contacts-table'
 import { pageStyles } from './page.styles'
 
 const ContactsPage: React.FC = () => {
@@ -24,7 +24,7 @@ const ContactsPage: React.FC = () => {
     <div className={wrapper()}>
       <div className={header()}>
         <PageTitle title="Contacts" />
-        <ContactControls search={setQuery} />
+        <ContactsControls search={setQuery} />
       </div>
       {!error && !isLoading && (
         <ContactsTable

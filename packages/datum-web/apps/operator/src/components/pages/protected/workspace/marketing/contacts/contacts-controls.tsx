@@ -25,16 +25,16 @@ import {
   AccordionTrigger,
 } from '@/components/shared/sidebar/sidebar-accordion/sidebar-accordion'
 
-import AddContactDialog from './contact-add-dialog'
-import ImportContactsDialog from './contact-import-dialog'
-import ContactSearch from './contact-search'
+import AddContactDialog from './contacts-add-dialog'
+import ImportContactsDialog from './contacts-import-dialog'
+import ContactsSearch from './contacts-search'
 import { pageStyles } from './page.styles'
 
-type ContactControlsProps = {
+type ContactsControlsProps = {
   search(query: string): void
 }
 
-const ContactControls = ({ search }: ContactControlsProps) => {
+const ContactsControls = ({ search }: ContactsControlsProps) => {
   const {
     accordionContainer,
     accordionContent,
@@ -84,7 +84,7 @@ const ContactControls = ({ search }: ContactControlsProps) => {
   return (
     <>
       <div className={contactControls()}>
-        <ContactSearch search={search} />
+        <ContactsSearch search={search} />
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" icon={<ChevronDown />}>
@@ -186,4 +186,4 @@ const ContactControls = ({ search }: ContactControlsProps) => {
   )
 }
 
-export default ContactControls
+export default ContactsControls
