@@ -135,7 +135,13 @@ func (h *Handler) ContactsDelete(ctx echo.Context) error {
 
 	h.Logger.Debugf("Deleted %d Contacts, %s", affected, IDs)
 
-	return h.NoContent(ctx)
+	return h.Success(
+		ctx,
+		&models.ContactsDeleteResponse{
+			Reply:         rout.Reply{Success: true},
+			CountAffected: affected,
+		},
+	)
 }
 
 func (h *Handler) BindContactsDelete() *openapi3.Operation {
