@@ -49,19 +49,19 @@ func (h *Handler) BindContactsGet() *openapi3.Operation {
 
 func contactCreateFromContactData(cd *models.Contact, cc *generated.ContactCreate,
 ) *generated.ContactCreate {
-	c := func(from *string, to func(string)) {
-		if len(*from) > 0 {
-			to(*from)
+	c := func(from string, to func(string)) {
+		if len(from) > 0 {
+			to(from)
 		}
 	}
 
 	m := cc.Mutation()
-	c(&cd.FullName, m.SetFullName)
-	c(&cd.Title, m.SetTitle)
-	c(&cd.Company, m.SetCompany)
-	c(&cd.Email, m.SetEmail)
-	c(&cd.PhoneNumber, m.SetPhoneNumber)
-	c(&cd.Address, m.SetAddress)
+	c(cd.FullName, m.SetFullName)
+	c(cd.Title, m.SetTitle)
+	c(cd.Company, m.SetCompany)
+	c(cd.Email, m.SetEmail)
+	c(cd.PhoneNumber, m.SetPhoneNumber)
+	c(cd.Address, m.SetAddress)
 
 	if len(cd.Status) > 0 {
 		m.SetStatus(*enums.ToUserStatus(cd.Status))
@@ -110,6 +110,59 @@ func (h *Handler) BindContactsPost() *openapi3.Operation {
 	contactsPost.AddResponse(http.StatusUnauthorized, unauthorized())
 
 	return contactsPost
+}
+
+func (h *Handler) ContactsPut(ctx echo.Context) error {
+	contacts := models.ContactsPutRequest{}
+	err := ctx.Bind(&contacts)
+	if err != nil {
+		return h.BadRequest(ctx, err)
+	}
+
+	tx := transaction.FromContext(ctx.Request().Context())
+	updatedContacts := models.ContactsPutResponse{}
+	for _, contact := range contacts.Contacts {
+		updatedContact, err := tx.Contact.UpdateOneID(contact.ID).
+			SetFullName(contact.FullName).
+			SetTitle(contact.Title).
+			SetCompany(contact.Company).
+			SetEmail(contact.Email).
+			SetPhoneNumber(contact.PhoneNumber).
+			SetAddress(contact.Address).
+			SetNillableStatus(enums.ToUserStatus(contact.Status)).
+			Save(ctx.Request().Context())
+		if err != nil {
+			return h.InternalServerError(ctx, err)
+		}
+
+		h.Logger.Debugf("Updated Contact, %s", updatedContact)
+
+		updatedContacts.Count += 1
+		updatedContacts.Contacts = append(updatedContacts.Contacts, models.ContactFromGeneratedContact(updatedContact))
+	}
+
+	updatedContacts.Success = true
+	return h.Success(ctx, updatedContacts)
+}
+
+func (h *Handler) BindContactsPut() *openapi3.Operation {
+	contactsPut := openapi3.NewOperation()
+	contactsPut.Description = "Update Contacts (Full Update)"
+	contactsPut.OperationID = "ContactsPut"
+	contactsPut.Security = &openapi3.SecurityRequirements{
+		openapi3.SecurityRequirement{
+			"bearerAuth": []string{},
+		},
+	}
+
+	h.AddRequestBody("ContactsPutRequest", models.ExampleContactsPutRequest, contactsPut)
+
+	h.AddResponse("ContactsPutResponse", "success", models.ExampleContactsPutSuccessResponse, contactsPut, http.StatusOK)
+	contactsPut.AddResponse(http.StatusBadRequest, badRequest())
+	contactsPut.AddResponse(http.StatusInternalServerError, internalServerError())
+	contactsPut.AddResponse(http.StatusUnauthorized, unauthorized())
+
+	return contactsPut
 }
 
 func (h *Handler) ContactsDelete(ctx echo.Context) error {
