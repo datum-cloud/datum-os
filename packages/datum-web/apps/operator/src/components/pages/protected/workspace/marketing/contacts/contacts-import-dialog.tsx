@@ -5,8 +5,6 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@repo/ui/dialog'
-import { Label } from '@repo/ui/label'
-import { Input } from '@repo/ui/input'
 import { Button } from '@repo/ui/button'
 import Link from 'next/link'
 

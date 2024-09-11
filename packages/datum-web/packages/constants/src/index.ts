@@ -21,6 +21,8 @@ export const OPERATOR_API_ROUTES = {
   lists: '/api/auth/lists',
 }
 
+export const mockLists = ['Admin', 'Newsletter', 'Developers', 'Promo']
+
 export const TEL_REGEX =
   /^([+]?[\s0-9]+)?(\d{3}|[(]?[0-9]+[)])?([-]?[\s]?[0-9])+$/
 

@@ -29,7 +29,7 @@ import {
 import { Datum } from '@repo/types'
 import { createContacts } from '@/query/contacts'
 
-import { formStyles } from './form.styles'
+import { formStyles } from './page.styles'
 
 type AddContactDialogProps = {
   open: boolean

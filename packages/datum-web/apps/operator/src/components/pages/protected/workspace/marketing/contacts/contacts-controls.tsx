@@ -1,15 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import {
-  Check,
-  ChevronDown,
-  Filter,
-  Import,
-  Plus,
-  Trash,
-  User,
-} from 'lucide-react'
+import { Check, ChevronDown, Import, Plus, Trash, User } from 'lucide-react'
 
 import { Button } from '@repo/ui/button'
 import {
@@ -26,9 +18,11 @@ import {
 } from '@/components/shared/sidebar/sidebar-accordion/sidebar-accordion'
 
 import AddContactDialog from './contacts-add-dialog'
+import FilterContactDialog from './contacts-filter-dialog'
 import ImportContactsDialog from './contacts-import-dialog'
 import ContactsSearch from './contacts-search'
 import { pageStyles } from './page.styles'
+import { mockLists } from '@repo/constants'
 
 type ContactsControlsProps = {
   search(query: string): void
@@ -37,7 +31,8 @@ type ContactsControlsProps = {
 const ContactsControls = ({ search }: ContactsControlsProps) => {
   const {
     accordionContainer,
-    accordionContent,
+    accordionContentOuter,
+    accordionContentInner,
     accordionTrigger,
     contactControls,
     contactDropdownItem,
@@ -45,6 +40,7 @@ const ContactsControls = ({ search }: ContactsControlsProps) => {
   } = pageStyles()
   const [_openContactDialog, _setOpenContactDialog] = useState(false)
   const [_openImportDialog, _setOpenImportDialog] = useState(false)
+  const [selectedLists, setSelectedLists] = useState<string[]>([])
 
   function handleExport() {
     // TODO:Export files
@@ -141,38 +137,51 @@ const ContactsControls = ({ search }: ContactsControlsProps) => {
                   </div>
                   <ChevronDown size={18} className={contactDropdownIcon()} />
                 </AccordionTrigger>
-                <AccordionContent className={accordionContent()}>
-                  <Button
-                    variant="success"
-                    icon={<Check size={10} className="leading-none" />}
-                    iconPosition="left"
-                    size="tag"
-                  >
-                    Newsletter
-                  </Button>
-                  <Button variant="tag" size="tag">
-                    Admin
-                  </Button>
-                  <Button variant="tag" size="tag">
-                    Cardholders
-                  </Button>
-                  <Button variant="tag" size="tag">
-                    Developers
-                  </Button>
-                  <Button variant="tag" size="tag">
-                    Free Plan
-                  </Button>
-                  <Button variant="tag" size="tag">
-                    To Renew
-                  </Button>
+                <AccordionContent className={accordionContentOuter()}>
+                  <div className={accordionContentInner()}>
+                    {/* TODO: Replace mock lists */}
+                    {mockLists.map((list) => {
+                      const isSelected = selectedLists.includes(list)
+
+                      if (isSelected) {
+                        const newSelectedLists = selectedLists.filter(
+                          (selectedList) => list !== selectedList,
+                        )
+
+                        return (
+                          <Button
+                            variant="success"
+                            icon={<Check size={10} className="leading-none" />}
+                            iconPosition="left"
+                            className="transition-all duration-0"
+                            onClick={() => setSelectedLists(newSelectedLists)}
+                            size="tag"
+                          >
+                            {list}
+                          </Button>
+                        )
+                      }
+
+                      const newSelectedLists = [...selectedLists, list]
+
+                      return (
+                        <Button
+                          variant="tag"
+                          size="tag"
+                          className="transition-all duration-0"
+                          onClick={() => setSelectedLists(newSelectedLists)}
+                        >
+                          {list}
+                        </Button>
+                      )
+                    })}
+                  </div>
                 </AccordionContent>
               </AccordionItem>
             </Accordion>
           </DropdownMenuContent>
         </DropdownMenu>
-        <Button variant="sunglow" icon={<Filter />}>
-          Filter
-        </Button>
+        <FilterContactDialog />
       </div>
       <AddContactDialog
         open={_openContactDialog}

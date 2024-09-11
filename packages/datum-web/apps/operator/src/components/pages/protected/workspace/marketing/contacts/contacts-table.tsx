@@ -20,8 +20,7 @@ import { formatDate } from '@/utils/date'
 import { sortAlphabetically } from '@/utils/sort'
 
 import ContactsTableDropdown from './contacts-table-dropdown'
-import { tableStyles } from './table.styles'
-import { tagStyles } from './tag.styles'
+import { tableStyles, tagStyles } from './page.styles'
 
 type ContactsTableProps = {
   contacts: Datum.Contact[]

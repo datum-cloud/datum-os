@@ -59,8 +59,19 @@ export namespace Datum {
     onboarding = 'ONBOARDING',
     inactive = 'INACTIVE',
     suspended = 'SUSPENDED',
-    deactivated = 'SUSPENDED',
+    deactivated = 'DEACTIVATED',
   }
+
+  export type OPERATOR =
+    | 'equals'
+    | 'doesNotEqual'
+    | 'contains'
+    | 'doesNotContain'
+    | 'greaterThan'
+    | 'greaterThanOrEqualTo'
+    | 'lessThan'
+    | 'lessThanOrEqualTo'
+    | 'empty'
 
   // TODO extend list type
   export type List = {

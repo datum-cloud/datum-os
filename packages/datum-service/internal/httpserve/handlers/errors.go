@@ -226,8 +226,3 @@ func (h *Handler) Success(ctx echo.Context, rep interface{}) error {
 func (h *Handler) Created(ctx echo.Context, rep interface{}) error {
 	return ctx.JSON(http.StatusCreated, rep)
 }
-
-// NoContent returns a 204 NoContent resposne with an empty response object.
-func (h *Handler) NoContent(ctx echo.Context) error {
-	return ctx.NoContent(http.StatusNoContent)
-}

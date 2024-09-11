@@ -29,7 +29,7 @@ import {
 import { Datum } from '@repo/types'
 import { createContacts } from '@/query/contacts'
 
-import { formStyles } from '../contacts/form.styles'
+import { formStyles } from '../contacts/page.styles'
 
 type EditContactDialogProps = {
   contact: Datum.Contact

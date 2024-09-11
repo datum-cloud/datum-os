@@ -1,6 +1,9 @@
-import { loadingStyles } from './loading.styles'
+import { LoadingSpinner } from '@repo/ui/loading-spinner'
 
 export const Loading = () => {
-  const { loader } = loadingStyles()
-  return <section className={loader()} />
+  return (
+    <section className="flex items-center justify-center h-full w-full">
+      <LoadingSpinner size={28} />
+    </section>
+  )
 }

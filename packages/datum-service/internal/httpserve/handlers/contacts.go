@@ -2,11 +2,8 @@ package handlers
 
 import (
 	"net/http"
-	"time"
 
 	"github.com/datum-cloud/datum-os/internal/ent/generated"
-	"github.com/datum-cloud/datum-os/internal/ent/generated/contact"
-	"github.com/datum-cloud/datum-os/pkg/auth"
 	echo "github.com/datum-cloud/datum-os/pkg/echox"
 	"github.com/datum-cloud/datum-os/pkg/enums"
 	"github.com/datum-cloud/datum-os/pkg/middleware/transaction"
@@ -105,58 +102,6 @@ func (h *Handler) BindContactsPost() *openapi3.Operation {
 	h.AddRequestBody("ContactsPostRequest", models.ExampleContactsPostRequest, contactsPost)
 
 	h.AddResponse("ContactsPostResponse", "success", models.ExampleContactsPostSuccessResponse, contactsPost, http.StatusOK)
-	contactsPost.AddResponse(http.StatusBadRequest, badRequest())
-	contactsPost.AddResponse(http.StatusInternalServerError, internalServerError())
-	contactsPost.AddResponse(http.StatusUnauthorized, unauthorized())
-
-	return contactsPost
-}
-
-func (h *Handler) ContactsDelete(ctx echo.Context) error {
-	IDs := models.ContactsDeleteRequest{}
-	err := ctx.Bind(&IDs)
-	if err != nil {
-		return h.BadRequest(ctx, err)
-	}
-
-	deletedBy, err := auth.GetUserIDFromContext(ctx.Request().Context())
-	if err != nil {
-		return h.InternalServerError(ctx, err)
-	}
-
-	affected, err := transaction.FromContext(ctx.Request().Context()).Contact.Update().
-		Where(contact.IDIn(IDs.ContactIDs...)).
-		SetDeletedAt(time.Now()).
-		SetDeletedBy(deletedBy).
-		Save(ctx.Request().Context())
-	if err != nil {
-		return h.InternalServerError(ctx, err)
-	}
-
-	h.Logger.Debugf("Deleted %d Contacts, %s", affected, IDs)
-
-	return h.Success(
-		ctx,
-		&models.ContactsDeleteResponse{
-			Reply:         rout.Reply{Success: true},
-			CountAffected: affected,
-		},
-	)
-}
-
-func (h *Handler) BindContactsDelete() *openapi3.Operation {
-	contactsPost := openapi3.NewOperation()
-	contactsPost.Description = "Delete Contacts"
-	contactsPost.OperationID = "ContactsDelete"
-	contactsPost.Security = &openapi3.SecurityRequirements{
-		openapi3.SecurityRequirement{
-			"bearerAuth": []string{},
-		},
-	}
-
-	h.AddRequestBody("ContactsDeleteRequest", models.ExampleContactsDeleteRequest, contactsPost)
-
-	h.AddResponse("ContactsDeleteResponse", "success", models.ExampleContactsDeleteSuccessResponse, contactsPost, http.StatusOK)
 	contactsPost.AddResponse(http.StatusBadRequest, badRequest())
 	contactsPost.AddResponse(http.StatusInternalServerError, internalServerError())
 	contactsPost.AddResponse(http.StatusUnauthorized, unauthorized())

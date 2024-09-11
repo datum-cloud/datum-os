@@ -1,6 +1,6 @@
 'use client'
 
-import React from 'react'
+import React, { useState } from 'react'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -27,15 +27,18 @@ import {
 import { Button } from '@repo/ui/button'
 
 import { pageStyles } from './page.styles'
+import { mockLists } from '@repo/constants'
 
 type ContactsTableDropdownProps = {
   id: Datum.ContactId
 }
 
 const ContactsTableDropdown = ({ id }: ContactsTableDropdownProps) => {
+  const [selectedLists, setSelectedLists] = useState<string[]>([])
   const {
     accordionContainer,
-    accordionContent,
+    accordionContentInner,
+    accordionContentOuter,
     accordionTrigger,
     contactDropdownItem,
     contactDropdownIcon,
@@ -70,30 +73,45 @@ const ContactsTableDropdown = ({ id }: ContactsTableDropdownProps) => {
                 </div>
                 <ChevronDown size={18} className={contactDropdownIcon()} />
               </AccordionTrigger>
-              <AccordionContent className={accordionContent()}>
-                <Button
-                  variant="success"
-                  icon={<Check size={10} className="leading-none" />}
-                  iconPosition="left"
-                  size="tag"
-                >
-                  Newsletter
-                </Button>
-                <Button variant="tag" size="tag">
-                  Admin
-                </Button>
-                <Button variant="tag" size="tag">
-                  Cardholders
-                </Button>
-                <Button variant="tag" size="tag">
-                  Developers
-                </Button>
-                <Button variant="tag" size="tag">
-                  Free Plan
-                </Button>
-                <Button variant="tag" size="tag">
-                  To Renew
-                </Button>
+              <AccordionContent className={accordionContentOuter()}>
+                <div className={accordionContentInner()}>
+                  {/* TODO: Replace mock lists */}
+                  {mockLists.map((list) => {
+                    const isSelected = selectedLists.includes(list)
+
+                    if (isSelected) {
+                      const newSelectedLists = selectedLists.filter(
+                        (selectedList) => list !== selectedList,
+                      )
+
+                      return (
+                        <Button
+                          variant="success"
+                          icon={<Check size={10} className="leading-none" />}
+                          iconPosition="left"
+                          className="transition-all duration-0"
+                          onClick={() => setSelectedLists(newSelectedLists)}
+                          size="tag"
+                        >
+                          {list}
+                        </Button>
+                      )
+                    }
+
+                    const newSelectedLists = [...selectedLists, list]
+
+                    return (
+                      <Button
+                        variant="tag"
+                        size="tag"
+                        className="transition-all duration-0"
+                        onClick={() => setSelectedLists(newSelectedLists)}
+                      >
+                        {list}
+                      </Button>
+                    )
+                  })}
+                </div>
               </AccordionContent>
             </AccordionItem>
           </Accordion>

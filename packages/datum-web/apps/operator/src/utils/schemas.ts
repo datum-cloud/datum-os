@@ -53,11 +53,34 @@ export const ContactUpdateSchema = ContactCreationSchema.extend({
   id: z.string().describe('Contact ID'),
 })
 
+export const ContactFilterFormSchema = z.object({
+  filters: z.record(
+    z.string().describe('Field to query from the Contact'),
+    z.object({
+      value: z.any().describe('Query value'),
+      operator: z
+        .enum([
+          'equals',
+          'doesNotEqual',
+          'contains',
+          'doesNotContain',
+          'greaterThan',
+          'greaterThanOrEqualTo',
+          'lessThan',
+          'lessThanOrEqualTo',
+          'empty',
+        ])
+        .describe('Operator to use for the query'),
+    }),
+  ),
+})
+
 export const SearchFormSchema = z.object({
   query: z.string().describe('The search query').optional(),
 })
 
 export type ContactCreationInput = z.infer<typeof ContactCreationSchema>
+export type ContactFilterInput = z.infer<typeof ContactFilterFormSchema>
 export type ContactCreationFormInput = z.infer<typeof ContactCreationFormSchema>
 export type ContactUpdateInput = z.infer<typeof ContactUpdateSchema>
 export type SearchFormInput = z.infer<typeof SearchFormSchema>
