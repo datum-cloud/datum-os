@@ -79,7 +79,7 @@ export namespace Datum {
     name: string
   }
 
-  export type Contact = {
+  export interface Contact {
     id: ContactId
     fullName: string
     title: string
@@ -92,6 +92,13 @@ export namespace Datum {
     deletedAt?: Date
     source: string
     status: Status
-    lists: string[]
+    lists: ListId[]
+  }
+
+  export interface ContactCreateInput extends Partial<Contact> {
+    email: Email
+  }
+  export interface ContactEditInput extends ContactCreateInput {
+    id: ContactId
   }
 }

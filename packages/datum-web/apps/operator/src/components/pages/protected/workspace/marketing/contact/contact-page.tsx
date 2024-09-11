@@ -140,6 +140,7 @@ const ContactPage = ({ id }: ContactPageProps) => {
 
                           return (
                             <Button
+                              key={list}
                               variant="success"
                               icon={
                                 <Check size={10} className="leading-none" />
@@ -158,6 +159,7 @@ const ContactPage = ({ id }: ContactPageProps) => {
 
                         return (
                           <Button
+                            key={list}
                             variant="tag"
                             size="tag"
                             className="transition-all duration-0"
@@ -176,7 +178,9 @@ const ContactPage = ({ id }: ContactPageProps) => {
         </div>
         <div className="w-full flex gap-2 flex-wrap">
           {lists.map((list) => (
-            <span className={tagStyles()}>{list}</span>
+            <span key={list} className={tagStyles()}>
+              {list}
+            </span>
           ))}
         </div>
       </Panel>

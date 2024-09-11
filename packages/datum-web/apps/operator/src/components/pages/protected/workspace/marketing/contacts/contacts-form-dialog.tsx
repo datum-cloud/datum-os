@@ -22,21 +22,25 @@ import {
   useForm,
   zodResolver,
 } from '@repo/ui/form'
-import {
-  ContactCreationFormInput,
-  ContactCreationFormSchema,
-} from '@/utils/schemas'
+import { ContactFormInput, ContactFormSchema } from '@/utils/schemas'
 import { Datum } from '@repo/types'
-import { createContacts } from '@/query/contacts'
+import { createContacts, editContacts } from '@/query/contacts'
 
 import { formStyles } from './page.styles'
 
-type AddContactDialogProps = {
+type ContactDialogFormProps = {
   open: boolean
   setOpen(input: boolean): void
+  contact?: Datum.Contact
 }
 
-const AddContactDialog = ({ open, setOpen }: AddContactDialogProps) => {
+const ContactFormDialog = ({
+  contact,
+  open,
+  setOpen,
+}: ContactDialogFormProps) => {
+  console.log(contact)
+  const isNew = !contact || !contact.id
   const {
     form: formStyle,
     fieldsContainer,
@@ -47,13 +51,19 @@ const AddContactDialog = ({ open, setOpen }: AddContactDialogProps) => {
   const organizationId =
     session?.user.organization ?? ('' as Datum.OrganisationId)
 
-  const form = useForm<ContactCreationFormInput>({
-    resolver: zodResolver(ContactCreationFormSchema),
+  const names = contact?.fullName?.split(' ')
+  const [name, ...otherNames] = names || []
+
+  const form = useForm<ContactFormInput>({
+    resolver: zodResolver(ContactFormSchema),
     mode: 'onChange',
     defaultValues: {
       email: '',
       status: 'INACTIVE',
       source: 'form',
+      ...contact,
+      firstName: name,
+      lastName: otherNames.join(' '),
     },
   })
 
@@ -72,8 +82,12 @@ const AddContactDialog = ({ open, setOpen }: AddContactDialogProps) => {
     setValue('fullName', `${firstName || ''} ${lastName || ''}`)
   }, [firstName, lastName])
 
-  async function onSubmit(data: ContactCreationFormInput) {
-    await createContacts(organizationId, [data])
+  async function onSubmit(data: ContactFormInput) {
+    if (isNew) {
+      await createContacts(organizationId, [data])
+    } else {
+      await editContacts(organizationId, [data])
+    }
     setOpen(false)
     reset()
   }
@@ -87,7 +101,9 @@ const AddContactDialog = ({ open, setOpen }: AddContactDialogProps) => {
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Add a contact</DialogTitle>
+          <DialogTitle>
+            {isNew ? 'Add a contact' : 'Edit contact info'}
+          </DialogTitle>
           <DialogClose onClick={handleCancel} />
         </DialogHeader>
         <Form {...form}>
@@ -145,7 +161,7 @@ const AddContactDialog = ({ open, setOpen }: AddContactDialogProps) => {
                   full
                   className="w-2/3"
                 >
-                  Add contact
+                  {isNew ? 'Add contact' : 'Save'}
                 </Button>
               </DialogClose>
               <Button
@@ -164,4 +180,4 @@ const AddContactDialog = ({ open, setOpen }: AddContactDialogProps) => {
   )
 }
 
-export default AddContactDialog
+export default ContactFormDialog

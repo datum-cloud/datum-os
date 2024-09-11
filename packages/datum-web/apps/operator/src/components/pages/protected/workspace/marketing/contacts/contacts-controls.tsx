@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useId, useState } from 'react'
 import { Check, ChevronDown, Import, Plus, Trash, User } from 'lucide-react'
 
 import { Button } from '@repo/ui/button'
@@ -10,6 +10,9 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@repo/ui/dropdown-menu'
+import { mockLists } from '@repo/constants'
+import type { Datum } from '@repo/types'
+
 import {
   Accordion,
   AccordionContent,
@@ -17,18 +20,25 @@ import {
   AccordionTrigger,
 } from '@/components/shared/sidebar/sidebar-accordion/sidebar-accordion'
 
-import AddContactDialog from './contacts-add-dialog'
+import ContactFormDialog from './contacts-form-dialog'
 import FilterContactDialog from './contacts-filter-dialog'
 import ImportContactsDialog from './contacts-import-dialog'
 import ContactsSearch from './contacts-search'
 import { pageStyles } from './page.styles'
-import { mockLists } from '@repo/constants'
 
 type ContactsControlsProps = {
   search(query: string): void
+  onDelete(): void
+  onExport(): void
+  onListAddition(lists: Datum.ListId[]): void
 }
 
-const ContactsControls = ({ search }: ContactsControlsProps) => {
+const ContactsControls = ({
+  search,
+  onDelete,
+  onExport,
+  onListAddition,
+}: ContactsControlsProps) => {
   const {
     accordionContainer,
     accordionContentOuter,
@@ -41,21 +51,6 @@ const ContactsControls = ({ search }: ContactsControlsProps) => {
   const [_openContactDialog, _setOpenContactDialog] = useState(false)
   const [_openImportDialog, _setOpenImportDialog] = useState(false)
   const [selectedLists, setSelectedLists] = useState<string[]>([])
-
-  function handleExport() {
-    // TODO:Export files
-    console.log('Export Selected Files')
-  }
-
-  function handleDeletion() {
-    // TODO:Delete files
-    console.log('Delete Selected Files')
-  }
-
-  function handleListAddition() {
-    // TODO: Add to list
-    console.log('Add to list')
-  }
 
   function openContactDialog() {
     _setOpenContactDialog(true)
@@ -112,7 +107,7 @@ const ContactsControls = ({ search }: ContactsControlsProps) => {
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="px-2 py-2.5">
             <DropdownMenuItem
-              onClick={handleExport}
+              onClick={onExport}
               className={contactDropdownItem()}
             >
               <Import
@@ -122,7 +117,7 @@ const ContactsControls = ({ search }: ContactsControlsProps) => {
               Export
             </DropdownMenuItem>
             <DropdownMenuItem
-              onClick={handleDeletion}
+              onClick={onDelete}
               className={contactDropdownItem()}
             >
               <Trash size={18} className={contactDropdownIcon()} />
@@ -141,6 +136,7 @@ const ContactsControls = ({ search }: ContactsControlsProps) => {
                   <div className={accordionContentInner()}>
                     {/* TODO: Replace mock lists */}
                     {mockLists.map((list) => {
+                      const id = useId()
                       const isSelected = selectedLists.includes(list)
 
                       if (isSelected) {
@@ -150,6 +146,7 @@ const ContactsControls = ({ search }: ContactsControlsProps) => {
 
                         return (
                           <Button
+                            key={id}
                             variant="success"
                             icon={<Check size={10} className="leading-none" />}
                             iconPosition="left"
@@ -166,6 +163,7 @@ const ContactsControls = ({ search }: ContactsControlsProps) => {
 
                       return (
                         <Button
+                          key={id}
                           variant="tag"
                           size="tag"
                           className="transition-all duration-0"
@@ -183,7 +181,7 @@ const ContactsControls = ({ search }: ContactsControlsProps) => {
         </DropdownMenu>
         <FilterContactDialog />
       </div>
-      <AddContactDialog
+      <ContactFormDialog
         open={_openContactDialog}
         setOpen={setOpenContactDialog}
       />

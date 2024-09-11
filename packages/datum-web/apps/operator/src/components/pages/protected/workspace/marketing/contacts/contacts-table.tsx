@@ -21,11 +21,15 @@ import { sortAlphabetically } from '@/utils/sort'
 
 import ContactsTableDropdown from './contacts-table-dropdown'
 import { tableStyles, tagStyles } from './page.styles'
+import Link from 'next/link'
+import { getPathWithParams } from '@repo/common/routes'
+import { OPERATOR_APP_ROUTES } from '@repo/constants'
 
 type ContactsTableProps = {
   contacts: Datum.Contact[]
   globalFilter: string
   setGlobalFilter(input: string): void
+  onSelectionChange(contacts: Datum.Contact[]): void
 }
 
 const { header, checkboxContainer, link } = tableStyles()
@@ -110,17 +114,18 @@ export const CONTACT_COLUMNS: ColumnDef<Datum.Contact>[] = [
         children="Email"
       />
     ),
-    cell: ({ cell }) => {
+    cell: ({ cell, row }) => {
       const value = cell.getValue() as Datum.Email
+      const id = row.original.id
 
       return (
-        <a
-          href={`mailto:${value}`}
+        <Link
+          href={getPathWithParams(OPERATOR_APP_ROUTES.contact, { id })}
           className={link()}
           rel="noopener noreferrer"
         >
           {value}
-        </a>
+        </Link>
       )
     },
   },
@@ -238,10 +243,11 @@ export const CONTACT_COLUMNS: ColumnDef<Datum.Contact>[] = [
     enableGlobalFilter: false,
     enableSorting: false,
     header: '',
-    cell: ({ cell }) => {
+    cell: ({ cell, row }) => {
       const id = cell.getValue() as Datum.ContactId
+      const contact = row.original
 
-      return <ContactsTableDropdown id={id} />
+      return <ContactsTableDropdown contact={contact} />
     },
   },
 ]
@@ -250,6 +256,7 @@ const ContactsTable = ({
   contacts,
   globalFilter,
   setGlobalFilter,
+  onSelectionChange,
 }: ContactsTableProps) => {
   const [filteredContacts, setFilteredContacts] =
     useState<Datum.Contact[]>(contacts)
@@ -270,6 +277,7 @@ const ContactsTable = ({
       data={filteredContacts}
       layoutFixed
       bordered
+      onSelectionChange={onSelectionChange}
       highlightHeader
       showFooter
     />

@@ -1,5 +1,6 @@
 'use client'
 
+import { useSession } from 'next-auth/react'
 import React, { useState } from 'react'
 import {
   DropdownMenu,
@@ -17,7 +18,7 @@ import {
   Trash,
 } from 'lucide-react'
 
-import { Datum } from '@repo/types'
+import { mockLists } from '@repo/constants'
 import {
   Accordion,
   AccordionContent,
@@ -25,16 +26,23 @@ import {
   AccordionTrigger,
 } from '@/components/shared/sidebar/sidebar-accordion/sidebar-accordion'
 import { Button } from '@repo/ui/button'
+import { Datum } from '@repo/types'
+
+import { removeContacts } from '@/query/contacts'
 
 import { pageStyles } from './page.styles'
-import { mockLists } from '@repo/constants'
+import ContactFormDialog from './contacts-form-dialog'
 
 type ContactsTableDropdownProps = {
-  id: Datum.ContactId
+  contact: Datum.Contact
 }
 
-const ContactsTableDropdown = ({ id }: ContactsTableDropdownProps) => {
-  const [selectedLists, setSelectedLists] = useState<string[]>([])
+const ContactsTableDropdown = ({ contact }: ContactsTableDropdownProps) => {
+  const { id, lists } = contact
+  const [_openEditDialog, _setOpenEditDialog] = useState(false)
+  const { data: session } = useSession()
+  const organizationId =
+    session?.user.organization ?? ('' as Datum.OrganisationId)
   const {
     accordionContainer,
     accordionContentInner,
@@ -44,7 +52,26 @@ const ContactsTableDropdown = ({ id }: ContactsTableDropdownProps) => {
     contactDropdownIcon,
   } = pageStyles()
 
-  // TODO: Add actions...
+  async function deleteContact() {
+    await removeContacts(organizationId, [id])
+  }
+
+  async function unsubscribeAll() {
+    // TODO:
+    console.log('Unsubscribe all')
+  }
+
+  async function setLists(newLists: Datum.ListId[]) {
+    // TODO:
+    console.log('New lists array', newLists)
+  }
+
+  function setOpenEditDialog(input: boolean) {
+    _setOpenEditDialog(input)
+    // NOTE: This is needed to close the dialog without removing pointer events per https://github.com/shadcn-ui/ui/issues/468
+    setTimeout(() => (document.body.style.pointerEvents = ''), 500)
+  }
+
   return (
     <div className="flex items-center justify-center">
       <DropdownMenu>
@@ -52,15 +79,24 @@ const ContactsTableDropdown = ({ id }: ContactsTableDropdownProps) => {
           <Ellipsis className={contactDropdownIcon()} />
         </DropdownMenuTrigger>
         <DropdownMenuContent className="py-2.5 px-2" align="end">
-          <DropdownMenuItem className={contactDropdownItem()}>
+          <DropdownMenuItem
+            className={contactDropdownItem()}
+            onClick={unsubscribeAll}
+          >
             <BellMinus size={18} className={contactDropdownIcon()} />
             Unsubscribe from all
           </DropdownMenuItem>
-          <DropdownMenuItem className={contactDropdownItem()}>
+          <DropdownMenuItem
+            className={contactDropdownItem()}
+            onClick={() => setOpenEditDialog(true)}
+          >
             <Pencil size={18} className={contactDropdownIcon()} />
             Edit
           </DropdownMenuItem>
-          <DropdownMenuItem className={contactDropdownItem()}>
+          <DropdownMenuItem
+            className={contactDropdownItem()}
+            onClick={deleteContact}
+          >
             <Trash size={18} className={contactDropdownIcon()} />
             Delete Item
           </DropdownMenuItem>
@@ -77,20 +113,21 @@ const ContactsTableDropdown = ({ id }: ContactsTableDropdownProps) => {
                 <div className={accordionContentInner()}>
                   {/* TODO: Replace mock lists */}
                   {mockLists.map((list) => {
-                    const isSelected = selectedLists.includes(list)
+                    const isSelected = lists.includes(list)
 
                     if (isSelected) {
-                      const newSelectedLists = selectedLists.filter(
+                      const newSelectedLists = lists.filter(
                         (selectedList) => list !== selectedList,
                       )
 
                       return (
                         <Button
+                          key={list}
                           variant="success"
                           icon={<Check size={10} className="leading-none" />}
                           iconPosition="left"
                           className="transition-all duration-0"
-                          onClick={() => setSelectedLists(newSelectedLists)}
+                          onClick={setLists.bind(null, newSelectedLists)}
                           size="tag"
                         >
                           {list}
@@ -98,14 +135,15 @@ const ContactsTableDropdown = ({ id }: ContactsTableDropdownProps) => {
                       )
                     }
 
-                    const newSelectedLists = [...selectedLists, list]
+                    const newSelectedLists = [...lists, list]
 
                     return (
                       <Button
+                        key={list}
                         variant="tag"
                         size="tag"
                         className="transition-all duration-0"
-                        onClick={() => setSelectedLists(newSelectedLists)}
+                        onClick={setLists.bind(null, newSelectedLists)}
                       >
                         {list}
                       </Button>
@@ -117,6 +155,11 @@ const ContactsTableDropdown = ({ id }: ContactsTableDropdownProps) => {
           </Accordion>
         </DropdownMenuContent>
       </DropdownMenu>
+      <ContactFormDialog
+        contact={contact}
+        open={_openEditDialog}
+        setOpen={setOpenEditDialog}
+      />
     </div>
   )
 }

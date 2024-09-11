@@ -5,7 +5,7 @@ import { camelize, decamelize } from '@repo/common/keys'
 import { getPathWithParams } from '@repo/common/routes'
 import { Datum } from '@repo/types'
 import { queryClient } from '@/query/client'
-import type { ContactCreationInput } from '@/utils/schemas'
+import type { ContactInput } from '@/utils/schemas'
 
 export async function getContact(
   id: Datum.ContactId,
@@ -52,7 +52,7 @@ export async function getContacts(): Promise<Datum.Contact[]> {
 
 export async function createContacts(
   organisationId: Datum.OrganisationId,
-  input: ContactCreationInput[],
+  input: ContactInput[],
 ) {
   const formattedContacts = input.map((contact) => decamelize(contact))
 
@@ -73,22 +73,40 @@ export async function createContacts(
   return contacts
 }
 
-export async function updateContact(id: Datum.ContactId, updates: any) {
-  console.log(`Update ${id} with:`, JSON.stringify(updates))
+export async function editContacts(
+  id: Datum.OrganisationId,
+  input: ContactInput[],
+) {
+  console.log(`Contact updates:`, JSON.stringify(input))
 
-  // TODO: Handle update and reinstate the below
-  // await queryClient.invalidateQueries({ queryKey: getContactKey(id) })
-  // return contact
+  const formattedInput = decamelize({
+    contacts: input,
+  })
+
+  const response = await fetch(OPERATOR_API_ROUTES.editContacts, {
+    method: 'PUT',
+    body: JSON.stringify(formattedInput),
+  })
+
+  await queryClient.invalidateQueries({ queryKey: getContactsKey(id) })
+
+  return response
 }
 
 export async function removeContacts(
   id: Datum.OrganisationId,
   input: Datum.ContactId[],
 ) {
-  console.log('Delete', input)
+  const formattedInput = decamelize({
+    contactIds: input,
+  })
 
-  // TODO: handle delete and reinstate the below
-  // await queryClient.invalidateQueries({ queryKey: getContactsKey(id) });
+  await fetch(OPERATOR_API_ROUTES.deleteContacts, {
+    method: 'DELETE',
+    body: JSON.stringify(formattedInput),
+  })
+
+  await queryClient.invalidateQueries({ queryKey: getContactsKey(id) })
 }
 
 export function getContactKey(id: Datum.ContactId): QueryKey {

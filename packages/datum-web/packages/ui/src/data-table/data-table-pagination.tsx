@@ -61,95 +61,97 @@ export function DataTablePagination<TData>({
           </SelectContent>
         </Select>
       </div>
-      <div className={paginationColumn()}>
-        <div className={paginationContainer()}>
-          <Button
-            variant="blackberryXs"
-            size="xs"
-            className={paginationButton()}
-            onClick={() => table.previousPage()}
-            disabled={!table.getCanPreviousPage()}
-          >
-            <ChevronLeftIcon className="h-4 w-4" />
-          </Button>
-          {/* First Button */}
-          <Button
-            variant="blackberryXs"
-            size="xs"
-            className={paginationButton()}
-            onClick={() => table.setPageIndex(firstPage)}
-            disabled={currentPage === firstPage}
-          >
-            {firstPage + 1}
-          </Button>
-          {/*  Ellipsis for pages before */}
-          {showEllipses && currentPage > 2 && (
-            <div className={paginationEllipses()}>
-              <Ellipsis size={14} className="text-blackberry-400" />
-            </div>
-          )}
-          {/* Previous Button */}
-          {prevPage > 0 && (
+      {lastPage > 0 && (
+        <div className={paginationColumn()}>
+          <div className={paginationContainer()}>
             <Button
               variant="blackberryXs"
               size="xs"
               className={paginationButton()}
-              onClick={() => table.setPageIndex(prevPage)}
+              onClick={() => table.previousPage()}
+              disabled={!table.getCanPreviousPage()}
             >
-              {prevPage + 1}
+              <ChevronLeftIcon className="h-4 w-4" />
             </Button>
-          )}
-          {/* Current Button - Placeholder only */}
-          {currentPage > 0 && currentPage < lastPage && (
+            {/* First Button */}
             <Button
               variant="blackberryXs"
               size="xs"
               className={paginationButton()}
-              onClick={() => table.setPageIndex(currentPage)}
-              disabled
+              onClick={() => table.setPageIndex(firstPage)}
+              disabled={currentPage === firstPage}
             >
-              {currentPage + 1}
+              {firstPage + 1}
             </Button>
-          )}
-          {/* Next Button */}
-          {nextPage < lastPage && (
+            {/*  Ellipsis for pages before */}
+            {showEllipses && currentPage > 2 && (
+              <div className={paginationEllipses()}>
+                <Ellipsis size={14} className="text-blackberry-400" />
+              </div>
+            )}
+            {/* Previous Button */}
+            {prevPage > 0 && (
+              <Button
+                variant="blackberryXs"
+                size="xs"
+                className={paginationButton()}
+                onClick={() => table.setPageIndex(prevPage)}
+              >
+                {prevPage + 1}
+              </Button>
+            )}
+            {/* Current Button - Placeholder only */}
+            {currentPage > 0 && currentPage < lastPage && (
+              <Button
+                variant="blackberryXs"
+                size="xs"
+                className={paginationButton()}
+                onClick={() => table.setPageIndex(currentPage)}
+                disabled
+              >
+                {currentPage + 1}
+              </Button>
+            )}
+            {/* Next Button */}
+            {nextPage < lastPage && (
+              <Button
+                variant="blackberryXs"
+                size="xs"
+                className={paginationButton()}
+                onClick={() => table.setPageIndex(nextPage)}
+              >
+                {nextPage + 1}
+              </Button>
+            )}
+            {/*  Ellipsis for pages after */}
+            {showEllipses && currentPage < lastPage - 2 && (
+              <div className={paginationEllipses()}>
+                <Ellipsis size={14} className="text-blackberry-400" />
+              </div>
+            )}
+            {lastPage > 1 && (
+              <Button
+                variant="blackberryXs"
+                size="xs"
+                className={paginationButton()}
+                onClick={() => table.setPageIndex(lastPage)}
+                disabled={currentPage === lastPage}
+              >
+                {lastPage + 1}
+              </Button>
+            )}
             <Button
               variant="blackberryXs"
               size="xs"
-              className={paginationButton()}
-              onClick={() => table.setPageIndex(nextPage)}
+              className="h-8 w-8 p-0 flex"
+              onClick={() => table.nextPage()}
+              disabled={!table.getCanNextPage()}
             >
-              {nextPage + 1}
+              <ChevronRightIcon className="h-4 w-4" />
             </Button>
-          )}
-          {/*  Ellipsis for pages after */}
-          {showEllipses && currentPage < lastPage - 2 && (
-            <div className={paginationEllipses()}>
-              <Ellipsis size={14} className="text-blackberry-400" />
-            </div>
-          )}
-          {lastPage > 1 && (
-            <Button
-              variant="blackberryXs"
-              size="xs"
-              className={paginationButton()}
-              onClick={() => table.setPageIndex(lastPage)}
-              disabled={currentPage === lastPage}
-            >
-              {lastPage + 1}
-            </Button>
-          )}
-          <Button
-            variant="blackberryXs"
-            size="xs"
-            className="h-8 w-8 p-0 flex"
-            onClick={() => table.nextPage()}
-            disabled={!table.getCanNextPage()}
-          >
-            <ChevronRightIcon className="h-4 w-4" />
-          </Button>
+          </div>
         </div>
-      </div>
+      )}
     </div>
   )
 }

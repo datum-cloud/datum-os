@@ -7,11 +7,9 @@ import { HydrationBoundary } from '@/query/hydration-boundary'
 import { getServerQueryClient } from '@/query/client'
 import { getContact, getContactKey } from '@/query/contacts'
 
-type ContactPageProps = {
-  id: Datum.ContactId
-}
+type ContactPageProps = { params: { id: Datum.ContactId } }
 
-const Page = async ({ id }: ContactPageProps) => {
+const Page = async ({ params: { id } }: ContactPageProps) => {
   const client = getServerQueryClient()
 
   await client.prefetchQuery({

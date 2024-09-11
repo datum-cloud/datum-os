@@ -1,7 +1,7 @@
 'use client'
 
 import { EyeIcon } from 'lucide-react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -56,6 +56,7 @@ interface DataTableProps<TData, TValue> {
   globalFilterFn?: any
   globalFilter?: string
   setGlobalFilter?(input: string): void
+  onSelectionChange?(selection: TData[]): void
 }
 
 declare module '@tanstack/react-table' {
@@ -80,8 +81,9 @@ export function DataTable<TData, TValue>({
   noResultsText = 'No results',
   filterFns = {},
   globalFilterFn,
-  setGlobalFilter,
   globalFilter,
+  setGlobalFilter,
+  onSelectionChange,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([])
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
@@ -113,6 +115,15 @@ export function DataTable<TData, TValue>({
       size: 0,
     },
   })
+
+  useEffect(() => {
+    if (onSelectionChange) {
+      const selectedRowData = Object.keys(rowSelection)
+        .filter((id) => !!data[Number(id)]) // Filter out undefined
+        .map((id) => data[Number(id)])
+      onSelectionChange(selectedRowData as TData[])
+    }
+  }, [rowSelection])
 
   return (
     <>
