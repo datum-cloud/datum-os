@@ -834,11 +834,11 @@ type ContactsPostResponse = ContactsGetResponse
 var ExampleContactsPostRequest = ContactsPostRequest{
 	Contacts: []Contact{
 		{
-			ID: "01J6X14S34TP3H6Z4S3AVHJSMY", FullName: "Serene Ilsley", Address: "66195 Gateway Junction",
+			FullName: "Serene Ilsley", Address: "66195 Gateway Junction",
 			Email: "silsley0@harvard.edu", Title: "Web Designer III", Company: "Crona-Dooley", PhoneNumber: "694-566-6857",
 		},
 		{
-			ID: "01J6X14S355M2R0GP5WFX6QX91", FullName: "Bobbie Kolyagin", Address: "467 Magdeline Hill",
+			FullName: "Bobbie Kolyagin", Address: "467 Magdeline Hill",
 			Email: "bkolyagin1@blogs.com", Title: "VP Sales", Company: "Mosciski Group", PhoneNumber: "228-669-6638",
 		},
 	},
@@ -856,6 +856,42 @@ var ExampleContactsPostSuccessResponse = ContactsPostResponse{
 		{
 			FullName: "Bobbie Kolyagin", Address: "467 Magdeline Hill", Email: "bkolyagin1@blogs.com",
 			Title: "VP Sales", Company: "Mosciski Group", PhoneNumber: "228-669-6638",
+		},
+	},
+}
+
+// ContactsPutRequest is the body for a PUT request to `/contacts`
+type ContactsPutRequest ContactsPostRequest
+
+// ExampleContactsPutRequest is an example of a valid body for a PUT request to `/contacts`
+var ExampleContactsPutRequest = ContactsPutRequest{
+	Contacts: []Contact{
+		{
+			ID: "01J6X14S34TP3H6Z4S3AVHJSMY", FullName: "Serene Ilsley", Address: "66195 Gateway Junction",
+			Email: "silsley0@harvard.edu", Title: "Web Designer III", Company: "Crona-Dooley", PhoneNumber: "694-566-6857",
+		},
+		{
+			ID: "01J6X14S355M2R0GP5WFX6QX91", FullName: "Bobbie Kolyagin", Address: "467 Magdeline Hill",
+			Email: "bkolyagin1@blogs.com", Title: "VP Sales", Company: "Mosciski Group", PhoneNumber: "228-669-6638",
+		},
+	},
+}
+
+// ContactsPutResponse is the body for a PUT request response from `/contacts`
+type ContactsPutResponse ContactsGetResponse
+
+// ExampleContactsPutResponse is an example of a PUT request response body from `/contacts`
+var ExampleContactsPutSuccessResponse = ContactsPutResponse{
+	Reply: rout.Reply{Success: true},
+	Count: 2,
+	Contacts: []*Contact{
+		{
+			ID: "01J6X14S34TP3H6Z4S3AVHJSMY", FullName: "Serene Ilsley", Address: "66195 Gateway Junction",
+			Email: "silsley0@harvard.edu", Title: "Web Designer III", Company: "Crona-Dooley", PhoneNumber: "694-566-6857",
+		},
+		{
+			ID: "01J6X14S355M2R0GP5WFX6QX91", FullName: "Bobbie Kolyagin", Address: "467 Magdeline Hill",
+			Email: "bkolyagin1@blogs.com", Title: "VP Sales", Company: "Mosciski Group", PhoneNumber: "228-669-6638",
 		},
 	},
 }
