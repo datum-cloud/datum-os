@@ -14,8 +14,6 @@ require (
 	github.com/alicebob/miniredis/v2 v2.33.0
 	github.com/brianvoe/gofakeit/v7 v7.0.4
 	github.com/bytedance/sonic v1.12.1
-	github.com/datum-cloud/echo-prometheus/v5 v5.0.1
-	github.com/datumforge/echox v0.0.0-20231205180954-6e7ee4c4d965
 	github.com/dustinkirkland/golang-petname v0.0.0-20240428194347-eebcea082ee0
 	github.com/flume/enthistory v0.15.3
 	github.com/gertd/go-pluralize v0.2.1
