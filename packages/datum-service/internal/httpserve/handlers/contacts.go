@@ -24,9 +24,8 @@ func (h *Handler) ContactsGet(ctx echo.Context) error {
 
 	contactsGetResponse := models.ContactsGetResponseFromGeneratedContacts(contacts)
 	contactsGetResponse.Reply = rout.Reply{Success: true}
-	out := contactsGetResponse
 
-	return h.Success(ctx, out)
+	return h.Success(ctx, contactsGetResponse)
 }
 
 // BindContactsGet returns the OpenAPI3 operation for getting an orgs contacts'
@@ -45,6 +44,41 @@ func (h *Handler) BindContactsGet() *openapi3.Operation {
 	contactsGet.AddResponse(http.StatusUnauthorized, unauthorized())
 
 	return contactsGet
+}
+
+func (h *Handler) ContactsGetOne(ctx echo.Context) error {
+	contactsGetOneReq := models.ContactsGetOneRequest{}
+	if err := ctx.Bind(&contactsGetOneReq); err != nil {
+		return h.BadRequest(ctx, err)
+	}
+
+	contact, err := transaction.FromContext(ctx.Request().Context()).
+		Contact.Get(ctx.Request().Context(), contactsGetOneReq.ID)
+	if err != nil {
+		return h.InternalServerError(ctx, err)
+	}
+
+	contactsGetOneResponse := models.ContactsGetOneResponseFromGeneratedContact(contact)
+
+	return h.Success(ctx, contactsGetOneResponse)
+}
+
+func (h *Handler) BindContactsGetOne() *openapi3.Operation {
+	contactsGetOne := openapi3.NewOperation()
+	contactsGetOne.Description = "Get One Contact"
+	contactsGetOne.OperationID = "ContactsGetOne"
+	contactsGetOne.Security = &openapi3.SecurityRequirements{
+		openapi3.SecurityRequirement{
+			"bearerAuth": []string{},
+		},
+	}
+
+	h.AddResponse("ContactsGetOneResponse", "success", models.ExampleContactsGetOneSuccessResponse, contactsGetOne, http.StatusOK)
+	contactsGetOne.AddResponse(http.StatusBadRequest, badRequest())
+	contactsGetOne.AddResponse(http.StatusInternalServerError, internalServerError())
+	contactsGetOne.AddResponse(http.StatusUnauthorized, unauthorized())
+
+	return contactsGetOne
 }
 
 func contactCreateFromContactData(cd *models.Contact, cc *generated.ContactCreate,
