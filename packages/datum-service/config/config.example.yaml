@@ -82,11 +82,6 @@ entConfig:
     flags:
         useListObjectServices: false
         useListUserService: true
-geodetic:
-    baseUrl: http://localhost:1337
-    debug: false
-    enabled: true
-    endpoint: query
 posthog:
     apiKey: ""
     enabled: false

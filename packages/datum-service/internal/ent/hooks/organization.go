@@ -8,8 +8,6 @@ import (
 
 	"github.com/datum-cloud/datum-os/pkg/entx"
 	"github.com/datum-cloud/datum-os/pkg/fgax"
-	geodeticenums "github.com/datum-cloud/datum-os/pkg/geodetic/pkg/enums"
-	geodetic "github.com/datum-cloud/datum-os/pkg/geodetic/pkg/geodeticclient"
 
 	"github.com/datum-cloud/datum-os/internal/ent/generated"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/hook"
@@ -18,7 +16,6 @@ import (
 	"github.com/datum-cloud/datum-os/pkg/auth"
 	"github.com/datum-cloud/datum-os/pkg/enums"
 	"github.com/datum-cloud/datum-os/pkg/utils/gravatar"
-	"github.com/datum-cloud/datum-os/pkg/utils/marionette"
 )
 
 // HookOrganization runs on org mutations to set default values that are not provided
@@ -60,25 +57,6 @@ func HookOrganization() ent.Hook {
 				// otherwise add the API token for admin access to the newly created organization
 				if err := createOrgMemberOwner(ctx, orgCreated.ID, mutation); err != nil {
 					return v, err
-				}
-
-				// create the database, if the org has a dedicated db and geodetic is available
-				if orgCreated.DedicatedDb && mutation.Geodetic != nil {
-					settings, err := orgCreated.Setting(ctx)
-					if err != nil {
-						mutation.Logger.Errorw("unable to get organization settings")
-
-						return nil, err
-					}
-
-					if err := mutation.Marionette.Queue(marionette.TaskFunc(func(ctx context.Context) error {
-						return createDatabase(ctx, orgCreated.ID, settings.GeoLocation.String(), mutation)
-					}), marionette.WithErrorf("could not send create the database for %s", orgCreated.Name),
-					); err != nil {
-						mutation.Logger.Errorw("unable to queue database creation")
-
-						return v, err
-					}
 				}
 
 				// update the session to drop the user into the new organization
@@ -305,31 +283,6 @@ func checkAndUpdateDefaultOrg(ctx context.Context, userID string, oldOrgID strin
 	}
 
 	return userSetting.Edges.DefaultOrg.ID, nil
-}
-
-// createDatabase creates a new database for the organization
-func createDatabase(ctx context.Context, orgID, geo string, mutation *generated.OrganizationMutation) error {
-	// set default geo if not provided
-	if geo == "" {
-		geo = enums.Amer.String()
-	}
-
-	input := geodetic.CreateDatabaseInput{
-		OrganizationID: orgID,
-		Geo:            &geo,
-		Provider:       &geodeticenums.Turso,
-	}
-
-	mutation.Logger.Infow("creating database", "org", input.OrganizationID, "geo", input.Geo, "provider", input.Provider)
-
-	if _, err := mutation.Geodetic.CreateDatabase(ctx, input); err != nil {
-		mutation.Logger.Errorw("error creating database", "error", err)
-
-		return err
-	}
-
-	// create the database
-	return nil
 }
 
 // defaultOrganizationSettings creates the default organizations settings for a new org

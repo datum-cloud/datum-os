@@ -76,7 +76,6 @@ import (
 	"github.com/datum-cloud/datum-os/pkg/analytics"
 	"github.com/datum-cloud/datum-os/pkg/fgax"
 	"github.com/datum-cloud/datum-os/pkg/fgax/entfga"
-	"github.com/datum-cloud/datum-os/pkg/geodetic/pkg/geodeticclient"
 	"github.com/datum-cloud/datum-os/pkg/sessions"
 	"github.com/datum-cloud/datum-os/pkg/tokens"
 	"github.com/datum-cloud/datum-os/pkg/utils/emails"
@@ -321,7 +320,6 @@ type (
 		Marionette    *marionette.TaskManager
 		Analytics     *analytics.EventManager
 		TOTP          *totp.Manager
-		Geodetic      *geodeticclient.Client
 		// schemaConfig contains alternative names for all tables.
 		schemaConfig SchemaConfig
 	}
@@ -434,13 +432,6 @@ func Analytics(v *analytics.EventManager) Option {
 func TOTP(v *totp.Manager) Option {
 	return func(c *config) {
 		c.TOTP = v
-	}
-}
-
-// Geodetic configures the Geodetic.
-func Geodetic(v *geodeticclient.Client) Option {
-	return func(c *config) {
-		c.Geodetic = v
 	}
 }
 
