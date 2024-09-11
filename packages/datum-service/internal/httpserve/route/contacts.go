@@ -43,5 +43,37 @@ func registerContactsHandlers(router *Router) (err error) {
 		return err
 	}
 
+	routePut := echo.Route{
+		Name:        name + "Put",
+		Method:      http.MethodPut,
+		Path:        path,
+		Middlewares: authMW,
+		Handler: func(c echo.Context) error {
+			return router.Handler.ContactsPut(c)
+		},
+	}
+
+	if err = router.Addv1Route(
+		path, routePut.Method, router.Handler.BindContactsPut(), routePut,
+	); err != nil {
+		return err
+	}
+
+	routeDelete := echo.Route{
+		Name:        name + "Delete",
+		Method:      http.MethodDelete,
+		Path:        path,
+		Middlewares: authMW,
+		Handler: func(c echo.Context) error {
+			return router.Handler.ContactsDelete(c)
+		},
+	}
+
+	if err = router.Addv1Route(
+		path, routePost.Method, router.Handler.BindContactsDelete(), routeDelete,
+	); err != nil {
+		return err
+	}
+
 	return nil
 }
