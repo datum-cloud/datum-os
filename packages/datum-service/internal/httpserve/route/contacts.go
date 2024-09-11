@@ -27,6 +27,22 @@ func registerContactsHandlers(router *Router) (err error) {
 		return err
 	}
 
+	routeGetOne := echo.Route{
+		Name:        name + "GetOne",
+		Method:      http.MethodGet,
+		Path:        path + "/:id",
+		Middlewares: authMW,
+		Handler: func(c echo.Context) error {
+			return router.Handler.ContactsGetOne(c)
+		},
+	}
+
+	if err := router.Addv1Route(
+		path, routeGetOne.Method, router.Handler.BindContactsGetOne(), routeGetOne,
+	); err != nil {
+		return err
+	}
+
 	routePost := echo.Route{
 		Name:        name + "Post",
 		Method:      http.MethodPost,
@@ -70,7 +86,7 @@ func registerContactsHandlers(router *Router) (err error) {
 	}
 
 	if err = router.Addv1Route(
-		path, routePost.Method, router.Handler.BindContactsDelete(), routeDelete,
+		path, routeDelete.Method, router.Handler.BindContactsDelete(), routeDelete,
 	); err != nil {
 		return err
 	}
