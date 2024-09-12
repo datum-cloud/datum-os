@@ -11,8 +11,8 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/groupmembershiphistory"
+	"github.com/datum-cloud/datum-os/pkg/enthistory"
 	"github.com/datum-cloud/datum-os/pkg/enums"
-	"github.com/flume/enthistory"
 )
 
 // GroupMembershipHistoryCreate is the builder for creating a GroupMembershipHistory entity.

@@ -16,10 +16,9 @@ import (
 	"go.uber.org/zap"
 	"gocloud.dev/secrets"
 
+	"github.com/datum-cloud/datum-os/pkg/enthistory"
 	"github.com/datum-cloud/datum-os/pkg/entx"
 	"github.com/datum-cloud/datum-os/pkg/entx/genhooks"
-	geodetic "github.com/datum-cloud/datum-os/pkg/geodetic/pkg/geodeticclient"
-	"github.com/flume/enthistory"
 
 	"github.com/datum-cloud/datum-os/internal/ent/entconfig"
 	"github.com/datum-cloud/datum-os/pkg/analytics"
@@ -116,10 +115,6 @@ func main() {
 		entc.Dependency(
 			entc.DependencyName("TOTP"),
 			entc.DependencyType(&totp.Manager{}),
-		),
-		entc.Dependency(
-			entc.DependencyName("Geodetic"),
-			entc.DependencyType(&geodetic.Client{}),
 		),
 		entc.TemplateDir("./internal/ent/templates"),
 		entc.Extensions(

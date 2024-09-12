@@ -114,10 +114,6 @@ github.com/cpuguy83/go-md2man/v2 v2.0.4 h1:wfIWP927BUkWJb2NmU/kNDYIBTh/ziUX91+lV
 github.com/cpuguy83/go-md2man/v2 v2.0.4/go.mod h1:tgQtvFlXSQOSOSIRvRPT7W67SCa46tRHOmNcaadrF8o=
 github.com/danieljoos/wincred v1.2.1 h1:dl9cBrupW8+r5250DYkYxocLeZ1Y4vB1kxgtjxw8GQs=
 github.com/danieljoos/wincred v1.2.1/go.mod h1:uGaFL9fDn3OLTvzCGulzE+SzjEe5NGlh5FdCcyfPwps=
-github.com/datum-cloud/echo-prometheus/v5 v5.0.1 h1:t8nwgnsq9axHcMDrFmyERmveMX0Uxk8LFwFGjiyHE/Y=
-github.com/datum-cloud/echo-prometheus/v5 v5.0.1/go.mod h1:VU9vz11GF4EstHW9lRhBrVZ/eYKIzRlbO01b+4zbn44=
-github.com/datumforge/echox v0.0.0-20231205180954-6e7ee4c4d965 h1:dfDQM+NoVuYwBzY4hPX41zoqiPMcNAOb+FxYpSmPKQw=
-github.com/datumforge/echox v0.0.0-20231205180954-6e7ee4c4d965/go.mod h1:PIZalzJ+wD5P0bUHkn8wk0H+TsT94MoZUf0y1lTAwa4=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/davecgh/go-spew v1.1.2-0.20180830191138-d8f796af33cc h1:U9qPSI2PIWSS1VwoXQT9A3Wy9MM3WgvqSxFWenqJduM=

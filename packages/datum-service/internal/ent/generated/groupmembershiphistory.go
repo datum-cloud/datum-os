@@ -10,8 +10,8 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/groupmembershiphistory"
+	"github.com/datum-cloud/datum-os/pkg/enthistory"
 	"github.com/datum-cloud/datum-os/pkg/enums"
-	"github.com/flume/enthistory"
 )
 
 // GroupMembershipHistory is the model entity for the GroupMembershipHistory schema.

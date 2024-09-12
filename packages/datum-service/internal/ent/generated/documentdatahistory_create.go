@@ -12,7 +12,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/datum-cloud/datum-os/internal/ent/customtypes"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/documentdatahistory"
-	"github.com/flume/enthistory"
+	"github.com/datum-cloud/datum-os/pkg/enthistory"
 )
 
 // DocumentDataHistoryCreate is the builder for creating a DocumentDataHistory entity.

@@ -105,10 +105,6 @@ data:
   DATUM_DB_RUNMIGRATIONS: {{ .Values.datum.db.runMigrations | default true }}
   DATUM_DB_MIGRATIONPROVIDER: {{ .Values.datum.db.migrationProvider | default "atlas" }}
   DATUM_DB_ENABLEHISTORY: {{ .Values.datum.db.enableHistory | default false }}
-  DATUM_GEODETIC_ENABLED: {{ .Values.datum.geodetic.enabled | default true }}
-  DATUM_GEODETIC_BASEURL: {{ .Values.datum.geodetic.baseUrl | default "http://localhost:1337" }}
-  DATUM_GEODETIC_ENDPOINT: {{ .Values.datum.geodetic.endpoint | default "query" }}
-  DATUM_GEODETIC_DEBUG: {{ .Values.datum.geodetic.debug | default false }}
   DATUM_REDIS_ENABLED: {{ .Values.datum.redis.enabled | default true }}
   DATUM_REDIS_ADDRESS: {{ .Values.datum.redis.address | default "localhost:6379" }}
   DATUM_REDIS_NAME: {{ .Values.datum.redis.name | default "datum" }}
