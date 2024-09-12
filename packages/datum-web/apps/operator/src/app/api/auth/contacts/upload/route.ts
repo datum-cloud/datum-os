@@ -1,14 +1,53 @@
 import { parse } from 'csv-parse/sync' // Using sync for simplicity
 import { NextResponse } from 'next/server'
 
-import {
-  HttpStatus,
-  OPERATOR_API_ROUTES,
-  SERVICE_APP_ROUTES,
-} from '@repo/constants'
+import { decamelize } from '@repo/common/keys'
+import { HttpStatus, SERVICE_APP_ROUTES } from '@repo/constants'
 import type { Datum } from '@repo/types'
 
 import { auth } from '@/lib/auth/auth'
+
+type FormatAction = (key: string, row: Record<string, any>) => string
+
+type FormatField = {
+  key?: keyof Datum.Contact
+  action?: FormatAction
+}
+
+const FORMAT_MAP: Record<string, FormatField> = {
+  name: {
+    key: 'fullName',
+  },
+  fullname: {
+    key: 'fullName',
+  },
+  phone: {
+    key: 'phoneNumber',
+  },
+}
+
+function handleName(key: string, row: Record<string, any>) {
+  // TODO: Handle name fields other than Full Name
+  return ''
+}
+
+function getContactInformation(row: Record<string, any>) {
+  const data: Record<string, any> = {}
+  const filteredKeys = Object.keys(row).filter(Boolean)
+
+  for (const key of filteredKeys) {
+    const tidyKey = key.toLowerCase().replaceAll(' ', '').replaceAll('_', '')
+    const { key: formattedKey = tidyKey, action } = FORMAT_MAP?.[tidyKey] || {}
+
+    if (action) {
+      data[formattedKey] = action(key, row)
+    } else {
+      data[formattedKey] = row[key]
+    }
+  }
+
+  return decamelize(data) as Datum.Contact
+}
 
 export async function POST(request: Request) {
   const session = await auth()
@@ -40,14 +79,10 @@ export async function POST(request: Request) {
     })
 
     const formattedContacts = rawContacts
-      .filter((row: any) => row['Name'] && row['Email'] && row['Phone Number'])
-      .map((row: any) => ({
-        full_name: row['Name'],
-        email: row['Email'],
-        phone_number: row['Phone Number'],
-      }))
-
-    console.log('Formatted Contacts', formattedContacts)
+      .map(getContactInformation)
+      .filter(
+        ({ email }: Partial<Datum.Contact>) => !!email,
+      ) as Datum.ContactCreateInput
 
     const fData = await fetch(SERVICE_APP_ROUTES.contacts, {
       method: 'POST',

@@ -139,7 +139,8 @@ export const LoginPage = () => {
             Log in with GitHub
           </Button>
 
-          <Button
+          {/* NOTE: Temporarily removing */}
+          {/* <Button
             variant="outline"
             size="md"
             icon={<KeyRoundIcon className={keyIcon()} />}
@@ -149,7 +150,7 @@ export const LoginPage = () => {
             }}
           >
             Log in with PassKey
-          </Button>
+          </Button> */}
         </div>
 
         <Separator label="or" className={separator()} />

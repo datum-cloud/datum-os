@@ -6,7 +6,6 @@ import { auth } from '@/lib/auth/auth'
 
 export async function DELETE(request: Request) {
   const bodyData = await request.json()
-  console.log('BODY DATA', bodyData)
   const session = await auth()
   const token = session?.user?.accessToken
 

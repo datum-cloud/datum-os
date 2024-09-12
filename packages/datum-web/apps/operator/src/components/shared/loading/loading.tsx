@@ -1,8 +1,18 @@
 import { LoadingSpinner } from '@repo/ui/loading-spinner'
+import { cn } from '@repo/ui/lib/utils'
 
-export const Loading = () => {
+type LoadingProps = {
+  className?: string
+}
+
+export const Loading = ({ className }: LoadingProps) => {
   return (
-    <section className="flex items-center justify-center h-full w-full">
+    <section
+      className={cn(
+        'flex items-center justify-center h-full w-full',
+        className,
+      )}
+    >
       <LoadingSpinner size={28} />
     </section>
   )

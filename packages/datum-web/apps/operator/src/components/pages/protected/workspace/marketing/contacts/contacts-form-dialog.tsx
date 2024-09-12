@@ -27,6 +27,11 @@ import { Datum } from '@repo/types'
 import { createContacts, editContacts } from '@/query/contacts'
 
 import { formStyles } from './page.styles'
+import { useRouter } from 'next/navigation'
+import { getPathWithParams } from '@repo/common/routes'
+import { OPERATOR_APP_ROUTES } from '@repo/constants'
+import { useAsyncFn } from '@/hooks/useAsyncFn'
+import { Loading } from '@/components/shared/loading/loading'
 
 type ContactDialogFormProps = {
   open: boolean
@@ -39,6 +44,7 @@ const ContactFormDialog = ({
   open,
   setOpen,
 }: ContactDialogFormProps) => {
+  const router = useRouter()
   const isNew = !contact || !contact.id
   const {
     form: formStyle,
@@ -46,10 +52,16 @@ const ContactFormDialog = ({
     labelContainer,
     requiredText,
   } = formStyles()
+  const [{ loading: loadingCreate, error: errorCreate }, create] =
+    useAsyncFn(createContacts)
+  const [{ loading: loadingEdit, error: errorEdit }, edit] =
+    useAsyncFn(editContacts)
   const { data: session } = useSession()
   const organizationId =
     session?.user.organization ?? ('' as Datum.OrganisationId)
 
+  const loading = loadingEdit || loadingCreate
+  const error = errorEdit || errorCreate
   const names = contact?.fullName?.split(' ')
   const [name, ...otherNames] = names || []
 
@@ -82,13 +94,20 @@ const ContactFormDialog = ({
   }, [firstName, lastName])
 
   async function onSubmit(data: ContactFormInput) {
+    let id: string | undefined
+
     if (isNew) {
-      await createContacts(organizationId, [data])
+      const contacts = await create(organizationId, [data])
+      id = contacts[0].id
     } else {
-      await editContacts(organizationId, [data])
+      const contacts = await edit(organizationId, [data])
+      id = contacts[0].id
     }
-    setOpen(false)
+
+    router.push(getPathWithParams(OPERATOR_APP_ROUTES.contact, { id }))
+
     reset()
+    setOpen(false)
   }
 
   function handleCancel() {
@@ -105,75 +124,79 @@ const ContactFormDialog = ({
           </DialogTitle>
           <DialogClose onClick={handleCancel} />
         </DialogHeader>
-        <Form {...form}>
-          <form onSubmit={handleSubmit(onSubmit)} className={formStyle()}>
-            <div className={fieldsContainer()}>
-              <FormField
-                name="email"
-                control={control}
-                render={({ field }) => (
-                  <FormItem>
-                    <div className={labelContainer()}>
-                      <FormLabel>Email</FormLabel>
-                      <span className={requiredText()}>Required</span>
-                    </div>
-                    <FormControl>
-                      <Input {...field} value={field.value || ''} />
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
-              <FormField
-                name="firstName"
-                control={control}
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>First Name</FormLabel>
-                    <FormControl>
-                      <Input {...field} value={field.value || ''} />
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
-              <FormField
-                name="lastName"
-                control={control}
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Last Name</FormLabel>
-                    <FormControl>
-                      <Input {...field} value={field.value || ''} />
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
-            </div>
-            <DialogFooter className="flex gap-5">
-              <DialogClose
-                asChild
-                disabled={!isValid}
-                onClick={handleSubmit(onSubmit)}
-              >
+        {loading && <Loading className="min-h-96" />}
+        {error && <p>Whoops... something went wrong</p>}
+        {!loading && (
+          <Form {...form}>
+            <form onSubmit={handleSubmit(onSubmit)} className={formStyle()}>
+              <div className={fieldsContainer()}>
+                <FormField
+                  name="email"
+                  control={control}
+                  render={({ field }) => (
+                    <FormItem>
+                      <div className={labelContainer()}>
+                        <FormLabel>Email</FormLabel>
+                        <span className={requiredText()}>Required</span>
+                      </div>
+                      <FormControl>
+                        <Input {...field} value={field.value || ''} />
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  name="firstName"
+                  control={control}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>First Name</FormLabel>
+                      <FormControl>
+                        <Input {...field} value={field.value || ''} />
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  name="lastName"
+                  control={control}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Last Name</FormLabel>
+                      <FormControl>
+                        <Input {...field} value={field.value || ''} />
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+              </div>
+              <DialogFooter className="flex gap-5">
+                <DialogClose
+                  asChild
+                  disabled={!isValid}
+                  onClick={handleSubmit(onSubmit)}
+                >
+                  <Button
+                    type="button"
+                    disabled={!isValid}
+                    full
+                    className="w-2/3"
+                  >
+                    {isNew ? 'Add contact' : 'Save'}
+                  </Button>
+                </DialogClose>
                 <Button
                   type="button"
-                  disabled={!isValid}
-                  full
-                  className="w-2/3"
+                  onClick={handleCancel}
+                  className="w-1/3 ml-0"
+                  variant="outline"
                 >
-                  {isNew ? 'Add contact' : 'Save'}
+                  Cancel
                 </Button>
-              </DialogClose>
-              <Button
-                type="button"
-                onClick={handleCancel}
-                className="w-1/3 ml-0"
-                variant="outline"
-              >
-                Cancel
-              </Button>
-            </DialogFooter>
-          </form>
-        </Form>
+              </DialogFooter>
+            </form>
+          </Form>
+        )}
       </DialogContent>
     </Dialog>
   )

@@ -26,8 +26,7 @@ const ImportContactsDialog = ({ open, setOpen }: ImportContactsDialogProps) => {
     const formData = new FormData()
     formData.append('file', files[0])
 
-    const contacts = await uploadContacts(organizationId, formData)
-    console.log('Created Contacts:', contacts)
+    await uploadContacts(organizationId, formData)
 
     setOpen(false)
   }

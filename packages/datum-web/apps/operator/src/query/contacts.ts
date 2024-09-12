@@ -96,8 +96,6 @@ export async function editContacts(
   id: Datum.OrganisationId,
   input: ContactInput[],
 ) {
-  console.log(`Contact updates:`, JSON.stringify(input))
-
   const formattedInput = decamelize({
     contacts: input,
   })
@@ -107,9 +105,12 @@ export async function editContacts(
     body: JSON.stringify(formattedInput),
   })
 
+  const result = await response.json()
+  const contacts = result.contacts as Datum.Contact[]
+
   await queryClient.invalidateQueries({ queryKey: getContactsKey(id) })
 
-  return response
+  return contacts
 }
 
 export async function removeContacts(

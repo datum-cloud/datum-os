@@ -119,7 +119,8 @@ export const SignupPage = () => {
           Sign up with GitHub
         </Button>
 
-        <Button
+        {/* NOTE: Temporarily removing */}
+        {/* <Button
           variant="outline"
           size="md"
           icon={<KeyRoundIcon className={keyIcon()} />}
@@ -127,7 +128,7 @@ export const SignupPage = () => {
           onClick={registerPassKey}
         >
           Sign up with PassKey
-        </Button>
+        </Button> */}
       </div>
 
       <Separator label="or" className={separator()} />
