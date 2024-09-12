@@ -13,6 +13,7 @@ import {
   DialogTrigger,
 } from '@repo/ui/dialog'
 import { Panel } from '@repo/ui/panel'
+import type { ColumnFiltersState } from '@repo/ui/data-table'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -26,7 +27,11 @@ import { ContactFilterFormSchema, ContactFilterInput } from '@/utils/schemas'
 
 import { filterStyles } from './page.styles'
 
-const FilterContactDialog = () => {
+type FilterDialogProps = {
+  onFilter(input: ColumnFiltersState): void
+}
+
+const FilterContactDialog = ({ onFilter }: FilterDialogProps) => {
   const [open, setOpen] = React.useState(false)
   const { column, dialogContent, filterContainer, filterTitle } = filterStyles()
   const form = useForm<ContactFilterInput>({
@@ -52,8 +57,16 @@ const FilterContactDialog = () => {
     reset({ filters: newFilters })
   }
 
-  async function onSubmit(data: ContactFilterInput) {
+  function onSubmit(data: ContactFilterInput) {
     console.log(data)
+    const formattedFilters = Object.entries(data.filters).map(
+      ([field, { value }]) => ({
+        id: field,
+        value: value.value,
+      }),
+    )
+    console.log('formattedFilters', formattedFilters)
+    onFilter(formattedFilters)
     setOpen(false)
     reset({ filters: {} })
   }

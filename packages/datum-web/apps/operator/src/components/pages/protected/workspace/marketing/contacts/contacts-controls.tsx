@@ -10,6 +10,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@repo/ui/dropdown-menu'
+import type { ColumnFiltersState } from '@repo/ui/data-table'
 import { mockLists } from '@repo/constants'
 import type { Datum } from '@repo/types'
 
@@ -30,6 +31,7 @@ type ContactsControlsProps = {
   search(query: string): void
   onDelete(): void
   onExport(): void
+  onFilter(columnFilters: ColumnFiltersState): void
   onListAddition(lists: Datum.ListId[]): void
 }
 
@@ -37,6 +39,7 @@ const ContactsControls = ({
   search,
   onDelete,
   onExport,
+  onFilter,
   onListAddition,
 }: ContactsControlsProps) => {
   const {
@@ -179,7 +182,7 @@ const ContactsControls = ({
             </Accordion>
           </DropdownMenuContent>
         </DropdownMenu>
-        <FilterContactDialog />
+        <FilterContactDialog onFilter={onFilter} />
       </div>
       <ContactFormDialog
         open={_openContactDialog}

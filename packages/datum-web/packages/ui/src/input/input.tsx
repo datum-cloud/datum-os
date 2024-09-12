@@ -14,6 +14,7 @@ export interface InputProps
     InputVariants {
   icon?: ReactNode
   prefix?: ReactNode
+  debounce?: number
   onIconClick?: () => void
 }
 
@@ -21,9 +22,17 @@ interface InputRowProps extends InputRowVariants {
   className?: string
   children: ReactNode
 }
+interface DebouncedInputProps extends Omit<InputProps, 'onChange' | 'value'> {
+  value: string | number
+  onChange: (value: string | number) => void
+  debounce?: number
+}
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ className, type, icon, prefix, variant, onIconClick, ...props }, ref) => {
+  (
+    { className, type, icon, prefix, variant, onIconClick, debounce, ...props },
+    ref,
+  ) => {
     const { input, inputWrapper, iconWrapper, prefixWrapper } = inputStyles({
       variant,
     })
@@ -65,6 +74,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
     )
   },
 )
+
 Input.displayName = 'Input'
 
 const InputRow: React.FC<InputRowProps> = ({ children, className }) => {
@@ -72,4 +82,33 @@ const InputRow: React.FC<InputRowProps> = ({ children, className }) => {
   return <div className={cn(styles.wrapper(), className)}>{children}</div>
 }
 
-export { Input, InputRow }
+const DebouncedInput: React.FC<DebouncedInputProps> = ({
+  value: initialValue,
+  onChange,
+  debounce = 500,
+  ...props
+}) => {
+  const [value, setValue] = React.useState(initialValue)
+
+  React.useEffect(() => {
+    setValue(initialValue)
+  }, [initialValue])
+
+  React.useEffect(() => {
+    const timeout = setTimeout(() => {
+      onChange(value)
+    }, debounce)
+
+    return () => clearTimeout(timeout)
+  }, [value])
+
+  return (
+    <Input
+      {...props}
+      value={value}
+      onChange={(e) => setValue(e.target.value)}
+    />
+  )
+}
+
+export { DebouncedInput, Input, InputRow }

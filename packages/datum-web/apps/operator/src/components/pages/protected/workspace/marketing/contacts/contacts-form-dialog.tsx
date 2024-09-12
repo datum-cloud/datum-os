@@ -39,7 +39,6 @@ const ContactFormDialog = ({
   open,
   setOpen,
 }: ContactDialogFormProps) => {
-  console.log(contact)
   const isNew = !contact || !contact.id
   const {
     form: formStyle,

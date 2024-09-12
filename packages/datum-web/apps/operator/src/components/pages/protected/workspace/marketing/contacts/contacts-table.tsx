@@ -12,6 +12,7 @@ import {
   sortingFns,
   rankItem,
   compareItems,
+  ColumnFiltersState,
 } from '@repo/ui/data-table'
 import { cn } from '@repo/ui/lib/utils'
 import { Datum } from '@repo/types'
@@ -28,6 +29,7 @@ import { OPERATOR_APP_ROUTES } from '@repo/constants'
 type ContactsTableProps = {
   contacts: Datum.Contact[]
   globalFilter: string
+  columnFilters?: ColumnFiltersState
   setGlobalFilter(input: string): void
   onSelectionChange(contacts: Datum.Contact[]): void
 }
@@ -50,6 +52,8 @@ const fuzzyFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
   return itemRank.passed
 }
 
+const emptyFilter: FilterFn<any> = (row, columnId, value) => Boolean(value)
+
 const fuzzySort: SortingFn<any> = (rowA, rowB, columnId) => {
   let dir = 0
 
@@ -65,6 +69,7 @@ const fuzzySort: SortingFn<any> = (rowA, rowB, columnId) => {
 
 const filterFns = {
   fuzzy: fuzzyFilter,
+  empty: emptyFilter,
 }
 
 export const CONTACT_COLUMNS: ColumnDef<Datum.Contact>[] = [
@@ -255,6 +260,7 @@ export const CONTACT_COLUMNS: ColumnDef<Datum.Contact>[] = [
 const ContactsTable = ({
   contacts,
   globalFilter,
+  columnFilters,
   setGlobalFilter,
   onSelectionChange,
 }: ContactsTableProps) => {
@@ -271,8 +277,9 @@ const ContactsTable = ({
     <DataTable
       globalFilter={globalFilter}
       setGlobalFilter={setGlobalFilter}
-      globalFilterFn="fuzzy"
       filterFns={filterFns}
+      globalFilterFn="fuzzy"
+      columnFilters={columnFilters}
       columns={CONTACT_COLUMNS}
       data={filteredContacts}
       layoutFixed

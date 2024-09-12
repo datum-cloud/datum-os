@@ -55,6 +55,7 @@ interface DataTableProps<TData, TValue> {
   filterFns?: Record<string, FilterFn<any>>
   globalFilterFn?: any
   globalFilter?: string
+  columnFilters?: ColumnFiltersState
   setGlobalFilter?(input: string): void
   onSelectionChange?(selection: TData[]): void
 }
@@ -82,13 +83,17 @@ export function DataTable<TData, TValue>({
   filterFns = {},
   globalFilterFn,
   globalFilter,
+  columnFilters: _columnFilters = [],
   setGlobalFilter,
   onSelectionChange,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([])
-  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
+  const [columnFilters, setColumnFilters] =
+    useState<ColumnFiltersState>(_columnFilters)
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
   const [rowSelection, setRowSelection] = useState({})
+
+  console.log('COLUMN FILTERS DATA TABLE', columnFilters)
 
   const table = useReactTable({
     data,
