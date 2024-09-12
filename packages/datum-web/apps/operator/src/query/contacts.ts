@@ -50,6 +50,25 @@ export async function getContacts(): Promise<Datum.Contact[]> {
   return contacts
 }
 
+export async function uploadContacts(
+  organisationId: Datum.OrganisationId,
+  input: FormData,
+) {
+  const response = await fetch(OPERATOR_API_ROUTES.uploadContacts, {
+    method: 'POST',
+    body: input,
+  })
+
+  const result = await response.json()
+  const contacts = result.contacts as Datum.Contact[]
+
+  await queryClient.invalidateQueries({
+    queryKey: getContactsKey(organisationId),
+  })
+
+  return contacts
+}
+
 export async function createContacts(
   organisationId: Datum.OrganisationId,
   input: ContactInput[],

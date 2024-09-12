@@ -7,6 +7,10 @@ import {
 } from '@repo/ui/dialog'
 import { Button } from '@repo/ui/button'
 import Link from 'next/link'
+import DragAndDrop from '@/components/shared/drag-and-drop/drag-and-drop'
+import { uploadContacts } from '@/query/contacts'
+import { useSession } from 'next-auth/react'
+import { Datum } from '@repo/types'
 
 type ImportContactsDialogProps = {
   open: boolean
@@ -14,9 +18,18 @@ type ImportContactsDialogProps = {
 }
 
 const ImportContactsDialog = ({ open, setOpen }: ImportContactsDialogProps) => {
-  function handleCSVDownload() {
-    // TODO: Handle CSV download
-    console.log('handleCSVDownload')
+  const { data: session } = useSession()
+  const organizationId = (session?.user.organization ??
+    '') as Datum.OrganisationId
+
+  async function handleCSVUpload(files: File[]) {
+    const formData = new FormData()
+    formData.append('file', files[0])
+
+    const contacts = await uploadContacts(organizationId, formData)
+    console.log('Created Contacts:', contacts)
+
+    setOpen(false)
   }
 
   function handleCancel() {
@@ -32,22 +45,8 @@ const ImportContactsDialog = ({ open, setOpen }: ImportContactsDialogProps) => {
         </DialogHeader>
         <div className="flex flex-col gap-12">
           <div className="w-full flex flex-col gap-6">
-            <div className="w-full border border-dashed border-blackberry-500 rounded-[5px] flex items-center justify-center h-[109px]">
-              Drag your CSV file in here, or{' '}
-              <Button
-                variant="blackberryXs"
-                size="xs"
-                className="underline p-1 font-normal"
-              >
-                select it manually.
-              </Button>
-            </div>
-            <Button
-              variant="sunglowXs"
-              size="xs"
-              className="underline"
-              onClick={handleCSVDownload}
-            >
+            <DragAndDrop onConfirm={handleCSVUpload} />
+            <Button variant="sunglowXs" size="xs" className="underline">
               Download our pre-formatted CSV
             </Button>
           </div>

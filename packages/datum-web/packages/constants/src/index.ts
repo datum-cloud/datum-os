@@ -22,6 +22,7 @@ export const OPERATOR_API_ROUTES = {
   createContacts: '/api/auth/contacts/create',
   deleteContacts: '/api/auth/contacts/delete',
   editContacts: '/api/auth/contacts/edit',
+  uploadContacts: '/api/auth/contacts/upload',
   lists: '/api/auth/lists',
 }
 
