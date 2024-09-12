@@ -93,6 +93,7 @@ export namespace Datum {
     source: string
     status: Status
     lists: ListId[]
+    enrichedData?: any // TODO: Type this properly
   }
 
   export interface ContactCreateInput extends Partial<Contact> {

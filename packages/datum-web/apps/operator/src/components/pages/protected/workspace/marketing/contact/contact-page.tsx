@@ -7,7 +7,9 @@ import {
   Check,
   ChevronDown,
   Ellipsis,
+  Info,
   Plus,
+  Trash,
   User,
 } from 'lucide-react'
 import Link from 'next/link'
@@ -21,6 +23,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@repo/ui/dropdown-menu'
+import { cn } from '@repo/ui/lib/utils'
 import { Datum } from '@repo/types'
 
 import {
@@ -29,18 +32,27 @@ import {
   AccordionContent,
   AccordionTrigger,
 } from '@/components/shared/sidebar/sidebar-accordion/sidebar-accordion'
+import { Loading } from '@/components/shared/loading/loading'
+import { useContact } from '@/hooks/useContacts'
 import { formatDate } from '@/utils/date'
 
 import { pageStyles as contactsStyles } from '../contacts/page.styles'
 import { tagStyles } from '../contacts/page.styles'
 import { pageStyles } from './page.styles'
+import ContactFormDialog from '@/components/pages/protected/workspace/marketing/contacts/contacts-form-dialog'
+import { removeContacts } from '@/query/contacts'
+import { useSession } from 'next-auth/react'
 
 type ContactPageProps = {
   id: Datum.ContactId
 }
 
 const ContactPage = ({ id }: ContactPageProps) => {
+  const { data: session } = useSession()
+  const organizationId = (session?.user.organization ??
+    '') as Datum.OrganisationId
   const [selectedLists, setSelectedLists] = useState<string[]>([])
+  const [openEditDialog, setOpenEditDialog] = useState(false)
   const { wrapper } = pageStyles()
   const {
     accordionContainer,
@@ -51,24 +63,21 @@ const ContactPage = ({ id }: ContactPageProps) => {
     contactDropdownIcon,
   } = contactsStyles()
 
-  //   TODO: Replace mock data...
-  //   const { error, isLoading, data: contact } = useContact(id)
-  const MOCK_CONTACT = {
-    id: '01J7A35QY582XPTHXF03GFA7J5' as Datum.ContactId,
-    createdAt: new Date('2024-09-08T19:33:09.583385-05:00'),
-    updatedAt: new Date('2024-09-08T19:33:09.583385-05:00'),
-    fullName: 'Roxanne Banks',
-    title: 'Developer',
-    email: 'rox@company.ai' as Datum.Email,
-    status: 'ACTIVE',
-    company: 'Google',
-    address: '',
-    phoneNumber: '+1234567890',
-    source: 'form',
-    lists: ['Newsletter', 'Admin', 'Cardholders', 'Developers'],
-  } as Datum.Contact
+  const { error, isLoading, data: contact } = useContact(id)
 
-  const { email, source, lists, createdAt } = MOCK_CONTACT
+  async function handleDeletion() {
+    await removeContacts(organizationId, [id])
+  }
+
+  if (isLoading) {
+    return <Loading />
+  }
+
+  if (error || !contact) {
+    return <div>Whoops... Something went wrong</div>
+  }
+
+  const { email, source, lists, createdAt, enrichedData = {} } = contact
 
   return (
     <div className={wrapper()}>
@@ -93,19 +102,60 @@ const ContactPage = ({ id }: ContactPageProps) => {
           </div>
         </div>
         <div className="flex justify-start items-stretch gap-4">
-          <Button variant="outline">Edit contact info</Button>
-          <Button icon={<ChevronDown />} iconPosition="right">
-            Actions
+          <Button variant="outline" onClick={() => setOpenEditDialog(true)}>
+            Edit contact info
           </Button>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button icon={<ChevronDown />} iconPosition="right">
+                Actions
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="px-2 py-2.5">
+              <DropdownMenuItem
+                onClick={handleDeletion}
+                className={contactDropdownItem()}
+              >
+                <Trash size={18} className={contactDropdownIcon()} />
+                Delete contact
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </div>
       <Panel>
         <PanelHeader heading="Latest activity" noBorder />
         {/* TODO Table */}
       </Panel>
-      <Panel className="bg-blackberry-300/50">
-        <PanelHeader heading="Enriched Data" noBorder />
-      </Panel>
+      {Object.keys(enrichedData).length > 0 && (
+        <Panel className="bg-blackberry-300/50">
+          <PanelHeader
+            heading="Enriched Data"
+            icon={<Info size={16} />}
+            noBorder
+          />
+          <div className="grid grid-cols-2 rounded-lg border border-blackberry-300">
+            {Object.values(enrichedData).map(({ key, value }: any, index) => (
+              <div
+                className={cn(
+                  'w-full flex items-stretch justify-start px-6 py-3 border-blackberry-300',
+                  index < Object.keys(enrichedData).length - 2 && 'border-b',
+                  (index + 1) % 2 !== 0 && 'border-r',
+                )}
+              >
+                <h6
+                  className={
+                    'w-1/3 text-blackberry-800/60 font-normal text-body-m'
+                  }
+                >
+                  {key}
+                </h6>
+                <p className="w-2/3 text-blackberry-800">{value}</p>
+              </div>
+            ))}
+          </div>
+        </Panel>
+      )}
       <Panel className="bg-blackberry-100/50 gap-4">
         <div className="flex items-start justify-between">
           <h2 className="text-xl font-semibold">Current Lists</h2>
@@ -184,6 +234,11 @@ const ContactPage = ({ id }: ContactPageProps) => {
           ))}
         </div>
       </Panel>
+      <ContactFormDialog
+        contact={contact}
+        open={openEditDialog}
+        setOpen={setOpenEditDialog}
+      />
     </div>
   )
 }

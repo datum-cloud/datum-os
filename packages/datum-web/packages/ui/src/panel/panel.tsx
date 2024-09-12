@@ -14,8 +14,9 @@ interface PanelProps extends PanelVariants {
 }
 
 interface PanelHeaderProps extends PanelHeaderVariants {
-  className?: string
   heading: React.ReactNode
+  className?: string
+  icon?: React.ReactNode
   subheading?: React.ReactNode
 }
 
@@ -47,11 +48,15 @@ const PanelHeader: React.FC<PanelHeaderProps> = ({
   heading,
   subheading,
   noBorder,
+  icon,
 }) => {
   const styles = panelHeaderStyles({ noBorder })
   return (
     <div className={cn(styles.header(), className)}>
-      <h2 className={styles.heading()}>{heading}</h2>
+      <div className={cn(styles.icon())}>
+        <h2 className={styles.heading()}>{heading}</h2>
+        {icon}
+      </div>
       {subheading && <p className={styles.subheading()}>{subheading}</p>}
     </div>
   )

@@ -2,29 +2,73 @@ import type { QueryKey } from '@tanstack/react-query'
 
 import { OPERATOR_API_ROUTES } from '@repo/constants'
 import { camelize, decamelize } from '@repo/common/keys'
-import { getPathWithParams } from '@repo/common/routes'
+// import { getPathWithParams } from '@repo/common/routes'
 import { Datum } from '@repo/types'
 import { queryClient } from '@/query/client'
 import type { ContactInput } from '@/utils/schemas'
 
-export async function getContact(
-  id: Datum.ContactId,
-): Promise<Datum.Contact | undefined> {
-  const response = await fetch(
-    getPathWithParams(OPERATOR_API_ROUTES.contact, { id }),
-  )
+const MOCK_CONTACT = {
+  id: '01J7A35QY582XPTHXF03GFA7J5' as Datum.ContactId,
+  createdAt: new Date('2024-09-08T19:33:09.583385-05:00'),
+  updatedAt: new Date('2024-09-08T19:33:09.583385-05:00'),
+  fullName: 'Roxanne Banks',
+  title: 'Developer',
+  email: 'rox@company.ai' as Datum.Email,
+  status: 'ACTIVE',
+  company: 'Google',
+  address: '',
+  phoneNumber: '+1234567890',
+  source: 'form',
+  lists: ['Newsletter', 'Admin', 'Cardholders', 'Developers'],
+} as Datum.Contact
 
-  if (!response.ok) {
-    const result = await response.json()
-    const message = result?.message || 'Something went wrong'
+const MOCK_ENRICHED_DATA = {
+  company: {
+    key: 'Company',
+    value: 'IBM Europe',
+  },
+  linkedin: {
+    key: 'LinkedIn',
+    value: 'linkedin.com/braink',
+  },
+  title: {
+    key: 'Title',
+    value: 'Marketing Director, EMEA',
+  },
+  github: {
+    key: 'GitHub',
+    value: 'github.com/braink',
+  },
+}
 
-    throw new Error(message)
-  }
+export async function getContact(id: Datum.ContactId): Promise<Datum.Contact> {
+  // TODO: Reinstate when the API is functional
+  // const response = await fetch(
+  //   getPathWithParams(OPERATOR_API_ROUTES.contact, { id }),
+  // )
 
-  const result = await response.json()
-  const contact = camelize<Datum.Contact>(result.contact)
+  // if (!response.ok) {
+  //   const result = await response.json()
+  //   const message = result?.message || 'Something went wrong'
 
-  return contact
+  //   throw new Error(message)
+  // }
+
+  // const result = await response.json()
+  // const contact = camelize<Datum.Contact>(result.contact)
+  const contact = MOCK_CONTACT
+
+  const enrichedData = await getEnrichedData(id)
+
+  return { ...contact, enrichedData }
+}
+
+export async function getEnrichedData(id: Datum.ContactId) {
+  // TODO: We will be hooking this up to a third party service...
+
+  const enrichedData = MOCK_ENRICHED_DATA
+
+  return enrichedData
 }
 
 export async function getContacts(): Promise<Datum.Contact[]> {

@@ -55,6 +55,7 @@ export const panelHeaderStyles = tv({
   slots: {
     header: 'mb-4 pb-8',
     heading: 'text-xl font-semibold',
+    icon: 'flex items-center justify-start gap-2',
     subheading: 'mt-5',
   },
   variants: {
