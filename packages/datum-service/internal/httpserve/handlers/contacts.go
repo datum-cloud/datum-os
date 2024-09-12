@@ -2,11 +2,9 @@ package handlers
 
 import (
 	"net/http"
-	"time"
 
 	"github.com/datum-cloud/datum-os/internal/ent/generated"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/contact"
-	"github.com/datum-cloud/datum-os/pkg/auth"
 	echo "github.com/datum-cloud/datum-os/pkg/echox"
 	"github.com/datum-cloud/datum-os/pkg/enums"
 	"github.com/datum-cloud/datum-os/pkg/middleware/transaction"
@@ -206,16 +204,9 @@ func (h *Handler) ContactsDelete(ctx echo.Context) error {
 		return h.BadRequest(ctx, err)
 	}
 
-	deletedBy, err := auth.GetUserIDFromContext(ctx.Request().Context())
-	if err != nil {
-		return h.InternalServerError(ctx, err)
-	}
-
-	affected, err := transaction.FromContext(ctx.Request().Context()).Contact.Update().
+	affected, err := transaction.FromContext(ctx.Request().Context()).Contact.Delete().
 		Where(contact.IDIn(IDs.ContactIDs...)).
-		SetDeletedAt(time.Now()).
-		SetDeletedBy(deletedBy).
-		Save(ctx.Request().Context())
+		Exec(ctx.Request().Context())
 	if err != nil {
 		return h.InternalServerError(ctx, err)
 	}
