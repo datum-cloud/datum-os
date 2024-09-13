@@ -179,9 +179,6 @@ export const CONTACT_COLUMNS: ColumnDef<Datum.Contact>[] = [
     enableGlobalFilter: true,
     enableSorting: true,
     sortingFn: fuzzySort,
-    cell: ({ cell }) => (
-      <div className="w-full">{cell.getValue() as string}</div>
-    ),
   },
   {
     id: 'status',

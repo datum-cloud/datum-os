@@ -41,6 +41,29 @@ const MOCK_ENRICHED_DATA = {
   },
 }
 
+const MOCK_CONTACT_HISTORY: Datum.ContactHistory = {
+  events: [
+    {
+      type: 'opened',
+      content: 'Welcome to Wise',
+      location: 'London, UK',
+      date: '2024-09-08T19:33:09.583385-05:00',
+    },
+    {
+      type: 'delivered',
+      content: 'Welcome to Wise',
+      location: 'Strasbourg, France',
+      date: '2024-08-08T19:33:09.583385-05:00',
+    },
+    {
+      type: 'sent',
+      content: 'Welcome to Wise',
+      location: 'London, UK',
+      date: '2024-07-08T19:33:09.583385-05:00',
+    },
+  ],
+}
+
 export async function getContact(id: Datum.ContactId): Promise<Datum.Contact> {
   // TODO: Reinstate when the API is functional
   // const response = await fetch(
@@ -59,11 +82,20 @@ export async function getContact(id: Datum.ContactId): Promise<Datum.Contact> {
   const contact = MOCK_CONTACT
 
   const enrichedData = await getEnrichedData(id)
+  const contactHistory = await getContactHistory(id)
 
-  return { ...contact, enrichedData }
+  return { ...contact, contactHistory, enrichedData }
 }
 
-export async function getEnrichedData(id: Datum.ContactId) {
+async function getContactHistory(id: Datum.ContactId) {
+  // TODO: Pull the Contact History from an API
+
+  const contactHistory = MOCK_CONTACT_HISTORY
+
+  return contactHistory
+}
+
+async function getEnrichedData(id: Datum.ContactId) {
   // TODO: We will be hooking this up to a third party service...
 
   const enrichedData = MOCK_ENRICHED_DATA

@@ -26,6 +26,13 @@ export const OPERATOR_API_ROUTES = {
   lists: '/api/auth/lists',
 }
 
+export const OPERATOR_FILES = {
+  contactsTemplate: {
+    name: 'datum-sample.csv',
+    url: '/templates/datum-sample.csv',
+  },
+}
+
 export const mockLists = [
   'Admin',
   'Newsletter',

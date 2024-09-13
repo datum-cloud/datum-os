@@ -79,6 +79,17 @@ export namespace Datum {
     name: string
   }
 
+  export type ContactHistoryEvent = {
+    type: 'sent' | 'opened' | 'delivered'
+    content: string
+    location: string
+    date: Date // ISO date string
+  }
+
+  export type ContactHistory = {
+    events: ContactHistoryEvent[]
+  }
+
   export interface Contact {
     id: ContactId
     fullName: string
@@ -94,6 +105,7 @@ export namespace Datum {
     status: Status
     lists: ListId[]
     enrichedData?: any // TODO: Type this properly
+    contactHistory?: ContactHistory // TODO: Type this properly
   }
 
   export interface ContactCreateInput extends Partial<Contact> {

@@ -1,3 +1,9 @@
+import { useSession } from 'next-auth/react'
+import Link from 'next/link'
+
+import { downloadFromUrl } from '@repo/common/download'
+import { OPERATOR_FILES } from '@repo/constants'
+import { Button } from '@repo/ui/button'
 import {
   Dialog,
   DialogClose,
@@ -5,12 +11,10 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@repo/ui/dialog'
-import { Button } from '@repo/ui/button'
-import Link from 'next/link'
+import { Datum } from '@repo/types'
+
 import DragAndDrop from '@/components/shared/drag-and-drop/drag-and-drop'
 import { uploadContacts } from '@/query/contacts'
-import { useSession } from 'next-auth/react'
-import { Datum } from '@repo/types'
 
 type ImportContactsDialogProps = {
   open: boolean
@@ -26,9 +30,9 @@ const ImportContactsDialog = ({ open, setOpen }: ImportContactsDialogProps) => {
     const formData = new FormData()
     formData.append('file', files[0])
 
-    await uploadContacts(organizationId, formData)
+    const contacts = await uploadContacts(organizationId, formData)
 
-    setOpen(false)
+    return contacts
   }
 
   function handleCancel() {
@@ -44,13 +48,28 @@ const ImportContactsDialog = ({ open, setOpen }: ImportContactsDialogProps) => {
         </DialogHeader>
         <div className="flex flex-col gap-12">
           <div className="w-full flex flex-col gap-6">
-            <DragAndDrop onConfirm={handleCSVUpload} />
-            <Button variant="sunglowXs" size="xs" className="underline">
+            <DragAndDrop
+              confirmationText="Import contacts"
+              entityName="contact"
+              onConfirm={handleCSVUpload}
+            />
+
+            <Button
+              variant="sunglowXs"
+              size="xs"
+              className="underline"
+              onClick={() =>
+                downloadFromUrl(
+                  OPERATOR_FILES.contactsTemplate.name,
+                  OPERATOR_FILES.contactsTemplate.url,
+                )
+              }
+            >
               Download our pre-formatted CSV
             </Button>
           </div>
           <div className="flex flex-col gap-5 border border-butter-900 bg-butter-800 rounded-lg p-9">
-            <p className="text-peat-800 leading-[23.6px]">
+            <p className="text-peat-800 leading-6">
               There are additional ways of importing contacts into Datum OS:
             </p>
             <ul className="list-disc list-inside text-peat-800 leading-[23.6px]">

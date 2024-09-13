@@ -1,5 +1,6 @@
 'use client'
 
+import { useSession } from 'next-auth/react'
 import React, { useState } from 'react'
 import {
   ArrowLeft,
@@ -34,14 +35,14 @@ import {
 } from '@/components/shared/sidebar/sidebar-accordion/sidebar-accordion'
 import { Loading } from '@/components/shared/loading/loading'
 import { useContact } from '@/hooks/useContacts'
+import { removeContacts } from '@/query/contacts'
 import { formatDate } from '@/utils/date'
 
 import { pageStyles as contactsStyles } from '../contacts/page.styles'
 import { tagStyles } from '../contacts/page.styles'
+import ContactFormDialog from '../contacts/contacts-form-dialog'
+import ContactTable from './contact-table'
 import { pageStyles } from './page.styles'
-import ContactFormDialog from '@/components/pages/protected/workspace/marketing/contacts/contacts-form-dialog'
-import { removeContacts } from '@/query/contacts'
-import { useSession } from 'next-auth/react'
 
 type ContactPageProps = {
   id: Datum.ContactId
@@ -77,7 +78,14 @@ const ContactPage = ({ id }: ContactPageProps) => {
     return <div>Whoops... Something went wrong</div>
   }
 
-  const { email, source, lists, createdAt, enrichedData = {} } = contact
+  const {
+    email,
+    source,
+    lists,
+    createdAt,
+    enrichedData = {},
+    contactHistory,
+  } = contact
 
   return (
     <div className={wrapper()}>
@@ -90,6 +98,7 @@ const ContactPage = ({ id }: ContactPageProps) => {
       </Link>
       <div className="flex items-end justify-between">
         <div className="flex gap-7 justify-start items-center">
+          {/* TODO: Fetch user image via Gravatar or similar */}
           <div className="h-[83px] w-[83px] flex items-center justify-center shrink-0 bg-winter-sky-800 rounded-[4px]">
             <User size={60} className="text-winter-sky-900" />
           </div>
@@ -125,7 +134,7 @@ const ContactPage = ({ id }: ContactPageProps) => {
       </div>
       <Panel>
         <PanelHeader heading="Latest activity" noBorder />
-        {/* TODO Table */}
+        <ContactTable history={contactHistory?.events || []} />
       </Panel>
       {Object.keys(enrichedData).length > 0 && (
         <Panel className="bg-blackberry-300/50">
