@@ -1,6 +1,8 @@
 package schema
 
 import (
+	"context"
+
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/entsql"
@@ -13,7 +15,10 @@ import (
 	emixin "github.com/datum-cloud/datum-os/pkg/entx/mixin"
 	"github.com/datum-cloud/datum-os/pkg/fgax/entfga"
 
+	"github.com/datum-cloud/datum-os/internal/ent/generated"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/privacy"
 	"github.com/datum-cloud/datum-os/internal/ent/mixin"
+	"github.com/datum-cloud/datum-os/internal/ent/privacy/rule"
 	"github.com/datum-cloud/datum-os/pkg/enums"
 )
 
@@ -111,24 +116,24 @@ func (ContactList) Annotations() []schema.Annotation {
 }
 
 // Policy of the ContactList
-// func (ContactList) Policy() ent.Policy {
-// 	return privacy.Policy{
-// 		Mutation: privacy.MutationPolicy{
-// 			privacy.ContactListMutationRuleFunc(func(ctx context.Context, m *generated.ContactListMutation) error {
-// 				return m.CheckAccessForEdit(ctx)
-// 			}),
-// 			rule.AllowIfOrgEditor(),
-// 			privacy.AlwaysDenyRule(),
-// 		},
-// 		Query: privacy.QueryPolicy{
-// 			privacy.ContactListQueryRuleFunc(func(ctx context.Context, q *generated.ContactListQuery) error {
-// 				return q.CheckAccess(ctx)
-// 			}),
-// 			rule.AllowIfOrgViewer(),
-// 			privacy.AlwaysDenyRule(),
-// 		},
-// 	}
-// }
+func (ContactList) Policy() ent.Policy {
+	return privacy.Policy{
+		Mutation: privacy.MutationPolicy{
+			privacy.ContactListMutationRuleFunc(func(ctx context.Context, m *generated.ContactListMutation) error {
+				return m.CheckAccessForEdit(ctx)
+			}),
+			rule.AllowIfOrgEditor(),
+			privacy.AlwaysDenyRule(),
+		},
+		Query: privacy.QueryPolicy{
+			privacy.ContactListQueryRuleFunc(func(ctx context.Context, q *generated.ContactListQuery) error {
+				return q.CheckAccess(ctx)
+			}),
+			rule.AllowIfOrgViewer(),
+			privacy.AlwaysDenyRule(),
+		},
+	}
+}
 
 // Hooks of the ContactList
 func (ContactList) Hooks() []ent.Hook {

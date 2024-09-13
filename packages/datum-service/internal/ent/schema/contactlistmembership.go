@@ -1,6 +1,8 @@
 package schema
 
 import (
+	"context"
+
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/entsql"
@@ -8,6 +10,8 @@ import (
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
+	"github.com/datum-cloud/datum-os/internal/ent/generated"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/privacy"
 	"github.com/datum-cloud/datum-os/internal/ent/mixin"
 	emixin "github.com/datum-cloud/datum-os/pkg/entx/mixin"
 	"github.com/datum-cloud/datum-os/pkg/fgax/entfga"
@@ -84,19 +88,19 @@ func (ContactListMembership) Hooks() []ent.Hook {
 }
 
 // Policy of the ContactListMembership
-// func (ContactListMembership) Policy() ent.Policy {
-// 	return privacy.Policy{
-// 		Mutation: privacy.MutationPolicy{
-// 			privacy.GroupMembershipMutationRuleFunc(func(ctx context.Context, m *generated.GroupMembershipMutation) error {
-// 				return m.CheckAccessForEdit(ctx)
-// 			}),
-// 			privacy.AlwaysDenyRule(),
-// 		},
-// 		Query: privacy.QueryPolicy{
-// 			privacy.GroupMembershipQueryRuleFunc(func(ctx context.Context, q *generated.GroupMembershipQuery) error {
-// 				return q.CheckAccess(ctx)
-// 			}),
-// 			privacy.AlwaysDenyRule(),
-// 		},
-// 	}
-// }
+func (ContactListMembership) Policy() ent.Policy {
+	return privacy.Policy{
+		Mutation: privacy.MutationPolicy{
+			privacy.GroupMembershipMutationRuleFunc(func(ctx context.Context, m *generated.GroupMembershipMutation) error {
+				return m.CheckAccessForEdit(ctx)
+			}),
+			privacy.AlwaysDenyRule(),
+		},
+		Query: privacy.QueryPolicy{
+			privacy.GroupMembershipQueryRuleFunc(func(ctx context.Context, q *generated.GroupMembershipQuery) error {
+				return q.CheckAccess(ctx)
+			}),
+			privacy.AlwaysDenyRule(),
+		},
+	}
+}

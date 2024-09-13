@@ -170,6 +170,13 @@ func NotFound() StatusError {
 	}
 }
 
+func OK() StatusError {
+	return StatusError{
+		StatusCode: http.StatusOK,
+		Reply:      Reply{Success: true},
+	}
+}
+
 func Created() StatusError {
 	return StatusError{
 		StatusCode: http.StatusCreated,

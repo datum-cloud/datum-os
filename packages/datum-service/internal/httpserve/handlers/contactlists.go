@@ -5,22 +5,20 @@ import (
 
 	"github.com/datum-cloud/datum-os/internal/ent/generated"
 	echo "github.com/datum-cloud/datum-os/pkg/echox"
-	"github.com/datum-cloud/datum-os/pkg/enums"
+	"github.com/datum-cloud/datum-os/pkg/middleware/transaction"
 	"github.com/datum-cloud/datum-os/pkg/models"
 	"github.com/getkin/kin-openapi/openapi3"
 )
 
 func (h *Handler) ContactListsGet(ctx echo.Context) error {
-	// contacts, err := transaction.FromContext(ctx.Request().Context()).Contact.Query().All(ctx.Request().Context())
-	// if err != nil {
-	// 	return h.InternalServerError(ctx, err)
-	// }
+	contactLists, err := transaction.FromContext(ctx.Request().Context()).ContactList.Query().All(ctx.Request().Context())
+	if err != nil {
+		return h.InternalServerError(ctx, err)
+	}
 
-	// contactsGetResponse := models.ContactsGetResponseFromGeneratedContacts(contacts)
-	// contactsGetResponse.Reply = rout.Reply{Success: true}
+	contactListsGetResponse := models.ContactListsGetResponseFromGeneratedContacts(contactLists)
 
-	// return h.Success(ctx, contactsGetResponse)
-	return nil
+	return h.Success(ctx, contactListsGetResponse)
 }
 
 // BindContactsGet returns the OpenAPI3 operation for getting an orgs contacts'
@@ -34,7 +32,7 @@ func (h *Handler) BindContactListsGet() *openapi3.Operation {
 		},
 	}
 
-	// h.AddResponse("ContactListsGetResponse", "success", models.ExampleContactListsGetSuccessResponse, contactListsGet, http.StatusOK)
+	h.AddResponse("ContactListsGetResponse", "success", models.ExampleContactListsGetSuccessResponse, contactListsGet, http.StatusOK)
 	contactListsGet.AddResponse(http.StatusInternalServerError, internalServerError())
 	contactListsGet.AddResponse(http.StatusUnauthorized, unauthorized())
 
@@ -42,21 +40,20 @@ func (h *Handler) BindContactListsGet() *openapi3.Operation {
 }
 
 func (h *Handler) ContactListsGetOne(ctx echo.Context) error {
-	// contactListsGetOneReq := models.ContactListsGetOneRequest{}
-	// if err := ctx.Bind(&contactListsGetOneReq); err != nil {
-	// 	return h.BadRequest(ctx, err)
-	// }
+	contactListsGetOneReq := models.ContactListsGetOneRequest{}
+	if err := ctx.Bind(&contactListsGetOneReq); err != nil {
+		return h.BadRequest(ctx, err)
+	}
 
-	// contactList, err := transaction.FromContext(ctx.Request().Context()).
-	// 	Contact.Get(ctx.Request().Context(), contactListsGetOneReq.ID)
-	// if err != nil {
-	// 	return h.InternalServerError(ctx, err)
-	// }
+	contactList, err := transaction.FromContext(ctx.Request().Context()).
+		ContactList.Get(ctx.Request().Context(), contactListsGetOneReq.ID)
+	if err != nil {
+		return h.InternalServerError(ctx, err)
+	}
 
-	// contactListsGetOneResponse := models.ContactListsGetOneResponseFromGeneratedContact(contact)
+	contactListsGetOneResponse := models.ContactListsGetOneResponseFromGeneratedContactList(contactList)
 
-	// return h.Success(ctx, contactListsGetOneResponse)
-	return nil
+	return h.Success(ctx, contactListsGetOneResponse)
 }
 
 func (h *Handler) BindContactListsGetOne() *openapi3.Operation {
@@ -77,8 +74,8 @@ func (h *Handler) BindContactListsGetOne() *openapi3.Operation {
 	return contactListsGetOne
 }
 
-func contactListCreateFromContactListData(cd *models.Contact, cc *generated.ContactCreate,
-) *generated.ContactCreate {
+func contactListCreateFromContactListData(cd *models.ContactList, cc *generated.ContactListCreate,
+) *generated.ContactListCreate {
 	c := func(from string, to func(string)) {
 		if len(from) > 0 {
 			to(from)
@@ -86,41 +83,34 @@ func contactListCreateFromContactListData(cd *models.Contact, cc *generated.Cont
 	}
 
 	m := cc.Mutation()
-	c(cd.FullName, m.SetFullName)
-	c(cd.Title, m.SetTitle)
-	c(cd.Company, m.SetCompany)
-	c(cd.Email, m.SetEmail)
-	c(cd.PhoneNumber, m.SetPhoneNumber)
-	c(cd.Address, m.SetAddress)
-
-	if len(cd.Status) > 0 {
-		m.SetStatus(*enums.ToUserStatus(cd.Status))
-	}
+	c(cd.Name, m.SetName)
+	c(cd.Visibility, m.SetVisibility)
+	c(cd.DisplayName, m.SetDisplayName)
+	c(cd.Description, m.SetDisplayName)
 
 	return cc
 }
 
 func (h *Handler) ContactListsPost(ctx echo.Context) error {
-	// contactLists := models.ContactListsPostRequest{}
-	// err := ctx.Bind(&contactLists)
-	// if err != nil {
-	// 	return h.BadRequest(ctx, err)
-	// }
+	contactLists := models.ContactListsPostRequest{}
+	err := ctx.Bind(&contactLists)
+	if err != nil {
+		return h.BadRequest(ctx, err)
+	}
 
-	// createdContactLists, err := transaction.FromContext(ctx.Request().Context()).
-	// 	Contact.
-	// 	MapCreateBulk(contactLists.Contacts, func(builder *generated.ContactListsCreate, i int) {
-	// 		contactListCreateFromContactListData(&contactLists.Contacts[i], builder)
-	// 	}).
-	// 	Save(ctx.Request().Context())
-	// if err != nil {
-	// 	return h.InternalServerError(ctx, err)
-	// }
+	createdContactLists, err := transaction.FromContext(ctx.Request().Context()).
+		ContactList.
+		MapCreateBulk(contactLists.ContactLists, func(builder *generated.ContactListCreate, i int) {
+			contactListCreateFromContactListData(&contactLists.ContactLists[i], builder)
+		}).
+		Save(ctx.Request().Context())
+	if err != nil {
+		return h.InternalServerError(ctx, err)
+	}
 
-	// h.Logger.Debugf("Created Contact Lists, %s", createdContactLists)
+	h.Logger.Debugf("Created Contact Lists, %s", createdContactLists)
 
-	// return h.Created(ctx, models.ContactsGetResponseFromGeneratedContacts(createdContacts))
-	return nil
+	return h.Created(ctx, models.ContactListsGetResponseFromGeneratedContacts(createdContactLists))
 }
 
 func (h *Handler) BindContactListsPost() *openapi3.Operation {
