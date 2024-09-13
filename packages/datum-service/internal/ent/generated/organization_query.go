@@ -15,6 +15,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/apitoken"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/contact"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/contactlist"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/documentdata"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/entitlement"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/entitlementplan"
@@ -75,6 +76,7 @@ type OrganizationQuery struct {
 	withEntities                     *EntityQuery
 	withEntitytypes                  *EntityTypeQuery
 	withContacts                     *ContactQuery
+	withContactLists                 *ContactListQuery
 	withNotes                        *NoteQuery
 	withMembers                      *OrgMembershipQuery
 	modifiers                        []func(*sql.Selector)
@@ -102,6 +104,7 @@ type OrganizationQuery struct {
 	withNamedEntities                map[string]*EntityQuery
 	withNamedEntitytypes             map[string]*EntityTypeQuery
 	withNamedContacts                map[string]*ContactQuery
+	withNamedContactLists            map[string]*ContactListQuery
 	withNamedNotes                   map[string]*NoteQuery
 	withNamedMembers                 map[string]*OrgMembershipQuery
 	// intermediate query (i.e. traversal path).
@@ -765,6 +768,31 @@ func (oq *OrganizationQuery) QueryContacts() *ContactQuery {
 	return query
 }
 
+// QueryContactLists chains the current query on the "contact_lists" edge.
+func (oq *OrganizationQuery) QueryContactLists() *ContactListQuery {
+	query := (&ContactListClient{config: oq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := oq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := oq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, selector),
+			sqlgraph.To(contactlist.Table, contactlist.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.ContactListsTable, organization.ContactListsColumn),
+		)
+		schemaConfig := oq.schemaConfig
+		step.To.Schema = schemaConfig.ContactList
+		step.Edge.Schema = schemaConfig.ContactList
+		fromU = sqlgraph.SetNeighbors(oq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // QueryNotes chains the current query on the "notes" edge.
 func (oq *OrganizationQuery) QueryNotes() *NoteQuery {
 	query := (&NoteClient{config: oq.config}).Query()
@@ -1032,6 +1060,7 @@ func (oq *OrganizationQuery) Clone() *OrganizationQuery {
 		withEntities:                oq.withEntities.Clone(),
 		withEntitytypes:             oq.withEntitytypes.Clone(),
 		withContacts:                oq.withContacts.Clone(),
+		withContactLists:            oq.withContactLists.Clone(),
 		withNotes:                   oq.withNotes.Clone(),
 		withMembers:                 oq.withMembers.Clone(),
 		// clone intermediate query.
@@ -1315,6 +1344,17 @@ func (oq *OrganizationQuery) WithContacts(opts ...func(*ContactQuery)) *Organiza
 	return oq
 }
 
+// WithContactLists tells the query-builder to eager-load the nodes that are connected to
+// the "contact_lists" edge. The optional arguments are used to configure the query builder of the edge.
+func (oq *OrganizationQuery) WithContactLists(opts ...func(*ContactListQuery)) *OrganizationQuery {
+	query := (&ContactListClient{config: oq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	oq.withContactLists = query
+	return oq
+}
+
 // WithNotes tells the query-builder to eager-load the nodes that are connected to
 // the "notes" edge. The optional arguments are used to configure the query builder of the edge.
 func (oq *OrganizationQuery) WithNotes(opts ...func(*NoteQuery)) *OrganizationQuery {
@@ -1421,7 +1461,7 @@ func (oq *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 	var (
 		nodes       = []*Organization{}
 		_spec       = oq.querySpec()
-		loadedTypes = [27]bool{
+		loadedTypes = [28]bool{
 			oq.withParent != nil,
 			oq.withChildren != nil,
 			oq.withGroups != nil,
@@ -1447,6 +1487,7 @@ func (oq *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			oq.withEntities != nil,
 			oq.withEntitytypes != nil,
 			oq.withContacts != nil,
+			oq.withContactLists != nil,
 			oq.withNotes != nil,
 			oq.withMembers != nil,
 		}
@@ -1655,6 +1696,13 @@ func (oq *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			return nil, err
 		}
 	}
+	if query := oq.withContactLists; query != nil {
+		if err := oq.loadContactLists(ctx, query, nodes,
+			func(n *Organization) { n.Edges.ContactLists = []*ContactList{} },
+			func(n *Organization, e *ContactList) { n.Edges.ContactLists = append(n.Edges.ContactLists, e) }); err != nil {
+			return nil, err
+		}
+	}
 	if query := oq.withNotes; query != nil {
 		if err := oq.loadNotes(ctx, query, nodes,
 			func(n *Organization) { n.Edges.Notes = []*Note{} },
@@ -1827,6 +1875,13 @@ func (oq *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 		if err := oq.loadContacts(ctx, query, nodes,
 			func(n *Organization) { n.appendNamedContacts(name) },
 			func(n *Organization, e *Contact) { n.appendNamedContacts(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range oq.withNamedContactLists {
+		if err := oq.loadContactLists(ctx, query, nodes,
+			func(n *Organization) { n.appendNamedContactLists(name) },
+			func(n *Organization, e *ContactList) { n.appendNamedContactLists(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -2760,6 +2815,36 @@ func (oq *OrganizationQuery) loadContacts(ctx context.Context, query *ContactQue
 	}
 	return nil
 }
+func (oq *OrganizationQuery) loadContactLists(ctx context.Context, query *ContactListQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *ContactList)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Organization)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(contactlist.FieldOwnerID)
+	}
+	query.Where(predicate.ContactList(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(organization.ContactListsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.OwnerID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "owner_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
 func (oq *OrganizationQuery) loadNotes(ctx context.Context, query *NoteQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *Note)) error {
 	fks := make([]driver.Value, 0, len(nodes))
 	nodeids := make(map[string]*Organization)
@@ -3233,6 +3318,20 @@ func (oq *OrganizationQuery) WithNamedContacts(name string, opts ...func(*Contac
 		oq.withNamedContacts = make(map[string]*ContactQuery)
 	}
 	oq.withNamedContacts[name] = query
+	return oq
+}
+
+// WithNamedContactLists tells the query-builder to eager-load the nodes that are connected to the "contact_lists"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (oq *OrganizationQuery) WithNamedContactLists(name string, opts ...func(*ContactListQuery)) *OrganizationQuery {
+	query := (&ContactListClient{config: oq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if oq.withNamedContactLists == nil {
+		oq.withNamedContactLists = make(map[string]*ContactListQuery)
+	}
+	oq.withNamedContactLists[name] = query
 	return oq
 }
 

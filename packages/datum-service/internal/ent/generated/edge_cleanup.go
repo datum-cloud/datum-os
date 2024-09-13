@@ -7,6 +7,8 @@ import (
 
 	"entgo.io/ent/privacy"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/contact"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/contactlist"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/contactlistmembership"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/documentdata"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/emailverificationtoken"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/entitlement"
@@ -51,6 +53,41 @@ func ContactEdgeCleanup(ctx context.Context, id string) error {
 func ContactHistoryEdgeCleanup(ctx context.Context, id string) error {
 	// If a user has access to delete the object, they have access to delete all edges
 	ctx = privacy.DecisionContext(ctx, privacy.Allowf("cleanup contacthistory edge"))
+
+	return nil
+}
+
+func ContactListEdgeCleanup(ctx context.Context, id string) error {
+	// If a user has access to delete the object, they have access to delete all edges
+	ctx = privacy.DecisionContext(ctx, privacy.Allowf("cleanup contactlist edge"))
+
+	if exists, err := FromContext(ctx).ContactListMembership.Query().Where((contactlistmembership.HasContactListWith(contactlist.ID(id)))).Exist(ctx); err == nil && exists {
+		if contactlistmembershipCount, err := FromContext(ctx).ContactListMembership.Delete().Where(contactlistmembership.HasContactListWith(contactlist.ID(id))).Exec(ctx); err != nil {
+			FromContext(ctx).Logger.Debugw("deleting contactlistmembership", "count", contactlistmembershipCount, "err", err)
+			return err
+		}
+	}
+
+	return nil
+}
+
+func ContactListHistoryEdgeCleanup(ctx context.Context, id string) error {
+	// If a user has access to delete the object, they have access to delete all edges
+	ctx = privacy.DecisionContext(ctx, privacy.Allowf("cleanup contactlisthistory edge"))
+
+	return nil
+}
+
+func ContactListMembershipEdgeCleanup(ctx context.Context, id string) error {
+	// If a user has access to delete the object, they have access to delete all edges
+	ctx = privacy.DecisionContext(ctx, privacy.Allowf("cleanup contactlistmembership edge"))
+
+	return nil
+}
+
+func ContactListMembershipHistoryEdgeCleanup(ctx context.Context, id string) error {
+	// If a user has access to delete the object, they have access to delete all edges
+	ctx = privacy.DecisionContext(ctx, privacy.Allowf("cleanup contactlistmembershiphistory edge"))
 
 	return nil
 }
@@ -433,6 +470,13 @@ func OrganizationEdgeCleanup(ctx context.Context, id string) error {
 	if exists, err := FromContext(ctx).Contact.Query().Where((contact.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if contactCount, err := FromContext(ctx).Contact.Delete().Where(contact.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
 			FromContext(ctx).Logger.Debugw("deleting contact", "count", contactCount, "err", err)
+			return err
+		}
+	}
+
+	if exists, err := FromContext(ctx).ContactList.Query().Where((contactlist.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
+		if contactlistCount, err := FromContext(ctx).ContactList.Delete().Where(contactlist.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
+			FromContext(ctx).Logger.Debugw("deleting contactlist", "count", contactlistCount, "err", err)
 			return err
 		}
 	}

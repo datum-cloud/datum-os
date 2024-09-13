@@ -9,6 +9,8 @@ import (
 
 	"entgo.io/ent/dialect/sql"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/contacthistory"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/contactlisthistory"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/contactlistmembershiphistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/documentdatahistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/entitlementhistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/entitlementplanfeaturehistory"
@@ -77,6 +79,98 @@ func (chq *ContactHistoryQuery) AsOf(ctx context.Context, time time.Time) (*Cont
 	return chq.
 		Where(contacthistory.HistoryTimeLTE(time)).
 		Order(contacthistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (cl *ContactList) History() *ContactListHistoryQuery {
+	historyClient := NewContactListHistoryClient(cl.config)
+	return historyClient.Query().Where(contactlisthistory.Ref(cl.ID))
+}
+
+func (clh *ContactListHistory) Next(ctx context.Context) (*ContactListHistory, error) {
+	client := NewContactListHistoryClient(clh.config)
+	return client.Query().
+		Where(
+			contactlisthistory.Ref(clh.Ref),
+			contactlisthistory.HistoryTimeGT(clh.HistoryTime),
+		).
+		Order(contactlisthistory.ByHistoryTime()).
+		First(ctx)
+}
+
+func (clh *ContactListHistory) Prev(ctx context.Context) (*ContactListHistory, error) {
+	client := NewContactListHistoryClient(clh.config)
+	return client.Query().
+		Where(
+			contactlisthistory.Ref(clh.Ref),
+			contactlisthistory.HistoryTimeLT(clh.HistoryTime),
+		).
+		Order(contactlisthistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (clhq *ContactListHistoryQuery) Earliest(ctx context.Context) (*ContactListHistory, error) {
+	return clhq.
+		Order(contactlisthistory.ByHistoryTime()).
+		First(ctx)
+}
+
+func (clhq *ContactListHistoryQuery) Latest(ctx context.Context) (*ContactListHistory, error) {
+	return clhq.
+		Order(contactlisthistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (clhq *ContactListHistoryQuery) AsOf(ctx context.Context, time time.Time) (*ContactListHistory, error) {
+	return clhq.
+		Where(contactlisthistory.HistoryTimeLTE(time)).
+		Order(contactlisthistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (clm *ContactListMembership) History() *ContactListMembershipHistoryQuery {
+	historyClient := NewContactListMembershipHistoryClient(clm.config)
+	return historyClient.Query().Where(contactlistmembershiphistory.Ref(clm.ID))
+}
+
+func (clmh *ContactListMembershipHistory) Next(ctx context.Context) (*ContactListMembershipHistory, error) {
+	client := NewContactListMembershipHistoryClient(clmh.config)
+	return client.Query().
+		Where(
+			contactlistmembershiphistory.Ref(clmh.Ref),
+			contactlistmembershiphistory.HistoryTimeGT(clmh.HistoryTime),
+		).
+		Order(contactlistmembershiphistory.ByHistoryTime()).
+		First(ctx)
+}
+
+func (clmh *ContactListMembershipHistory) Prev(ctx context.Context) (*ContactListMembershipHistory, error) {
+	client := NewContactListMembershipHistoryClient(clmh.config)
+	return client.Query().
+		Where(
+			contactlistmembershiphistory.Ref(clmh.Ref),
+			contactlistmembershiphistory.HistoryTimeLT(clmh.HistoryTime),
+		).
+		Order(contactlistmembershiphistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (clmhq *ContactListMembershipHistoryQuery) Earliest(ctx context.Context) (*ContactListMembershipHistory, error) {
+	return clmhq.
+		Order(contactlistmembershiphistory.ByHistoryTime()).
+		First(ctx)
+}
+
+func (clmhq *ContactListMembershipHistoryQuery) Latest(ctx context.Context) (*ContactListMembershipHistory, error) {
+	return clmhq.
+		Order(contactlistmembershiphistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (clmhq *ContactListMembershipHistoryQuery) AsOf(ctx context.Context, time time.Time) (*ContactListMembershipHistory, error) {
+	return clmhq.
+		Where(contactlistmembershiphistory.HistoryTimeLTE(time)).
+		Order(contactlistmembershiphistory.ByHistoryTime(sql.OrderDesc())).
 		First(ctx)
 }
 

@@ -123,16 +123,17 @@ func (c *APITokenUpdateOne) SetInput(i UpdateAPITokenInput) *APITokenUpdateOne {
 
 // CreateContactInput represents a mutation input for creating contacts.
 type CreateContactInput struct {
-	Tags        []string
-	FullName    string
-	Title       *string
-	Company     *string
-	Email       *string
-	PhoneNumber *string
-	Address     *string
-	Status      *enums.UserStatus
-	OwnerID     *string
-	EntityIDs   []string
+	Tags           []string
+	FullName       string
+	Title          *string
+	Company        *string
+	Email          *string
+	PhoneNumber    *string
+	Address        *string
+	Status         *enums.UserStatus
+	OwnerID        *string
+	ContactListIDs []string
+	EntityIDs      []string
 }
 
 // Mutate applies the CreateContactInput on the ContactMutation builder.
@@ -162,6 +163,9 @@ func (i *CreateContactInput) Mutate(m *ContactMutation) {
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
 	}
+	if v := i.ContactListIDs; len(v) > 0 {
+		m.AddContactListIDs(v...)
+	}
 	if v := i.EntityIDs; len(v) > 0 {
 		m.AddEntityIDs(v...)
 	}
@@ -175,26 +179,29 @@ func (c *ContactCreate) SetInput(i CreateContactInput) *ContactCreate {
 
 // UpdateContactInput represents a mutation input for updating contacts.
 type UpdateContactInput struct {
-	ClearTags        bool
-	Tags             []string
-	AppendTags       []string
-	FullName         *string
-	ClearTitle       bool
-	Title            *string
-	ClearCompany     bool
-	Company          *string
-	ClearEmail       bool
-	Email            *string
-	ClearPhoneNumber bool
-	PhoneNumber      *string
-	ClearAddress     bool
-	Address          *string
-	Status           *enums.UserStatus
-	ClearOwner       bool
-	OwnerID          *string
-	ClearEntities    bool
-	AddEntityIDs     []string
-	RemoveEntityIDs  []string
+	ClearTags            bool
+	Tags                 []string
+	AppendTags           []string
+	FullName             *string
+	ClearTitle           bool
+	Title                *string
+	ClearCompany         bool
+	Company              *string
+	ClearEmail           bool
+	Email                *string
+	ClearPhoneNumber     bool
+	PhoneNumber          *string
+	ClearAddress         bool
+	Address              *string
+	Status               *enums.UserStatus
+	ClearOwner           bool
+	OwnerID              *string
+	ClearContactLists    bool
+	AddContactListIDs    []string
+	RemoveContactListIDs []string
+	ClearEntities        bool
+	AddEntityIDs         []string
+	RemoveEntityIDs      []string
 }
 
 // Mutate applies the UpdateContactInput on the ContactMutation builder.
@@ -250,6 +257,15 @@ func (i *UpdateContactInput) Mutate(m *ContactMutation) {
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
 	}
+	if i.ClearContactLists {
+		m.ClearContactLists()
+	}
+	if v := i.AddContactListIDs; len(v) > 0 {
+		m.AddContactListIDs(v...)
+	}
+	if v := i.RemoveContactListIDs; len(v) > 0 {
+		m.RemoveContactListIDs(v...)
+	}
 	if i.ClearEntities {
 		m.ClearEntities()
 	}
@@ -269,6 +285,204 @@ func (c *ContactUpdate) SetInput(i UpdateContactInput) *ContactUpdate {
 
 // SetInput applies the change-set in the UpdateContactInput on the ContactUpdateOne builder.
 func (c *ContactUpdateOne) SetInput(i UpdateContactInput) *ContactUpdateOne {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// CreateContactListInput represents a mutation input for creating contactlists.
+type CreateContactListInput struct {
+	Tags           []string
+	Name           string
+	Visibility     *string
+	DisplayName    *string
+	Description    *string
+	OwnerID        *string
+	ContactIDs     []string
+	EventIDs       []string
+	IntegrationIDs []string
+}
+
+// Mutate applies the CreateContactListInput on the ContactListMutation builder.
+func (i *CreateContactListInput) Mutate(m *ContactListMutation) {
+	if v := i.Tags; v != nil {
+		m.SetTags(v)
+	}
+	m.SetName(i.Name)
+	if v := i.Visibility; v != nil {
+		m.SetVisibility(*v)
+	}
+	if v := i.DisplayName; v != nil {
+		m.SetDisplayName(*v)
+	}
+	if v := i.Description; v != nil {
+		m.SetDescription(*v)
+	}
+	if v := i.OwnerID; v != nil {
+		m.SetOwnerID(*v)
+	}
+	if v := i.ContactIDs; len(v) > 0 {
+		m.AddContactIDs(v...)
+	}
+	if v := i.EventIDs; len(v) > 0 {
+		m.AddEventIDs(v...)
+	}
+	if v := i.IntegrationIDs; len(v) > 0 {
+		m.AddIntegrationIDs(v...)
+	}
+}
+
+// SetInput applies the change-set in the CreateContactListInput on the ContactListCreate builder.
+func (c *ContactListCreate) SetInput(i CreateContactListInput) *ContactListCreate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// UpdateContactListInput represents a mutation input for updating contactlists.
+type UpdateContactListInput struct {
+	ClearTags            bool
+	Tags                 []string
+	AppendTags           []string
+	Name                 *string
+	Visibility           *string
+	DisplayName          *string
+	ClearDescription     bool
+	Description          *string
+	ClearOwner           bool
+	OwnerID              *string
+	ClearContacts        bool
+	AddContactIDs        []string
+	RemoveContactIDs     []string
+	ClearEvents          bool
+	AddEventIDs          []string
+	RemoveEventIDs       []string
+	ClearIntegrations    bool
+	AddIntegrationIDs    []string
+	RemoveIntegrationIDs []string
+}
+
+// Mutate applies the UpdateContactListInput on the ContactListMutation builder.
+func (i *UpdateContactListInput) Mutate(m *ContactListMutation) {
+	if i.ClearTags {
+		m.ClearTags()
+	}
+	if v := i.Tags; v != nil {
+		m.SetTags(v)
+	}
+	if i.AppendTags != nil {
+		m.AppendTags(i.Tags)
+	}
+	if v := i.Name; v != nil {
+		m.SetName(*v)
+	}
+	if v := i.Visibility; v != nil {
+		m.SetVisibility(*v)
+	}
+	if v := i.DisplayName; v != nil {
+		m.SetDisplayName(*v)
+	}
+	if i.ClearDescription {
+		m.ClearDescription()
+	}
+	if v := i.Description; v != nil {
+		m.SetDescription(*v)
+	}
+	if i.ClearOwner {
+		m.ClearOwner()
+	}
+	if v := i.OwnerID; v != nil {
+		m.SetOwnerID(*v)
+	}
+	if i.ClearContacts {
+		m.ClearContacts()
+	}
+	if v := i.AddContactIDs; len(v) > 0 {
+		m.AddContactIDs(v...)
+	}
+	if v := i.RemoveContactIDs; len(v) > 0 {
+		m.RemoveContactIDs(v...)
+	}
+	if i.ClearEvents {
+		m.ClearEvents()
+	}
+	if v := i.AddEventIDs; len(v) > 0 {
+		m.AddEventIDs(v...)
+	}
+	if v := i.RemoveEventIDs; len(v) > 0 {
+		m.RemoveEventIDs(v...)
+	}
+	if i.ClearIntegrations {
+		m.ClearIntegrations()
+	}
+	if v := i.AddIntegrationIDs; len(v) > 0 {
+		m.AddIntegrationIDs(v...)
+	}
+	if v := i.RemoveIntegrationIDs; len(v) > 0 {
+		m.RemoveIntegrationIDs(v...)
+	}
+}
+
+// SetInput applies the change-set in the UpdateContactListInput on the ContactListUpdate builder.
+func (c *ContactListUpdate) SetInput(i UpdateContactListInput) *ContactListUpdate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// SetInput applies the change-set in the UpdateContactListInput on the ContactListUpdateOne builder.
+func (c *ContactListUpdateOne) SetInput(i UpdateContactListInput) *ContactListUpdateOne {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// CreateContactListMembershipInput represents a mutation input for creating contactlistmemberships.
+type CreateContactListMembershipInput struct {
+	ContactListID string
+	ContactID     string
+	EventIDs      []string
+}
+
+// Mutate applies the CreateContactListMembershipInput on the ContactListMembershipMutation builder.
+func (i *CreateContactListMembershipInput) Mutate(m *ContactListMembershipMutation) {
+	m.SetContactListID(i.ContactListID)
+	m.SetContactID(i.ContactID)
+	if v := i.EventIDs; len(v) > 0 {
+		m.AddEventIDs(v...)
+	}
+}
+
+// SetInput applies the change-set in the CreateContactListMembershipInput on the ContactListMembershipCreate builder.
+func (c *ContactListMembershipCreate) SetInput(i CreateContactListMembershipInput) *ContactListMembershipCreate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// UpdateContactListMembershipInput represents a mutation input for updating contactlistmemberships.
+type UpdateContactListMembershipInput struct {
+	ClearEvents    bool
+	AddEventIDs    []string
+	RemoveEventIDs []string
+}
+
+// Mutate applies the UpdateContactListMembershipInput on the ContactListMembershipMutation builder.
+func (i *UpdateContactListMembershipInput) Mutate(m *ContactListMembershipMutation) {
+	if i.ClearEvents {
+		m.ClearEvents()
+	}
+	if v := i.AddEventIDs; len(v) > 0 {
+		m.AddEventIDs(v...)
+	}
+	if v := i.RemoveEventIDs; len(v) > 0 {
+		m.RemoveEventIDs(v...)
+	}
+}
+
+// SetInput applies the change-set in the UpdateContactListMembershipInput on the ContactListMembershipUpdate builder.
+func (c *ContactListMembershipUpdate) SetInput(i UpdateContactListMembershipInput) *ContactListMembershipUpdate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// SetInput applies the change-set in the UpdateContactListMembershipInput on the ContactListMembershipUpdateOne builder.
+func (c *ContactListMembershipUpdateOne) SetInput(i UpdateContactListMembershipInput) *ContactListMembershipUpdateOne {
 	i.Mutate(c.Mutation())
 	return c
 }
@@ -2833,6 +3047,7 @@ type CreateOrganizationInput struct {
 	EntityIDs                  []string
 	EntitytypeIDs              []string
 	ContactIDs                 []string
+	ContactListIDs             []string
 	NoteIDs                    []string
 }
 
@@ -2926,6 +3141,9 @@ func (i *CreateOrganizationInput) Mutate(m *OrganizationMutation) {
 	if v := i.ContactIDs; len(v) > 0 {
 		m.AddContactIDs(v...)
 	}
+	if v := i.ContactListIDs; len(v) > 0 {
+		m.AddContactListIDs(v...)
+	}
 	if v := i.NoteIDs; len(v) > 0 {
 		m.AddNoteIDs(v...)
 	}
@@ -3013,6 +3231,9 @@ type UpdateOrganizationInput struct {
 	ClearContacts                    bool
 	AddContactIDs                    []string
 	RemoveContactIDs                 []string
+	ClearContactLists                bool
+	AddContactListIDs                []string
+	RemoveContactListIDs             []string
 	ClearNotes                       bool
 	AddNoteIDs                       []string
 	RemoveNoteIDs                    []string
@@ -3241,6 +3462,15 @@ func (i *UpdateOrganizationInput) Mutate(m *OrganizationMutation) {
 	}
 	if v := i.RemoveContactIDs; len(v) > 0 {
 		m.RemoveContactIDs(v...)
+	}
+	if i.ClearContactLists {
+		m.ClearContactLists()
+	}
+	if v := i.AddContactListIDs; len(v) > 0 {
+		m.AddContactListIDs(v...)
+	}
+	if v := i.RemoveContactListIDs; len(v) > 0 {
+		m.RemoveContactListIDs(v...)
 	}
 	if i.ClearNotes {
 		m.ClearNotes()

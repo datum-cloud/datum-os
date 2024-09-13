@@ -18,6 +18,14 @@ type Tx struct {
 	Contact *ContactClient
 	// ContactHistory is the client for interacting with the ContactHistory builders.
 	ContactHistory *ContactHistoryClient
+	// ContactList is the client for interacting with the ContactList builders.
+	ContactList *ContactListClient
+	// ContactListHistory is the client for interacting with the ContactListHistory builders.
+	ContactListHistory *ContactListHistoryClient
+	// ContactListMembership is the client for interacting with the ContactListMembership builders.
+	ContactListMembership *ContactListMembershipClient
+	// ContactListMembershipHistory is the client for interacting with the ContactListMembershipHistory builders.
+	ContactListMembershipHistory *ContactListMembershipHistoryClient
 	// DocumentData is the client for interacting with the DocumentData builders.
 	DocumentData *DocumentDataClient
 	// DocumentDataHistory is the client for interacting with the DocumentDataHistory builders.
@@ -260,6 +268,10 @@ func (tx *Tx) init() {
 	tx.APIToken = NewAPITokenClient(tx.config)
 	tx.Contact = NewContactClient(tx.config)
 	tx.ContactHistory = NewContactHistoryClient(tx.config)
+	tx.ContactList = NewContactListClient(tx.config)
+	tx.ContactListHistory = NewContactListHistoryClient(tx.config)
+	tx.ContactListMembership = NewContactListMembershipClient(tx.config)
+	tx.ContactListMembershipHistory = NewContactListMembershipHistoryClient(tx.config)
 	tx.DocumentData = NewDocumentDataClient(tx.config)
 	tx.DocumentDataHistory = NewDocumentDataHistoryClient(tx.config)
 	tx.EmailVerificationToken = NewEmailVerificationTokenClient(tx.config)

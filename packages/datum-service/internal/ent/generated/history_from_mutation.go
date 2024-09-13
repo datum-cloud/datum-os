@@ -292,6 +292,420 @@ func (m *ContactMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	return nil
 }
 
+func (m *ContactListMutation) CreateHistoryFromCreate(ctx context.Context) error {
+	client := m.Client()
+
+	id, ok := m.ID()
+	if !ok {
+		return idNotFoundError
+	}
+
+	create := client.ContactListHistory.Create()
+
+	create = create.
+		SetOperation(EntOpToHistoryOp(m.Op())).
+		SetHistoryTime(time.Now()).
+		SetRef(id)
+
+	if createdAt, exists := m.CreatedAt(); exists {
+		create = create.SetCreatedAt(createdAt)
+	}
+
+	if updatedAt, exists := m.UpdatedAt(); exists {
+		create = create.SetUpdatedAt(updatedAt)
+	}
+
+	if createdBy, exists := m.CreatedBy(); exists {
+		create = create.SetCreatedBy(createdBy)
+	}
+
+	if updatedBy, exists := m.UpdatedBy(); exists {
+		create = create.SetUpdatedBy(updatedBy)
+	}
+
+	if deletedAt, exists := m.DeletedAt(); exists {
+		create = create.SetDeletedAt(deletedAt)
+	}
+
+	if deletedBy, exists := m.DeletedBy(); exists {
+		create = create.SetDeletedBy(deletedBy)
+	}
+
+	if mappingID, exists := m.MappingID(); exists {
+		create = create.SetMappingID(mappingID)
+	}
+
+	if tags, exists := m.Tags(); exists {
+		create = create.SetTags(tags)
+	}
+
+	if ownerID, exists := m.OwnerID(); exists {
+		create = create.SetOwnerID(ownerID)
+	}
+
+	if name, exists := m.Name(); exists {
+		create = create.SetName(name)
+	}
+
+	if visibility, exists := m.Visibility(); exists {
+		create = create.SetVisibility(visibility)
+	}
+
+	if displayName, exists := m.DisplayName(); exists {
+		create = create.SetDisplayName(displayName)
+	}
+
+	if description, exists := m.Description(); exists {
+		create = create.SetDescription(description)
+	}
+
+	_, err := create.Save(ctx)
+
+	return err
+}
+
+func (m *ContactListMutation) CreateHistoryFromUpdate(ctx context.Context) error {
+	// check for soft delete operation and delete instead
+	if entx.CheckIsSoftDelete(ctx) {
+		return m.CreateHistoryFromDelete(ctx)
+	}
+	client := m.Client()
+
+	ids, err := m.IDs(ctx)
+	if err != nil {
+		return fmt.Errorf("getting ids: %w", err)
+	}
+
+	for _, id := range ids {
+		contactlist, err := client.ContactList.Get(ctx, id)
+		if err != nil {
+			return err
+		}
+
+		create := client.ContactListHistory.Create()
+
+		create = create.
+			SetOperation(EntOpToHistoryOp(m.Op())).
+			SetHistoryTime(time.Now()).
+			SetRef(id)
+
+		if createdAt, exists := m.CreatedAt(); exists {
+			create = create.SetCreatedAt(createdAt)
+		} else {
+			create = create.SetCreatedAt(contactlist.CreatedAt)
+		}
+
+		if updatedAt, exists := m.UpdatedAt(); exists {
+			create = create.SetUpdatedAt(updatedAt)
+		} else {
+			create = create.SetUpdatedAt(contactlist.UpdatedAt)
+		}
+
+		if createdBy, exists := m.CreatedBy(); exists {
+			create = create.SetCreatedBy(createdBy)
+		} else {
+			create = create.SetCreatedBy(contactlist.CreatedBy)
+		}
+
+		if updatedBy, exists := m.UpdatedBy(); exists {
+			create = create.SetUpdatedBy(updatedBy)
+		} else {
+			create = create.SetUpdatedBy(contactlist.UpdatedBy)
+		}
+
+		if deletedAt, exists := m.DeletedAt(); exists {
+			create = create.SetDeletedAt(deletedAt)
+		} else {
+			create = create.SetDeletedAt(contactlist.DeletedAt)
+		}
+
+		if deletedBy, exists := m.DeletedBy(); exists {
+			create = create.SetDeletedBy(deletedBy)
+		} else {
+			create = create.SetDeletedBy(contactlist.DeletedBy)
+		}
+
+		if mappingID, exists := m.MappingID(); exists {
+			create = create.SetMappingID(mappingID)
+		} else {
+			create = create.SetMappingID(contactlist.MappingID)
+		}
+
+		if tags, exists := m.Tags(); exists {
+			create = create.SetTags(tags)
+		} else {
+			create = create.SetTags(contactlist.Tags)
+		}
+
+		if ownerID, exists := m.OwnerID(); exists {
+			create = create.SetOwnerID(ownerID)
+		} else {
+			create = create.SetOwnerID(contactlist.OwnerID)
+		}
+
+		if name, exists := m.Name(); exists {
+			create = create.SetName(name)
+		} else {
+			create = create.SetName(contactlist.Name)
+		}
+
+		if visibility, exists := m.Visibility(); exists {
+			create = create.SetVisibility(visibility)
+		} else {
+			create = create.SetVisibility(contactlist.Visibility)
+		}
+
+		if displayName, exists := m.DisplayName(); exists {
+			create = create.SetDisplayName(displayName)
+		} else {
+			create = create.SetDisplayName(contactlist.DisplayName)
+		}
+
+		if description, exists := m.Description(); exists {
+			create = create.SetDescription(description)
+		} else {
+			create = create.SetDescription(contactlist.Description)
+		}
+
+		if _, err := create.Save(ctx); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ContactListMutation) CreateHistoryFromDelete(ctx context.Context) error {
+	// check for soft delete operation and skip so it happens on update
+	if entx.CheckIsSoftDelete(ctx) {
+		return nil
+	}
+	client := m.Client()
+
+	ids, err := m.IDs(ctx)
+	if err != nil {
+		return fmt.Errorf("getting ids: %w", err)
+	}
+
+	for _, id := range ids {
+		contactlist, err := client.ContactList.Get(ctx, id)
+		if err != nil {
+			return err
+		}
+
+		create := client.ContactListHistory.Create()
+
+		_, err = create.
+			SetOperation(EntOpToHistoryOp(m.Op())).
+			SetHistoryTime(time.Now()).
+			SetRef(id).
+			SetCreatedAt(contactlist.CreatedAt).
+			SetUpdatedAt(contactlist.UpdatedAt).
+			SetCreatedBy(contactlist.CreatedBy).
+			SetUpdatedBy(contactlist.UpdatedBy).
+			SetDeletedAt(contactlist.DeletedAt).
+			SetDeletedBy(contactlist.DeletedBy).
+			SetMappingID(contactlist.MappingID).
+			SetTags(contactlist.Tags).
+			SetOwnerID(contactlist.OwnerID).
+			SetName(contactlist.Name).
+			SetVisibility(contactlist.Visibility).
+			SetDisplayName(contactlist.DisplayName).
+			SetDescription(contactlist.Description).
+			Save(ctx)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ContactListMembershipMutation) CreateHistoryFromCreate(ctx context.Context) error {
+	client := m.Client()
+
+	id, ok := m.ID()
+	if !ok {
+		return idNotFoundError
+	}
+
+	create := client.ContactListMembershipHistory.Create()
+
+	create = create.
+		SetOperation(EntOpToHistoryOp(m.Op())).
+		SetHistoryTime(time.Now()).
+		SetRef(id)
+
+	if createdAt, exists := m.CreatedAt(); exists {
+		create = create.SetCreatedAt(createdAt)
+	}
+
+	if updatedAt, exists := m.UpdatedAt(); exists {
+		create = create.SetUpdatedAt(updatedAt)
+	}
+
+	if createdBy, exists := m.CreatedBy(); exists {
+		create = create.SetCreatedBy(createdBy)
+	}
+
+	if updatedBy, exists := m.UpdatedBy(); exists {
+		create = create.SetUpdatedBy(updatedBy)
+	}
+
+	if mappingID, exists := m.MappingID(); exists {
+		create = create.SetMappingID(mappingID)
+	}
+
+	if deletedAt, exists := m.DeletedAt(); exists {
+		create = create.SetDeletedAt(deletedAt)
+	}
+
+	if deletedBy, exists := m.DeletedBy(); exists {
+		create = create.SetDeletedBy(deletedBy)
+	}
+
+	if contactListID, exists := m.ContactListID(); exists {
+		create = create.SetContactListID(contactListID)
+	}
+
+	if contactID, exists := m.ContactID(); exists {
+		create = create.SetContactID(contactID)
+	}
+
+	_, err := create.Save(ctx)
+
+	return err
+}
+
+func (m *ContactListMembershipMutation) CreateHistoryFromUpdate(ctx context.Context) error {
+	// check for soft delete operation and delete instead
+	if entx.CheckIsSoftDelete(ctx) {
+		return m.CreateHistoryFromDelete(ctx)
+	}
+	client := m.Client()
+
+	ids, err := m.IDs(ctx)
+	if err != nil {
+		return fmt.Errorf("getting ids: %w", err)
+	}
+
+	for _, id := range ids {
+		contactlistmembership, err := client.ContactListMembership.Get(ctx, id)
+		if err != nil {
+			return err
+		}
+
+		create := client.ContactListMembershipHistory.Create()
+
+		create = create.
+			SetOperation(EntOpToHistoryOp(m.Op())).
+			SetHistoryTime(time.Now()).
+			SetRef(id)
+
+		if createdAt, exists := m.CreatedAt(); exists {
+			create = create.SetCreatedAt(createdAt)
+		} else {
+			create = create.SetCreatedAt(contactlistmembership.CreatedAt)
+		}
+
+		if updatedAt, exists := m.UpdatedAt(); exists {
+			create = create.SetUpdatedAt(updatedAt)
+		} else {
+			create = create.SetUpdatedAt(contactlistmembership.UpdatedAt)
+		}
+
+		if createdBy, exists := m.CreatedBy(); exists {
+			create = create.SetCreatedBy(createdBy)
+		} else {
+			create = create.SetCreatedBy(contactlistmembership.CreatedBy)
+		}
+
+		if updatedBy, exists := m.UpdatedBy(); exists {
+			create = create.SetUpdatedBy(updatedBy)
+		} else {
+			create = create.SetUpdatedBy(contactlistmembership.UpdatedBy)
+		}
+
+		if mappingID, exists := m.MappingID(); exists {
+			create = create.SetMappingID(mappingID)
+		} else {
+			create = create.SetMappingID(contactlistmembership.MappingID)
+		}
+
+		if deletedAt, exists := m.DeletedAt(); exists {
+			create = create.SetDeletedAt(deletedAt)
+		} else {
+			create = create.SetDeletedAt(contactlistmembership.DeletedAt)
+		}
+
+		if deletedBy, exists := m.DeletedBy(); exists {
+			create = create.SetDeletedBy(deletedBy)
+		} else {
+			create = create.SetDeletedBy(contactlistmembership.DeletedBy)
+		}
+
+		if contactListID, exists := m.ContactListID(); exists {
+			create = create.SetContactListID(contactListID)
+		} else {
+			create = create.SetContactListID(contactlistmembership.ContactListID)
+		}
+
+		if contactID, exists := m.ContactID(); exists {
+			create = create.SetContactID(contactID)
+		} else {
+			create = create.SetContactID(contactlistmembership.ContactID)
+		}
+
+		if _, err := create.Save(ctx); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ContactListMembershipMutation) CreateHistoryFromDelete(ctx context.Context) error {
+	// check for soft delete operation and skip so it happens on update
+	if entx.CheckIsSoftDelete(ctx) {
+		return nil
+	}
+	client := m.Client()
+
+	ids, err := m.IDs(ctx)
+	if err != nil {
+		return fmt.Errorf("getting ids: %w", err)
+	}
+
+	for _, id := range ids {
+		contactlistmembership, err := client.ContactListMembership.Get(ctx, id)
+		if err != nil {
+			return err
+		}
+
+		create := client.ContactListMembershipHistory.Create()
+
+		_, err = create.
+			SetOperation(EntOpToHistoryOp(m.Op())).
+			SetHistoryTime(time.Now()).
+			SetRef(id).
+			SetCreatedAt(contactlistmembership.CreatedAt).
+			SetUpdatedAt(contactlistmembership.UpdatedAt).
+			SetCreatedBy(contactlistmembership.CreatedBy).
+			SetUpdatedBy(contactlistmembership.UpdatedBy).
+			SetMappingID(contactlistmembership.MappingID).
+			SetDeletedAt(contactlistmembership.DeletedAt).
+			SetDeletedBy(contactlistmembership.DeletedBy).
+			SetContactListID(contactlistmembership.ContactListID).
+			SetContactID(contactlistmembership.ContactID).
+			Save(ctx)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *DocumentDataMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	client := m.Client()
 

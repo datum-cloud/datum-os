@@ -13,6 +13,10 @@ import (
 	"github.com/datum-cloud/datum-os/internal/ent/generated/apitoken"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/contact"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/contacthistory"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/contactlist"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/contactlisthistory"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/contactlistmembership"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/contactlistmembershiphistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/documentdata"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/documentdatahistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/entitlement"
@@ -250,6 +254,19 @@ func (c *ContactQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 				fieldSeen[contact.FieldOwnerID] = struct{}{}
 			}
 
+		case "contactLists":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&ContactListClient{config: c.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, contactlistImplementors)...); err != nil {
+				return err
+			}
+			c.WithNamedContactLists(alias, func(wq *ContactListQuery) {
+				*wq = *query
+			})
+
 		case "entities":
 			var (
 				alias = field.Alias
@@ -260,6 +277,19 @@ func (c *ContactQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 				return err
 			}
 			c.WithNamedEntities(alias, func(wq *EntityQuery) {
+				*wq = *query
+			})
+
+		case "contactListMemberships":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&ContactListMembershipClient{config: c.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, contactlistmembershipImplementors)...); err != nil {
+				return err
+			}
+			c.WithNamedContactListMemberships(alias, func(wq *ContactListMembershipQuery) {
 				*wq = *query
 			})
 		case "createdAt":
@@ -526,6 +556,638 @@ func newContactHistoryPaginateArgs(rv map[string]any) *contacthistoryPaginateArg
 	}
 	if v, ok := rv[whereField].(*ContactHistoryWhereInput); ok {
 		args.opts = append(args.opts, WithContactHistoryFilter(v.Filter))
+	}
+	return args
+}
+
+// CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
+func (cl *ContactListQuery) CollectFields(ctx context.Context, satisfies ...string) (*ContactListQuery, error) {
+	fc := graphql.GetFieldContext(ctx)
+	if fc == nil {
+		return cl, nil
+	}
+	if err := cl.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+		return nil, err
+	}
+	return cl, nil
+}
+
+func (cl *ContactListQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+	path = append([]string(nil), path...)
+	var (
+		unknownSeen    bool
+		fieldSeen      = make(map[string]struct{}, len(contactlist.Columns))
+		selectedFields = []string{contactlist.FieldID}
+	)
+	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
+		switch field.Name {
+
+		case "owner":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&OrganizationClient{config: cl.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, organizationImplementors)...); err != nil {
+				return err
+			}
+			cl.withOwner = query
+			if _, ok := fieldSeen[contactlist.FieldOwnerID]; !ok {
+				selectedFields = append(selectedFields, contactlist.FieldOwnerID)
+				fieldSeen[contactlist.FieldOwnerID] = struct{}{}
+			}
+
+		case "contacts":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&ContactClient{config: cl.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, contactImplementors)...); err != nil {
+				return err
+			}
+			cl.WithNamedContacts(alias, func(wq *ContactQuery) {
+				*wq = *query
+			})
+
+		case "events":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&EventClient{config: cl.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, eventImplementors)...); err != nil {
+				return err
+			}
+			cl.WithNamedEvents(alias, func(wq *EventQuery) {
+				*wq = *query
+			})
+
+		case "integrations":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&IntegrationClient{config: cl.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, integrationImplementors)...); err != nil {
+				return err
+			}
+			cl.WithNamedIntegrations(alias, func(wq *IntegrationQuery) {
+				*wq = *query
+			})
+
+		case "contactListMembers":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&ContactListMembershipClient{config: cl.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, contactlistmembershipImplementors)...); err != nil {
+				return err
+			}
+			cl.WithNamedContactListMembers(alias, func(wq *ContactListMembershipQuery) {
+				*wq = *query
+			})
+		case "createdAt":
+			if _, ok := fieldSeen[contactlist.FieldCreatedAt]; !ok {
+				selectedFields = append(selectedFields, contactlist.FieldCreatedAt)
+				fieldSeen[contactlist.FieldCreatedAt] = struct{}{}
+			}
+		case "updatedAt":
+			if _, ok := fieldSeen[contactlist.FieldUpdatedAt]; !ok {
+				selectedFields = append(selectedFields, contactlist.FieldUpdatedAt)
+				fieldSeen[contactlist.FieldUpdatedAt] = struct{}{}
+			}
+		case "createdBy":
+			if _, ok := fieldSeen[contactlist.FieldCreatedBy]; !ok {
+				selectedFields = append(selectedFields, contactlist.FieldCreatedBy)
+				fieldSeen[contactlist.FieldCreatedBy] = struct{}{}
+			}
+		case "updatedBy":
+			if _, ok := fieldSeen[contactlist.FieldUpdatedBy]; !ok {
+				selectedFields = append(selectedFields, contactlist.FieldUpdatedBy)
+				fieldSeen[contactlist.FieldUpdatedBy] = struct{}{}
+			}
+		case "deletedAt":
+			if _, ok := fieldSeen[contactlist.FieldDeletedAt]; !ok {
+				selectedFields = append(selectedFields, contactlist.FieldDeletedAt)
+				fieldSeen[contactlist.FieldDeletedAt] = struct{}{}
+			}
+		case "deletedBy":
+			if _, ok := fieldSeen[contactlist.FieldDeletedBy]; !ok {
+				selectedFields = append(selectedFields, contactlist.FieldDeletedBy)
+				fieldSeen[contactlist.FieldDeletedBy] = struct{}{}
+			}
+		case "tags":
+			if _, ok := fieldSeen[contactlist.FieldTags]; !ok {
+				selectedFields = append(selectedFields, contactlist.FieldTags)
+				fieldSeen[contactlist.FieldTags] = struct{}{}
+			}
+		case "ownerID":
+			if _, ok := fieldSeen[contactlist.FieldOwnerID]; !ok {
+				selectedFields = append(selectedFields, contactlist.FieldOwnerID)
+				fieldSeen[contactlist.FieldOwnerID] = struct{}{}
+			}
+		case "name":
+			if _, ok := fieldSeen[contactlist.FieldName]; !ok {
+				selectedFields = append(selectedFields, contactlist.FieldName)
+				fieldSeen[contactlist.FieldName] = struct{}{}
+			}
+		case "visibility":
+			if _, ok := fieldSeen[contactlist.FieldVisibility]; !ok {
+				selectedFields = append(selectedFields, contactlist.FieldVisibility)
+				fieldSeen[contactlist.FieldVisibility] = struct{}{}
+			}
+		case "displayName":
+			if _, ok := fieldSeen[contactlist.FieldDisplayName]; !ok {
+				selectedFields = append(selectedFields, contactlist.FieldDisplayName)
+				fieldSeen[contactlist.FieldDisplayName] = struct{}{}
+			}
+		case "description":
+			if _, ok := fieldSeen[contactlist.FieldDescription]; !ok {
+				selectedFields = append(selectedFields, contactlist.FieldDescription)
+				fieldSeen[contactlist.FieldDescription] = struct{}{}
+			}
+		case "id":
+		case "__typename":
+		default:
+			unknownSeen = true
+		}
+	}
+	if !unknownSeen {
+		cl.Select(selectedFields...)
+	}
+	return nil
+}
+
+type contactlistPaginateArgs struct {
+	first, last   *int
+	after, before *Cursor
+	opts          []ContactListPaginateOption
+}
+
+func newContactListPaginateArgs(rv map[string]any) *contactlistPaginateArgs {
+	args := &contactlistPaginateArgs{}
+	if rv == nil {
+		return args
+	}
+	if v := rv[firstField]; v != nil {
+		args.first = v.(*int)
+	}
+	if v := rv[lastField]; v != nil {
+		args.last = v.(*int)
+	}
+	if v := rv[afterField]; v != nil {
+		args.after = v.(*Cursor)
+	}
+	if v := rv[beforeField]; v != nil {
+		args.before = v.(*Cursor)
+	}
+	if v, ok := rv[orderByField]; ok {
+		switch v := v.(type) {
+		case map[string]any:
+			var (
+				err1, err2 error
+				order      = &ContactListOrder{Field: &ContactListOrderField{}, Direction: entgql.OrderDirectionAsc}
+			)
+			if d, ok := v[directionField]; ok {
+				err1 = order.Direction.UnmarshalGQL(d)
+			}
+			if f, ok := v[fieldField]; ok {
+				err2 = order.Field.UnmarshalGQL(f)
+			}
+			if err1 == nil && err2 == nil {
+				args.opts = append(args.opts, WithContactListOrder(order))
+			}
+		case *ContactListOrder:
+			if v != nil {
+				args.opts = append(args.opts, WithContactListOrder(v))
+			}
+		}
+	}
+	if v, ok := rv[whereField].(*ContactListWhereInput); ok {
+		args.opts = append(args.opts, WithContactListFilter(v.Filter))
+	}
+	return args
+}
+
+// CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
+func (clh *ContactListHistoryQuery) CollectFields(ctx context.Context, satisfies ...string) (*ContactListHistoryQuery, error) {
+	fc := graphql.GetFieldContext(ctx)
+	if fc == nil {
+		return clh, nil
+	}
+	if err := clh.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+		return nil, err
+	}
+	return clh, nil
+}
+
+func (clh *ContactListHistoryQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+	path = append([]string(nil), path...)
+	var (
+		unknownSeen    bool
+		fieldSeen      = make(map[string]struct{}, len(contactlisthistory.Columns))
+		selectedFields = []string{contactlisthistory.FieldID}
+	)
+	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
+		switch field.Name {
+		case "historyTime":
+			if _, ok := fieldSeen[contactlisthistory.FieldHistoryTime]; !ok {
+				selectedFields = append(selectedFields, contactlisthistory.FieldHistoryTime)
+				fieldSeen[contactlisthistory.FieldHistoryTime] = struct{}{}
+			}
+		case "ref":
+			if _, ok := fieldSeen[contactlisthistory.FieldRef]; !ok {
+				selectedFields = append(selectedFields, contactlisthistory.FieldRef)
+				fieldSeen[contactlisthistory.FieldRef] = struct{}{}
+			}
+		case "operation":
+			if _, ok := fieldSeen[contactlisthistory.FieldOperation]; !ok {
+				selectedFields = append(selectedFields, contactlisthistory.FieldOperation)
+				fieldSeen[contactlisthistory.FieldOperation] = struct{}{}
+			}
+		case "createdAt":
+			if _, ok := fieldSeen[contactlisthistory.FieldCreatedAt]; !ok {
+				selectedFields = append(selectedFields, contactlisthistory.FieldCreatedAt)
+				fieldSeen[contactlisthistory.FieldCreatedAt] = struct{}{}
+			}
+		case "updatedAt":
+			if _, ok := fieldSeen[contactlisthistory.FieldUpdatedAt]; !ok {
+				selectedFields = append(selectedFields, contactlisthistory.FieldUpdatedAt)
+				fieldSeen[contactlisthistory.FieldUpdatedAt] = struct{}{}
+			}
+		case "createdBy":
+			if _, ok := fieldSeen[contactlisthistory.FieldCreatedBy]; !ok {
+				selectedFields = append(selectedFields, contactlisthistory.FieldCreatedBy)
+				fieldSeen[contactlisthistory.FieldCreatedBy] = struct{}{}
+			}
+		case "updatedBy":
+			if _, ok := fieldSeen[contactlisthistory.FieldUpdatedBy]; !ok {
+				selectedFields = append(selectedFields, contactlisthistory.FieldUpdatedBy)
+				fieldSeen[contactlisthistory.FieldUpdatedBy] = struct{}{}
+			}
+		case "deletedAt":
+			if _, ok := fieldSeen[contactlisthistory.FieldDeletedAt]; !ok {
+				selectedFields = append(selectedFields, contactlisthistory.FieldDeletedAt)
+				fieldSeen[contactlisthistory.FieldDeletedAt] = struct{}{}
+			}
+		case "deletedBy":
+			if _, ok := fieldSeen[contactlisthistory.FieldDeletedBy]; !ok {
+				selectedFields = append(selectedFields, contactlisthistory.FieldDeletedBy)
+				fieldSeen[contactlisthistory.FieldDeletedBy] = struct{}{}
+			}
+		case "tags":
+			if _, ok := fieldSeen[contactlisthistory.FieldTags]; !ok {
+				selectedFields = append(selectedFields, contactlisthistory.FieldTags)
+				fieldSeen[contactlisthistory.FieldTags] = struct{}{}
+			}
+		case "ownerID":
+			if _, ok := fieldSeen[contactlisthistory.FieldOwnerID]; !ok {
+				selectedFields = append(selectedFields, contactlisthistory.FieldOwnerID)
+				fieldSeen[contactlisthistory.FieldOwnerID] = struct{}{}
+			}
+		case "name":
+			if _, ok := fieldSeen[contactlisthistory.FieldName]; !ok {
+				selectedFields = append(selectedFields, contactlisthistory.FieldName)
+				fieldSeen[contactlisthistory.FieldName] = struct{}{}
+			}
+		case "visibility":
+			if _, ok := fieldSeen[contactlisthistory.FieldVisibility]; !ok {
+				selectedFields = append(selectedFields, contactlisthistory.FieldVisibility)
+				fieldSeen[contactlisthistory.FieldVisibility] = struct{}{}
+			}
+		case "displayName":
+			if _, ok := fieldSeen[contactlisthistory.FieldDisplayName]; !ok {
+				selectedFields = append(selectedFields, contactlisthistory.FieldDisplayName)
+				fieldSeen[contactlisthistory.FieldDisplayName] = struct{}{}
+			}
+		case "description":
+			if _, ok := fieldSeen[contactlisthistory.FieldDescription]; !ok {
+				selectedFields = append(selectedFields, contactlisthistory.FieldDescription)
+				fieldSeen[contactlisthistory.FieldDescription] = struct{}{}
+			}
+		case "id":
+		case "__typename":
+		default:
+			unknownSeen = true
+		}
+	}
+	if !unknownSeen {
+		clh.Select(selectedFields...)
+	}
+	return nil
+}
+
+type contactlisthistoryPaginateArgs struct {
+	first, last   *int
+	after, before *Cursor
+	opts          []ContactListHistoryPaginateOption
+}
+
+func newContactListHistoryPaginateArgs(rv map[string]any) *contactlisthistoryPaginateArgs {
+	args := &contactlisthistoryPaginateArgs{}
+	if rv == nil {
+		return args
+	}
+	if v := rv[firstField]; v != nil {
+		args.first = v.(*int)
+	}
+	if v := rv[lastField]; v != nil {
+		args.last = v.(*int)
+	}
+	if v := rv[afterField]; v != nil {
+		args.after = v.(*Cursor)
+	}
+	if v := rv[beforeField]; v != nil {
+		args.before = v.(*Cursor)
+	}
+	if v, ok := rv[orderByField]; ok {
+		switch v := v.(type) {
+		case map[string]any:
+			var (
+				err1, err2 error
+				order      = &ContactListHistoryOrder{Field: &ContactListHistoryOrderField{}, Direction: entgql.OrderDirectionAsc}
+			)
+			if d, ok := v[directionField]; ok {
+				err1 = order.Direction.UnmarshalGQL(d)
+			}
+			if f, ok := v[fieldField]; ok {
+				err2 = order.Field.UnmarshalGQL(f)
+			}
+			if err1 == nil && err2 == nil {
+				args.opts = append(args.opts, WithContactListHistoryOrder(order))
+			}
+		case *ContactListHistoryOrder:
+			if v != nil {
+				args.opts = append(args.opts, WithContactListHistoryOrder(v))
+			}
+		}
+	}
+	if v, ok := rv[whereField].(*ContactListHistoryWhereInput); ok {
+		args.opts = append(args.opts, WithContactListHistoryFilter(v.Filter))
+	}
+	return args
+}
+
+// CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
+func (clm *ContactListMembershipQuery) CollectFields(ctx context.Context, satisfies ...string) (*ContactListMembershipQuery, error) {
+	fc := graphql.GetFieldContext(ctx)
+	if fc == nil {
+		return clm, nil
+	}
+	if err := clm.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+		return nil, err
+	}
+	return clm, nil
+}
+
+func (clm *ContactListMembershipQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+	path = append([]string(nil), path...)
+	var (
+		unknownSeen    bool
+		fieldSeen      = make(map[string]struct{}, len(contactlistmembership.Columns))
+		selectedFields = []string{contactlistmembership.FieldID}
+	)
+	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
+		switch field.Name {
+
+		case "contactList":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&ContactListClient{config: clm.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, contactlistImplementors)...); err != nil {
+				return err
+			}
+			clm.withContactList = query
+			if _, ok := fieldSeen[contactlistmembership.FieldContactListID]; !ok {
+				selectedFields = append(selectedFields, contactlistmembership.FieldContactListID)
+				fieldSeen[contactlistmembership.FieldContactListID] = struct{}{}
+			}
+
+		case "contact":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&ContactClient{config: clm.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, contactImplementors)...); err != nil {
+				return err
+			}
+			clm.withContact = query
+			if _, ok := fieldSeen[contactlistmembership.FieldContactID]; !ok {
+				selectedFields = append(selectedFields, contactlistmembership.FieldContactID)
+				fieldSeen[contactlistmembership.FieldContactID] = struct{}{}
+			}
+
+		case "events":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&EventClient{config: clm.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, eventImplementors)...); err != nil {
+				return err
+			}
+			clm.WithNamedEvents(alias, func(wq *EventQuery) {
+				*wq = *query
+			})
+		case "createdAt":
+			if _, ok := fieldSeen[contactlistmembership.FieldCreatedAt]; !ok {
+				selectedFields = append(selectedFields, contactlistmembership.FieldCreatedAt)
+				fieldSeen[contactlistmembership.FieldCreatedAt] = struct{}{}
+			}
+		case "updatedAt":
+			if _, ok := fieldSeen[contactlistmembership.FieldUpdatedAt]; !ok {
+				selectedFields = append(selectedFields, contactlistmembership.FieldUpdatedAt)
+				fieldSeen[contactlistmembership.FieldUpdatedAt] = struct{}{}
+			}
+		case "createdBy":
+			if _, ok := fieldSeen[contactlistmembership.FieldCreatedBy]; !ok {
+				selectedFields = append(selectedFields, contactlistmembership.FieldCreatedBy)
+				fieldSeen[contactlistmembership.FieldCreatedBy] = struct{}{}
+			}
+		case "updatedBy":
+			if _, ok := fieldSeen[contactlistmembership.FieldUpdatedBy]; !ok {
+				selectedFields = append(selectedFields, contactlistmembership.FieldUpdatedBy)
+				fieldSeen[contactlistmembership.FieldUpdatedBy] = struct{}{}
+			}
+		case "deletedAt":
+			if _, ok := fieldSeen[contactlistmembership.FieldDeletedAt]; !ok {
+				selectedFields = append(selectedFields, contactlistmembership.FieldDeletedAt)
+				fieldSeen[contactlistmembership.FieldDeletedAt] = struct{}{}
+			}
+		case "deletedBy":
+			if _, ok := fieldSeen[contactlistmembership.FieldDeletedBy]; !ok {
+				selectedFields = append(selectedFields, contactlistmembership.FieldDeletedBy)
+				fieldSeen[contactlistmembership.FieldDeletedBy] = struct{}{}
+			}
+		case "contactListID":
+			if _, ok := fieldSeen[contactlistmembership.FieldContactListID]; !ok {
+				selectedFields = append(selectedFields, contactlistmembership.FieldContactListID)
+				fieldSeen[contactlistmembership.FieldContactListID] = struct{}{}
+			}
+		case "contactID":
+			if _, ok := fieldSeen[contactlistmembership.FieldContactID]; !ok {
+				selectedFields = append(selectedFields, contactlistmembership.FieldContactID)
+				fieldSeen[contactlistmembership.FieldContactID] = struct{}{}
+			}
+		case "id":
+		case "__typename":
+		default:
+			unknownSeen = true
+		}
+	}
+	if !unknownSeen {
+		clm.Select(selectedFields...)
+	}
+	return nil
+}
+
+type contactlistmembershipPaginateArgs struct {
+	first, last   *int
+	after, before *Cursor
+	opts          []ContactListMembershipPaginateOption
+}
+
+func newContactListMembershipPaginateArgs(rv map[string]any) *contactlistmembershipPaginateArgs {
+	args := &contactlistmembershipPaginateArgs{}
+	if rv == nil {
+		return args
+	}
+	if v := rv[firstField]; v != nil {
+		args.first = v.(*int)
+	}
+	if v := rv[lastField]; v != nil {
+		args.last = v.(*int)
+	}
+	if v := rv[afterField]; v != nil {
+		args.after = v.(*Cursor)
+	}
+	if v := rv[beforeField]; v != nil {
+		args.before = v.(*Cursor)
+	}
+	if v, ok := rv[whereField].(*ContactListMembershipWhereInput); ok {
+		args.opts = append(args.opts, WithContactListMembershipFilter(v.Filter))
+	}
+	return args
+}
+
+// CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
+func (clmh *ContactListMembershipHistoryQuery) CollectFields(ctx context.Context, satisfies ...string) (*ContactListMembershipHistoryQuery, error) {
+	fc := graphql.GetFieldContext(ctx)
+	if fc == nil {
+		return clmh, nil
+	}
+	if err := clmh.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+		return nil, err
+	}
+	return clmh, nil
+}
+
+func (clmh *ContactListMembershipHistoryQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+	path = append([]string(nil), path...)
+	var (
+		unknownSeen    bool
+		fieldSeen      = make(map[string]struct{}, len(contactlistmembershiphistory.Columns))
+		selectedFields = []string{contactlistmembershiphistory.FieldID}
+	)
+	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
+		switch field.Name {
+		case "historyTime":
+			if _, ok := fieldSeen[contactlistmembershiphistory.FieldHistoryTime]; !ok {
+				selectedFields = append(selectedFields, contactlistmembershiphistory.FieldHistoryTime)
+				fieldSeen[contactlistmembershiphistory.FieldHistoryTime] = struct{}{}
+			}
+		case "ref":
+			if _, ok := fieldSeen[contactlistmembershiphistory.FieldRef]; !ok {
+				selectedFields = append(selectedFields, contactlistmembershiphistory.FieldRef)
+				fieldSeen[contactlistmembershiphistory.FieldRef] = struct{}{}
+			}
+		case "operation":
+			if _, ok := fieldSeen[contactlistmembershiphistory.FieldOperation]; !ok {
+				selectedFields = append(selectedFields, contactlistmembershiphistory.FieldOperation)
+				fieldSeen[contactlistmembershiphistory.FieldOperation] = struct{}{}
+			}
+		case "createdAt":
+			if _, ok := fieldSeen[contactlistmembershiphistory.FieldCreatedAt]; !ok {
+				selectedFields = append(selectedFields, contactlistmembershiphistory.FieldCreatedAt)
+				fieldSeen[contactlistmembershiphistory.FieldCreatedAt] = struct{}{}
+			}
+		case "updatedAt":
+			if _, ok := fieldSeen[contactlistmembershiphistory.FieldUpdatedAt]; !ok {
+				selectedFields = append(selectedFields, contactlistmembershiphistory.FieldUpdatedAt)
+				fieldSeen[contactlistmembershiphistory.FieldUpdatedAt] = struct{}{}
+			}
+		case "createdBy":
+			if _, ok := fieldSeen[contactlistmembershiphistory.FieldCreatedBy]; !ok {
+				selectedFields = append(selectedFields, contactlistmembershiphistory.FieldCreatedBy)
+				fieldSeen[contactlistmembershiphistory.FieldCreatedBy] = struct{}{}
+			}
+		case "updatedBy":
+			if _, ok := fieldSeen[contactlistmembershiphistory.FieldUpdatedBy]; !ok {
+				selectedFields = append(selectedFields, contactlistmembershiphistory.FieldUpdatedBy)
+				fieldSeen[contactlistmembershiphistory.FieldUpdatedBy] = struct{}{}
+			}
+		case "deletedAt":
+			if _, ok := fieldSeen[contactlistmembershiphistory.FieldDeletedAt]; !ok {
+				selectedFields = append(selectedFields, contactlistmembershiphistory.FieldDeletedAt)
+				fieldSeen[contactlistmembershiphistory.FieldDeletedAt] = struct{}{}
+			}
+		case "deletedBy":
+			if _, ok := fieldSeen[contactlistmembershiphistory.FieldDeletedBy]; !ok {
+				selectedFields = append(selectedFields, contactlistmembershiphistory.FieldDeletedBy)
+				fieldSeen[contactlistmembershiphistory.FieldDeletedBy] = struct{}{}
+			}
+		case "contactListID":
+			if _, ok := fieldSeen[contactlistmembershiphistory.FieldContactListID]; !ok {
+				selectedFields = append(selectedFields, contactlistmembershiphistory.FieldContactListID)
+				fieldSeen[contactlistmembershiphistory.FieldContactListID] = struct{}{}
+			}
+		case "contactID":
+			if _, ok := fieldSeen[contactlistmembershiphistory.FieldContactID]; !ok {
+				selectedFields = append(selectedFields, contactlistmembershiphistory.FieldContactID)
+				fieldSeen[contactlistmembershiphistory.FieldContactID] = struct{}{}
+			}
+		case "id":
+		case "__typename":
+		default:
+			unknownSeen = true
+		}
+	}
+	if !unknownSeen {
+		clmh.Select(selectedFields...)
+	}
+	return nil
+}
+
+type contactlistmembershiphistoryPaginateArgs struct {
+	first, last   *int
+	after, before *Cursor
+	opts          []ContactListMembershipHistoryPaginateOption
+}
+
+func newContactListMembershipHistoryPaginateArgs(rv map[string]any) *contactlistmembershiphistoryPaginateArgs {
+	args := &contactlistmembershiphistoryPaginateArgs{}
+	if rv == nil {
+		return args
+	}
+	if v := rv[firstField]; v != nil {
+		args.first = v.(*int)
+	}
+	if v := rv[lastField]; v != nil {
+		args.last = v.(*int)
+	}
+	if v := rv[afterField]; v != nil {
+		args.after = v.(*Cursor)
+	}
+	if v := rv[beforeField]; v != nil {
+		args.before = v.(*Cursor)
+	}
+	if v, ok := rv[whereField].(*ContactListMembershipHistoryWhereInput); ok {
+		args.opts = append(args.opts, WithContactListMembershipHistoryFilter(v.Filter))
 	}
 	return args
 }
@@ -6808,6 +7470,19 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 				return err
 			}
 			o.WithNamedContacts(alias, func(wq *ContactQuery) {
+				*wq = *query
+			})
+
+		case "contactLists":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&ContactListClient{config: o.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, contactlistImplementors)...); err != nil {
+				return err
+			}
+			o.WithNamedContactLists(alias, func(wq *ContactListQuery) {
 				*wq = *query
 			})
 

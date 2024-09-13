@@ -11,6 +11,10 @@ import (
 	"github.com/datum-cloud/datum-os/internal/ent/generated/apitoken"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/contact"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/contacthistory"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/contactlist"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/contactlisthistory"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/contactlistmembership"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/contactlistmembershiphistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/documentdata"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/documentdatahistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/emailverificationtoken"
@@ -203,6 +207,114 @@ func (f TraverseContactHistory) Traverse(ctx context.Context, q generated.Query)
 		return f(ctx, q)
 	}
 	return fmt.Errorf("unexpected query type %T. expect *generated.ContactHistoryQuery", q)
+}
+
+// The ContactListFunc type is an adapter to allow the use of ordinary function as a Querier.
+type ContactListFunc func(context.Context, *generated.ContactListQuery) (generated.Value, error)
+
+// Query calls f(ctx, q).
+func (f ContactListFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
+	if q, ok := q.(*generated.ContactListQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *generated.ContactListQuery", q)
+}
+
+// The TraverseContactList type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseContactList func(context.Context, *generated.ContactListQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseContactList) Intercept(next generated.Querier) generated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseContactList) Traverse(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.ContactListQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *generated.ContactListQuery", q)
+}
+
+// The ContactListHistoryFunc type is an adapter to allow the use of ordinary function as a Querier.
+type ContactListHistoryFunc func(context.Context, *generated.ContactListHistoryQuery) (generated.Value, error)
+
+// Query calls f(ctx, q).
+func (f ContactListHistoryFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
+	if q, ok := q.(*generated.ContactListHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *generated.ContactListHistoryQuery", q)
+}
+
+// The TraverseContactListHistory type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseContactListHistory func(context.Context, *generated.ContactListHistoryQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseContactListHistory) Intercept(next generated.Querier) generated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseContactListHistory) Traverse(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.ContactListHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *generated.ContactListHistoryQuery", q)
+}
+
+// The ContactListMembershipFunc type is an adapter to allow the use of ordinary function as a Querier.
+type ContactListMembershipFunc func(context.Context, *generated.ContactListMembershipQuery) (generated.Value, error)
+
+// Query calls f(ctx, q).
+func (f ContactListMembershipFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
+	if q, ok := q.(*generated.ContactListMembershipQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *generated.ContactListMembershipQuery", q)
+}
+
+// The TraverseContactListMembership type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseContactListMembership func(context.Context, *generated.ContactListMembershipQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseContactListMembership) Intercept(next generated.Querier) generated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseContactListMembership) Traverse(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.ContactListMembershipQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *generated.ContactListMembershipQuery", q)
+}
+
+// The ContactListMembershipHistoryFunc type is an adapter to allow the use of ordinary function as a Querier.
+type ContactListMembershipHistoryFunc func(context.Context, *generated.ContactListMembershipHistoryQuery) (generated.Value, error)
+
+// Query calls f(ctx, q).
+func (f ContactListMembershipHistoryFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
+	if q, ok := q.(*generated.ContactListMembershipHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *generated.ContactListMembershipHistoryQuery", q)
+}
+
+// The TraverseContactListMembershipHistory type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseContactListMembershipHistory func(context.Context, *generated.ContactListMembershipHistoryQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseContactListMembershipHistory) Intercept(next generated.Querier) generated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseContactListMembershipHistory) Traverse(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.ContactListMembershipHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *generated.ContactListMembershipHistoryQuery", q)
 }
 
 // The DocumentDataFunc type is an adapter to allow the use of ordinary function as a Querier.
@@ -1672,6 +1784,14 @@ func NewQuery(q generated.Query) (Query, error) {
 		return &query[*generated.ContactQuery, predicate.Contact, contact.OrderOption]{typ: generated.TypeContact, tq: q}, nil
 	case *generated.ContactHistoryQuery:
 		return &query[*generated.ContactHistoryQuery, predicate.ContactHistory, contacthistory.OrderOption]{typ: generated.TypeContactHistory, tq: q}, nil
+	case *generated.ContactListQuery:
+		return &query[*generated.ContactListQuery, predicate.ContactList, contactlist.OrderOption]{typ: generated.TypeContactList, tq: q}, nil
+	case *generated.ContactListHistoryQuery:
+		return &query[*generated.ContactListHistoryQuery, predicate.ContactListHistory, contactlisthistory.OrderOption]{typ: generated.TypeContactListHistory, tq: q}, nil
+	case *generated.ContactListMembershipQuery:
+		return &query[*generated.ContactListMembershipQuery, predicate.ContactListMembership, contactlistmembership.OrderOption]{typ: generated.TypeContactListMembership, tq: q}, nil
+	case *generated.ContactListMembershipHistoryQuery:
+		return &query[*generated.ContactListMembershipHistoryQuery, predicate.ContactListMembershipHistory, contactlistmembershiphistory.OrderOption]{typ: generated.TypeContactListMembershipHistory, tq: q}, nil
 	case *generated.DocumentDataQuery:
 		return &query[*generated.DocumentDataQuery, predicate.DocumentData, documentdata.OrderOption]{typ: generated.TypeDocumentData, tq: q}, nil
 	case *generated.DocumentDataHistoryQuery:

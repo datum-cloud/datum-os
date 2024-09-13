@@ -52,8 +52,12 @@ const (
 	FieldStatus = "status"
 	// EdgeOwner holds the string denoting the owner edge name in mutations.
 	EdgeOwner = "owner"
+	// EdgeContactLists holds the string denoting the contact_lists edge name in mutations.
+	EdgeContactLists = "contact_lists"
 	// EdgeEntities holds the string denoting the entities edge name in mutations.
 	EdgeEntities = "entities"
+	// EdgeContactListMemberships holds the string denoting the contact_list_memberships edge name in mutations.
+	EdgeContactListMemberships = "contact_list_memberships"
 	// Table holds the table name of the contact in the database.
 	Table = "contacts"
 	// OwnerTable is the table that holds the owner relation/edge.
@@ -63,11 +67,23 @@ const (
 	OwnerInverseTable = "organizations"
 	// OwnerColumn is the table column denoting the owner relation/edge.
 	OwnerColumn = "owner_id"
+	// ContactListsTable is the table that holds the contact_lists relation/edge. The primary key declared below.
+	ContactListsTable = "contact_list_memberships"
+	// ContactListsInverseTable is the table name for the ContactList entity.
+	// It exists in this package in order to avoid circular dependency with the "contactlist" package.
+	ContactListsInverseTable = "contact_lists"
 	// EntitiesTable is the table that holds the entities relation/edge. The primary key declared below.
 	EntitiesTable = "entity_contacts"
 	// EntitiesInverseTable is the table name for the Entity entity.
 	// It exists in this package in order to avoid circular dependency with the "entity" package.
 	EntitiesInverseTable = "entities"
+	// ContactListMembershipsTable is the table that holds the contact_list_memberships relation/edge.
+	ContactListMembershipsTable = "contact_list_memberships"
+	// ContactListMembershipsInverseTable is the table name for the ContactListMembership entity.
+	// It exists in this package in order to avoid circular dependency with the "contactlistmembership" package.
+	ContactListMembershipsInverseTable = "contact_list_memberships"
+	// ContactListMembershipsColumn is the table column denoting the contact_list_memberships relation/edge.
+	ContactListMembershipsColumn = "contact_id"
 )
 
 // Columns holds all SQL columns for contact fields.
@@ -92,6 +108,9 @@ var Columns = []string{
 }
 
 var (
+	// ContactListsPrimaryKey and ContactListsColumn2 are the table columns denoting the
+	// primary key for the contact_lists relation (M2M).
+	ContactListsPrimaryKey = []string{"contact_id", "contact_list_id"}
 	// EntitiesPrimaryKey and EntitiesColumn2 are the table columns denoting the
 	// primary key for the entities relation (M2M).
 	EntitiesPrimaryKey = []string{"entity_id", "contact_id"}
@@ -240,6 +259,20 @@ func ByOwnerField(field string, opts ...sql.OrderTermOption) OrderOption {
 	}
 }
 
+// ByContactListsCount orders the results by contact_lists count.
+func ByContactListsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newContactListsStep(), opts...)
+	}
+}
+
+// ByContactLists orders the results by contact_lists terms.
+func ByContactLists(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newContactListsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByEntitiesCount orders the results by entities count.
 func ByEntitiesCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -253,6 +286,20 @@ func ByEntities(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 		sqlgraph.OrderByNeighborTerms(s, newEntitiesStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
+
+// ByContactListMembershipsCount orders the results by contact_list_memberships count.
+func ByContactListMembershipsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newContactListMembershipsStep(), opts...)
+	}
+}
+
+// ByContactListMemberships orders the results by contact_list_memberships terms.
+func ByContactListMemberships(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newContactListMembershipsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
 func newOwnerStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -260,11 +307,25 @@ func newOwnerStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.M2O, true, OwnerTable, OwnerColumn),
 	)
 }
+func newContactListsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ContactListsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, false, ContactListsTable, ContactListsPrimaryKey...),
+	)
+}
 func newEntitiesStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(EntitiesInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2M, true, EntitiesTable, EntitiesPrimaryKey...),
+	)
+}
+func newContactListMembershipsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ContactListMembershipsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, true, ContactListMembershipsTable, ContactListMembershipsColumn),
 	)
 }
 

@@ -1,0 +1,103 @@
+extend type Query {
+    """
+    Look up contactListMembership by ID
+    """
+     contactListMembership(
+        """
+        ID of the contactListMembership
+        """
+        id: ID!
+    ):  ContactListMembership!
+}
+
+extend type Mutation{
+    """
+    Create a new contactListMembership
+    """
+    createContactListMembership(
+        """
+        values of the contactListMembership
+        """
+        input: CreateContactListMembershipInput!
+    ): ContactListMembershipCreatePayload!
+    """
+    Create multiple new contactListMemberships
+    """
+    createBulkContactListMembership(
+        """
+        values of the contactListMembership
+        """
+        input: [CreateContactListMembershipInput!]
+    ): ContactListMembershipBulkCreatePayload!
+    """
+    Create multiple new contactListMemberships via file upload
+    """
+    createBulkCSVContactListMembership(
+        """
+        csv file containing values of the contactListMembership
+        """
+        input: Upload!
+    ): ContactListMembershipBulkCreatePayload!
+    """
+    Update an existing contactListMembership
+    """
+    updateContactListMembership(
+        """
+        ID of the contactListMembership
+        """
+        id: ID!
+        """
+        New values for the contactListMembership
+        """
+        input: UpdateContactListMembershipInput!
+    ): ContactListMembershipUpdatePayload!
+    """
+    Delete an existing contactListMembership
+    """
+    deleteContactListMembership(
+        """
+        ID of the contactListMembership
+        """
+        id: ID!
+    ): ContactListMembershipDeletePayload!
+}
+
+"""
+Return response for createContactListMembership mutation
+"""
+type ContactListMembershipCreatePayload {
+    """
+    Created contactListMembership
+    """
+    contactListMembership: ContactListMembership!
+}
+
+"""
+Return response for updateContactListMembership mutation
+"""
+type ContactListMembershipUpdatePayload {
+    """
+    Updated contactListMembership
+    """
+    contactListMembership: ContactListMembership!
+}
+
+"""
+Return response for deleteContactListMembership mutation
+"""
+type ContactListMembershipDeletePayload {
+    """
+    Deleted contactListMembership ID
+    """
+    deletedID: ID!
+}
+
+"""
+Return response for createBulkContactListMembership mutation
+"""
+type ContactListMembershipBulkCreatePayload {
+    """
+    Created contactListMemberships
+    """
+    contactListMemberships: [ContactListMembership!]
+}

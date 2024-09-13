@@ -183,6 +183,102 @@ func (f ContactHistoryMutationRuleFunc) EvalMutation(ctx context.Context, m gene
 	return Denyf("generated/privacy: unexpected mutation type %T, expect *generated.ContactHistoryMutation", m)
 }
 
+// The ContactListQueryRuleFunc type is an adapter to allow the use of ordinary
+// functions as a query rule.
+type ContactListQueryRuleFunc func(context.Context, *generated.ContactListQuery) error
+
+// EvalQuery return f(ctx, q).
+func (f ContactListQueryRuleFunc) EvalQuery(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.ContactListQuery); ok {
+		return f(ctx, q)
+	}
+	return Denyf("generated/privacy: unexpected query type %T, expect *generated.ContactListQuery", q)
+}
+
+// The ContactListMutationRuleFunc type is an adapter to allow the use of ordinary
+// functions as a mutation rule.
+type ContactListMutationRuleFunc func(context.Context, *generated.ContactListMutation) error
+
+// EvalMutation calls f(ctx, m).
+func (f ContactListMutationRuleFunc) EvalMutation(ctx context.Context, m generated.Mutation) error {
+	if m, ok := m.(*generated.ContactListMutation); ok {
+		return f(ctx, m)
+	}
+	return Denyf("generated/privacy: unexpected mutation type %T, expect *generated.ContactListMutation", m)
+}
+
+// The ContactListHistoryQueryRuleFunc type is an adapter to allow the use of ordinary
+// functions as a query rule.
+type ContactListHistoryQueryRuleFunc func(context.Context, *generated.ContactListHistoryQuery) error
+
+// EvalQuery return f(ctx, q).
+func (f ContactListHistoryQueryRuleFunc) EvalQuery(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.ContactListHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return Denyf("generated/privacy: unexpected query type %T, expect *generated.ContactListHistoryQuery", q)
+}
+
+// The ContactListHistoryMutationRuleFunc type is an adapter to allow the use of ordinary
+// functions as a mutation rule.
+type ContactListHistoryMutationRuleFunc func(context.Context, *generated.ContactListHistoryMutation) error
+
+// EvalMutation calls f(ctx, m).
+func (f ContactListHistoryMutationRuleFunc) EvalMutation(ctx context.Context, m generated.Mutation) error {
+	if m, ok := m.(*generated.ContactListHistoryMutation); ok {
+		return f(ctx, m)
+	}
+	return Denyf("generated/privacy: unexpected mutation type %T, expect *generated.ContactListHistoryMutation", m)
+}
+
+// The ContactListMembershipQueryRuleFunc type is an adapter to allow the use of ordinary
+// functions as a query rule.
+type ContactListMembershipQueryRuleFunc func(context.Context, *generated.ContactListMembershipQuery) error
+
+// EvalQuery return f(ctx, q).
+func (f ContactListMembershipQueryRuleFunc) EvalQuery(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.ContactListMembershipQuery); ok {
+		return f(ctx, q)
+	}
+	return Denyf("generated/privacy: unexpected query type %T, expect *generated.ContactListMembershipQuery", q)
+}
+
+// The ContactListMembershipMutationRuleFunc type is an adapter to allow the use of ordinary
+// functions as a mutation rule.
+type ContactListMembershipMutationRuleFunc func(context.Context, *generated.ContactListMembershipMutation) error
+
+// EvalMutation calls f(ctx, m).
+func (f ContactListMembershipMutationRuleFunc) EvalMutation(ctx context.Context, m generated.Mutation) error {
+	if m, ok := m.(*generated.ContactListMembershipMutation); ok {
+		return f(ctx, m)
+	}
+	return Denyf("generated/privacy: unexpected mutation type %T, expect *generated.ContactListMembershipMutation", m)
+}
+
+// The ContactListMembershipHistoryQueryRuleFunc type is an adapter to allow the use of ordinary
+// functions as a query rule.
+type ContactListMembershipHistoryQueryRuleFunc func(context.Context, *generated.ContactListMembershipHistoryQuery) error
+
+// EvalQuery return f(ctx, q).
+func (f ContactListMembershipHistoryQueryRuleFunc) EvalQuery(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.ContactListMembershipHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return Denyf("generated/privacy: unexpected query type %T, expect *generated.ContactListMembershipHistoryQuery", q)
+}
+
+// The ContactListMembershipHistoryMutationRuleFunc type is an adapter to allow the use of ordinary
+// functions as a mutation rule.
+type ContactListMembershipHistoryMutationRuleFunc func(context.Context, *generated.ContactListMembershipHistoryMutation) error
+
+// EvalMutation calls f(ctx, m).
+func (f ContactListMembershipHistoryMutationRuleFunc) EvalMutation(ctx context.Context, m generated.Mutation) error {
+	if m, ok := m.(*generated.ContactListMembershipHistoryMutation); ok {
+		return f(ctx, m)
+	}
+	return Denyf("generated/privacy: unexpected mutation type %T, expect *generated.ContactListMembershipHistoryMutation", m)
+}
+
 // The DocumentDataQueryRuleFunc type is an adapter to allow the use of ordinary
 // functions as a query rule.
 type DocumentDataQueryRuleFunc func(context.Context, *generated.DocumentDataQuery) error
@@ -1520,6 +1616,14 @@ func queryFilter(q generated.Query) (Filter, error) {
 		return q.Filter(), nil
 	case *generated.ContactHistoryQuery:
 		return q.Filter(), nil
+	case *generated.ContactListQuery:
+		return q.Filter(), nil
+	case *generated.ContactListHistoryQuery:
+		return q.Filter(), nil
+	case *generated.ContactListMembershipQuery:
+		return q.Filter(), nil
+	case *generated.ContactListMembershipHistoryQuery:
+		return q.Filter(), nil
 	case *generated.DocumentDataQuery:
 		return q.Filter(), nil
 	case *generated.DocumentDataHistoryQuery:
@@ -1640,6 +1744,14 @@ func mutationFilter(m generated.Mutation) (Filter, error) {
 	case *generated.ContactMutation:
 		return m.Filter(), nil
 	case *generated.ContactHistoryMutation:
+		return m.Filter(), nil
+	case *generated.ContactListMutation:
+		return m.Filter(), nil
+	case *generated.ContactListHistoryMutation:
+		return m.Filter(), nil
+	case *generated.ContactListMembershipMutation:
+		return m.Filter(), nil
+	case *generated.ContactListMembershipHistoryMutation:
 		return m.Filter(), nil
 	case *generated.DocumentDataMutation:
 		return m.Filter(), nil

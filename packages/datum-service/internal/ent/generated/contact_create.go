@@ -11,6 +11,8 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/contact"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/contactlist"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/contactlistmembership"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/entity"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/organization"
 	"github.com/datum-cloud/datum-os/pkg/enums"
@@ -250,6 +252,21 @@ func (cc *ContactCreate) SetOwner(o *Organization) *ContactCreate {
 	return cc.SetOwnerID(o.ID)
 }
 
+// AddContactListIDs adds the "contact_lists" edge to the ContactList entity by IDs.
+func (cc *ContactCreate) AddContactListIDs(ids ...string) *ContactCreate {
+	cc.mutation.AddContactListIDs(ids...)
+	return cc
+}
+
+// AddContactLists adds the "contact_lists" edges to the ContactList entity.
+func (cc *ContactCreate) AddContactLists(c ...*ContactList) *ContactCreate {
+	ids := make([]string, len(c))
+	for i := range c {
+		ids[i] = c[i].ID
+	}
+	return cc.AddContactListIDs(ids...)
+}
+
 // AddEntityIDs adds the "entities" edge to the Entity entity by IDs.
 func (cc *ContactCreate) AddEntityIDs(ids ...string) *ContactCreate {
 	cc.mutation.AddEntityIDs(ids...)
@@ -263,6 +280,21 @@ func (cc *ContactCreate) AddEntities(e ...*Entity) *ContactCreate {
 		ids[i] = e[i].ID
 	}
 	return cc.AddEntityIDs(ids...)
+}
+
+// AddContactListMembershipIDs adds the "contact_list_memberships" edge to the ContactListMembership entity by IDs.
+func (cc *ContactCreate) AddContactListMembershipIDs(ids ...string) *ContactCreate {
+	cc.mutation.AddContactListMembershipIDs(ids...)
+	return cc
+}
+
+// AddContactListMemberships adds the "contact_list_memberships" edges to the ContactListMembership entity.
+func (cc *ContactCreate) AddContactListMemberships(c ...*ContactListMembership) *ContactCreate {
+	ids := make([]string, len(c))
+	for i := range c {
+		ids[i] = c[i].ID
+	}
+	return cc.AddContactListMembershipIDs(ids...)
 }
 
 // Mutation returns the ContactMutation object of the builder.
@@ -491,6 +523,30 @@ func (cc *ContactCreate) createSpec() (*Contact, *sqlgraph.CreateSpec) {
 		_node.OwnerID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
+	if nodes := cc.mutation.ContactListsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   contact.ContactListsTable,
+			Columns: contact.ContactListsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(contactlist.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = cc.schemaConfig.ContactListMembership
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		createE := &ContactListMembershipCreate{config: cc.config, mutation: newContactListMembershipMutation(cc.config, OpCreate)}
+		_ = createE.defaults()
+		_, specE := createE.createSpec()
+		edge.Target.Fields = specE.Fields
+		if specE.ID.Value != nil {
+			edge.Target.Fields = append(edge.Target.Fields, specE.ID)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
 	if nodes := cc.mutation.EntitiesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -503,6 +559,23 @@ func (cc *ContactCreate) createSpec() (*Contact, *sqlgraph.CreateSpec) {
 			},
 		}
 		edge.Schema = cc.schemaConfig.EntityContacts
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := cc.mutation.ContactListMembershipsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   contact.ContactListMembershipsTable,
+			Columns: []string{contact.ContactListMembershipsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(contactlistmembership.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = cc.schemaConfig.ContactListMembership
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

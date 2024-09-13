@@ -1,0 +1,39 @@
+
+
+query GetAllContactListMembershipHistories {
+  contactListMembershipHistories {
+    edges {
+      node {
+        contactID
+        contactListID
+        createdAt
+        createdBy
+        historyTime
+        id
+        operation
+        ref
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}
+
+query GetContactListMembershipHistories($where: ContactListMembershipHistoryWhereInput) {
+  contactListMembershipHistories(where: $where) {
+    edges {
+      node {
+        contactID
+        contactListID
+        createdAt
+        createdBy
+        historyTime
+        id
+        operation
+        ref
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}
