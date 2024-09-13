@@ -4,9 +4,11 @@ import (
 	"net/http"
 
 	"github.com/datum-cloud/datum-os/internal/ent/generated"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/contactlist"
 	echo "github.com/datum-cloud/datum-os/pkg/echox"
 	"github.com/datum-cloud/datum-os/pkg/middleware/transaction"
 	"github.com/datum-cloud/datum-os/pkg/models"
+	"github.com/datum-cloud/datum-os/pkg/rout"
 	"github.com/getkin/kin-openapi/openapi3"
 )
 
@@ -66,7 +68,7 @@ func (h *Handler) BindContactListsGetOne() *openapi3.Operation {
 		},
 	}
 
-	// h.AddResponse("ContactListsGetOneResponse", "success", models.ExampleContactListsGetOneSuccessResponse, contactlistsGetOne, http.StatusOK)
+	h.AddResponse("ContactListsGetOneResponse", "success", models.ExampleContactListsGetOneSuccessResponse, contactListsGetOne, http.StatusOK)
 	contactListsGetOne.AddResponse(http.StatusBadRequest, badRequest())
 	contactListsGetOne.AddResponse(http.StatusInternalServerError, internalServerError())
 	contactListsGetOne.AddResponse(http.StatusUnauthorized, unauthorized())
@@ -123,9 +125,9 @@ func (h *Handler) BindContactListsPost() *openapi3.Operation {
 		},
 	}
 
-	// h.AddRequestBody("ContactListsPostRequest", models.ExampleContactListsPostRequest, contactsPost)
+	h.AddRequestBody("ContactListsPostRequest", models.ExampleContactListsPostRequest, contactsPost)
 
-	// h.AddResponse("ContactListsPostResponse", "success", models.ExampleContactsPostSuccessResponse, contactsPost, http.StatusOK)
+	h.AddResponse("ContactListsPostResponse", "success", models.ExampleContactsPostSuccessResponse, contactsPost, http.StatusOK)
 	contactsPost.AddResponse(http.StatusBadRequest, badRequest())
 	contactsPost.AddResponse(http.StatusInternalServerError, internalServerError())
 	contactsPost.AddResponse(http.StatusUnauthorized, unauthorized())
@@ -188,30 +190,28 @@ func (h *Handler) BindContactListsPut() *openapi3.Operation {
 }
 
 func (h *Handler) ContactListsDelete(ctx echo.Context) error {
-	// IDs := models.ContactListsDeleteRequest{}
-	// err := ctx.Bind(&IDs)
-	// if err != nil {
-	// 	return h.BadRequest(ctx, err)
-	// }
+	IDs := models.ContactListsDeleteRequest{}
+	err := ctx.Bind(&IDs)
+	if err != nil {
+		return h.BadRequest(ctx, err)
+	}
 
-	// affected, err := transaction.FromContext(ctx.Request().Context()).Contact.Delete().
-	// 	Where(contact.IDIn(IDs.ContactIDs...)).
-	// 	Exec(ctx.Request().Context())
-	// if err != nil {
-	// 	return h.InternalServerError(ctx, err)
-	// }
+	affected, err := transaction.FromContext(ctx.Request().Context()).ContactList.Delete().
+		Where(contactlist.IDIn(IDs.ContactListIDs...)).
+		Exec(ctx.Request().Context())
+	if err != nil {
+		return h.InternalServerError(ctx, err)
+	}
 
-	// h.Logger.Debugf("Deleted %d Contacts, %s", affected, IDs)
+	h.Logger.Debugf("Deleted %d ContactLists, %s", affected, IDs)
 
-	// return h.Success(
-	// 	ctx,
-	// 	&models.ContactListsDeleteResponse{
-	// 		Reply:         rout.Reply{Success: true},
-	// 		CountAffected: affected,
-	// 	},
-	// )
-
-	return nil
+	return h.Success(
+		ctx,
+		&models.ContactListsDeleteResponse{
+			Reply:         rout.Reply{Success: true},
+			CountAffected: affected,
+		},
+	)
 }
 
 func (h *Handler) BindContactListsDelete() *openapi3.Operation {
@@ -224,9 +224,9 @@ func (h *Handler) BindContactListsDelete() *openapi3.Operation {
 		},
 	}
 
-	// h.AddRequestBody("ContactListsDeleteRequest", models.ExampleContactListsDeleteRequest, contactListsDelete)
+	h.AddRequestBody("ContactListsDeleteRequest", models.ExampleContactListsDeleteRequest, contactListsDelete)
 
-	// h.AddResponse("ContactListsDeleteResponse", "success", models.ExampleContactListsDeleteSuccessResponse, contactListsDelete, http.StatusOK)
+	h.AddResponse("ContactListsDeleteResponse", "success", models.ExampleContactListsDeleteSuccessResponse, contactListsDelete, http.StatusOK)
 	contactListsDelete.AddResponse(http.StatusBadRequest, badRequest())
 	contactListsDelete.AddResponse(http.StatusInternalServerError, internalServerError())
 	contactListsDelete.AddResponse(http.StatusUnauthorized, unauthorized())

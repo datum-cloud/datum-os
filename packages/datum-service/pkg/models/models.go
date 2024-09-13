@@ -906,7 +906,7 @@ var ExampleContactsPutRequest = ContactsPutRequest{
 // ContactsPutResponse is the body for a PUT request response from `/contacts`
 type ContactsPutResponse ContactsGetResponse
 
-// ExampleContactsPutResponse is an example of a PUT request response body from `/contacts`
+// ExampleContactsPutSuccessResponse is an example of a PUT request response body from `/contacts`
 var ExampleContactsPutSuccessResponse = ContactsPutResponse{
 	Reply: rout.Reply{Success: true},
 	Count: 2,
@@ -943,7 +943,8 @@ type ContactsDeleteResponse struct {
 
 // ExampleContactsDeleteSuccessResponse is an example of a DELETE request response body from `/contacts`
 var ExampleContactsDeleteSuccessResponse = ContactsDeleteResponse{
-	Reply: rout.Reply{Success: true},
+	Reply:         rout.Reply{Success: true},
+	CountAffected: 2,
 }
 
 // ContactListsGetResponse
@@ -953,7 +954,7 @@ type ContactListsGetResponse struct {
 	ContactLists []ContactList `json:"contact_lists"`
 }
 
-// ContactList
+// ContactList holds the fields for a ContactList
 type ContactList struct {
 	ID string `json:"id,omitempty"`
 	// CreatedAt holds the value of the "created_at" field.
@@ -984,6 +985,7 @@ type ContactList struct {
 	Description string `json:"description,omitempty"`
 }
 
+// ContactListFromGeneratedContactList is a helper function to return a `ContactList` from a `generated.ContactList`
 func ContactListFromGeneratedContactList(genContactList *generated.ContactList) ContactList {
 	cl := ContactList{}
 
@@ -1021,6 +1023,7 @@ func ContactListsGetResponseFromGeneratedContacts(genContactLists []*generated.C
 	return &clgr
 }
 
+// ExampleContactListsGetSuccessResponse is an example of a GET request response from `/contacts/lists`
 var ExampleContactListsGetSuccessResponse = ContactListsGetResponse{
 	Reply: rout.OK().Reply,
 	Count: 2,
@@ -1040,15 +1043,18 @@ var ExampleContactListsGetSuccessResponse = ContactListsGetResponse{
 	},
 }
 
+// ContactListsGetOneRequest describes the parameters of a GET request to `/contacts/lists/:id`
 type ContactListsGetOneRequest struct {
 	ID string `param:"id"`
 }
 
+// ContactListsGetOneResponse is the body for a GET request response from `/contacts/lists/:id`
 type ContactListsGetOneResponse struct {
 	rout.Reply
 	ContactList `json:"contact_list"`
 }
 
+// ContactListsGetOneResponseFromGeneratedContactList is a helper function to generate a `*ContactListsGetOneResponse` from a `*generated.ContactList`
 func ContactListsGetOneResponseFromGeneratedContactList(genContactList *generated.ContactList) *ContactListsGetOneResponse {
 	clgr := ContactListsGetOneResponse{}
 	clgr.ContactList = ContactListFromGeneratedContactList(genContactList)
@@ -1056,6 +1062,69 @@ func ContactListsGetOneResponseFromGeneratedContactList(genContactList *generate
 	return &clgr
 }
 
+// ExampleContactListsGetOneSuccessResponse is an example of a GET request response from `/contacts/lists/:id`
+var ExampleContactListsGetOneSuccessResponse = ContactListsGetOneResponse{
+	Reply: rout.OK().Reply,
+	ContactList: ContactList{
+		ID:          "01J7PBEMJAZ08HKZF71302ZD1X",
+		Name:        "weekly-tips",
+		DisplayName: "Weekly Tips",
+		Description: "For sending out weekly tips regarding new features",
+	},
+}
+
+// ContactListsPostRequest is the body for a POST request to `/contacts/lists`
 type ContactListsPostRequest struct {
 	ContactLists []ContactList `json:"contact_lists"`
+}
+
+// ExampleContactListsPostRequest is an example POST request to `/contacts/lists`
+var ExampleContactListsPostRequest = ContactListsPostRequest{
+	ContactLists: []ContactList{
+		{
+			Name:        "tos",
+			DisplayName: "Terms of Service",
+			Description: "For communicating changes to our terms of service",
+			Visibility:  "PRIVATE",
+		},
+		{
+			Name:        "weekly-tips",
+			DisplayName: "Weekly Tips",
+			Description: "For sending out weekly tips regarding new features",
+			Visibility:  "PUBLIC",
+		},
+	},
+}
+
+// ContactListsPostResponse is the body for a POST request response from `/contacts/lists`
+type ContactListsPostResponse = ContactListsGetResponse
+
+// ContactListsPostResponseFromContactListsGetResponse is a helper function to return
+func ContactListsPostResponseFromContactListsGetResponse(respGet *ContactListsGetResponse) *ContactListsPostResponse {
+	var respPost *ContactListsPostResponse = respGet
+	return respPost
+}
+
+// ContactListsDeleteRequest is the body for a DELETE request to `/contacts/lists`
+type ContactListsDeleteRequest struct {
+	ContactListIDs []string `json:"contact_list_ids"`
+}
+
+// ExampleContactListsDeleteRequest is an example DELETE request to `/contacts/lists`
+var ExampleContactListsDeleteRequest = ContactListsDeleteRequest{
+	ContactListIDs: []string{
+		"01J7PBEMJAZ08HKZF71302ZD1X",
+	},
+}
+
+// ContactListsDeleteResponse is the body for a DELETE request response from `/contacts/lists`
+type ContactListsDeleteResponse struct {
+	rout.Reply
+	CountAffected int `json:"count"`
+}
+
+// ExampleContactListsDeleteSuccessResponse is an example DELETE request response from `/contacts/lists`
+var ExampleContactListsDeleteSuccessResponse = ContactListsDeleteResponse{
+	Reply:         rout.OK().Reply,
+	CountAffected: 2,
 }
