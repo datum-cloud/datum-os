@@ -47,19 +47,19 @@ const MOCK_CONTACT_HISTORY: Datum.ContactHistory = {
       type: 'opened',
       content: 'Welcome to Wise',
       location: 'London, UK',
-      date: '2024-09-08T19:33:09.583385-05:00',
+      date: new Date('2024-09-08T19:33:09.583385-05:00'),
     },
     {
       type: 'delivered',
       content: 'Welcome to Wise',
       location: 'Strasbourg, France',
-      date: '2024-08-08T19:33:09.583385-05:00',
+      date: new Date('2024-08-08T19:33:09.583385-05:00'),
     },
     {
       type: 'sent',
       content: 'Welcome to Wise',
       location: 'London, UK',
-      date: '2024-07-08T19:33:09.583385-05:00',
+      date: new Date('2024-07-08T19:33:09.583385-05:00'),
     },
   ],
 }
