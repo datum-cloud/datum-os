@@ -11,8 +11,8 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/organizationsettinghistory"
+	"github.com/datum-cloud/datum-os/pkg/enthistory"
 	"github.com/datum-cloud/datum-os/pkg/enums"
-	"github.com/flume/enthistory"
 )
 
 // OrganizationSettingHistoryCreate is the builder for creating a OrganizationSettingHistory entity.

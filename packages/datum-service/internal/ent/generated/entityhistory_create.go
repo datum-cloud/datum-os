@@ -11,7 +11,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/entityhistory"
-	"github.com/flume/enthistory"
+	"github.com/datum-cloud/datum-os/pkg/enthistory"
 )
 
 // EntityHistoryCreate is the builder for creating a EntityHistory entity.

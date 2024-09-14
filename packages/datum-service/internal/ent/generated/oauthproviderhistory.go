@@ -12,7 +12,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"github.com/datum-cloud/datum-os/internal/ent/customtypes"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/oauthproviderhistory"
-	"github.com/flume/enthistory"
+	"github.com/datum-cloud/datum-os/pkg/enthistory"
 )
 
 // OauthProviderHistory is the model entity for the OauthProviderHistory schema.

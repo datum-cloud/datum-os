@@ -36,7 +36,7 @@ import (
 	"github.com/datum-cloud/datum-os/internal/ent/generated/userhistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/usersettinghistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/webhookhistory"
-	"github.com/flume/enthistory"
+	"github.com/datum-cloud/datum-os/pkg/enthistory"
 )
 
 type Change struct {

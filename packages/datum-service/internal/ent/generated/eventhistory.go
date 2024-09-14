@@ -11,7 +11,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/eventhistory"
-	"github.com/flume/enthistory"
+	"github.com/datum-cloud/datum-os/pkg/enthistory"
 )
 
 // EventHistory is the model entity for the EventHistory schema.

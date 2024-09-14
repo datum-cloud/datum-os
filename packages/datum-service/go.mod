@@ -14,8 +14,6 @@ require (
 	github.com/alicebob/miniredis/v2 v2.33.0
 	github.com/brianvoe/gofakeit/v7 v7.0.4
 	github.com/bytedance/sonic v1.12.1
-	github.com/datum-cloud/echo-prometheus/v5 v5.0.1
-	github.com/datumforge/echox v0.0.0-20231205180954-6e7ee4c4d965
 	github.com/dustinkirkland/golang-petname v0.0.0-20240428194347-eebcea082ee0
 	github.com/flume/enthistory v0.15.3
 	github.com/gertd/go-pluralize v0.2.1
@@ -50,8 +48,6 @@ require (
 	github.com/redis/go-redis/v9 v9.6.1
 	github.com/samber/lo v1.47.0
 	github.com/spf13/cobra v1.8.1
-	github.com/spf13/pflag v1.0.5
-	github.com/spf13/viper v1.18.2
 	github.com/stoewer/go-strcase v1.3.0
 	github.com/stretchr/testify v1.9.0
 	github.com/tursodatabase/libsql-client-go v0.0.0-20240812094001-348a4e45b535
@@ -192,6 +188,8 @@ require (
 	github.com/sirupsen/logrus v1.9.3 // indirect
 	github.com/sourcegraph/conc v0.3.0 // indirect
 	github.com/spf13/cast v1.6.0 // indirect
+	github.com/spf13/pflag v1.0.5 // indirect
+	github.com/spf13/viper v1.18.2 // indirect
 	github.com/stretchr/objx v0.5.2 // indirect
 	github.com/subosito/gotenv v1.6.0 // indirect
 	github.com/twitchyliquid64/golang-asm v0.15.1 // indirect

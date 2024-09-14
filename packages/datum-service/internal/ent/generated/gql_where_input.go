@@ -63,8 +63,8 @@ import (
 	"github.com/datum-cloud/datum-os/internal/ent/generated/usersettinghistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/webhook"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/webhookhistory"
+	"github.com/datum-cloud/datum-os/pkg/enthistory"
 	"github.com/datum-cloud/datum-os/pkg/enums"
-	"github.com/flume/enthistory"
 )
 
 // APITokenWhereInput represents a where input for filtering APIToken queries.

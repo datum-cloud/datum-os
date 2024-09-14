@@ -10,8 +10,8 @@ import (
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/Yamashou/gqlgenc/clientv2"
+	"github.com/datum-cloud/datum-os/pkg/enthistory"
 	"github.com/datum-cloud/datum-os/pkg/enums"
-	"github.com/flume/enthistory"
 )
 
 type DatumGraphClient interface {

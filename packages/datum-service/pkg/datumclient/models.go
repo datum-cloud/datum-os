@@ -9,8 +9,8 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/datum-cloud/datum-os/pkg/enthistory"
 	"github.com/datum-cloud/datum-os/pkg/enums"
-	"github.com/flume/enthistory"
 )
 
 type GlobalSearchResult interface {

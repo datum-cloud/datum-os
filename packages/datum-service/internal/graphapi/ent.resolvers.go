@@ -413,13 +413,11 @@ func (r *Resolver) UpdateTFASettingInput() UpdateTFASettingInputResolver {
 	return &updateTFASettingInputResolver{r}
 }
 
-type (
-	queryResolver                   struct{ *Resolver }
-	createEntityInputResolver       struct{ *Resolver }
-	createGroupInputResolver        struct{ *Resolver }
-	createOrganizationInputResolver struct{ *Resolver }
-	updateEntityInputResolver       struct{ *Resolver }
-	updateGroupInputResolver        struct{ *Resolver }
-	updateOrganizationInputResolver struct{ *Resolver }
-	updateTFASettingInputResolver   struct{ *Resolver }
-)
+type queryResolver struct{ *Resolver }
+type createEntityInputResolver struct{ *Resolver }
+type createGroupInputResolver struct{ *Resolver }
+type createOrganizationInputResolver struct{ *Resolver }
+type updateEntityInputResolver struct{ *Resolver }
+type updateGroupInputResolver struct{ *Resolver }
+type updateOrganizationInputResolver struct{ *Resolver }
+type updateTFASettingInputResolver struct{ *Resolver }

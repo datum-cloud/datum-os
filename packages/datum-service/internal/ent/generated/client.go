@@ -10,7 +10,6 @@ import (
 	"reflect"
 
 	"github.com/datum-cloud/datum-os/internal/ent/generated/migrate"
-	"github.com/datum-cloud/datum-os/pkg/fgax/entfga"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect"
@@ -75,13 +74,13 @@ import (
 	"github.com/datum-cloud/datum-os/internal/ent/generated/webhook"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/webhookhistory"
 	"github.com/datum-cloud/datum-os/pkg/analytics"
+	"github.com/datum-cloud/datum-os/pkg/fgax"
+	"github.com/datum-cloud/datum-os/pkg/fgax/entfga"
 	"github.com/datum-cloud/datum-os/pkg/sessions"
 	"github.com/datum-cloud/datum-os/pkg/tokens"
 	"github.com/datum-cloud/datum-os/pkg/utils/emails"
 	"github.com/datum-cloud/datum-os/pkg/utils/marionette"
 	"github.com/datum-cloud/datum-os/pkg/utils/totp"
-	"github.com/datum-cloud/datum-os/pkg/fgax"
-	"github.com/datum-cloud/datum-os/pkg/geodetic/pkg/geodeticclient"
 	"go.uber.org/zap"
 	"gocloud.dev/secrets"
 
@@ -321,7 +320,6 @@ type (
 		Marionette    *marionette.TaskManager
 		Analytics     *analytics.EventManager
 		TOTP          *totp.Manager
-		Geodetic      *geodeticclient.Client
 		// schemaConfig contains alternative names for all tables.
 		schemaConfig SchemaConfig
 	}
@@ -434,13 +432,6 @@ func Analytics(v *analytics.EventManager) Option {
 func TOTP(v *totp.Manager) Option {
 	return func(c *config) {
 		c.TOTP = v
-	}
-}
-
-// Geodetic configures the Geodetic.
-func Geodetic(v *geodeticclient.Client) Option {
-	return func(c *config) {
-		c.Geodetic = v
 	}
 }
 

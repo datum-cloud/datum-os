@@ -7,7 +7,6 @@ import (
 
 	"github.com/datum-cloud/datum-os/pkg/entx"
 	"github.com/datum-cloud/datum-os/pkg/fgax"
-	"github.com/datum-cloud/datum-os/pkg/geodetic/pkg/geodeticclient"
 	"github.com/knadh/koanf/parsers/yaml"
 	"github.com/knadh/koanf/providers/env"
 	"github.com/knadh/koanf/providers/file"
@@ -48,8 +47,6 @@ type Config struct {
 	Authz fgax.Config `json:"authz" koanf:"authz"`
 	// DB contains the database configuration for the ent client
 	DB entx.Config `json:"db" koanf:"db"`
-	// Geodetic contains the geodetic client configuration
-	Geodetic geodeticclient.Config `json:"geodetic" koanf:"geodetic"`
 	// Redis contains the redis configuration for the key-value store
 	Redis cache.Config `json:"redis" koanf:"redis"`
 	// Tracer contains the tracing config for opentelemetry

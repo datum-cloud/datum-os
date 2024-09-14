@@ -726,14 +726,14 @@ type ContactsGetResponse struct {
 	// the number of contacts returned in `Contacts`
 	Count int `json:"count"`
 	// the array of contacts
-	Contacts []*Contact `json:"contacts"`
+	Contacts []Contact `json:"contacts"`
 }
 
 // ContactsGetResponseFromGeneratedContacts is a helper function to return a `ContactsGetResponse` body from a `generated.Contact` slice
 func ContactsGetResponseFromGeneratedContacts(genContacts []*generated.Contact) *ContactsGetResponse {
 	cgr := &ContactsGetResponse{}
 	cgr.Count = len(genContacts)
-	cgr.Contacts = make([]*Contact, cgr.Count)
+	cgr.Contacts = make([]Contact, cgr.Count)
 	for i, genContact := range genContacts {
 		cgr.Contacts[i] = ContactFromGeneratedContact(genContact)
 		cgr.Contacts[i].Tags = append(cgr.Contacts[i].Tags, genContact.Tags...)
@@ -780,8 +780,8 @@ type Contact struct {
 }
 
 // ContactFromGeneratedContact is a helper function to return a `Contact` from a `generated.Contact`
-func ContactFromGeneratedContact(genContact *generated.Contact) *Contact {
-	cd := &Contact{}
+func ContactFromGeneratedContact(genContact *generated.Contact) Contact {
+	cd := Contact{}
 
 	cd.ID = genContact.ID
 	cd.CreatedAt = genContact.CreatedAt
@@ -809,7 +809,7 @@ func ContactFromGeneratedContact(genContact *generated.Contact) *Contact {
 var ExampleContactsGetSuccessResponse = ContactsGetResponse{
 	Reply: rout.Reply{Success: true},
 	Count: 2,
-	Contacts: []*Contact{
+	Contacts: []Contact{
 		{
 			ID: "01J6X14S34TP3H6Z4S3AVHJSMY", FullName: "Serene Ilsley", Address: "66195 Gateway Junction",
 			Email: "silsley0@harvard.edu", Title: "Web Designer III", Company: "Crona-Dooley", PhoneNumber: "694-566-6857",
@@ -818,6 +818,32 @@ var ExampleContactsGetSuccessResponse = ContactsGetResponse{
 			ID: "01J6X14S355M2R0GP5WFX6QX91", FullName: "Bobbie Kolyagin", Address: "467 Magdeline Hill",
 			Email: "bkolyagin1@blogs.com", Title: "VP Sales", Company: "Mosciski Group", PhoneNumber: "228-669-6638",
 		},
+	},
+}
+
+// ContactsGetOneRequest is the parameter for a GET request to `/contacts/:id`
+type ContactsGetOneRequest struct {
+	ID string `param:"id"`
+}
+
+// ContactsGetOneResponse is the body for a GET request response to `/contacts/:id`
+type ContactsGetOneResponse struct {
+	rout.Reply
+	Contact `json:"contact"`
+}
+
+func ContactsGetOneResponseFromGeneratedContact(genContact *generated.Contact) *ContactsGetOneResponse {
+	cgr := &ContactsGetOneResponse{Reply: rout.Reply{Success: true}}
+	cgr.Contact = ContactFromGeneratedContact(genContact)
+
+	return cgr
+}
+
+var ExampleContactsGetOneSuccessResponse = ContactsGetOneResponse{
+	Reply: rout.Reply{Success: true},
+	Contact: Contact{
+		ID: "01J6X14S34TP3H6Z4S3AVHJSMY", FullName: "Serene Ilsley", Address: "66195 Gateway Junction",
+		Email: "silsley0@harvard.edu", Title: "Web Designer III", Company: "Crona-Dooley", PhoneNumber: "694-566-6857",
 	},
 }
 
@@ -847,7 +873,7 @@ var ExampleContactsPostRequest = ContactsPostRequest{
 var ExampleContactsPostSuccessResponse = ContactsPostResponse{
 	Reply: rout.Reply{Success: true},
 	Count: 2,
-	Contacts: []*Contact{
+	Contacts: []Contact{
 		{
 			FullName: "Serene Ilsley", Address: "66195 Gateway Junction", Email: "silsley0@harvard.edu",
 			Title: "Web Designer III", Company: "Crona-Dooley", PhoneNumber: "694-566-6857",
@@ -883,7 +909,7 @@ type ContactsPutResponse ContactsGetResponse
 var ExampleContactsPutSuccessResponse = ContactsPutResponse{
 	Reply: rout.Reply{Success: true},
 	Count: 2,
-	Contacts: []*Contact{
+	Contacts: []Contact{
 		{
 			ID: "01J6X14S34TP3H6Z4S3AVHJSMY", FullName: "Serene Ilsley", Address: "66195 Gateway Junction",
 			Email: "silsley0@harvard.edu", Title: "Web Designer III", Company: "Crona-Dooley", PhoneNumber: "694-566-6857",
