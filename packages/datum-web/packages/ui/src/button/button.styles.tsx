@@ -15,7 +15,7 @@ export const buttonStyles = tv({
     variant: {
       tag: '!text-blackberry-500 !font-mono border font-bold border-blackberry-500 uppercase disabled:opacity-50',
       tagSuccess:
-        '!text-white !font-mono border font-bold border-util-green-500 bg-util-green-500 uppercase disabled:opacity-50',
+        '!text-white font-mono border font-bold border-util-green-500 bg-util-green-500 uppercase disabled:opacity-50 gap-1',
       tableHeader: '!text-blackberry-600 !font-mono disabled:opacity-50',
       sunglowXs: '!text-sunglow-900',
       blackberryXs: 'text-blackberry-900',

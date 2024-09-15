@@ -81,7 +81,7 @@ const ContactPage = ({ id }: ContactPageProps) => {
   const {
     email,
     source,
-    lists = [],
+    lists = ['Admin', 'Newsletter', 'Developers'], // TODO: Remove these later
     createdAt,
     enrichedData = {},
     contactHistory,

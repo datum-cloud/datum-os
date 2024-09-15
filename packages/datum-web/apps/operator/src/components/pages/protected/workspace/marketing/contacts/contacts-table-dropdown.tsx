@@ -123,11 +123,10 @@ const ContactsTableDropdown = ({ contact }: ContactsTableDropdownProps) => {
                       return (
                         <Button
                           key={list}
-                          size="xs"
-                          variant="successXs"
+                          size="tag"
+                          variant="tagSuccess"
                           icon={<Check size={10} className="leading-none" />}
                           iconPosition="left"
-                          className="rounded-[5px] px-[7px] pt-[1px] pb-[2px] h-[19px] bg-util-green-500 border border-util-green-500 uppercase font-mono text-[10px] !text-white font-semibold leading-[150%] tracking-[0.4px] !gap-1"
                           onClick={setLists.bind(null, newSelectedLists)}
                         >
                           {list}
@@ -140,9 +139,8 @@ const ContactsTableDropdown = ({ contact }: ContactsTableDropdownProps) => {
                     return (
                       <Button
                         key={list}
-                        variant="blackberryXs"
-                        size="xs"
-                        className="rounded-[5px] px-[7px] pt-[1px] pb-[2px] h-[19px] border uppercase font-mono text-[10px] font-semibold leading-[150%] tracking-[0.4px]"
+                        variant="tag"
+                        size="tag"
                         onClick={setLists.bind(null, newSelectedLists)}
                       >
                         {list}
