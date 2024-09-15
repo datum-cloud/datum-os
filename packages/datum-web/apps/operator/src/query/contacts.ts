@@ -2,25 +2,10 @@ import type { QueryKey } from '@tanstack/react-query'
 
 import { OPERATOR_API_ROUTES } from '@repo/constants'
 import { camelize, decamelize } from '@repo/common/keys'
-// import { getPathWithParams } from '@repo/common/routes'
+import { getPathWithParams } from '@repo/common/routes'
 import { Datum } from '@repo/types'
 import { queryClient } from '@/query/client'
 import type { ContactInput } from '@/utils/schemas'
-
-const MOCK_CONTACT = {
-  id: '01J7A35QY582XPTHXF03GFA7J5' as Datum.ContactId,
-  createdAt: new Date('2024-09-08T19:33:09.583385-05:00'),
-  updatedAt: new Date('2024-09-08T19:33:09.583385-05:00'),
-  fullName: 'Roxanne Banks',
-  title: 'Developer',
-  email: 'rox@company.ai' as Datum.Email,
-  status: 'ACTIVE',
-  company: 'Google',
-  address: '',
-  phoneNumber: '+1234567890',
-  source: 'form',
-  lists: ['Newsletter', 'Admin', 'Cardholders', 'Developers'],
-} as Datum.Contact
 
 const MOCK_ENRICHED_DATA = {
   company: {
@@ -65,21 +50,19 @@ const MOCK_CONTACT_HISTORY: Datum.ContactHistory = {
 }
 
 export async function getContact(id: Datum.ContactId): Promise<Datum.Contact> {
-  // TODO: Reinstate when the API is functional
-  // const response = await fetch(
-  //   getPathWithParams(OPERATOR_API_ROUTES.contact, { id }),
-  // )
+  const response = await fetch(
+    getPathWithParams(OPERATOR_API_ROUTES.contact, { id }),
+  )
 
-  // if (!response.ok) {
-  //   const result = await response.json()
-  //   const message = result?.message || 'Something went wrong'
+  if (!response.ok) {
+    const result = await response.json()
+    const message = result?.message || 'Something went wrong'
 
-  //   throw new Error(message)
-  // }
+    throw new Error(message)
+  }
 
-  // const result = await response.json()
-  // const contact = camelize<Datum.Contact>(result.contact)
-  const contact = MOCK_CONTACT
+  const result = await response.json()
+  const contact = camelize<Datum.Contact>(result.contact)
 
   const enrichedData = await getEnrichedData(id)
   const contactHistory = await getContactHistory(id)

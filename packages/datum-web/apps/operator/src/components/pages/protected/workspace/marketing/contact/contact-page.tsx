@@ -81,7 +81,7 @@ const ContactPage = ({ id }: ContactPageProps) => {
   const {
     email,
     source,
-    lists,
+    lists = [],
     createdAt,
     enrichedData = {},
     contactHistory,
@@ -146,6 +146,7 @@ const ContactPage = ({ id }: ContactPageProps) => {
           <div className="grid grid-cols-2 rounded-lg border border-blackberry-300">
             {Object.values(enrichedData).map(({ key, value }: any, index) => (
               <div
+                key={index}
                 className={cn(
                   'w-full flex items-stretch justify-start px-6 py-3 border-blackberry-300',
                   index < Object.keys(enrichedData).length - 2 && 'border-b',
@@ -200,14 +201,13 @@ const ContactPage = ({ id }: ContactPageProps) => {
                           return (
                             <Button
                               key={list}
-                              variant="success"
+                              variant="tagSuccess"
+                              size="tag"
                               icon={
                                 <Check size={10} className="leading-none" />
                               }
                               iconPosition="left"
-                              className="transition-all duration-0 !text-blackberry-500 !font-semibold"
                               onClick={() => setSelectedLists(newSelectedLists)}
-                              size="tag"
                             >
                               {list}
                             </Button>
@@ -221,7 +221,6 @@ const ContactPage = ({ id }: ContactPageProps) => {
                             key={list}
                             variant="tag"
                             size="tag"
-                            className="transition-all duration-0"
                             onClick={() => setSelectedLists(newSelectedLists)}
                           >
                             {list}

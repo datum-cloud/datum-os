@@ -48,10 +48,10 @@ const ContactsSearch = ({ search }: ContactsSearchProps) => {
             ? '!absolute z-10 top-0 right-0 border-transparent'
             : 'border-blackberry-300',
         )}
+        icon={<Search />}
+        iconPosition="left"
         onClick={handleSearch}
-      >
-        <Search />
-      </Button>
+      />
     </div>
   )
 }

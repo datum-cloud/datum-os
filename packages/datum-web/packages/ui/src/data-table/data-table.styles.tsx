@@ -13,6 +13,6 @@ export const dataTableStyles = tv({
     pageSizeTrigger: 'h-8 !text-blackberry-400 placeholder-blackberry-400',
     pageSizeColumn: 'flex flex-row justify-start items-stretch',
     tableHeader:
-      'uppercase font-mono font-semibold !leading-[150%] !tracking-[0.4px] flex items-center justify-between',
+      'uppercase font-mono font-semibold !leading-[150%] !tracking-[0.4px] flex items-center justify-between hover:!text-blackberry-600/50',
   },
 })

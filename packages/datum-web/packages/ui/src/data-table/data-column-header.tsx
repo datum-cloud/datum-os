@@ -24,10 +24,10 @@ export function DataTableColumnHeader<TData, TValue>({
   return (
     <button
       type="button"
-      className={cn(tableHeader(), className, 'hover:!opacity-50')}
+      className={cn(tableHeader(), className)}
       onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
     >
-      <div className="pb-[2px]">{children}</div>
+      <span className="inline-block pb-[2px]">{children}</span>
       <ChevronsUpDown size={16} />
     </button>
   )
