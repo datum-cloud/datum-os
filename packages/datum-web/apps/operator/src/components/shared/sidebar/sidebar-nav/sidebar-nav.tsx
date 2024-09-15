@@ -98,7 +98,7 @@ export function SideNav({ items, setOpen, className }: SideNavProps) {
                   {item.title}
                 </div>
               </AccordionTrigger>
-              <AccordionContent>
+              <AccordionContent className="px-2 pb-0">
                 {item.children?.map((child) => (
                   <Link
                     key={child.title}

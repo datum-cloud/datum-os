@@ -22,8 +22,8 @@ export const LoadingSpinner = ({
         width={size}
         className={cn(
           'animate-spin',
-          track ?? 'text-blackberry-400',
-          marker ?? 'fill-blackberry-900',
+          track ?? 'text-sunglow-400',
+          marker ?? 'fill-sunglow-900',
           className,
         )}
         viewBox="0 0 100 101"

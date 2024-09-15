@@ -23,6 +23,10 @@ p {
   @apply text-blackberry-800/90 dark:text-blackberry-100;
 }
 
+.link {
+  @apply hover:opacity-80 transition-opacity;
+}
+
 .type-h1 {
   @apply text-h1 tracking-h1;
 }

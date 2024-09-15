@@ -39,10 +39,10 @@ import { removeContacts } from '@/query/contacts'
 import { formatDate } from '@/utils/date'
 
 import { pageStyles as contactsStyles } from '../contacts/page.styles'
-import { tagStyles } from '../contacts/page.styles'
 import ContactFormDialog from '../contacts/contacts-form-dialog'
 import ContactTable from './contact-table'
 import { pageStyles } from './page.styles'
+import { Tag } from '@repo/ui/tag'
 
 type ContactPageProps = {
   id: Datum.ContactId
@@ -237,9 +237,7 @@ const ContactPage = ({ id }: ContactPageProps) => {
         </div>
         <div className="w-full flex gap-2 flex-wrap">
           {lists.map((list) => (
-            <span key={list} className={tagStyles()}>
-              {list}
-            </span>
+            <Tag key={list}>{list}</Tag>
           ))}
         </div>
       </Panel>

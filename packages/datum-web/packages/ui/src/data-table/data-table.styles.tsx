@@ -12,5 +12,7 @@ export const dataTableStyles = tv({
       'h-8 w-8 p-1 flex items-end justify-center border-r border-blackberry-400',
     pageSizeTrigger: 'h-8 !text-blackberry-400 placeholder-blackberry-400',
     pageSizeColumn: 'flex flex-row justify-start items-stretch',
+    tableHeader:
+      'uppercase font-mono font-semibold !leading-[150%] !tracking-[0.4px] flex items-center justify-between',
   },
 })

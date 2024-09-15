@@ -25,6 +25,7 @@ import { tableStyles, tagStyles } from './page.styles'
 import Link from 'next/link'
 import { getPathWithParams } from '@repo/common/routes'
 import { OPERATOR_APP_ROUTES } from '@repo/constants'
+import { Tag } from '@repo/ui/tag'
 
 type ContactsTableProps = {
   contacts: Datum.Contact[]
@@ -197,13 +198,7 @@ export const CONTACT_COLUMNS: ColumnDef<Datum.Contact>[] = [
       const value = cell.getValue() as Datum.Status
       const isActive = value === 'ACTIVE'
 
-      return (
-        <span
-          className={tagStyles({ status: isActive ? 'success' : 'default' })}
-        >
-          {value}
-        </span>
-      )
+      return <Tag variant={isActive ? 'success' : 'default'}>{value}</Tag>
     },
   },
   {
@@ -226,14 +221,8 @@ export const CONTACT_COLUMNS: ColumnDef<Datum.Contact>[] = [
 
       return (
         <div className="text-nowrap">
-          <span className={cn(tagStyles({ status: 'default' }), 'mr-[9px]')}>
-            {first}
-          </span>
-          {rest.length > 0 && (
-            <span className={tagStyles({ status: 'muted' })}>
-              + {rest.length}
-            </span>
-          )}
+          <Tag className="mr-[9px]">{first}</Tag>
+          {rest.length > 0 && <Tag variant="muted">+ {rest.length}</Tag>}
         </div>
       )
     },
@@ -245,8 +234,7 @@ export const CONTACT_COLUMNS: ColumnDef<Datum.Contact>[] = [
     enableGlobalFilter: false,
     enableSorting: false,
     header: '',
-    cell: ({ cell, row }) => {
-      const id = cell.getValue() as Datum.ContactId
+    cell: ({ row }) => {
       const contact = row.original
 
       return <ContactsTableDropdown contact={contact} />

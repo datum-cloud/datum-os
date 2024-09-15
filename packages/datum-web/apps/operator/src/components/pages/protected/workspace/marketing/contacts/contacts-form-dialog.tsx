@@ -135,10 +135,10 @@ const ContactFormDialog = ({
                   control={control}
                   render={({ field }) => (
                     <FormItem>
-                      <div className={labelContainer()}>
-                        <FormLabel>Email</FormLabel>
+                      <FormLabel className={labelContainer()}>
+                        Email
                         <span className={requiredText()}>Required</span>
-                      </div>
+                      </FormLabel>
                       <FormControl>
                         <Input {...field} value={field.value || ''} />
                       </FormControl>

@@ -3,8 +3,8 @@ import { tv, type VariantProps } from 'tailwind-variants'
 
 export const buttonStyles = tv({
   slots: {
-    base: 'relative group inline-flex items-center gap-2 justify-center whitespace-nowrap rounded-md leading-none transition-all duration-500 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-blackberry-300 disabled:pointer-events-none hover:!opacity-90',
-    childWrapper: '',
+    base: 'relative group inline-flex items-center gap-2 justify-center whitespace-nowrap rounded-md leading-none transition-all duration-500 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-blackberry-300 disabled:pointer-events-none hover:opacity-90 font-mono',
+    childWrapper: 'pb-[2px]',
     loadingWrapper:
       'absolute top-1/2 left-1/2  transform -translate-x-1/2 -translate-y-1/2',
     loadingText: 'opacity-0',
@@ -40,9 +40,9 @@ export const buttonStyles = tv({
     size: {
       tag: 'py-0.5 px-[7px] text-[10px]',
       xs: 'rounded-none p-0',
-      sm: 'h-9 rounded-md px-4 text-button-s font-sans',
-      md: 'h-11 rounded-md px-5 text-button-m font-sans',
-      lg: 'h-16 px-8 text-button-l font-sans',
+      sm: 'h-9 rounded-md px-4 text-button-s',
+      md: 'h-11 rounded-md px-5 text-button-m',
+      lg: 'h-16 px-8 text-button-l',
     },
     full: {
       true: {

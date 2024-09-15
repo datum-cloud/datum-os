@@ -23,8 +23,8 @@ interface InputRowProps extends InputRowVariants {
   children: ReactNode
 }
 interface DebouncedInputProps extends Omit<InputProps, 'onChange' | 'value'> {
-  value: string | number
-  onChange: (value: string | number) => void
+  value: string
+  onChange(value: string): void
   debounce?: number
 }
 

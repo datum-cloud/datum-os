@@ -11,31 +11,13 @@ import {
   DropdownMenuItem,
   DropdownMenuSeparator,
 } from '@repo/ui/dropdown-menu'
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@repo/ui/select'
-import Link from 'next/link'
 import { ChevronDown } from '@repo/ui/icons/chevron-down'
-import { Kbd } from '@repo/ui/kbd'
-import { useTheme } from 'next-themes'
+import { ShieldCheck } from 'lucide-react'
 
 export const UserMenu = () => {
-  const { setTheme, theme } = useTheme()
   const { data: sessionData } = useSession()
-  const {
-    trigger,
-    email,
-    userSettingsLink,
-    themeRow,
-    themeDropdown,
-    commandRow,
-    commands,
-  } = userMenuStyles()
+  const { trigger, email, dropdownItem, subheading, logOutButton } =
+    userMenuStyles()
 
   return (
     <DropdownMenu>
@@ -53,63 +35,25 @@ export const UserMenu = () => {
         </div>
       </DropdownMenuTrigger>
       <DropdownMenuContent>
-        <DropdownMenuItem
-          className="flex items-start justify-start flex-col gap-2"
-          asChild
-        >
+        <DropdownMenuItem asChild className={dropdownItem()}>
           <>
-            {sessionData?.user?.name}
-            <p className={email()}>{sessionData?.user.email}</p>
-            <Link href="/profile" className={userSettingsLink()}>
-              User Settings
-            </Link>
+            <p className={subheading()}>Signed in as</p>
+            <a href={`mailto:${sessionData?.user.email}`} className={email()}>
+              {sessionData?.user.email}
+            </a>
           </>
         </DropdownMenuItem>
         <DropdownMenuSeparator spacing="md" />
-        <div className={commandRow()}>
-          <p>Command menu</p>
-          <div className={commands()}>
-            <Kbd text="⌘" size="small" />
-            <Kbd text="K" size="small" />
-          </div>
-        </div>
-        <DropdownMenuSeparator spacing="md" />
-        <div className={themeRow()}>
-          <p>Theme</p>
-          <Select onValueChange={(value) => setTheme(value)} value={theme}>
-            <SelectTrigger className={themeDropdown()}>
-              <SelectValue placeholder="Select theme" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectGroup>
-                <SelectItem value="system">Default</SelectItem>
-                <SelectItem value="dark">Dark</SelectItem>
-                <SelectItem value="light">Light</SelectItem>
-              </SelectGroup>
-            </SelectContent>
-          </Select>
-        </div>
-        <DropdownMenuSeparator spacing="md" />
-        <DropdownMenuItem>
-          <div>
-            <Link href="/workspace" className={userSettingsLink()}>
-              My workspaces
-            </Link>
-          </div>
-        </DropdownMenuItem>
-
-        <DropdownMenuSeparator spacing="md" />
-        <DropdownMenuItem>
-          <Button
-            size="md"
-            variant="outline"
-            full
-            onClick={() => {
-              signOut()
-            }}
-          >
+        <DropdownMenuItem
+          asChild
+          onClick={() => {
+            signOut()
+          }}
+        >
+          <div className={logOutButton()}>
+            <ShieldCheck className="text-blackberry-400" />
             Log out
-          </Button>
+          </div>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

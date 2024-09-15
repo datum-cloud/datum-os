@@ -7,14 +7,14 @@ export const pageStyles = tv({
     actionIcon: 'text-blackberry-400',
     contactControls: 'flex justify-start items-stretch gap-[18px]',
     contactDropdownItem:
-      'w-full flex items-center justify-start gap-3 text-button-m cursor-pointer',
+      'w-full flex items-center justify-start gap-3 text-button-m cursor-pointer hover:bg-winter-sky-700',
     contactDropdownIcon: 'text-blackberry-400',
     nameRow: 'flex gap-2',
     copyIcon: 'text-blackberry-400 cursor-pointer',
-    accordionContainer: 'w-full border-b-0',
+    accordionContainer: 'w-full border-b-0 px-0',
     accordionTrigger:
-      'w-full !h-[30px] py-1.5 px-0 flex items-center font-normal hover:no-underline justify-between gap-3 text-base cursor-pointer',
-    accordionContentOuter: 'w-full flex',
+      'w-full !h-[30px] py-1.5 px-0 flex items-center font-normal hover:no-underline justify-between gap-3 text-base cursor-pointer px-2 hover:bg-winter-sky-700',
+    accordionContentOuter: 'w-full flex px-2',
     accordionContentInner:
       'w-full flex overflow-scroll flex-col items-start justify-start gap-2 max-w-full truncate pt-2 pb-0',
   },
@@ -23,9 +23,10 @@ export const pageStyles = tv({
 export const formStyles = tv({
   slots: {
     form: 'w-full flex flex-col gap-6',
-    fieldsContainer: 'w-full flex flex-col justify-start gap-2.5',
-    labelContainer: 'w-full flex items-center justify-between',
-    requiredText: 'type-smallcaps-s text-blackberry-500',
+    fieldsContainer: 'relative w-full flex flex-col justify-start gap-4',
+    labelContainer: 'w-full',
+    requiredText:
+      'text-smallcaps-s font-bold text-[12px] font-mono uppercase tracking-smallcaps-s leading-[150%] text-blackberry-500 absolute top-1 right-0',
   },
 })
 
@@ -49,7 +50,7 @@ export const filterStyles = tv({
 })
 
 export const tagStyles = tv({
-  base: 'rounded-[5px] px-[7px] pt-[1px] pb-[3px] h-[19px] border uppercase font-mono text-[10px] font-semibold leading-normal',
+  base: 'rounded-[5px] px-[7px] pt-[1px] pb-[3px] h-[19px] border uppercase font-mono text-[10px] font-semibold leading-[150%] tracking-[0.4px]',
   variants: {
     status: {
       success: 'border-util-green-500 text-util-green-500',

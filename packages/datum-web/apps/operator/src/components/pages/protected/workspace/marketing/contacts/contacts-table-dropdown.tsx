@@ -75,7 +75,7 @@ const ContactsTableDropdown = ({ contact }: ContactsTableDropdownProps) => {
   return (
     <div className="flex items-center justify-center">
       <DropdownMenu>
-        <DropdownMenuTrigger className="p-3">
+        <DropdownMenuTrigger className="p-0.5">
           <Ellipsis className={contactDropdownIcon()} />
         </DropdownMenuTrigger>
         <DropdownMenuContent className="py-2.5 px-2" align="end">
@@ -100,7 +100,7 @@ const ContactsTableDropdown = ({ contact }: ContactsTableDropdownProps) => {
             <Trash size={18} className={contactDropdownIcon()} />
             Delete Item
           </DropdownMenuItem>
-          <Accordion type="single" collapsible className="w-full px-2">
+          <Accordion type="single" collapsible className="w-full px-0">
             <AccordionItem value="lists" className={accordionContainer()}>
               <AccordionTrigger className={accordionTrigger()}>
                 <div className="flex items-center justify-start gap-3">

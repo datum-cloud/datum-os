@@ -13,7 +13,7 @@ export const tableStyles = tv({
     tableHead:
       'h-12 px-4 text-left align-middle font-medium text-blackberry-500 [&:has([role=checkbox])]:pr-0 dark:text-slate-400',
     tableCell:
-      'p-4 text-blackberry-800 align-middle [&:has([role=checkbox])]:pr-0',
+      'px-4 py-3 text-blackberry-800 align-middle [&:has([role=checkbox])]:pr-0',
     tableCaption: 'mt-4 text-sm text-slate-500 dark:text-slate-400',
   },
   variants: {
