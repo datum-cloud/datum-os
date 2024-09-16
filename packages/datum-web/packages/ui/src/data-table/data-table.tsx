@@ -181,7 +181,7 @@ export function DataTable<TData, TValue>({
           )}
         </div>
       )}
-      <Table layoutFixed={layoutFixed}>
+      <Table className="border-separate" layoutFixed={layoutFixed}>
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>
@@ -191,6 +191,11 @@ export function DataTable<TData, TValue>({
 
                 const hasBorder =
                   bordered && headerGroup.headers.length - 1 > index
+                const pinLeft =
+                  header.getContext().column.columnDef.meta?.pin === 'left'
+                const pinRight =
+                  header.getContext().column.columnDef.meta?.pin === 'right'
+
                 return (
                   <TableHead
                     highlightHeader={highlightHeader}
@@ -198,12 +203,19 @@ export function DataTable<TData, TValue>({
                     key={header.id}
                     style={{ width: columnWidth }}
                     className={cn(
-                      header.getContext().column.columnDef.meta?.pin ===
-                        'left' && 'sticky z-20 left-0',
-                      header.getContext().column.columnDef.meta?.pin ===
-                        'right' && 'sticky z-20 right-0',
+                      pinLeft && 'sticky z-20 left-0 border-r-0',
+                      pinRight && 'sticky z-20 right-0',
                     )}
                   >
+                    {/* NOTE: This is to give the illusion of a border when sticky */}
+                    {(pinRight || pinLeft) && (
+                      <div
+                        className={cn(
+                          'absolute top-0 h-full w-[1px] bg-blackberry-400',
+                          pinRight ? 'left-0' : 'right-0',
+                        )}
+                      />
+                    )}
                     {header.isPlaceholder
                       ? null
                       : flexRender(
@@ -227,6 +239,10 @@ export function DataTable<TData, TValue>({
                 {row.getVisibleCells().map((cell, index) => {
                   const hasBorder =
                     bordered && row.getVisibleCells().length - 1 > index
+                  const pinLeft =
+                    cell.getContext().column.columnDef.meta?.pin === 'left'
+                  const pinRight =
+                    cell.getContext().column.columnDef.meta?.pin === 'right'
                   const columnWidth =
                     cell.column.getSize() === 20
                       ? 'auto'
@@ -238,14 +254,21 @@ export function DataTable<TData, TValue>({
                       key={cell.id}
                       style={{ width: columnWidth }}
                       className={cn(
-                        cell.getContext().column.columnDef.meta?.pin ===
-                          'left' &&
-                          'sticky z-20 bg-inherit left-0 bg-white group-hover:bg-blackberry-900',
-                        cell.getContext().column.columnDef.meta?.pin ===
-                          'right' &&
+                        pinLeft &&
+                          'sticky z-20 bg-inherit left-0 bg-white group-hover:bg-blackberry-900 border-r-0',
+                        pinRight &&
                           'sticky z-20 bg-inherit right-0 bg-white group-hover:bg-blackberry-50',
                       )}
                     >
+                      {/* NOTE: This is to give the illusion of a border when sticky */}
+                      {(pinRight || pinLeft) && (
+                        <div
+                          className={cn(
+                            'absolute top-0 h-full w-[1px] bg-blackberry-400',
+                            pinRight ? 'left-0' : 'right-0',
+                          )}
+                        />
+                      )}
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext(),
