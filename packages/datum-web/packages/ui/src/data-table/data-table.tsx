@@ -183,107 +183,55 @@ export function DataTable<TData, TValue>({
       )}
       <Table layoutFixed={layoutFixed}>
         <TableHeader>
-          {table.getHeaderGroups().map((headerGroup) => (
-            <TableRow key={headerGroup.id}>
-              {headerGroup.headers.map((header, index) => {
-                const columnWidth =
-                  header.getSize() === 20 ? 'auto' : `${header.getSize()}px`
+          {table.getHeaderGroups().map((headerGroup) => {
+            const hasPinnedRightCell = headerGroup.headers.some(
+              (cell) =>
+                cell.getContext().column.columnDef.meta?.pin === 'right',
+            )
 
-                const hasBorder =
-                  bordered && headerGroup.headers.length - 1 > index
-                const pinLeft =
-                  header.getContext().column.columnDef.meta?.pin === 'left'
-                const pinRight =
-                  header.getContext().column.columnDef.meta?.pin === 'right'
-
-                return (
-                  <Fragment key={header.id}>
-                    {pinRight && (
-                      <th
-                        className="w-[1px] p-0 bg-blackberry-100 sticky z-20"
-                        style={{ right: columnWidth }}
-                      />
-                    )}
-                    <TableHead
-                      highlightHeader={highlightHeader}
-                      bordered={hasBorder}
-                      style={{ width: columnWidth }}
-                      className={cn(
-                        pinLeft && 'sticky z-20 left-0 border-r-0',
-                        pinRight && 'sticky z-20 right-0',
-                        pinRight &&
-                          index === headerGroup.headers.length - 2 &&
-                          'border-r-0',
-                      )}
-                    >
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext(),
-                          )}
-                    </TableHead>
-                    {pinLeft && (
-                      <th
-                        className="w-[1px] p-0 bg-blackberry-100 sticky z-20"
-                        style={{ left: columnWidth }}
-                      />
-                    )}
-                  </Fragment>
-                )
-              })}
-            </TableRow>
-          ))}
-        </TableHeader>
-        <TableBody>
-          {table.getRowModel().rows?.length ? (
-            table.getRowModel().rows.map((row) => (
-              <TableRow
-                key={row.id}
-                className="group"
-                data-state={row.getIsSelected() && 'selected'}
-              >
-                {row.getVisibleCells().map((cell, index) => {
-                  const hasBorder =
-                    bordered && row.getVisibleCells().length - 1 > index
-                  const pinLeft =
-                    cell.getContext().column.columnDef.meta?.pin === 'left'
-                  const pinRight =
-                    cell.getContext().column.columnDef.meta?.pin === 'right'
+            return (
+              <TableRow key={headerGroup.id}>
+                {headerGroup.headers.map((header, index) => {
                   const columnWidth =
-                    cell.column.getSize() === 20
-                      ? 'auto'
-                      : `${cell.column.getSize()}px`
+                    header.getSize() === 20 ? 'auto' : `${header.getSize()}px`
+
+                  const hasBorder =
+                    bordered && headerGroup.headers.length - 1 > index
+                  const pinLeft =
+                    header.getContext().column.columnDef.meta?.pin === 'left'
+                  const pinRight =
+                    header.getContext().column.columnDef.meta?.pin === 'right'
+                  const secondLastCell =
+                    index === headerGroup.headers.length - 2
 
                   return (
-                    <Fragment key={cell.id}>
+                    <Fragment key={header.id}>
                       {pinRight && (
-                        <td
-                          className="w-[1px] p-0 bg-blackberry-100 sticky z-20"
+                        <th
+                          className="w-[1px] p-0 bg-blackberry-200 sticky z-20"
                           style={{ right: columnWidth }}
                         />
                       )}
-                      <TableCell
+                      <TableHead
+                        highlightHeader={highlightHeader}
                         bordered={hasBorder}
                         style={{ width: columnWidth }}
                         className={cn(
-                          pinLeft &&
-                            'sticky z-20 bg-inherit left-0 bg-white group-hover:!bg-blackberry-50 group-data-[state=selected]:bg-blackberry-50 border-r-0',
-                          pinRight &&
-                            'sticky z-20 bg-inherit right-0 bg-white group-hover:!bg-blackberry-50 group-data-[state=selected]:bg-blackberry-50',
-                          pinRight &&
-                            index === row.getVisibleCells().length - 2 &&
-                            'border-r-0',
+                          pinLeft && 'sticky z-20 left-0 border-r-0',
+                          pinRight && 'sticky z-20 right-0',
+                          hasPinnedRightCell && secondLastCell && 'border-r-0',
                         )}
                       >
-                        {flexRender(
-                          cell.column.columnDef.cell,
-                          cell.getContext(),
-                        )}
-                      </TableCell>
+                        {header.isPlaceholder
+                          ? null
+                          : flexRender(
+                              header.column.columnDef.header,
+                              header.getContext(),
+                            )}
+                      </TableHead>
                       {pinLeft && (
-                        <td
-                          className="w-[1px] p-0 bg-blackberry-100 sticky z-20 left-0"
+                        <th
+                          className="w-[1px] p-0 bg-blackberry-200 sticky z-20"
                           style={{ left: columnWidth }}
                         />
                       )}
@@ -291,7 +239,78 @@ export function DataTable<TData, TValue>({
                   )
                 })}
               </TableRow>
-            ))
+            )
+          })}
+        </TableHeader>
+        <TableBody>
+          {table.getRowModel().rows?.length ? (
+            table.getRowModel().rows.map((row) => {
+              const hasPinnedRightCell = row
+                .getVisibleCells()
+                .some(
+                  (cell) =>
+                    cell.getContext().column.columnDef.meta?.pin === 'right',
+                )
+
+              return (
+                <TableRow
+                  key={row.id}
+                  className="group"
+                  data-state={row.getIsSelected() && 'selected'}
+                >
+                  {row.getVisibleCells().map((cell, index) => {
+                    const hasBorder =
+                      bordered && row.getVisibleCells().length - 1 > index
+                    const pinLeft =
+                      cell.getContext().column.columnDef.meta?.pin === 'left'
+                    const pinRight =
+                      cell.getContext().column.columnDef.meta?.pin === 'right'
+                    const columnWidth =
+                      cell.column.getSize() === 20
+                        ? 'auto'
+                        : `${cell.column.getSize()}px`
+
+                    const secondLastCell =
+                      index === row.getVisibleCells().length - 2
+
+                    return (
+                      <Fragment key={cell.id}>
+                        {pinRight && (
+                          <td
+                            className="w-[1px] p-0 bg-blackberry-200 sticky z-20"
+                            style={{ right: columnWidth }}
+                          />
+                        )}
+                        <TableCell
+                          bordered={hasBorder}
+                          style={{ width: columnWidth }}
+                          className={cn(
+                            pinLeft &&
+                              'sticky z-20 bg-inherit left-0 bg-white group-hover:!bg-blackberry-50 group-data-[state=selected]:bg-blackberry-50 border-r-0',
+                            pinRight &&
+                              'sticky z-20 bg-inherit right-0 bg-white group-hover:!bg-blackberry-50 group-data-[state=selected]:bg-blackberry-50',
+                            hasPinnedRightCell &&
+                              secondLastCell &&
+                              'border-r-0',
+                          )}
+                        >
+                          {flexRender(
+                            cell.column.columnDef.cell,
+                            cell.getContext(),
+                          )}
+                        </TableCell>
+                        {pinLeft && (
+                          <td
+                            className="w-[1px] p-0 bg-blackberry-200 sticky z-20 left-0"
+                            style={{ left: columnWidth }}
+                          />
+                        )}
+                      </Fragment>
+                    )
+                  })}
+                </TableRow>
+              )
+            })
           ) : (
             <TableRow>
               <TableCell colSpan={columns.length} className="h-24 text-center">
