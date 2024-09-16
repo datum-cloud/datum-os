@@ -200,7 +200,7 @@ export function DataTable<TData, TValue>({
                   <Fragment key={header.id}>
                     {pinRight && (
                       <th
-                        className="w-[1px] p-0 bg-blackberry-4 sticky z-20"
+                        className="w-[1px] p-0 bg-blackberry-100 sticky z-20"
                         style={{ right: columnWidth }}
                       />
                     )}
@@ -211,6 +211,9 @@ export function DataTable<TData, TValue>({
                       className={cn(
                         pinLeft && 'sticky z-20 left-0 border-r-0',
                         pinRight && 'sticky z-20 right-0',
+                        pinRight &&
+                          index === headerGroup.headers.length - 2 &&
+                          'border-r-0',
                       )}
                     >
                       {header.isPlaceholder
@@ -222,7 +225,7 @@ export function DataTable<TData, TValue>({
                     </TableHead>
                     {pinLeft && (
                       <th
-                        className="w-[1px] p-0 bg-blackberry-4 sticky z-20"
+                        className="w-[1px] p-0 bg-blackberry-100 sticky z-20"
                         style={{ left: columnWidth }}
                       />
                     )}
@@ -256,7 +259,7 @@ export function DataTable<TData, TValue>({
                     <Fragment key={cell.id}>
                       {pinRight && (
                         <td
-                          className="w-[1px] p-0 bg-blackberry-4 sticky z-20"
+                          className="w-[1px] p-0 bg-blackberry-100 sticky z-20"
                           style={{ right: columnWidth }}
                         />
                       )}
@@ -268,6 +271,9 @@ export function DataTable<TData, TValue>({
                             'sticky z-20 bg-inherit left-0 bg-white group-hover:!bg-blackberry-50 group-data-[state=selected]:bg-blackberry-50 border-r-0',
                           pinRight &&
                             'sticky z-20 bg-inherit right-0 bg-white group-hover:!bg-blackberry-50 group-data-[state=selected]:bg-blackberry-50',
+                          pinRight &&
+                            index === row.getVisibleCells().length - 2 &&
+                            'border-r-0',
                         )}
                       >
                         {flexRender(
@@ -277,7 +283,7 @@ export function DataTable<TData, TValue>({
                       </TableCell>
                       {pinLeft && (
                         <td
-                          className="w-[1px] p-0 bg-blackberry-4 sticky z-20 left-0"
+                          className="w-[1px] p-0 bg-blackberry-100 sticky z-20 left-0"
                           style={{ left: columnWidth }}
                         />
                       )}

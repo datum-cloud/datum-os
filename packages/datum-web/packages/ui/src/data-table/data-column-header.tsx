@@ -3,7 +3,7 @@ import { ChevronsUpDown } from 'lucide-react'
 import { Column } from '@tanstack/react-table'
 
 import { cn } from '../../lib/utils'
-import { tableStyles } from '../table/table.styles'
+import { dataTableStyles } from './data-table.styles'
 
 interface DataTableColumnHeaderProps<TData, TValue>
   extends React.HTMLAttributes<HTMLDivElement> {
@@ -16,7 +16,7 @@ export function DataTableColumnHeader<TData, TValue>({
   children,
   className,
 }: DataTableColumnHeaderProps<TData, TValue>) {
-  const { tableHeader } = tableStyles()
+  const { tableHeader } = dataTableStyles()
   if (!column.getCanSort()) {
     return <div className={cn(tableHeader(), className)}>{children}</div>
   }
@@ -24,7 +24,11 @@ export function DataTableColumnHeader<TData, TValue>({
   return (
     <button
       type="button"
-      className={cn(tableHeader(), className)}
+      className={cn(
+        tableHeader(),
+        'hover:text-opacity-50 transition-colors',
+        className,
+      )}
       onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
     >
       <span className="inline-block pb-[2px]">{children}</span>
