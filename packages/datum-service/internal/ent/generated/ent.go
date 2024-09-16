@@ -15,6 +15,10 @@ import (
 	"github.com/datum-cloud/datum-os/internal/ent/generated/apitoken"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/contact"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/contacthistory"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/contactlist"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/contactlisthistory"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/contactlistmembership"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/contactlistmembershiphistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/documentdata"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/documentdatahistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/emailverificationtoken"
@@ -132,6 +136,10 @@ func checkColumn(table, column string) error {
 			apitoken.Table:                      apitoken.ValidColumn,
 			contact.Table:                       contact.ValidColumn,
 			contacthistory.Table:                contacthistory.ValidColumn,
+			contactlist.Table:                   contactlist.ValidColumn,
+			contactlisthistory.Table:            contactlisthistory.ValidColumn,
+			contactlistmembership.Table:         contactlistmembership.ValidColumn,
+			contactlistmembershiphistory.Table:  contactlistmembershiphistory.ValidColumn,
 			documentdata.Table:                  documentdata.ValidColumn,
 			documentdatahistory.Table:           documentdatahistory.ValidColumn,
 			emailverificationtoken.Table:        emailverificationtoken.ValidColumn,

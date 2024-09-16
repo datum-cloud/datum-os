@@ -9,6 +9,10 @@ import (
 	"github.com/datum-cloud/datum-os/internal/ent/generated/apitoken"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/contact"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/contacthistory"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/contactlist"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/contactlisthistory"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/contactlistmembership"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/contactlistmembershiphistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/documentdata"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/documentdatahistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/emailverificationtoken"
@@ -271,6 +275,180 @@ func init() {
 	contacthistoryDescID := contacthistoryFields[7].Descriptor()
 	// contacthistory.DefaultID holds the default value on creation for the id field.
 	contacthistory.DefaultID = contacthistoryDescID.Default.(func() string)
+	contactlistMixin := schema.ContactList{}.Mixin()
+	contactlistMixinHooks0 := contactlistMixin[0].Hooks()
+	contactlistMixinHooks1 := contactlistMixin[1].Hooks()
+	contactlistMixinHooks4 := contactlistMixin[4].Hooks()
+	contactlist.Hooks[0] = contactlistMixinHooks0[0]
+	contactlist.Hooks[1] = contactlistMixinHooks1[0]
+	contactlist.Hooks[2] = contactlistMixinHooks4[0]
+	contactlistMixinInters1 := contactlistMixin[1].Interceptors()
+	contactlistMixinInters4 := contactlistMixin[4].Interceptors()
+	contactlist.Interceptors[0] = contactlistMixinInters1[0]
+	contactlist.Interceptors[1] = contactlistMixinInters4[0]
+	contactlistMixinFields0 := contactlistMixin[0].Fields()
+	_ = contactlistMixinFields0
+	contactlistMixinFields2 := contactlistMixin[2].Fields()
+	_ = contactlistMixinFields2
+	contactlistMixinFields3 := contactlistMixin[3].Fields()
+	_ = contactlistMixinFields3
+	contactlistMixinFields4 := contactlistMixin[4].Fields()
+	_ = contactlistMixinFields4
+	contactlistFields := schema.ContactList{}.Fields()
+	_ = contactlistFields
+	// contactlistDescCreatedAt is the schema descriptor for created_at field.
+	contactlistDescCreatedAt := contactlistMixinFields0[0].Descriptor()
+	// contactlist.DefaultCreatedAt holds the default value on creation for the created_at field.
+	contactlist.DefaultCreatedAt = contactlistDescCreatedAt.Default.(func() time.Time)
+	// contactlistDescUpdatedAt is the schema descriptor for updated_at field.
+	contactlistDescUpdatedAt := contactlistMixinFields0[1].Descriptor()
+	// contactlist.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	contactlist.DefaultUpdatedAt = contactlistDescUpdatedAt.Default.(func() time.Time)
+	// contactlist.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	contactlist.UpdateDefaultUpdatedAt = contactlistDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// contactlistDescMappingID is the schema descriptor for mapping_id field.
+	contactlistDescMappingID := contactlistMixinFields2[1].Descriptor()
+	// contactlist.DefaultMappingID holds the default value on creation for the mapping_id field.
+	contactlist.DefaultMappingID = contactlistDescMappingID.Default.(func() string)
+	// contactlistDescTags is the schema descriptor for tags field.
+	contactlistDescTags := contactlistMixinFields3[0].Descriptor()
+	// contactlist.DefaultTags holds the default value on creation for the tags field.
+	contactlist.DefaultTags = contactlistDescTags.Default.([]string)
+	// contactlistDescOwnerID is the schema descriptor for owner_id field.
+	contactlistDescOwnerID := contactlistMixinFields4[0].Descriptor()
+	// contactlist.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
+	contactlist.OwnerIDValidator = contactlistDescOwnerID.Validators[0].(func(string) error)
+	// contactlistDescName is the schema descriptor for name field.
+	contactlistDescName := contactlistFields[0].Descriptor()
+	// contactlist.NameValidator is a validator for the "name" field. It is called by the builders before save.
+	contactlist.NameValidator = contactlistDescName.Validators[0].(func(string) error)
+	// contactlistDescVisibility is the schema descriptor for visibility field.
+	contactlistDescVisibility := contactlistFields[1].Descriptor()
+	// contactlist.DefaultVisibility holds the default value on creation for the visibility field.
+	contactlist.DefaultVisibility = string(contactlistDescVisibility.Default.(string))
+	// contactlistDescDisplayName is the schema descriptor for display_name field.
+	contactlistDescDisplayName := contactlistFields[2].Descriptor()
+	// contactlist.DefaultDisplayName holds the default value on creation for the display_name field.
+	contactlist.DefaultDisplayName = contactlistDescDisplayName.Default.(string)
+	// contactlist.DisplayNameValidator is a validator for the "display_name" field. It is called by the builders before save.
+	contactlist.DisplayNameValidator = contactlistDescDisplayName.Validators[0].(func(string) error)
+	// contactlistDescID is the schema descriptor for id field.
+	contactlistDescID := contactlistMixinFields2[0].Descriptor()
+	// contactlist.DefaultID holds the default value on creation for the id field.
+	contactlist.DefaultID = contactlistDescID.Default.(func() string)
+	contactlisthistory.Policy = privacy.NewPolicies(schema.ContactListHistory{})
+	contactlisthistory.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := contactlisthistory.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+	contactlisthistoryInters := schema.ContactListHistory{}.Interceptors()
+	contactlisthistory.Interceptors[0] = contactlisthistoryInters[0]
+	contactlisthistoryFields := schema.ContactListHistory{}.Fields()
+	_ = contactlisthistoryFields
+	// contactlisthistoryDescHistoryTime is the schema descriptor for history_time field.
+	contactlisthistoryDescHistoryTime := contactlisthistoryFields[0].Descriptor()
+	// contactlisthistory.DefaultHistoryTime holds the default value on creation for the history_time field.
+	contactlisthistory.DefaultHistoryTime = contactlisthistoryDescHistoryTime.Default.(func() time.Time)
+	// contactlisthistoryDescCreatedAt is the schema descriptor for created_at field.
+	contactlisthistoryDescCreatedAt := contactlisthistoryFields[3].Descriptor()
+	// contactlisthistory.DefaultCreatedAt holds the default value on creation for the created_at field.
+	contactlisthistory.DefaultCreatedAt = contactlisthistoryDescCreatedAt.Default.(func() time.Time)
+	// contactlisthistoryDescUpdatedAt is the schema descriptor for updated_at field.
+	contactlisthistoryDescUpdatedAt := contactlisthistoryFields[4].Descriptor()
+	// contactlisthistory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	contactlisthistory.DefaultUpdatedAt = contactlisthistoryDescUpdatedAt.Default.(func() time.Time)
+	// contactlisthistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	contactlisthistory.UpdateDefaultUpdatedAt = contactlisthistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// contactlisthistoryDescMappingID is the schema descriptor for mapping_id field.
+	contactlisthistoryDescMappingID := contactlisthistoryFields[10].Descriptor()
+	// contactlisthistory.DefaultMappingID holds the default value on creation for the mapping_id field.
+	contactlisthistory.DefaultMappingID = contactlisthistoryDescMappingID.Default.(func() string)
+	// contactlisthistoryDescTags is the schema descriptor for tags field.
+	contactlisthistoryDescTags := contactlisthistoryFields[11].Descriptor()
+	// contactlisthistory.DefaultTags holds the default value on creation for the tags field.
+	contactlisthistory.DefaultTags = contactlisthistoryDescTags.Default.([]string)
+	// contactlisthistoryDescVisibility is the schema descriptor for visibility field.
+	contactlisthistoryDescVisibility := contactlisthistoryFields[14].Descriptor()
+	// contactlisthistory.DefaultVisibility holds the default value on creation for the visibility field.
+	contactlisthistory.DefaultVisibility = string(contactlisthistoryDescVisibility.Default.(string))
+	// contactlisthistoryDescDisplayName is the schema descriptor for display_name field.
+	contactlisthistoryDescDisplayName := contactlisthistoryFields[15].Descriptor()
+	// contactlisthistory.DefaultDisplayName holds the default value on creation for the display_name field.
+	contactlisthistory.DefaultDisplayName = contactlisthistoryDescDisplayName.Default.(string)
+	// contactlisthistoryDescID is the schema descriptor for id field.
+	contactlisthistoryDescID := contactlisthistoryFields[9].Descriptor()
+	// contactlisthistory.DefaultID holds the default value on creation for the id field.
+	contactlisthistory.DefaultID = contactlisthistoryDescID.Default.(func() string)
+	contactlistmembershipMixin := schema.ContactListMembership{}.Mixin()
+	contactlistmembershipMixinHooks0 := contactlistmembershipMixin[0].Hooks()
+	contactlistmembershipMixinHooks2 := contactlistmembershipMixin[2].Hooks()
+	contactlistmembership.Hooks[0] = contactlistmembershipMixinHooks0[0]
+	contactlistmembership.Hooks[1] = contactlistmembershipMixinHooks2[0]
+	contactlistmembershipMixinInters2 := contactlistmembershipMixin[2].Interceptors()
+	contactlistmembership.Interceptors[0] = contactlistmembershipMixinInters2[0]
+	contactlistmembershipMixinFields0 := contactlistmembershipMixin[0].Fields()
+	_ = contactlistmembershipMixinFields0
+	contactlistmembershipMixinFields1 := contactlistmembershipMixin[1].Fields()
+	_ = contactlistmembershipMixinFields1
+	contactlistmembershipFields := schema.ContactListMembership{}.Fields()
+	_ = contactlistmembershipFields
+	// contactlistmembershipDescCreatedAt is the schema descriptor for created_at field.
+	contactlistmembershipDescCreatedAt := contactlistmembershipMixinFields0[0].Descriptor()
+	// contactlistmembership.DefaultCreatedAt holds the default value on creation for the created_at field.
+	contactlistmembership.DefaultCreatedAt = contactlistmembershipDescCreatedAt.Default.(func() time.Time)
+	// contactlistmembershipDescUpdatedAt is the schema descriptor for updated_at field.
+	contactlistmembershipDescUpdatedAt := contactlistmembershipMixinFields0[1].Descriptor()
+	// contactlistmembership.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	contactlistmembership.DefaultUpdatedAt = contactlistmembershipDescUpdatedAt.Default.(func() time.Time)
+	// contactlistmembership.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	contactlistmembership.UpdateDefaultUpdatedAt = contactlistmembershipDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// contactlistmembershipDescMappingID is the schema descriptor for mapping_id field.
+	contactlistmembershipDescMappingID := contactlistmembershipMixinFields1[1].Descriptor()
+	// contactlistmembership.DefaultMappingID holds the default value on creation for the mapping_id field.
+	contactlistmembership.DefaultMappingID = contactlistmembershipDescMappingID.Default.(func() string)
+	// contactlistmembershipDescID is the schema descriptor for id field.
+	contactlistmembershipDescID := contactlistmembershipMixinFields1[0].Descriptor()
+	// contactlistmembership.DefaultID holds the default value on creation for the id field.
+	contactlistmembership.DefaultID = contactlistmembershipDescID.Default.(func() string)
+	contactlistmembershiphistory.Policy = privacy.NewPolicies(schema.ContactListMembershipHistory{})
+	contactlistmembershiphistory.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := contactlistmembershiphistory.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+	contactlistmembershiphistoryInters := schema.ContactListMembershipHistory{}.Interceptors()
+	contactlistmembershiphistory.Interceptors[0] = contactlistmembershiphistoryInters[0]
+	contactlistmembershiphistoryFields := schema.ContactListMembershipHistory{}.Fields()
+	_ = contactlistmembershiphistoryFields
+	// contactlistmembershiphistoryDescHistoryTime is the schema descriptor for history_time field.
+	contactlistmembershiphistoryDescHistoryTime := contactlistmembershiphistoryFields[0].Descriptor()
+	// contactlistmembershiphistory.DefaultHistoryTime holds the default value on creation for the history_time field.
+	contactlistmembershiphistory.DefaultHistoryTime = contactlistmembershiphistoryDescHistoryTime.Default.(func() time.Time)
+	// contactlistmembershiphistoryDescCreatedAt is the schema descriptor for created_at field.
+	contactlistmembershiphistoryDescCreatedAt := contactlistmembershiphistoryFields[3].Descriptor()
+	// contactlistmembershiphistory.DefaultCreatedAt holds the default value on creation for the created_at field.
+	contactlistmembershiphistory.DefaultCreatedAt = contactlistmembershiphistoryDescCreatedAt.Default.(func() time.Time)
+	// contactlistmembershiphistoryDescUpdatedAt is the schema descriptor for updated_at field.
+	contactlistmembershiphistoryDescUpdatedAt := contactlistmembershiphistoryFields[4].Descriptor()
+	// contactlistmembershiphistory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	contactlistmembershiphistory.DefaultUpdatedAt = contactlistmembershiphistoryDescUpdatedAt.Default.(func() time.Time)
+	// contactlistmembershiphistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	contactlistmembershiphistory.UpdateDefaultUpdatedAt = contactlistmembershiphistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// contactlistmembershiphistoryDescMappingID is the schema descriptor for mapping_id field.
+	contactlistmembershiphistoryDescMappingID := contactlistmembershiphistoryFields[8].Descriptor()
+	// contactlistmembershiphistory.DefaultMappingID holds the default value on creation for the mapping_id field.
+	contactlistmembershiphistory.DefaultMappingID = contactlistmembershiphistoryDescMappingID.Default.(func() string)
+	// contactlistmembershiphistoryDescID is the schema descriptor for id field.
+	contactlistmembershiphistoryDescID := contactlistmembershiphistoryFields[7].Descriptor()
+	// contactlistmembershiphistory.DefaultID holds the default value on creation for the id field.
+	contactlistmembershiphistory.DefaultID = contactlistmembershiphistoryDescID.Default.(func() string)
 	documentdataMixin := schema.DocumentData{}.Mixin()
 	documentdata.Policy = privacy.NewPolicies(schema.DocumentData{})
 	documentdata.Hooks[0] = func(next ent.Mutator) ent.Mutator {

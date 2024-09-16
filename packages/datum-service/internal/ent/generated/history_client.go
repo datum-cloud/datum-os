@@ -11,6 +11,12 @@ func (c *Client) WithHistory() {
 	for _, hook := range enthistory.HistoryHooks[*ContactMutation]() {
 		c.Contact.Use(hook)
 	}
+	for _, hook := range enthistory.HistoryHooks[*ContactListMutation]() {
+		c.ContactList.Use(hook)
+	}
+	for _, hook := range enthistory.HistoryHooks[*ContactListMembershipMutation]() {
+		c.ContactListMembership.Use(hook)
+	}
 	for _, hook := range enthistory.HistoryHooks[*DocumentDataMutation]() {
 		c.DocumentData.Use(hook)
 	}

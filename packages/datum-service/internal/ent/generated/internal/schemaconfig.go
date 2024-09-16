@@ -10,6 +10,10 @@ type SchemaConfig struct {
 	APIToken                         string // APIToken table.
 	Contact                          string // Contact table.
 	ContactHistory                   string // ContactHistory table.
+	ContactList                      string // ContactList table.
+	ContactListHistory               string // ContactListHistory table.
+	ContactListMembership            string // ContactListMembership table.
+	ContactListMembershipHistory     string // ContactListMembershipHistory table.
 	DocumentData                     string // DocumentData table.
 	DocumentDataHistory              string // DocumentDataHistory table.
 	EmailVerificationToken           string // EmailVerificationToken table.

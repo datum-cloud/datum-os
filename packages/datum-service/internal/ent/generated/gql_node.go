@@ -11,6 +11,10 @@ import (
 	"github.com/datum-cloud/datum-os/internal/ent/generated/apitoken"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/contact"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/contacthistory"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/contactlist"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/contactlisthistory"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/contactlistmembership"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/contactlistmembershiphistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/documentdata"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/documentdatahistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/entitlement"
@@ -84,6 +88,26 @@ var contacthistoryImplementors = []string{"ContactHistory", "Node"}
 
 // IsNode implements the Node interface check for GQLGen.
 func (*ContactHistory) IsNode() {}
+
+var contactlistImplementors = []string{"ContactList", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*ContactList) IsNode() {}
+
+var contactlisthistoryImplementors = []string{"ContactListHistory", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*ContactListHistory) IsNode() {}
+
+var contactlistmembershipImplementors = []string{"ContactListMembership", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*ContactListMembership) IsNode() {}
+
+var contactlistmembershiphistoryImplementors = []string{"ContactListMembershipHistory", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*ContactListMembershipHistory) IsNode() {}
 
 var documentdataImplementors = []string{"DocumentData", "Node"}
 
@@ -421,6 +445,42 @@ func (c *Client) noder(ctx context.Context, table string, id string) (Noder, err
 			Where(contacthistory.ID(id))
 		if fc := graphql.GetFieldContext(ctx); fc != nil {
 			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, contacthistoryImplementors...); err != nil {
+				return nil, err
+			}
+		}
+		return query.Only(ctx)
+	case contactlist.Table:
+		query := c.ContactList.Query().
+			Where(contactlist.ID(id))
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, contactlistImplementors...); err != nil {
+				return nil, err
+			}
+		}
+		return query.Only(ctx)
+	case contactlisthistory.Table:
+		query := c.ContactListHistory.Query().
+			Where(contactlisthistory.ID(id))
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, contactlisthistoryImplementors...); err != nil {
+				return nil, err
+			}
+		}
+		return query.Only(ctx)
+	case contactlistmembership.Table:
+		query := c.ContactListMembership.Query().
+			Where(contactlistmembership.ID(id))
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, contactlistmembershipImplementors...); err != nil {
+				return nil, err
+			}
+		}
+		return query.Only(ctx)
+	case contactlistmembershiphistory.Table:
+		query := c.ContactListMembershipHistory.Query().
+			Where(contactlistmembershiphistory.ID(id))
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, contactlistmembershiphistoryImplementors...); err != nil {
 				return nil, err
 			}
 		}
@@ -993,6 +1053,70 @@ func (c *Client) noders(ctx context.Context, table string, ids []string) ([]Node
 		query := c.ContactHistory.Query().
 			Where(contacthistory.IDIn(ids...))
 		query, err := query.CollectFields(ctx, contacthistoryImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case contactlist.Table:
+		query := c.ContactList.Query().
+			Where(contactlist.IDIn(ids...))
+		query, err := query.CollectFields(ctx, contactlistImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case contactlisthistory.Table:
+		query := c.ContactListHistory.Query().
+			Where(contactlisthistory.IDIn(ids...))
+		query, err := query.CollectFields(ctx, contactlisthistoryImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case contactlistmembership.Table:
+		query := c.ContactListMembership.Query().
+			Where(contactlistmembership.IDIn(ids...))
+		query, err := query.CollectFields(ctx, contactlistmembershipImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case contactlistmembershiphistory.Table:
+		query := c.ContactListMembershipHistory.Query().
+			Where(contactlistmembershiphistory.IDIn(ids...))
+		query, err := query.CollectFields(ctx, contactlistmembershiphistoryImplementors...)
 		if err != nil {
 			return nil, err
 		}

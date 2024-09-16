@@ -6,7 +6,7 @@ import (
 	echo "github.com/datum-cloud/datum-os/pkg/echox"
 )
 
-// registerContactsGetHandlers registers the contacts endpoint handlers
+// registerContactsHandlers registers the contacts endpoint handlers
 func registerContactsHandlers(router *Router) (err error) {
 	path := "/contacts"
 	name := "Contacts"

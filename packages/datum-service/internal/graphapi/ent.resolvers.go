@@ -48,6 +48,52 @@ func (r *queryResolver) ContactHistories(ctx context.Context, after *entgql.Curs
 		generated.WithContactHistoryFilter(where.Filter))
 }
 
+// ContactLists is the resolver for the contactLists field.
+func (r *queryResolver) ContactLists(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.ContactListOrder, where *generated.ContactListWhereInput) (*generated.ContactListConnection, error) {
+	return withTransactionalMutation(ctx).ContactList.Query().Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithContactListOrder(orderBy),
+		generated.WithContactListFilter(where.Filter))
+}
+
+// ContactListHistories is the resolver for the contactListHistories field.
+func (r *queryResolver) ContactListHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.ContactListHistoryOrder, where *generated.ContactListHistoryWhereInput) (*generated.ContactListHistoryConnection, error) {
+	return withTransactionalMutation(ctx).ContactListHistory.Query().Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithContactListHistoryOrder(orderBy),
+		generated.WithContactListHistoryFilter(where.Filter))
+}
+
+// ContactListMemberships is the resolver for the contactListMemberships field.
+func (r *queryResolver) ContactListMemberships(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.ContactListMembershipWhereInput) (*generated.ContactListMembershipConnection, error) {
+	return withTransactionalMutation(ctx).ContactListMembership.Query().Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithContactListMembershipFilter(where.Filter))
+}
+
+// ContactListMembershipHistories is the resolver for the contactListMembershipHistories field.
+func (r *queryResolver) ContactListMembershipHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.ContactListMembershipHistoryWhereInput) (*generated.ContactListMembershipHistoryConnection, error) {
+	return withTransactionalMutation(ctx).ContactListMembershipHistory.Query().Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithContactListMembershipHistoryFilter(where.Filter))
+}
+
 // DocumentDataSlice is the resolver for the documentDataSlice field.
 func (r *queryResolver) DocumentDataSlice(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.DocumentDataWhereInput) (*generated.DocumentDataConnection, error) {
 	return withTransactionalMutation(ctx).DocumentData.Query().Paginate(ctx, after, first, before, last, generated.WithDocumentDataFilter(where.Filter))

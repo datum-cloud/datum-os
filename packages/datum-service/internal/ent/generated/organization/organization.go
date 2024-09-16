@@ -95,6 +95,8 @@ const (
 	EdgeEntitytypes = "entitytypes"
 	// EdgeContacts holds the string denoting the contacts edge name in mutations.
 	EdgeContacts = "contacts"
+	// EdgeContactLists holds the string denoting the contact_lists edge name in mutations.
+	EdgeContactLists = "contact_lists"
 	// EdgeNotes holds the string denoting the notes edge name in mutations.
 	EdgeNotes = "notes"
 	// EdgeMembers holds the string denoting the members edge name in mutations.
@@ -260,6 +262,13 @@ const (
 	ContactsInverseTable = "contacts"
 	// ContactsColumn is the table column denoting the contacts relation/edge.
 	ContactsColumn = "owner_id"
+	// ContactListsTable is the table that holds the contact_lists relation/edge.
+	ContactListsTable = "contact_lists"
+	// ContactListsInverseTable is the table name for the ContactList entity.
+	// It exists in this package in order to avoid circular dependency with the "contactlist" package.
+	ContactListsInverseTable = "contact_lists"
+	// ContactListsColumn is the table column denoting the contact_lists relation/edge.
+	ContactListsColumn = "owner_id"
 	// NotesTable is the table that holds the notes relation/edge.
 	NotesTable = "notes"
 	// NotesInverseTable is the table name for the Note entity.
@@ -773,6 +782,20 @@ func ByContacts(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
+// ByContactListsCount orders the results by contact_lists count.
+func ByContactListsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newContactListsStep(), opts...)
+	}
+}
+
+// ByContactLists orders the results by contact_lists terms.
+func ByContactLists(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newContactListsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByNotesCount orders the results by notes count.
 func ByNotesCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -973,6 +996,13 @@ func newContactsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(ContactsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, ContactsTable, ContactsColumn),
+	)
+}
+func newContactListsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ContactListsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, ContactListsTable, ContactListsColumn),
 	)
 }
 func newNotesStep() *sqlgraph.Step {

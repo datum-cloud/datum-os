@@ -45,9 +45,10 @@ type Integration struct {
 	Kind string `json:"kind,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the IntegrationQuery when eager-loading is set.
-	Edges              IntegrationEdges `json:"edges"`
-	group_integrations *string
-	selectValues       sql.SelectValues
+	Edges                     IntegrationEdges `json:"edges"`
+	contact_list_integrations *string
+	group_integrations        *string
+	selectValues              sql.SelectValues
 }
 
 // IntegrationEdges holds the relations/edges for other nodes in the graph.
@@ -132,7 +133,9 @@ func (*Integration) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullString)
 		case integration.FieldCreatedAt, integration.FieldUpdatedAt, integration.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
-		case integration.ForeignKeys[0]: // group_integrations
+		case integration.ForeignKeys[0]: // contact_list_integrations
+			values[i] = new(sql.NullString)
+		case integration.ForeignKeys[1]: // group_integrations
 			values[i] = new(sql.NullString)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -230,6 +233,13 @@ func (i *Integration) assignValues(columns []string, values []any) error {
 				i.Kind = value.String
 			}
 		case integration.ForeignKeys[0]:
+			if value, ok := values[j].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field contact_list_integrations", values[j])
+			} else if value.Valid {
+				i.contact_list_integrations = new(string)
+				*i.contact_list_integrations = value.String
+			}
+		case integration.ForeignKeys[1]:
 			if value, ok := values[j].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field group_integrations", values[j])
 			} else if value.Valid {
