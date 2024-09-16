@@ -7,8 +7,8 @@ import './globals.css'
 
 export const metadata: Metadata = {
   title: {
-    template: '%s | Datum | Start here, go anywhere',
-    default: 'Operator Portal | Datum | Start here, go anywhere',
+    template: '%s | Datum Operator Portal',
+    default: 'Datum Operator Portal | Start here, go anywhere',
   },
   description: 'The open source foundation of a sustainable digital world',
 }

@@ -1,3 +1,4 @@
+import type { Metadata } from 'next'
 import React from 'react'
 
 import { Datum } from '@repo/types'
@@ -9,6 +10,10 @@ import { getContacts, getContactsKey } from '@/query/contacts'
 
 type ContactsPageProps = {
   organisationId: Datum.OrganisationId
+}
+
+export const metadata: Metadata = {
+  title: 'Contacts',
 }
 
 const Page = async ({ organisationId }: ContactsPageProps) => {
