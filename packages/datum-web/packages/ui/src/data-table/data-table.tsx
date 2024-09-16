@@ -16,6 +16,7 @@ import {
   FilterFn,
   SortingFn,
   sortingFns,
+  RowData,
 } from '@tanstack/react-table'
 import {
   RankingInfo,
@@ -41,6 +42,7 @@ import {
 } from '../dropdown-menu/dropdown-menu'
 import { DataTableColumnHeader } from './data-column-header'
 import { DataTablePagination } from './data-table-pagination'
+import { cn } from '../../lib/utils'
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
@@ -67,6 +69,10 @@ declare module '@tanstack/react-table' {
   }
   interface FilterMeta {
     itemRank: RankingInfo
+  }
+
+  interface ColumnMeta<TData extends RowData, TValue> {
+    pin?: 'left' | 'right'
   }
 }
 
@@ -191,6 +197,12 @@ export function DataTable<TData, TValue>({
                     bordered={hasBorder}
                     key={header.id}
                     style={{ width: columnWidth }}
+                    className={cn(
+                      header.getContext().column.columnDef.meta?.pin ===
+                        'left' && 'sticky z-20 left-0',
+                      header.getContext().column.columnDef.meta?.pin ===
+                        'right' && 'sticky z-20 right-0',
+                    )}
                   >
                     {header.isPlaceholder
                       ? null
@@ -209,6 +221,7 @@ export function DataTable<TData, TValue>({
             table.getRowModel().rows.map((row) => (
               <TableRow
                 key={row.id}
+                className="group table-row"
                 data-state={row.getIsSelected() && 'selected'}
               >
                 {row.getVisibleCells().map((cell, index) => {
@@ -224,6 +237,14 @@ export function DataTable<TData, TValue>({
                       bordered={hasBorder}
                       key={cell.id}
                       style={{ width: columnWidth }}
+                      className={cn(
+                        cell.getContext().column.columnDef.meta?.pin ===
+                          'left' &&
+                          'sticky z-20 bg-inherit left-0 bg-white group-hover:bg-blackberry-900',
+                        cell.getContext().column.columnDef.meta?.pin ===
+                          'right' &&
+                          'sticky z-20 bg-inherit right-0 bg-white group-hover:bg-blackberry-50',
+                      )}
                     >
                       {flexRender(
                         cell.column.columnDef.cell,

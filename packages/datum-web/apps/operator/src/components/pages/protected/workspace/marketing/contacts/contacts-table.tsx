@@ -14,14 +14,13 @@ import {
   compareItems,
   ColumnFiltersState,
 } from '@repo/ui/data-table'
-import { cn } from '@repo/ui/lib/utils'
 import { Datum } from '@repo/types'
 
 import { formatDate } from '@/utils/date'
 import { sortAlphabetically } from '@/utils/sort'
 
 import ContactsTableDropdown from './contacts-table-dropdown'
-import { tableStyles, tagStyles } from './page.styles'
+import { tableStyles } from './page.styles'
 import Link from 'next/link'
 import { getPathWithParams } from '@repo/common/routes'
 import { OPERATOR_APP_ROUTES } from '@repo/constants'
@@ -80,6 +79,9 @@ export const CONTACT_COLUMNS: ColumnDef<Datum.Contact>[] = [
     size: 60,
     enableGlobalFilter: false,
     enableSorting: false,
+    meta: {
+      pin: 'left',
+    },
     header: ({ table }) => {
       return (
         <div className={checkboxContainer()}>
@@ -234,6 +236,9 @@ export const CONTACT_COLUMNS: ColumnDef<Datum.Contact>[] = [
     enableGlobalFilter: false,
     enableSorting: false,
     header: '',
+    meta: {
+      pin: 'right',
+    },
     cell: ({ row }) => {
       const contact = row.original
 
