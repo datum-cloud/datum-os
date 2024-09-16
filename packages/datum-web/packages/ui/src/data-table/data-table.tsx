@@ -1,7 +1,7 @@
 'use client'
 
 import { EyeIcon } from 'lucide-react'
-import { useEffect, useState } from 'react'
+import { Fragment, useEffect, useState } from 'react'
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -181,7 +181,7 @@ export function DataTable<TData, TValue>({
           )}
         </div>
       )}
-      <Table className="border-separate" layoutFixed={layoutFixed}>
+      <Table layoutFixed={layoutFixed}>
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>
@@ -197,23 +197,36 @@ export function DataTable<TData, TValue>({
                   header.getContext().column.columnDef.meta?.pin === 'right'
 
                 return (
-                  <TableHead
-                    highlightHeader={highlightHeader}
-                    bordered={hasBorder}
-                    key={header.id}
-                    style={{ width: columnWidth }}
-                    className={cn(
-                      pinLeft && 'sticky z-20 left-0',
-                      pinRight && 'sticky z-20 right-0',
+                  <Fragment key={header.id}>
+                    {pinRight && (
+                      <th
+                        className="w-[1px] p-0 bg-blackberry-4 sticky z-20"
+                        style={{ right: columnWidth }}
+                      />
                     )}
-                  >
-                    {header.isPlaceholder
-                      ? null
-                      : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext(),
-                        )}
-                  </TableHead>
+                    <TableHead
+                      highlightHeader={highlightHeader}
+                      bordered={hasBorder}
+                      style={{ width: columnWidth }}
+                      className={cn(
+                        pinLeft && 'sticky z-20 left-0 border-r-0',
+                        pinRight && 'sticky z-20 right-0',
+                      )}
+                    >
+                      {header.isPlaceholder
+                        ? null
+                        : flexRender(
+                            header.column.columnDef.header,
+                            header.getContext(),
+                          )}
+                    </TableHead>
+                    {pinLeft && (
+                      <th
+                        className="w-[1px] p-0 bg-blackberry-4 sticky z-20"
+                        style={{ left: columnWidth }}
+                      />
+                    )}
+                  </Fragment>
                 )
               })}
             </TableRow>
@@ -224,7 +237,7 @@ export function DataTable<TData, TValue>({
             table.getRowModel().rows.map((row) => (
               <TableRow
                 key={row.id}
-                className="group table-row"
+                className="group"
                 data-state={row.getIsSelected() && 'selected'}
               >
                 {row.getVisibleCells().map((cell, index) => {
@@ -240,22 +253,35 @@ export function DataTable<TData, TValue>({
                       : `${cell.column.getSize()}px`
 
                   return (
-                    <TableCell
-                      bordered={hasBorder}
-                      key={cell.id}
-                      style={{ width: columnWidth }}
-                      className={cn(
-                        pinLeft &&
-                          'sticky z-20 bg-inherit left-0 bg-white group-hover:bg-blackberry-900',
-                        pinRight &&
-                          'sticky z-20 bg-inherit right-0 bg-white group-hover:bg-blackberry-50',
+                    <Fragment key={cell.id}>
+                      {pinRight && (
+                        <td
+                          className="w-[1px] p-0 bg-blackberry-4 sticky z-20"
+                          style={{ right: columnWidth }}
+                        />
                       )}
-                    >
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext(),
+                      <TableCell
+                        bordered={hasBorder}
+                        style={{ width: columnWidth }}
+                        className={cn(
+                          pinLeft &&
+                            'sticky z-20 bg-inherit left-0 bg-white group-hover:!bg-blackberry-50 group-data-[state=selected]:bg-blackberry-50 border-r-0',
+                          pinRight &&
+                            'sticky z-20 bg-inherit right-0 bg-white group-hover:!bg-blackberry-50 group-data-[state=selected]:bg-blackberry-50',
+                        )}
+                      >
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext(),
+                        )}
+                      </TableCell>
+                      {pinLeft && (
+                        <td
+                          className="w-[1px] p-0 bg-blackberry-4 sticky z-20 left-0"
+                          style={{ left: columnWidth }}
+                        />
                       )}
-                    </TableCell>
+                    </Fragment>
                   )
                 })}
               </TableRow>
