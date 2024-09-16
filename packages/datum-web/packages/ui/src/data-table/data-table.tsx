@@ -203,19 +203,10 @@ export function DataTable<TData, TValue>({
                     key={header.id}
                     style={{ width: columnWidth }}
                     className={cn(
-                      pinLeft && 'sticky z-20 left-0 border-r-0',
+                      pinLeft && 'sticky z-20 left-0',
                       pinRight && 'sticky z-20 right-0',
                     )}
                   >
-                    {/* NOTE: This is to give the illusion of a border when sticky */}
-                    {(pinRight || pinLeft) && (
-                      <div
-                        className={cn(
-                          'absolute top-0 h-full w-[1px] bg-blackberry-400',
-                          pinRight ? 'left-0' : 'right-0',
-                        )}
-                      />
-                    )}
                     {header.isPlaceholder
                       ? null
                       : flexRender(
@@ -255,20 +246,11 @@ export function DataTable<TData, TValue>({
                       style={{ width: columnWidth }}
                       className={cn(
                         pinLeft &&
-                          'sticky z-20 bg-inherit left-0 bg-white group-hover:bg-blackberry-900 border-r-0',
+                          'sticky z-20 bg-inherit left-0 bg-white group-hover:bg-blackberry-900',
                         pinRight &&
                           'sticky z-20 bg-inherit right-0 bg-white group-hover:bg-blackberry-50',
                       )}
                     >
-                      {/* NOTE: This is to give the illusion of a border when sticky */}
-                      {(pinRight || pinLeft) && (
-                        <div
-                          className={cn(
-                            'absolute top-0 h-full w-[1px] bg-blackberry-400',
-                            pinRight ? 'left-0' : 'right-0',
-                          )}
-                        />
-                      )}
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext(),
