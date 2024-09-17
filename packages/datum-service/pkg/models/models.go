@@ -1105,7 +1105,39 @@ func ContactListsPostResponseFromContactListsGetResponse(respGet *ContactListsGe
 	return respPost
 }
 
-type ContactListsPutRequest struct{}
+// ContactListsPutRequest is the body for a PUT request to `/contacts/lists/:id`
+type ContactListsPutRequest struct {
+	ContactListID string      `param:"id"`
+	ContactList   ContactList `json:"contact_list"`
+}
+
+// ExampleContactListsPutRequest is an example PUT request to `/contacts/lists/:id`
+var ExampleContactListsPutRequest = ContactListsPutRequest{
+	ContactListID: "01J7PBEMJAZ08HKZF71302ZD1X",
+	ContactList: ContactList{
+		Name:        "weekly-tips",
+		DisplayName: "Weekly Tips",
+		Description: "For sending out weekly tips regarding new features",
+		Visibility:  "PUBLIC",
+	},
+}
+
+// ContactListsPutResponse is the body for a PUT request response from `/contacts/lists/:id`
+type ContactListsPutResponse struct {
+	rout.Reply
+	ContactList ContactList `json:"contact_list"`
+}
+
+// ExampleContactListsPutSuccessResponse is an example PUT request response from `/contacts/lists/:id`
+var ExampleContactListsPutSuccessResponse = ContactListsPutResponse{
+	Reply: rout.OK().Reply,
+	ContactList: ContactList{
+		ID:          "01J7PBEMJAZ08HKZF71302ZD1X",
+		Name:        "weekly-tips",
+		DisplayName: "Weekly Tips",
+		Description: "For sending out weekly tips regarding new features",
+	},
+}
 
 // ContactListsDeleteRequest is the body for a DELETE request to `/contacts/lists`
 type ContactListsDeleteRequest struct {

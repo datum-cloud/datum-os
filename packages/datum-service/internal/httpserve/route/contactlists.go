@@ -62,7 +62,7 @@ func registerContactListsHandlers(router *Router) (err error) {
 	routePut := echo.Route{
 		Name:        name + "Put",
 		Method:      http.MethodPut,
-		Path:        path,
+		Path:        path + "/:id",
 		Middlewares: authMW,
 		Handler: func(c echo.Context) error {
 			return router.Handler.ContactListsPut(c)

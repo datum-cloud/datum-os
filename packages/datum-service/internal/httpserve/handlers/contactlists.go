@@ -137,37 +137,26 @@ func (h *Handler) BindContactListsPost() *openapi3.Operation {
 }
 
 func (h *Handler) ContactListsPut(ctx echo.Context) error {
-	// contactLists := models.ContactListsPutRequest{}
-	// err := ctx.Bind(&contactLists)
-	// if err != nil {
-	// 	return h.BadRequest(ctx, err)
-	// }
+	contactListsPutReq := models.ContactListsPutRequest{}
+	if err := ctx.Bind(&contactListsPutReq); err != nil {
+		return h.BadRequest(ctx, err)
+	}
 
-	// tx := transaction.FromContext(ctx.Request().Context())
-	// updatedContactLists := models.ContactListsPutResponse{}
-	// for _, contact := range contactLists.Contacts {
-	// 	updatedContactList, err := tx.ContactList.UpdateOneID(contact.ID).
-	// 		SetFullName(contact.FullName).
-	// 		SetTitle(contact.Title).
-	// 		SetCompany(contact.Company).
-	// 		SetEmail(contact.Email).
-	// 		SetPhoneNumber(contact.PhoneNumber).
-	// 		SetAddress(contact.Address).
-	// 		SetNillableStatus(enums.ToUserStatus(contact.Status)).
-	// 		Save(ctx.Request().Context())
-	// 	if err != nil {
-	// 		return h.InternalServerError(ctx, err)
-	// 	}
+	contactList, err := transaction.FromContext(ctx.Request().Context()).
+		ContactList.UpdateOneID(contactListsPutReq.ContactListID).
+		SetName(contactListsPutReq.ContactList.Name).
+		SetVisibility(contactListsPutReq.ContactList.Visibility).
+		SetDisplayName(contactListsPutReq.ContactList.DisplayName).
+		SetDescription(contactListsPutReq.ContactList.Description).
+		Save(ctx.Request().Context())
+	if err != nil {
+		return h.InternalServerError(ctx, err)
+	}
 
-	// 	h.Logger.Debugf("Updated Contact, %s", updatedContactList)
-
-	// 	updatedContactLists.Count += 1
-	// 	updatedContactLists.Contacts = append(updatedContactLists.Contacts, models.ContactFromGeneratedContact(updatedContactList))
-	// }
-
-	// updatedContactLists.Success = true
-	// return h.Success(ctx, updatedContactLists)
-	return nil
+	return h.Success(ctx, models.ContactListsPutResponse{
+		Reply:       rout.Reply{Success: true},
+		ContactList: models.ContactListFromGeneratedContactList(contactList),
+	})
 }
 
 func (h *Handler) BindContactListsPut() *openapi3.Operation {
