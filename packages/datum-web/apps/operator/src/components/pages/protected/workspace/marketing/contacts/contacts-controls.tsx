@@ -150,8 +150,13 @@ const ContactsControls = ({
                         return (
                           <Button
                             key={id}
-                            variant="success"
-                            icon={<Check size={10} className="leading-none" />}
+                            variant="tagSuccess"
+                            icon={
+                              <Check
+                                size={10}
+                                className="leading-none pt-[3px]"
+                              />
+                            }
                             iconPosition="left"
                             className="transition-all duration-0"
                             onClick={() => setSelectedLists(newSelectedLists)}

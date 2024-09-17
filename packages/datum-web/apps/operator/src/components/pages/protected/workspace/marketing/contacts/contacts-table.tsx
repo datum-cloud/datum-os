@@ -112,7 +112,6 @@ export const CONTACT_COLUMNS: ColumnDef<Datum.Contact>[] = [
   {
     id: 'email',
     accessorFn: (row) => row.email || '',
-    minSize: 225,
     enableGlobalFilter: true,
     sortingFn: fuzzySort,
     header: ({ column }) => (
@@ -122,6 +121,9 @@ export const CONTACT_COLUMNS: ColumnDef<Datum.Contact>[] = [
         children="Email"
       />
     ),
+    meta: {
+      minWidth: 225,
+    },
     cell: ({ cell, row }) => {
       const value = cell.getValue() as Datum.Email
       const id = row.original.id
@@ -147,10 +149,12 @@ export const CONTACT_COLUMNS: ColumnDef<Datum.Contact>[] = [
         children="Name"
       />
     ),
-    minSize: 185,
     enableGlobalFilter: true,
     enableSorting: true,
     sortingFn: fuzzySort,
+    meta: {
+      minWidth: 185,
+    },
   },
   // NOTE: Removing temporarily per Chris' request
   // {
@@ -178,10 +182,12 @@ export const CONTACT_COLUMNS: ColumnDef<Datum.Contact>[] = [
         children="Created At"
       />
     ),
-    size: 225,
     enableGlobalFilter: true,
     enableSorting: true,
     sortingFn: fuzzySort,
+    meta: {
+      minWidth: 225,
+    },
   },
   {
     id: 'status',
@@ -193,7 +199,6 @@ export const CONTACT_COLUMNS: ColumnDef<Datum.Contact>[] = [
         children="Status"
       />
     ),
-    size: 120,
     enableGlobalFilter: true,
     enableSorting: true,
     cell: ({ cell }) => {
@@ -201,6 +206,9 @@ export const CONTACT_COLUMNS: ColumnDef<Datum.Contact>[] = [
       const isActive = value === 'ACTIVE'
 
       return <Tag variant={isActive ? 'success' : 'default'}>{value}</Tag>
+    },
+    meta: {
+      minWidth: 120,
     },
   },
   {
@@ -213,7 +221,6 @@ export const CONTACT_COLUMNS: ColumnDef<Datum.Contact>[] = [
         children="Lists"
       />
     ),
-    minSize: 165,
     enableGlobalFilter: false,
     enableSorting: false,
     cell: ({ cell }) => {
@@ -228,11 +235,14 @@ export const CONTACT_COLUMNS: ColumnDef<Datum.Contact>[] = [
         </div>
       )
     },
+    meta: {
+      minWidth: 165,
+    },
   },
   {
     id: 'dropdown',
     accessorKey: 'id',
-    minSize: 80,
+    size: 80,
     enableGlobalFilter: false,
     enableSorting: false,
     header: '',

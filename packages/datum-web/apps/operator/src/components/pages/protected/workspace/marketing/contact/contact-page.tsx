@@ -54,7 +54,23 @@ const ContactPage = ({ id }: ContactPageProps) => {
     '') as Datum.OrganisationId
   const [selectedLists, setSelectedLists] = useState<string[]>([])
   const [openEditDialog, setOpenEditDialog] = useState(false)
-  const { wrapper } = pageStyles()
+  const {
+    wrapper,
+    link,
+    contactHeader,
+    contactCard,
+    contactImage,
+    contactText,
+    contactActions,
+    enrichedData: enrichedDataTable,
+    enrichedDataCell,
+    enrichedDataTitle,
+    enrichedDataText,
+    listsPanel,
+    listsActions,
+    listsTrigger,
+    listsContainer,
+  } = pageStyles()
   const {
     accordionContainer,
     accordionTrigger,
@@ -79,6 +95,7 @@ const ContactPage = ({ id }: ContactPageProps) => {
   }
 
   const {
+    fullName,
     email,
     source,
     lists = ['Admin', 'Newsletter', 'Developers'], // TODO: Remove these later
@@ -89,28 +106,25 @@ const ContactPage = ({ id }: ContactPageProps) => {
 
   return (
     <div className={wrapper()}>
-      <Link
-        href={OPERATOR_APP_ROUTES.contacts}
-        className="flex gap-1 items-center text-sunglow-900 text-button-l"
-      >
+      <Link href={OPERATOR_APP_ROUTES.contacts} className={link()}>
         <ArrowLeft size={18} />
         Back to Contacts
       </Link>
-      <div className="flex items-end justify-between">
-        <div className="flex gap-7 justify-start items-center">
+      <div className={contactHeader()}>
+        <div className={contactCard()}>
           {/* TODO: Fetch user image via Gravatar or similar */}
-          <div className="h-[83px] w-[83px] flex items-center justify-center shrink-0 bg-winter-sky-800 rounded-[4px]">
+          <div className={contactImage()}>
             <User size={60} className="text-winter-sky-900" />
           </div>
-          <div className="flex flex-col gap-0 justify-start items-start">
-            <h4>Contact Info</h4>
+          <div className={contactText()}>
+            <h4 className="text-[27px] leading-[130%]">{fullName}</h4>
             <h6 className="text-body-l text-blackberry-600">{email}</h6>
             <p className="text-body-sm leading-5 text-blackberry-500">
               Added by {source} on {formatDate(createdAt)}
             </p>
           </div>
         </div>
-        <div className="flex justify-start items-stretch gap-4">
+        <div className={contactActions()}>
           <Button variant="outline" onClick={() => setOpenEditDialog(true)}>
             Edit contact info
           </Button>
@@ -137,38 +151,32 @@ const ContactPage = ({ id }: ContactPageProps) => {
         <ContactTable history={contactHistory?.events || []} />
       </Panel>
       {Object.keys(enrichedData).length > 0 && (
-        <Panel className="bg-blackberry-300/50">
+        <Panel className="bg-blackberry-100">
           <PanelHeader
             heading="Enriched Data"
             icon={<Info size={16} />}
             noBorder
           />
-          <div className="grid grid-cols-2 rounded-lg border border-blackberry-300">
+          <div className={enrichedDataTable()}>
             {Object.values(enrichedData).map(({ key, value }: any, index) => (
               <div
                 key={index}
                 className={cn(
-                  'w-full flex items-stretch justify-start px-6 py-3 border-blackberry-300',
+                  enrichedDataCell(),
                   index < Object.keys(enrichedData).length - 2 && 'border-b',
                   (index + 1) % 2 !== 0 && 'border-r',
                 )}
               >
-                <h6
-                  className={
-                    'w-1/3 text-blackberry-800/60 font-normal text-body-m'
-                  }
-                >
-                  {key}
-                </h6>
-                <p className="w-2/3 text-blackberry-800">{value}</p>
+                <h6 className={enrichedDataTitle()}>{key}</h6>
+                <p className={enrichedDataText()}>{value}</p>
               </div>
             ))}
           </div>
         </Panel>
       )}
-      <Panel className="bg-blackberry-100/50 gap-4">
-        <div className="flex items-start justify-between">
-          <h2 className="text-xl font-semibold">Current Lists</h2>
+      <Panel className={listsPanel()}>
+        <div className={listsActions()}>
+          <h2 className="text-xl font-medium">Current Lists</h2>
           <DropdownMenu>
             <DropdownMenuTrigger>
               <Ellipsis className={contactDropdownIcon()} />
@@ -178,10 +186,10 @@ const ContactPage = ({ id }: ContactPageProps) => {
                 <BellMinus size={18} className={contactDropdownIcon()} />
                 Unsubscribe from all
               </DropdownMenuItem>
-              <Accordion type="single" collapsible className="w-full px-2">
+              <Accordion type="single" collapsible className="w-full">
                 <AccordionItem value="lists" className={accordionContainer()}>
                   <AccordionTrigger className={accordionTrigger()}>
-                    <div className="flex items-center justify-start gap-3">
+                    <div className={listsTrigger()}>
                       <Plus size={18} className={contactDropdownIcon()} />
                       Manage Lists
                     </div>
@@ -204,7 +212,10 @@ const ContactPage = ({ id }: ContactPageProps) => {
                               variant="tagSuccess"
                               size="tag"
                               icon={
-                                <Check size={10} className="leading-none" />
+                                <Check
+                                  size={10}
+                                  className="leading-none pt-[3px]"
+                                />
                               }
                               iconPosition="left"
                               onClick={() => setSelectedLists(newSelectedLists)}
@@ -234,7 +245,7 @@ const ContactPage = ({ id }: ContactPageProps) => {
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
-        <div className="w-full flex gap-2 flex-wrap">
+        <div className={listsContainer()}>
           {lists.map((list) => (
             <Tag key={list}>{list}</Tag>
           ))}

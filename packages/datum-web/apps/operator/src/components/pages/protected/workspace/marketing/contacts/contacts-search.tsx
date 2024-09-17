@@ -26,7 +26,12 @@ const ContactsSearch = ({ search }: ContactsSearchProps) => {
   }
 
   return (
-    <div className="h-11 relative bg-white flex gap-0 items-start justify-start rounded-md border border-blackberry-400">
+    <div
+      className={cn(
+        'h-11 relative bg-white flex gap-0 items-start justify-start rounded-md border border-blackberry-400',
+        openSearch ? 'w-auto' : 'w-11',
+      )}
+    >
       <DebouncedInput
         value={query}
         type="search"
@@ -42,7 +47,10 @@ const ContactsSearch = ({ search }: ContactsSearchProps) => {
       <Button
         variant="blackberryXs"
         size="xs"
-        className={cn('h-[42px] aspect-square shrink-0 rounded-md')}
+        className={cn(
+          'h-[42px] aspect-square shrink-0 rounded-md',
+          openSearch ? '!absolute top-0 right-0' : '',
+        )}
         icon={<Search />}
         iconPosition="left"
         onClick={handleSearch}

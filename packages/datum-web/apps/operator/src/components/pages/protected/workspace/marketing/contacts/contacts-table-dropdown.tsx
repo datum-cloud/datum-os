@@ -125,7 +125,12 @@ const ContactsTableDropdown = ({ contact }: ContactsTableDropdownProps) => {
                           key={list}
                           size="tag"
                           variant="tagSuccess"
-                          icon={<Check size={10} className="leading-none" />}
+                          icon={
+                            <Check
+                              size={10}
+                              className="leading-none pt-[3px]"
+                            />
+                          }
                           iconPosition="left"
                           onClick={setLists.bind(null, newSelectedLists)}
                         >

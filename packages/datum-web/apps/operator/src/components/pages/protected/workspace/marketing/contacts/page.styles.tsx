@@ -14,7 +14,7 @@ export const pageStyles = tv({
     accordionContainer: 'w-full border-b-0 px-0',
     accordionTrigger:
       'w-full !h-[30px] py-1.5 px-0 flex items-center font-normal hover:no-underline justify-between gap-3 text-base cursor-pointer px-2 hover:bg-winter-sky-700',
-    accordionContentOuter: 'w-full flex px-2',
+    accordionContentOuter: 'w-full flex px-2 pb-2',
     accordionContentInner:
       'w-full flex overflow-scroll flex-col items-start justify-start gap-2 max-w-full truncate pt-2 pb-0',
   },
@@ -50,7 +50,7 @@ export const filterStyles = tv({
 })
 
 export const tagStyles = tv({
-  base: 'rounded-[5px] px-[7px] pt-[1px] pb-[3px] h-[19px] border uppercase font-mono text-[10px] font-semibold leading-[150%] tracking-[0.4px]',
+  base: 'rounded-[5px] px-[7px] pt-[1px] pb-[2px] h-5 border uppercase font-mono text-[10px] font-semibold leading-[150%] tracking-[0.4px]',
   variants: {
     status: {
       success: 'border-util-green-500 text-util-green-500',

@@ -73,6 +73,7 @@ declare module '@tanstack/react-table' {
 
   interface ColumnMeta<TData extends RowData, TValue> {
     pin?: 'left' | 'right'
+    minWidth?: number
   }
 }
 
@@ -194,6 +195,8 @@ export function DataTable<TData, TValue>({
                 {headerGroup.headers.map((header, index) => {
                   const columnWidth =
                     header.getSize() === 20 ? 'auto' : `${header.getSize()}px`
+                  const minWidth =
+                    header.getContext().column.columnDef.meta?.minWidth
 
                   const hasBorder =
                     bordered && headerGroup.headers.length - 1 > index
@@ -215,8 +218,9 @@ export function DataTable<TData, TValue>({
                       <TableHead
                         highlightHeader={highlightHeader}
                         bordered={hasBorder}
-                        style={{ width: columnWidth }}
+                        style={{ width: minWidth || columnWidth }}
                         className={cn(
+                          minWidth && 'xl:!w-auto',
                           pinLeft && 'sticky z-20 left-0 border-r-0',
                           pinRight && 'sticky z-20 right-0',
                           hasPinnedRightCell && secondLastCell && 'border-r-0',
@@ -269,6 +273,8 @@ export function DataTable<TData, TValue>({
                       cell.column.getSize() === 20
                         ? 'auto'
                         : `${cell.column.getSize()}px`
+                    const minWidth =
+                      cell.getContext().column.columnDef.meta?.minWidth
 
                     const secondLastCell =
                       index === row.getVisibleCells().length - 2
@@ -283,8 +289,9 @@ export function DataTable<TData, TValue>({
                         )}
                         <TableCell
                           bordered={hasBorder}
-                          style={{ width: columnWidth }}
+                          style={{ width: minWidth || columnWidth }}
                           className={cn(
+                            minWidth && 'xl:!w-auto',
                             pinLeft &&
                               'sticky z-20 bg-inherit left-0 bg-white group-hover:!bg-blackberry-50 group-data-[state=selected]:bg-blackberry-50 border-r-0',
                             pinRight &&

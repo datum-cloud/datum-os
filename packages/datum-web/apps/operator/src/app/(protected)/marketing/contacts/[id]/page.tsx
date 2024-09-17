@@ -1,3 +1,4 @@
+import type { Metadata } from 'next'
 import React from 'react'
 
 import { Datum } from '@repo/types'
@@ -8,6 +9,13 @@ import { getServerQueryClient } from '@/query/client'
 import { getContact, getContactKey } from '@/query/contacts'
 
 type ContactPageProps = { params: { id: Datum.ContactId } }
+
+export const metadata: Metadata = {
+  title: {
+    template: '%s',
+    default: 'Contact Information',
+  },
+}
 
 const Page = async ({ params: { id } }: ContactPageProps) => {
   const client = getServerQueryClient()

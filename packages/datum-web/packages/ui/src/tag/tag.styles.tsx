@@ -1,7 +1,7 @@
 import { tv, type VariantProps } from 'tailwind-variants'
 
 const tagStyles = tv({
-  base: 'rounded-[5px] px-[7px] pt-[1px] pb-[2px] h-[20px] border uppercase font-mono text-[10px] font-semibold leading-[150%] tracking-[0.4px]',
+  base: 'rounded-[5px] px-[7px] pb-[2px] h-[19px] border uppercase font-mono text-[10px] font-semibold leading-[150%] tracking-[0.4px]',
   variants: {
     status: {
       success: 'border-util-green-500 text-util-green-500',
