@@ -1105,6 +1105,40 @@ func ContactListsPostResponseFromContactListsGetResponse(respGet *ContactListsGe
 	return respPost
 }
 
+// ContactListsPutRequest is the body for a PUT request to `/contacts/lists/:id`
+type ContactListsPutRequest struct {
+	ContactListID string      `param:"id"`
+	ContactList   ContactList `json:"contact_list"`
+}
+
+// ExampleContactListsPutRequest is an example PUT request to `/contacts/lists/:id`
+var ExampleContactListsPutRequest = ContactListsPutRequest{
+	ContactListID: "01J7PBEMJAZ08HKZF71302ZD1X",
+	ContactList: ContactList{
+		Name:        "weekly-tips",
+		DisplayName: "Weekly Tips",
+		Description: "For sending out weekly tips regarding new features",
+		Visibility:  "PUBLIC",
+	},
+}
+
+// ContactListsPutResponse is the body for a PUT request response from `/contacts/lists/:id`
+type ContactListsPutResponse struct {
+	rout.Reply
+	ContactList ContactList `json:"contact_list"`
+}
+
+// ExampleContactListsPutSuccessResponse is an example PUT request response from `/contacts/lists/:id`
+var ExampleContactListsPutSuccessResponse = ContactListsPutResponse{
+	Reply: rout.OK().Reply,
+	ContactList: ContactList{
+		ID:          "01J7PBEMJAZ08HKZF71302ZD1X",
+		Name:        "weekly-tips",
+		DisplayName: "Weekly Tips",
+		Description: "For sending out weekly tips regarding new features",
+	},
+}
+
 // ContactListsDeleteRequest is the body for a DELETE request to `/contacts/lists`
 type ContactListsDeleteRequest struct {
 	ContactListIDs []string `json:"contact_list_ids"`
@@ -1127,4 +1161,119 @@ type ContactListsDeleteResponse struct {
 var ExampleContactListsDeleteSuccessResponse = ContactListsDeleteResponse{
 	Reply:         rout.OK().Reply,
 	CountAffected: 2,
+}
+
+// ContactListMembersGetRequest is the body for a GET request to `/contacts/lists/:id/members`
+type ContactListMembersGetRequest struct {
+	ContactListID string `param:"id"`
+}
+
+// ContactListMembersGetResponse is the body for a GET request response from `/contacts/lists/:id/members`
+type ContactListMembersGetResponse struct {
+	rout.Reply
+	Count    int       `json:"count"`
+	Contacts []Contact `json:"contacts"`
+}
+
+// ExampleContactListMembersGetSuccessResponse is an example GET request response from `/contacts/lists/:id/members`
+var ExampleContactListMembersGetSuccessResponse = ContactListMembersGetResponse{
+	Reply: rout.OK().Reply,
+	Count: 2,
+	Contacts: []Contact{
+		{
+			ID: "01J6X14S34TP3H6Z4S3AVHJSMY", FullName: "Serene Ilsley", Address: "66195 Gateway Junction",
+			Email: "silsley0@harvard.edu", Title: "Web Designer III", Company: "Crona-Dooley", PhoneNumber: "694-566-6857",
+		},
+		{
+			ID: "01J6X14S355M2R0GP5WFX6QX91", FullName: "Bobbie Kolyagin", Address: "467 Magdeline Hill",
+			Email: "bkolyagin1@blogs.com", Title: "VP Sales", Company: "Mosciski Group", PhoneNumber: "228-669-6638",
+		},
+	},
+}
+
+// ContactsFromGeneratedContactListMembers is a helper function to return a `[]Contact` from a `[]*generated.ContactListMembership`
+func ContactsFromGeneratedContactListMembers(members []*generated.ContactListMembership) []Contact {
+	contacts := make([]Contact, len(members))
+	for i, member := range members {
+		contacts[i] = ContactFromGeneratedContact(member.Edges.Contact)
+	}
+	return contacts
+}
+
+// ContactListMembersPostRequest is the body for a POST request to `/contacts/lists/:id/members`
+type ContactListMembersPostRequest struct {
+	ContactListID string   `param:"id"`
+	ContactIDs    []string `json:"contact_ids"`
+}
+
+// ExampleContactListMembersPostRequest is an example POST request to `/contacts/lists/:id/members`
+var ExampleContactListMembersPostRequest = ContactListMembersPostRequest{
+	ContactListID: "01J7PBEMJAZ08HKZF71302ZD1X",
+	ContactIDs: []string{
+		"01J6X14S34TP3H6Z4S3AVHJSMY",
+		"01J6X14S355M2R0GP5WFX6QX91",
+	},
+}
+
+// ContactListMembersPostResponse is the body for a POST request response from `/contacts/lists/:id/members`
+type ContactListMembersPostResponse struct {
+	rout.Reply
+	CountAffected int `json:"count"`
+}
+
+// ExampleContactListMembersPostSuccessResponse is an example POST request response from `/contacts/lists/:id/members`
+var ExampleContactListMembersPostSuccessResponse = ContactListMembersPostResponse{
+	Reply:         rout.Reply{Success: true},
+	CountAffected: 2,
+}
+
+// ContactListMembersDeleteRequest is the body for a DELETE request to `/contacts/lists/:id/members`
+type ContactListMembersDeleteRequest struct {
+	ContactListID string   `param:"id"`
+	ContactIDs    []string `json:"contact_ids"`
+}
+
+// ExampleContactListMembersDeleteRequest is an example DELETE request to `/contacts/lists/:id/members`
+var ExampleContactListMembersDeleteRequest = ContactListMembersDeleteRequest{
+	ContactListID: "01J7PBEMJAZ08HKZF71302ZD1X",
+	ContactIDs: []string{
+		"01J6X14S34TP3H6Z4S3AVHJSMY",
+		"01J6X14S355M2R0GP5WFX6QX91",
+	},
+}
+
+// ContactListMembersDeleteResponse is the body for a DELETE request response from `/contacts/lists/:id/members`
+type ContactListMembersDeleteResponse struct {
+	rout.Reply
+	CountAffected int `json:"count"`
+}
+
+// ExampleContactListMembersDeleteSuccessResponse is an example DELETE request response from `/contacts/lists/:id/members`
+var ExampleContactListMembersDeleteSuccessResponse = ContactListMembersDeleteResponse{
+	Reply:         rout.Reply{Success: true},
+	CountAffected: 2,
+}
+
+// ContactListMembersDeleteOneRequest is the body for a DELETE request to `/contacts/lists/:id/members/:contact_id`
+type ContactListMembersDeleteOneRequest struct {
+	ContactListID string `param:"id"`
+	ContactID     string `param:"contact_id"`
+}
+
+// ExampleContactListMembersDeleteOneRequest is an example DELETE request to `/contacts/lists/:id/members/:contact_id`
+var ExampleContactListMembersDeleteOneRequest = ContactListMembersDeleteOneRequest{
+	ContactListID: "01J7PBEMJAZ08HKZF71302ZD1X",
+	ContactID:     "01J6X14S34TP3H6Z4S3AVHJSMY",
+}
+
+// ContactListMembersDeleteOneResponse is the body for a DELETE request response from `/contacts/lists/:id/members/:contact_id`
+type ContactListMembersDeleteOneResponse struct {
+	rout.Reply
+	CountAffected int `json:"count"`
+}
+
+// ExampleContactListMembersDeleteOneSuccessResponse is an example DELETE request response from `/contacts/lists/:id/members/:contact_id`
+var ExampleContactListMembersDeleteOneSuccessResponse = ContactListMembersDeleteOneResponse{
+	Reply:         rout.Reply{Success: true},
+	CountAffected: 1,
 }

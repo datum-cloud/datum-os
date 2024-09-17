@@ -9,7 +9,7 @@ import (
 // registerContactListsHandlers registers the contacts endpoint handlers
 func registerContactListsHandlers(router *Router) (err error) {
 	path := "/contacts/lists"
-	name := "Contact Lists"
+	name := "Contact Lists "
 
 	routeGet := echo.Route{
 		Name:        name + "Get",
@@ -62,7 +62,7 @@ func registerContactListsHandlers(router *Router) (err error) {
 	routePut := echo.Route{
 		Name:        name + "Put",
 		Method:      http.MethodPut,
-		Path:        path,
+		Path:        path + "/:id",
 		Middlewares: authMW,
 		Handler: func(c echo.Context) error {
 			return router.Handler.ContactListsPut(c)
@@ -87,6 +87,54 @@ func registerContactListsHandlers(router *Router) (err error) {
 
 	if err = router.Addv1Route(
 		path, routeDelete.Method, router.Handler.BindContactListsDelete(), routeDelete,
+	); err != nil {
+		return err
+	}
+
+	routeMembersGet := echo.Route{
+		Name:        name + "Members Get",
+		Method:      http.MethodGet,
+		Path:        path + "/:id/members",
+		Middlewares: authMW,
+		Handler: func(c echo.Context) error {
+			return router.Handler.ContactListsMembersGet(c)
+		},
+	}
+
+	if err = router.Addv1Route(
+		path, routeMembersGet.Method, router.Handler.BindContactListsMembersGet(), routeMembersGet,
+	); err != nil {
+		return err
+	}
+
+	routeMembersPost := echo.Route{
+		Name:        name + "Members Post",
+		Method:      http.MethodPost,
+		Path:        path + "/:id/members",
+		Middlewares: authMW,
+		Handler: func(c echo.Context) error {
+			return router.Handler.ContactListsMembersPost(c)
+		},
+	}
+
+	if err = router.Addv1Route(
+		path, routeMembersPost.Method, router.Handler.BindContactListsMembersPost(), routeMembersPost,
+	); err != nil {
+		return err
+	}
+
+	routeMembersDelete := echo.Route{
+		Name:        name + "Members Delete",
+		Method:      http.MethodDelete,
+		Path:        path + "/:id/members",
+		Middlewares: authMW,
+		Handler: func(c echo.Context) error {
+			return router.Handler.ContactListsMembersDelete(c)
+		},
+	}
+
+	if err = router.Addv1Route(
+		path, routeMembersDelete.Method, router.Handler.BindContactListsMembersDelete(), routeMembersDelete,
 	); err != nil {
 		return err
 	}
