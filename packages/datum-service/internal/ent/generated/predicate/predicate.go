@@ -15,6 +15,18 @@ type Contact func(*sql.Selector)
 // ContactHistory is the predicate function for contacthistory builders.
 type ContactHistory func(*sql.Selector)
 
+// ContactList is the predicate function for contactlist builders.
+type ContactList func(*sql.Selector)
+
+// ContactListHistory is the predicate function for contactlisthistory builders.
+type ContactListHistory func(*sql.Selector)
+
+// ContactListMembership is the predicate function for contactlistmembership builders.
+type ContactListMembership func(*sql.Selector)
+
+// ContactListMembershipHistory is the predicate function for contactlistmembershiphistory builders.
+type ContactListMembershipHistory func(*sql.Selector)
+
 // DocumentData is the predicate function for documentdata builders.
 type DocumentData func(*sql.Selector)
 

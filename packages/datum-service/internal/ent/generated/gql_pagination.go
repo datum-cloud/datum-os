@@ -17,6 +17,10 @@ import (
 	"github.com/datum-cloud/datum-os/internal/ent/generated/apitoken"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/contact"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/contacthistory"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/contactlist"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/contactlisthistory"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/contactlistmembership"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/contactlistmembershiphistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/documentdata"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/documentdatahistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/entitlement"
@@ -895,6 +899,1132 @@ func (ch *ContactHistory) ToEdge(order *ContactHistoryOrder) *ContactHistoryEdge
 	return &ContactHistoryEdge{
 		Node:   ch,
 		Cursor: order.Field.toCursor(ch),
+	}
+}
+
+// ContactListEdge is the edge representation of ContactList.
+type ContactListEdge struct {
+	Node   *ContactList `json:"node"`
+	Cursor Cursor       `json:"cursor"`
+}
+
+// ContactListConnection is the connection containing edges to ContactList.
+type ContactListConnection struct {
+	Edges      []*ContactListEdge `json:"edges"`
+	PageInfo   PageInfo           `json:"pageInfo"`
+	TotalCount int                `json:"totalCount"`
+}
+
+func (c *ContactListConnection) build(nodes []*ContactList, pager *contactlistPager, after *Cursor, first *int, before *Cursor, last *int) {
+	c.PageInfo.HasNextPage = before != nil
+	c.PageInfo.HasPreviousPage = after != nil
+	if first != nil && *first+1 == len(nodes) {
+		c.PageInfo.HasNextPage = true
+		nodes = nodes[:len(nodes)-1]
+	} else if last != nil && *last+1 == len(nodes) {
+		c.PageInfo.HasPreviousPage = true
+		nodes = nodes[:len(nodes)-1]
+	}
+	var nodeAt func(int) *ContactList
+	if last != nil {
+		n := len(nodes) - 1
+		nodeAt = func(i int) *ContactList {
+			return nodes[n-i]
+		}
+	} else {
+		nodeAt = func(i int) *ContactList {
+			return nodes[i]
+		}
+	}
+	c.Edges = make([]*ContactListEdge, len(nodes))
+	for i := range nodes {
+		node := nodeAt(i)
+		c.Edges[i] = &ContactListEdge{
+			Node:   node,
+			Cursor: pager.toCursor(node),
+		}
+	}
+	if l := len(c.Edges); l > 0 {
+		c.PageInfo.StartCursor = &c.Edges[0].Cursor
+		c.PageInfo.EndCursor = &c.Edges[l-1].Cursor
+	}
+	if c.TotalCount == 0 {
+		c.TotalCount = len(nodes)
+	}
+}
+
+// ContactListPaginateOption enables pagination customization.
+type ContactListPaginateOption func(*contactlistPager) error
+
+// WithContactListOrder configures pagination ordering.
+func WithContactListOrder(order *ContactListOrder) ContactListPaginateOption {
+	if order == nil {
+		order = DefaultContactListOrder
+	}
+	o := *order
+	return func(pager *contactlistPager) error {
+		if err := o.Direction.Validate(); err != nil {
+			return err
+		}
+		if o.Field == nil {
+			o.Field = DefaultContactListOrder.Field
+		}
+		pager.order = &o
+		return nil
+	}
+}
+
+// WithContactListFilter configures pagination filter.
+func WithContactListFilter(filter func(*ContactListQuery) (*ContactListQuery, error)) ContactListPaginateOption {
+	return func(pager *contactlistPager) error {
+		if filter == nil {
+			return errors.New("ContactListQuery filter cannot be nil")
+		}
+		pager.filter = filter
+		return nil
+	}
+}
+
+type contactlistPager struct {
+	reverse bool
+	order   *ContactListOrder
+	filter  func(*ContactListQuery) (*ContactListQuery, error)
+}
+
+func newContactListPager(opts []ContactListPaginateOption, reverse bool) (*contactlistPager, error) {
+	pager := &contactlistPager{reverse: reverse}
+	for _, opt := range opts {
+		if err := opt(pager); err != nil {
+			return nil, err
+		}
+	}
+	if pager.order == nil {
+		pager.order = DefaultContactListOrder
+	}
+	return pager, nil
+}
+
+func (p *contactlistPager) applyFilter(query *ContactListQuery) (*ContactListQuery, error) {
+	if p.filter != nil {
+		return p.filter(query)
+	}
+	return query, nil
+}
+
+func (p *contactlistPager) toCursor(cl *ContactList) Cursor {
+	return p.order.Field.toCursor(cl)
+}
+
+func (p *contactlistPager) applyCursors(query *ContactListQuery, after, before *Cursor) (*ContactListQuery, error) {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	for _, predicate := range entgql.CursorsPredicate(after, before, DefaultContactListOrder.Field.column, p.order.Field.column, direction) {
+		query = query.Where(predicate)
+	}
+	return query, nil
+}
+
+func (p *contactlistPager) applyOrder(query *ContactListQuery) *ContactListQuery {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	query = query.Order(p.order.Field.toTerm(direction.OrderTermOption()))
+	if p.order.Field != DefaultContactListOrder.Field {
+		query = query.Order(DefaultContactListOrder.Field.toTerm(direction.OrderTermOption()))
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(p.order.Field.column)
+	}
+	return query
+}
+
+func (p *contactlistPager) orderExpr(query *ContactListQuery) sql.Querier {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(p.order.Field.column)
+	}
+	return sql.ExprFunc(func(b *sql.Builder) {
+		b.Ident(p.order.Field.column).Pad().WriteString(string(direction))
+		if p.order.Field != DefaultContactListOrder.Field {
+			b.Comma().Ident(DefaultContactListOrder.Field.column).Pad().WriteString(string(direction))
+		}
+	})
+}
+
+// Paginate executes the query and returns a relay based cursor connection to ContactList.
+func (cl *ContactListQuery) Paginate(
+	ctx context.Context, after *Cursor, first *int,
+	before *Cursor, last *int, opts ...ContactListPaginateOption,
+) (*ContactListConnection, error) {
+	if err := validateFirstLast(first, last); err != nil {
+		return nil, err
+	}
+	pager, err := newContactListPager(opts, last != nil)
+	if err != nil {
+		return nil, err
+	}
+	if cl, err = pager.applyFilter(cl); err != nil {
+		return nil, err
+	}
+	conn := &ContactListConnection{Edges: []*ContactListEdge{}}
+	ignoredEdges := !hasCollectedField(ctx, edgesField)
+	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+		hasPagination := after != nil || first != nil || before != nil || last != nil
+		if hasPagination || ignoredEdges {
+			c := cl.Clone()
+			c.ctx.Fields = nil
+			if conn.TotalCount, err = c.Count(ctx); err != nil {
+				return nil, err
+			}
+			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
+			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
+		}
+	}
+	if ignoredEdges || (first != nil && *first == 0) || (last != nil && *last == 0) {
+		return conn, nil
+	}
+	if cl, err = pager.applyCursors(cl, after, before); err != nil {
+		return nil, err
+	}
+	limit := paginateLimit(first, last)
+	if limit != 0 {
+		cl.Limit(limit)
+	}
+	if field := collectedField(ctx, edgesField, nodeField); field != nil {
+		if err := cl.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
+			return nil, err
+		}
+	}
+	cl = pager.applyOrder(cl)
+	nodes, err := cl.All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	conn.build(nodes, pager, after, first, before, last)
+	return conn, nil
+}
+
+var (
+	// ContactListOrderFieldName orders ContactList by name.
+	ContactListOrderFieldName = &ContactListOrderField{
+		Value: func(cl *ContactList) (ent.Value, error) {
+			return cl.Name, nil
+		},
+		column: contactlist.FieldName,
+		toTerm: contactlist.ByName,
+		toCursor: func(cl *ContactList) Cursor {
+			return Cursor{
+				ID:    cl.ID,
+				Value: cl.Name,
+			}
+		},
+	}
+	// ContactListOrderFieldDisplayName orders ContactList by display_name.
+	ContactListOrderFieldDisplayName = &ContactListOrderField{
+		Value: func(cl *ContactList) (ent.Value, error) {
+			return cl.DisplayName, nil
+		},
+		column: contactlist.FieldDisplayName,
+		toTerm: contactlist.ByDisplayName,
+		toCursor: func(cl *ContactList) Cursor {
+			return Cursor{
+				ID:    cl.ID,
+				Value: cl.DisplayName,
+			}
+		},
+	}
+)
+
+// String implement fmt.Stringer interface.
+func (f ContactListOrderField) String() string {
+	var str string
+	switch f.column {
+	case ContactListOrderFieldName.column:
+		str = "name"
+	case ContactListOrderFieldDisplayName.column:
+		str = "display_name"
+	}
+	return str
+}
+
+// MarshalGQL implements graphql.Marshaler interface.
+func (f ContactListOrderField) MarshalGQL(w io.Writer) {
+	io.WriteString(w, strconv.Quote(f.String()))
+}
+
+// UnmarshalGQL implements graphql.Unmarshaler interface.
+func (f *ContactListOrderField) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("ContactListOrderField %T must be a string", v)
+	}
+	switch str {
+	case "name":
+		*f = *ContactListOrderFieldName
+	case "display_name":
+		*f = *ContactListOrderFieldDisplayName
+	default:
+		return fmt.Errorf("%s is not a valid ContactListOrderField", str)
+	}
+	return nil
+}
+
+// ContactListOrderField defines the ordering field of ContactList.
+type ContactListOrderField struct {
+	// Value extracts the ordering value from the given ContactList.
+	Value    func(*ContactList) (ent.Value, error)
+	column   string // field or computed.
+	toTerm   func(...sql.OrderTermOption) contactlist.OrderOption
+	toCursor func(*ContactList) Cursor
+}
+
+// ContactListOrder defines the ordering of ContactList.
+type ContactListOrder struct {
+	Direction OrderDirection         `json:"direction"`
+	Field     *ContactListOrderField `json:"field"`
+}
+
+// DefaultContactListOrder is the default ordering of ContactList.
+var DefaultContactListOrder = &ContactListOrder{
+	Direction: entgql.OrderDirectionAsc,
+	Field: &ContactListOrderField{
+		Value: func(cl *ContactList) (ent.Value, error) {
+			return cl.ID, nil
+		},
+		column: contactlist.FieldID,
+		toTerm: contactlist.ByID,
+		toCursor: func(cl *ContactList) Cursor {
+			return Cursor{ID: cl.ID}
+		},
+	},
+}
+
+// ToEdge converts ContactList into ContactListEdge.
+func (cl *ContactList) ToEdge(order *ContactListOrder) *ContactListEdge {
+	if order == nil {
+		order = DefaultContactListOrder
+	}
+	return &ContactListEdge{
+		Node:   cl,
+		Cursor: order.Field.toCursor(cl),
+	}
+}
+
+// ContactListHistoryEdge is the edge representation of ContactListHistory.
+type ContactListHistoryEdge struct {
+	Node   *ContactListHistory `json:"node"`
+	Cursor Cursor              `json:"cursor"`
+}
+
+// ContactListHistoryConnection is the connection containing edges to ContactListHistory.
+type ContactListHistoryConnection struct {
+	Edges      []*ContactListHistoryEdge `json:"edges"`
+	PageInfo   PageInfo                  `json:"pageInfo"`
+	TotalCount int                       `json:"totalCount"`
+}
+
+func (c *ContactListHistoryConnection) build(nodes []*ContactListHistory, pager *contactlisthistoryPager, after *Cursor, first *int, before *Cursor, last *int) {
+	c.PageInfo.HasNextPage = before != nil
+	c.PageInfo.HasPreviousPage = after != nil
+	if first != nil && *first+1 == len(nodes) {
+		c.PageInfo.HasNextPage = true
+		nodes = nodes[:len(nodes)-1]
+	} else if last != nil && *last+1 == len(nodes) {
+		c.PageInfo.HasPreviousPage = true
+		nodes = nodes[:len(nodes)-1]
+	}
+	var nodeAt func(int) *ContactListHistory
+	if last != nil {
+		n := len(nodes) - 1
+		nodeAt = func(i int) *ContactListHistory {
+			return nodes[n-i]
+		}
+	} else {
+		nodeAt = func(i int) *ContactListHistory {
+			return nodes[i]
+		}
+	}
+	c.Edges = make([]*ContactListHistoryEdge, len(nodes))
+	for i := range nodes {
+		node := nodeAt(i)
+		c.Edges[i] = &ContactListHistoryEdge{
+			Node:   node,
+			Cursor: pager.toCursor(node),
+		}
+	}
+	if l := len(c.Edges); l > 0 {
+		c.PageInfo.StartCursor = &c.Edges[0].Cursor
+		c.PageInfo.EndCursor = &c.Edges[l-1].Cursor
+	}
+	if c.TotalCount == 0 {
+		c.TotalCount = len(nodes)
+	}
+}
+
+// ContactListHistoryPaginateOption enables pagination customization.
+type ContactListHistoryPaginateOption func(*contactlisthistoryPager) error
+
+// WithContactListHistoryOrder configures pagination ordering.
+func WithContactListHistoryOrder(order *ContactListHistoryOrder) ContactListHistoryPaginateOption {
+	if order == nil {
+		order = DefaultContactListHistoryOrder
+	}
+	o := *order
+	return func(pager *contactlisthistoryPager) error {
+		if err := o.Direction.Validate(); err != nil {
+			return err
+		}
+		if o.Field == nil {
+			o.Field = DefaultContactListHistoryOrder.Field
+		}
+		pager.order = &o
+		return nil
+	}
+}
+
+// WithContactListHistoryFilter configures pagination filter.
+func WithContactListHistoryFilter(filter func(*ContactListHistoryQuery) (*ContactListHistoryQuery, error)) ContactListHistoryPaginateOption {
+	return func(pager *contactlisthistoryPager) error {
+		if filter == nil {
+			return errors.New("ContactListHistoryQuery filter cannot be nil")
+		}
+		pager.filter = filter
+		return nil
+	}
+}
+
+type contactlisthistoryPager struct {
+	reverse bool
+	order   *ContactListHistoryOrder
+	filter  func(*ContactListHistoryQuery) (*ContactListHistoryQuery, error)
+}
+
+func newContactListHistoryPager(opts []ContactListHistoryPaginateOption, reverse bool) (*contactlisthistoryPager, error) {
+	pager := &contactlisthistoryPager{reverse: reverse}
+	for _, opt := range opts {
+		if err := opt(pager); err != nil {
+			return nil, err
+		}
+	}
+	if pager.order == nil {
+		pager.order = DefaultContactListHistoryOrder
+	}
+	return pager, nil
+}
+
+func (p *contactlisthistoryPager) applyFilter(query *ContactListHistoryQuery) (*ContactListHistoryQuery, error) {
+	if p.filter != nil {
+		return p.filter(query)
+	}
+	return query, nil
+}
+
+func (p *contactlisthistoryPager) toCursor(clh *ContactListHistory) Cursor {
+	return p.order.Field.toCursor(clh)
+}
+
+func (p *contactlisthistoryPager) applyCursors(query *ContactListHistoryQuery, after, before *Cursor) (*ContactListHistoryQuery, error) {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	for _, predicate := range entgql.CursorsPredicate(after, before, DefaultContactListHistoryOrder.Field.column, p.order.Field.column, direction) {
+		query = query.Where(predicate)
+	}
+	return query, nil
+}
+
+func (p *contactlisthistoryPager) applyOrder(query *ContactListHistoryQuery) *ContactListHistoryQuery {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	query = query.Order(p.order.Field.toTerm(direction.OrderTermOption()))
+	if p.order.Field != DefaultContactListHistoryOrder.Field {
+		query = query.Order(DefaultContactListHistoryOrder.Field.toTerm(direction.OrderTermOption()))
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(p.order.Field.column)
+	}
+	return query
+}
+
+func (p *contactlisthistoryPager) orderExpr(query *ContactListHistoryQuery) sql.Querier {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(p.order.Field.column)
+	}
+	return sql.ExprFunc(func(b *sql.Builder) {
+		b.Ident(p.order.Field.column).Pad().WriteString(string(direction))
+		if p.order.Field != DefaultContactListHistoryOrder.Field {
+			b.Comma().Ident(DefaultContactListHistoryOrder.Field.column).Pad().WriteString(string(direction))
+		}
+	})
+}
+
+// Paginate executes the query and returns a relay based cursor connection to ContactListHistory.
+func (clh *ContactListHistoryQuery) Paginate(
+	ctx context.Context, after *Cursor, first *int,
+	before *Cursor, last *int, opts ...ContactListHistoryPaginateOption,
+) (*ContactListHistoryConnection, error) {
+	if err := validateFirstLast(first, last); err != nil {
+		return nil, err
+	}
+	pager, err := newContactListHistoryPager(opts, last != nil)
+	if err != nil {
+		return nil, err
+	}
+	if clh, err = pager.applyFilter(clh); err != nil {
+		return nil, err
+	}
+	conn := &ContactListHistoryConnection{Edges: []*ContactListHistoryEdge{}}
+	ignoredEdges := !hasCollectedField(ctx, edgesField)
+	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+		hasPagination := after != nil || first != nil || before != nil || last != nil
+		if hasPagination || ignoredEdges {
+			c := clh.Clone()
+			c.ctx.Fields = nil
+			if conn.TotalCount, err = c.Count(ctx); err != nil {
+				return nil, err
+			}
+			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
+			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
+		}
+	}
+	if ignoredEdges || (first != nil && *first == 0) || (last != nil && *last == 0) {
+		return conn, nil
+	}
+	if clh, err = pager.applyCursors(clh, after, before); err != nil {
+		return nil, err
+	}
+	limit := paginateLimit(first, last)
+	if limit != 0 {
+		clh.Limit(limit)
+	}
+	if field := collectedField(ctx, edgesField, nodeField); field != nil {
+		if err := clh.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
+			return nil, err
+		}
+	}
+	clh = pager.applyOrder(clh)
+	nodes, err := clh.All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	conn.build(nodes, pager, after, first, before, last)
+	return conn, nil
+}
+
+var (
+	// ContactListHistoryOrderFieldName orders ContactListHistory by name.
+	ContactListHistoryOrderFieldName = &ContactListHistoryOrderField{
+		Value: func(clh *ContactListHistory) (ent.Value, error) {
+			return clh.Name, nil
+		},
+		column: contactlisthistory.FieldName,
+		toTerm: contactlisthistory.ByName,
+		toCursor: func(clh *ContactListHistory) Cursor {
+			return Cursor{
+				ID:    clh.ID,
+				Value: clh.Name,
+			}
+		},
+	}
+	// ContactListHistoryOrderFieldDisplayName orders ContactListHistory by display_name.
+	ContactListHistoryOrderFieldDisplayName = &ContactListHistoryOrderField{
+		Value: func(clh *ContactListHistory) (ent.Value, error) {
+			return clh.DisplayName, nil
+		},
+		column: contactlisthistory.FieldDisplayName,
+		toTerm: contactlisthistory.ByDisplayName,
+		toCursor: func(clh *ContactListHistory) Cursor {
+			return Cursor{
+				ID:    clh.ID,
+				Value: clh.DisplayName,
+			}
+		},
+	}
+)
+
+// String implement fmt.Stringer interface.
+func (f ContactListHistoryOrderField) String() string {
+	var str string
+	switch f.column {
+	case ContactListHistoryOrderFieldName.column:
+		str = "name"
+	case ContactListHistoryOrderFieldDisplayName.column:
+		str = "display_name"
+	}
+	return str
+}
+
+// MarshalGQL implements graphql.Marshaler interface.
+func (f ContactListHistoryOrderField) MarshalGQL(w io.Writer) {
+	io.WriteString(w, strconv.Quote(f.String()))
+}
+
+// UnmarshalGQL implements graphql.Unmarshaler interface.
+func (f *ContactListHistoryOrderField) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("ContactListHistoryOrderField %T must be a string", v)
+	}
+	switch str {
+	case "name":
+		*f = *ContactListHistoryOrderFieldName
+	case "display_name":
+		*f = *ContactListHistoryOrderFieldDisplayName
+	default:
+		return fmt.Errorf("%s is not a valid ContactListHistoryOrderField", str)
+	}
+	return nil
+}
+
+// ContactListHistoryOrderField defines the ordering field of ContactListHistory.
+type ContactListHistoryOrderField struct {
+	// Value extracts the ordering value from the given ContactListHistory.
+	Value    func(*ContactListHistory) (ent.Value, error)
+	column   string // field or computed.
+	toTerm   func(...sql.OrderTermOption) contactlisthistory.OrderOption
+	toCursor func(*ContactListHistory) Cursor
+}
+
+// ContactListHistoryOrder defines the ordering of ContactListHistory.
+type ContactListHistoryOrder struct {
+	Direction OrderDirection                `json:"direction"`
+	Field     *ContactListHistoryOrderField `json:"field"`
+}
+
+// DefaultContactListHistoryOrder is the default ordering of ContactListHistory.
+var DefaultContactListHistoryOrder = &ContactListHistoryOrder{
+	Direction: entgql.OrderDirectionAsc,
+	Field: &ContactListHistoryOrderField{
+		Value: func(clh *ContactListHistory) (ent.Value, error) {
+			return clh.ID, nil
+		},
+		column: contactlisthistory.FieldID,
+		toTerm: contactlisthistory.ByID,
+		toCursor: func(clh *ContactListHistory) Cursor {
+			return Cursor{ID: clh.ID}
+		},
+	},
+}
+
+// ToEdge converts ContactListHistory into ContactListHistoryEdge.
+func (clh *ContactListHistory) ToEdge(order *ContactListHistoryOrder) *ContactListHistoryEdge {
+	if order == nil {
+		order = DefaultContactListHistoryOrder
+	}
+	return &ContactListHistoryEdge{
+		Node:   clh,
+		Cursor: order.Field.toCursor(clh),
+	}
+}
+
+// ContactListMembershipEdge is the edge representation of ContactListMembership.
+type ContactListMembershipEdge struct {
+	Node   *ContactListMembership `json:"node"`
+	Cursor Cursor                 `json:"cursor"`
+}
+
+// ContactListMembershipConnection is the connection containing edges to ContactListMembership.
+type ContactListMembershipConnection struct {
+	Edges      []*ContactListMembershipEdge `json:"edges"`
+	PageInfo   PageInfo                     `json:"pageInfo"`
+	TotalCount int                          `json:"totalCount"`
+}
+
+func (c *ContactListMembershipConnection) build(nodes []*ContactListMembership, pager *contactlistmembershipPager, after *Cursor, first *int, before *Cursor, last *int) {
+	c.PageInfo.HasNextPage = before != nil
+	c.PageInfo.HasPreviousPage = after != nil
+	if first != nil && *first+1 == len(nodes) {
+		c.PageInfo.HasNextPage = true
+		nodes = nodes[:len(nodes)-1]
+	} else if last != nil && *last+1 == len(nodes) {
+		c.PageInfo.HasPreviousPage = true
+		nodes = nodes[:len(nodes)-1]
+	}
+	var nodeAt func(int) *ContactListMembership
+	if last != nil {
+		n := len(nodes) - 1
+		nodeAt = func(i int) *ContactListMembership {
+			return nodes[n-i]
+		}
+	} else {
+		nodeAt = func(i int) *ContactListMembership {
+			return nodes[i]
+		}
+	}
+	c.Edges = make([]*ContactListMembershipEdge, len(nodes))
+	for i := range nodes {
+		node := nodeAt(i)
+		c.Edges[i] = &ContactListMembershipEdge{
+			Node:   node,
+			Cursor: pager.toCursor(node),
+		}
+	}
+	if l := len(c.Edges); l > 0 {
+		c.PageInfo.StartCursor = &c.Edges[0].Cursor
+		c.PageInfo.EndCursor = &c.Edges[l-1].Cursor
+	}
+	if c.TotalCount == 0 {
+		c.TotalCount = len(nodes)
+	}
+}
+
+// ContactListMembershipPaginateOption enables pagination customization.
+type ContactListMembershipPaginateOption func(*contactlistmembershipPager) error
+
+// WithContactListMembershipOrder configures pagination ordering.
+func WithContactListMembershipOrder(order *ContactListMembershipOrder) ContactListMembershipPaginateOption {
+	if order == nil {
+		order = DefaultContactListMembershipOrder
+	}
+	o := *order
+	return func(pager *contactlistmembershipPager) error {
+		if err := o.Direction.Validate(); err != nil {
+			return err
+		}
+		if o.Field == nil {
+			o.Field = DefaultContactListMembershipOrder.Field
+		}
+		pager.order = &o
+		return nil
+	}
+}
+
+// WithContactListMembershipFilter configures pagination filter.
+func WithContactListMembershipFilter(filter func(*ContactListMembershipQuery) (*ContactListMembershipQuery, error)) ContactListMembershipPaginateOption {
+	return func(pager *contactlistmembershipPager) error {
+		if filter == nil {
+			return errors.New("ContactListMembershipQuery filter cannot be nil")
+		}
+		pager.filter = filter
+		return nil
+	}
+}
+
+type contactlistmembershipPager struct {
+	reverse bool
+	order   *ContactListMembershipOrder
+	filter  func(*ContactListMembershipQuery) (*ContactListMembershipQuery, error)
+}
+
+func newContactListMembershipPager(opts []ContactListMembershipPaginateOption, reverse bool) (*contactlistmembershipPager, error) {
+	pager := &contactlistmembershipPager{reverse: reverse}
+	for _, opt := range opts {
+		if err := opt(pager); err != nil {
+			return nil, err
+		}
+	}
+	if pager.order == nil {
+		pager.order = DefaultContactListMembershipOrder
+	}
+	return pager, nil
+}
+
+func (p *contactlistmembershipPager) applyFilter(query *ContactListMembershipQuery) (*ContactListMembershipQuery, error) {
+	if p.filter != nil {
+		return p.filter(query)
+	}
+	return query, nil
+}
+
+func (p *contactlistmembershipPager) toCursor(clm *ContactListMembership) Cursor {
+	return p.order.Field.toCursor(clm)
+}
+
+func (p *contactlistmembershipPager) applyCursors(query *ContactListMembershipQuery, after, before *Cursor) (*ContactListMembershipQuery, error) {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	for _, predicate := range entgql.CursorsPredicate(after, before, DefaultContactListMembershipOrder.Field.column, p.order.Field.column, direction) {
+		query = query.Where(predicate)
+	}
+	return query, nil
+}
+
+func (p *contactlistmembershipPager) applyOrder(query *ContactListMembershipQuery) *ContactListMembershipQuery {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	query = query.Order(p.order.Field.toTerm(direction.OrderTermOption()))
+	if p.order.Field != DefaultContactListMembershipOrder.Field {
+		query = query.Order(DefaultContactListMembershipOrder.Field.toTerm(direction.OrderTermOption()))
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(p.order.Field.column)
+	}
+	return query
+}
+
+func (p *contactlistmembershipPager) orderExpr(query *ContactListMembershipQuery) sql.Querier {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(p.order.Field.column)
+	}
+	return sql.ExprFunc(func(b *sql.Builder) {
+		b.Ident(p.order.Field.column).Pad().WriteString(string(direction))
+		if p.order.Field != DefaultContactListMembershipOrder.Field {
+			b.Comma().Ident(DefaultContactListMembershipOrder.Field.column).Pad().WriteString(string(direction))
+		}
+	})
+}
+
+// Paginate executes the query and returns a relay based cursor connection to ContactListMembership.
+func (clm *ContactListMembershipQuery) Paginate(
+	ctx context.Context, after *Cursor, first *int,
+	before *Cursor, last *int, opts ...ContactListMembershipPaginateOption,
+) (*ContactListMembershipConnection, error) {
+	if err := validateFirstLast(first, last); err != nil {
+		return nil, err
+	}
+	pager, err := newContactListMembershipPager(opts, last != nil)
+	if err != nil {
+		return nil, err
+	}
+	if clm, err = pager.applyFilter(clm); err != nil {
+		return nil, err
+	}
+	conn := &ContactListMembershipConnection{Edges: []*ContactListMembershipEdge{}}
+	ignoredEdges := !hasCollectedField(ctx, edgesField)
+	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+		hasPagination := after != nil || first != nil || before != nil || last != nil
+		if hasPagination || ignoredEdges {
+			c := clm.Clone()
+			c.ctx.Fields = nil
+			if conn.TotalCount, err = c.Count(ctx); err != nil {
+				return nil, err
+			}
+			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
+			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
+		}
+	}
+	if ignoredEdges || (first != nil && *first == 0) || (last != nil && *last == 0) {
+		return conn, nil
+	}
+	if clm, err = pager.applyCursors(clm, after, before); err != nil {
+		return nil, err
+	}
+	limit := paginateLimit(first, last)
+	if limit != 0 {
+		clm.Limit(limit)
+	}
+	if field := collectedField(ctx, edgesField, nodeField); field != nil {
+		if err := clm.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
+			return nil, err
+		}
+	}
+	clm = pager.applyOrder(clm)
+	nodes, err := clm.All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	conn.build(nodes, pager, after, first, before, last)
+	return conn, nil
+}
+
+// ContactListMembershipOrderField defines the ordering field of ContactListMembership.
+type ContactListMembershipOrderField struct {
+	// Value extracts the ordering value from the given ContactListMembership.
+	Value    func(*ContactListMembership) (ent.Value, error)
+	column   string // field or computed.
+	toTerm   func(...sql.OrderTermOption) contactlistmembership.OrderOption
+	toCursor func(*ContactListMembership) Cursor
+}
+
+// ContactListMembershipOrder defines the ordering of ContactListMembership.
+type ContactListMembershipOrder struct {
+	Direction OrderDirection                   `json:"direction"`
+	Field     *ContactListMembershipOrderField `json:"field"`
+}
+
+// DefaultContactListMembershipOrder is the default ordering of ContactListMembership.
+var DefaultContactListMembershipOrder = &ContactListMembershipOrder{
+	Direction: entgql.OrderDirectionAsc,
+	Field: &ContactListMembershipOrderField{
+		Value: func(clm *ContactListMembership) (ent.Value, error) {
+			return clm.ID, nil
+		},
+		column: contactlistmembership.FieldID,
+		toTerm: contactlistmembership.ByID,
+		toCursor: func(clm *ContactListMembership) Cursor {
+			return Cursor{ID: clm.ID}
+		},
+	},
+}
+
+// ToEdge converts ContactListMembership into ContactListMembershipEdge.
+func (clm *ContactListMembership) ToEdge(order *ContactListMembershipOrder) *ContactListMembershipEdge {
+	if order == nil {
+		order = DefaultContactListMembershipOrder
+	}
+	return &ContactListMembershipEdge{
+		Node:   clm,
+		Cursor: order.Field.toCursor(clm),
+	}
+}
+
+// ContactListMembershipHistoryEdge is the edge representation of ContactListMembershipHistory.
+type ContactListMembershipHistoryEdge struct {
+	Node   *ContactListMembershipHistory `json:"node"`
+	Cursor Cursor                        `json:"cursor"`
+}
+
+// ContactListMembershipHistoryConnection is the connection containing edges to ContactListMembershipHistory.
+type ContactListMembershipHistoryConnection struct {
+	Edges      []*ContactListMembershipHistoryEdge `json:"edges"`
+	PageInfo   PageInfo                            `json:"pageInfo"`
+	TotalCount int                                 `json:"totalCount"`
+}
+
+func (c *ContactListMembershipHistoryConnection) build(nodes []*ContactListMembershipHistory, pager *contactlistmembershiphistoryPager, after *Cursor, first *int, before *Cursor, last *int) {
+	c.PageInfo.HasNextPage = before != nil
+	c.PageInfo.HasPreviousPage = after != nil
+	if first != nil && *first+1 == len(nodes) {
+		c.PageInfo.HasNextPage = true
+		nodes = nodes[:len(nodes)-1]
+	} else if last != nil && *last+1 == len(nodes) {
+		c.PageInfo.HasPreviousPage = true
+		nodes = nodes[:len(nodes)-1]
+	}
+	var nodeAt func(int) *ContactListMembershipHistory
+	if last != nil {
+		n := len(nodes) - 1
+		nodeAt = func(i int) *ContactListMembershipHistory {
+			return nodes[n-i]
+		}
+	} else {
+		nodeAt = func(i int) *ContactListMembershipHistory {
+			return nodes[i]
+		}
+	}
+	c.Edges = make([]*ContactListMembershipHistoryEdge, len(nodes))
+	for i := range nodes {
+		node := nodeAt(i)
+		c.Edges[i] = &ContactListMembershipHistoryEdge{
+			Node:   node,
+			Cursor: pager.toCursor(node),
+		}
+	}
+	if l := len(c.Edges); l > 0 {
+		c.PageInfo.StartCursor = &c.Edges[0].Cursor
+		c.PageInfo.EndCursor = &c.Edges[l-1].Cursor
+	}
+	if c.TotalCount == 0 {
+		c.TotalCount = len(nodes)
+	}
+}
+
+// ContactListMembershipHistoryPaginateOption enables pagination customization.
+type ContactListMembershipHistoryPaginateOption func(*contactlistmembershiphistoryPager) error
+
+// WithContactListMembershipHistoryOrder configures pagination ordering.
+func WithContactListMembershipHistoryOrder(order *ContactListMembershipHistoryOrder) ContactListMembershipHistoryPaginateOption {
+	if order == nil {
+		order = DefaultContactListMembershipHistoryOrder
+	}
+	o := *order
+	return func(pager *contactlistmembershiphistoryPager) error {
+		if err := o.Direction.Validate(); err != nil {
+			return err
+		}
+		if o.Field == nil {
+			o.Field = DefaultContactListMembershipHistoryOrder.Field
+		}
+		pager.order = &o
+		return nil
+	}
+}
+
+// WithContactListMembershipHistoryFilter configures pagination filter.
+func WithContactListMembershipHistoryFilter(filter func(*ContactListMembershipHistoryQuery) (*ContactListMembershipHistoryQuery, error)) ContactListMembershipHistoryPaginateOption {
+	return func(pager *contactlistmembershiphistoryPager) error {
+		if filter == nil {
+			return errors.New("ContactListMembershipHistoryQuery filter cannot be nil")
+		}
+		pager.filter = filter
+		return nil
+	}
+}
+
+type contactlistmembershiphistoryPager struct {
+	reverse bool
+	order   *ContactListMembershipHistoryOrder
+	filter  func(*ContactListMembershipHistoryQuery) (*ContactListMembershipHistoryQuery, error)
+}
+
+func newContactListMembershipHistoryPager(opts []ContactListMembershipHistoryPaginateOption, reverse bool) (*contactlistmembershiphistoryPager, error) {
+	pager := &contactlistmembershiphistoryPager{reverse: reverse}
+	for _, opt := range opts {
+		if err := opt(pager); err != nil {
+			return nil, err
+		}
+	}
+	if pager.order == nil {
+		pager.order = DefaultContactListMembershipHistoryOrder
+	}
+	return pager, nil
+}
+
+func (p *contactlistmembershiphistoryPager) applyFilter(query *ContactListMembershipHistoryQuery) (*ContactListMembershipHistoryQuery, error) {
+	if p.filter != nil {
+		return p.filter(query)
+	}
+	return query, nil
+}
+
+func (p *contactlistmembershiphistoryPager) toCursor(clmh *ContactListMembershipHistory) Cursor {
+	return p.order.Field.toCursor(clmh)
+}
+
+func (p *contactlistmembershiphistoryPager) applyCursors(query *ContactListMembershipHistoryQuery, after, before *Cursor) (*ContactListMembershipHistoryQuery, error) {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	for _, predicate := range entgql.CursorsPredicate(after, before, DefaultContactListMembershipHistoryOrder.Field.column, p.order.Field.column, direction) {
+		query = query.Where(predicate)
+	}
+	return query, nil
+}
+
+func (p *contactlistmembershiphistoryPager) applyOrder(query *ContactListMembershipHistoryQuery) *ContactListMembershipHistoryQuery {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	query = query.Order(p.order.Field.toTerm(direction.OrderTermOption()))
+	if p.order.Field != DefaultContactListMembershipHistoryOrder.Field {
+		query = query.Order(DefaultContactListMembershipHistoryOrder.Field.toTerm(direction.OrderTermOption()))
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(p.order.Field.column)
+	}
+	return query
+}
+
+func (p *contactlistmembershiphistoryPager) orderExpr(query *ContactListMembershipHistoryQuery) sql.Querier {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(p.order.Field.column)
+	}
+	return sql.ExprFunc(func(b *sql.Builder) {
+		b.Ident(p.order.Field.column).Pad().WriteString(string(direction))
+		if p.order.Field != DefaultContactListMembershipHistoryOrder.Field {
+			b.Comma().Ident(DefaultContactListMembershipHistoryOrder.Field.column).Pad().WriteString(string(direction))
+		}
+	})
+}
+
+// Paginate executes the query and returns a relay based cursor connection to ContactListMembershipHistory.
+func (clmh *ContactListMembershipHistoryQuery) Paginate(
+	ctx context.Context, after *Cursor, first *int,
+	before *Cursor, last *int, opts ...ContactListMembershipHistoryPaginateOption,
+) (*ContactListMembershipHistoryConnection, error) {
+	if err := validateFirstLast(first, last); err != nil {
+		return nil, err
+	}
+	pager, err := newContactListMembershipHistoryPager(opts, last != nil)
+	if err != nil {
+		return nil, err
+	}
+	if clmh, err = pager.applyFilter(clmh); err != nil {
+		return nil, err
+	}
+	conn := &ContactListMembershipHistoryConnection{Edges: []*ContactListMembershipHistoryEdge{}}
+	ignoredEdges := !hasCollectedField(ctx, edgesField)
+	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+		hasPagination := after != nil || first != nil || before != nil || last != nil
+		if hasPagination || ignoredEdges {
+			c := clmh.Clone()
+			c.ctx.Fields = nil
+			if conn.TotalCount, err = c.Count(ctx); err != nil {
+				return nil, err
+			}
+			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
+			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
+		}
+	}
+	if ignoredEdges || (first != nil && *first == 0) || (last != nil && *last == 0) {
+		return conn, nil
+	}
+	if clmh, err = pager.applyCursors(clmh, after, before); err != nil {
+		return nil, err
+	}
+	limit := paginateLimit(first, last)
+	if limit != 0 {
+		clmh.Limit(limit)
+	}
+	if field := collectedField(ctx, edgesField, nodeField); field != nil {
+		if err := clmh.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
+			return nil, err
+		}
+	}
+	clmh = pager.applyOrder(clmh)
+	nodes, err := clmh.All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	conn.build(nodes, pager, after, first, before, last)
+	return conn, nil
+}
+
+// ContactListMembershipHistoryOrderField defines the ordering field of ContactListMembershipHistory.
+type ContactListMembershipHistoryOrderField struct {
+	// Value extracts the ordering value from the given ContactListMembershipHistory.
+	Value    func(*ContactListMembershipHistory) (ent.Value, error)
+	column   string // field or computed.
+	toTerm   func(...sql.OrderTermOption) contactlistmembershiphistory.OrderOption
+	toCursor func(*ContactListMembershipHistory) Cursor
+}
+
+// ContactListMembershipHistoryOrder defines the ordering of ContactListMembershipHistory.
+type ContactListMembershipHistoryOrder struct {
+	Direction OrderDirection                          `json:"direction"`
+	Field     *ContactListMembershipHistoryOrderField `json:"field"`
+}
+
+// DefaultContactListMembershipHistoryOrder is the default ordering of ContactListMembershipHistory.
+var DefaultContactListMembershipHistoryOrder = &ContactListMembershipHistoryOrder{
+	Direction: entgql.OrderDirectionAsc,
+	Field: &ContactListMembershipHistoryOrderField{
+		Value: func(clmh *ContactListMembershipHistory) (ent.Value, error) {
+			return clmh.ID, nil
+		},
+		column: contactlistmembershiphistory.FieldID,
+		toTerm: contactlistmembershiphistory.ByID,
+		toCursor: func(clmh *ContactListMembershipHistory) Cursor {
+			return Cursor{ID: clmh.ID}
+		},
+	},
+}
+
+// ToEdge converts ContactListMembershipHistory into ContactListMembershipHistoryEdge.
+func (clmh *ContactListMembershipHistory) ToEdge(order *ContactListMembershipHistoryOrder) *ContactListMembershipHistoryEdge {
+	if order == nil {
+		order = DefaultContactListMembershipHistoryOrder
+	}
+	return &ContactListMembershipHistoryEdge{
+		Node:   clmh,
+		Cursor: order.Field.toCursor(clmh),
 	}
 }
 

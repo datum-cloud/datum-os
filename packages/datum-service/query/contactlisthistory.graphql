@@ -1,0 +1,47 @@
+
+
+query GetAllContactListHistories {
+  contactListHistories {
+    edges {
+      node {
+        createdAt
+        createdBy
+        description
+        displayName
+        historyTime
+        id
+        name
+        operation
+        ownerID
+        ref
+        tags
+        updatedAt
+        updatedBy
+        visibility
+      }
+    }
+  }
+}
+
+query GetContactListHistories($where: ContactListHistoryWhereInput) {
+  contactListHistories(where: $where) {
+    edges {
+      node {
+        createdAt
+        createdBy
+        description
+        displayName
+        historyTime
+        id
+        name
+        operation
+        ownerID
+        ref
+        tags
+        updatedAt
+        updatedBy
+        visibility
+      }
+    }
+  }
+}

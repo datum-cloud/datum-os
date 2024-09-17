@@ -15,6 +15,10 @@ import (
 	"github.com/datum-cloud/datum-os/internal/ent/generated/apitoken"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/contact"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/contacthistory"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/contactlist"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/contactlisthistory"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/contactlistmembership"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/contactlistmembershiphistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/documentdata"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/documentdatahistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/emailverificationtoken"
@@ -86,6 +90,10 @@ const (
 	TypeAPIToken                      = "APIToken"
 	TypeContact                       = "Contact"
 	TypeContactHistory                = "ContactHistory"
+	TypeContactList                   = "ContactList"
+	TypeContactListHistory            = "ContactListHistory"
+	TypeContactListMembership         = "ContactListMembership"
+	TypeContactListMembershipHistory  = "ContactListMembershipHistory"
 	TypeDocumentData                  = "DocumentData"
 	TypeDocumentDataHistory           = "DocumentDataHistory"
 	TypeEmailVerificationToken        = "EmailVerificationToken"
@@ -1552,34 +1560,40 @@ func (m *APITokenMutation) ResetEdge(name string) error {
 // ContactMutation represents an operation that mutates the Contact nodes in the graph.
 type ContactMutation struct {
 	config
-	op              Op
-	typ             string
-	id              *string
-	created_at      *time.Time
-	updated_at      *time.Time
-	created_by      *string
-	updated_by      *string
-	mapping_id      *string
-	deleted_at      *time.Time
-	deleted_by      *string
-	tags            *[]string
-	appendtags      []string
-	full_name       *string
-	title           *string
-	company         *string
-	email           *string
-	phone_number    *string
-	address         *string
-	status          *enums.UserStatus
-	clearedFields   map[string]struct{}
-	owner           *string
-	clearedowner    bool
-	entities        map[string]struct{}
-	removedentities map[string]struct{}
-	clearedentities bool
-	done            bool
-	oldValue        func(context.Context) (*Contact, error)
-	predicates      []predicate.Contact
+	op                              Op
+	typ                             string
+	id                              *string
+	created_at                      *time.Time
+	updated_at                      *time.Time
+	created_by                      *string
+	updated_by                      *string
+	mapping_id                      *string
+	deleted_at                      *time.Time
+	deleted_by                      *string
+	tags                            *[]string
+	appendtags                      []string
+	full_name                       *string
+	title                           *string
+	company                         *string
+	email                           *string
+	phone_number                    *string
+	address                         *string
+	status                          *enums.UserStatus
+	clearedFields                   map[string]struct{}
+	owner                           *string
+	clearedowner                    bool
+	contact_lists                   map[string]struct{}
+	removedcontact_lists            map[string]struct{}
+	clearedcontact_lists            bool
+	entities                        map[string]struct{}
+	removedentities                 map[string]struct{}
+	clearedentities                 bool
+	contact_list_memberships        map[string]struct{}
+	removedcontact_list_memberships map[string]struct{}
+	clearedcontact_list_memberships bool
+	done                            bool
+	oldValue                        func(context.Context) (*Contact, error)
+	predicates                      []predicate.Contact
 }
 
 var _ ent.Mutation = (*ContactMutation)(nil)
@@ -2474,6 +2488,60 @@ func (m *ContactMutation) ResetOwner() {
 	m.clearedowner = false
 }
 
+// AddContactListIDs adds the "contact_lists" edge to the ContactList entity by ids.
+func (m *ContactMutation) AddContactListIDs(ids ...string) {
+	if m.contact_lists == nil {
+		m.contact_lists = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.contact_lists[ids[i]] = struct{}{}
+	}
+}
+
+// ClearContactLists clears the "contact_lists" edge to the ContactList entity.
+func (m *ContactMutation) ClearContactLists() {
+	m.clearedcontact_lists = true
+}
+
+// ContactListsCleared reports if the "contact_lists" edge to the ContactList entity was cleared.
+func (m *ContactMutation) ContactListsCleared() bool {
+	return m.clearedcontact_lists
+}
+
+// RemoveContactListIDs removes the "contact_lists" edge to the ContactList entity by IDs.
+func (m *ContactMutation) RemoveContactListIDs(ids ...string) {
+	if m.removedcontact_lists == nil {
+		m.removedcontact_lists = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.contact_lists, ids[i])
+		m.removedcontact_lists[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedContactLists returns the removed IDs of the "contact_lists" edge to the ContactList entity.
+func (m *ContactMutation) RemovedContactListsIDs() (ids []string) {
+	for id := range m.removedcontact_lists {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ContactListsIDs returns the "contact_lists" edge IDs in the mutation.
+func (m *ContactMutation) ContactListsIDs() (ids []string) {
+	for id := range m.contact_lists {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetContactLists resets all changes to the "contact_lists" edge.
+func (m *ContactMutation) ResetContactLists() {
+	m.contact_lists = nil
+	m.clearedcontact_lists = false
+	m.removedcontact_lists = nil
+}
+
 // AddEntityIDs adds the "entities" edge to the Entity entity by ids.
 func (m *ContactMutation) AddEntityIDs(ids ...string) {
 	if m.entities == nil {
@@ -2526,6 +2594,60 @@ func (m *ContactMutation) ResetEntities() {
 	m.entities = nil
 	m.clearedentities = false
 	m.removedentities = nil
+}
+
+// AddContactListMembershipIDs adds the "contact_list_memberships" edge to the ContactListMembership entity by ids.
+func (m *ContactMutation) AddContactListMembershipIDs(ids ...string) {
+	if m.contact_list_memberships == nil {
+		m.contact_list_memberships = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.contact_list_memberships[ids[i]] = struct{}{}
+	}
+}
+
+// ClearContactListMemberships clears the "contact_list_memberships" edge to the ContactListMembership entity.
+func (m *ContactMutation) ClearContactListMemberships() {
+	m.clearedcontact_list_memberships = true
+}
+
+// ContactListMembershipsCleared reports if the "contact_list_memberships" edge to the ContactListMembership entity was cleared.
+func (m *ContactMutation) ContactListMembershipsCleared() bool {
+	return m.clearedcontact_list_memberships
+}
+
+// RemoveContactListMembershipIDs removes the "contact_list_memberships" edge to the ContactListMembership entity by IDs.
+func (m *ContactMutation) RemoveContactListMembershipIDs(ids ...string) {
+	if m.removedcontact_list_memberships == nil {
+		m.removedcontact_list_memberships = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.contact_list_memberships, ids[i])
+		m.removedcontact_list_memberships[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedContactListMemberships returns the removed IDs of the "contact_list_memberships" edge to the ContactListMembership entity.
+func (m *ContactMutation) RemovedContactListMembershipsIDs() (ids []string) {
+	for id := range m.removedcontact_list_memberships {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ContactListMembershipsIDs returns the "contact_list_memberships" edge IDs in the mutation.
+func (m *ContactMutation) ContactListMembershipsIDs() (ids []string) {
+	for id := range m.contact_list_memberships {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetContactListMemberships resets all changes to the "contact_list_memberships" edge.
+func (m *ContactMutation) ResetContactListMemberships() {
+	m.contact_list_memberships = nil
+	m.clearedcontact_list_memberships = false
+	m.removedcontact_list_memberships = nil
 }
 
 // Where appends a list predicates to the ContactMutation builder.
@@ -2997,12 +3119,18 @@ func (m *ContactMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *ContactMutation) AddedEdges() []string {
-	edges := make([]string, 0, 2)
+	edges := make([]string, 0, 4)
 	if m.owner != nil {
 		edges = append(edges, contact.EdgeOwner)
 	}
+	if m.contact_lists != nil {
+		edges = append(edges, contact.EdgeContactLists)
+	}
 	if m.entities != nil {
 		edges = append(edges, contact.EdgeEntities)
+	}
+	if m.contact_list_memberships != nil {
+		edges = append(edges, contact.EdgeContactListMemberships)
 	}
 	return edges
 }
@@ -3015,9 +3143,21 @@ func (m *ContactMutation) AddedIDs(name string) []ent.Value {
 		if id := m.owner; id != nil {
 			return []ent.Value{*id}
 		}
+	case contact.EdgeContactLists:
+		ids := make([]ent.Value, 0, len(m.contact_lists))
+		for id := range m.contact_lists {
+			ids = append(ids, id)
+		}
+		return ids
 	case contact.EdgeEntities:
 		ids := make([]ent.Value, 0, len(m.entities))
 		for id := range m.entities {
+			ids = append(ids, id)
+		}
+		return ids
+	case contact.EdgeContactListMemberships:
+		ids := make([]ent.Value, 0, len(m.contact_list_memberships))
+		for id := range m.contact_list_memberships {
 			ids = append(ids, id)
 		}
 		return ids
@@ -3027,9 +3167,15 @@ func (m *ContactMutation) AddedIDs(name string) []ent.Value {
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *ContactMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 2)
+	edges := make([]string, 0, 4)
+	if m.removedcontact_lists != nil {
+		edges = append(edges, contact.EdgeContactLists)
+	}
 	if m.removedentities != nil {
 		edges = append(edges, contact.EdgeEntities)
+	}
+	if m.removedcontact_list_memberships != nil {
+		edges = append(edges, contact.EdgeContactListMemberships)
 	}
 	return edges
 }
@@ -3038,9 +3184,21 @@ func (m *ContactMutation) RemovedEdges() []string {
 // the given name in this mutation.
 func (m *ContactMutation) RemovedIDs(name string) []ent.Value {
 	switch name {
+	case contact.EdgeContactLists:
+		ids := make([]ent.Value, 0, len(m.removedcontact_lists))
+		for id := range m.removedcontact_lists {
+			ids = append(ids, id)
+		}
+		return ids
 	case contact.EdgeEntities:
 		ids := make([]ent.Value, 0, len(m.removedentities))
 		for id := range m.removedentities {
+			ids = append(ids, id)
+		}
+		return ids
+	case contact.EdgeContactListMemberships:
+		ids := make([]ent.Value, 0, len(m.removedcontact_list_memberships))
+		for id := range m.removedcontact_list_memberships {
 			ids = append(ids, id)
 		}
 		return ids
@@ -3050,12 +3208,18 @@ func (m *ContactMutation) RemovedIDs(name string) []ent.Value {
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *ContactMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 2)
+	edges := make([]string, 0, 4)
 	if m.clearedowner {
 		edges = append(edges, contact.EdgeOwner)
 	}
+	if m.clearedcontact_lists {
+		edges = append(edges, contact.EdgeContactLists)
+	}
 	if m.clearedentities {
 		edges = append(edges, contact.EdgeEntities)
+	}
+	if m.clearedcontact_list_memberships {
+		edges = append(edges, contact.EdgeContactListMemberships)
 	}
 	return edges
 }
@@ -3066,8 +3230,12 @@ func (m *ContactMutation) EdgeCleared(name string) bool {
 	switch name {
 	case contact.EdgeOwner:
 		return m.clearedowner
+	case contact.EdgeContactLists:
+		return m.clearedcontact_lists
 	case contact.EdgeEntities:
 		return m.clearedentities
+	case contact.EdgeContactListMemberships:
+		return m.clearedcontact_list_memberships
 	}
 	return false
 }
@@ -3090,8 +3258,14 @@ func (m *ContactMutation) ResetEdge(name string) error {
 	case contact.EdgeOwner:
 		m.ResetOwner()
 		return nil
+	case contact.EdgeContactLists:
+		m.ResetContactLists()
+		return nil
 	case contact.EdgeEntities:
 		m.ResetEntities()
+		return nil
+	case contact.EdgeContactListMemberships:
+		m.ResetContactListMemberships()
 		return nil
 	}
 	return fmt.Errorf("unknown Contact edge %s", name)
@@ -4685,6 +4859,5045 @@ func (m *ContactHistoryMutation) ClearEdge(name string) error {
 // It returns an error if the edge is not defined in the schema.
 func (m *ContactHistoryMutation) ResetEdge(name string) error {
 	return fmt.Errorf("unknown ContactHistory edge %s", name)
+}
+
+// ContactListMutation represents an operation that mutates the ContactList nodes in the graph.
+type ContactListMutation struct {
+	config
+	op                          Op
+	typ                         string
+	id                          *string
+	created_at                  *time.Time
+	updated_at                  *time.Time
+	created_by                  *string
+	updated_by                  *string
+	deleted_at                  *time.Time
+	deleted_by                  *string
+	mapping_id                  *string
+	tags                        *[]string
+	appendtags                  []string
+	name                        *string
+	visibility                  *string
+	display_name                *string
+	description                 *string
+	clearedFields               map[string]struct{}
+	owner                       *string
+	clearedowner                bool
+	contacts                    map[string]struct{}
+	removedcontacts             map[string]struct{}
+	clearedcontacts             bool
+	events                      map[string]struct{}
+	removedevents               map[string]struct{}
+	clearedevents               bool
+	integrations                map[string]struct{}
+	removedintegrations         map[string]struct{}
+	clearedintegrations         bool
+	contact_list_members        map[string]struct{}
+	removedcontact_list_members map[string]struct{}
+	clearedcontact_list_members bool
+	done                        bool
+	oldValue                    func(context.Context) (*ContactList, error)
+	predicates                  []predicate.ContactList
+}
+
+var _ ent.Mutation = (*ContactListMutation)(nil)
+
+// contactlistOption allows management of the mutation configuration using functional options.
+type contactlistOption func(*ContactListMutation)
+
+// newContactListMutation creates new mutation for the ContactList entity.
+func newContactListMutation(c config, op Op, opts ...contactlistOption) *ContactListMutation {
+	m := &ContactListMutation{
+		config:        c,
+		op:            op,
+		typ:           TypeContactList,
+		clearedFields: make(map[string]struct{}),
+	}
+	for _, opt := range opts {
+		opt(m)
+	}
+	return m
+}
+
+// withContactListID sets the ID field of the mutation.
+func withContactListID(id string) contactlistOption {
+	return func(m *ContactListMutation) {
+		var (
+			err   error
+			once  sync.Once
+			value *ContactList
+		)
+		m.oldValue = func(ctx context.Context) (*ContactList, error) {
+			once.Do(func() {
+				if m.done {
+					err = errors.New("querying old values post mutation is not allowed")
+				} else {
+					value, err = m.Client().ContactList.Get(ctx, id)
+				}
+			})
+			return value, err
+		}
+		m.id = &id
+	}
+}
+
+// withContactList sets the old ContactList of the mutation.
+func withContactList(node *ContactList) contactlistOption {
+	return func(m *ContactListMutation) {
+		m.oldValue = func(context.Context) (*ContactList, error) {
+			return node, nil
+		}
+		m.id = &node.ID
+	}
+}
+
+// Client returns a new `ent.Client` from the mutation. If the mutation was
+// executed in a transaction (ent.Tx), a transactional client is returned.
+func (m ContactListMutation) Client() *Client {
+	client := &Client{config: m.config}
+	client.init()
+	return client
+}
+
+// Tx returns an `ent.Tx` for mutations that were executed in transactions;
+// it returns an error otherwise.
+func (m ContactListMutation) Tx() (*Tx, error) {
+	if _, ok := m.driver.(*txDriver); !ok {
+		return nil, errors.New("generated: mutation is not running in a transaction")
+	}
+	tx := &Tx{config: m.config}
+	tx.init()
+	return tx, nil
+}
+
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of ContactList entities.
+func (m *ContactListMutation) SetID(id string) {
+	m.id = &id
+}
+
+// ID returns the ID value in the mutation. Note that the ID is only available
+// if it was provided to the builder or after it was returned from the database.
+func (m *ContactListMutation) ID() (id string, exists bool) {
+	if m.id == nil {
+		return
+	}
+	return *m.id, true
+}
+
+// IDs queries the database and returns the entity ids that match the mutation's predicate.
+// That means, if the mutation is applied within a transaction with an isolation level such
+// as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
+// or updated by the mutation.
+func (m *ContactListMutation) IDs(ctx context.Context) ([]string, error) {
+	switch {
+	case m.op.Is(OpUpdateOne | OpDeleteOne):
+		id, exists := m.ID()
+		if exists {
+			return []string{id}, nil
+		}
+		fallthrough
+	case m.op.Is(OpUpdate | OpDelete):
+		return m.Client().ContactList.Query().Where(m.predicates...).IDs(ctx)
+	default:
+		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
+	}
+}
+
+// SetCreatedAt sets the "created_at" field.
+func (m *ContactListMutation) SetCreatedAt(t time.Time) {
+	m.created_at = &t
+}
+
+// CreatedAt returns the value of the "created_at" field in the mutation.
+func (m *ContactListMutation) CreatedAt() (r time.Time, exists bool) {
+	v := m.created_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedAt returns the old "created_at" field's value of the ContactList entity.
+// If the ContactList object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ContactListMutation) OldCreatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedAt: %w", err)
+	}
+	return oldValue.CreatedAt, nil
+}
+
+// ClearCreatedAt clears the value of the "created_at" field.
+func (m *ContactListMutation) ClearCreatedAt() {
+	m.created_at = nil
+	m.clearedFields[contactlist.FieldCreatedAt] = struct{}{}
+}
+
+// CreatedAtCleared returns if the "created_at" field was cleared in this mutation.
+func (m *ContactListMutation) CreatedAtCleared() bool {
+	_, ok := m.clearedFields[contactlist.FieldCreatedAt]
+	return ok
+}
+
+// ResetCreatedAt resets all changes to the "created_at" field.
+func (m *ContactListMutation) ResetCreatedAt() {
+	m.created_at = nil
+	delete(m.clearedFields, contactlist.FieldCreatedAt)
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (m *ContactListMutation) SetUpdatedAt(t time.Time) {
+	m.updated_at = &t
+}
+
+// UpdatedAt returns the value of the "updated_at" field in the mutation.
+func (m *ContactListMutation) UpdatedAt() (r time.Time, exists bool) {
+	v := m.updated_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedAt returns the old "updated_at" field's value of the ContactList entity.
+// If the ContactList object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ContactListMutation) OldUpdatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedAt: %w", err)
+	}
+	return oldValue.UpdatedAt, nil
+}
+
+// ClearUpdatedAt clears the value of the "updated_at" field.
+func (m *ContactListMutation) ClearUpdatedAt() {
+	m.updated_at = nil
+	m.clearedFields[contactlist.FieldUpdatedAt] = struct{}{}
+}
+
+// UpdatedAtCleared returns if the "updated_at" field was cleared in this mutation.
+func (m *ContactListMutation) UpdatedAtCleared() bool {
+	_, ok := m.clearedFields[contactlist.FieldUpdatedAt]
+	return ok
+}
+
+// ResetUpdatedAt resets all changes to the "updated_at" field.
+func (m *ContactListMutation) ResetUpdatedAt() {
+	m.updated_at = nil
+	delete(m.clearedFields, contactlist.FieldUpdatedAt)
+}
+
+// SetCreatedBy sets the "created_by" field.
+func (m *ContactListMutation) SetCreatedBy(s string) {
+	m.created_by = &s
+}
+
+// CreatedBy returns the value of the "created_by" field in the mutation.
+func (m *ContactListMutation) CreatedBy() (r string, exists bool) {
+	v := m.created_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedBy returns the old "created_by" field's value of the ContactList entity.
+// If the ContactList object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ContactListMutation) OldCreatedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedBy: %w", err)
+	}
+	return oldValue.CreatedBy, nil
+}
+
+// ClearCreatedBy clears the value of the "created_by" field.
+func (m *ContactListMutation) ClearCreatedBy() {
+	m.created_by = nil
+	m.clearedFields[contactlist.FieldCreatedBy] = struct{}{}
+}
+
+// CreatedByCleared returns if the "created_by" field was cleared in this mutation.
+func (m *ContactListMutation) CreatedByCleared() bool {
+	_, ok := m.clearedFields[contactlist.FieldCreatedBy]
+	return ok
+}
+
+// ResetCreatedBy resets all changes to the "created_by" field.
+func (m *ContactListMutation) ResetCreatedBy() {
+	m.created_by = nil
+	delete(m.clearedFields, contactlist.FieldCreatedBy)
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (m *ContactListMutation) SetUpdatedBy(s string) {
+	m.updated_by = &s
+}
+
+// UpdatedBy returns the value of the "updated_by" field in the mutation.
+func (m *ContactListMutation) UpdatedBy() (r string, exists bool) {
+	v := m.updated_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedBy returns the old "updated_by" field's value of the ContactList entity.
+// If the ContactList object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ContactListMutation) OldUpdatedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedBy: %w", err)
+	}
+	return oldValue.UpdatedBy, nil
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (m *ContactListMutation) ClearUpdatedBy() {
+	m.updated_by = nil
+	m.clearedFields[contactlist.FieldUpdatedBy] = struct{}{}
+}
+
+// UpdatedByCleared returns if the "updated_by" field was cleared in this mutation.
+func (m *ContactListMutation) UpdatedByCleared() bool {
+	_, ok := m.clearedFields[contactlist.FieldUpdatedBy]
+	return ok
+}
+
+// ResetUpdatedBy resets all changes to the "updated_by" field.
+func (m *ContactListMutation) ResetUpdatedBy() {
+	m.updated_by = nil
+	delete(m.clearedFields, contactlist.FieldUpdatedBy)
+}
+
+// SetDeletedAt sets the "deleted_at" field.
+func (m *ContactListMutation) SetDeletedAt(t time.Time) {
+	m.deleted_at = &t
+}
+
+// DeletedAt returns the value of the "deleted_at" field in the mutation.
+func (m *ContactListMutation) DeletedAt() (r time.Time, exists bool) {
+	v := m.deleted_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDeletedAt returns the old "deleted_at" field's value of the ContactList entity.
+// If the ContactList object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ContactListMutation) OldDeletedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDeletedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDeletedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDeletedAt: %w", err)
+	}
+	return oldValue.DeletedAt, nil
+}
+
+// ClearDeletedAt clears the value of the "deleted_at" field.
+func (m *ContactListMutation) ClearDeletedAt() {
+	m.deleted_at = nil
+	m.clearedFields[contactlist.FieldDeletedAt] = struct{}{}
+}
+
+// DeletedAtCleared returns if the "deleted_at" field was cleared in this mutation.
+func (m *ContactListMutation) DeletedAtCleared() bool {
+	_, ok := m.clearedFields[contactlist.FieldDeletedAt]
+	return ok
+}
+
+// ResetDeletedAt resets all changes to the "deleted_at" field.
+func (m *ContactListMutation) ResetDeletedAt() {
+	m.deleted_at = nil
+	delete(m.clearedFields, contactlist.FieldDeletedAt)
+}
+
+// SetDeletedBy sets the "deleted_by" field.
+func (m *ContactListMutation) SetDeletedBy(s string) {
+	m.deleted_by = &s
+}
+
+// DeletedBy returns the value of the "deleted_by" field in the mutation.
+func (m *ContactListMutation) DeletedBy() (r string, exists bool) {
+	v := m.deleted_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDeletedBy returns the old "deleted_by" field's value of the ContactList entity.
+// If the ContactList object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ContactListMutation) OldDeletedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDeletedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDeletedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDeletedBy: %w", err)
+	}
+	return oldValue.DeletedBy, nil
+}
+
+// ClearDeletedBy clears the value of the "deleted_by" field.
+func (m *ContactListMutation) ClearDeletedBy() {
+	m.deleted_by = nil
+	m.clearedFields[contactlist.FieldDeletedBy] = struct{}{}
+}
+
+// DeletedByCleared returns if the "deleted_by" field was cleared in this mutation.
+func (m *ContactListMutation) DeletedByCleared() bool {
+	_, ok := m.clearedFields[contactlist.FieldDeletedBy]
+	return ok
+}
+
+// ResetDeletedBy resets all changes to the "deleted_by" field.
+func (m *ContactListMutation) ResetDeletedBy() {
+	m.deleted_by = nil
+	delete(m.clearedFields, contactlist.FieldDeletedBy)
+}
+
+// SetMappingID sets the "mapping_id" field.
+func (m *ContactListMutation) SetMappingID(s string) {
+	m.mapping_id = &s
+}
+
+// MappingID returns the value of the "mapping_id" field in the mutation.
+func (m *ContactListMutation) MappingID() (r string, exists bool) {
+	v := m.mapping_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldMappingID returns the old "mapping_id" field's value of the ContactList entity.
+// If the ContactList object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ContactListMutation) OldMappingID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldMappingID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldMappingID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldMappingID: %w", err)
+	}
+	return oldValue.MappingID, nil
+}
+
+// ResetMappingID resets all changes to the "mapping_id" field.
+func (m *ContactListMutation) ResetMappingID() {
+	m.mapping_id = nil
+}
+
+// SetTags sets the "tags" field.
+func (m *ContactListMutation) SetTags(s []string) {
+	m.tags = &s
+	m.appendtags = nil
+}
+
+// Tags returns the value of the "tags" field in the mutation.
+func (m *ContactListMutation) Tags() (r []string, exists bool) {
+	v := m.tags
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldTags returns the old "tags" field's value of the ContactList entity.
+// If the ContactList object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ContactListMutation) OldTags(ctx context.Context) (v []string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldTags is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldTags requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldTags: %w", err)
+	}
+	return oldValue.Tags, nil
+}
+
+// AppendTags adds s to the "tags" field.
+func (m *ContactListMutation) AppendTags(s []string) {
+	m.appendtags = append(m.appendtags, s...)
+}
+
+// AppendedTags returns the list of values that were appended to the "tags" field in this mutation.
+func (m *ContactListMutation) AppendedTags() ([]string, bool) {
+	if len(m.appendtags) == 0 {
+		return nil, false
+	}
+	return m.appendtags, true
+}
+
+// ClearTags clears the value of the "tags" field.
+func (m *ContactListMutation) ClearTags() {
+	m.tags = nil
+	m.appendtags = nil
+	m.clearedFields[contactlist.FieldTags] = struct{}{}
+}
+
+// TagsCleared returns if the "tags" field was cleared in this mutation.
+func (m *ContactListMutation) TagsCleared() bool {
+	_, ok := m.clearedFields[contactlist.FieldTags]
+	return ok
+}
+
+// ResetTags resets all changes to the "tags" field.
+func (m *ContactListMutation) ResetTags() {
+	m.tags = nil
+	m.appendtags = nil
+	delete(m.clearedFields, contactlist.FieldTags)
+}
+
+// SetOwnerID sets the "owner_id" field.
+func (m *ContactListMutation) SetOwnerID(s string) {
+	m.owner = &s
+}
+
+// OwnerID returns the value of the "owner_id" field in the mutation.
+func (m *ContactListMutation) OwnerID() (r string, exists bool) {
+	v := m.owner
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldOwnerID returns the old "owner_id" field's value of the ContactList entity.
+// If the ContactList object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ContactListMutation) OldOwnerID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldOwnerID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldOwnerID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldOwnerID: %w", err)
+	}
+	return oldValue.OwnerID, nil
+}
+
+// ClearOwnerID clears the value of the "owner_id" field.
+func (m *ContactListMutation) ClearOwnerID() {
+	m.owner = nil
+	m.clearedFields[contactlist.FieldOwnerID] = struct{}{}
+}
+
+// OwnerIDCleared returns if the "owner_id" field was cleared in this mutation.
+func (m *ContactListMutation) OwnerIDCleared() bool {
+	_, ok := m.clearedFields[contactlist.FieldOwnerID]
+	return ok
+}
+
+// ResetOwnerID resets all changes to the "owner_id" field.
+func (m *ContactListMutation) ResetOwnerID() {
+	m.owner = nil
+	delete(m.clearedFields, contactlist.FieldOwnerID)
+}
+
+// SetName sets the "name" field.
+func (m *ContactListMutation) SetName(s string) {
+	m.name = &s
+}
+
+// Name returns the value of the "name" field in the mutation.
+func (m *ContactListMutation) Name() (r string, exists bool) {
+	v := m.name
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldName returns the old "name" field's value of the ContactList entity.
+// If the ContactList object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ContactListMutation) OldName(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldName is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldName requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldName: %w", err)
+	}
+	return oldValue.Name, nil
+}
+
+// ResetName resets all changes to the "name" field.
+func (m *ContactListMutation) ResetName() {
+	m.name = nil
+}
+
+// SetVisibility sets the "visibility" field.
+func (m *ContactListMutation) SetVisibility(s string) {
+	m.visibility = &s
+}
+
+// Visibility returns the value of the "visibility" field in the mutation.
+func (m *ContactListMutation) Visibility() (r string, exists bool) {
+	v := m.visibility
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldVisibility returns the old "visibility" field's value of the ContactList entity.
+// If the ContactList object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ContactListMutation) OldVisibility(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldVisibility is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldVisibility requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldVisibility: %w", err)
+	}
+	return oldValue.Visibility, nil
+}
+
+// ResetVisibility resets all changes to the "visibility" field.
+func (m *ContactListMutation) ResetVisibility() {
+	m.visibility = nil
+}
+
+// SetDisplayName sets the "display_name" field.
+func (m *ContactListMutation) SetDisplayName(s string) {
+	m.display_name = &s
+}
+
+// DisplayName returns the value of the "display_name" field in the mutation.
+func (m *ContactListMutation) DisplayName() (r string, exists bool) {
+	v := m.display_name
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDisplayName returns the old "display_name" field's value of the ContactList entity.
+// If the ContactList object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ContactListMutation) OldDisplayName(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDisplayName is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDisplayName requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDisplayName: %w", err)
+	}
+	return oldValue.DisplayName, nil
+}
+
+// ResetDisplayName resets all changes to the "display_name" field.
+func (m *ContactListMutation) ResetDisplayName() {
+	m.display_name = nil
+}
+
+// SetDescription sets the "description" field.
+func (m *ContactListMutation) SetDescription(s string) {
+	m.description = &s
+}
+
+// Description returns the value of the "description" field in the mutation.
+func (m *ContactListMutation) Description() (r string, exists bool) {
+	v := m.description
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDescription returns the old "description" field's value of the ContactList entity.
+// If the ContactList object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ContactListMutation) OldDescription(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDescription is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDescription requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDescription: %w", err)
+	}
+	return oldValue.Description, nil
+}
+
+// ClearDescription clears the value of the "description" field.
+func (m *ContactListMutation) ClearDescription() {
+	m.description = nil
+	m.clearedFields[contactlist.FieldDescription] = struct{}{}
+}
+
+// DescriptionCleared returns if the "description" field was cleared in this mutation.
+func (m *ContactListMutation) DescriptionCleared() bool {
+	_, ok := m.clearedFields[contactlist.FieldDescription]
+	return ok
+}
+
+// ResetDescription resets all changes to the "description" field.
+func (m *ContactListMutation) ResetDescription() {
+	m.description = nil
+	delete(m.clearedFields, contactlist.FieldDescription)
+}
+
+// ClearOwner clears the "owner" edge to the Organization entity.
+func (m *ContactListMutation) ClearOwner() {
+	m.clearedowner = true
+	m.clearedFields[contactlist.FieldOwnerID] = struct{}{}
+}
+
+// OwnerCleared reports if the "owner" edge to the Organization entity was cleared.
+func (m *ContactListMutation) OwnerCleared() bool {
+	return m.OwnerIDCleared() || m.clearedowner
+}
+
+// OwnerIDs returns the "owner" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// OwnerID instead. It exists only for internal usage by the builders.
+func (m *ContactListMutation) OwnerIDs() (ids []string) {
+	if id := m.owner; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetOwner resets all changes to the "owner" edge.
+func (m *ContactListMutation) ResetOwner() {
+	m.owner = nil
+	m.clearedowner = false
+}
+
+// AddContactIDs adds the "contacts" edge to the Contact entity by ids.
+func (m *ContactListMutation) AddContactIDs(ids ...string) {
+	if m.contacts == nil {
+		m.contacts = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.contacts[ids[i]] = struct{}{}
+	}
+}
+
+// ClearContacts clears the "contacts" edge to the Contact entity.
+func (m *ContactListMutation) ClearContacts() {
+	m.clearedcontacts = true
+}
+
+// ContactsCleared reports if the "contacts" edge to the Contact entity was cleared.
+func (m *ContactListMutation) ContactsCleared() bool {
+	return m.clearedcontacts
+}
+
+// RemoveContactIDs removes the "contacts" edge to the Contact entity by IDs.
+func (m *ContactListMutation) RemoveContactIDs(ids ...string) {
+	if m.removedcontacts == nil {
+		m.removedcontacts = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.contacts, ids[i])
+		m.removedcontacts[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedContacts returns the removed IDs of the "contacts" edge to the Contact entity.
+func (m *ContactListMutation) RemovedContactsIDs() (ids []string) {
+	for id := range m.removedcontacts {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ContactsIDs returns the "contacts" edge IDs in the mutation.
+func (m *ContactListMutation) ContactsIDs() (ids []string) {
+	for id := range m.contacts {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetContacts resets all changes to the "contacts" edge.
+func (m *ContactListMutation) ResetContacts() {
+	m.contacts = nil
+	m.clearedcontacts = false
+	m.removedcontacts = nil
+}
+
+// AddEventIDs adds the "events" edge to the Event entity by ids.
+func (m *ContactListMutation) AddEventIDs(ids ...string) {
+	if m.events == nil {
+		m.events = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.events[ids[i]] = struct{}{}
+	}
+}
+
+// ClearEvents clears the "events" edge to the Event entity.
+func (m *ContactListMutation) ClearEvents() {
+	m.clearedevents = true
+}
+
+// EventsCleared reports if the "events" edge to the Event entity was cleared.
+func (m *ContactListMutation) EventsCleared() bool {
+	return m.clearedevents
+}
+
+// RemoveEventIDs removes the "events" edge to the Event entity by IDs.
+func (m *ContactListMutation) RemoveEventIDs(ids ...string) {
+	if m.removedevents == nil {
+		m.removedevents = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.events, ids[i])
+		m.removedevents[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedEvents returns the removed IDs of the "events" edge to the Event entity.
+func (m *ContactListMutation) RemovedEventsIDs() (ids []string) {
+	for id := range m.removedevents {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// EventsIDs returns the "events" edge IDs in the mutation.
+func (m *ContactListMutation) EventsIDs() (ids []string) {
+	for id := range m.events {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetEvents resets all changes to the "events" edge.
+func (m *ContactListMutation) ResetEvents() {
+	m.events = nil
+	m.clearedevents = false
+	m.removedevents = nil
+}
+
+// AddIntegrationIDs adds the "integrations" edge to the Integration entity by ids.
+func (m *ContactListMutation) AddIntegrationIDs(ids ...string) {
+	if m.integrations == nil {
+		m.integrations = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.integrations[ids[i]] = struct{}{}
+	}
+}
+
+// ClearIntegrations clears the "integrations" edge to the Integration entity.
+func (m *ContactListMutation) ClearIntegrations() {
+	m.clearedintegrations = true
+}
+
+// IntegrationsCleared reports if the "integrations" edge to the Integration entity was cleared.
+func (m *ContactListMutation) IntegrationsCleared() bool {
+	return m.clearedintegrations
+}
+
+// RemoveIntegrationIDs removes the "integrations" edge to the Integration entity by IDs.
+func (m *ContactListMutation) RemoveIntegrationIDs(ids ...string) {
+	if m.removedintegrations == nil {
+		m.removedintegrations = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.integrations, ids[i])
+		m.removedintegrations[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedIntegrations returns the removed IDs of the "integrations" edge to the Integration entity.
+func (m *ContactListMutation) RemovedIntegrationsIDs() (ids []string) {
+	for id := range m.removedintegrations {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// IntegrationsIDs returns the "integrations" edge IDs in the mutation.
+func (m *ContactListMutation) IntegrationsIDs() (ids []string) {
+	for id := range m.integrations {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetIntegrations resets all changes to the "integrations" edge.
+func (m *ContactListMutation) ResetIntegrations() {
+	m.integrations = nil
+	m.clearedintegrations = false
+	m.removedintegrations = nil
+}
+
+// AddContactListMemberIDs adds the "contact_list_members" edge to the ContactListMembership entity by ids.
+func (m *ContactListMutation) AddContactListMemberIDs(ids ...string) {
+	if m.contact_list_members == nil {
+		m.contact_list_members = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.contact_list_members[ids[i]] = struct{}{}
+	}
+}
+
+// ClearContactListMembers clears the "contact_list_members" edge to the ContactListMembership entity.
+func (m *ContactListMutation) ClearContactListMembers() {
+	m.clearedcontact_list_members = true
+}
+
+// ContactListMembersCleared reports if the "contact_list_members" edge to the ContactListMembership entity was cleared.
+func (m *ContactListMutation) ContactListMembersCleared() bool {
+	return m.clearedcontact_list_members
+}
+
+// RemoveContactListMemberIDs removes the "contact_list_members" edge to the ContactListMembership entity by IDs.
+func (m *ContactListMutation) RemoveContactListMemberIDs(ids ...string) {
+	if m.removedcontact_list_members == nil {
+		m.removedcontact_list_members = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.contact_list_members, ids[i])
+		m.removedcontact_list_members[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedContactListMembers returns the removed IDs of the "contact_list_members" edge to the ContactListMembership entity.
+func (m *ContactListMutation) RemovedContactListMembersIDs() (ids []string) {
+	for id := range m.removedcontact_list_members {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ContactListMembersIDs returns the "contact_list_members" edge IDs in the mutation.
+func (m *ContactListMutation) ContactListMembersIDs() (ids []string) {
+	for id := range m.contact_list_members {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetContactListMembers resets all changes to the "contact_list_members" edge.
+func (m *ContactListMutation) ResetContactListMembers() {
+	m.contact_list_members = nil
+	m.clearedcontact_list_members = false
+	m.removedcontact_list_members = nil
+}
+
+// Where appends a list predicates to the ContactListMutation builder.
+func (m *ContactListMutation) Where(ps ...predicate.ContactList) {
+	m.predicates = append(m.predicates, ps...)
+}
+
+// WhereP appends storage-level predicates to the ContactListMutation builder. Using this method,
+// users can use type-assertion to append predicates that do not depend on any generated package.
+func (m *ContactListMutation) WhereP(ps ...func(*sql.Selector)) {
+	p := make([]predicate.ContactList, len(ps))
+	for i := range ps {
+		p[i] = ps[i]
+	}
+	m.Where(p...)
+}
+
+// Op returns the operation name.
+func (m *ContactListMutation) Op() Op {
+	return m.op
+}
+
+// SetOp allows setting the mutation operation.
+func (m *ContactListMutation) SetOp(op Op) {
+	m.op = op
+}
+
+// Type returns the node type of this mutation (ContactList).
+func (m *ContactListMutation) Type() string {
+	return m.typ
+}
+
+// Fields returns all fields that were changed during this mutation. Note that in
+// order to get all numeric fields that were incremented/decremented, call
+// AddedFields().
+func (m *ContactListMutation) Fields() []string {
+	fields := make([]string, 0, 13)
+	if m.created_at != nil {
+		fields = append(fields, contactlist.FieldCreatedAt)
+	}
+	if m.updated_at != nil {
+		fields = append(fields, contactlist.FieldUpdatedAt)
+	}
+	if m.created_by != nil {
+		fields = append(fields, contactlist.FieldCreatedBy)
+	}
+	if m.updated_by != nil {
+		fields = append(fields, contactlist.FieldUpdatedBy)
+	}
+	if m.deleted_at != nil {
+		fields = append(fields, contactlist.FieldDeletedAt)
+	}
+	if m.deleted_by != nil {
+		fields = append(fields, contactlist.FieldDeletedBy)
+	}
+	if m.mapping_id != nil {
+		fields = append(fields, contactlist.FieldMappingID)
+	}
+	if m.tags != nil {
+		fields = append(fields, contactlist.FieldTags)
+	}
+	if m.owner != nil {
+		fields = append(fields, contactlist.FieldOwnerID)
+	}
+	if m.name != nil {
+		fields = append(fields, contactlist.FieldName)
+	}
+	if m.visibility != nil {
+		fields = append(fields, contactlist.FieldVisibility)
+	}
+	if m.display_name != nil {
+		fields = append(fields, contactlist.FieldDisplayName)
+	}
+	if m.description != nil {
+		fields = append(fields, contactlist.FieldDescription)
+	}
+	return fields
+}
+
+// Field returns the value of a field with the given name. The second boolean
+// return value indicates that this field was not set, or was not defined in the
+// schema.
+func (m *ContactListMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case contactlist.FieldCreatedAt:
+		return m.CreatedAt()
+	case contactlist.FieldUpdatedAt:
+		return m.UpdatedAt()
+	case contactlist.FieldCreatedBy:
+		return m.CreatedBy()
+	case contactlist.FieldUpdatedBy:
+		return m.UpdatedBy()
+	case contactlist.FieldDeletedAt:
+		return m.DeletedAt()
+	case contactlist.FieldDeletedBy:
+		return m.DeletedBy()
+	case contactlist.FieldMappingID:
+		return m.MappingID()
+	case contactlist.FieldTags:
+		return m.Tags()
+	case contactlist.FieldOwnerID:
+		return m.OwnerID()
+	case contactlist.FieldName:
+		return m.Name()
+	case contactlist.FieldVisibility:
+		return m.Visibility()
+	case contactlist.FieldDisplayName:
+		return m.DisplayName()
+	case contactlist.FieldDescription:
+		return m.Description()
+	}
+	return nil, false
+}
+
+// OldField returns the old value of the field from the database. An error is
+// returned if the mutation operation is not UpdateOne, or the query to the
+// database failed.
+func (m *ContactListMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case contactlist.FieldCreatedAt:
+		return m.OldCreatedAt(ctx)
+	case contactlist.FieldUpdatedAt:
+		return m.OldUpdatedAt(ctx)
+	case contactlist.FieldCreatedBy:
+		return m.OldCreatedBy(ctx)
+	case contactlist.FieldUpdatedBy:
+		return m.OldUpdatedBy(ctx)
+	case contactlist.FieldDeletedAt:
+		return m.OldDeletedAt(ctx)
+	case contactlist.FieldDeletedBy:
+		return m.OldDeletedBy(ctx)
+	case contactlist.FieldMappingID:
+		return m.OldMappingID(ctx)
+	case contactlist.FieldTags:
+		return m.OldTags(ctx)
+	case contactlist.FieldOwnerID:
+		return m.OldOwnerID(ctx)
+	case contactlist.FieldName:
+		return m.OldName(ctx)
+	case contactlist.FieldVisibility:
+		return m.OldVisibility(ctx)
+	case contactlist.FieldDisplayName:
+		return m.OldDisplayName(ctx)
+	case contactlist.FieldDescription:
+		return m.OldDescription(ctx)
+	}
+	return nil, fmt.Errorf("unknown ContactList field %s", name)
+}
+
+// SetField sets the value of a field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *ContactListMutation) SetField(name string, value ent.Value) error {
+	switch name {
+	case contactlist.FieldCreatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedAt(v)
+		return nil
+	case contactlist.FieldUpdatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedAt(v)
+		return nil
+	case contactlist.FieldCreatedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedBy(v)
+		return nil
+	case contactlist.FieldUpdatedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedBy(v)
+		return nil
+	case contactlist.FieldDeletedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDeletedAt(v)
+		return nil
+	case contactlist.FieldDeletedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDeletedBy(v)
+		return nil
+	case contactlist.FieldMappingID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetMappingID(v)
+		return nil
+	case contactlist.FieldTags:
+		v, ok := value.([]string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetTags(v)
+		return nil
+	case contactlist.FieldOwnerID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetOwnerID(v)
+		return nil
+	case contactlist.FieldName:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetName(v)
+		return nil
+	case contactlist.FieldVisibility:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetVisibility(v)
+		return nil
+	case contactlist.FieldDisplayName:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDisplayName(v)
+		return nil
+	case contactlist.FieldDescription:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDescription(v)
+		return nil
+	}
+	return fmt.Errorf("unknown ContactList field %s", name)
+}
+
+// AddedFields returns all numeric fields that were incremented/decremented during
+// this mutation.
+func (m *ContactListMutation) AddedFields() []string {
+	return nil
+}
+
+// AddedField returns the numeric value that was incremented/decremented on a field
+// with the given name. The second boolean return value indicates that this field
+// was not set, or was not defined in the schema.
+func (m *ContactListMutation) AddedField(name string) (ent.Value, bool) {
+	return nil, false
+}
+
+// AddField adds the value to the field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *ContactListMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	}
+	return fmt.Errorf("unknown ContactList numeric field %s", name)
+}
+
+// ClearedFields returns all nullable fields that were cleared during this
+// mutation.
+func (m *ContactListMutation) ClearedFields() []string {
+	var fields []string
+	if m.FieldCleared(contactlist.FieldCreatedAt) {
+		fields = append(fields, contactlist.FieldCreatedAt)
+	}
+	if m.FieldCleared(contactlist.FieldUpdatedAt) {
+		fields = append(fields, contactlist.FieldUpdatedAt)
+	}
+	if m.FieldCleared(contactlist.FieldCreatedBy) {
+		fields = append(fields, contactlist.FieldCreatedBy)
+	}
+	if m.FieldCleared(contactlist.FieldUpdatedBy) {
+		fields = append(fields, contactlist.FieldUpdatedBy)
+	}
+	if m.FieldCleared(contactlist.FieldDeletedAt) {
+		fields = append(fields, contactlist.FieldDeletedAt)
+	}
+	if m.FieldCleared(contactlist.FieldDeletedBy) {
+		fields = append(fields, contactlist.FieldDeletedBy)
+	}
+	if m.FieldCleared(contactlist.FieldTags) {
+		fields = append(fields, contactlist.FieldTags)
+	}
+	if m.FieldCleared(contactlist.FieldOwnerID) {
+		fields = append(fields, contactlist.FieldOwnerID)
+	}
+	if m.FieldCleared(contactlist.FieldDescription) {
+		fields = append(fields, contactlist.FieldDescription)
+	}
+	return fields
+}
+
+// FieldCleared returns a boolean indicating if a field with the given name was
+// cleared in this mutation.
+func (m *ContactListMutation) FieldCleared(name string) bool {
+	_, ok := m.clearedFields[name]
+	return ok
+}
+
+// ClearField clears the value of the field with the given name. It returns an
+// error if the field is not defined in the schema.
+func (m *ContactListMutation) ClearField(name string) error {
+	switch name {
+	case contactlist.FieldCreatedAt:
+		m.ClearCreatedAt()
+		return nil
+	case contactlist.FieldUpdatedAt:
+		m.ClearUpdatedAt()
+		return nil
+	case contactlist.FieldCreatedBy:
+		m.ClearCreatedBy()
+		return nil
+	case contactlist.FieldUpdatedBy:
+		m.ClearUpdatedBy()
+		return nil
+	case contactlist.FieldDeletedAt:
+		m.ClearDeletedAt()
+		return nil
+	case contactlist.FieldDeletedBy:
+		m.ClearDeletedBy()
+		return nil
+	case contactlist.FieldTags:
+		m.ClearTags()
+		return nil
+	case contactlist.FieldOwnerID:
+		m.ClearOwnerID()
+		return nil
+	case contactlist.FieldDescription:
+		m.ClearDescription()
+		return nil
+	}
+	return fmt.Errorf("unknown ContactList nullable field %s", name)
+}
+
+// ResetField resets all changes in the mutation for the field with the given name.
+// It returns an error if the field is not defined in the schema.
+func (m *ContactListMutation) ResetField(name string) error {
+	switch name {
+	case contactlist.FieldCreatedAt:
+		m.ResetCreatedAt()
+		return nil
+	case contactlist.FieldUpdatedAt:
+		m.ResetUpdatedAt()
+		return nil
+	case contactlist.FieldCreatedBy:
+		m.ResetCreatedBy()
+		return nil
+	case contactlist.FieldUpdatedBy:
+		m.ResetUpdatedBy()
+		return nil
+	case contactlist.FieldDeletedAt:
+		m.ResetDeletedAt()
+		return nil
+	case contactlist.FieldDeletedBy:
+		m.ResetDeletedBy()
+		return nil
+	case contactlist.FieldMappingID:
+		m.ResetMappingID()
+		return nil
+	case contactlist.FieldTags:
+		m.ResetTags()
+		return nil
+	case contactlist.FieldOwnerID:
+		m.ResetOwnerID()
+		return nil
+	case contactlist.FieldName:
+		m.ResetName()
+		return nil
+	case contactlist.FieldVisibility:
+		m.ResetVisibility()
+		return nil
+	case contactlist.FieldDisplayName:
+		m.ResetDisplayName()
+		return nil
+	case contactlist.FieldDescription:
+		m.ResetDescription()
+		return nil
+	}
+	return fmt.Errorf("unknown ContactList field %s", name)
+}
+
+// AddedEdges returns all edge names that were set/added in this mutation.
+func (m *ContactListMutation) AddedEdges() []string {
+	edges := make([]string, 0, 5)
+	if m.owner != nil {
+		edges = append(edges, contactlist.EdgeOwner)
+	}
+	if m.contacts != nil {
+		edges = append(edges, contactlist.EdgeContacts)
+	}
+	if m.events != nil {
+		edges = append(edges, contactlist.EdgeEvents)
+	}
+	if m.integrations != nil {
+		edges = append(edges, contactlist.EdgeIntegrations)
+	}
+	if m.contact_list_members != nil {
+		edges = append(edges, contactlist.EdgeContactListMembers)
+	}
+	return edges
+}
+
+// AddedIDs returns all IDs (to other nodes) that were added for the given edge
+// name in this mutation.
+func (m *ContactListMutation) AddedIDs(name string) []ent.Value {
+	switch name {
+	case contactlist.EdgeOwner:
+		if id := m.owner; id != nil {
+			return []ent.Value{*id}
+		}
+	case contactlist.EdgeContacts:
+		ids := make([]ent.Value, 0, len(m.contacts))
+		for id := range m.contacts {
+			ids = append(ids, id)
+		}
+		return ids
+	case contactlist.EdgeEvents:
+		ids := make([]ent.Value, 0, len(m.events))
+		for id := range m.events {
+			ids = append(ids, id)
+		}
+		return ids
+	case contactlist.EdgeIntegrations:
+		ids := make([]ent.Value, 0, len(m.integrations))
+		for id := range m.integrations {
+			ids = append(ids, id)
+		}
+		return ids
+	case contactlist.EdgeContactListMembers:
+		ids := make([]ent.Value, 0, len(m.contact_list_members))
+		for id := range m.contact_list_members {
+			ids = append(ids, id)
+		}
+		return ids
+	}
+	return nil
+}
+
+// RemovedEdges returns all edge names that were removed in this mutation.
+func (m *ContactListMutation) RemovedEdges() []string {
+	edges := make([]string, 0, 5)
+	if m.removedcontacts != nil {
+		edges = append(edges, contactlist.EdgeContacts)
+	}
+	if m.removedevents != nil {
+		edges = append(edges, contactlist.EdgeEvents)
+	}
+	if m.removedintegrations != nil {
+		edges = append(edges, contactlist.EdgeIntegrations)
+	}
+	if m.removedcontact_list_members != nil {
+		edges = append(edges, contactlist.EdgeContactListMembers)
+	}
+	return edges
+}
+
+// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
+// the given name in this mutation.
+func (m *ContactListMutation) RemovedIDs(name string) []ent.Value {
+	switch name {
+	case contactlist.EdgeContacts:
+		ids := make([]ent.Value, 0, len(m.removedcontacts))
+		for id := range m.removedcontacts {
+			ids = append(ids, id)
+		}
+		return ids
+	case contactlist.EdgeEvents:
+		ids := make([]ent.Value, 0, len(m.removedevents))
+		for id := range m.removedevents {
+			ids = append(ids, id)
+		}
+		return ids
+	case contactlist.EdgeIntegrations:
+		ids := make([]ent.Value, 0, len(m.removedintegrations))
+		for id := range m.removedintegrations {
+			ids = append(ids, id)
+		}
+		return ids
+	case contactlist.EdgeContactListMembers:
+		ids := make([]ent.Value, 0, len(m.removedcontact_list_members))
+		for id := range m.removedcontact_list_members {
+			ids = append(ids, id)
+		}
+		return ids
+	}
+	return nil
+}
+
+// ClearedEdges returns all edge names that were cleared in this mutation.
+func (m *ContactListMutation) ClearedEdges() []string {
+	edges := make([]string, 0, 5)
+	if m.clearedowner {
+		edges = append(edges, contactlist.EdgeOwner)
+	}
+	if m.clearedcontacts {
+		edges = append(edges, contactlist.EdgeContacts)
+	}
+	if m.clearedevents {
+		edges = append(edges, contactlist.EdgeEvents)
+	}
+	if m.clearedintegrations {
+		edges = append(edges, contactlist.EdgeIntegrations)
+	}
+	if m.clearedcontact_list_members {
+		edges = append(edges, contactlist.EdgeContactListMembers)
+	}
+	return edges
+}
+
+// EdgeCleared returns a boolean which indicates if the edge with the given name
+// was cleared in this mutation.
+func (m *ContactListMutation) EdgeCleared(name string) bool {
+	switch name {
+	case contactlist.EdgeOwner:
+		return m.clearedowner
+	case contactlist.EdgeContacts:
+		return m.clearedcontacts
+	case contactlist.EdgeEvents:
+		return m.clearedevents
+	case contactlist.EdgeIntegrations:
+		return m.clearedintegrations
+	case contactlist.EdgeContactListMembers:
+		return m.clearedcontact_list_members
+	}
+	return false
+}
+
+// ClearEdge clears the value of the edge with the given name. It returns an error
+// if that edge is not defined in the schema.
+func (m *ContactListMutation) ClearEdge(name string) error {
+	switch name {
+	case contactlist.EdgeOwner:
+		m.ClearOwner()
+		return nil
+	}
+	return fmt.Errorf("unknown ContactList unique edge %s", name)
+}
+
+// ResetEdge resets all changes to the edge with the given name in this mutation.
+// It returns an error if the edge is not defined in the schema.
+func (m *ContactListMutation) ResetEdge(name string) error {
+	switch name {
+	case contactlist.EdgeOwner:
+		m.ResetOwner()
+		return nil
+	case contactlist.EdgeContacts:
+		m.ResetContacts()
+		return nil
+	case contactlist.EdgeEvents:
+		m.ResetEvents()
+		return nil
+	case contactlist.EdgeIntegrations:
+		m.ResetIntegrations()
+		return nil
+	case contactlist.EdgeContactListMembers:
+		m.ResetContactListMembers()
+		return nil
+	}
+	return fmt.Errorf("unknown ContactList edge %s", name)
+}
+
+// ContactListHistoryMutation represents an operation that mutates the ContactListHistory nodes in the graph.
+type ContactListHistoryMutation struct {
+	config
+	op            Op
+	typ           string
+	id            *string
+	history_time  *time.Time
+	ref           *string
+	operation     *enthistory.OpType
+	created_at    *time.Time
+	updated_at    *time.Time
+	created_by    *string
+	updated_by    *string
+	deleted_at    *time.Time
+	deleted_by    *string
+	mapping_id    *string
+	tags          *[]string
+	appendtags    []string
+	owner_id      *string
+	name          *string
+	visibility    *string
+	display_name  *string
+	description   *string
+	clearedFields map[string]struct{}
+	done          bool
+	oldValue      func(context.Context) (*ContactListHistory, error)
+	predicates    []predicate.ContactListHistory
+}
+
+var _ ent.Mutation = (*ContactListHistoryMutation)(nil)
+
+// contactlisthistoryOption allows management of the mutation configuration using functional options.
+type contactlisthistoryOption func(*ContactListHistoryMutation)
+
+// newContactListHistoryMutation creates new mutation for the ContactListHistory entity.
+func newContactListHistoryMutation(c config, op Op, opts ...contactlisthistoryOption) *ContactListHistoryMutation {
+	m := &ContactListHistoryMutation{
+		config:        c,
+		op:            op,
+		typ:           TypeContactListHistory,
+		clearedFields: make(map[string]struct{}),
+	}
+	for _, opt := range opts {
+		opt(m)
+	}
+	return m
+}
+
+// withContactListHistoryID sets the ID field of the mutation.
+func withContactListHistoryID(id string) contactlisthistoryOption {
+	return func(m *ContactListHistoryMutation) {
+		var (
+			err   error
+			once  sync.Once
+			value *ContactListHistory
+		)
+		m.oldValue = func(ctx context.Context) (*ContactListHistory, error) {
+			once.Do(func() {
+				if m.done {
+					err = errors.New("querying old values post mutation is not allowed")
+				} else {
+					value, err = m.Client().ContactListHistory.Get(ctx, id)
+				}
+			})
+			return value, err
+		}
+		m.id = &id
+	}
+}
+
+// withContactListHistory sets the old ContactListHistory of the mutation.
+func withContactListHistory(node *ContactListHistory) contactlisthistoryOption {
+	return func(m *ContactListHistoryMutation) {
+		m.oldValue = func(context.Context) (*ContactListHistory, error) {
+			return node, nil
+		}
+		m.id = &node.ID
+	}
+}
+
+// Client returns a new `ent.Client` from the mutation. If the mutation was
+// executed in a transaction (ent.Tx), a transactional client is returned.
+func (m ContactListHistoryMutation) Client() *Client {
+	client := &Client{config: m.config}
+	client.init()
+	return client
+}
+
+// Tx returns an `ent.Tx` for mutations that were executed in transactions;
+// it returns an error otherwise.
+func (m ContactListHistoryMutation) Tx() (*Tx, error) {
+	if _, ok := m.driver.(*txDriver); !ok {
+		return nil, errors.New("generated: mutation is not running in a transaction")
+	}
+	tx := &Tx{config: m.config}
+	tx.init()
+	return tx, nil
+}
+
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of ContactListHistory entities.
+func (m *ContactListHistoryMutation) SetID(id string) {
+	m.id = &id
+}
+
+// ID returns the ID value in the mutation. Note that the ID is only available
+// if it was provided to the builder or after it was returned from the database.
+func (m *ContactListHistoryMutation) ID() (id string, exists bool) {
+	if m.id == nil {
+		return
+	}
+	return *m.id, true
+}
+
+// IDs queries the database and returns the entity ids that match the mutation's predicate.
+// That means, if the mutation is applied within a transaction with an isolation level such
+// as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
+// or updated by the mutation.
+func (m *ContactListHistoryMutation) IDs(ctx context.Context) ([]string, error) {
+	switch {
+	case m.op.Is(OpUpdateOne | OpDeleteOne):
+		id, exists := m.ID()
+		if exists {
+			return []string{id}, nil
+		}
+		fallthrough
+	case m.op.Is(OpUpdate | OpDelete):
+		return m.Client().ContactListHistory.Query().Where(m.predicates...).IDs(ctx)
+	default:
+		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
+	}
+}
+
+// SetHistoryTime sets the "history_time" field.
+func (m *ContactListHistoryMutation) SetHistoryTime(t time.Time) {
+	m.history_time = &t
+}
+
+// HistoryTime returns the value of the "history_time" field in the mutation.
+func (m *ContactListHistoryMutation) HistoryTime() (r time.Time, exists bool) {
+	v := m.history_time
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldHistoryTime returns the old "history_time" field's value of the ContactListHistory entity.
+// If the ContactListHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ContactListHistoryMutation) OldHistoryTime(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldHistoryTime is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldHistoryTime requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldHistoryTime: %w", err)
+	}
+	return oldValue.HistoryTime, nil
+}
+
+// ResetHistoryTime resets all changes to the "history_time" field.
+func (m *ContactListHistoryMutation) ResetHistoryTime() {
+	m.history_time = nil
+}
+
+// SetRef sets the "ref" field.
+func (m *ContactListHistoryMutation) SetRef(s string) {
+	m.ref = &s
+}
+
+// Ref returns the value of the "ref" field in the mutation.
+func (m *ContactListHistoryMutation) Ref() (r string, exists bool) {
+	v := m.ref
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldRef returns the old "ref" field's value of the ContactListHistory entity.
+// If the ContactListHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ContactListHistoryMutation) OldRef(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldRef is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldRef requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldRef: %w", err)
+	}
+	return oldValue.Ref, nil
+}
+
+// ClearRef clears the value of the "ref" field.
+func (m *ContactListHistoryMutation) ClearRef() {
+	m.ref = nil
+	m.clearedFields[contactlisthistory.FieldRef] = struct{}{}
+}
+
+// RefCleared returns if the "ref" field was cleared in this mutation.
+func (m *ContactListHistoryMutation) RefCleared() bool {
+	_, ok := m.clearedFields[contactlisthistory.FieldRef]
+	return ok
+}
+
+// ResetRef resets all changes to the "ref" field.
+func (m *ContactListHistoryMutation) ResetRef() {
+	m.ref = nil
+	delete(m.clearedFields, contactlisthistory.FieldRef)
+}
+
+// SetOperation sets the "operation" field.
+func (m *ContactListHistoryMutation) SetOperation(et enthistory.OpType) {
+	m.operation = &et
+}
+
+// Operation returns the value of the "operation" field in the mutation.
+func (m *ContactListHistoryMutation) Operation() (r enthistory.OpType, exists bool) {
+	v := m.operation
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldOperation returns the old "operation" field's value of the ContactListHistory entity.
+// If the ContactListHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ContactListHistoryMutation) OldOperation(ctx context.Context) (v enthistory.OpType, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldOperation is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldOperation requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldOperation: %w", err)
+	}
+	return oldValue.Operation, nil
+}
+
+// ResetOperation resets all changes to the "operation" field.
+func (m *ContactListHistoryMutation) ResetOperation() {
+	m.operation = nil
+}
+
+// SetCreatedAt sets the "created_at" field.
+func (m *ContactListHistoryMutation) SetCreatedAt(t time.Time) {
+	m.created_at = &t
+}
+
+// CreatedAt returns the value of the "created_at" field in the mutation.
+func (m *ContactListHistoryMutation) CreatedAt() (r time.Time, exists bool) {
+	v := m.created_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedAt returns the old "created_at" field's value of the ContactListHistory entity.
+// If the ContactListHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ContactListHistoryMutation) OldCreatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedAt: %w", err)
+	}
+	return oldValue.CreatedAt, nil
+}
+
+// ClearCreatedAt clears the value of the "created_at" field.
+func (m *ContactListHistoryMutation) ClearCreatedAt() {
+	m.created_at = nil
+	m.clearedFields[contactlisthistory.FieldCreatedAt] = struct{}{}
+}
+
+// CreatedAtCleared returns if the "created_at" field was cleared in this mutation.
+func (m *ContactListHistoryMutation) CreatedAtCleared() bool {
+	_, ok := m.clearedFields[contactlisthistory.FieldCreatedAt]
+	return ok
+}
+
+// ResetCreatedAt resets all changes to the "created_at" field.
+func (m *ContactListHistoryMutation) ResetCreatedAt() {
+	m.created_at = nil
+	delete(m.clearedFields, contactlisthistory.FieldCreatedAt)
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (m *ContactListHistoryMutation) SetUpdatedAt(t time.Time) {
+	m.updated_at = &t
+}
+
+// UpdatedAt returns the value of the "updated_at" field in the mutation.
+func (m *ContactListHistoryMutation) UpdatedAt() (r time.Time, exists bool) {
+	v := m.updated_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedAt returns the old "updated_at" field's value of the ContactListHistory entity.
+// If the ContactListHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ContactListHistoryMutation) OldUpdatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedAt: %w", err)
+	}
+	return oldValue.UpdatedAt, nil
+}
+
+// ClearUpdatedAt clears the value of the "updated_at" field.
+func (m *ContactListHistoryMutation) ClearUpdatedAt() {
+	m.updated_at = nil
+	m.clearedFields[contactlisthistory.FieldUpdatedAt] = struct{}{}
+}
+
+// UpdatedAtCleared returns if the "updated_at" field was cleared in this mutation.
+func (m *ContactListHistoryMutation) UpdatedAtCleared() bool {
+	_, ok := m.clearedFields[contactlisthistory.FieldUpdatedAt]
+	return ok
+}
+
+// ResetUpdatedAt resets all changes to the "updated_at" field.
+func (m *ContactListHistoryMutation) ResetUpdatedAt() {
+	m.updated_at = nil
+	delete(m.clearedFields, contactlisthistory.FieldUpdatedAt)
+}
+
+// SetCreatedBy sets the "created_by" field.
+func (m *ContactListHistoryMutation) SetCreatedBy(s string) {
+	m.created_by = &s
+}
+
+// CreatedBy returns the value of the "created_by" field in the mutation.
+func (m *ContactListHistoryMutation) CreatedBy() (r string, exists bool) {
+	v := m.created_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedBy returns the old "created_by" field's value of the ContactListHistory entity.
+// If the ContactListHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ContactListHistoryMutation) OldCreatedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedBy: %w", err)
+	}
+	return oldValue.CreatedBy, nil
+}
+
+// ClearCreatedBy clears the value of the "created_by" field.
+func (m *ContactListHistoryMutation) ClearCreatedBy() {
+	m.created_by = nil
+	m.clearedFields[contactlisthistory.FieldCreatedBy] = struct{}{}
+}
+
+// CreatedByCleared returns if the "created_by" field was cleared in this mutation.
+func (m *ContactListHistoryMutation) CreatedByCleared() bool {
+	_, ok := m.clearedFields[contactlisthistory.FieldCreatedBy]
+	return ok
+}
+
+// ResetCreatedBy resets all changes to the "created_by" field.
+func (m *ContactListHistoryMutation) ResetCreatedBy() {
+	m.created_by = nil
+	delete(m.clearedFields, contactlisthistory.FieldCreatedBy)
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (m *ContactListHistoryMutation) SetUpdatedBy(s string) {
+	m.updated_by = &s
+}
+
+// UpdatedBy returns the value of the "updated_by" field in the mutation.
+func (m *ContactListHistoryMutation) UpdatedBy() (r string, exists bool) {
+	v := m.updated_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedBy returns the old "updated_by" field's value of the ContactListHistory entity.
+// If the ContactListHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ContactListHistoryMutation) OldUpdatedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedBy: %w", err)
+	}
+	return oldValue.UpdatedBy, nil
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (m *ContactListHistoryMutation) ClearUpdatedBy() {
+	m.updated_by = nil
+	m.clearedFields[contactlisthistory.FieldUpdatedBy] = struct{}{}
+}
+
+// UpdatedByCleared returns if the "updated_by" field was cleared in this mutation.
+func (m *ContactListHistoryMutation) UpdatedByCleared() bool {
+	_, ok := m.clearedFields[contactlisthistory.FieldUpdatedBy]
+	return ok
+}
+
+// ResetUpdatedBy resets all changes to the "updated_by" field.
+func (m *ContactListHistoryMutation) ResetUpdatedBy() {
+	m.updated_by = nil
+	delete(m.clearedFields, contactlisthistory.FieldUpdatedBy)
+}
+
+// SetDeletedAt sets the "deleted_at" field.
+func (m *ContactListHistoryMutation) SetDeletedAt(t time.Time) {
+	m.deleted_at = &t
+}
+
+// DeletedAt returns the value of the "deleted_at" field in the mutation.
+func (m *ContactListHistoryMutation) DeletedAt() (r time.Time, exists bool) {
+	v := m.deleted_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDeletedAt returns the old "deleted_at" field's value of the ContactListHistory entity.
+// If the ContactListHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ContactListHistoryMutation) OldDeletedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDeletedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDeletedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDeletedAt: %w", err)
+	}
+	return oldValue.DeletedAt, nil
+}
+
+// ClearDeletedAt clears the value of the "deleted_at" field.
+func (m *ContactListHistoryMutation) ClearDeletedAt() {
+	m.deleted_at = nil
+	m.clearedFields[contactlisthistory.FieldDeletedAt] = struct{}{}
+}
+
+// DeletedAtCleared returns if the "deleted_at" field was cleared in this mutation.
+func (m *ContactListHistoryMutation) DeletedAtCleared() bool {
+	_, ok := m.clearedFields[contactlisthistory.FieldDeletedAt]
+	return ok
+}
+
+// ResetDeletedAt resets all changes to the "deleted_at" field.
+func (m *ContactListHistoryMutation) ResetDeletedAt() {
+	m.deleted_at = nil
+	delete(m.clearedFields, contactlisthistory.FieldDeletedAt)
+}
+
+// SetDeletedBy sets the "deleted_by" field.
+func (m *ContactListHistoryMutation) SetDeletedBy(s string) {
+	m.deleted_by = &s
+}
+
+// DeletedBy returns the value of the "deleted_by" field in the mutation.
+func (m *ContactListHistoryMutation) DeletedBy() (r string, exists bool) {
+	v := m.deleted_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDeletedBy returns the old "deleted_by" field's value of the ContactListHistory entity.
+// If the ContactListHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ContactListHistoryMutation) OldDeletedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDeletedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDeletedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDeletedBy: %w", err)
+	}
+	return oldValue.DeletedBy, nil
+}
+
+// ClearDeletedBy clears the value of the "deleted_by" field.
+func (m *ContactListHistoryMutation) ClearDeletedBy() {
+	m.deleted_by = nil
+	m.clearedFields[contactlisthistory.FieldDeletedBy] = struct{}{}
+}
+
+// DeletedByCleared returns if the "deleted_by" field was cleared in this mutation.
+func (m *ContactListHistoryMutation) DeletedByCleared() bool {
+	_, ok := m.clearedFields[contactlisthistory.FieldDeletedBy]
+	return ok
+}
+
+// ResetDeletedBy resets all changes to the "deleted_by" field.
+func (m *ContactListHistoryMutation) ResetDeletedBy() {
+	m.deleted_by = nil
+	delete(m.clearedFields, contactlisthistory.FieldDeletedBy)
+}
+
+// SetMappingID sets the "mapping_id" field.
+func (m *ContactListHistoryMutation) SetMappingID(s string) {
+	m.mapping_id = &s
+}
+
+// MappingID returns the value of the "mapping_id" field in the mutation.
+func (m *ContactListHistoryMutation) MappingID() (r string, exists bool) {
+	v := m.mapping_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldMappingID returns the old "mapping_id" field's value of the ContactListHistory entity.
+// If the ContactListHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ContactListHistoryMutation) OldMappingID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldMappingID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldMappingID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldMappingID: %w", err)
+	}
+	return oldValue.MappingID, nil
+}
+
+// ResetMappingID resets all changes to the "mapping_id" field.
+func (m *ContactListHistoryMutation) ResetMappingID() {
+	m.mapping_id = nil
+}
+
+// SetTags sets the "tags" field.
+func (m *ContactListHistoryMutation) SetTags(s []string) {
+	m.tags = &s
+	m.appendtags = nil
+}
+
+// Tags returns the value of the "tags" field in the mutation.
+func (m *ContactListHistoryMutation) Tags() (r []string, exists bool) {
+	v := m.tags
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldTags returns the old "tags" field's value of the ContactListHistory entity.
+// If the ContactListHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ContactListHistoryMutation) OldTags(ctx context.Context) (v []string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldTags is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldTags requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldTags: %w", err)
+	}
+	return oldValue.Tags, nil
+}
+
+// AppendTags adds s to the "tags" field.
+func (m *ContactListHistoryMutation) AppendTags(s []string) {
+	m.appendtags = append(m.appendtags, s...)
+}
+
+// AppendedTags returns the list of values that were appended to the "tags" field in this mutation.
+func (m *ContactListHistoryMutation) AppendedTags() ([]string, bool) {
+	if len(m.appendtags) == 0 {
+		return nil, false
+	}
+	return m.appendtags, true
+}
+
+// ClearTags clears the value of the "tags" field.
+func (m *ContactListHistoryMutation) ClearTags() {
+	m.tags = nil
+	m.appendtags = nil
+	m.clearedFields[contactlisthistory.FieldTags] = struct{}{}
+}
+
+// TagsCleared returns if the "tags" field was cleared in this mutation.
+func (m *ContactListHistoryMutation) TagsCleared() bool {
+	_, ok := m.clearedFields[contactlisthistory.FieldTags]
+	return ok
+}
+
+// ResetTags resets all changes to the "tags" field.
+func (m *ContactListHistoryMutation) ResetTags() {
+	m.tags = nil
+	m.appendtags = nil
+	delete(m.clearedFields, contactlisthistory.FieldTags)
+}
+
+// SetOwnerID sets the "owner_id" field.
+func (m *ContactListHistoryMutation) SetOwnerID(s string) {
+	m.owner_id = &s
+}
+
+// OwnerID returns the value of the "owner_id" field in the mutation.
+func (m *ContactListHistoryMutation) OwnerID() (r string, exists bool) {
+	v := m.owner_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldOwnerID returns the old "owner_id" field's value of the ContactListHistory entity.
+// If the ContactListHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ContactListHistoryMutation) OldOwnerID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldOwnerID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldOwnerID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldOwnerID: %w", err)
+	}
+	return oldValue.OwnerID, nil
+}
+
+// ClearOwnerID clears the value of the "owner_id" field.
+func (m *ContactListHistoryMutation) ClearOwnerID() {
+	m.owner_id = nil
+	m.clearedFields[contactlisthistory.FieldOwnerID] = struct{}{}
+}
+
+// OwnerIDCleared returns if the "owner_id" field was cleared in this mutation.
+func (m *ContactListHistoryMutation) OwnerIDCleared() bool {
+	_, ok := m.clearedFields[contactlisthistory.FieldOwnerID]
+	return ok
+}
+
+// ResetOwnerID resets all changes to the "owner_id" field.
+func (m *ContactListHistoryMutation) ResetOwnerID() {
+	m.owner_id = nil
+	delete(m.clearedFields, contactlisthistory.FieldOwnerID)
+}
+
+// SetName sets the "name" field.
+func (m *ContactListHistoryMutation) SetName(s string) {
+	m.name = &s
+}
+
+// Name returns the value of the "name" field in the mutation.
+func (m *ContactListHistoryMutation) Name() (r string, exists bool) {
+	v := m.name
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldName returns the old "name" field's value of the ContactListHistory entity.
+// If the ContactListHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ContactListHistoryMutation) OldName(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldName is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldName requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldName: %w", err)
+	}
+	return oldValue.Name, nil
+}
+
+// ResetName resets all changes to the "name" field.
+func (m *ContactListHistoryMutation) ResetName() {
+	m.name = nil
+}
+
+// SetVisibility sets the "visibility" field.
+func (m *ContactListHistoryMutation) SetVisibility(s string) {
+	m.visibility = &s
+}
+
+// Visibility returns the value of the "visibility" field in the mutation.
+func (m *ContactListHistoryMutation) Visibility() (r string, exists bool) {
+	v := m.visibility
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldVisibility returns the old "visibility" field's value of the ContactListHistory entity.
+// If the ContactListHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ContactListHistoryMutation) OldVisibility(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldVisibility is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldVisibility requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldVisibility: %w", err)
+	}
+	return oldValue.Visibility, nil
+}
+
+// ResetVisibility resets all changes to the "visibility" field.
+func (m *ContactListHistoryMutation) ResetVisibility() {
+	m.visibility = nil
+}
+
+// SetDisplayName sets the "display_name" field.
+func (m *ContactListHistoryMutation) SetDisplayName(s string) {
+	m.display_name = &s
+}
+
+// DisplayName returns the value of the "display_name" field in the mutation.
+func (m *ContactListHistoryMutation) DisplayName() (r string, exists bool) {
+	v := m.display_name
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDisplayName returns the old "display_name" field's value of the ContactListHistory entity.
+// If the ContactListHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ContactListHistoryMutation) OldDisplayName(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDisplayName is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDisplayName requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDisplayName: %w", err)
+	}
+	return oldValue.DisplayName, nil
+}
+
+// ResetDisplayName resets all changes to the "display_name" field.
+func (m *ContactListHistoryMutation) ResetDisplayName() {
+	m.display_name = nil
+}
+
+// SetDescription sets the "description" field.
+func (m *ContactListHistoryMutation) SetDescription(s string) {
+	m.description = &s
+}
+
+// Description returns the value of the "description" field in the mutation.
+func (m *ContactListHistoryMutation) Description() (r string, exists bool) {
+	v := m.description
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDescription returns the old "description" field's value of the ContactListHistory entity.
+// If the ContactListHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ContactListHistoryMutation) OldDescription(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDescription is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDescription requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDescription: %w", err)
+	}
+	return oldValue.Description, nil
+}
+
+// ClearDescription clears the value of the "description" field.
+func (m *ContactListHistoryMutation) ClearDescription() {
+	m.description = nil
+	m.clearedFields[contactlisthistory.FieldDescription] = struct{}{}
+}
+
+// DescriptionCleared returns if the "description" field was cleared in this mutation.
+func (m *ContactListHistoryMutation) DescriptionCleared() bool {
+	_, ok := m.clearedFields[contactlisthistory.FieldDescription]
+	return ok
+}
+
+// ResetDescription resets all changes to the "description" field.
+func (m *ContactListHistoryMutation) ResetDescription() {
+	m.description = nil
+	delete(m.clearedFields, contactlisthistory.FieldDescription)
+}
+
+// Where appends a list predicates to the ContactListHistoryMutation builder.
+func (m *ContactListHistoryMutation) Where(ps ...predicate.ContactListHistory) {
+	m.predicates = append(m.predicates, ps...)
+}
+
+// WhereP appends storage-level predicates to the ContactListHistoryMutation builder. Using this method,
+// users can use type-assertion to append predicates that do not depend on any generated package.
+func (m *ContactListHistoryMutation) WhereP(ps ...func(*sql.Selector)) {
+	p := make([]predicate.ContactListHistory, len(ps))
+	for i := range ps {
+		p[i] = ps[i]
+	}
+	m.Where(p...)
+}
+
+// Op returns the operation name.
+func (m *ContactListHistoryMutation) Op() Op {
+	return m.op
+}
+
+// SetOp allows setting the mutation operation.
+func (m *ContactListHistoryMutation) SetOp(op Op) {
+	m.op = op
+}
+
+// Type returns the node type of this mutation (ContactListHistory).
+func (m *ContactListHistoryMutation) Type() string {
+	return m.typ
+}
+
+// Fields returns all fields that were changed during this mutation. Note that in
+// order to get all numeric fields that were incremented/decremented, call
+// AddedFields().
+func (m *ContactListHistoryMutation) Fields() []string {
+	fields := make([]string, 0, 16)
+	if m.history_time != nil {
+		fields = append(fields, contactlisthistory.FieldHistoryTime)
+	}
+	if m.ref != nil {
+		fields = append(fields, contactlisthistory.FieldRef)
+	}
+	if m.operation != nil {
+		fields = append(fields, contactlisthistory.FieldOperation)
+	}
+	if m.created_at != nil {
+		fields = append(fields, contactlisthistory.FieldCreatedAt)
+	}
+	if m.updated_at != nil {
+		fields = append(fields, contactlisthistory.FieldUpdatedAt)
+	}
+	if m.created_by != nil {
+		fields = append(fields, contactlisthistory.FieldCreatedBy)
+	}
+	if m.updated_by != nil {
+		fields = append(fields, contactlisthistory.FieldUpdatedBy)
+	}
+	if m.deleted_at != nil {
+		fields = append(fields, contactlisthistory.FieldDeletedAt)
+	}
+	if m.deleted_by != nil {
+		fields = append(fields, contactlisthistory.FieldDeletedBy)
+	}
+	if m.mapping_id != nil {
+		fields = append(fields, contactlisthistory.FieldMappingID)
+	}
+	if m.tags != nil {
+		fields = append(fields, contactlisthistory.FieldTags)
+	}
+	if m.owner_id != nil {
+		fields = append(fields, contactlisthistory.FieldOwnerID)
+	}
+	if m.name != nil {
+		fields = append(fields, contactlisthistory.FieldName)
+	}
+	if m.visibility != nil {
+		fields = append(fields, contactlisthistory.FieldVisibility)
+	}
+	if m.display_name != nil {
+		fields = append(fields, contactlisthistory.FieldDisplayName)
+	}
+	if m.description != nil {
+		fields = append(fields, contactlisthistory.FieldDescription)
+	}
+	return fields
+}
+
+// Field returns the value of a field with the given name. The second boolean
+// return value indicates that this field was not set, or was not defined in the
+// schema.
+func (m *ContactListHistoryMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case contactlisthistory.FieldHistoryTime:
+		return m.HistoryTime()
+	case contactlisthistory.FieldRef:
+		return m.Ref()
+	case contactlisthistory.FieldOperation:
+		return m.Operation()
+	case contactlisthistory.FieldCreatedAt:
+		return m.CreatedAt()
+	case contactlisthistory.FieldUpdatedAt:
+		return m.UpdatedAt()
+	case contactlisthistory.FieldCreatedBy:
+		return m.CreatedBy()
+	case contactlisthistory.FieldUpdatedBy:
+		return m.UpdatedBy()
+	case contactlisthistory.FieldDeletedAt:
+		return m.DeletedAt()
+	case contactlisthistory.FieldDeletedBy:
+		return m.DeletedBy()
+	case contactlisthistory.FieldMappingID:
+		return m.MappingID()
+	case contactlisthistory.FieldTags:
+		return m.Tags()
+	case contactlisthistory.FieldOwnerID:
+		return m.OwnerID()
+	case contactlisthistory.FieldName:
+		return m.Name()
+	case contactlisthistory.FieldVisibility:
+		return m.Visibility()
+	case contactlisthistory.FieldDisplayName:
+		return m.DisplayName()
+	case contactlisthistory.FieldDescription:
+		return m.Description()
+	}
+	return nil, false
+}
+
+// OldField returns the old value of the field from the database. An error is
+// returned if the mutation operation is not UpdateOne, or the query to the
+// database failed.
+func (m *ContactListHistoryMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case contactlisthistory.FieldHistoryTime:
+		return m.OldHistoryTime(ctx)
+	case contactlisthistory.FieldRef:
+		return m.OldRef(ctx)
+	case contactlisthistory.FieldOperation:
+		return m.OldOperation(ctx)
+	case contactlisthistory.FieldCreatedAt:
+		return m.OldCreatedAt(ctx)
+	case contactlisthistory.FieldUpdatedAt:
+		return m.OldUpdatedAt(ctx)
+	case contactlisthistory.FieldCreatedBy:
+		return m.OldCreatedBy(ctx)
+	case contactlisthistory.FieldUpdatedBy:
+		return m.OldUpdatedBy(ctx)
+	case contactlisthistory.FieldDeletedAt:
+		return m.OldDeletedAt(ctx)
+	case contactlisthistory.FieldDeletedBy:
+		return m.OldDeletedBy(ctx)
+	case contactlisthistory.FieldMappingID:
+		return m.OldMappingID(ctx)
+	case contactlisthistory.FieldTags:
+		return m.OldTags(ctx)
+	case contactlisthistory.FieldOwnerID:
+		return m.OldOwnerID(ctx)
+	case contactlisthistory.FieldName:
+		return m.OldName(ctx)
+	case contactlisthistory.FieldVisibility:
+		return m.OldVisibility(ctx)
+	case contactlisthistory.FieldDisplayName:
+		return m.OldDisplayName(ctx)
+	case contactlisthistory.FieldDescription:
+		return m.OldDescription(ctx)
+	}
+	return nil, fmt.Errorf("unknown ContactListHistory field %s", name)
+}
+
+// SetField sets the value of a field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *ContactListHistoryMutation) SetField(name string, value ent.Value) error {
+	switch name {
+	case contactlisthistory.FieldHistoryTime:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetHistoryTime(v)
+		return nil
+	case contactlisthistory.FieldRef:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetRef(v)
+		return nil
+	case contactlisthistory.FieldOperation:
+		v, ok := value.(enthistory.OpType)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetOperation(v)
+		return nil
+	case contactlisthistory.FieldCreatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedAt(v)
+		return nil
+	case contactlisthistory.FieldUpdatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedAt(v)
+		return nil
+	case contactlisthistory.FieldCreatedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedBy(v)
+		return nil
+	case contactlisthistory.FieldUpdatedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedBy(v)
+		return nil
+	case contactlisthistory.FieldDeletedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDeletedAt(v)
+		return nil
+	case contactlisthistory.FieldDeletedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDeletedBy(v)
+		return nil
+	case contactlisthistory.FieldMappingID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetMappingID(v)
+		return nil
+	case contactlisthistory.FieldTags:
+		v, ok := value.([]string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetTags(v)
+		return nil
+	case contactlisthistory.FieldOwnerID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetOwnerID(v)
+		return nil
+	case contactlisthistory.FieldName:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetName(v)
+		return nil
+	case contactlisthistory.FieldVisibility:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetVisibility(v)
+		return nil
+	case contactlisthistory.FieldDisplayName:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDisplayName(v)
+		return nil
+	case contactlisthistory.FieldDescription:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDescription(v)
+		return nil
+	}
+	return fmt.Errorf("unknown ContactListHistory field %s", name)
+}
+
+// AddedFields returns all numeric fields that were incremented/decremented during
+// this mutation.
+func (m *ContactListHistoryMutation) AddedFields() []string {
+	return nil
+}
+
+// AddedField returns the numeric value that was incremented/decremented on a field
+// with the given name. The second boolean return value indicates that this field
+// was not set, or was not defined in the schema.
+func (m *ContactListHistoryMutation) AddedField(name string) (ent.Value, bool) {
+	return nil, false
+}
+
+// AddField adds the value to the field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *ContactListHistoryMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	}
+	return fmt.Errorf("unknown ContactListHistory numeric field %s", name)
+}
+
+// ClearedFields returns all nullable fields that were cleared during this
+// mutation.
+func (m *ContactListHistoryMutation) ClearedFields() []string {
+	var fields []string
+	if m.FieldCleared(contactlisthistory.FieldRef) {
+		fields = append(fields, contactlisthistory.FieldRef)
+	}
+	if m.FieldCleared(contactlisthistory.FieldCreatedAt) {
+		fields = append(fields, contactlisthistory.FieldCreatedAt)
+	}
+	if m.FieldCleared(contactlisthistory.FieldUpdatedAt) {
+		fields = append(fields, contactlisthistory.FieldUpdatedAt)
+	}
+	if m.FieldCleared(contactlisthistory.FieldCreatedBy) {
+		fields = append(fields, contactlisthistory.FieldCreatedBy)
+	}
+	if m.FieldCleared(contactlisthistory.FieldUpdatedBy) {
+		fields = append(fields, contactlisthistory.FieldUpdatedBy)
+	}
+	if m.FieldCleared(contactlisthistory.FieldDeletedAt) {
+		fields = append(fields, contactlisthistory.FieldDeletedAt)
+	}
+	if m.FieldCleared(contactlisthistory.FieldDeletedBy) {
+		fields = append(fields, contactlisthistory.FieldDeletedBy)
+	}
+	if m.FieldCleared(contactlisthistory.FieldTags) {
+		fields = append(fields, contactlisthistory.FieldTags)
+	}
+	if m.FieldCleared(contactlisthistory.FieldOwnerID) {
+		fields = append(fields, contactlisthistory.FieldOwnerID)
+	}
+	if m.FieldCleared(contactlisthistory.FieldDescription) {
+		fields = append(fields, contactlisthistory.FieldDescription)
+	}
+	return fields
+}
+
+// FieldCleared returns a boolean indicating if a field with the given name was
+// cleared in this mutation.
+func (m *ContactListHistoryMutation) FieldCleared(name string) bool {
+	_, ok := m.clearedFields[name]
+	return ok
+}
+
+// ClearField clears the value of the field with the given name. It returns an
+// error if the field is not defined in the schema.
+func (m *ContactListHistoryMutation) ClearField(name string) error {
+	switch name {
+	case contactlisthistory.FieldRef:
+		m.ClearRef()
+		return nil
+	case contactlisthistory.FieldCreatedAt:
+		m.ClearCreatedAt()
+		return nil
+	case contactlisthistory.FieldUpdatedAt:
+		m.ClearUpdatedAt()
+		return nil
+	case contactlisthistory.FieldCreatedBy:
+		m.ClearCreatedBy()
+		return nil
+	case contactlisthistory.FieldUpdatedBy:
+		m.ClearUpdatedBy()
+		return nil
+	case contactlisthistory.FieldDeletedAt:
+		m.ClearDeletedAt()
+		return nil
+	case contactlisthistory.FieldDeletedBy:
+		m.ClearDeletedBy()
+		return nil
+	case contactlisthistory.FieldTags:
+		m.ClearTags()
+		return nil
+	case contactlisthistory.FieldOwnerID:
+		m.ClearOwnerID()
+		return nil
+	case contactlisthistory.FieldDescription:
+		m.ClearDescription()
+		return nil
+	}
+	return fmt.Errorf("unknown ContactListHistory nullable field %s", name)
+}
+
+// ResetField resets all changes in the mutation for the field with the given name.
+// It returns an error if the field is not defined in the schema.
+func (m *ContactListHistoryMutation) ResetField(name string) error {
+	switch name {
+	case contactlisthistory.FieldHistoryTime:
+		m.ResetHistoryTime()
+		return nil
+	case contactlisthistory.FieldRef:
+		m.ResetRef()
+		return nil
+	case contactlisthistory.FieldOperation:
+		m.ResetOperation()
+		return nil
+	case contactlisthistory.FieldCreatedAt:
+		m.ResetCreatedAt()
+		return nil
+	case contactlisthistory.FieldUpdatedAt:
+		m.ResetUpdatedAt()
+		return nil
+	case contactlisthistory.FieldCreatedBy:
+		m.ResetCreatedBy()
+		return nil
+	case contactlisthistory.FieldUpdatedBy:
+		m.ResetUpdatedBy()
+		return nil
+	case contactlisthistory.FieldDeletedAt:
+		m.ResetDeletedAt()
+		return nil
+	case contactlisthistory.FieldDeletedBy:
+		m.ResetDeletedBy()
+		return nil
+	case contactlisthistory.FieldMappingID:
+		m.ResetMappingID()
+		return nil
+	case contactlisthistory.FieldTags:
+		m.ResetTags()
+		return nil
+	case contactlisthistory.FieldOwnerID:
+		m.ResetOwnerID()
+		return nil
+	case contactlisthistory.FieldName:
+		m.ResetName()
+		return nil
+	case contactlisthistory.FieldVisibility:
+		m.ResetVisibility()
+		return nil
+	case contactlisthistory.FieldDisplayName:
+		m.ResetDisplayName()
+		return nil
+	case contactlisthistory.FieldDescription:
+		m.ResetDescription()
+		return nil
+	}
+	return fmt.Errorf("unknown ContactListHistory field %s", name)
+}
+
+// AddedEdges returns all edge names that were set/added in this mutation.
+func (m *ContactListHistoryMutation) AddedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// AddedIDs returns all IDs (to other nodes) that were added for the given edge
+// name in this mutation.
+func (m *ContactListHistoryMutation) AddedIDs(name string) []ent.Value {
+	return nil
+}
+
+// RemovedEdges returns all edge names that were removed in this mutation.
+func (m *ContactListHistoryMutation) RemovedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
+// the given name in this mutation.
+func (m *ContactListHistoryMutation) RemovedIDs(name string) []ent.Value {
+	return nil
+}
+
+// ClearedEdges returns all edge names that were cleared in this mutation.
+func (m *ContactListHistoryMutation) ClearedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// EdgeCleared returns a boolean which indicates if the edge with the given name
+// was cleared in this mutation.
+func (m *ContactListHistoryMutation) EdgeCleared(name string) bool {
+	return false
+}
+
+// ClearEdge clears the value of the edge with the given name. It returns an error
+// if that edge is not defined in the schema.
+func (m *ContactListHistoryMutation) ClearEdge(name string) error {
+	return fmt.Errorf("unknown ContactListHistory unique edge %s", name)
+}
+
+// ResetEdge resets all changes to the edge with the given name in this mutation.
+// It returns an error if the edge is not defined in the schema.
+func (m *ContactListHistoryMutation) ResetEdge(name string) error {
+	return fmt.Errorf("unknown ContactListHistory edge %s", name)
+}
+
+// ContactListMembershipMutation represents an operation that mutates the ContactListMembership nodes in the graph.
+type ContactListMembershipMutation struct {
+	config
+	op                  Op
+	typ                 string
+	id                  *string
+	created_at          *time.Time
+	updated_at          *time.Time
+	created_by          *string
+	updated_by          *string
+	mapping_id          *string
+	deleted_at          *time.Time
+	deleted_by          *string
+	clearedFields       map[string]struct{}
+	contact_list        *string
+	clearedcontact_list bool
+	contact             *string
+	clearedcontact      bool
+	events              map[string]struct{}
+	removedevents       map[string]struct{}
+	clearedevents       bool
+	done                bool
+	oldValue            func(context.Context) (*ContactListMembership, error)
+	predicates          []predicate.ContactListMembership
+}
+
+var _ ent.Mutation = (*ContactListMembershipMutation)(nil)
+
+// contactlistmembershipOption allows management of the mutation configuration using functional options.
+type contactlistmembershipOption func(*ContactListMembershipMutation)
+
+// newContactListMembershipMutation creates new mutation for the ContactListMembership entity.
+func newContactListMembershipMutation(c config, op Op, opts ...contactlistmembershipOption) *ContactListMembershipMutation {
+	m := &ContactListMembershipMutation{
+		config:        c,
+		op:            op,
+		typ:           TypeContactListMembership,
+		clearedFields: make(map[string]struct{}),
+	}
+	for _, opt := range opts {
+		opt(m)
+	}
+	return m
+}
+
+// withContactListMembershipID sets the ID field of the mutation.
+func withContactListMembershipID(id string) contactlistmembershipOption {
+	return func(m *ContactListMembershipMutation) {
+		var (
+			err   error
+			once  sync.Once
+			value *ContactListMembership
+		)
+		m.oldValue = func(ctx context.Context) (*ContactListMembership, error) {
+			once.Do(func() {
+				if m.done {
+					err = errors.New("querying old values post mutation is not allowed")
+				} else {
+					value, err = m.Client().ContactListMembership.Get(ctx, id)
+				}
+			})
+			return value, err
+		}
+		m.id = &id
+	}
+}
+
+// withContactListMembership sets the old ContactListMembership of the mutation.
+func withContactListMembership(node *ContactListMembership) contactlistmembershipOption {
+	return func(m *ContactListMembershipMutation) {
+		m.oldValue = func(context.Context) (*ContactListMembership, error) {
+			return node, nil
+		}
+		m.id = &node.ID
+	}
+}
+
+// Client returns a new `ent.Client` from the mutation. If the mutation was
+// executed in a transaction (ent.Tx), a transactional client is returned.
+func (m ContactListMembershipMutation) Client() *Client {
+	client := &Client{config: m.config}
+	client.init()
+	return client
+}
+
+// Tx returns an `ent.Tx` for mutations that were executed in transactions;
+// it returns an error otherwise.
+func (m ContactListMembershipMutation) Tx() (*Tx, error) {
+	if _, ok := m.driver.(*txDriver); !ok {
+		return nil, errors.New("generated: mutation is not running in a transaction")
+	}
+	tx := &Tx{config: m.config}
+	tx.init()
+	return tx, nil
+}
+
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of ContactListMembership entities.
+func (m *ContactListMembershipMutation) SetID(id string) {
+	m.id = &id
+}
+
+// ID returns the ID value in the mutation. Note that the ID is only available
+// if it was provided to the builder or after it was returned from the database.
+func (m *ContactListMembershipMutation) ID() (id string, exists bool) {
+	if m.id == nil {
+		return
+	}
+	return *m.id, true
+}
+
+// IDs queries the database and returns the entity ids that match the mutation's predicate.
+// That means, if the mutation is applied within a transaction with an isolation level such
+// as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
+// or updated by the mutation.
+func (m *ContactListMembershipMutation) IDs(ctx context.Context) ([]string, error) {
+	switch {
+	case m.op.Is(OpUpdateOne | OpDeleteOne):
+		id, exists := m.ID()
+		if exists {
+			return []string{id}, nil
+		}
+		fallthrough
+	case m.op.Is(OpUpdate | OpDelete):
+		return m.Client().ContactListMembership.Query().Where(m.predicates...).IDs(ctx)
+	default:
+		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
+	}
+}
+
+// SetCreatedAt sets the "created_at" field.
+func (m *ContactListMembershipMutation) SetCreatedAt(t time.Time) {
+	m.created_at = &t
+}
+
+// CreatedAt returns the value of the "created_at" field in the mutation.
+func (m *ContactListMembershipMutation) CreatedAt() (r time.Time, exists bool) {
+	v := m.created_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedAt returns the old "created_at" field's value of the ContactListMembership entity.
+// If the ContactListMembership object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ContactListMembershipMutation) OldCreatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedAt: %w", err)
+	}
+	return oldValue.CreatedAt, nil
+}
+
+// ClearCreatedAt clears the value of the "created_at" field.
+func (m *ContactListMembershipMutation) ClearCreatedAt() {
+	m.created_at = nil
+	m.clearedFields[contactlistmembership.FieldCreatedAt] = struct{}{}
+}
+
+// CreatedAtCleared returns if the "created_at" field was cleared in this mutation.
+func (m *ContactListMembershipMutation) CreatedAtCleared() bool {
+	_, ok := m.clearedFields[contactlistmembership.FieldCreatedAt]
+	return ok
+}
+
+// ResetCreatedAt resets all changes to the "created_at" field.
+func (m *ContactListMembershipMutation) ResetCreatedAt() {
+	m.created_at = nil
+	delete(m.clearedFields, contactlistmembership.FieldCreatedAt)
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (m *ContactListMembershipMutation) SetUpdatedAt(t time.Time) {
+	m.updated_at = &t
+}
+
+// UpdatedAt returns the value of the "updated_at" field in the mutation.
+func (m *ContactListMembershipMutation) UpdatedAt() (r time.Time, exists bool) {
+	v := m.updated_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedAt returns the old "updated_at" field's value of the ContactListMembership entity.
+// If the ContactListMembership object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ContactListMembershipMutation) OldUpdatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedAt: %w", err)
+	}
+	return oldValue.UpdatedAt, nil
+}
+
+// ClearUpdatedAt clears the value of the "updated_at" field.
+func (m *ContactListMembershipMutation) ClearUpdatedAt() {
+	m.updated_at = nil
+	m.clearedFields[contactlistmembership.FieldUpdatedAt] = struct{}{}
+}
+
+// UpdatedAtCleared returns if the "updated_at" field was cleared in this mutation.
+func (m *ContactListMembershipMutation) UpdatedAtCleared() bool {
+	_, ok := m.clearedFields[contactlistmembership.FieldUpdatedAt]
+	return ok
+}
+
+// ResetUpdatedAt resets all changes to the "updated_at" field.
+func (m *ContactListMembershipMutation) ResetUpdatedAt() {
+	m.updated_at = nil
+	delete(m.clearedFields, contactlistmembership.FieldUpdatedAt)
+}
+
+// SetCreatedBy sets the "created_by" field.
+func (m *ContactListMembershipMutation) SetCreatedBy(s string) {
+	m.created_by = &s
+}
+
+// CreatedBy returns the value of the "created_by" field in the mutation.
+func (m *ContactListMembershipMutation) CreatedBy() (r string, exists bool) {
+	v := m.created_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedBy returns the old "created_by" field's value of the ContactListMembership entity.
+// If the ContactListMembership object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ContactListMembershipMutation) OldCreatedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedBy: %w", err)
+	}
+	return oldValue.CreatedBy, nil
+}
+
+// ClearCreatedBy clears the value of the "created_by" field.
+func (m *ContactListMembershipMutation) ClearCreatedBy() {
+	m.created_by = nil
+	m.clearedFields[contactlistmembership.FieldCreatedBy] = struct{}{}
+}
+
+// CreatedByCleared returns if the "created_by" field was cleared in this mutation.
+func (m *ContactListMembershipMutation) CreatedByCleared() bool {
+	_, ok := m.clearedFields[contactlistmembership.FieldCreatedBy]
+	return ok
+}
+
+// ResetCreatedBy resets all changes to the "created_by" field.
+func (m *ContactListMembershipMutation) ResetCreatedBy() {
+	m.created_by = nil
+	delete(m.clearedFields, contactlistmembership.FieldCreatedBy)
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (m *ContactListMembershipMutation) SetUpdatedBy(s string) {
+	m.updated_by = &s
+}
+
+// UpdatedBy returns the value of the "updated_by" field in the mutation.
+func (m *ContactListMembershipMutation) UpdatedBy() (r string, exists bool) {
+	v := m.updated_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedBy returns the old "updated_by" field's value of the ContactListMembership entity.
+// If the ContactListMembership object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ContactListMembershipMutation) OldUpdatedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedBy: %w", err)
+	}
+	return oldValue.UpdatedBy, nil
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (m *ContactListMembershipMutation) ClearUpdatedBy() {
+	m.updated_by = nil
+	m.clearedFields[contactlistmembership.FieldUpdatedBy] = struct{}{}
+}
+
+// UpdatedByCleared returns if the "updated_by" field was cleared in this mutation.
+func (m *ContactListMembershipMutation) UpdatedByCleared() bool {
+	_, ok := m.clearedFields[contactlistmembership.FieldUpdatedBy]
+	return ok
+}
+
+// ResetUpdatedBy resets all changes to the "updated_by" field.
+func (m *ContactListMembershipMutation) ResetUpdatedBy() {
+	m.updated_by = nil
+	delete(m.clearedFields, contactlistmembership.FieldUpdatedBy)
+}
+
+// SetMappingID sets the "mapping_id" field.
+func (m *ContactListMembershipMutation) SetMappingID(s string) {
+	m.mapping_id = &s
+}
+
+// MappingID returns the value of the "mapping_id" field in the mutation.
+func (m *ContactListMembershipMutation) MappingID() (r string, exists bool) {
+	v := m.mapping_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldMappingID returns the old "mapping_id" field's value of the ContactListMembership entity.
+// If the ContactListMembership object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ContactListMembershipMutation) OldMappingID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldMappingID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldMappingID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldMappingID: %w", err)
+	}
+	return oldValue.MappingID, nil
+}
+
+// ResetMappingID resets all changes to the "mapping_id" field.
+func (m *ContactListMembershipMutation) ResetMappingID() {
+	m.mapping_id = nil
+}
+
+// SetDeletedAt sets the "deleted_at" field.
+func (m *ContactListMembershipMutation) SetDeletedAt(t time.Time) {
+	m.deleted_at = &t
+}
+
+// DeletedAt returns the value of the "deleted_at" field in the mutation.
+func (m *ContactListMembershipMutation) DeletedAt() (r time.Time, exists bool) {
+	v := m.deleted_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDeletedAt returns the old "deleted_at" field's value of the ContactListMembership entity.
+// If the ContactListMembership object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ContactListMembershipMutation) OldDeletedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDeletedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDeletedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDeletedAt: %w", err)
+	}
+	return oldValue.DeletedAt, nil
+}
+
+// ClearDeletedAt clears the value of the "deleted_at" field.
+func (m *ContactListMembershipMutation) ClearDeletedAt() {
+	m.deleted_at = nil
+	m.clearedFields[contactlistmembership.FieldDeletedAt] = struct{}{}
+}
+
+// DeletedAtCleared returns if the "deleted_at" field was cleared in this mutation.
+func (m *ContactListMembershipMutation) DeletedAtCleared() bool {
+	_, ok := m.clearedFields[contactlistmembership.FieldDeletedAt]
+	return ok
+}
+
+// ResetDeletedAt resets all changes to the "deleted_at" field.
+func (m *ContactListMembershipMutation) ResetDeletedAt() {
+	m.deleted_at = nil
+	delete(m.clearedFields, contactlistmembership.FieldDeletedAt)
+}
+
+// SetDeletedBy sets the "deleted_by" field.
+func (m *ContactListMembershipMutation) SetDeletedBy(s string) {
+	m.deleted_by = &s
+}
+
+// DeletedBy returns the value of the "deleted_by" field in the mutation.
+func (m *ContactListMembershipMutation) DeletedBy() (r string, exists bool) {
+	v := m.deleted_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDeletedBy returns the old "deleted_by" field's value of the ContactListMembership entity.
+// If the ContactListMembership object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ContactListMembershipMutation) OldDeletedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDeletedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDeletedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDeletedBy: %w", err)
+	}
+	return oldValue.DeletedBy, nil
+}
+
+// ClearDeletedBy clears the value of the "deleted_by" field.
+func (m *ContactListMembershipMutation) ClearDeletedBy() {
+	m.deleted_by = nil
+	m.clearedFields[contactlistmembership.FieldDeletedBy] = struct{}{}
+}
+
+// DeletedByCleared returns if the "deleted_by" field was cleared in this mutation.
+func (m *ContactListMembershipMutation) DeletedByCleared() bool {
+	_, ok := m.clearedFields[contactlistmembership.FieldDeletedBy]
+	return ok
+}
+
+// ResetDeletedBy resets all changes to the "deleted_by" field.
+func (m *ContactListMembershipMutation) ResetDeletedBy() {
+	m.deleted_by = nil
+	delete(m.clearedFields, contactlistmembership.FieldDeletedBy)
+}
+
+// SetContactListID sets the "contact_list_id" field.
+func (m *ContactListMembershipMutation) SetContactListID(s string) {
+	m.contact_list = &s
+}
+
+// ContactListID returns the value of the "contact_list_id" field in the mutation.
+func (m *ContactListMembershipMutation) ContactListID() (r string, exists bool) {
+	v := m.contact_list
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldContactListID returns the old "contact_list_id" field's value of the ContactListMembership entity.
+// If the ContactListMembership object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ContactListMembershipMutation) OldContactListID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldContactListID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldContactListID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldContactListID: %w", err)
+	}
+	return oldValue.ContactListID, nil
+}
+
+// ResetContactListID resets all changes to the "contact_list_id" field.
+func (m *ContactListMembershipMutation) ResetContactListID() {
+	m.contact_list = nil
+}
+
+// SetContactID sets the "contact_id" field.
+func (m *ContactListMembershipMutation) SetContactID(s string) {
+	m.contact = &s
+}
+
+// ContactID returns the value of the "contact_id" field in the mutation.
+func (m *ContactListMembershipMutation) ContactID() (r string, exists bool) {
+	v := m.contact
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldContactID returns the old "contact_id" field's value of the ContactListMembership entity.
+// If the ContactListMembership object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ContactListMembershipMutation) OldContactID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldContactID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldContactID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldContactID: %w", err)
+	}
+	return oldValue.ContactID, nil
+}
+
+// ResetContactID resets all changes to the "contact_id" field.
+func (m *ContactListMembershipMutation) ResetContactID() {
+	m.contact = nil
+}
+
+// ClearContactList clears the "contact_list" edge to the ContactList entity.
+func (m *ContactListMembershipMutation) ClearContactList() {
+	m.clearedcontact_list = true
+	m.clearedFields[contactlistmembership.FieldContactListID] = struct{}{}
+}
+
+// ContactListCleared reports if the "contact_list" edge to the ContactList entity was cleared.
+func (m *ContactListMembershipMutation) ContactListCleared() bool {
+	return m.clearedcontact_list
+}
+
+// ContactListIDs returns the "contact_list" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// ContactListID instead. It exists only for internal usage by the builders.
+func (m *ContactListMembershipMutation) ContactListIDs() (ids []string) {
+	if id := m.contact_list; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetContactList resets all changes to the "contact_list" edge.
+func (m *ContactListMembershipMutation) ResetContactList() {
+	m.contact_list = nil
+	m.clearedcontact_list = false
+}
+
+// ClearContact clears the "contact" edge to the Contact entity.
+func (m *ContactListMembershipMutation) ClearContact() {
+	m.clearedcontact = true
+	m.clearedFields[contactlistmembership.FieldContactID] = struct{}{}
+}
+
+// ContactCleared reports if the "contact" edge to the Contact entity was cleared.
+func (m *ContactListMembershipMutation) ContactCleared() bool {
+	return m.clearedcontact
+}
+
+// ContactIDs returns the "contact" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// ContactID instead. It exists only for internal usage by the builders.
+func (m *ContactListMembershipMutation) ContactIDs() (ids []string) {
+	if id := m.contact; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetContact resets all changes to the "contact" edge.
+func (m *ContactListMembershipMutation) ResetContact() {
+	m.contact = nil
+	m.clearedcontact = false
+}
+
+// AddEventIDs adds the "events" edge to the Event entity by ids.
+func (m *ContactListMembershipMutation) AddEventIDs(ids ...string) {
+	if m.events == nil {
+		m.events = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.events[ids[i]] = struct{}{}
+	}
+}
+
+// ClearEvents clears the "events" edge to the Event entity.
+func (m *ContactListMembershipMutation) ClearEvents() {
+	m.clearedevents = true
+}
+
+// EventsCleared reports if the "events" edge to the Event entity was cleared.
+func (m *ContactListMembershipMutation) EventsCleared() bool {
+	return m.clearedevents
+}
+
+// RemoveEventIDs removes the "events" edge to the Event entity by IDs.
+func (m *ContactListMembershipMutation) RemoveEventIDs(ids ...string) {
+	if m.removedevents == nil {
+		m.removedevents = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.events, ids[i])
+		m.removedevents[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedEvents returns the removed IDs of the "events" edge to the Event entity.
+func (m *ContactListMembershipMutation) RemovedEventsIDs() (ids []string) {
+	for id := range m.removedevents {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// EventsIDs returns the "events" edge IDs in the mutation.
+func (m *ContactListMembershipMutation) EventsIDs() (ids []string) {
+	for id := range m.events {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetEvents resets all changes to the "events" edge.
+func (m *ContactListMembershipMutation) ResetEvents() {
+	m.events = nil
+	m.clearedevents = false
+	m.removedevents = nil
+}
+
+// Where appends a list predicates to the ContactListMembershipMutation builder.
+func (m *ContactListMembershipMutation) Where(ps ...predicate.ContactListMembership) {
+	m.predicates = append(m.predicates, ps...)
+}
+
+// WhereP appends storage-level predicates to the ContactListMembershipMutation builder. Using this method,
+// users can use type-assertion to append predicates that do not depend on any generated package.
+func (m *ContactListMembershipMutation) WhereP(ps ...func(*sql.Selector)) {
+	p := make([]predicate.ContactListMembership, len(ps))
+	for i := range ps {
+		p[i] = ps[i]
+	}
+	m.Where(p...)
+}
+
+// Op returns the operation name.
+func (m *ContactListMembershipMutation) Op() Op {
+	return m.op
+}
+
+// SetOp allows setting the mutation operation.
+func (m *ContactListMembershipMutation) SetOp(op Op) {
+	m.op = op
+}
+
+// Type returns the node type of this mutation (ContactListMembership).
+func (m *ContactListMembershipMutation) Type() string {
+	return m.typ
+}
+
+// Fields returns all fields that were changed during this mutation. Note that in
+// order to get all numeric fields that were incremented/decremented, call
+// AddedFields().
+func (m *ContactListMembershipMutation) Fields() []string {
+	fields := make([]string, 0, 9)
+	if m.created_at != nil {
+		fields = append(fields, contactlistmembership.FieldCreatedAt)
+	}
+	if m.updated_at != nil {
+		fields = append(fields, contactlistmembership.FieldUpdatedAt)
+	}
+	if m.created_by != nil {
+		fields = append(fields, contactlistmembership.FieldCreatedBy)
+	}
+	if m.updated_by != nil {
+		fields = append(fields, contactlistmembership.FieldUpdatedBy)
+	}
+	if m.mapping_id != nil {
+		fields = append(fields, contactlistmembership.FieldMappingID)
+	}
+	if m.deleted_at != nil {
+		fields = append(fields, contactlistmembership.FieldDeletedAt)
+	}
+	if m.deleted_by != nil {
+		fields = append(fields, contactlistmembership.FieldDeletedBy)
+	}
+	if m.contact_list != nil {
+		fields = append(fields, contactlistmembership.FieldContactListID)
+	}
+	if m.contact != nil {
+		fields = append(fields, contactlistmembership.FieldContactID)
+	}
+	return fields
+}
+
+// Field returns the value of a field with the given name. The second boolean
+// return value indicates that this field was not set, or was not defined in the
+// schema.
+func (m *ContactListMembershipMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case contactlistmembership.FieldCreatedAt:
+		return m.CreatedAt()
+	case contactlistmembership.FieldUpdatedAt:
+		return m.UpdatedAt()
+	case contactlistmembership.FieldCreatedBy:
+		return m.CreatedBy()
+	case contactlistmembership.FieldUpdatedBy:
+		return m.UpdatedBy()
+	case contactlistmembership.FieldMappingID:
+		return m.MappingID()
+	case contactlistmembership.FieldDeletedAt:
+		return m.DeletedAt()
+	case contactlistmembership.FieldDeletedBy:
+		return m.DeletedBy()
+	case contactlistmembership.FieldContactListID:
+		return m.ContactListID()
+	case contactlistmembership.FieldContactID:
+		return m.ContactID()
+	}
+	return nil, false
+}
+
+// OldField returns the old value of the field from the database. An error is
+// returned if the mutation operation is not UpdateOne, or the query to the
+// database failed.
+func (m *ContactListMembershipMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case contactlistmembership.FieldCreatedAt:
+		return m.OldCreatedAt(ctx)
+	case contactlistmembership.FieldUpdatedAt:
+		return m.OldUpdatedAt(ctx)
+	case contactlistmembership.FieldCreatedBy:
+		return m.OldCreatedBy(ctx)
+	case contactlistmembership.FieldUpdatedBy:
+		return m.OldUpdatedBy(ctx)
+	case contactlistmembership.FieldMappingID:
+		return m.OldMappingID(ctx)
+	case contactlistmembership.FieldDeletedAt:
+		return m.OldDeletedAt(ctx)
+	case contactlistmembership.FieldDeletedBy:
+		return m.OldDeletedBy(ctx)
+	case contactlistmembership.FieldContactListID:
+		return m.OldContactListID(ctx)
+	case contactlistmembership.FieldContactID:
+		return m.OldContactID(ctx)
+	}
+	return nil, fmt.Errorf("unknown ContactListMembership field %s", name)
+}
+
+// SetField sets the value of a field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *ContactListMembershipMutation) SetField(name string, value ent.Value) error {
+	switch name {
+	case contactlistmembership.FieldCreatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedAt(v)
+		return nil
+	case contactlistmembership.FieldUpdatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedAt(v)
+		return nil
+	case contactlistmembership.FieldCreatedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedBy(v)
+		return nil
+	case contactlistmembership.FieldUpdatedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedBy(v)
+		return nil
+	case contactlistmembership.FieldMappingID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetMappingID(v)
+		return nil
+	case contactlistmembership.FieldDeletedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDeletedAt(v)
+		return nil
+	case contactlistmembership.FieldDeletedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDeletedBy(v)
+		return nil
+	case contactlistmembership.FieldContactListID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetContactListID(v)
+		return nil
+	case contactlistmembership.FieldContactID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetContactID(v)
+		return nil
+	}
+	return fmt.Errorf("unknown ContactListMembership field %s", name)
+}
+
+// AddedFields returns all numeric fields that were incremented/decremented during
+// this mutation.
+func (m *ContactListMembershipMutation) AddedFields() []string {
+	return nil
+}
+
+// AddedField returns the numeric value that was incremented/decremented on a field
+// with the given name. The second boolean return value indicates that this field
+// was not set, or was not defined in the schema.
+func (m *ContactListMembershipMutation) AddedField(name string) (ent.Value, bool) {
+	return nil, false
+}
+
+// AddField adds the value to the field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *ContactListMembershipMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	}
+	return fmt.Errorf("unknown ContactListMembership numeric field %s", name)
+}
+
+// ClearedFields returns all nullable fields that were cleared during this
+// mutation.
+func (m *ContactListMembershipMutation) ClearedFields() []string {
+	var fields []string
+	if m.FieldCleared(contactlistmembership.FieldCreatedAt) {
+		fields = append(fields, contactlistmembership.FieldCreatedAt)
+	}
+	if m.FieldCleared(contactlistmembership.FieldUpdatedAt) {
+		fields = append(fields, contactlistmembership.FieldUpdatedAt)
+	}
+	if m.FieldCleared(contactlistmembership.FieldCreatedBy) {
+		fields = append(fields, contactlistmembership.FieldCreatedBy)
+	}
+	if m.FieldCleared(contactlistmembership.FieldUpdatedBy) {
+		fields = append(fields, contactlistmembership.FieldUpdatedBy)
+	}
+	if m.FieldCleared(contactlistmembership.FieldDeletedAt) {
+		fields = append(fields, contactlistmembership.FieldDeletedAt)
+	}
+	if m.FieldCleared(contactlistmembership.FieldDeletedBy) {
+		fields = append(fields, contactlistmembership.FieldDeletedBy)
+	}
+	return fields
+}
+
+// FieldCleared returns a boolean indicating if a field with the given name was
+// cleared in this mutation.
+func (m *ContactListMembershipMutation) FieldCleared(name string) bool {
+	_, ok := m.clearedFields[name]
+	return ok
+}
+
+// ClearField clears the value of the field with the given name. It returns an
+// error if the field is not defined in the schema.
+func (m *ContactListMembershipMutation) ClearField(name string) error {
+	switch name {
+	case contactlistmembership.FieldCreatedAt:
+		m.ClearCreatedAt()
+		return nil
+	case contactlistmembership.FieldUpdatedAt:
+		m.ClearUpdatedAt()
+		return nil
+	case contactlistmembership.FieldCreatedBy:
+		m.ClearCreatedBy()
+		return nil
+	case contactlistmembership.FieldUpdatedBy:
+		m.ClearUpdatedBy()
+		return nil
+	case contactlistmembership.FieldDeletedAt:
+		m.ClearDeletedAt()
+		return nil
+	case contactlistmembership.FieldDeletedBy:
+		m.ClearDeletedBy()
+		return nil
+	}
+	return fmt.Errorf("unknown ContactListMembership nullable field %s", name)
+}
+
+// ResetField resets all changes in the mutation for the field with the given name.
+// It returns an error if the field is not defined in the schema.
+func (m *ContactListMembershipMutation) ResetField(name string) error {
+	switch name {
+	case contactlistmembership.FieldCreatedAt:
+		m.ResetCreatedAt()
+		return nil
+	case contactlistmembership.FieldUpdatedAt:
+		m.ResetUpdatedAt()
+		return nil
+	case contactlistmembership.FieldCreatedBy:
+		m.ResetCreatedBy()
+		return nil
+	case contactlistmembership.FieldUpdatedBy:
+		m.ResetUpdatedBy()
+		return nil
+	case contactlistmembership.FieldMappingID:
+		m.ResetMappingID()
+		return nil
+	case contactlistmembership.FieldDeletedAt:
+		m.ResetDeletedAt()
+		return nil
+	case contactlistmembership.FieldDeletedBy:
+		m.ResetDeletedBy()
+		return nil
+	case contactlistmembership.FieldContactListID:
+		m.ResetContactListID()
+		return nil
+	case contactlistmembership.FieldContactID:
+		m.ResetContactID()
+		return nil
+	}
+	return fmt.Errorf("unknown ContactListMembership field %s", name)
+}
+
+// AddedEdges returns all edge names that were set/added in this mutation.
+func (m *ContactListMembershipMutation) AddedEdges() []string {
+	edges := make([]string, 0, 3)
+	if m.contact_list != nil {
+		edges = append(edges, contactlistmembership.EdgeContactList)
+	}
+	if m.contact != nil {
+		edges = append(edges, contactlistmembership.EdgeContact)
+	}
+	if m.events != nil {
+		edges = append(edges, contactlistmembership.EdgeEvents)
+	}
+	return edges
+}
+
+// AddedIDs returns all IDs (to other nodes) that were added for the given edge
+// name in this mutation.
+func (m *ContactListMembershipMutation) AddedIDs(name string) []ent.Value {
+	switch name {
+	case contactlistmembership.EdgeContactList:
+		if id := m.contact_list; id != nil {
+			return []ent.Value{*id}
+		}
+	case contactlistmembership.EdgeContact:
+		if id := m.contact; id != nil {
+			return []ent.Value{*id}
+		}
+	case contactlistmembership.EdgeEvents:
+		ids := make([]ent.Value, 0, len(m.events))
+		for id := range m.events {
+			ids = append(ids, id)
+		}
+		return ids
+	}
+	return nil
+}
+
+// RemovedEdges returns all edge names that were removed in this mutation.
+func (m *ContactListMembershipMutation) RemovedEdges() []string {
+	edges := make([]string, 0, 3)
+	if m.removedevents != nil {
+		edges = append(edges, contactlistmembership.EdgeEvents)
+	}
+	return edges
+}
+
+// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
+// the given name in this mutation.
+func (m *ContactListMembershipMutation) RemovedIDs(name string) []ent.Value {
+	switch name {
+	case contactlistmembership.EdgeEvents:
+		ids := make([]ent.Value, 0, len(m.removedevents))
+		for id := range m.removedevents {
+			ids = append(ids, id)
+		}
+		return ids
+	}
+	return nil
+}
+
+// ClearedEdges returns all edge names that were cleared in this mutation.
+func (m *ContactListMembershipMutation) ClearedEdges() []string {
+	edges := make([]string, 0, 3)
+	if m.clearedcontact_list {
+		edges = append(edges, contactlistmembership.EdgeContactList)
+	}
+	if m.clearedcontact {
+		edges = append(edges, contactlistmembership.EdgeContact)
+	}
+	if m.clearedevents {
+		edges = append(edges, contactlistmembership.EdgeEvents)
+	}
+	return edges
+}
+
+// EdgeCleared returns a boolean which indicates if the edge with the given name
+// was cleared in this mutation.
+func (m *ContactListMembershipMutation) EdgeCleared(name string) bool {
+	switch name {
+	case contactlistmembership.EdgeContactList:
+		return m.clearedcontact_list
+	case contactlistmembership.EdgeContact:
+		return m.clearedcontact
+	case contactlistmembership.EdgeEvents:
+		return m.clearedevents
+	}
+	return false
+}
+
+// ClearEdge clears the value of the edge with the given name. It returns an error
+// if that edge is not defined in the schema.
+func (m *ContactListMembershipMutation) ClearEdge(name string) error {
+	switch name {
+	case contactlistmembership.EdgeContactList:
+		m.ClearContactList()
+		return nil
+	case contactlistmembership.EdgeContact:
+		m.ClearContact()
+		return nil
+	}
+	return fmt.Errorf("unknown ContactListMembership unique edge %s", name)
+}
+
+// ResetEdge resets all changes to the edge with the given name in this mutation.
+// It returns an error if the edge is not defined in the schema.
+func (m *ContactListMembershipMutation) ResetEdge(name string) error {
+	switch name {
+	case contactlistmembership.EdgeContactList:
+		m.ResetContactList()
+		return nil
+	case contactlistmembership.EdgeContact:
+		m.ResetContact()
+		return nil
+	case contactlistmembership.EdgeEvents:
+		m.ResetEvents()
+		return nil
+	}
+	return fmt.Errorf("unknown ContactListMembership edge %s", name)
+}
+
+// ContactListMembershipHistoryMutation represents an operation that mutates the ContactListMembershipHistory nodes in the graph.
+type ContactListMembershipHistoryMutation struct {
+	config
+	op              Op
+	typ             string
+	id              *string
+	history_time    *time.Time
+	ref             *string
+	operation       *enthistory.OpType
+	created_at      *time.Time
+	updated_at      *time.Time
+	created_by      *string
+	updated_by      *string
+	mapping_id      *string
+	deleted_at      *time.Time
+	deleted_by      *string
+	contact_list_id *string
+	contact_id      *string
+	clearedFields   map[string]struct{}
+	done            bool
+	oldValue        func(context.Context) (*ContactListMembershipHistory, error)
+	predicates      []predicate.ContactListMembershipHistory
+}
+
+var _ ent.Mutation = (*ContactListMembershipHistoryMutation)(nil)
+
+// contactlistmembershiphistoryOption allows management of the mutation configuration using functional options.
+type contactlistmembershiphistoryOption func(*ContactListMembershipHistoryMutation)
+
+// newContactListMembershipHistoryMutation creates new mutation for the ContactListMembershipHistory entity.
+func newContactListMembershipHistoryMutation(c config, op Op, opts ...contactlistmembershiphistoryOption) *ContactListMembershipHistoryMutation {
+	m := &ContactListMembershipHistoryMutation{
+		config:        c,
+		op:            op,
+		typ:           TypeContactListMembershipHistory,
+		clearedFields: make(map[string]struct{}),
+	}
+	for _, opt := range opts {
+		opt(m)
+	}
+	return m
+}
+
+// withContactListMembershipHistoryID sets the ID field of the mutation.
+func withContactListMembershipHistoryID(id string) contactlistmembershiphistoryOption {
+	return func(m *ContactListMembershipHistoryMutation) {
+		var (
+			err   error
+			once  sync.Once
+			value *ContactListMembershipHistory
+		)
+		m.oldValue = func(ctx context.Context) (*ContactListMembershipHistory, error) {
+			once.Do(func() {
+				if m.done {
+					err = errors.New("querying old values post mutation is not allowed")
+				} else {
+					value, err = m.Client().ContactListMembershipHistory.Get(ctx, id)
+				}
+			})
+			return value, err
+		}
+		m.id = &id
+	}
+}
+
+// withContactListMembershipHistory sets the old ContactListMembershipHistory of the mutation.
+func withContactListMembershipHistory(node *ContactListMembershipHistory) contactlistmembershiphistoryOption {
+	return func(m *ContactListMembershipHistoryMutation) {
+		m.oldValue = func(context.Context) (*ContactListMembershipHistory, error) {
+			return node, nil
+		}
+		m.id = &node.ID
+	}
+}
+
+// Client returns a new `ent.Client` from the mutation. If the mutation was
+// executed in a transaction (ent.Tx), a transactional client is returned.
+func (m ContactListMembershipHistoryMutation) Client() *Client {
+	client := &Client{config: m.config}
+	client.init()
+	return client
+}
+
+// Tx returns an `ent.Tx` for mutations that were executed in transactions;
+// it returns an error otherwise.
+func (m ContactListMembershipHistoryMutation) Tx() (*Tx, error) {
+	if _, ok := m.driver.(*txDriver); !ok {
+		return nil, errors.New("generated: mutation is not running in a transaction")
+	}
+	tx := &Tx{config: m.config}
+	tx.init()
+	return tx, nil
+}
+
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of ContactListMembershipHistory entities.
+func (m *ContactListMembershipHistoryMutation) SetID(id string) {
+	m.id = &id
+}
+
+// ID returns the ID value in the mutation. Note that the ID is only available
+// if it was provided to the builder or after it was returned from the database.
+func (m *ContactListMembershipHistoryMutation) ID() (id string, exists bool) {
+	if m.id == nil {
+		return
+	}
+	return *m.id, true
+}
+
+// IDs queries the database and returns the entity ids that match the mutation's predicate.
+// That means, if the mutation is applied within a transaction with an isolation level such
+// as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
+// or updated by the mutation.
+func (m *ContactListMembershipHistoryMutation) IDs(ctx context.Context) ([]string, error) {
+	switch {
+	case m.op.Is(OpUpdateOne | OpDeleteOne):
+		id, exists := m.ID()
+		if exists {
+			return []string{id}, nil
+		}
+		fallthrough
+	case m.op.Is(OpUpdate | OpDelete):
+		return m.Client().ContactListMembershipHistory.Query().Where(m.predicates...).IDs(ctx)
+	default:
+		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
+	}
+}
+
+// SetHistoryTime sets the "history_time" field.
+func (m *ContactListMembershipHistoryMutation) SetHistoryTime(t time.Time) {
+	m.history_time = &t
+}
+
+// HistoryTime returns the value of the "history_time" field in the mutation.
+func (m *ContactListMembershipHistoryMutation) HistoryTime() (r time.Time, exists bool) {
+	v := m.history_time
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldHistoryTime returns the old "history_time" field's value of the ContactListMembershipHistory entity.
+// If the ContactListMembershipHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ContactListMembershipHistoryMutation) OldHistoryTime(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldHistoryTime is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldHistoryTime requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldHistoryTime: %w", err)
+	}
+	return oldValue.HistoryTime, nil
+}
+
+// ResetHistoryTime resets all changes to the "history_time" field.
+func (m *ContactListMembershipHistoryMutation) ResetHistoryTime() {
+	m.history_time = nil
+}
+
+// SetRef sets the "ref" field.
+func (m *ContactListMembershipHistoryMutation) SetRef(s string) {
+	m.ref = &s
+}
+
+// Ref returns the value of the "ref" field in the mutation.
+func (m *ContactListMembershipHistoryMutation) Ref() (r string, exists bool) {
+	v := m.ref
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldRef returns the old "ref" field's value of the ContactListMembershipHistory entity.
+// If the ContactListMembershipHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ContactListMembershipHistoryMutation) OldRef(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldRef is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldRef requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldRef: %w", err)
+	}
+	return oldValue.Ref, nil
+}
+
+// ClearRef clears the value of the "ref" field.
+func (m *ContactListMembershipHistoryMutation) ClearRef() {
+	m.ref = nil
+	m.clearedFields[contactlistmembershiphistory.FieldRef] = struct{}{}
+}
+
+// RefCleared returns if the "ref" field was cleared in this mutation.
+func (m *ContactListMembershipHistoryMutation) RefCleared() bool {
+	_, ok := m.clearedFields[contactlistmembershiphistory.FieldRef]
+	return ok
+}
+
+// ResetRef resets all changes to the "ref" field.
+func (m *ContactListMembershipHistoryMutation) ResetRef() {
+	m.ref = nil
+	delete(m.clearedFields, contactlistmembershiphistory.FieldRef)
+}
+
+// SetOperation sets the "operation" field.
+func (m *ContactListMembershipHistoryMutation) SetOperation(et enthistory.OpType) {
+	m.operation = &et
+}
+
+// Operation returns the value of the "operation" field in the mutation.
+func (m *ContactListMembershipHistoryMutation) Operation() (r enthistory.OpType, exists bool) {
+	v := m.operation
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldOperation returns the old "operation" field's value of the ContactListMembershipHistory entity.
+// If the ContactListMembershipHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ContactListMembershipHistoryMutation) OldOperation(ctx context.Context) (v enthistory.OpType, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldOperation is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldOperation requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldOperation: %w", err)
+	}
+	return oldValue.Operation, nil
+}
+
+// ResetOperation resets all changes to the "operation" field.
+func (m *ContactListMembershipHistoryMutation) ResetOperation() {
+	m.operation = nil
+}
+
+// SetCreatedAt sets the "created_at" field.
+func (m *ContactListMembershipHistoryMutation) SetCreatedAt(t time.Time) {
+	m.created_at = &t
+}
+
+// CreatedAt returns the value of the "created_at" field in the mutation.
+func (m *ContactListMembershipHistoryMutation) CreatedAt() (r time.Time, exists bool) {
+	v := m.created_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedAt returns the old "created_at" field's value of the ContactListMembershipHistory entity.
+// If the ContactListMembershipHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ContactListMembershipHistoryMutation) OldCreatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedAt: %w", err)
+	}
+	return oldValue.CreatedAt, nil
+}
+
+// ClearCreatedAt clears the value of the "created_at" field.
+func (m *ContactListMembershipHistoryMutation) ClearCreatedAt() {
+	m.created_at = nil
+	m.clearedFields[contactlistmembershiphistory.FieldCreatedAt] = struct{}{}
+}
+
+// CreatedAtCleared returns if the "created_at" field was cleared in this mutation.
+func (m *ContactListMembershipHistoryMutation) CreatedAtCleared() bool {
+	_, ok := m.clearedFields[contactlistmembershiphistory.FieldCreatedAt]
+	return ok
+}
+
+// ResetCreatedAt resets all changes to the "created_at" field.
+func (m *ContactListMembershipHistoryMutation) ResetCreatedAt() {
+	m.created_at = nil
+	delete(m.clearedFields, contactlistmembershiphistory.FieldCreatedAt)
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (m *ContactListMembershipHistoryMutation) SetUpdatedAt(t time.Time) {
+	m.updated_at = &t
+}
+
+// UpdatedAt returns the value of the "updated_at" field in the mutation.
+func (m *ContactListMembershipHistoryMutation) UpdatedAt() (r time.Time, exists bool) {
+	v := m.updated_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedAt returns the old "updated_at" field's value of the ContactListMembershipHistory entity.
+// If the ContactListMembershipHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ContactListMembershipHistoryMutation) OldUpdatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedAt: %w", err)
+	}
+	return oldValue.UpdatedAt, nil
+}
+
+// ClearUpdatedAt clears the value of the "updated_at" field.
+func (m *ContactListMembershipHistoryMutation) ClearUpdatedAt() {
+	m.updated_at = nil
+	m.clearedFields[contactlistmembershiphistory.FieldUpdatedAt] = struct{}{}
+}
+
+// UpdatedAtCleared returns if the "updated_at" field was cleared in this mutation.
+func (m *ContactListMembershipHistoryMutation) UpdatedAtCleared() bool {
+	_, ok := m.clearedFields[contactlistmembershiphistory.FieldUpdatedAt]
+	return ok
+}
+
+// ResetUpdatedAt resets all changes to the "updated_at" field.
+func (m *ContactListMembershipHistoryMutation) ResetUpdatedAt() {
+	m.updated_at = nil
+	delete(m.clearedFields, contactlistmembershiphistory.FieldUpdatedAt)
+}
+
+// SetCreatedBy sets the "created_by" field.
+func (m *ContactListMembershipHistoryMutation) SetCreatedBy(s string) {
+	m.created_by = &s
+}
+
+// CreatedBy returns the value of the "created_by" field in the mutation.
+func (m *ContactListMembershipHistoryMutation) CreatedBy() (r string, exists bool) {
+	v := m.created_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedBy returns the old "created_by" field's value of the ContactListMembershipHistory entity.
+// If the ContactListMembershipHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ContactListMembershipHistoryMutation) OldCreatedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedBy: %w", err)
+	}
+	return oldValue.CreatedBy, nil
+}
+
+// ClearCreatedBy clears the value of the "created_by" field.
+func (m *ContactListMembershipHistoryMutation) ClearCreatedBy() {
+	m.created_by = nil
+	m.clearedFields[contactlistmembershiphistory.FieldCreatedBy] = struct{}{}
+}
+
+// CreatedByCleared returns if the "created_by" field was cleared in this mutation.
+func (m *ContactListMembershipHistoryMutation) CreatedByCleared() bool {
+	_, ok := m.clearedFields[contactlistmembershiphistory.FieldCreatedBy]
+	return ok
+}
+
+// ResetCreatedBy resets all changes to the "created_by" field.
+func (m *ContactListMembershipHistoryMutation) ResetCreatedBy() {
+	m.created_by = nil
+	delete(m.clearedFields, contactlistmembershiphistory.FieldCreatedBy)
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (m *ContactListMembershipHistoryMutation) SetUpdatedBy(s string) {
+	m.updated_by = &s
+}
+
+// UpdatedBy returns the value of the "updated_by" field in the mutation.
+func (m *ContactListMembershipHistoryMutation) UpdatedBy() (r string, exists bool) {
+	v := m.updated_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedBy returns the old "updated_by" field's value of the ContactListMembershipHistory entity.
+// If the ContactListMembershipHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ContactListMembershipHistoryMutation) OldUpdatedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedBy: %w", err)
+	}
+	return oldValue.UpdatedBy, nil
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (m *ContactListMembershipHistoryMutation) ClearUpdatedBy() {
+	m.updated_by = nil
+	m.clearedFields[contactlistmembershiphistory.FieldUpdatedBy] = struct{}{}
+}
+
+// UpdatedByCleared returns if the "updated_by" field was cleared in this mutation.
+func (m *ContactListMembershipHistoryMutation) UpdatedByCleared() bool {
+	_, ok := m.clearedFields[contactlistmembershiphistory.FieldUpdatedBy]
+	return ok
+}
+
+// ResetUpdatedBy resets all changes to the "updated_by" field.
+func (m *ContactListMembershipHistoryMutation) ResetUpdatedBy() {
+	m.updated_by = nil
+	delete(m.clearedFields, contactlistmembershiphistory.FieldUpdatedBy)
+}
+
+// SetMappingID sets the "mapping_id" field.
+func (m *ContactListMembershipHistoryMutation) SetMappingID(s string) {
+	m.mapping_id = &s
+}
+
+// MappingID returns the value of the "mapping_id" field in the mutation.
+func (m *ContactListMembershipHistoryMutation) MappingID() (r string, exists bool) {
+	v := m.mapping_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldMappingID returns the old "mapping_id" field's value of the ContactListMembershipHistory entity.
+// If the ContactListMembershipHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ContactListMembershipHistoryMutation) OldMappingID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldMappingID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldMappingID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldMappingID: %w", err)
+	}
+	return oldValue.MappingID, nil
+}
+
+// ResetMappingID resets all changes to the "mapping_id" field.
+func (m *ContactListMembershipHistoryMutation) ResetMappingID() {
+	m.mapping_id = nil
+}
+
+// SetDeletedAt sets the "deleted_at" field.
+func (m *ContactListMembershipHistoryMutation) SetDeletedAt(t time.Time) {
+	m.deleted_at = &t
+}
+
+// DeletedAt returns the value of the "deleted_at" field in the mutation.
+func (m *ContactListMembershipHistoryMutation) DeletedAt() (r time.Time, exists bool) {
+	v := m.deleted_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDeletedAt returns the old "deleted_at" field's value of the ContactListMembershipHistory entity.
+// If the ContactListMembershipHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ContactListMembershipHistoryMutation) OldDeletedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDeletedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDeletedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDeletedAt: %w", err)
+	}
+	return oldValue.DeletedAt, nil
+}
+
+// ClearDeletedAt clears the value of the "deleted_at" field.
+func (m *ContactListMembershipHistoryMutation) ClearDeletedAt() {
+	m.deleted_at = nil
+	m.clearedFields[contactlistmembershiphistory.FieldDeletedAt] = struct{}{}
+}
+
+// DeletedAtCleared returns if the "deleted_at" field was cleared in this mutation.
+func (m *ContactListMembershipHistoryMutation) DeletedAtCleared() bool {
+	_, ok := m.clearedFields[contactlistmembershiphistory.FieldDeletedAt]
+	return ok
+}
+
+// ResetDeletedAt resets all changes to the "deleted_at" field.
+func (m *ContactListMembershipHistoryMutation) ResetDeletedAt() {
+	m.deleted_at = nil
+	delete(m.clearedFields, contactlistmembershiphistory.FieldDeletedAt)
+}
+
+// SetDeletedBy sets the "deleted_by" field.
+func (m *ContactListMembershipHistoryMutation) SetDeletedBy(s string) {
+	m.deleted_by = &s
+}
+
+// DeletedBy returns the value of the "deleted_by" field in the mutation.
+func (m *ContactListMembershipHistoryMutation) DeletedBy() (r string, exists bool) {
+	v := m.deleted_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDeletedBy returns the old "deleted_by" field's value of the ContactListMembershipHistory entity.
+// If the ContactListMembershipHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ContactListMembershipHistoryMutation) OldDeletedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDeletedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDeletedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDeletedBy: %w", err)
+	}
+	return oldValue.DeletedBy, nil
+}
+
+// ClearDeletedBy clears the value of the "deleted_by" field.
+func (m *ContactListMembershipHistoryMutation) ClearDeletedBy() {
+	m.deleted_by = nil
+	m.clearedFields[contactlistmembershiphistory.FieldDeletedBy] = struct{}{}
+}
+
+// DeletedByCleared returns if the "deleted_by" field was cleared in this mutation.
+func (m *ContactListMembershipHistoryMutation) DeletedByCleared() bool {
+	_, ok := m.clearedFields[contactlistmembershiphistory.FieldDeletedBy]
+	return ok
+}
+
+// ResetDeletedBy resets all changes to the "deleted_by" field.
+func (m *ContactListMembershipHistoryMutation) ResetDeletedBy() {
+	m.deleted_by = nil
+	delete(m.clearedFields, contactlistmembershiphistory.FieldDeletedBy)
+}
+
+// SetContactListID sets the "contact_list_id" field.
+func (m *ContactListMembershipHistoryMutation) SetContactListID(s string) {
+	m.contact_list_id = &s
+}
+
+// ContactListID returns the value of the "contact_list_id" field in the mutation.
+func (m *ContactListMembershipHistoryMutation) ContactListID() (r string, exists bool) {
+	v := m.contact_list_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldContactListID returns the old "contact_list_id" field's value of the ContactListMembershipHistory entity.
+// If the ContactListMembershipHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ContactListMembershipHistoryMutation) OldContactListID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldContactListID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldContactListID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldContactListID: %w", err)
+	}
+	return oldValue.ContactListID, nil
+}
+
+// ResetContactListID resets all changes to the "contact_list_id" field.
+func (m *ContactListMembershipHistoryMutation) ResetContactListID() {
+	m.contact_list_id = nil
+}
+
+// SetContactID sets the "contact_id" field.
+func (m *ContactListMembershipHistoryMutation) SetContactID(s string) {
+	m.contact_id = &s
+}
+
+// ContactID returns the value of the "contact_id" field in the mutation.
+func (m *ContactListMembershipHistoryMutation) ContactID() (r string, exists bool) {
+	v := m.contact_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldContactID returns the old "contact_id" field's value of the ContactListMembershipHistory entity.
+// If the ContactListMembershipHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ContactListMembershipHistoryMutation) OldContactID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldContactID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldContactID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldContactID: %w", err)
+	}
+	return oldValue.ContactID, nil
+}
+
+// ResetContactID resets all changes to the "contact_id" field.
+func (m *ContactListMembershipHistoryMutation) ResetContactID() {
+	m.contact_id = nil
+}
+
+// Where appends a list predicates to the ContactListMembershipHistoryMutation builder.
+func (m *ContactListMembershipHistoryMutation) Where(ps ...predicate.ContactListMembershipHistory) {
+	m.predicates = append(m.predicates, ps...)
+}
+
+// WhereP appends storage-level predicates to the ContactListMembershipHistoryMutation builder. Using this method,
+// users can use type-assertion to append predicates that do not depend on any generated package.
+func (m *ContactListMembershipHistoryMutation) WhereP(ps ...func(*sql.Selector)) {
+	p := make([]predicate.ContactListMembershipHistory, len(ps))
+	for i := range ps {
+		p[i] = ps[i]
+	}
+	m.Where(p...)
+}
+
+// Op returns the operation name.
+func (m *ContactListMembershipHistoryMutation) Op() Op {
+	return m.op
+}
+
+// SetOp allows setting the mutation operation.
+func (m *ContactListMembershipHistoryMutation) SetOp(op Op) {
+	m.op = op
+}
+
+// Type returns the node type of this mutation (ContactListMembershipHistory).
+func (m *ContactListMembershipHistoryMutation) Type() string {
+	return m.typ
+}
+
+// Fields returns all fields that were changed during this mutation. Note that in
+// order to get all numeric fields that were incremented/decremented, call
+// AddedFields().
+func (m *ContactListMembershipHistoryMutation) Fields() []string {
+	fields := make([]string, 0, 12)
+	if m.history_time != nil {
+		fields = append(fields, contactlistmembershiphistory.FieldHistoryTime)
+	}
+	if m.ref != nil {
+		fields = append(fields, contactlistmembershiphistory.FieldRef)
+	}
+	if m.operation != nil {
+		fields = append(fields, contactlistmembershiphistory.FieldOperation)
+	}
+	if m.created_at != nil {
+		fields = append(fields, contactlistmembershiphistory.FieldCreatedAt)
+	}
+	if m.updated_at != nil {
+		fields = append(fields, contactlistmembershiphistory.FieldUpdatedAt)
+	}
+	if m.created_by != nil {
+		fields = append(fields, contactlistmembershiphistory.FieldCreatedBy)
+	}
+	if m.updated_by != nil {
+		fields = append(fields, contactlistmembershiphistory.FieldUpdatedBy)
+	}
+	if m.mapping_id != nil {
+		fields = append(fields, contactlistmembershiphistory.FieldMappingID)
+	}
+	if m.deleted_at != nil {
+		fields = append(fields, contactlistmembershiphistory.FieldDeletedAt)
+	}
+	if m.deleted_by != nil {
+		fields = append(fields, contactlistmembershiphistory.FieldDeletedBy)
+	}
+	if m.contact_list_id != nil {
+		fields = append(fields, contactlistmembershiphistory.FieldContactListID)
+	}
+	if m.contact_id != nil {
+		fields = append(fields, contactlistmembershiphistory.FieldContactID)
+	}
+	return fields
+}
+
+// Field returns the value of a field with the given name. The second boolean
+// return value indicates that this field was not set, or was not defined in the
+// schema.
+func (m *ContactListMembershipHistoryMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case contactlistmembershiphistory.FieldHistoryTime:
+		return m.HistoryTime()
+	case contactlistmembershiphistory.FieldRef:
+		return m.Ref()
+	case contactlistmembershiphistory.FieldOperation:
+		return m.Operation()
+	case contactlistmembershiphistory.FieldCreatedAt:
+		return m.CreatedAt()
+	case contactlistmembershiphistory.FieldUpdatedAt:
+		return m.UpdatedAt()
+	case contactlistmembershiphistory.FieldCreatedBy:
+		return m.CreatedBy()
+	case contactlistmembershiphistory.FieldUpdatedBy:
+		return m.UpdatedBy()
+	case contactlistmembershiphistory.FieldMappingID:
+		return m.MappingID()
+	case contactlistmembershiphistory.FieldDeletedAt:
+		return m.DeletedAt()
+	case contactlistmembershiphistory.FieldDeletedBy:
+		return m.DeletedBy()
+	case contactlistmembershiphistory.FieldContactListID:
+		return m.ContactListID()
+	case contactlistmembershiphistory.FieldContactID:
+		return m.ContactID()
+	}
+	return nil, false
+}
+
+// OldField returns the old value of the field from the database. An error is
+// returned if the mutation operation is not UpdateOne, or the query to the
+// database failed.
+func (m *ContactListMembershipHistoryMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case contactlistmembershiphistory.FieldHistoryTime:
+		return m.OldHistoryTime(ctx)
+	case contactlistmembershiphistory.FieldRef:
+		return m.OldRef(ctx)
+	case contactlistmembershiphistory.FieldOperation:
+		return m.OldOperation(ctx)
+	case contactlistmembershiphistory.FieldCreatedAt:
+		return m.OldCreatedAt(ctx)
+	case contactlistmembershiphistory.FieldUpdatedAt:
+		return m.OldUpdatedAt(ctx)
+	case contactlistmembershiphistory.FieldCreatedBy:
+		return m.OldCreatedBy(ctx)
+	case contactlistmembershiphistory.FieldUpdatedBy:
+		return m.OldUpdatedBy(ctx)
+	case contactlistmembershiphistory.FieldMappingID:
+		return m.OldMappingID(ctx)
+	case contactlistmembershiphistory.FieldDeletedAt:
+		return m.OldDeletedAt(ctx)
+	case contactlistmembershiphistory.FieldDeletedBy:
+		return m.OldDeletedBy(ctx)
+	case contactlistmembershiphistory.FieldContactListID:
+		return m.OldContactListID(ctx)
+	case contactlistmembershiphistory.FieldContactID:
+		return m.OldContactID(ctx)
+	}
+	return nil, fmt.Errorf("unknown ContactListMembershipHistory field %s", name)
+}
+
+// SetField sets the value of a field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *ContactListMembershipHistoryMutation) SetField(name string, value ent.Value) error {
+	switch name {
+	case contactlistmembershiphistory.FieldHistoryTime:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetHistoryTime(v)
+		return nil
+	case contactlistmembershiphistory.FieldRef:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetRef(v)
+		return nil
+	case contactlistmembershiphistory.FieldOperation:
+		v, ok := value.(enthistory.OpType)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetOperation(v)
+		return nil
+	case contactlistmembershiphistory.FieldCreatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedAt(v)
+		return nil
+	case contactlistmembershiphistory.FieldUpdatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedAt(v)
+		return nil
+	case contactlistmembershiphistory.FieldCreatedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedBy(v)
+		return nil
+	case contactlistmembershiphistory.FieldUpdatedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedBy(v)
+		return nil
+	case contactlistmembershiphistory.FieldMappingID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetMappingID(v)
+		return nil
+	case contactlistmembershiphistory.FieldDeletedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDeletedAt(v)
+		return nil
+	case contactlistmembershiphistory.FieldDeletedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDeletedBy(v)
+		return nil
+	case contactlistmembershiphistory.FieldContactListID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetContactListID(v)
+		return nil
+	case contactlistmembershiphistory.FieldContactID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetContactID(v)
+		return nil
+	}
+	return fmt.Errorf("unknown ContactListMembershipHistory field %s", name)
+}
+
+// AddedFields returns all numeric fields that were incremented/decremented during
+// this mutation.
+func (m *ContactListMembershipHistoryMutation) AddedFields() []string {
+	return nil
+}
+
+// AddedField returns the numeric value that was incremented/decremented on a field
+// with the given name. The second boolean return value indicates that this field
+// was not set, or was not defined in the schema.
+func (m *ContactListMembershipHistoryMutation) AddedField(name string) (ent.Value, bool) {
+	return nil, false
+}
+
+// AddField adds the value to the field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *ContactListMembershipHistoryMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	}
+	return fmt.Errorf("unknown ContactListMembershipHistory numeric field %s", name)
+}
+
+// ClearedFields returns all nullable fields that were cleared during this
+// mutation.
+func (m *ContactListMembershipHistoryMutation) ClearedFields() []string {
+	var fields []string
+	if m.FieldCleared(contactlistmembershiphistory.FieldRef) {
+		fields = append(fields, contactlistmembershiphistory.FieldRef)
+	}
+	if m.FieldCleared(contactlistmembershiphistory.FieldCreatedAt) {
+		fields = append(fields, contactlistmembershiphistory.FieldCreatedAt)
+	}
+	if m.FieldCleared(contactlistmembershiphistory.FieldUpdatedAt) {
+		fields = append(fields, contactlistmembershiphistory.FieldUpdatedAt)
+	}
+	if m.FieldCleared(contactlistmembershiphistory.FieldCreatedBy) {
+		fields = append(fields, contactlistmembershiphistory.FieldCreatedBy)
+	}
+	if m.FieldCleared(contactlistmembershiphistory.FieldUpdatedBy) {
+		fields = append(fields, contactlistmembershiphistory.FieldUpdatedBy)
+	}
+	if m.FieldCleared(contactlistmembershiphistory.FieldDeletedAt) {
+		fields = append(fields, contactlistmembershiphistory.FieldDeletedAt)
+	}
+	if m.FieldCleared(contactlistmembershiphistory.FieldDeletedBy) {
+		fields = append(fields, contactlistmembershiphistory.FieldDeletedBy)
+	}
+	return fields
+}
+
+// FieldCleared returns a boolean indicating if a field with the given name was
+// cleared in this mutation.
+func (m *ContactListMembershipHistoryMutation) FieldCleared(name string) bool {
+	_, ok := m.clearedFields[name]
+	return ok
+}
+
+// ClearField clears the value of the field with the given name. It returns an
+// error if the field is not defined in the schema.
+func (m *ContactListMembershipHistoryMutation) ClearField(name string) error {
+	switch name {
+	case contactlistmembershiphistory.FieldRef:
+		m.ClearRef()
+		return nil
+	case contactlistmembershiphistory.FieldCreatedAt:
+		m.ClearCreatedAt()
+		return nil
+	case contactlistmembershiphistory.FieldUpdatedAt:
+		m.ClearUpdatedAt()
+		return nil
+	case contactlistmembershiphistory.FieldCreatedBy:
+		m.ClearCreatedBy()
+		return nil
+	case contactlistmembershiphistory.FieldUpdatedBy:
+		m.ClearUpdatedBy()
+		return nil
+	case contactlistmembershiphistory.FieldDeletedAt:
+		m.ClearDeletedAt()
+		return nil
+	case contactlistmembershiphistory.FieldDeletedBy:
+		m.ClearDeletedBy()
+		return nil
+	}
+	return fmt.Errorf("unknown ContactListMembershipHistory nullable field %s", name)
+}
+
+// ResetField resets all changes in the mutation for the field with the given name.
+// It returns an error if the field is not defined in the schema.
+func (m *ContactListMembershipHistoryMutation) ResetField(name string) error {
+	switch name {
+	case contactlistmembershiphistory.FieldHistoryTime:
+		m.ResetHistoryTime()
+		return nil
+	case contactlistmembershiphistory.FieldRef:
+		m.ResetRef()
+		return nil
+	case contactlistmembershiphistory.FieldOperation:
+		m.ResetOperation()
+		return nil
+	case contactlistmembershiphistory.FieldCreatedAt:
+		m.ResetCreatedAt()
+		return nil
+	case contactlistmembershiphistory.FieldUpdatedAt:
+		m.ResetUpdatedAt()
+		return nil
+	case contactlistmembershiphistory.FieldCreatedBy:
+		m.ResetCreatedBy()
+		return nil
+	case contactlistmembershiphistory.FieldUpdatedBy:
+		m.ResetUpdatedBy()
+		return nil
+	case contactlistmembershiphistory.FieldMappingID:
+		m.ResetMappingID()
+		return nil
+	case contactlistmembershiphistory.FieldDeletedAt:
+		m.ResetDeletedAt()
+		return nil
+	case contactlistmembershiphistory.FieldDeletedBy:
+		m.ResetDeletedBy()
+		return nil
+	case contactlistmembershiphistory.FieldContactListID:
+		m.ResetContactListID()
+		return nil
+	case contactlistmembershiphistory.FieldContactID:
+		m.ResetContactID()
+		return nil
+	}
+	return fmt.Errorf("unknown ContactListMembershipHistory field %s", name)
+}
+
+// AddedEdges returns all edge names that were set/added in this mutation.
+func (m *ContactListMembershipHistoryMutation) AddedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// AddedIDs returns all IDs (to other nodes) that were added for the given edge
+// name in this mutation.
+func (m *ContactListMembershipHistoryMutation) AddedIDs(name string) []ent.Value {
+	return nil
+}
+
+// RemovedEdges returns all edge names that were removed in this mutation.
+func (m *ContactListMembershipHistoryMutation) RemovedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
+// the given name in this mutation.
+func (m *ContactListMembershipHistoryMutation) RemovedIDs(name string) []ent.Value {
+	return nil
+}
+
+// ClearedEdges returns all edge names that were cleared in this mutation.
+func (m *ContactListMembershipHistoryMutation) ClearedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// EdgeCleared returns a boolean which indicates if the edge with the given name
+// was cleared in this mutation.
+func (m *ContactListMembershipHistoryMutation) EdgeCleared(name string) bool {
+	return false
+}
+
+// ClearEdge clears the value of the edge with the given name. It returns an error
+// if that edge is not defined in the schema.
+func (m *ContactListMembershipHistoryMutation) ClearEdge(name string) error {
+	return fmt.Errorf("unknown ContactListMembershipHistory unique edge %s", name)
+}
+
+// ResetEdge resets all changes to the edge with the given name in this mutation.
+// It returns an error if the edge is not defined in the schema.
+func (m *ContactListMembershipHistoryMutation) ResetEdge(name string) error {
+	return fmt.Errorf("unknown ContactListMembershipHistory edge %s", name)
 }
 
 // DocumentDataMutation represents an operation that mutates the DocumentData nodes in the graph.
@@ -56721,6 +61934,9 @@ type OrganizationMutation struct {
 	contacts                        map[string]struct{}
 	removedcontacts                 map[string]struct{}
 	clearedcontacts                 bool
+	contact_lists                   map[string]struct{}
+	removedcontact_lists            map[string]struct{}
+	clearedcontact_lists            bool
 	notes                           map[string]struct{}
 	removednotes                    map[string]struct{}
 	clearednotes                    bool
@@ -58856,6 +64072,60 @@ func (m *OrganizationMutation) ResetContacts() {
 	m.removedcontacts = nil
 }
 
+// AddContactListIDs adds the "contact_lists" edge to the ContactList entity by ids.
+func (m *OrganizationMutation) AddContactListIDs(ids ...string) {
+	if m.contact_lists == nil {
+		m.contact_lists = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.contact_lists[ids[i]] = struct{}{}
+	}
+}
+
+// ClearContactLists clears the "contact_lists" edge to the ContactList entity.
+func (m *OrganizationMutation) ClearContactLists() {
+	m.clearedcontact_lists = true
+}
+
+// ContactListsCleared reports if the "contact_lists" edge to the ContactList entity was cleared.
+func (m *OrganizationMutation) ContactListsCleared() bool {
+	return m.clearedcontact_lists
+}
+
+// RemoveContactListIDs removes the "contact_lists" edge to the ContactList entity by IDs.
+func (m *OrganizationMutation) RemoveContactListIDs(ids ...string) {
+	if m.removedcontact_lists == nil {
+		m.removedcontact_lists = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.contact_lists, ids[i])
+		m.removedcontact_lists[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedContactLists returns the removed IDs of the "contact_lists" edge to the ContactList entity.
+func (m *OrganizationMutation) RemovedContactListsIDs() (ids []string) {
+	for id := range m.removedcontact_lists {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ContactListsIDs returns the "contact_lists" edge IDs in the mutation.
+func (m *OrganizationMutation) ContactListsIDs() (ids []string) {
+	for id := range m.contact_lists {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetContactLists resets all changes to the "contact_lists" edge.
+func (m *OrganizationMutation) ResetContactLists() {
+	m.contact_lists = nil
+	m.clearedcontact_lists = false
+	m.removedcontact_lists = nil
+}
+
 // AddNoteIDs adds the "notes" edge to the Note entity by ids.
 func (m *OrganizationMutation) AddNoteIDs(ids ...string) {
 	if m.notes == nil {
@@ -59404,7 +64674,7 @@ func (m *OrganizationMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *OrganizationMutation) AddedEdges() []string {
-	edges := make([]string, 0, 27)
+	edges := make([]string, 0, 28)
 	if m.parent != nil {
 		edges = append(edges, organization.EdgeParent)
 	}
@@ -59479,6 +64749,9 @@ func (m *OrganizationMutation) AddedEdges() []string {
 	}
 	if m.contacts != nil {
 		edges = append(edges, organization.EdgeContacts)
+	}
+	if m.contact_lists != nil {
+		edges = append(edges, organization.EdgeContactLists)
 	}
 	if m.notes != nil {
 		edges = append(edges, organization.EdgeNotes)
@@ -59639,6 +64912,12 @@ func (m *OrganizationMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case organization.EdgeContactLists:
+		ids := make([]ent.Value, 0, len(m.contact_lists))
+		for id := range m.contact_lists {
+			ids = append(ids, id)
+		}
+		return ids
 	case organization.EdgeNotes:
 		ids := make([]ent.Value, 0, len(m.notes))
 		for id := range m.notes {
@@ -59657,7 +64936,7 @@ func (m *OrganizationMutation) AddedIDs(name string) []ent.Value {
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *OrganizationMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 27)
+	edges := make([]string, 0, 28)
 	if m.removedchildren != nil {
 		edges = append(edges, organization.EdgeChildren)
 	}
@@ -59726,6 +65005,9 @@ func (m *OrganizationMutation) RemovedEdges() []string {
 	}
 	if m.removedcontacts != nil {
 		edges = append(edges, organization.EdgeContacts)
+	}
+	if m.removedcontact_lists != nil {
+		edges = append(edges, organization.EdgeContactLists)
 	}
 	if m.removednotes != nil {
 		edges = append(edges, organization.EdgeNotes)
@@ -59878,6 +65160,12 @@ func (m *OrganizationMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case organization.EdgeContactLists:
+		ids := make([]ent.Value, 0, len(m.removedcontact_lists))
+		for id := range m.removedcontact_lists {
+			ids = append(ids, id)
+		}
+		return ids
 	case organization.EdgeNotes:
 		ids := make([]ent.Value, 0, len(m.removednotes))
 		for id := range m.removednotes {
@@ -59896,7 +65184,7 @@ func (m *OrganizationMutation) RemovedIDs(name string) []ent.Value {
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *OrganizationMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 27)
+	edges := make([]string, 0, 28)
 	if m.clearedparent {
 		edges = append(edges, organization.EdgeParent)
 	}
@@ -59972,6 +65260,9 @@ func (m *OrganizationMutation) ClearedEdges() []string {
 	if m.clearedcontacts {
 		edges = append(edges, organization.EdgeContacts)
 	}
+	if m.clearedcontact_lists {
+		edges = append(edges, organization.EdgeContactLists)
+	}
 	if m.clearednotes {
 		edges = append(edges, organization.EdgeNotes)
 	}
@@ -60035,6 +65326,8 @@ func (m *OrganizationMutation) EdgeCleared(name string) bool {
 		return m.clearedentitytypes
 	case organization.EdgeContacts:
 		return m.clearedcontacts
+	case organization.EdgeContactLists:
+		return m.clearedcontact_lists
 	case organization.EdgeNotes:
 		return m.clearednotes
 	case organization.EdgeMembers:
@@ -60135,6 +65428,9 @@ func (m *OrganizationMutation) ResetEdge(name string) error {
 		return nil
 	case organization.EdgeContacts:
 		m.ResetContacts()
+		return nil
+	case organization.EdgeContactLists:
+		m.ResetContactLists()
 		return nil
 	case organization.EdgeNotes:
 		m.ResetNotes()

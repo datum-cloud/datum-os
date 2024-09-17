@@ -13,6 +13,8 @@ import (
 	"time"
 
 	"github.com/datum-cloud/datum-os/internal/ent/generated/contacthistory"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/contactlisthistory"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/contactlistmembershiphistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/documentdatahistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/entitlementhistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/entitlementplanfeaturehistory"
@@ -134,6 +136,126 @@ func (ch *ContactHistory) Diff(history *ContactHistory) (*HistoryDiff[ContactHis
 			Old:     history,
 			New:     ch,
 			Changes: history.changes(ch),
+		}, nil
+	}
+	return nil, IdenticalHistoryError
+}
+
+func (clh *ContactListHistory) changes(new *ContactListHistory) []Change {
+	var changes []Change
+	if !reflect.DeepEqual(clh.CreatedAt, new.CreatedAt) {
+		changes = append(changes, NewChange(contactlisthistory.FieldCreatedAt, clh.CreatedAt, new.CreatedAt))
+	}
+	if !reflect.DeepEqual(clh.UpdatedAt, new.UpdatedAt) {
+		changes = append(changes, NewChange(contactlisthistory.FieldUpdatedAt, clh.UpdatedAt, new.UpdatedAt))
+	}
+	if !reflect.DeepEqual(clh.CreatedBy, new.CreatedBy) {
+		changes = append(changes, NewChange(contactlisthistory.FieldCreatedBy, clh.CreatedBy, new.CreatedBy))
+	}
+	if !reflect.DeepEqual(clh.DeletedAt, new.DeletedAt) {
+		changes = append(changes, NewChange(contactlisthistory.FieldDeletedAt, clh.DeletedAt, new.DeletedAt))
+	}
+	if !reflect.DeepEqual(clh.DeletedBy, new.DeletedBy) {
+		changes = append(changes, NewChange(contactlisthistory.FieldDeletedBy, clh.DeletedBy, new.DeletedBy))
+	}
+	if !reflect.DeepEqual(clh.MappingID, new.MappingID) {
+		changes = append(changes, NewChange(contactlisthistory.FieldMappingID, clh.MappingID, new.MappingID))
+	}
+	if !reflect.DeepEqual(clh.Tags, new.Tags) {
+		changes = append(changes, NewChange(contactlisthistory.FieldTags, clh.Tags, new.Tags))
+	}
+	if !reflect.DeepEqual(clh.OwnerID, new.OwnerID) {
+		changes = append(changes, NewChange(contactlisthistory.FieldOwnerID, clh.OwnerID, new.OwnerID))
+	}
+	if !reflect.DeepEqual(clh.Name, new.Name) {
+		changes = append(changes, NewChange(contactlisthistory.FieldName, clh.Name, new.Name))
+	}
+	if !reflect.DeepEqual(clh.Visibility, new.Visibility) {
+		changes = append(changes, NewChange(contactlisthistory.FieldVisibility, clh.Visibility, new.Visibility))
+	}
+	if !reflect.DeepEqual(clh.DisplayName, new.DisplayName) {
+		changes = append(changes, NewChange(contactlisthistory.FieldDisplayName, clh.DisplayName, new.DisplayName))
+	}
+	if !reflect.DeepEqual(clh.Description, new.Description) {
+		changes = append(changes, NewChange(contactlisthistory.FieldDescription, clh.Description, new.Description))
+	}
+	return changes
+}
+
+func (clh *ContactListHistory) Diff(history *ContactListHistory) (*HistoryDiff[ContactListHistory], error) {
+	if clh.Ref != history.Ref {
+		return nil, MismatchedRefError
+	}
+
+	clhUnix, historyUnix := clh.HistoryTime.Unix(), history.HistoryTime.Unix()
+	clhOlder := clhUnix < historyUnix || (clhUnix == historyUnix && clh.ID < history.ID)
+	historyOlder := clhUnix > historyUnix || (clhUnix == historyUnix && clh.ID > history.ID)
+
+	if clhOlder {
+		return &HistoryDiff[ContactListHistory]{
+			Old:     clh,
+			New:     history,
+			Changes: clh.changes(history),
+		}, nil
+	} else if historyOlder {
+		return &HistoryDiff[ContactListHistory]{
+			Old:     history,
+			New:     clh,
+			Changes: history.changes(clh),
+		}, nil
+	}
+	return nil, IdenticalHistoryError
+}
+
+func (clmh *ContactListMembershipHistory) changes(new *ContactListMembershipHistory) []Change {
+	var changes []Change
+	if !reflect.DeepEqual(clmh.CreatedAt, new.CreatedAt) {
+		changes = append(changes, NewChange(contactlistmembershiphistory.FieldCreatedAt, clmh.CreatedAt, new.CreatedAt))
+	}
+	if !reflect.DeepEqual(clmh.UpdatedAt, new.UpdatedAt) {
+		changes = append(changes, NewChange(contactlistmembershiphistory.FieldUpdatedAt, clmh.UpdatedAt, new.UpdatedAt))
+	}
+	if !reflect.DeepEqual(clmh.CreatedBy, new.CreatedBy) {
+		changes = append(changes, NewChange(contactlistmembershiphistory.FieldCreatedBy, clmh.CreatedBy, new.CreatedBy))
+	}
+	if !reflect.DeepEqual(clmh.MappingID, new.MappingID) {
+		changes = append(changes, NewChange(contactlistmembershiphistory.FieldMappingID, clmh.MappingID, new.MappingID))
+	}
+	if !reflect.DeepEqual(clmh.DeletedAt, new.DeletedAt) {
+		changes = append(changes, NewChange(contactlistmembershiphistory.FieldDeletedAt, clmh.DeletedAt, new.DeletedAt))
+	}
+	if !reflect.DeepEqual(clmh.DeletedBy, new.DeletedBy) {
+		changes = append(changes, NewChange(contactlistmembershiphistory.FieldDeletedBy, clmh.DeletedBy, new.DeletedBy))
+	}
+	if !reflect.DeepEqual(clmh.ContactListID, new.ContactListID) {
+		changes = append(changes, NewChange(contactlistmembershiphistory.FieldContactListID, clmh.ContactListID, new.ContactListID))
+	}
+	if !reflect.DeepEqual(clmh.ContactID, new.ContactID) {
+		changes = append(changes, NewChange(contactlistmembershiphistory.FieldContactID, clmh.ContactID, new.ContactID))
+	}
+	return changes
+}
+
+func (clmh *ContactListMembershipHistory) Diff(history *ContactListMembershipHistory) (*HistoryDiff[ContactListMembershipHistory], error) {
+	if clmh.Ref != history.Ref {
+		return nil, MismatchedRefError
+	}
+
+	clmhUnix, historyUnix := clmh.HistoryTime.Unix(), history.HistoryTime.Unix()
+	clmhOlder := clmhUnix < historyUnix || (clmhUnix == historyUnix && clmh.ID < history.ID)
+	historyOlder := clmhUnix > historyUnix || (clmhUnix == historyUnix && clmh.ID > history.ID)
+
+	if clmhOlder {
+		return &HistoryDiff[ContactListMembershipHistory]{
+			Old:     clmh,
+			New:     history,
+			Changes: clmh.changes(history),
+		}, nil
+	} else if historyOlder {
+		return &HistoryDiff[ContactListMembershipHistory]{
+			Old:     history,
+			New:     clmh,
+			Changes: history.changes(clmh),
 		}, nil
 	}
 	return nil, IdenticalHistoryError
@@ -1751,6 +1873,18 @@ func (c *Client) Audit(ctx context.Context) ([][]string, error) {
 	}
 	records = append(records, record...)
 
+	record, err = auditContactListHistory(ctx, c.config)
+	if err != nil {
+		return nil, err
+	}
+	records = append(records, record...)
+
+	record, err = auditContactListMembershipHistory(ctx, c.config)
+	if err != nil {
+		return nil, err
+	}
+	records = append(records, record...)
+
 	record, err = auditDocumentDataHistory(ctx, c.config)
 	if err != nil {
 		return nil, err
@@ -1901,6 +2035,24 @@ func (c *Client) AuditWithFilter(ctx context.Context, tableName string) ([][]str
 
 	if tableName == "" || tableName == strings.TrimSuffix("ContactHistory", "History") {
 		record, err = auditContactHistory(ctx, c.config)
+		if err != nil {
+			return nil, err
+		}
+
+		records = append(records, record...)
+	}
+
+	if tableName == "" || tableName == strings.TrimSuffix("ContactListHistory", "History") {
+		record, err = auditContactListHistory(ctx, c.config)
+		if err != nil {
+			return nil, err
+		}
+
+		records = append(records, record...)
+	}
+
+	if tableName == "" || tableName == strings.TrimSuffix("ContactListMembershipHistory", "History") {
+		record, err = auditContactListMembershipHistory(ctx, c.config)
 		if err != nil {
 			return nil, err
 		}
@@ -2190,6 +2342,112 @@ func auditContactHistory(ctx context.Context, config config) ([][]string, error)
 			default:
 				if i == 0 {
 					record.Changes = (&ContactHistory{}).changes(curr)
+				} else {
+					record.Changes = histories[i-1].changes(curr)
+				}
+			}
+			records = append(records, record.toRow())
+		}
+	}
+	return records, nil
+}
+
+type contactlisthistoryref struct {
+	Ref string
+}
+
+func auditContactListHistory(ctx context.Context, config config) ([][]string, error) {
+	var records = [][]string{}
+	var refs []contactlisthistoryref
+	client := NewContactListHistoryClient(config)
+	err := client.Query().
+		Unique(true).
+		Order(contactlisthistory.ByRef()).
+		Select(contactlisthistory.FieldRef).
+		Scan(ctx, &refs)
+
+	if err != nil {
+		return nil, err
+	}
+	for _, currRef := range refs {
+		histories, err := client.Query().
+			Where(contactlisthistory.Ref(currRef.Ref)).
+			Order(contactlisthistory.ByHistoryTime()).
+			All(ctx)
+		if err != nil {
+			return nil, err
+		}
+
+		for i := 0; i < len(histories); i++ {
+			curr := histories[i]
+			record := record{
+				Table:       "ContactListHistory",
+				RefId:       curr.Ref,
+				HistoryTime: curr.HistoryTime,
+				Operation:   curr.Operation,
+				UpdatedBy:   curr.UpdatedBy,
+			}
+			switch curr.Operation {
+			case enthistory.OpTypeInsert:
+				record.Changes = (&ContactListHistory{}).changes(curr)
+			case enthistory.OpTypeDelete:
+				record.Changes = curr.changes(&ContactListHistory{})
+			default:
+				if i == 0 {
+					record.Changes = (&ContactListHistory{}).changes(curr)
+				} else {
+					record.Changes = histories[i-1].changes(curr)
+				}
+			}
+			records = append(records, record.toRow())
+		}
+	}
+	return records, nil
+}
+
+type contactlistmembershiphistoryref struct {
+	Ref string
+}
+
+func auditContactListMembershipHistory(ctx context.Context, config config) ([][]string, error) {
+	var records = [][]string{}
+	var refs []contactlistmembershiphistoryref
+	client := NewContactListMembershipHistoryClient(config)
+	err := client.Query().
+		Unique(true).
+		Order(contactlistmembershiphistory.ByRef()).
+		Select(contactlistmembershiphistory.FieldRef).
+		Scan(ctx, &refs)
+
+	if err != nil {
+		return nil, err
+	}
+	for _, currRef := range refs {
+		histories, err := client.Query().
+			Where(contactlistmembershiphistory.Ref(currRef.Ref)).
+			Order(contactlistmembershiphistory.ByHistoryTime()).
+			All(ctx)
+		if err != nil {
+			return nil, err
+		}
+
+		for i := 0; i < len(histories); i++ {
+			curr := histories[i]
+			record := record{
+				Table:       "ContactListMembershipHistory",
+				RefId:       curr.Ref,
+				HistoryTime: curr.HistoryTime,
+				Operation:   curr.Operation,
+				UpdatedBy:   curr.UpdatedBy,
+			}
+			switch curr.Operation {
+			case enthistory.OpTypeInsert:
+				record.Changes = (&ContactListMembershipHistory{}).changes(curr)
+			case enthistory.OpTypeDelete:
+				record.Changes = curr.changes(&ContactListMembershipHistory{})
+			default:
+				if i == 0 {
+					record.Changes = (&ContactListMembershipHistory{}).changes(curr)
 				} else {
 					record.Changes = histories[i-1].changes(curr)
 				}

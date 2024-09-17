@@ -45,6 +45,54 @@ func (f ContactHistoryFunc) Mutate(ctx context.Context, m generated.Mutation) (g
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.ContactHistoryMutation", m)
 }
 
+// The ContactListFunc type is an adapter to allow the use of ordinary
+// function as ContactList mutator.
+type ContactListFunc func(context.Context, *generated.ContactListMutation) (generated.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f ContactListFunc) Mutate(ctx context.Context, m generated.Mutation) (generated.Value, error) {
+	if mv, ok := m.(*generated.ContactListMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.ContactListMutation", m)
+}
+
+// The ContactListHistoryFunc type is an adapter to allow the use of ordinary
+// function as ContactListHistory mutator.
+type ContactListHistoryFunc func(context.Context, *generated.ContactListHistoryMutation) (generated.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f ContactListHistoryFunc) Mutate(ctx context.Context, m generated.Mutation) (generated.Value, error) {
+	if mv, ok := m.(*generated.ContactListHistoryMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.ContactListHistoryMutation", m)
+}
+
+// The ContactListMembershipFunc type is an adapter to allow the use of ordinary
+// function as ContactListMembership mutator.
+type ContactListMembershipFunc func(context.Context, *generated.ContactListMembershipMutation) (generated.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f ContactListMembershipFunc) Mutate(ctx context.Context, m generated.Mutation) (generated.Value, error) {
+	if mv, ok := m.(*generated.ContactListMembershipMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.ContactListMembershipMutation", m)
+}
+
+// The ContactListMembershipHistoryFunc type is an adapter to allow the use of ordinary
+// function as ContactListMembershipHistory mutator.
+type ContactListMembershipHistoryFunc func(context.Context, *generated.ContactListMembershipHistoryMutation) (generated.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f ContactListMembershipHistoryFunc) Mutate(ctx context.Context, m generated.Mutation) (generated.Value, error) {
+	if mv, ok := m.(*generated.ContactListMembershipHistoryMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.ContactListMembershipHistoryMutation", m)
+}
+
 // The DocumentDataFunc type is an adapter to allow the use of ordinary
 // function as DocumentData mutator.
 type DocumentDataFunc func(context.Context, *generated.DocumentDataMutation) (generated.Value, error)

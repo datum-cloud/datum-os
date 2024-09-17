@@ -24,6 +24,18 @@ func (c *Contact) Owner(ctx context.Context) (*Organization, error) {
 	return result, MaskNotFound(err)
 }
 
+func (c *Contact) ContactLists(ctx context.Context) (result []*ContactList, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = c.NamedContactLists(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = c.Edges.ContactListsOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = c.QueryContactLists().All(ctx)
+	}
+	return result, err
+}
+
 func (c *Contact) Entities(ctx context.Context) (result []*Entity, err error) {
 	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
 		result, err = c.NamedEntities(graphql.GetFieldContext(ctx).Field.Alias)
@@ -32,6 +44,102 @@ func (c *Contact) Entities(ctx context.Context) (result []*Entity, err error) {
 	}
 	if IsNotLoaded(err) {
 		result, err = c.QueryEntities().All(ctx)
+	}
+	return result, err
+}
+
+func (c *Contact) ContactListMemberships(ctx context.Context) (result []*ContactListMembership, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = c.NamedContactListMemberships(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = c.Edges.ContactListMembershipsOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = c.QueryContactListMemberships().All(ctx)
+	}
+	return result, err
+}
+
+func (cl *ContactList) Owner(ctx context.Context) (*Organization, error) {
+	result, err := cl.Edges.OwnerOrErr()
+	if IsNotLoaded(err) {
+		result, err = cl.QueryOwner().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (cl *ContactList) Contacts(ctx context.Context) (result []*Contact, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = cl.NamedContacts(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = cl.Edges.ContactsOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = cl.QueryContacts().All(ctx)
+	}
+	return result, err
+}
+
+func (cl *ContactList) Events(ctx context.Context) (result []*Event, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = cl.NamedEvents(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = cl.Edges.EventsOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = cl.QueryEvents().All(ctx)
+	}
+	return result, err
+}
+
+func (cl *ContactList) Integrations(ctx context.Context) (result []*Integration, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = cl.NamedIntegrations(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = cl.Edges.IntegrationsOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = cl.QueryIntegrations().All(ctx)
+	}
+	return result, err
+}
+
+func (cl *ContactList) ContactListMembers(ctx context.Context) (result []*ContactListMembership, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = cl.NamedContactListMembers(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = cl.Edges.ContactListMembersOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = cl.QueryContactListMembers().All(ctx)
+	}
+	return result, err
+}
+
+func (clm *ContactListMembership) ContactList(ctx context.Context) (*ContactList, error) {
+	result, err := clm.Edges.ContactListOrErr()
+	if IsNotLoaded(err) {
+		result, err = clm.QueryContactList().Only(ctx)
+	}
+	return result, err
+}
+
+func (clm *ContactListMembership) Contact(ctx context.Context) (*Contact, error) {
+	result, err := clm.Edges.ContactOrErr()
+	if IsNotLoaded(err) {
+		result, err = clm.QueryContact().Only(ctx)
+	}
+	return result, err
+}
+
+func (clm *ContactListMembership) Events(ctx context.Context) (result []*Event, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = clm.NamedEvents(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = clm.Edges.EventsOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = clm.QueryEvents().All(ctx)
 	}
 	return result, err
 }
@@ -1153,6 +1261,18 @@ func (o *Organization) Contacts(ctx context.Context) (result []*Contact, err err
 	}
 	if IsNotLoaded(err) {
 		result, err = o.QueryContacts().All(ctx)
+	}
+	return result, err
+}
+
+func (o *Organization) ContactLists(ctx context.Context) (result []*ContactList, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = o.NamedContactLists(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = o.Edges.ContactListsOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = o.QueryContactLists().All(ctx)
 	}
 	return result, err
 }
