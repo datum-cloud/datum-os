@@ -30,6 +30,24 @@ type DatumGraphClient interface {
 	UpdateContact(ctx context.Context, updateContactID string, input UpdateContactInput, interceptors ...clientv2.RequestInterceptor) (*UpdateContact, error)
 	GetAllContactHistories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllContactHistories, error)
 	GetContactHistories(ctx context.Context, where *ContactHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetContactHistories, error)
+	CreateBulkCSVContactList(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVContactList, error)
+	CreateBulkContactList(ctx context.Context, input []*CreateContactListInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkContactList, error)
+	CreateContactList(ctx context.Context, input CreateContactListInput, interceptors ...clientv2.RequestInterceptor) (*CreateContactList, error)
+	GetAllContactLists(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllContactLists, error)
+	GetContactListByID(ctx context.Context, contactListID string, interceptors ...clientv2.RequestInterceptor) (*GetContactListByID, error)
+	GetContactLists(ctx context.Context, where *ContactListWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetContactLists, error)
+	UpdateContactList(ctx context.Context, updateContactListID string, input UpdateContactListInput, interceptors ...clientv2.RequestInterceptor) (*UpdateContactList, error)
+	GetAllContactListHistories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllContactListHistories, error)
+	GetContactListHistories(ctx context.Context, where *ContactListHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetContactListHistories, error)
+	CreateBulkCSVContactListMembership(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVContactListMembership, error)
+	CreateBulkContactListMembership(ctx context.Context, input []*CreateContactListMembershipInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkContactListMembership, error)
+	CreateContactListMembership(ctx context.Context, input CreateContactListMembershipInput, interceptors ...clientv2.RequestInterceptor) (*CreateContactListMembership, error)
+	GetAllContactListMemberships(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllContactListMemberships, error)
+	GetContactListMembershipByID(ctx context.Context, contactListMembershipID string, interceptors ...clientv2.RequestInterceptor) (*GetContactListMembershipByID, error)
+	GetContactListMemberships(ctx context.Context, where *ContactListMembershipWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetContactListMemberships, error)
+	UpdateContactListMembership(ctx context.Context, updateContactListMembershipID string, input UpdateContactListMembershipInput, interceptors ...clientv2.RequestInterceptor) (*UpdateContactListMembership, error)
+	GetAllContactListMembershipHistories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllContactListMembershipHistories, error)
+	GetContactListMembershipHistories(ctx context.Context, where *ContactListMembershipHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetContactListMembershipHistories, error)
 	CreateDocumentData(ctx context.Context, input CreateDocumentDataInput, interceptors ...clientv2.RequestInterceptor) (*CreateDocumentData, error)
 	DeleteDocumentData(ctx context.Context, deleteDocumentDataID string, interceptors ...clientv2.RequestInterceptor) (*DeleteDocumentData, error)
 	GetDocumentDataByID(ctx context.Context, documentDataID string, interceptors ...clientv2.RequestInterceptor) (*GetDocumentDataByID, error)
@@ -1810,6 +1828,1560 @@ type GetContactHistories_ContactHistories struct {
 func (t *GetContactHistories_ContactHistories) GetEdges() []*GetContactHistories_ContactHistories_Edges {
 	if t == nil {
 		t = &GetContactHistories_ContactHistories{}
+	}
+	return t.Edges
+}
+
+type CreateBulkCSVContactList_CreateBulkCSVContactList_ContactLists struct {
+	CreatedAt   *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy   *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description *string    "json:\"description,omitempty\" graphql:\"description\""
+	DisplayName string     "json:\"displayName\" graphql:\"displayName\""
+	ID          string     "json:\"id\" graphql:\"id\""
+	Name        string     "json:\"name\" graphql:\"name\""
+	OwnerID     *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Tags        []string   "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt   *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy   *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	Visibility  string     "json:\"visibility\" graphql:\"visibility\""
+}
+
+func (t *CreateBulkCSVContactList_CreateBulkCSVContactList_ContactLists) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkCSVContactList_CreateBulkCSVContactList_ContactLists{}
+	}
+	return t.CreatedAt
+}
+func (t *CreateBulkCSVContactList_CreateBulkCSVContactList_ContactLists) GetCreatedBy() *string {
+	if t == nil {
+		t = &CreateBulkCSVContactList_CreateBulkCSVContactList_ContactLists{}
+	}
+	return t.CreatedBy
+}
+func (t *CreateBulkCSVContactList_CreateBulkCSVContactList_ContactLists) GetDescription() *string {
+	if t == nil {
+		t = &CreateBulkCSVContactList_CreateBulkCSVContactList_ContactLists{}
+	}
+	return t.Description
+}
+func (t *CreateBulkCSVContactList_CreateBulkCSVContactList_ContactLists) GetDisplayName() string {
+	if t == nil {
+		t = &CreateBulkCSVContactList_CreateBulkCSVContactList_ContactLists{}
+	}
+	return t.DisplayName
+}
+func (t *CreateBulkCSVContactList_CreateBulkCSVContactList_ContactLists) GetID() string {
+	if t == nil {
+		t = &CreateBulkCSVContactList_CreateBulkCSVContactList_ContactLists{}
+	}
+	return t.ID
+}
+func (t *CreateBulkCSVContactList_CreateBulkCSVContactList_ContactLists) GetName() string {
+	if t == nil {
+		t = &CreateBulkCSVContactList_CreateBulkCSVContactList_ContactLists{}
+	}
+	return t.Name
+}
+func (t *CreateBulkCSVContactList_CreateBulkCSVContactList_ContactLists) GetOwnerID() *string {
+	if t == nil {
+		t = &CreateBulkCSVContactList_CreateBulkCSVContactList_ContactLists{}
+	}
+	return t.OwnerID
+}
+func (t *CreateBulkCSVContactList_CreateBulkCSVContactList_ContactLists) GetTags() []string {
+	if t == nil {
+		t = &CreateBulkCSVContactList_CreateBulkCSVContactList_ContactLists{}
+	}
+	return t.Tags
+}
+func (t *CreateBulkCSVContactList_CreateBulkCSVContactList_ContactLists) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkCSVContactList_CreateBulkCSVContactList_ContactLists{}
+	}
+	return t.UpdatedAt
+}
+func (t *CreateBulkCSVContactList_CreateBulkCSVContactList_ContactLists) GetUpdatedBy() *string {
+	if t == nil {
+		t = &CreateBulkCSVContactList_CreateBulkCSVContactList_ContactLists{}
+	}
+	return t.UpdatedBy
+}
+func (t *CreateBulkCSVContactList_CreateBulkCSVContactList_ContactLists) GetVisibility() string {
+	if t == nil {
+		t = &CreateBulkCSVContactList_CreateBulkCSVContactList_ContactLists{}
+	}
+	return t.Visibility
+}
+
+type CreateBulkCSVContactList_CreateBulkCSVContactList struct {
+	ContactLists []*CreateBulkCSVContactList_CreateBulkCSVContactList_ContactLists "json:\"contactLists,omitempty\" graphql:\"contactLists\""
+}
+
+func (t *CreateBulkCSVContactList_CreateBulkCSVContactList) GetContactLists() []*CreateBulkCSVContactList_CreateBulkCSVContactList_ContactLists {
+	if t == nil {
+		t = &CreateBulkCSVContactList_CreateBulkCSVContactList{}
+	}
+	return t.ContactLists
+}
+
+type CreateBulkContactList_CreateBulkContactList_ContactLists struct {
+	CreatedAt   *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy   *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description *string    "json:\"description,omitempty\" graphql:\"description\""
+	DisplayName string     "json:\"displayName\" graphql:\"displayName\""
+	ID          string     "json:\"id\" graphql:\"id\""
+	Name        string     "json:\"name\" graphql:\"name\""
+	OwnerID     *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Tags        []string   "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt   *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy   *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	Visibility  string     "json:\"visibility\" graphql:\"visibility\""
+}
+
+func (t *CreateBulkContactList_CreateBulkContactList_ContactLists) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkContactList_CreateBulkContactList_ContactLists{}
+	}
+	return t.CreatedAt
+}
+func (t *CreateBulkContactList_CreateBulkContactList_ContactLists) GetCreatedBy() *string {
+	if t == nil {
+		t = &CreateBulkContactList_CreateBulkContactList_ContactLists{}
+	}
+	return t.CreatedBy
+}
+func (t *CreateBulkContactList_CreateBulkContactList_ContactLists) GetDescription() *string {
+	if t == nil {
+		t = &CreateBulkContactList_CreateBulkContactList_ContactLists{}
+	}
+	return t.Description
+}
+func (t *CreateBulkContactList_CreateBulkContactList_ContactLists) GetDisplayName() string {
+	if t == nil {
+		t = &CreateBulkContactList_CreateBulkContactList_ContactLists{}
+	}
+	return t.DisplayName
+}
+func (t *CreateBulkContactList_CreateBulkContactList_ContactLists) GetID() string {
+	if t == nil {
+		t = &CreateBulkContactList_CreateBulkContactList_ContactLists{}
+	}
+	return t.ID
+}
+func (t *CreateBulkContactList_CreateBulkContactList_ContactLists) GetName() string {
+	if t == nil {
+		t = &CreateBulkContactList_CreateBulkContactList_ContactLists{}
+	}
+	return t.Name
+}
+func (t *CreateBulkContactList_CreateBulkContactList_ContactLists) GetOwnerID() *string {
+	if t == nil {
+		t = &CreateBulkContactList_CreateBulkContactList_ContactLists{}
+	}
+	return t.OwnerID
+}
+func (t *CreateBulkContactList_CreateBulkContactList_ContactLists) GetTags() []string {
+	if t == nil {
+		t = &CreateBulkContactList_CreateBulkContactList_ContactLists{}
+	}
+	return t.Tags
+}
+func (t *CreateBulkContactList_CreateBulkContactList_ContactLists) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkContactList_CreateBulkContactList_ContactLists{}
+	}
+	return t.UpdatedAt
+}
+func (t *CreateBulkContactList_CreateBulkContactList_ContactLists) GetUpdatedBy() *string {
+	if t == nil {
+		t = &CreateBulkContactList_CreateBulkContactList_ContactLists{}
+	}
+	return t.UpdatedBy
+}
+func (t *CreateBulkContactList_CreateBulkContactList_ContactLists) GetVisibility() string {
+	if t == nil {
+		t = &CreateBulkContactList_CreateBulkContactList_ContactLists{}
+	}
+	return t.Visibility
+}
+
+type CreateBulkContactList_CreateBulkContactList struct {
+	ContactLists []*CreateBulkContactList_CreateBulkContactList_ContactLists "json:\"contactLists,omitempty\" graphql:\"contactLists\""
+}
+
+func (t *CreateBulkContactList_CreateBulkContactList) GetContactLists() []*CreateBulkContactList_CreateBulkContactList_ContactLists {
+	if t == nil {
+		t = &CreateBulkContactList_CreateBulkContactList{}
+	}
+	return t.ContactLists
+}
+
+type CreateContactList_CreateContactList_ContactList struct {
+	CreatedAt   *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy   *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description *string    "json:\"description,omitempty\" graphql:\"description\""
+	DisplayName string     "json:\"displayName\" graphql:\"displayName\""
+	ID          string     "json:\"id\" graphql:\"id\""
+	Name        string     "json:\"name\" graphql:\"name\""
+	OwnerID     *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Tags        []string   "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt   *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy   *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	Visibility  string     "json:\"visibility\" graphql:\"visibility\""
+}
+
+func (t *CreateContactList_CreateContactList_ContactList) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &CreateContactList_CreateContactList_ContactList{}
+	}
+	return t.CreatedAt
+}
+func (t *CreateContactList_CreateContactList_ContactList) GetCreatedBy() *string {
+	if t == nil {
+		t = &CreateContactList_CreateContactList_ContactList{}
+	}
+	return t.CreatedBy
+}
+func (t *CreateContactList_CreateContactList_ContactList) GetDescription() *string {
+	if t == nil {
+		t = &CreateContactList_CreateContactList_ContactList{}
+	}
+	return t.Description
+}
+func (t *CreateContactList_CreateContactList_ContactList) GetDisplayName() string {
+	if t == nil {
+		t = &CreateContactList_CreateContactList_ContactList{}
+	}
+	return t.DisplayName
+}
+func (t *CreateContactList_CreateContactList_ContactList) GetID() string {
+	if t == nil {
+		t = &CreateContactList_CreateContactList_ContactList{}
+	}
+	return t.ID
+}
+func (t *CreateContactList_CreateContactList_ContactList) GetName() string {
+	if t == nil {
+		t = &CreateContactList_CreateContactList_ContactList{}
+	}
+	return t.Name
+}
+func (t *CreateContactList_CreateContactList_ContactList) GetOwnerID() *string {
+	if t == nil {
+		t = &CreateContactList_CreateContactList_ContactList{}
+	}
+	return t.OwnerID
+}
+func (t *CreateContactList_CreateContactList_ContactList) GetTags() []string {
+	if t == nil {
+		t = &CreateContactList_CreateContactList_ContactList{}
+	}
+	return t.Tags
+}
+func (t *CreateContactList_CreateContactList_ContactList) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &CreateContactList_CreateContactList_ContactList{}
+	}
+	return t.UpdatedAt
+}
+func (t *CreateContactList_CreateContactList_ContactList) GetUpdatedBy() *string {
+	if t == nil {
+		t = &CreateContactList_CreateContactList_ContactList{}
+	}
+	return t.UpdatedBy
+}
+func (t *CreateContactList_CreateContactList_ContactList) GetVisibility() string {
+	if t == nil {
+		t = &CreateContactList_CreateContactList_ContactList{}
+	}
+	return t.Visibility
+}
+
+type CreateContactList_CreateContactList struct {
+	ContactList CreateContactList_CreateContactList_ContactList "json:\"contactList\" graphql:\"contactList\""
+}
+
+func (t *CreateContactList_CreateContactList) GetContactList() *CreateContactList_CreateContactList_ContactList {
+	if t == nil {
+		t = &CreateContactList_CreateContactList{}
+	}
+	return &t.ContactList
+}
+
+type GetAllContactLists_ContactLists_Edges_Node struct {
+	CreatedAt   *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy   *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description *string    "json:\"description,omitempty\" graphql:\"description\""
+	DisplayName string     "json:\"displayName\" graphql:\"displayName\""
+	ID          string     "json:\"id\" graphql:\"id\""
+	Name        string     "json:\"name\" graphql:\"name\""
+	OwnerID     *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Tags        []string   "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt   *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy   *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	Visibility  string     "json:\"visibility\" graphql:\"visibility\""
+}
+
+func (t *GetAllContactLists_ContactLists_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllContactLists_ContactLists_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetAllContactLists_ContactLists_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetAllContactLists_ContactLists_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetAllContactLists_ContactLists_Edges_Node) GetDescription() *string {
+	if t == nil {
+		t = &GetAllContactLists_ContactLists_Edges_Node{}
+	}
+	return t.Description
+}
+func (t *GetAllContactLists_ContactLists_Edges_Node) GetDisplayName() string {
+	if t == nil {
+		t = &GetAllContactLists_ContactLists_Edges_Node{}
+	}
+	return t.DisplayName
+}
+func (t *GetAllContactLists_ContactLists_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetAllContactLists_ContactLists_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetAllContactLists_ContactLists_Edges_Node) GetName() string {
+	if t == nil {
+		t = &GetAllContactLists_ContactLists_Edges_Node{}
+	}
+	return t.Name
+}
+func (t *GetAllContactLists_ContactLists_Edges_Node) GetOwnerID() *string {
+	if t == nil {
+		t = &GetAllContactLists_ContactLists_Edges_Node{}
+	}
+	return t.OwnerID
+}
+func (t *GetAllContactLists_ContactLists_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &GetAllContactLists_ContactLists_Edges_Node{}
+	}
+	return t.Tags
+}
+func (t *GetAllContactLists_ContactLists_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllContactLists_ContactLists_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetAllContactLists_ContactLists_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetAllContactLists_ContactLists_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+func (t *GetAllContactLists_ContactLists_Edges_Node) GetVisibility() string {
+	if t == nil {
+		t = &GetAllContactLists_ContactLists_Edges_Node{}
+	}
+	return t.Visibility
+}
+
+type GetAllContactLists_ContactLists_Edges struct {
+	Node *GetAllContactLists_ContactLists_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetAllContactLists_ContactLists_Edges) GetNode() *GetAllContactLists_ContactLists_Edges_Node {
+	if t == nil {
+		t = &GetAllContactLists_ContactLists_Edges{}
+	}
+	return t.Node
+}
+
+type GetAllContactLists_ContactLists struct {
+	Edges []*GetAllContactLists_ContactLists_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+}
+
+func (t *GetAllContactLists_ContactLists) GetEdges() []*GetAllContactLists_ContactLists_Edges {
+	if t == nil {
+		t = &GetAllContactLists_ContactLists{}
+	}
+	return t.Edges
+}
+
+type GetContactListByID_ContactList struct {
+	CreatedAt   *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy   *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description *string    "json:\"description,omitempty\" graphql:\"description\""
+	DisplayName string     "json:\"displayName\" graphql:\"displayName\""
+	ID          string     "json:\"id\" graphql:\"id\""
+	Name        string     "json:\"name\" graphql:\"name\""
+	OwnerID     *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Tags        []string   "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt   *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy   *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	Visibility  string     "json:\"visibility\" graphql:\"visibility\""
+}
+
+func (t *GetContactListByID_ContactList) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetContactListByID_ContactList{}
+	}
+	return t.CreatedAt
+}
+func (t *GetContactListByID_ContactList) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetContactListByID_ContactList{}
+	}
+	return t.CreatedBy
+}
+func (t *GetContactListByID_ContactList) GetDescription() *string {
+	if t == nil {
+		t = &GetContactListByID_ContactList{}
+	}
+	return t.Description
+}
+func (t *GetContactListByID_ContactList) GetDisplayName() string {
+	if t == nil {
+		t = &GetContactListByID_ContactList{}
+	}
+	return t.DisplayName
+}
+func (t *GetContactListByID_ContactList) GetID() string {
+	if t == nil {
+		t = &GetContactListByID_ContactList{}
+	}
+	return t.ID
+}
+func (t *GetContactListByID_ContactList) GetName() string {
+	if t == nil {
+		t = &GetContactListByID_ContactList{}
+	}
+	return t.Name
+}
+func (t *GetContactListByID_ContactList) GetOwnerID() *string {
+	if t == nil {
+		t = &GetContactListByID_ContactList{}
+	}
+	return t.OwnerID
+}
+func (t *GetContactListByID_ContactList) GetTags() []string {
+	if t == nil {
+		t = &GetContactListByID_ContactList{}
+	}
+	return t.Tags
+}
+func (t *GetContactListByID_ContactList) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetContactListByID_ContactList{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetContactListByID_ContactList) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetContactListByID_ContactList{}
+	}
+	return t.UpdatedBy
+}
+func (t *GetContactListByID_ContactList) GetVisibility() string {
+	if t == nil {
+		t = &GetContactListByID_ContactList{}
+	}
+	return t.Visibility
+}
+
+type GetContactLists_ContactLists_Edges_Node struct {
+	CreatedAt   *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy   *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description *string    "json:\"description,omitempty\" graphql:\"description\""
+	DisplayName string     "json:\"displayName\" graphql:\"displayName\""
+	ID          string     "json:\"id\" graphql:\"id\""
+	Name        string     "json:\"name\" graphql:\"name\""
+	OwnerID     *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Tags        []string   "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt   *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy   *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	Visibility  string     "json:\"visibility\" graphql:\"visibility\""
+}
+
+func (t *GetContactLists_ContactLists_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetContactLists_ContactLists_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetContactLists_ContactLists_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetContactLists_ContactLists_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetContactLists_ContactLists_Edges_Node) GetDescription() *string {
+	if t == nil {
+		t = &GetContactLists_ContactLists_Edges_Node{}
+	}
+	return t.Description
+}
+func (t *GetContactLists_ContactLists_Edges_Node) GetDisplayName() string {
+	if t == nil {
+		t = &GetContactLists_ContactLists_Edges_Node{}
+	}
+	return t.DisplayName
+}
+func (t *GetContactLists_ContactLists_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetContactLists_ContactLists_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetContactLists_ContactLists_Edges_Node) GetName() string {
+	if t == nil {
+		t = &GetContactLists_ContactLists_Edges_Node{}
+	}
+	return t.Name
+}
+func (t *GetContactLists_ContactLists_Edges_Node) GetOwnerID() *string {
+	if t == nil {
+		t = &GetContactLists_ContactLists_Edges_Node{}
+	}
+	return t.OwnerID
+}
+func (t *GetContactLists_ContactLists_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &GetContactLists_ContactLists_Edges_Node{}
+	}
+	return t.Tags
+}
+func (t *GetContactLists_ContactLists_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetContactLists_ContactLists_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetContactLists_ContactLists_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetContactLists_ContactLists_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+func (t *GetContactLists_ContactLists_Edges_Node) GetVisibility() string {
+	if t == nil {
+		t = &GetContactLists_ContactLists_Edges_Node{}
+	}
+	return t.Visibility
+}
+
+type GetContactLists_ContactLists_Edges struct {
+	Node *GetContactLists_ContactLists_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetContactLists_ContactLists_Edges) GetNode() *GetContactLists_ContactLists_Edges_Node {
+	if t == nil {
+		t = &GetContactLists_ContactLists_Edges{}
+	}
+	return t.Node
+}
+
+type GetContactLists_ContactLists struct {
+	Edges []*GetContactLists_ContactLists_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+}
+
+func (t *GetContactLists_ContactLists) GetEdges() []*GetContactLists_ContactLists_Edges {
+	if t == nil {
+		t = &GetContactLists_ContactLists{}
+	}
+	return t.Edges
+}
+
+type UpdateContactList_UpdateContactList_ContactList struct {
+	CreatedAt   *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy   *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description *string    "json:\"description,omitempty\" graphql:\"description\""
+	DisplayName string     "json:\"displayName\" graphql:\"displayName\""
+	ID          string     "json:\"id\" graphql:\"id\""
+	Name        string     "json:\"name\" graphql:\"name\""
+	OwnerID     *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Tags        []string   "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt   *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy   *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	Visibility  string     "json:\"visibility\" graphql:\"visibility\""
+}
+
+func (t *UpdateContactList_UpdateContactList_ContactList) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateContactList_UpdateContactList_ContactList{}
+	}
+	return t.CreatedAt
+}
+func (t *UpdateContactList_UpdateContactList_ContactList) GetCreatedBy() *string {
+	if t == nil {
+		t = &UpdateContactList_UpdateContactList_ContactList{}
+	}
+	return t.CreatedBy
+}
+func (t *UpdateContactList_UpdateContactList_ContactList) GetDescription() *string {
+	if t == nil {
+		t = &UpdateContactList_UpdateContactList_ContactList{}
+	}
+	return t.Description
+}
+func (t *UpdateContactList_UpdateContactList_ContactList) GetDisplayName() string {
+	if t == nil {
+		t = &UpdateContactList_UpdateContactList_ContactList{}
+	}
+	return t.DisplayName
+}
+func (t *UpdateContactList_UpdateContactList_ContactList) GetID() string {
+	if t == nil {
+		t = &UpdateContactList_UpdateContactList_ContactList{}
+	}
+	return t.ID
+}
+func (t *UpdateContactList_UpdateContactList_ContactList) GetName() string {
+	if t == nil {
+		t = &UpdateContactList_UpdateContactList_ContactList{}
+	}
+	return t.Name
+}
+func (t *UpdateContactList_UpdateContactList_ContactList) GetOwnerID() *string {
+	if t == nil {
+		t = &UpdateContactList_UpdateContactList_ContactList{}
+	}
+	return t.OwnerID
+}
+func (t *UpdateContactList_UpdateContactList_ContactList) GetTags() []string {
+	if t == nil {
+		t = &UpdateContactList_UpdateContactList_ContactList{}
+	}
+	return t.Tags
+}
+func (t *UpdateContactList_UpdateContactList_ContactList) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateContactList_UpdateContactList_ContactList{}
+	}
+	return t.UpdatedAt
+}
+func (t *UpdateContactList_UpdateContactList_ContactList) GetUpdatedBy() *string {
+	if t == nil {
+		t = &UpdateContactList_UpdateContactList_ContactList{}
+	}
+	return t.UpdatedBy
+}
+func (t *UpdateContactList_UpdateContactList_ContactList) GetVisibility() string {
+	if t == nil {
+		t = &UpdateContactList_UpdateContactList_ContactList{}
+	}
+	return t.Visibility
+}
+
+type UpdateContactList_UpdateContactList struct {
+	ContactList UpdateContactList_UpdateContactList_ContactList "json:\"contactList\" graphql:\"contactList\""
+}
+
+func (t *UpdateContactList_UpdateContactList) GetContactList() *UpdateContactList_UpdateContactList_ContactList {
+	if t == nil {
+		t = &UpdateContactList_UpdateContactList{}
+	}
+	return &t.ContactList
+}
+
+type GetAllContactListHistories_ContactListHistories_Edges_Node struct {
+	CreatedAt   *time.Time        "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy   *string           "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description *string           "json:\"description,omitempty\" graphql:\"description\""
+	DisplayName string            "json:\"displayName\" graphql:\"displayName\""
+	HistoryTime time.Time         "json:\"historyTime\" graphql:\"historyTime\""
+	ID          string            "json:\"id\" graphql:\"id\""
+	Name        string            "json:\"name\" graphql:\"name\""
+	Operation   enthistory.OpType "json:\"operation\" graphql:\"operation\""
+	OwnerID     *string           "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Ref         *string           "json:\"ref,omitempty\" graphql:\"ref\""
+	Tags        []string          "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt   *time.Time        "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy   *string           "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	Visibility  string            "json:\"visibility\" graphql:\"visibility\""
+}
+
+func (t *GetAllContactListHistories_ContactListHistories_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllContactListHistories_ContactListHistories_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetAllContactListHistories_ContactListHistories_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetAllContactListHistories_ContactListHistories_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetAllContactListHistories_ContactListHistories_Edges_Node) GetDescription() *string {
+	if t == nil {
+		t = &GetAllContactListHistories_ContactListHistories_Edges_Node{}
+	}
+	return t.Description
+}
+func (t *GetAllContactListHistories_ContactListHistories_Edges_Node) GetDisplayName() string {
+	if t == nil {
+		t = &GetAllContactListHistories_ContactListHistories_Edges_Node{}
+	}
+	return t.DisplayName
+}
+func (t *GetAllContactListHistories_ContactListHistories_Edges_Node) GetHistoryTime() *time.Time {
+	if t == nil {
+		t = &GetAllContactListHistories_ContactListHistories_Edges_Node{}
+	}
+	return &t.HistoryTime
+}
+func (t *GetAllContactListHistories_ContactListHistories_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetAllContactListHistories_ContactListHistories_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetAllContactListHistories_ContactListHistories_Edges_Node) GetName() string {
+	if t == nil {
+		t = &GetAllContactListHistories_ContactListHistories_Edges_Node{}
+	}
+	return t.Name
+}
+func (t *GetAllContactListHistories_ContactListHistories_Edges_Node) GetOperation() *enthistory.OpType {
+	if t == nil {
+		t = &GetAllContactListHistories_ContactListHistories_Edges_Node{}
+	}
+	return &t.Operation
+}
+func (t *GetAllContactListHistories_ContactListHistories_Edges_Node) GetOwnerID() *string {
+	if t == nil {
+		t = &GetAllContactListHistories_ContactListHistories_Edges_Node{}
+	}
+	return t.OwnerID
+}
+func (t *GetAllContactListHistories_ContactListHistories_Edges_Node) GetRef() *string {
+	if t == nil {
+		t = &GetAllContactListHistories_ContactListHistories_Edges_Node{}
+	}
+	return t.Ref
+}
+func (t *GetAllContactListHistories_ContactListHistories_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &GetAllContactListHistories_ContactListHistories_Edges_Node{}
+	}
+	return t.Tags
+}
+func (t *GetAllContactListHistories_ContactListHistories_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllContactListHistories_ContactListHistories_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetAllContactListHistories_ContactListHistories_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetAllContactListHistories_ContactListHistories_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+func (t *GetAllContactListHistories_ContactListHistories_Edges_Node) GetVisibility() string {
+	if t == nil {
+		t = &GetAllContactListHistories_ContactListHistories_Edges_Node{}
+	}
+	return t.Visibility
+}
+
+type GetAllContactListHistories_ContactListHistories_Edges struct {
+	Node *GetAllContactListHistories_ContactListHistories_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetAllContactListHistories_ContactListHistories_Edges) GetNode() *GetAllContactListHistories_ContactListHistories_Edges_Node {
+	if t == nil {
+		t = &GetAllContactListHistories_ContactListHistories_Edges{}
+	}
+	return t.Node
+}
+
+type GetAllContactListHistories_ContactListHistories struct {
+	Edges []*GetAllContactListHistories_ContactListHistories_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+}
+
+func (t *GetAllContactListHistories_ContactListHistories) GetEdges() []*GetAllContactListHistories_ContactListHistories_Edges {
+	if t == nil {
+		t = &GetAllContactListHistories_ContactListHistories{}
+	}
+	return t.Edges
+}
+
+type GetContactListHistories_ContactListHistories_Edges_Node struct {
+	CreatedAt   *time.Time        "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy   *string           "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description *string           "json:\"description,omitempty\" graphql:\"description\""
+	DisplayName string            "json:\"displayName\" graphql:\"displayName\""
+	HistoryTime time.Time         "json:\"historyTime\" graphql:\"historyTime\""
+	ID          string            "json:\"id\" graphql:\"id\""
+	Name        string            "json:\"name\" graphql:\"name\""
+	Operation   enthistory.OpType "json:\"operation\" graphql:\"operation\""
+	OwnerID     *string           "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Ref         *string           "json:\"ref,omitempty\" graphql:\"ref\""
+	Tags        []string          "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt   *time.Time        "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy   *string           "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	Visibility  string            "json:\"visibility\" graphql:\"visibility\""
+}
+
+func (t *GetContactListHistories_ContactListHistories_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetContactListHistories_ContactListHistories_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetContactListHistories_ContactListHistories_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetContactListHistories_ContactListHistories_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetContactListHistories_ContactListHistories_Edges_Node) GetDescription() *string {
+	if t == nil {
+		t = &GetContactListHistories_ContactListHistories_Edges_Node{}
+	}
+	return t.Description
+}
+func (t *GetContactListHistories_ContactListHistories_Edges_Node) GetDisplayName() string {
+	if t == nil {
+		t = &GetContactListHistories_ContactListHistories_Edges_Node{}
+	}
+	return t.DisplayName
+}
+func (t *GetContactListHistories_ContactListHistories_Edges_Node) GetHistoryTime() *time.Time {
+	if t == nil {
+		t = &GetContactListHistories_ContactListHistories_Edges_Node{}
+	}
+	return &t.HistoryTime
+}
+func (t *GetContactListHistories_ContactListHistories_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetContactListHistories_ContactListHistories_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetContactListHistories_ContactListHistories_Edges_Node) GetName() string {
+	if t == nil {
+		t = &GetContactListHistories_ContactListHistories_Edges_Node{}
+	}
+	return t.Name
+}
+func (t *GetContactListHistories_ContactListHistories_Edges_Node) GetOperation() *enthistory.OpType {
+	if t == nil {
+		t = &GetContactListHistories_ContactListHistories_Edges_Node{}
+	}
+	return &t.Operation
+}
+func (t *GetContactListHistories_ContactListHistories_Edges_Node) GetOwnerID() *string {
+	if t == nil {
+		t = &GetContactListHistories_ContactListHistories_Edges_Node{}
+	}
+	return t.OwnerID
+}
+func (t *GetContactListHistories_ContactListHistories_Edges_Node) GetRef() *string {
+	if t == nil {
+		t = &GetContactListHistories_ContactListHistories_Edges_Node{}
+	}
+	return t.Ref
+}
+func (t *GetContactListHistories_ContactListHistories_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &GetContactListHistories_ContactListHistories_Edges_Node{}
+	}
+	return t.Tags
+}
+func (t *GetContactListHistories_ContactListHistories_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetContactListHistories_ContactListHistories_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetContactListHistories_ContactListHistories_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetContactListHistories_ContactListHistories_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+func (t *GetContactListHistories_ContactListHistories_Edges_Node) GetVisibility() string {
+	if t == nil {
+		t = &GetContactListHistories_ContactListHistories_Edges_Node{}
+	}
+	return t.Visibility
+}
+
+type GetContactListHistories_ContactListHistories_Edges struct {
+	Node *GetContactListHistories_ContactListHistories_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetContactListHistories_ContactListHistories_Edges) GetNode() *GetContactListHistories_ContactListHistories_Edges_Node {
+	if t == nil {
+		t = &GetContactListHistories_ContactListHistories_Edges{}
+	}
+	return t.Node
+}
+
+type GetContactListHistories_ContactListHistories struct {
+	Edges []*GetContactListHistories_ContactListHistories_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+}
+
+func (t *GetContactListHistories_ContactListHistories) GetEdges() []*GetContactListHistories_ContactListHistories_Edges {
+	if t == nil {
+		t = &GetContactListHistories_ContactListHistories{}
+	}
+	return t.Edges
+}
+
+type CreateBulkCSVContactListMembership_CreateBulkCSVContactListMembership_ContactListMemberships struct {
+	ContactID     string     "json:\"contactID\" graphql:\"contactID\""
+	ContactListID string     "json:\"contactListID\" graphql:\"contactListID\""
+	CreatedAt     *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy     *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID            string     "json:\"id\" graphql:\"id\""
+	UpdatedAt     *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy     *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *CreateBulkCSVContactListMembership_CreateBulkCSVContactListMembership_ContactListMemberships) GetContactID() string {
+	if t == nil {
+		t = &CreateBulkCSVContactListMembership_CreateBulkCSVContactListMembership_ContactListMemberships{}
+	}
+	return t.ContactID
+}
+func (t *CreateBulkCSVContactListMembership_CreateBulkCSVContactListMembership_ContactListMemberships) GetContactListID() string {
+	if t == nil {
+		t = &CreateBulkCSVContactListMembership_CreateBulkCSVContactListMembership_ContactListMemberships{}
+	}
+	return t.ContactListID
+}
+func (t *CreateBulkCSVContactListMembership_CreateBulkCSVContactListMembership_ContactListMemberships) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkCSVContactListMembership_CreateBulkCSVContactListMembership_ContactListMemberships{}
+	}
+	return t.CreatedAt
+}
+func (t *CreateBulkCSVContactListMembership_CreateBulkCSVContactListMembership_ContactListMemberships) GetCreatedBy() *string {
+	if t == nil {
+		t = &CreateBulkCSVContactListMembership_CreateBulkCSVContactListMembership_ContactListMemberships{}
+	}
+	return t.CreatedBy
+}
+func (t *CreateBulkCSVContactListMembership_CreateBulkCSVContactListMembership_ContactListMemberships) GetID() string {
+	if t == nil {
+		t = &CreateBulkCSVContactListMembership_CreateBulkCSVContactListMembership_ContactListMemberships{}
+	}
+	return t.ID
+}
+func (t *CreateBulkCSVContactListMembership_CreateBulkCSVContactListMembership_ContactListMemberships) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkCSVContactListMembership_CreateBulkCSVContactListMembership_ContactListMemberships{}
+	}
+	return t.UpdatedAt
+}
+func (t *CreateBulkCSVContactListMembership_CreateBulkCSVContactListMembership_ContactListMemberships) GetUpdatedBy() *string {
+	if t == nil {
+		t = &CreateBulkCSVContactListMembership_CreateBulkCSVContactListMembership_ContactListMemberships{}
+	}
+	return t.UpdatedBy
+}
+
+type CreateBulkCSVContactListMembership_CreateBulkCSVContactListMembership struct {
+	ContactListMemberships []*CreateBulkCSVContactListMembership_CreateBulkCSVContactListMembership_ContactListMemberships "json:\"contactListMemberships,omitempty\" graphql:\"contactListMemberships\""
+}
+
+func (t *CreateBulkCSVContactListMembership_CreateBulkCSVContactListMembership) GetContactListMemberships() []*CreateBulkCSVContactListMembership_CreateBulkCSVContactListMembership_ContactListMemberships {
+	if t == nil {
+		t = &CreateBulkCSVContactListMembership_CreateBulkCSVContactListMembership{}
+	}
+	return t.ContactListMemberships
+}
+
+type CreateBulkContactListMembership_CreateBulkContactListMembership_ContactListMemberships struct {
+	ContactID     string     "json:\"contactID\" graphql:\"contactID\""
+	ContactListID string     "json:\"contactListID\" graphql:\"contactListID\""
+	CreatedAt     *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy     *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID            string     "json:\"id\" graphql:\"id\""
+	UpdatedAt     *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy     *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *CreateBulkContactListMembership_CreateBulkContactListMembership_ContactListMemberships) GetContactID() string {
+	if t == nil {
+		t = &CreateBulkContactListMembership_CreateBulkContactListMembership_ContactListMemberships{}
+	}
+	return t.ContactID
+}
+func (t *CreateBulkContactListMembership_CreateBulkContactListMembership_ContactListMemberships) GetContactListID() string {
+	if t == nil {
+		t = &CreateBulkContactListMembership_CreateBulkContactListMembership_ContactListMemberships{}
+	}
+	return t.ContactListID
+}
+func (t *CreateBulkContactListMembership_CreateBulkContactListMembership_ContactListMemberships) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkContactListMembership_CreateBulkContactListMembership_ContactListMemberships{}
+	}
+	return t.CreatedAt
+}
+func (t *CreateBulkContactListMembership_CreateBulkContactListMembership_ContactListMemberships) GetCreatedBy() *string {
+	if t == nil {
+		t = &CreateBulkContactListMembership_CreateBulkContactListMembership_ContactListMemberships{}
+	}
+	return t.CreatedBy
+}
+func (t *CreateBulkContactListMembership_CreateBulkContactListMembership_ContactListMemberships) GetID() string {
+	if t == nil {
+		t = &CreateBulkContactListMembership_CreateBulkContactListMembership_ContactListMemberships{}
+	}
+	return t.ID
+}
+func (t *CreateBulkContactListMembership_CreateBulkContactListMembership_ContactListMemberships) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkContactListMembership_CreateBulkContactListMembership_ContactListMemberships{}
+	}
+	return t.UpdatedAt
+}
+func (t *CreateBulkContactListMembership_CreateBulkContactListMembership_ContactListMemberships) GetUpdatedBy() *string {
+	if t == nil {
+		t = &CreateBulkContactListMembership_CreateBulkContactListMembership_ContactListMemberships{}
+	}
+	return t.UpdatedBy
+}
+
+type CreateBulkContactListMembership_CreateBulkContactListMembership struct {
+	ContactListMemberships []*CreateBulkContactListMembership_CreateBulkContactListMembership_ContactListMemberships "json:\"contactListMemberships,omitempty\" graphql:\"contactListMemberships\""
+}
+
+func (t *CreateBulkContactListMembership_CreateBulkContactListMembership) GetContactListMemberships() []*CreateBulkContactListMembership_CreateBulkContactListMembership_ContactListMemberships {
+	if t == nil {
+		t = &CreateBulkContactListMembership_CreateBulkContactListMembership{}
+	}
+	return t.ContactListMemberships
+}
+
+type CreateContactListMembership_CreateContactListMembership_ContactListMembership struct {
+	ContactID     string     "json:\"contactID\" graphql:\"contactID\""
+	ContactListID string     "json:\"contactListID\" graphql:\"contactListID\""
+	CreatedAt     *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy     *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID            string     "json:\"id\" graphql:\"id\""
+	UpdatedAt     *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy     *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *CreateContactListMembership_CreateContactListMembership_ContactListMembership) GetContactID() string {
+	if t == nil {
+		t = &CreateContactListMembership_CreateContactListMembership_ContactListMembership{}
+	}
+	return t.ContactID
+}
+func (t *CreateContactListMembership_CreateContactListMembership_ContactListMembership) GetContactListID() string {
+	if t == nil {
+		t = &CreateContactListMembership_CreateContactListMembership_ContactListMembership{}
+	}
+	return t.ContactListID
+}
+func (t *CreateContactListMembership_CreateContactListMembership_ContactListMembership) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &CreateContactListMembership_CreateContactListMembership_ContactListMembership{}
+	}
+	return t.CreatedAt
+}
+func (t *CreateContactListMembership_CreateContactListMembership_ContactListMembership) GetCreatedBy() *string {
+	if t == nil {
+		t = &CreateContactListMembership_CreateContactListMembership_ContactListMembership{}
+	}
+	return t.CreatedBy
+}
+func (t *CreateContactListMembership_CreateContactListMembership_ContactListMembership) GetID() string {
+	if t == nil {
+		t = &CreateContactListMembership_CreateContactListMembership_ContactListMembership{}
+	}
+	return t.ID
+}
+func (t *CreateContactListMembership_CreateContactListMembership_ContactListMembership) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &CreateContactListMembership_CreateContactListMembership_ContactListMembership{}
+	}
+	return t.UpdatedAt
+}
+func (t *CreateContactListMembership_CreateContactListMembership_ContactListMembership) GetUpdatedBy() *string {
+	if t == nil {
+		t = &CreateContactListMembership_CreateContactListMembership_ContactListMembership{}
+	}
+	return t.UpdatedBy
+}
+
+type CreateContactListMembership_CreateContactListMembership struct {
+	ContactListMembership CreateContactListMembership_CreateContactListMembership_ContactListMembership "json:\"contactListMembership\" graphql:\"contactListMembership\""
+}
+
+func (t *CreateContactListMembership_CreateContactListMembership) GetContactListMembership() *CreateContactListMembership_CreateContactListMembership_ContactListMembership {
+	if t == nil {
+		t = &CreateContactListMembership_CreateContactListMembership{}
+	}
+	return &t.ContactListMembership
+}
+
+type GetAllContactListMemberships_ContactListMemberships_Edges_Node struct {
+	ContactID     string     "json:\"contactID\" graphql:\"contactID\""
+	ContactListID string     "json:\"contactListID\" graphql:\"contactListID\""
+	CreatedAt     *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy     *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID            string     "json:\"id\" graphql:\"id\""
+	UpdatedAt     *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy     *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetAllContactListMemberships_ContactListMemberships_Edges_Node) GetContactID() string {
+	if t == nil {
+		t = &GetAllContactListMemberships_ContactListMemberships_Edges_Node{}
+	}
+	return t.ContactID
+}
+func (t *GetAllContactListMemberships_ContactListMemberships_Edges_Node) GetContactListID() string {
+	if t == nil {
+		t = &GetAllContactListMemberships_ContactListMemberships_Edges_Node{}
+	}
+	return t.ContactListID
+}
+func (t *GetAllContactListMemberships_ContactListMemberships_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllContactListMemberships_ContactListMemberships_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetAllContactListMemberships_ContactListMemberships_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetAllContactListMemberships_ContactListMemberships_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetAllContactListMemberships_ContactListMemberships_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetAllContactListMemberships_ContactListMemberships_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetAllContactListMemberships_ContactListMemberships_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllContactListMemberships_ContactListMemberships_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetAllContactListMemberships_ContactListMemberships_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetAllContactListMemberships_ContactListMemberships_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+
+type GetAllContactListMemberships_ContactListMemberships_Edges struct {
+	Node *GetAllContactListMemberships_ContactListMemberships_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetAllContactListMemberships_ContactListMemberships_Edges) GetNode() *GetAllContactListMemberships_ContactListMemberships_Edges_Node {
+	if t == nil {
+		t = &GetAllContactListMemberships_ContactListMemberships_Edges{}
+	}
+	return t.Node
+}
+
+type GetAllContactListMemberships_ContactListMemberships struct {
+	Edges []*GetAllContactListMemberships_ContactListMemberships_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+}
+
+func (t *GetAllContactListMemberships_ContactListMemberships) GetEdges() []*GetAllContactListMemberships_ContactListMemberships_Edges {
+	if t == nil {
+		t = &GetAllContactListMemberships_ContactListMemberships{}
+	}
+	return t.Edges
+}
+
+type GetContactListMembershipByID_ContactListMembership struct {
+	ContactID     string     "json:\"contactID\" graphql:\"contactID\""
+	ContactListID string     "json:\"contactListID\" graphql:\"contactListID\""
+	CreatedAt     *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy     *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID            string     "json:\"id\" graphql:\"id\""
+	UpdatedAt     *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy     *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetContactListMembershipByID_ContactListMembership) GetContactID() string {
+	if t == nil {
+		t = &GetContactListMembershipByID_ContactListMembership{}
+	}
+	return t.ContactID
+}
+func (t *GetContactListMembershipByID_ContactListMembership) GetContactListID() string {
+	if t == nil {
+		t = &GetContactListMembershipByID_ContactListMembership{}
+	}
+	return t.ContactListID
+}
+func (t *GetContactListMembershipByID_ContactListMembership) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetContactListMembershipByID_ContactListMembership{}
+	}
+	return t.CreatedAt
+}
+func (t *GetContactListMembershipByID_ContactListMembership) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetContactListMembershipByID_ContactListMembership{}
+	}
+	return t.CreatedBy
+}
+func (t *GetContactListMembershipByID_ContactListMembership) GetID() string {
+	if t == nil {
+		t = &GetContactListMembershipByID_ContactListMembership{}
+	}
+	return t.ID
+}
+func (t *GetContactListMembershipByID_ContactListMembership) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetContactListMembershipByID_ContactListMembership{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetContactListMembershipByID_ContactListMembership) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetContactListMembershipByID_ContactListMembership{}
+	}
+	return t.UpdatedBy
+}
+
+type GetContactListMemberships_ContactListMemberships_Edges_Node struct {
+	ContactID     string     "json:\"contactID\" graphql:\"contactID\""
+	ContactListID string     "json:\"contactListID\" graphql:\"contactListID\""
+	CreatedAt     *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy     *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID            string     "json:\"id\" graphql:\"id\""
+	UpdatedAt     *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy     *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetContactListMemberships_ContactListMemberships_Edges_Node) GetContactID() string {
+	if t == nil {
+		t = &GetContactListMemberships_ContactListMemberships_Edges_Node{}
+	}
+	return t.ContactID
+}
+func (t *GetContactListMemberships_ContactListMemberships_Edges_Node) GetContactListID() string {
+	if t == nil {
+		t = &GetContactListMemberships_ContactListMemberships_Edges_Node{}
+	}
+	return t.ContactListID
+}
+func (t *GetContactListMemberships_ContactListMemberships_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetContactListMemberships_ContactListMemberships_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetContactListMemberships_ContactListMemberships_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetContactListMemberships_ContactListMemberships_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetContactListMemberships_ContactListMemberships_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetContactListMemberships_ContactListMemberships_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetContactListMemberships_ContactListMemberships_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetContactListMemberships_ContactListMemberships_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetContactListMemberships_ContactListMemberships_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetContactListMemberships_ContactListMemberships_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+
+type GetContactListMemberships_ContactListMemberships_Edges struct {
+	Node *GetContactListMemberships_ContactListMemberships_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetContactListMemberships_ContactListMemberships_Edges) GetNode() *GetContactListMemberships_ContactListMemberships_Edges_Node {
+	if t == nil {
+		t = &GetContactListMemberships_ContactListMemberships_Edges{}
+	}
+	return t.Node
+}
+
+type GetContactListMemberships_ContactListMemberships struct {
+	Edges []*GetContactListMemberships_ContactListMemberships_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+}
+
+func (t *GetContactListMemberships_ContactListMemberships) GetEdges() []*GetContactListMemberships_ContactListMemberships_Edges {
+	if t == nil {
+		t = &GetContactListMemberships_ContactListMemberships{}
+	}
+	return t.Edges
+}
+
+type UpdateContactListMembership_UpdateContactListMembership_ContactListMembership struct {
+	ContactID     string     "json:\"contactID\" graphql:\"contactID\""
+	ContactListID string     "json:\"contactListID\" graphql:\"contactListID\""
+	CreatedAt     *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy     *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID            string     "json:\"id\" graphql:\"id\""
+	UpdatedAt     *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy     *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *UpdateContactListMembership_UpdateContactListMembership_ContactListMembership) GetContactID() string {
+	if t == nil {
+		t = &UpdateContactListMembership_UpdateContactListMembership_ContactListMembership{}
+	}
+	return t.ContactID
+}
+func (t *UpdateContactListMembership_UpdateContactListMembership_ContactListMembership) GetContactListID() string {
+	if t == nil {
+		t = &UpdateContactListMembership_UpdateContactListMembership_ContactListMembership{}
+	}
+	return t.ContactListID
+}
+func (t *UpdateContactListMembership_UpdateContactListMembership_ContactListMembership) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateContactListMembership_UpdateContactListMembership_ContactListMembership{}
+	}
+	return t.CreatedAt
+}
+func (t *UpdateContactListMembership_UpdateContactListMembership_ContactListMembership) GetCreatedBy() *string {
+	if t == nil {
+		t = &UpdateContactListMembership_UpdateContactListMembership_ContactListMembership{}
+	}
+	return t.CreatedBy
+}
+func (t *UpdateContactListMembership_UpdateContactListMembership_ContactListMembership) GetID() string {
+	if t == nil {
+		t = &UpdateContactListMembership_UpdateContactListMembership_ContactListMembership{}
+	}
+	return t.ID
+}
+func (t *UpdateContactListMembership_UpdateContactListMembership_ContactListMembership) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateContactListMembership_UpdateContactListMembership_ContactListMembership{}
+	}
+	return t.UpdatedAt
+}
+func (t *UpdateContactListMembership_UpdateContactListMembership_ContactListMembership) GetUpdatedBy() *string {
+	if t == nil {
+		t = &UpdateContactListMembership_UpdateContactListMembership_ContactListMembership{}
+	}
+	return t.UpdatedBy
+}
+
+type UpdateContactListMembership_UpdateContactListMembership struct {
+	ContactListMembership UpdateContactListMembership_UpdateContactListMembership_ContactListMembership "json:\"contactListMembership\" graphql:\"contactListMembership\""
+}
+
+func (t *UpdateContactListMembership_UpdateContactListMembership) GetContactListMembership() *UpdateContactListMembership_UpdateContactListMembership_ContactListMembership {
+	if t == nil {
+		t = &UpdateContactListMembership_UpdateContactListMembership{}
+	}
+	return &t.ContactListMembership
+}
+
+type GetAllContactListMembershipHistories_ContactListMembershipHistories_Edges_Node struct {
+	ContactID     string            "json:\"contactID\" graphql:\"contactID\""
+	ContactListID string            "json:\"contactListID\" graphql:\"contactListID\""
+	CreatedAt     *time.Time        "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy     *string           "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	HistoryTime   time.Time         "json:\"historyTime\" graphql:\"historyTime\""
+	ID            string            "json:\"id\" graphql:\"id\""
+	Operation     enthistory.OpType "json:\"operation\" graphql:\"operation\""
+	Ref           *string           "json:\"ref,omitempty\" graphql:\"ref\""
+	UpdatedAt     *time.Time        "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy     *string           "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetAllContactListMembershipHistories_ContactListMembershipHistories_Edges_Node) GetContactID() string {
+	if t == nil {
+		t = &GetAllContactListMembershipHistories_ContactListMembershipHistories_Edges_Node{}
+	}
+	return t.ContactID
+}
+func (t *GetAllContactListMembershipHistories_ContactListMembershipHistories_Edges_Node) GetContactListID() string {
+	if t == nil {
+		t = &GetAllContactListMembershipHistories_ContactListMembershipHistories_Edges_Node{}
+	}
+	return t.ContactListID
+}
+func (t *GetAllContactListMembershipHistories_ContactListMembershipHistories_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllContactListMembershipHistories_ContactListMembershipHistories_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetAllContactListMembershipHistories_ContactListMembershipHistories_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetAllContactListMembershipHistories_ContactListMembershipHistories_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetAllContactListMembershipHistories_ContactListMembershipHistories_Edges_Node) GetHistoryTime() *time.Time {
+	if t == nil {
+		t = &GetAllContactListMembershipHistories_ContactListMembershipHistories_Edges_Node{}
+	}
+	return &t.HistoryTime
+}
+func (t *GetAllContactListMembershipHistories_ContactListMembershipHistories_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetAllContactListMembershipHistories_ContactListMembershipHistories_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetAllContactListMembershipHistories_ContactListMembershipHistories_Edges_Node) GetOperation() *enthistory.OpType {
+	if t == nil {
+		t = &GetAllContactListMembershipHistories_ContactListMembershipHistories_Edges_Node{}
+	}
+	return &t.Operation
+}
+func (t *GetAllContactListMembershipHistories_ContactListMembershipHistories_Edges_Node) GetRef() *string {
+	if t == nil {
+		t = &GetAllContactListMembershipHistories_ContactListMembershipHistories_Edges_Node{}
+	}
+	return t.Ref
+}
+func (t *GetAllContactListMembershipHistories_ContactListMembershipHistories_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllContactListMembershipHistories_ContactListMembershipHistories_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetAllContactListMembershipHistories_ContactListMembershipHistories_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetAllContactListMembershipHistories_ContactListMembershipHistories_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+
+type GetAllContactListMembershipHistories_ContactListMembershipHistories_Edges struct {
+	Node *GetAllContactListMembershipHistories_ContactListMembershipHistories_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetAllContactListMembershipHistories_ContactListMembershipHistories_Edges) GetNode() *GetAllContactListMembershipHistories_ContactListMembershipHistories_Edges_Node {
+	if t == nil {
+		t = &GetAllContactListMembershipHistories_ContactListMembershipHistories_Edges{}
+	}
+	return t.Node
+}
+
+type GetAllContactListMembershipHistories_ContactListMembershipHistories struct {
+	Edges []*GetAllContactListMembershipHistories_ContactListMembershipHistories_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+}
+
+func (t *GetAllContactListMembershipHistories_ContactListMembershipHistories) GetEdges() []*GetAllContactListMembershipHistories_ContactListMembershipHistories_Edges {
+	if t == nil {
+		t = &GetAllContactListMembershipHistories_ContactListMembershipHistories{}
+	}
+	return t.Edges
+}
+
+type GetContactListMembershipHistories_ContactListMembershipHistories_Edges_Node struct {
+	ContactID     string            "json:\"contactID\" graphql:\"contactID\""
+	ContactListID string            "json:\"contactListID\" graphql:\"contactListID\""
+	CreatedAt     *time.Time        "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy     *string           "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	HistoryTime   time.Time         "json:\"historyTime\" graphql:\"historyTime\""
+	ID            string            "json:\"id\" graphql:\"id\""
+	Operation     enthistory.OpType "json:\"operation\" graphql:\"operation\""
+	Ref           *string           "json:\"ref,omitempty\" graphql:\"ref\""
+	UpdatedAt     *time.Time        "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy     *string           "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetContactListMembershipHistories_ContactListMembershipHistories_Edges_Node) GetContactID() string {
+	if t == nil {
+		t = &GetContactListMembershipHistories_ContactListMembershipHistories_Edges_Node{}
+	}
+	return t.ContactID
+}
+func (t *GetContactListMembershipHistories_ContactListMembershipHistories_Edges_Node) GetContactListID() string {
+	if t == nil {
+		t = &GetContactListMembershipHistories_ContactListMembershipHistories_Edges_Node{}
+	}
+	return t.ContactListID
+}
+func (t *GetContactListMembershipHistories_ContactListMembershipHistories_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetContactListMembershipHistories_ContactListMembershipHistories_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetContactListMembershipHistories_ContactListMembershipHistories_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetContactListMembershipHistories_ContactListMembershipHistories_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetContactListMembershipHistories_ContactListMembershipHistories_Edges_Node) GetHistoryTime() *time.Time {
+	if t == nil {
+		t = &GetContactListMembershipHistories_ContactListMembershipHistories_Edges_Node{}
+	}
+	return &t.HistoryTime
+}
+func (t *GetContactListMembershipHistories_ContactListMembershipHistories_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetContactListMembershipHistories_ContactListMembershipHistories_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetContactListMembershipHistories_ContactListMembershipHistories_Edges_Node) GetOperation() *enthistory.OpType {
+	if t == nil {
+		t = &GetContactListMembershipHistories_ContactListMembershipHistories_Edges_Node{}
+	}
+	return &t.Operation
+}
+func (t *GetContactListMembershipHistories_ContactListMembershipHistories_Edges_Node) GetRef() *string {
+	if t == nil {
+		t = &GetContactListMembershipHistories_ContactListMembershipHistories_Edges_Node{}
+	}
+	return t.Ref
+}
+func (t *GetContactListMembershipHistories_ContactListMembershipHistories_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetContactListMembershipHistories_ContactListMembershipHistories_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetContactListMembershipHistories_ContactListMembershipHistories_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetContactListMembershipHistories_ContactListMembershipHistories_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+
+type GetContactListMembershipHistories_ContactListMembershipHistories_Edges struct {
+	Node *GetContactListMembershipHistories_ContactListMembershipHistories_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetContactListMembershipHistories_ContactListMembershipHistories_Edges) GetNode() *GetContactListMembershipHistories_ContactListMembershipHistories_Edges_Node {
+	if t == nil {
+		t = &GetContactListMembershipHistories_ContactListMembershipHistories_Edges{}
+	}
+	return t.Node
+}
+
+type GetContactListMembershipHistories_ContactListMembershipHistories struct {
+	Edges []*GetContactListMembershipHistories_ContactListMembershipHistories_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+}
+
+func (t *GetContactListMembershipHistories_ContactListMembershipHistories) GetEdges() []*GetContactListMembershipHistories_ContactListMembershipHistories_Edges {
+	if t == nil {
+		t = &GetContactListMembershipHistories_ContactListMembershipHistories{}
 	}
 	return t.Edges
 }
@@ -27570,6 +29142,204 @@ func (t *GetContactHistories) GetContactHistories() *GetContactHistories_Contact
 	return &t.ContactHistories
 }
 
+type CreateBulkCSVContactList struct {
+	CreateBulkCSVContactList CreateBulkCSVContactList_CreateBulkCSVContactList "json:\"createBulkCSVContactList\" graphql:\"createBulkCSVContactList\""
+}
+
+func (t *CreateBulkCSVContactList) GetCreateBulkCSVContactList() *CreateBulkCSVContactList_CreateBulkCSVContactList {
+	if t == nil {
+		t = &CreateBulkCSVContactList{}
+	}
+	return &t.CreateBulkCSVContactList
+}
+
+type CreateBulkContactList struct {
+	CreateBulkContactList CreateBulkContactList_CreateBulkContactList "json:\"createBulkContactList\" graphql:\"createBulkContactList\""
+}
+
+func (t *CreateBulkContactList) GetCreateBulkContactList() *CreateBulkContactList_CreateBulkContactList {
+	if t == nil {
+		t = &CreateBulkContactList{}
+	}
+	return &t.CreateBulkContactList
+}
+
+type CreateContactList struct {
+	CreateContactList CreateContactList_CreateContactList "json:\"createContactList\" graphql:\"createContactList\""
+}
+
+func (t *CreateContactList) GetCreateContactList() *CreateContactList_CreateContactList {
+	if t == nil {
+		t = &CreateContactList{}
+	}
+	return &t.CreateContactList
+}
+
+type GetAllContactLists struct {
+	ContactLists GetAllContactLists_ContactLists "json:\"contactLists\" graphql:\"contactLists\""
+}
+
+func (t *GetAllContactLists) GetContactLists() *GetAllContactLists_ContactLists {
+	if t == nil {
+		t = &GetAllContactLists{}
+	}
+	return &t.ContactLists
+}
+
+type GetContactListByID struct {
+	ContactList GetContactListByID_ContactList "json:\"contactList\" graphql:\"contactList\""
+}
+
+func (t *GetContactListByID) GetContactList() *GetContactListByID_ContactList {
+	if t == nil {
+		t = &GetContactListByID{}
+	}
+	return &t.ContactList
+}
+
+type GetContactLists struct {
+	ContactLists GetContactLists_ContactLists "json:\"contactLists\" graphql:\"contactLists\""
+}
+
+func (t *GetContactLists) GetContactLists() *GetContactLists_ContactLists {
+	if t == nil {
+		t = &GetContactLists{}
+	}
+	return &t.ContactLists
+}
+
+type UpdateContactList struct {
+	UpdateContactList UpdateContactList_UpdateContactList "json:\"updateContactList\" graphql:\"updateContactList\""
+}
+
+func (t *UpdateContactList) GetUpdateContactList() *UpdateContactList_UpdateContactList {
+	if t == nil {
+		t = &UpdateContactList{}
+	}
+	return &t.UpdateContactList
+}
+
+type GetAllContactListHistories struct {
+	ContactListHistories GetAllContactListHistories_ContactListHistories "json:\"contactListHistories\" graphql:\"contactListHistories\""
+}
+
+func (t *GetAllContactListHistories) GetContactListHistories() *GetAllContactListHistories_ContactListHistories {
+	if t == nil {
+		t = &GetAllContactListHistories{}
+	}
+	return &t.ContactListHistories
+}
+
+type GetContactListHistories struct {
+	ContactListHistories GetContactListHistories_ContactListHistories "json:\"contactListHistories\" graphql:\"contactListHistories\""
+}
+
+func (t *GetContactListHistories) GetContactListHistories() *GetContactListHistories_ContactListHistories {
+	if t == nil {
+		t = &GetContactListHistories{}
+	}
+	return &t.ContactListHistories
+}
+
+type CreateBulkCSVContactListMembership struct {
+	CreateBulkCSVContactListMembership CreateBulkCSVContactListMembership_CreateBulkCSVContactListMembership "json:\"createBulkCSVContactListMembership\" graphql:\"createBulkCSVContactListMembership\""
+}
+
+func (t *CreateBulkCSVContactListMembership) GetCreateBulkCSVContactListMembership() *CreateBulkCSVContactListMembership_CreateBulkCSVContactListMembership {
+	if t == nil {
+		t = &CreateBulkCSVContactListMembership{}
+	}
+	return &t.CreateBulkCSVContactListMembership
+}
+
+type CreateBulkContactListMembership struct {
+	CreateBulkContactListMembership CreateBulkContactListMembership_CreateBulkContactListMembership "json:\"createBulkContactListMembership\" graphql:\"createBulkContactListMembership\""
+}
+
+func (t *CreateBulkContactListMembership) GetCreateBulkContactListMembership() *CreateBulkContactListMembership_CreateBulkContactListMembership {
+	if t == nil {
+		t = &CreateBulkContactListMembership{}
+	}
+	return &t.CreateBulkContactListMembership
+}
+
+type CreateContactListMembership struct {
+	CreateContactListMembership CreateContactListMembership_CreateContactListMembership "json:\"createContactListMembership\" graphql:\"createContactListMembership\""
+}
+
+func (t *CreateContactListMembership) GetCreateContactListMembership() *CreateContactListMembership_CreateContactListMembership {
+	if t == nil {
+		t = &CreateContactListMembership{}
+	}
+	return &t.CreateContactListMembership
+}
+
+type GetAllContactListMemberships struct {
+	ContactListMemberships GetAllContactListMemberships_ContactListMemberships "json:\"contactListMemberships\" graphql:\"contactListMemberships\""
+}
+
+func (t *GetAllContactListMemberships) GetContactListMemberships() *GetAllContactListMemberships_ContactListMemberships {
+	if t == nil {
+		t = &GetAllContactListMemberships{}
+	}
+	return &t.ContactListMemberships
+}
+
+type GetContactListMembershipByID struct {
+	ContactListMembership GetContactListMembershipByID_ContactListMembership "json:\"contactListMembership\" graphql:\"contactListMembership\""
+}
+
+func (t *GetContactListMembershipByID) GetContactListMembership() *GetContactListMembershipByID_ContactListMembership {
+	if t == nil {
+		t = &GetContactListMembershipByID{}
+	}
+	return &t.ContactListMembership
+}
+
+type GetContactListMemberships struct {
+	ContactListMemberships GetContactListMemberships_ContactListMemberships "json:\"contactListMemberships\" graphql:\"contactListMemberships\""
+}
+
+func (t *GetContactListMemberships) GetContactListMemberships() *GetContactListMemberships_ContactListMemberships {
+	if t == nil {
+		t = &GetContactListMemberships{}
+	}
+	return &t.ContactListMemberships
+}
+
+type UpdateContactListMembership struct {
+	UpdateContactListMembership UpdateContactListMembership_UpdateContactListMembership "json:\"updateContactListMembership\" graphql:\"updateContactListMembership\""
+}
+
+func (t *UpdateContactListMembership) GetUpdateContactListMembership() *UpdateContactListMembership_UpdateContactListMembership {
+	if t == nil {
+		t = &UpdateContactListMembership{}
+	}
+	return &t.UpdateContactListMembership
+}
+
+type GetAllContactListMembershipHistories struct {
+	ContactListMembershipHistories GetAllContactListMembershipHistories_ContactListMembershipHistories "json:\"contactListMembershipHistories\" graphql:\"contactListMembershipHistories\""
+}
+
+func (t *GetAllContactListMembershipHistories) GetContactListMembershipHistories() *GetAllContactListMembershipHistories_ContactListMembershipHistories {
+	if t == nil {
+		t = &GetAllContactListMembershipHistories{}
+	}
+	return &t.ContactListMembershipHistories
+}
+
+type GetContactListMembershipHistories struct {
+	ContactListMembershipHistories GetContactListMembershipHistories_ContactListMembershipHistories "json:\"contactListMembershipHistories\" graphql:\"contactListMembershipHistories\""
+}
+
+func (t *GetContactListMembershipHistories) GetContactListMembershipHistories() *GetContactListMembershipHistories_ContactListMembershipHistories {
+	if t == nil {
+		t = &GetContactListMembershipHistories{}
+	}
+	return &t.ContactListMembershipHistories
+}
+
 type CreateDocumentData struct {
 	CreateDocumentData CreateDocumentData_CreateDocumentData "json:\"createDocumentData\" graphql:\"createDocumentData\""
 }
@@ -30543,6 +32313,636 @@ func (c *Client) GetContactHistories(ctx context.Context, where *ContactHistoryW
 
 	var res GetContactHistories
 	if err := c.Client.Post(ctx, "GetContactHistories", GetContactHistoriesDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const CreateBulkCSVContactListDocument = `mutation CreateBulkCSVContactList ($input: Upload!) {
+	createBulkCSVContactList(input: $input) {
+		contactLists {
+			createdAt
+			createdBy
+			description
+			displayName
+			id
+			name
+			ownerID
+			tags
+			updatedAt
+			updatedBy
+			visibility
+		}
+	}
+}
+`
+
+func (c *Client) CreateBulkCSVContactList(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVContactList, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res CreateBulkCSVContactList
+	if err := c.Client.Post(ctx, "CreateBulkCSVContactList", CreateBulkCSVContactListDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const CreateBulkContactListDocument = `mutation CreateBulkContactList ($input: [CreateContactListInput!]) {
+	createBulkContactList(input: $input) {
+		contactLists {
+			createdAt
+			createdBy
+			description
+			displayName
+			id
+			name
+			ownerID
+			tags
+			updatedAt
+			updatedBy
+			visibility
+		}
+	}
+}
+`
+
+func (c *Client) CreateBulkContactList(ctx context.Context, input []*CreateContactListInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkContactList, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res CreateBulkContactList
+	if err := c.Client.Post(ctx, "CreateBulkContactList", CreateBulkContactListDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const CreateContactListDocument = `mutation CreateContactList ($input: CreateContactListInput!) {
+	createContactList(input: $input) {
+		contactList {
+			createdAt
+			createdBy
+			description
+			displayName
+			id
+			name
+			ownerID
+			tags
+			updatedAt
+			updatedBy
+			visibility
+		}
+	}
+}
+`
+
+func (c *Client) CreateContactList(ctx context.Context, input CreateContactListInput, interceptors ...clientv2.RequestInterceptor) (*CreateContactList, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res CreateContactList
+	if err := c.Client.Post(ctx, "CreateContactList", CreateContactListDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetAllContactListsDocument = `query GetAllContactLists {
+	contactLists {
+		edges {
+			node {
+				createdAt
+				createdBy
+				description
+				displayName
+				id
+				name
+				ownerID
+				tags
+				updatedAt
+				updatedBy
+				visibility
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetAllContactLists(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllContactLists, error) {
+	vars := map[string]any{}
+
+	var res GetAllContactLists
+	if err := c.Client.Post(ctx, "GetAllContactLists", GetAllContactListsDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetContactListByIDDocument = `query GetContactListByID ($contactListId: ID!) {
+	contactList(id: $contactListId) {
+		createdAt
+		createdBy
+		description
+		displayName
+		id
+		name
+		ownerID
+		tags
+		updatedAt
+		updatedBy
+		visibility
+	}
+}
+`
+
+func (c *Client) GetContactListByID(ctx context.Context, contactListID string, interceptors ...clientv2.RequestInterceptor) (*GetContactListByID, error) {
+	vars := map[string]any{
+		"contactListId": contactListID,
+	}
+
+	var res GetContactListByID
+	if err := c.Client.Post(ctx, "GetContactListByID", GetContactListByIDDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetContactListsDocument = `query GetContactLists ($where: ContactListWhereInput) {
+	contactLists(where: $where) {
+		edges {
+			node {
+				createdAt
+				createdBy
+				description
+				displayName
+				id
+				name
+				ownerID
+				tags
+				updatedAt
+				updatedBy
+				visibility
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetContactLists(ctx context.Context, where *ContactListWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetContactLists, error) {
+	vars := map[string]any{
+		"where": where,
+	}
+
+	var res GetContactLists
+	if err := c.Client.Post(ctx, "GetContactLists", GetContactListsDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const UpdateContactListDocument = `mutation UpdateContactList ($updateContactListId: ID!, $input: UpdateContactListInput!) {
+	updateContactList(id: $updateContactListId, input: $input) {
+		contactList {
+			createdAt
+			createdBy
+			description
+			displayName
+			id
+			name
+			ownerID
+			tags
+			updatedAt
+			updatedBy
+			visibility
+		}
+	}
+}
+`
+
+func (c *Client) UpdateContactList(ctx context.Context, updateContactListID string, input UpdateContactListInput, interceptors ...clientv2.RequestInterceptor) (*UpdateContactList, error) {
+	vars := map[string]any{
+		"updateContactListId": updateContactListID,
+		"input":               input,
+	}
+
+	var res UpdateContactList
+	if err := c.Client.Post(ctx, "UpdateContactList", UpdateContactListDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetAllContactListHistoriesDocument = `query GetAllContactListHistories {
+	contactListHistories {
+		edges {
+			node {
+				createdAt
+				createdBy
+				description
+				displayName
+				historyTime
+				id
+				name
+				operation
+				ownerID
+				ref
+				tags
+				updatedAt
+				updatedBy
+				visibility
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetAllContactListHistories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllContactListHistories, error) {
+	vars := map[string]any{}
+
+	var res GetAllContactListHistories
+	if err := c.Client.Post(ctx, "GetAllContactListHistories", GetAllContactListHistoriesDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetContactListHistoriesDocument = `query GetContactListHistories ($where: ContactListHistoryWhereInput) {
+	contactListHistories(where: $where) {
+		edges {
+			node {
+				createdAt
+				createdBy
+				description
+				displayName
+				historyTime
+				id
+				name
+				operation
+				ownerID
+				ref
+				tags
+				updatedAt
+				updatedBy
+				visibility
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetContactListHistories(ctx context.Context, where *ContactListHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetContactListHistories, error) {
+	vars := map[string]any{
+		"where": where,
+	}
+
+	var res GetContactListHistories
+	if err := c.Client.Post(ctx, "GetContactListHistories", GetContactListHistoriesDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const CreateBulkCSVContactListMembershipDocument = `mutation CreateBulkCSVContactListMembership ($input: Upload!) {
+	createBulkCSVContactListMembership(input: $input) {
+		contactListMemberships {
+			contactID
+			contactListID
+			createdAt
+			createdBy
+			id
+			updatedAt
+			updatedBy
+		}
+	}
+}
+`
+
+func (c *Client) CreateBulkCSVContactListMembership(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVContactListMembership, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res CreateBulkCSVContactListMembership
+	if err := c.Client.Post(ctx, "CreateBulkCSVContactListMembership", CreateBulkCSVContactListMembershipDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const CreateBulkContactListMembershipDocument = `mutation CreateBulkContactListMembership ($input: [CreateContactListMembershipInput!]) {
+	createBulkContactListMembership(input: $input) {
+		contactListMemberships {
+			contactID
+			contactListID
+			createdAt
+			createdBy
+			id
+			updatedAt
+			updatedBy
+		}
+	}
+}
+`
+
+func (c *Client) CreateBulkContactListMembership(ctx context.Context, input []*CreateContactListMembershipInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkContactListMembership, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res CreateBulkContactListMembership
+	if err := c.Client.Post(ctx, "CreateBulkContactListMembership", CreateBulkContactListMembershipDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const CreateContactListMembershipDocument = `mutation CreateContactListMembership ($input: CreateContactListMembershipInput!) {
+	createContactListMembership(input: $input) {
+		contactListMembership {
+			contactID
+			contactListID
+			createdAt
+			createdBy
+			id
+			updatedAt
+			updatedBy
+		}
+	}
+}
+`
+
+func (c *Client) CreateContactListMembership(ctx context.Context, input CreateContactListMembershipInput, interceptors ...clientv2.RequestInterceptor) (*CreateContactListMembership, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res CreateContactListMembership
+	if err := c.Client.Post(ctx, "CreateContactListMembership", CreateContactListMembershipDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetAllContactListMembershipsDocument = `query GetAllContactListMemberships {
+	contactListMemberships {
+		edges {
+			node {
+				contactID
+				contactListID
+				createdAt
+				createdBy
+				id
+				updatedAt
+				updatedBy
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetAllContactListMemberships(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllContactListMemberships, error) {
+	vars := map[string]any{}
+
+	var res GetAllContactListMemberships
+	if err := c.Client.Post(ctx, "GetAllContactListMemberships", GetAllContactListMembershipsDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetContactListMembershipByIDDocument = `query GetContactListMembershipByID ($contactListMembershipId: ID!) {
+	contactListMembership(id: $contactListMembershipId) {
+		contactID
+		contactListID
+		createdAt
+		createdBy
+		id
+		updatedAt
+		updatedBy
+	}
+}
+`
+
+func (c *Client) GetContactListMembershipByID(ctx context.Context, contactListMembershipID string, interceptors ...clientv2.RequestInterceptor) (*GetContactListMembershipByID, error) {
+	vars := map[string]any{
+		"contactListMembershipId": contactListMembershipID,
+	}
+
+	var res GetContactListMembershipByID
+	if err := c.Client.Post(ctx, "GetContactListMembershipByID", GetContactListMembershipByIDDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetContactListMembershipsDocument = `query GetContactListMemberships ($where: ContactListMembershipWhereInput) {
+	contactListMemberships(where: $where) {
+		edges {
+			node {
+				contactID
+				contactListID
+				createdAt
+				createdBy
+				id
+				updatedAt
+				updatedBy
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetContactListMemberships(ctx context.Context, where *ContactListMembershipWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetContactListMemberships, error) {
+	vars := map[string]any{
+		"where": where,
+	}
+
+	var res GetContactListMemberships
+	if err := c.Client.Post(ctx, "GetContactListMemberships", GetContactListMembershipsDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const UpdateContactListMembershipDocument = `mutation UpdateContactListMembership ($updateContactListMembershipId: ID!, $input: UpdateContactListMembershipInput!) {
+	updateContactListMembership(id: $updateContactListMembershipId, input: $input) {
+		contactListMembership {
+			contactID
+			contactListID
+			createdAt
+			createdBy
+			id
+			updatedAt
+			updatedBy
+		}
+	}
+}
+`
+
+func (c *Client) UpdateContactListMembership(ctx context.Context, updateContactListMembershipID string, input UpdateContactListMembershipInput, interceptors ...clientv2.RequestInterceptor) (*UpdateContactListMembership, error) {
+	vars := map[string]any{
+		"updateContactListMembershipId": updateContactListMembershipID,
+		"input":                         input,
+	}
+
+	var res UpdateContactListMembership
+	if err := c.Client.Post(ctx, "UpdateContactListMembership", UpdateContactListMembershipDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetAllContactListMembershipHistoriesDocument = `query GetAllContactListMembershipHistories {
+	contactListMembershipHistories {
+		edges {
+			node {
+				contactID
+				contactListID
+				createdAt
+				createdBy
+				historyTime
+				id
+				operation
+				ref
+				updatedAt
+				updatedBy
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetAllContactListMembershipHistories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllContactListMembershipHistories, error) {
+	vars := map[string]any{}
+
+	var res GetAllContactListMembershipHistories
+	if err := c.Client.Post(ctx, "GetAllContactListMembershipHistories", GetAllContactListMembershipHistoriesDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetContactListMembershipHistoriesDocument = `query GetContactListMembershipHistories ($where: ContactListMembershipHistoryWhereInput) {
+	contactListMembershipHistories(where: $where) {
+		edges {
+			node {
+				contactID
+				contactListID
+				createdAt
+				createdBy
+				historyTime
+				id
+				operation
+				ref
+				updatedAt
+				updatedBy
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetContactListMembershipHistories(ctx context.Context, where *ContactListMembershipHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetContactListMembershipHistories, error) {
+	vars := map[string]any{
+		"where": where,
+	}
+
+	var res GetContactListMembershipHistories
+	if err := c.Client.Post(ctx, "GetContactListMembershipHistories", GetContactListMembershipHistoriesDocument, &res, vars, interceptors...); err != nil {
 		if c.Client.ParseDataWhenErrors {
 			return &res, err
 		}
@@ -39354,6 +41754,24 @@ var DocumentOperationNames = map[string]string{
 	UpdateContactDocument:                         "UpdateContact",
 	GetAllContactHistoriesDocument:                "GetAllContactHistories",
 	GetContactHistoriesDocument:                   "GetContactHistories",
+	CreateBulkCSVContactListDocument:              "CreateBulkCSVContactList",
+	CreateBulkContactListDocument:                 "CreateBulkContactList",
+	CreateContactListDocument:                     "CreateContactList",
+	GetAllContactListsDocument:                    "GetAllContactLists",
+	GetContactListByIDDocument:                    "GetContactListByID",
+	GetContactListsDocument:                       "GetContactLists",
+	UpdateContactListDocument:                     "UpdateContactList",
+	GetAllContactListHistoriesDocument:            "GetAllContactListHistories",
+	GetContactListHistoriesDocument:               "GetContactListHistories",
+	CreateBulkCSVContactListMembershipDocument:    "CreateBulkCSVContactListMembership",
+	CreateBulkContactListMembershipDocument:       "CreateBulkContactListMembership",
+	CreateContactListMembershipDocument:           "CreateContactListMembership",
+	GetAllContactListMembershipsDocument:          "GetAllContactListMemberships",
+	GetContactListMembershipByIDDocument:          "GetContactListMembershipByID",
+	GetContactListMembershipsDocument:             "GetContactListMemberships",
+	UpdateContactListMembershipDocument:           "UpdateContactListMembership",
+	GetAllContactListMembershipHistoriesDocument:  "GetAllContactListMembershipHistories",
+	GetContactListMembershipHistoriesDocument:     "GetContactListMembershipHistories",
 	CreateDocumentDataDocument:                    "CreateDocumentData",
 	DeleteDocumentDataDocument:                    "DeleteDocumentData",
 	GetDocumentDataByIDDocument:                   "GetDocumentDataByID",

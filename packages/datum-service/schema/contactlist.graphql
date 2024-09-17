@@ -1,0 +1,103 @@
+extend type Query {
+    """
+    Look up contactList by ID
+    """
+     contactList(
+        """
+        ID of the contactList
+        """
+        id: ID!
+    ):  ContactList!
+}
+
+extend type Mutation{
+    """
+    Create a new contactList
+    """
+    createContactList(
+        """
+        values of the contactList
+        """
+        input: CreateContactListInput!
+    ): ContactListCreatePayload!
+    """
+    Create multiple new contactLists
+    """
+    createBulkContactList(
+        """
+        values of the contactList
+        """
+        input: [CreateContactListInput!]
+    ): ContactListBulkCreatePayload!
+    """
+    Create multiple new contactLists via file upload
+    """
+    createBulkCSVContactList(
+        """
+        csv file containing values of the contactList
+        """
+        input: Upload!
+    ): ContactListBulkCreatePayload!
+    """
+    Update an existing contactList
+    """
+    updateContactList(
+        """
+        ID of the contactList
+        """
+        id: ID!
+        """
+        New values for the contactList
+        """
+        input: UpdateContactListInput!
+    ): ContactListUpdatePayload!
+    """
+    Delete an existing contactList
+    """
+    deleteContactList(
+        """
+        ID of the contactList
+        """
+        id: ID!
+    ): ContactListDeletePayload!
+}
+
+"""
+Return response for createContactList mutation
+"""
+type ContactListCreatePayload {
+    """
+    Created contactList
+    """
+    contactList: ContactList!
+}
+
+"""
+Return response for updateContactList mutation
+"""
+type ContactListUpdatePayload {
+    """
+    Updated contactList
+    """
+    contactList: ContactList!
+}
+
+"""
+Return response for deleteContactList mutation
+"""
+type ContactListDeletePayload {
+    """
+    Deleted contactList ID
+    """
+    deletedID: ID!
+}
+
+"""
+Return response for createBulkContactList mutation
+"""
+type ContactListBulkCreatePayload {
+    """
+    Created contactLists
+    """
+    contactLists: [ContactList!]
+}

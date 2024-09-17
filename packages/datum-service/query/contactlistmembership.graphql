@@ -1,0 +1,98 @@
+
+mutation CreateBulkCSVContactListMembership($input: Upload!) {
+  createBulkCSVContactListMembership(input: $input) {
+    contactListMemberships {
+      contactID
+      contactListID
+      createdAt
+      createdBy
+      id
+      updatedAt
+      updatedBy
+    }
+  }
+}
+
+mutation CreateBulkContactListMembership($input: [CreateContactListMembershipInput!]) {
+  createBulkContactListMembership(input: $input) {
+    contactListMemberships {
+      contactID
+      contactListID
+      createdAt
+      createdBy
+      id
+      updatedAt
+      updatedBy
+    }
+  }
+}
+
+mutation CreateContactListMembership($input: CreateContactListMembershipInput!) {
+  createContactListMembership(input: $input) {
+    contactListMembership {
+      contactID
+      contactListID
+      createdAt
+      createdBy
+      id
+      updatedAt
+      updatedBy
+    }
+  }
+}
+
+query GetAllContactListMemberships {
+  contactListMemberships {
+    edges {
+      node {
+        contactID
+        contactListID
+        createdAt
+        createdBy
+        id
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}
+query GetContactListMembershipByID($contactListMembershipId: ID!) {
+  contactListMembership(id: $contactListMembershipId) {
+    contactID
+    contactListID
+    createdAt
+    createdBy
+    id
+    updatedAt
+    updatedBy
+  }
+}
+
+query GetContactListMemberships($where: ContactListMembershipWhereInput) {
+  contactListMemberships(where: $where) {
+    edges {
+      node {
+        contactID
+        contactListID
+        createdAt
+        createdBy
+        id
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}
+mutation UpdateContactListMembership($updateContactListMembershipId: ID!, $input: UpdateContactListMembershipInput!) {
+  updateContactListMembership(id: $updateContactListMembershipId, input: $input) {
+    contactListMembership {
+      contactID
+      contactListID
+      createdAt
+      createdBy
+      id
+      updatedAt
+      updatedBy
+    }
+  }
+}

@@ -93,6 +93,54 @@ type ContactDeletePayload struct {
 	DeletedID string `json:"deletedID"`
 }
 
+// Return response for createBulkContactList mutation
+type ContactListBulkCreatePayload struct {
+	// Created contactLists
+	ContactLists []*generated.ContactList `json:"contactLists,omitempty"`
+}
+
+// Return response for createContactList mutation
+type ContactListCreatePayload struct {
+	// Created contactList
+	ContactList *generated.ContactList `json:"contactList"`
+}
+
+// Return response for deleteContactList mutation
+type ContactListDeletePayload struct {
+	// Deleted contactList ID
+	DeletedID string `json:"deletedID"`
+}
+
+// Return response for createBulkContactListMembership mutation
+type ContactListMembershipBulkCreatePayload struct {
+	// Created contactListMemberships
+	ContactListMemberships []*generated.ContactListMembership `json:"contactListMemberships,omitempty"`
+}
+
+// Return response for createContactListMembership mutation
+type ContactListMembershipCreatePayload struct {
+	// Created contactListMembership
+	ContactListMembership *generated.ContactListMembership `json:"contactListMembership"`
+}
+
+// Return response for deleteContactListMembership mutation
+type ContactListMembershipDeletePayload struct {
+	// Deleted contactListMembership ID
+	DeletedID string `json:"deletedID"`
+}
+
+// Return response for updateContactListMembership mutation
+type ContactListMembershipUpdatePayload struct {
+	// Updated contactListMembership
+	ContactListMembership *generated.ContactListMembership `json:"contactListMembership"`
+}
+
+// Return response for updateContactList mutation
+type ContactListUpdatePayload struct {
+	// Updated contactList
+	ContactList *generated.ContactList `json:"contactList"`
+}
+
 // Return response for updateContact mutation
 type ContactUpdatePayload struct {
 	// Updated contact

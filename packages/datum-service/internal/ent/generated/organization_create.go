@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/apitoken"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/contact"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/contactlist"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/documentdata"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/entitlement"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/entitlementplan"
@@ -633,6 +634,21 @@ func (oc *OrganizationCreate) AddContacts(c ...*Contact) *OrganizationCreate {
 		ids[i] = c[i].ID
 	}
 	return oc.AddContactIDs(ids...)
+}
+
+// AddContactListIDs adds the "contact_lists" edge to the ContactList entity by IDs.
+func (oc *OrganizationCreate) AddContactListIDs(ids ...string) *OrganizationCreate {
+	oc.mutation.AddContactListIDs(ids...)
+	return oc
+}
+
+// AddContactLists adds the "contact_lists" edges to the ContactList entity.
+func (oc *OrganizationCreate) AddContactLists(c ...*ContactList) *OrganizationCreate {
+	ids := make([]string, len(c))
+	for i := range c {
+		ids[i] = c[i].ID
+	}
+	return oc.AddContactListIDs(ids...)
 }
 
 // AddNoteIDs adds the "notes" edge to the Note entity by IDs.
@@ -1298,6 +1314,23 @@ func (oc *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 			},
 		}
 		edge.Schema = oc.schemaConfig.Contact
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := oc.mutation.ContactListsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.ContactListsTable,
+			Columns: []string{organization.ContactListsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(contactlist.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = oc.schemaConfig.ContactList
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

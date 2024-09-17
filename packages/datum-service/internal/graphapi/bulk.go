@@ -46,6 +46,44 @@ func (r *mutationResolver) bulkCreateContact(ctx context.Context, input []*gener
 	}, nil
 }
 
+// bulkCreateContactList uses the CreateBulk function to create multiple ContactList entities
+func (r *mutationResolver) bulkCreateContactList(ctx context.Context, input []*generated.CreateContactListInput) (*ContactListBulkCreatePayload, error) {
+	c := withTransactionalMutation(ctx)
+	builders := make([]*generated.ContactListCreate, len(input))
+	for i, data := range input {
+		builders[i] = c.ContactList.Create().SetInput(*data)
+	}
+
+	res, err := c.ContactList.CreateBulk(builders...).Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionCreate, object: "contactlist"}, r.logger)
+	}
+
+	// return response
+	return &ContactListBulkCreatePayload{
+		ContactLists: res,
+	}, nil
+}
+
+// bulkCreateContactListMembership uses the CreateBulk function to create multiple ContactListMembership entities
+func (r *mutationResolver) bulkCreateContactListMembership(ctx context.Context, input []*generated.CreateContactListMembershipInput) (*ContactListMembershipBulkCreatePayload, error) {
+	c := withTransactionalMutation(ctx)
+	builders := make([]*generated.ContactListMembershipCreate, len(input))
+	for i, data := range input {
+		builders[i] = c.ContactListMembership.Create().SetInput(*data)
+	}
+
+	res, err := c.ContactListMembership.CreateBulk(builders...).Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionCreate, object: "contactlistmembership"}, r.logger)
+	}
+
+	// return response
+	return &ContactListMembershipBulkCreatePayload{
+		ContactListMemberships: res,
+	}, nil
+}
+
 // bulkCreateDocumentData uses the CreateBulk function to create multiple DocumentData entities
 func (r *mutationResolver) bulkCreateDocumentData(ctx context.Context, input []*generated.CreateDocumentDataInput) (*DocumentDataBulkCreatePayload, error) {
 	c := withTransactionalMutation(ctx)

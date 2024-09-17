@@ -107,15 +107,17 @@ type OrganizationEdges struct {
 	Entitytypes []*EntityType `json:"entitytypes,omitempty"`
 	// Contacts holds the value of the contacts edge.
 	Contacts []*Contact `json:"contacts,omitempty"`
+	// ContactLists holds the value of the contact_lists edge.
+	ContactLists []*ContactList `json:"contact_lists,omitempty"`
 	// Notes holds the value of the notes edge.
 	Notes []*Note `json:"notes,omitempty"`
 	// Members holds the value of the members edge.
 	Members []*OrgMembership `json:"members,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [27]bool
+	loadedTypes [28]bool
 	// totalCount holds the count of the edges above.
-	totalCount [27]map[string]int
+	totalCount [28]map[string]int
 
 	namedChildren                map[string][]*Organization
 	namedGroups                  map[string][]*Group
@@ -140,6 +142,7 @@ type OrganizationEdges struct {
 	namedEntities                map[string][]*Entity
 	namedEntitytypes             map[string][]*EntityType
 	namedContacts                map[string][]*Contact
+	namedContactLists            map[string][]*ContactList
 	namedNotes                   map[string][]*Note
 	namedMembers                 map[string][]*OrgMembership
 }
@@ -373,10 +376,19 @@ func (e OrganizationEdges) ContactsOrErr() ([]*Contact, error) {
 	return nil, &NotLoadedError{edge: "contacts"}
 }
 
+// ContactListsOrErr returns the ContactLists value or an error if the edge
+// was not loaded in eager-loading.
+func (e OrganizationEdges) ContactListsOrErr() ([]*ContactList, error) {
+	if e.loadedTypes[25] {
+		return e.ContactLists, nil
+	}
+	return nil, &NotLoadedError{edge: "contact_lists"}
+}
+
 // NotesOrErr returns the Notes value or an error if the edge
 // was not loaded in eager-loading.
 func (e OrganizationEdges) NotesOrErr() ([]*Note, error) {
-	if e.loadedTypes[25] {
+	if e.loadedTypes[26] {
 		return e.Notes, nil
 	}
 	return nil, &NotLoadedError{edge: "notes"}
@@ -385,7 +397,7 @@ func (e OrganizationEdges) NotesOrErr() ([]*Note, error) {
 // MembersOrErr returns the Members value or an error if the edge
 // was not loaded in eager-loading.
 func (e OrganizationEdges) MembersOrErr() ([]*OrgMembership, error) {
-	if e.loadedTypes[26] {
+	if e.loadedTypes[27] {
 		return e.Members, nil
 	}
 	return nil, &NotLoadedError{edge: "members"}
@@ -654,6 +666,11 @@ func (o *Organization) QueryEntitytypes() *EntityTypeQuery {
 // QueryContacts queries the "contacts" edge of the Organization entity.
 func (o *Organization) QueryContacts() *ContactQuery {
 	return NewOrganizationClient(o.config).QueryContacts(o)
+}
+
+// QueryContactLists queries the "contact_lists" edge of the Organization entity.
+func (o *Organization) QueryContactLists() *ContactListQuery {
+	return NewOrganizationClient(o.config).QueryContactLists(o)
 }
 
 // QueryNotes queries the "notes" edge of the Organization entity.
@@ -1288,6 +1305,30 @@ func (o *Organization) appendNamedContacts(name string, edges ...*Contact) {
 		o.Edges.namedContacts[name] = []*Contact{}
 	} else {
 		o.Edges.namedContacts[name] = append(o.Edges.namedContacts[name], edges...)
+	}
+}
+
+// NamedContactLists returns the ContactLists named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (o *Organization) NamedContactLists(name string) ([]*ContactList, error) {
+	if o.Edges.namedContactLists == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := o.Edges.namedContactLists[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (o *Organization) appendNamedContactLists(name string, edges ...*ContactList) {
+	if o.Edges.namedContactLists == nil {
+		o.Edges.namedContactLists = make(map[string][]*ContactList)
+	}
+	if len(edges) == 0 {
+		o.Edges.namedContactLists[name] = []*ContactList{}
+	} else {
+		o.Edges.namedContactLists[name] = append(o.Edges.namedContactLists[name], edges...)
 	}
 }
 

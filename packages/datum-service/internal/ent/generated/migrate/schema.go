@@ -119,6 +119,152 @@ var (
 			},
 		},
 	}
+	// ContactListsColumns holds the columns for the "contact_lists" table.
+	ContactListsColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "mapping_id", Type: field.TypeString, Unique: true},
+		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+		{Name: "name", Type: field.TypeString},
+		{Name: "visibility", Type: field.TypeString, Default: "PRIVATE"},
+		{Name: "display_name", Type: field.TypeString, Size: 64, Default: ""},
+		{Name: "description", Type: field.TypeString, Nullable: true},
+		{Name: "owner_id", Type: field.TypeString, Nullable: true},
+	}
+	// ContactListsTable holds the schema information for the "contact_lists" table.
+	ContactListsTable = &schema.Table{
+		Name:       "contact_lists",
+		Columns:    ContactListsColumns,
+		PrimaryKey: []*schema.Column{ContactListsColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "contact_lists_organizations_contact_lists",
+				Columns:    []*schema.Column{ContactListsColumns[13]},
+				RefColumns: []*schema.Column{OrganizationsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
+		Indexes: []*schema.Index{
+			{
+				Name:    "contactlist_name_owner_id",
+				Unique:  true,
+				Columns: []*schema.Column{ContactListsColumns[9], ContactListsColumns[13]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "deleted_at is NULL",
+				},
+			},
+		},
+	}
+	// ContactListHistoryColumns holds the columns for the "contact_list_history" table.
+	ContactListHistoryColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "history_time", Type: field.TypeTime},
+		{Name: "ref", Type: field.TypeString, Nullable: true},
+		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "mapping_id", Type: field.TypeString},
+		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+		{Name: "owner_id", Type: field.TypeString, Nullable: true},
+		{Name: "name", Type: field.TypeString},
+		{Name: "visibility", Type: field.TypeString, Default: "PRIVATE"},
+		{Name: "display_name", Type: field.TypeString, Size: 64, Default: ""},
+		{Name: "description", Type: field.TypeString, Nullable: true},
+	}
+	// ContactListHistoryTable holds the schema information for the "contact_list_history" table.
+	ContactListHistoryTable = &schema.Table{
+		Name:       "contact_list_history",
+		Columns:    ContactListHistoryColumns,
+		PrimaryKey: []*schema.Column{ContactListHistoryColumns[0]},
+		Indexes: []*schema.Index{
+			{
+				Name:    "contactlisthistory_history_time",
+				Unique:  false,
+				Columns: []*schema.Column{ContactListHistoryColumns[1]},
+			},
+		},
+	}
+	// ContactListMembershipsColumns holds the columns for the "contact_list_memberships" table.
+	ContactListMembershipsColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "mapping_id", Type: field.TypeString, Unique: true},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "contact_list_id", Type: field.TypeString},
+		{Name: "contact_id", Type: field.TypeString},
+	}
+	// ContactListMembershipsTable holds the schema information for the "contact_list_memberships" table.
+	ContactListMembershipsTable = &schema.Table{
+		Name:       "contact_list_memberships",
+		Columns:    ContactListMembershipsColumns,
+		PrimaryKey: []*schema.Column{ContactListMembershipsColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "contact_list_memberships_contact_lists_contact_list",
+				Columns:    []*schema.Column{ContactListMembershipsColumns[8]},
+				RefColumns: []*schema.Column{ContactListsColumns[0]},
+				OnDelete:   schema.NoAction,
+			},
+			{
+				Symbol:     "contact_list_memberships_contacts_contact",
+				Columns:    []*schema.Column{ContactListMembershipsColumns[9]},
+				RefColumns: []*schema.Column{ContactsColumns[0]},
+				OnDelete:   schema.NoAction,
+			},
+		},
+		Indexes: []*schema.Index{
+			{
+				Name:    "contactlistmembership_contact_id_contact_list_id",
+				Unique:  true,
+				Columns: []*schema.Column{ContactListMembershipsColumns[9], ContactListMembershipsColumns[8]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "deleted_at is NULL",
+				},
+			},
+		},
+	}
+	// ContactListMembershipHistoryColumns holds the columns for the "contact_list_membership_history" table.
+	ContactListMembershipHistoryColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "history_time", Type: field.TypeTime},
+		{Name: "ref", Type: field.TypeString, Nullable: true},
+		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "mapping_id", Type: field.TypeString},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "contact_list_id", Type: field.TypeString},
+		{Name: "contact_id", Type: field.TypeString},
+	}
+	// ContactListMembershipHistoryTable holds the schema information for the "contact_list_membership_history" table.
+	ContactListMembershipHistoryTable = &schema.Table{
+		Name:       "contact_list_membership_history",
+		Columns:    ContactListMembershipHistoryColumns,
+		PrimaryKey: []*schema.Column{ContactListMembershipHistoryColumns[0]},
+		Indexes: []*schema.Index{
+			{
+				Name:    "contactlistmembershiphistory_history_time",
+				Unique:  false,
+				Columns: []*schema.Column{ContactListMembershipHistoryColumns[1]},
+			},
+		},
+	}
 	// DocumentDataColumns holds the columns for the "document_data" table.
 	DocumentDataColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeString},
@@ -649,12 +795,28 @@ var (
 		{Name: "correlation_id", Type: field.TypeString, Nullable: true},
 		{Name: "event_type", Type: field.TypeString},
 		{Name: "metadata", Type: field.TypeJSON, Nullable: true},
+		{Name: "contact_list_events", Type: field.TypeString, Nullable: true},
+		{Name: "contact_list_membership_events", Type: field.TypeString, Nullable: true},
 	}
 	// EventsTable holds the schema information for the "events" table.
 	EventsTable = &schema.Table{
 		Name:       "events",
 		Columns:    EventsColumns,
 		PrimaryKey: []*schema.Column{EventsColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "events_contact_lists_events",
+				Columns:    []*schema.Column{EventsColumns[11]},
+				RefColumns: []*schema.Column{ContactListsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "events_contact_list_memberships_events",
+				Columns:    []*schema.Column{EventsColumns[12]},
+				RefColumns: []*schema.Column{ContactListMembershipsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
 	}
 	// EventHistoryColumns holds the columns for the "event_history" table.
 	EventHistoryColumns = []*schema.Column{
@@ -1113,6 +1275,7 @@ var (
 		{Name: "name", Type: field.TypeString},
 		{Name: "description", Type: field.TypeString, Nullable: true},
 		{Name: "kind", Type: field.TypeString, Nullable: true},
+		{Name: "contact_list_integrations", Type: field.TypeString, Nullable: true},
 		{Name: "group_integrations", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 	}
@@ -1123,14 +1286,20 @@ var (
 		PrimaryKey: []*schema.Column{IntegrationsColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "integrations_groups_integrations",
+				Symbol:     "integrations_contact_lists_integrations",
 				Columns:    []*schema.Column{IntegrationsColumns[12]},
+				RefColumns: []*schema.Column{ContactListsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "integrations_groups_integrations",
+				Columns:    []*schema.Column{IntegrationsColumns[13]},
 				RefColumns: []*schema.Column{GroupsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "integrations_organizations_integrations",
-				Columns:    []*schema.Column{IntegrationsColumns[13]},
+				Columns:    []*schema.Column{IntegrationsColumns[14]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -2781,6 +2950,10 @@ var (
 		APITokensTable,
 		ContactsTable,
 		ContactHistoryTable,
+		ContactListsTable,
+		ContactListHistoryTable,
+		ContactListMembershipsTable,
+		ContactListMembershipHistoryTable,
 		DocumentDataTable,
 		DocumentDataHistoryTable,
 		EmailVerificationTokensTable,
@@ -2870,6 +3043,15 @@ func init() {
 	ContactHistoryTable.Annotation = &entsql.Annotation{
 		Table: "contact_history",
 	}
+	ContactListsTable.ForeignKeys[0].RefTable = OrganizationsTable
+	ContactListHistoryTable.Annotation = &entsql.Annotation{
+		Table: "contact_list_history",
+	}
+	ContactListMembershipsTable.ForeignKeys[0].RefTable = ContactListsTable
+	ContactListMembershipsTable.ForeignKeys[1].RefTable = ContactsTable
+	ContactListMembershipHistoryTable.Annotation = &entsql.Annotation{
+		Table: "contact_list_membership_history",
+	}
 	DocumentDataTable.ForeignKeys[0].RefTable = OrganizationsTable
 	DocumentDataTable.ForeignKeys[1].RefTable = TemplatesTable
 	DocumentDataHistoryTable.Annotation = &entsql.Annotation{
@@ -2902,6 +3084,8 @@ func init() {
 	EntityTypeHistoryTable.Annotation = &entsql.Annotation{
 		Table: "entity_type_history",
 	}
+	EventsTable.ForeignKeys[0].RefTable = ContactListsTable
+	EventsTable.ForeignKeys[1].RefTable = ContactListMembershipsTable
 	EventHistoryTable.Annotation = &entsql.Annotation{
 		Table: "event_history",
 	}
@@ -2929,8 +3113,9 @@ func init() {
 	HushHistoryTable.Annotation = &entsql.Annotation{
 		Table: "hush_history",
 	}
-	IntegrationsTable.ForeignKeys[0].RefTable = GroupsTable
-	IntegrationsTable.ForeignKeys[1].RefTable = OrganizationsTable
+	IntegrationsTable.ForeignKeys[0].RefTable = ContactListsTable
+	IntegrationsTable.ForeignKeys[1].RefTable = GroupsTable
+	IntegrationsTable.ForeignKeys[2].RefTable = OrganizationsTable
 	IntegrationHistoryTable.Annotation = &entsql.Annotation{
 		Table: "integration_history",
 	}

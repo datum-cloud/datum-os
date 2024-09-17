@@ -14,6 +14,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/apitoken"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/contact"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/contactlist"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/documentdata"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/entitlement"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/entitlementplan"
@@ -591,6 +592,21 @@ func (ou *OrganizationUpdate) AddContacts(c ...*Contact) *OrganizationUpdate {
 	return ou.AddContactIDs(ids...)
 }
 
+// AddContactListIDs adds the "contact_lists" edge to the ContactList entity by IDs.
+func (ou *OrganizationUpdate) AddContactListIDs(ids ...string) *OrganizationUpdate {
+	ou.mutation.AddContactListIDs(ids...)
+	return ou
+}
+
+// AddContactLists adds the "contact_lists" edges to the ContactList entity.
+func (ou *OrganizationUpdate) AddContactLists(c ...*ContactList) *OrganizationUpdate {
+	ids := make([]string, len(c))
+	for i := range c {
+		ids[i] = c[i].ID
+	}
+	return ou.AddContactListIDs(ids...)
+}
+
 // AddNoteIDs adds the "notes" edge to the Note entity by IDs.
 func (ou *OrganizationUpdate) AddNoteIDs(ids ...string) *OrganizationUpdate {
 	ou.mutation.AddNoteIDs(ids...)
@@ -1113,6 +1129,27 @@ func (ou *OrganizationUpdate) RemoveContacts(c ...*Contact) *OrganizationUpdate 
 		ids[i] = c[i].ID
 	}
 	return ou.RemoveContactIDs(ids...)
+}
+
+// ClearContactLists clears all "contact_lists" edges to the ContactList entity.
+func (ou *OrganizationUpdate) ClearContactLists() *OrganizationUpdate {
+	ou.mutation.ClearContactLists()
+	return ou
+}
+
+// RemoveContactListIDs removes the "contact_lists" edge to ContactList entities by IDs.
+func (ou *OrganizationUpdate) RemoveContactListIDs(ids ...string) *OrganizationUpdate {
+	ou.mutation.RemoveContactListIDs(ids...)
+	return ou
+}
+
+// RemoveContactLists removes "contact_lists" edges to ContactList entities.
+func (ou *OrganizationUpdate) RemoveContactLists(c ...*ContactList) *OrganizationUpdate {
+	ids := make([]string, len(c))
+	for i := range c {
+		ids[i] = c[i].ID
+	}
+	return ou.RemoveContactListIDs(ids...)
 }
 
 // ClearNotes clears all "notes" edges to the Note entity.
@@ -2452,6 +2489,54 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if ou.mutation.ContactListsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.ContactListsTable,
+			Columns: []string{organization.ContactListsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(contactlist.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ou.schemaConfig.ContactList
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ou.mutation.RemovedContactListsIDs(); len(nodes) > 0 && !ou.mutation.ContactListsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.ContactListsTable,
+			Columns: []string{organization.ContactListsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(contactlist.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ou.schemaConfig.ContactList
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ou.mutation.ContactListsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.ContactListsTable,
+			Columns: []string{organization.ContactListsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(contactlist.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ou.schemaConfig.ContactList
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if ou.mutation.NotesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -3106,6 +3191,21 @@ func (ouo *OrganizationUpdateOne) AddContacts(c ...*Contact) *OrganizationUpdate
 	return ouo.AddContactIDs(ids...)
 }
 
+// AddContactListIDs adds the "contact_lists" edge to the ContactList entity by IDs.
+func (ouo *OrganizationUpdateOne) AddContactListIDs(ids ...string) *OrganizationUpdateOne {
+	ouo.mutation.AddContactListIDs(ids...)
+	return ouo
+}
+
+// AddContactLists adds the "contact_lists" edges to the ContactList entity.
+func (ouo *OrganizationUpdateOne) AddContactLists(c ...*ContactList) *OrganizationUpdateOne {
+	ids := make([]string, len(c))
+	for i := range c {
+		ids[i] = c[i].ID
+	}
+	return ouo.AddContactListIDs(ids...)
+}
+
 // AddNoteIDs adds the "notes" edge to the Note entity by IDs.
 func (ouo *OrganizationUpdateOne) AddNoteIDs(ids ...string) *OrganizationUpdateOne {
 	ouo.mutation.AddNoteIDs(ids...)
@@ -3628,6 +3728,27 @@ func (ouo *OrganizationUpdateOne) RemoveContacts(c ...*Contact) *OrganizationUpd
 		ids[i] = c[i].ID
 	}
 	return ouo.RemoveContactIDs(ids...)
+}
+
+// ClearContactLists clears all "contact_lists" edges to the ContactList entity.
+func (ouo *OrganizationUpdateOne) ClearContactLists() *OrganizationUpdateOne {
+	ouo.mutation.ClearContactLists()
+	return ouo
+}
+
+// RemoveContactListIDs removes the "contact_lists" edge to ContactList entities by IDs.
+func (ouo *OrganizationUpdateOne) RemoveContactListIDs(ids ...string) *OrganizationUpdateOne {
+	ouo.mutation.RemoveContactListIDs(ids...)
+	return ouo
+}
+
+// RemoveContactLists removes "contact_lists" edges to ContactList entities.
+func (ouo *OrganizationUpdateOne) RemoveContactLists(c ...*ContactList) *OrganizationUpdateOne {
+	ids := make([]string, len(c))
+	for i := range c {
+		ids[i] = c[i].ID
+	}
+	return ouo.RemoveContactListIDs(ids...)
 }
 
 // ClearNotes clears all "notes" edges to the Note entity.
@@ -4992,6 +5113,54 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 			},
 		}
 		edge.Schema = ouo.schemaConfig.Contact
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if ouo.mutation.ContactListsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.ContactListsTable,
+			Columns: []string{organization.ContactListsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(contactlist.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ouo.schemaConfig.ContactList
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ouo.mutation.RemovedContactListsIDs(); len(nodes) > 0 && !ouo.mutation.ContactListsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.ContactListsTable,
+			Columns: []string{organization.ContactListsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(contactlist.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ouo.schemaConfig.ContactList
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ouo.mutation.ContactListsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.ContactListsTable,
+			Columns: []string{organization.ContactListsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(contactlist.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ouo.schemaConfig.ContactList
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

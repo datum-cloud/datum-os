@@ -303,9 +303,11 @@ type Contact struct {
 	// the address of the contact
 	Address *string `json:"address,omitempty"`
 	// status of the contact
-	Status   enums.UserStatus `json:"status"`
-	Owner    *Organization    `json:"owner,omitempty"`
-	Entities []*Entity        `json:"entities,omitempty"`
+	Status                 enums.UserStatus         `json:"status"`
+	Owner                  *Organization            `json:"owner,omitempty"`
+	ContactLists           []*ContactList           `json:"contactLists,omitempty"`
+	Entities               []*Entity                `json:"entities,omitempty"`
+	ContactListMemberships []*ContactListMembership `json:"contactListMemberships,omitempty"`
 }
 
 func (Contact) IsNode() {}
@@ -642,6 +644,851 @@ type ContactHistoryWhereInput struct {
 	StatusNotIn []enums.UserStatus `json:"statusNotIn,omitempty"`
 }
 
+type ContactList struct {
+	ID        string     `json:"id"`
+	CreatedAt *time.Time `json:"createdAt,omitempty"`
+	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
+	CreatedBy *string    `json:"createdBy,omitempty"`
+	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	DeletedAt *time.Time `json:"deletedAt,omitempty"`
+	DeletedBy *string    `json:"deletedBy,omitempty"`
+	// tags associated with the object
+	Tags []string `json:"tags,omitempty"`
+	// The organization id that owns the object
+	OwnerID *string `json:"ownerID,omitempty"`
+	// the name of the list
+	Name string `json:"name"`
+	// the visibility of the list, for the subscriber
+	Visibility string `json:"visibility"`
+	// the friendly display name of the list
+	DisplayName string `json:"displayName"`
+	// the description of the list
+	Description        *string                  `json:"description,omitempty"`
+	Owner              *Organization            `json:"owner,omitempty"`
+	Contacts           []*Contact               `json:"contacts,omitempty"`
+	Events             []*Event                 `json:"events,omitempty"`
+	Integrations       []*Integration           `json:"integrations,omitempty"`
+	ContactListMembers []*ContactListMembership `json:"contactListMembers,omitempty"`
+}
+
+func (ContactList) IsNode() {}
+
+// Return response for createBulkContactList mutation
+type ContactListBulkCreatePayload struct {
+	// Created contactLists
+	ContactLists []*ContactList `json:"contactLists,omitempty"`
+}
+
+// A connection to a list of items.
+type ContactListConnection struct {
+	// A list of edges.
+	Edges []*ContactListEdge `json:"edges,omitempty"`
+	// Information to aid in pagination.
+	PageInfo *PageInfo `json:"pageInfo"`
+	// Identifies the total count of items in the connection.
+	TotalCount int64 `json:"totalCount"`
+}
+
+// Return response for createContactList mutation
+type ContactListCreatePayload struct {
+	// Created contactList
+	ContactList *ContactList `json:"contactList"`
+}
+
+// Return response for deleteContactList mutation
+type ContactListDeletePayload struct {
+	// Deleted contactList ID
+	DeletedID string `json:"deletedID"`
+}
+
+// An edge in a connection.
+type ContactListEdge struct {
+	// The item at the end of the edge.
+	Node *ContactList `json:"node,omitempty"`
+	// A cursor for use in pagination.
+	Cursor string `json:"cursor"`
+}
+
+type ContactListHistory struct {
+	ID          string            `json:"id"`
+	HistoryTime time.Time         `json:"historyTime"`
+	Ref         *string           `json:"ref,omitempty"`
+	Operation   enthistory.OpType `json:"operation"`
+	CreatedAt   *time.Time        `json:"createdAt,omitempty"`
+	UpdatedAt   *time.Time        `json:"updatedAt,omitempty"`
+	CreatedBy   *string           `json:"createdBy,omitempty"`
+	UpdatedBy   *string           `json:"updatedBy,omitempty"`
+	DeletedAt   *time.Time        `json:"deletedAt,omitempty"`
+	DeletedBy   *string           `json:"deletedBy,omitempty"`
+	// tags associated with the object
+	Tags []string `json:"tags,omitempty"`
+	// The organization id that owns the object
+	OwnerID *string `json:"ownerID,omitempty"`
+	// the name of the list
+	Name string `json:"name"`
+	// the visibility of the list, for the subscriber
+	Visibility string `json:"visibility"`
+	// the friendly display name of the list
+	DisplayName string `json:"displayName"`
+	// the description of the list
+	Description *string `json:"description,omitempty"`
+}
+
+func (ContactListHistory) IsNode() {}
+
+// A connection to a list of items.
+type ContactListHistoryConnection struct {
+	// A list of edges.
+	Edges []*ContactListHistoryEdge `json:"edges,omitempty"`
+	// Information to aid in pagination.
+	PageInfo *PageInfo `json:"pageInfo"`
+	// Identifies the total count of items in the connection.
+	TotalCount int64 `json:"totalCount"`
+}
+
+// An edge in a connection.
+type ContactListHistoryEdge struct {
+	// The item at the end of the edge.
+	Node *ContactListHistory `json:"node,omitempty"`
+	// A cursor for use in pagination.
+	Cursor string `json:"cursor"`
+}
+
+// Ordering options for ContactListHistory connections
+type ContactListHistoryOrder struct {
+	// The ordering direction.
+	Direction OrderDirection `json:"direction"`
+	// The field by which to order ContactListHistories.
+	Field ContactListHistoryOrderField `json:"field"`
+}
+
+// ContactListHistoryWhereInput is used for filtering ContactListHistory objects.
+// Input was generated by ent.
+type ContactListHistoryWhereInput struct {
+	Not *ContactListHistoryWhereInput   `json:"not,omitempty"`
+	And []*ContactListHistoryWhereInput `json:"and,omitempty"`
+	Or  []*ContactListHistoryWhereInput `json:"or,omitempty"`
+	// id field predicates
+	ID             *string  `json:"id,omitempty"`
+	IDNeq          *string  `json:"idNEQ,omitempty"`
+	IDIn           []string `json:"idIn,omitempty"`
+	IDNotIn        []string `json:"idNotIn,omitempty"`
+	IDGt           *string  `json:"idGT,omitempty"`
+	IDGte          *string  `json:"idGTE,omitempty"`
+	IDLt           *string  `json:"idLT,omitempty"`
+	IDLte          *string  `json:"idLTE,omitempty"`
+	IDEqualFold    *string  `json:"idEqualFold,omitempty"`
+	IDContainsFold *string  `json:"idContainsFold,omitempty"`
+	// history_time field predicates
+	HistoryTime      *time.Time   `json:"historyTime,omitempty"`
+	HistoryTimeNeq   *time.Time   `json:"historyTimeNEQ,omitempty"`
+	HistoryTimeIn    []*time.Time `json:"historyTimeIn,omitempty"`
+	HistoryTimeNotIn []*time.Time `json:"historyTimeNotIn,omitempty"`
+	HistoryTimeGt    *time.Time   `json:"historyTimeGT,omitempty"`
+	HistoryTimeGte   *time.Time   `json:"historyTimeGTE,omitempty"`
+	HistoryTimeLt    *time.Time   `json:"historyTimeLT,omitempty"`
+	HistoryTimeLte   *time.Time   `json:"historyTimeLTE,omitempty"`
+	// ref field predicates
+	Ref             *string  `json:"ref,omitempty"`
+	RefNeq          *string  `json:"refNEQ,omitempty"`
+	RefIn           []string `json:"refIn,omitempty"`
+	RefNotIn        []string `json:"refNotIn,omitempty"`
+	RefGt           *string  `json:"refGT,omitempty"`
+	RefGte          *string  `json:"refGTE,omitempty"`
+	RefLt           *string  `json:"refLT,omitempty"`
+	RefLte          *string  `json:"refLTE,omitempty"`
+	RefContains     *string  `json:"refContains,omitempty"`
+	RefHasPrefix    *string  `json:"refHasPrefix,omitempty"`
+	RefHasSuffix    *string  `json:"refHasSuffix,omitempty"`
+	RefIsNil        *bool    `json:"refIsNil,omitempty"`
+	RefNotNil       *bool    `json:"refNotNil,omitempty"`
+	RefEqualFold    *string  `json:"refEqualFold,omitempty"`
+	RefContainsFold *string  `json:"refContainsFold,omitempty"`
+	// operation field predicates
+	Operation      *enthistory.OpType  `json:"operation,omitempty"`
+	OperationNeq   *enthistory.OpType  `json:"operationNEQ,omitempty"`
+	OperationIn    []enthistory.OpType `json:"operationIn,omitempty"`
+	OperationNotIn []enthistory.OpType `json:"operationNotIn,omitempty"`
+	// created_at field predicates
+	CreatedAt       *time.Time   `json:"createdAt,omitempty"`
+	CreatedAtNeq    *time.Time   `json:"createdAtNEQ,omitempty"`
+	CreatedAtIn     []*time.Time `json:"createdAtIn,omitempty"`
+	CreatedAtNotIn  []*time.Time `json:"createdAtNotIn,omitempty"`
+	CreatedAtGt     *time.Time   `json:"createdAtGT,omitempty"`
+	CreatedAtGte    *time.Time   `json:"createdAtGTE,omitempty"`
+	CreatedAtLt     *time.Time   `json:"createdAtLT,omitempty"`
+	CreatedAtLte    *time.Time   `json:"createdAtLTE,omitempty"`
+	CreatedAtIsNil  *bool        `json:"createdAtIsNil,omitempty"`
+	CreatedAtNotNil *bool        `json:"createdAtNotNil,omitempty"`
+	// updated_at field predicates
+	UpdatedAt       *time.Time   `json:"updatedAt,omitempty"`
+	UpdatedAtNeq    *time.Time   `json:"updatedAtNEQ,omitempty"`
+	UpdatedAtIn     []*time.Time `json:"updatedAtIn,omitempty"`
+	UpdatedAtNotIn  []*time.Time `json:"updatedAtNotIn,omitempty"`
+	UpdatedAtGt     *time.Time   `json:"updatedAtGT,omitempty"`
+	UpdatedAtGte    *time.Time   `json:"updatedAtGTE,omitempty"`
+	UpdatedAtLt     *time.Time   `json:"updatedAtLT,omitempty"`
+	UpdatedAtLte    *time.Time   `json:"updatedAtLTE,omitempty"`
+	UpdatedAtIsNil  *bool        `json:"updatedAtIsNil,omitempty"`
+	UpdatedAtNotNil *bool        `json:"updatedAtNotNil,omitempty"`
+	// created_by field predicates
+	CreatedBy             *string  `json:"createdBy,omitempty"`
+	CreatedByNeq          *string  `json:"createdByNEQ,omitempty"`
+	CreatedByIn           []string `json:"createdByIn,omitempty"`
+	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
+	CreatedByGt           *string  `json:"createdByGT,omitempty"`
+	CreatedByGte          *string  `json:"createdByGTE,omitempty"`
+	CreatedByLt           *string  `json:"createdByLT,omitempty"`
+	CreatedByLte          *string  `json:"createdByLTE,omitempty"`
+	CreatedByContains     *string  `json:"createdByContains,omitempty"`
+	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
+	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
+	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
+	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
+	CreatedByEqualFold    *string  `json:"createdByEqualFold,omitempty"`
+	CreatedByContainsFold *string  `json:"createdByContainsFold,omitempty"`
+	// updated_by field predicates
+	UpdatedBy             *string  `json:"updatedBy,omitempty"`
+	UpdatedByNeq          *string  `json:"updatedByNEQ,omitempty"`
+	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
+	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
+	UpdatedByGt           *string  `json:"updatedByGT,omitempty"`
+	UpdatedByGte          *string  `json:"updatedByGTE,omitempty"`
+	UpdatedByLt           *string  `json:"updatedByLT,omitempty"`
+	UpdatedByLte          *string  `json:"updatedByLTE,omitempty"`
+	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
+	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
+	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
+	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
+	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
+	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// deleted_at field predicates
+	DeletedAt       *time.Time   `json:"deletedAt,omitempty"`
+	DeletedAtNeq    *time.Time   `json:"deletedAtNEQ,omitempty"`
+	DeletedAtIn     []*time.Time `json:"deletedAtIn,omitempty"`
+	DeletedAtNotIn  []*time.Time `json:"deletedAtNotIn,omitempty"`
+	DeletedAtGt     *time.Time   `json:"deletedAtGT,omitempty"`
+	DeletedAtGte    *time.Time   `json:"deletedAtGTE,omitempty"`
+	DeletedAtLt     *time.Time   `json:"deletedAtLT,omitempty"`
+	DeletedAtLte    *time.Time   `json:"deletedAtLTE,omitempty"`
+	DeletedAtIsNil  *bool        `json:"deletedAtIsNil,omitempty"`
+	DeletedAtNotNil *bool        `json:"deletedAtNotNil,omitempty"`
+	// deleted_by field predicates
+	DeletedBy             *string  `json:"deletedBy,omitempty"`
+	DeletedByNeq          *string  `json:"deletedByNEQ,omitempty"`
+	DeletedByIn           []string `json:"deletedByIn,omitempty"`
+	DeletedByNotIn        []string `json:"deletedByNotIn,omitempty"`
+	DeletedByGt           *string  `json:"deletedByGT,omitempty"`
+	DeletedByGte          *string  `json:"deletedByGTE,omitempty"`
+	DeletedByLt           *string  `json:"deletedByLT,omitempty"`
+	DeletedByLte          *string  `json:"deletedByLTE,omitempty"`
+	DeletedByContains     *string  `json:"deletedByContains,omitempty"`
+	DeletedByHasPrefix    *string  `json:"deletedByHasPrefix,omitempty"`
+	DeletedByHasSuffix    *string  `json:"deletedByHasSuffix,omitempty"`
+	DeletedByIsNil        *bool    `json:"deletedByIsNil,omitempty"`
+	DeletedByNotNil       *bool    `json:"deletedByNotNil,omitempty"`
+	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
+	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
+	// owner_id field predicates
+	OwnerID             *string  `json:"ownerID,omitempty"`
+	OwnerIDNeq          *string  `json:"ownerIDNEQ,omitempty"`
+	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
+	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
+	OwnerIDGt           *string  `json:"ownerIDGT,omitempty"`
+	OwnerIDGte          *string  `json:"ownerIDGTE,omitempty"`
+	OwnerIDLt           *string  `json:"ownerIDLT,omitempty"`
+	OwnerIDLte          *string  `json:"ownerIDLTE,omitempty"`
+	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
+	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
+	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
+	OwnerIDIsNil        *bool    `json:"ownerIDIsNil,omitempty"`
+	OwnerIDNotNil       *bool    `json:"ownerIDNotNil,omitempty"`
+	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
+	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
+	// name field predicates
+	Name             *string  `json:"name,omitempty"`
+	NameNeq          *string  `json:"nameNEQ,omitempty"`
+	NameIn           []string `json:"nameIn,omitempty"`
+	NameNotIn        []string `json:"nameNotIn,omitempty"`
+	NameGt           *string  `json:"nameGT,omitempty"`
+	NameGte          *string  `json:"nameGTE,omitempty"`
+	NameLt           *string  `json:"nameLT,omitempty"`
+	NameLte          *string  `json:"nameLTE,omitempty"`
+	NameContains     *string  `json:"nameContains,omitempty"`
+	NameHasPrefix    *string  `json:"nameHasPrefix,omitempty"`
+	NameHasSuffix    *string  `json:"nameHasSuffix,omitempty"`
+	NameEqualFold    *string  `json:"nameEqualFold,omitempty"`
+	NameContainsFold *string  `json:"nameContainsFold,omitempty"`
+	// visibility field predicates
+	Visibility             *string  `json:"visibility,omitempty"`
+	VisibilityNeq          *string  `json:"visibilityNEQ,omitempty"`
+	VisibilityIn           []string `json:"visibilityIn,omitempty"`
+	VisibilityNotIn        []string `json:"visibilityNotIn,omitempty"`
+	VisibilityGt           *string  `json:"visibilityGT,omitempty"`
+	VisibilityGte          *string  `json:"visibilityGTE,omitempty"`
+	VisibilityLt           *string  `json:"visibilityLT,omitempty"`
+	VisibilityLte          *string  `json:"visibilityLTE,omitempty"`
+	VisibilityContains     *string  `json:"visibilityContains,omitempty"`
+	VisibilityHasPrefix    *string  `json:"visibilityHasPrefix,omitempty"`
+	VisibilityHasSuffix    *string  `json:"visibilityHasSuffix,omitempty"`
+	VisibilityEqualFold    *string  `json:"visibilityEqualFold,omitempty"`
+	VisibilityContainsFold *string  `json:"visibilityContainsFold,omitempty"`
+	// display_name field predicates
+	DisplayName             *string  `json:"displayName,omitempty"`
+	DisplayNameNeq          *string  `json:"displayNameNEQ,omitempty"`
+	DisplayNameIn           []string `json:"displayNameIn,omitempty"`
+	DisplayNameNotIn        []string `json:"displayNameNotIn,omitempty"`
+	DisplayNameGt           *string  `json:"displayNameGT,omitempty"`
+	DisplayNameGte          *string  `json:"displayNameGTE,omitempty"`
+	DisplayNameLt           *string  `json:"displayNameLT,omitempty"`
+	DisplayNameLte          *string  `json:"displayNameLTE,omitempty"`
+	DisplayNameContains     *string  `json:"displayNameContains,omitempty"`
+	DisplayNameHasPrefix    *string  `json:"displayNameHasPrefix,omitempty"`
+	DisplayNameHasSuffix    *string  `json:"displayNameHasSuffix,omitempty"`
+	DisplayNameEqualFold    *string  `json:"displayNameEqualFold,omitempty"`
+	DisplayNameContainsFold *string  `json:"displayNameContainsFold,omitempty"`
+}
+
+type ContactListMembership struct {
+	ID            string       `json:"id"`
+	CreatedAt     *time.Time   `json:"createdAt,omitempty"`
+	UpdatedAt     *time.Time   `json:"updatedAt,omitempty"`
+	CreatedBy     *string      `json:"createdBy,omitempty"`
+	UpdatedBy     *string      `json:"updatedBy,omitempty"`
+	DeletedAt     *time.Time   `json:"deletedAt,omitempty"`
+	DeletedBy     *string      `json:"deletedBy,omitempty"`
+	ContactListID string       `json:"contactListID"`
+	ContactID     string       `json:"contactID"`
+	ContactList   *ContactList `json:"contactList"`
+	Contact       *Contact     `json:"contact"`
+	Events        []*Event     `json:"events,omitempty"`
+}
+
+func (ContactListMembership) IsNode() {}
+
+// Return response for createBulkContactListMembership mutation
+type ContactListMembershipBulkCreatePayload struct {
+	// Created contactListMemberships
+	ContactListMemberships []*ContactListMembership `json:"contactListMemberships,omitempty"`
+}
+
+// A connection to a list of items.
+type ContactListMembershipConnection struct {
+	// A list of edges.
+	Edges []*ContactListMembershipEdge `json:"edges,omitempty"`
+	// Information to aid in pagination.
+	PageInfo *PageInfo `json:"pageInfo"`
+	// Identifies the total count of items in the connection.
+	TotalCount int64 `json:"totalCount"`
+}
+
+// Return response for createContactListMembership mutation
+type ContactListMembershipCreatePayload struct {
+	// Created contactListMembership
+	ContactListMembership *ContactListMembership `json:"contactListMembership"`
+}
+
+// Return response for deleteContactListMembership mutation
+type ContactListMembershipDeletePayload struct {
+	// Deleted contactListMembership ID
+	DeletedID string `json:"deletedID"`
+}
+
+// An edge in a connection.
+type ContactListMembershipEdge struct {
+	// The item at the end of the edge.
+	Node *ContactListMembership `json:"node,omitempty"`
+	// A cursor for use in pagination.
+	Cursor string `json:"cursor"`
+}
+
+type ContactListMembershipHistory struct {
+	ID            string            `json:"id"`
+	HistoryTime   time.Time         `json:"historyTime"`
+	Ref           *string           `json:"ref,omitempty"`
+	Operation     enthistory.OpType `json:"operation"`
+	CreatedAt     *time.Time        `json:"createdAt,omitempty"`
+	UpdatedAt     *time.Time        `json:"updatedAt,omitempty"`
+	CreatedBy     *string           `json:"createdBy,omitempty"`
+	UpdatedBy     *string           `json:"updatedBy,omitempty"`
+	DeletedAt     *time.Time        `json:"deletedAt,omitempty"`
+	DeletedBy     *string           `json:"deletedBy,omitempty"`
+	ContactListID string            `json:"contactListID"`
+	ContactID     string            `json:"contactID"`
+}
+
+func (ContactListMembershipHistory) IsNode() {}
+
+// A connection to a list of items.
+type ContactListMembershipHistoryConnection struct {
+	// A list of edges.
+	Edges []*ContactListMembershipHistoryEdge `json:"edges,omitempty"`
+	// Information to aid in pagination.
+	PageInfo *PageInfo `json:"pageInfo"`
+	// Identifies the total count of items in the connection.
+	TotalCount int64 `json:"totalCount"`
+}
+
+// An edge in a connection.
+type ContactListMembershipHistoryEdge struct {
+	// The item at the end of the edge.
+	Node *ContactListMembershipHistory `json:"node,omitempty"`
+	// A cursor for use in pagination.
+	Cursor string `json:"cursor"`
+}
+
+// ContactListMembershipHistoryWhereInput is used for filtering ContactListMembershipHistory objects.
+// Input was generated by ent.
+type ContactListMembershipHistoryWhereInput struct {
+	Not *ContactListMembershipHistoryWhereInput   `json:"not,omitempty"`
+	And []*ContactListMembershipHistoryWhereInput `json:"and,omitempty"`
+	Or  []*ContactListMembershipHistoryWhereInput `json:"or,omitempty"`
+	// id field predicates
+	ID             *string  `json:"id,omitempty"`
+	IDNeq          *string  `json:"idNEQ,omitempty"`
+	IDIn           []string `json:"idIn,omitempty"`
+	IDNotIn        []string `json:"idNotIn,omitempty"`
+	IDGt           *string  `json:"idGT,omitempty"`
+	IDGte          *string  `json:"idGTE,omitempty"`
+	IDLt           *string  `json:"idLT,omitempty"`
+	IDLte          *string  `json:"idLTE,omitempty"`
+	IDEqualFold    *string  `json:"idEqualFold,omitempty"`
+	IDContainsFold *string  `json:"idContainsFold,omitempty"`
+	// history_time field predicates
+	HistoryTime      *time.Time   `json:"historyTime,omitempty"`
+	HistoryTimeNeq   *time.Time   `json:"historyTimeNEQ,omitempty"`
+	HistoryTimeIn    []*time.Time `json:"historyTimeIn,omitempty"`
+	HistoryTimeNotIn []*time.Time `json:"historyTimeNotIn,omitempty"`
+	HistoryTimeGt    *time.Time   `json:"historyTimeGT,omitempty"`
+	HistoryTimeGte   *time.Time   `json:"historyTimeGTE,omitempty"`
+	HistoryTimeLt    *time.Time   `json:"historyTimeLT,omitempty"`
+	HistoryTimeLte   *time.Time   `json:"historyTimeLTE,omitempty"`
+	// ref field predicates
+	Ref             *string  `json:"ref,omitempty"`
+	RefNeq          *string  `json:"refNEQ,omitempty"`
+	RefIn           []string `json:"refIn,omitempty"`
+	RefNotIn        []string `json:"refNotIn,omitempty"`
+	RefGt           *string  `json:"refGT,omitempty"`
+	RefGte          *string  `json:"refGTE,omitempty"`
+	RefLt           *string  `json:"refLT,omitempty"`
+	RefLte          *string  `json:"refLTE,omitempty"`
+	RefContains     *string  `json:"refContains,omitempty"`
+	RefHasPrefix    *string  `json:"refHasPrefix,omitempty"`
+	RefHasSuffix    *string  `json:"refHasSuffix,omitempty"`
+	RefIsNil        *bool    `json:"refIsNil,omitempty"`
+	RefNotNil       *bool    `json:"refNotNil,omitempty"`
+	RefEqualFold    *string  `json:"refEqualFold,omitempty"`
+	RefContainsFold *string  `json:"refContainsFold,omitempty"`
+	// operation field predicates
+	Operation      *enthistory.OpType  `json:"operation,omitempty"`
+	OperationNeq   *enthistory.OpType  `json:"operationNEQ,omitempty"`
+	OperationIn    []enthistory.OpType `json:"operationIn,omitempty"`
+	OperationNotIn []enthistory.OpType `json:"operationNotIn,omitempty"`
+	// created_at field predicates
+	CreatedAt       *time.Time   `json:"createdAt,omitempty"`
+	CreatedAtNeq    *time.Time   `json:"createdAtNEQ,omitempty"`
+	CreatedAtIn     []*time.Time `json:"createdAtIn,omitempty"`
+	CreatedAtNotIn  []*time.Time `json:"createdAtNotIn,omitempty"`
+	CreatedAtGt     *time.Time   `json:"createdAtGT,omitempty"`
+	CreatedAtGte    *time.Time   `json:"createdAtGTE,omitempty"`
+	CreatedAtLt     *time.Time   `json:"createdAtLT,omitempty"`
+	CreatedAtLte    *time.Time   `json:"createdAtLTE,omitempty"`
+	CreatedAtIsNil  *bool        `json:"createdAtIsNil,omitempty"`
+	CreatedAtNotNil *bool        `json:"createdAtNotNil,omitempty"`
+	// updated_at field predicates
+	UpdatedAt       *time.Time   `json:"updatedAt,omitempty"`
+	UpdatedAtNeq    *time.Time   `json:"updatedAtNEQ,omitempty"`
+	UpdatedAtIn     []*time.Time `json:"updatedAtIn,omitempty"`
+	UpdatedAtNotIn  []*time.Time `json:"updatedAtNotIn,omitempty"`
+	UpdatedAtGt     *time.Time   `json:"updatedAtGT,omitempty"`
+	UpdatedAtGte    *time.Time   `json:"updatedAtGTE,omitempty"`
+	UpdatedAtLt     *time.Time   `json:"updatedAtLT,omitempty"`
+	UpdatedAtLte    *time.Time   `json:"updatedAtLTE,omitempty"`
+	UpdatedAtIsNil  *bool        `json:"updatedAtIsNil,omitempty"`
+	UpdatedAtNotNil *bool        `json:"updatedAtNotNil,omitempty"`
+	// created_by field predicates
+	CreatedBy             *string  `json:"createdBy,omitempty"`
+	CreatedByNeq          *string  `json:"createdByNEQ,omitempty"`
+	CreatedByIn           []string `json:"createdByIn,omitempty"`
+	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
+	CreatedByGt           *string  `json:"createdByGT,omitempty"`
+	CreatedByGte          *string  `json:"createdByGTE,omitempty"`
+	CreatedByLt           *string  `json:"createdByLT,omitempty"`
+	CreatedByLte          *string  `json:"createdByLTE,omitempty"`
+	CreatedByContains     *string  `json:"createdByContains,omitempty"`
+	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
+	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
+	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
+	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
+	CreatedByEqualFold    *string  `json:"createdByEqualFold,omitempty"`
+	CreatedByContainsFold *string  `json:"createdByContainsFold,omitempty"`
+	// updated_by field predicates
+	UpdatedBy             *string  `json:"updatedBy,omitempty"`
+	UpdatedByNeq          *string  `json:"updatedByNEQ,omitempty"`
+	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
+	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
+	UpdatedByGt           *string  `json:"updatedByGT,omitempty"`
+	UpdatedByGte          *string  `json:"updatedByGTE,omitempty"`
+	UpdatedByLt           *string  `json:"updatedByLT,omitempty"`
+	UpdatedByLte          *string  `json:"updatedByLTE,omitempty"`
+	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
+	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
+	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
+	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
+	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
+	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// deleted_at field predicates
+	DeletedAt       *time.Time   `json:"deletedAt,omitempty"`
+	DeletedAtNeq    *time.Time   `json:"deletedAtNEQ,omitempty"`
+	DeletedAtIn     []*time.Time `json:"deletedAtIn,omitempty"`
+	DeletedAtNotIn  []*time.Time `json:"deletedAtNotIn,omitempty"`
+	DeletedAtGt     *time.Time   `json:"deletedAtGT,omitempty"`
+	DeletedAtGte    *time.Time   `json:"deletedAtGTE,omitempty"`
+	DeletedAtLt     *time.Time   `json:"deletedAtLT,omitempty"`
+	DeletedAtLte    *time.Time   `json:"deletedAtLTE,omitempty"`
+	DeletedAtIsNil  *bool        `json:"deletedAtIsNil,omitempty"`
+	DeletedAtNotNil *bool        `json:"deletedAtNotNil,omitempty"`
+	// deleted_by field predicates
+	DeletedBy             *string  `json:"deletedBy,omitempty"`
+	DeletedByNeq          *string  `json:"deletedByNEQ,omitempty"`
+	DeletedByIn           []string `json:"deletedByIn,omitempty"`
+	DeletedByNotIn        []string `json:"deletedByNotIn,omitempty"`
+	DeletedByGt           *string  `json:"deletedByGT,omitempty"`
+	DeletedByGte          *string  `json:"deletedByGTE,omitempty"`
+	DeletedByLt           *string  `json:"deletedByLT,omitempty"`
+	DeletedByLte          *string  `json:"deletedByLTE,omitempty"`
+	DeletedByContains     *string  `json:"deletedByContains,omitempty"`
+	DeletedByHasPrefix    *string  `json:"deletedByHasPrefix,omitempty"`
+	DeletedByHasSuffix    *string  `json:"deletedByHasSuffix,omitempty"`
+	DeletedByIsNil        *bool    `json:"deletedByIsNil,omitempty"`
+	DeletedByNotNil       *bool    `json:"deletedByNotNil,omitempty"`
+	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
+	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
+	// contact_list_id field predicates
+	ContactListID             *string  `json:"contactListID,omitempty"`
+	ContactListIDNeq          *string  `json:"contactListIDNEQ,omitempty"`
+	ContactListIDIn           []string `json:"contactListIDIn,omitempty"`
+	ContactListIDNotIn        []string `json:"contactListIDNotIn,omitempty"`
+	ContactListIDGt           *string  `json:"contactListIDGT,omitempty"`
+	ContactListIDGte          *string  `json:"contactListIDGTE,omitempty"`
+	ContactListIDLt           *string  `json:"contactListIDLT,omitempty"`
+	ContactListIDLte          *string  `json:"contactListIDLTE,omitempty"`
+	ContactListIDContains     *string  `json:"contactListIDContains,omitempty"`
+	ContactListIDHasPrefix    *string  `json:"contactListIDHasPrefix,omitempty"`
+	ContactListIDHasSuffix    *string  `json:"contactListIDHasSuffix,omitempty"`
+	ContactListIDEqualFold    *string  `json:"contactListIDEqualFold,omitempty"`
+	ContactListIDContainsFold *string  `json:"contactListIDContainsFold,omitempty"`
+	// contact_id field predicates
+	ContactID             *string  `json:"contactID,omitempty"`
+	ContactIDNeq          *string  `json:"contactIDNEQ,omitempty"`
+	ContactIDIn           []string `json:"contactIDIn,omitempty"`
+	ContactIDNotIn        []string `json:"contactIDNotIn,omitempty"`
+	ContactIDGt           *string  `json:"contactIDGT,omitempty"`
+	ContactIDGte          *string  `json:"contactIDGTE,omitempty"`
+	ContactIDLt           *string  `json:"contactIDLT,omitempty"`
+	ContactIDLte          *string  `json:"contactIDLTE,omitempty"`
+	ContactIDContains     *string  `json:"contactIDContains,omitempty"`
+	ContactIDHasPrefix    *string  `json:"contactIDHasPrefix,omitempty"`
+	ContactIDHasSuffix    *string  `json:"contactIDHasSuffix,omitempty"`
+	ContactIDEqualFold    *string  `json:"contactIDEqualFold,omitempty"`
+	ContactIDContainsFold *string  `json:"contactIDContainsFold,omitempty"`
+}
+
+// Return response for updateContactListMembership mutation
+type ContactListMembershipUpdatePayload struct {
+	// Updated contactListMembership
+	ContactListMembership *ContactListMembership `json:"contactListMembership"`
+}
+
+// ContactListMembershipWhereInput is used for filtering ContactListMembership objects.
+// Input was generated by ent.
+type ContactListMembershipWhereInput struct {
+	Not *ContactListMembershipWhereInput   `json:"not,omitempty"`
+	And []*ContactListMembershipWhereInput `json:"and,omitempty"`
+	Or  []*ContactListMembershipWhereInput `json:"or,omitempty"`
+	// id field predicates
+	ID             *string  `json:"id,omitempty"`
+	IDNeq          *string  `json:"idNEQ,omitempty"`
+	IDIn           []string `json:"idIn,omitempty"`
+	IDNotIn        []string `json:"idNotIn,omitempty"`
+	IDGt           *string  `json:"idGT,omitempty"`
+	IDGte          *string  `json:"idGTE,omitempty"`
+	IDLt           *string  `json:"idLT,omitempty"`
+	IDLte          *string  `json:"idLTE,omitempty"`
+	IDEqualFold    *string  `json:"idEqualFold,omitempty"`
+	IDContainsFold *string  `json:"idContainsFold,omitempty"`
+	// created_at field predicates
+	CreatedAt       *time.Time   `json:"createdAt,omitempty"`
+	CreatedAtNeq    *time.Time   `json:"createdAtNEQ,omitempty"`
+	CreatedAtIn     []*time.Time `json:"createdAtIn,omitempty"`
+	CreatedAtNotIn  []*time.Time `json:"createdAtNotIn,omitempty"`
+	CreatedAtGt     *time.Time   `json:"createdAtGT,omitempty"`
+	CreatedAtGte    *time.Time   `json:"createdAtGTE,omitempty"`
+	CreatedAtLt     *time.Time   `json:"createdAtLT,omitempty"`
+	CreatedAtLte    *time.Time   `json:"createdAtLTE,omitempty"`
+	CreatedAtIsNil  *bool        `json:"createdAtIsNil,omitempty"`
+	CreatedAtNotNil *bool        `json:"createdAtNotNil,omitempty"`
+	// updated_at field predicates
+	UpdatedAt       *time.Time   `json:"updatedAt,omitempty"`
+	UpdatedAtNeq    *time.Time   `json:"updatedAtNEQ,omitempty"`
+	UpdatedAtIn     []*time.Time `json:"updatedAtIn,omitempty"`
+	UpdatedAtNotIn  []*time.Time `json:"updatedAtNotIn,omitempty"`
+	UpdatedAtGt     *time.Time   `json:"updatedAtGT,omitempty"`
+	UpdatedAtGte    *time.Time   `json:"updatedAtGTE,omitempty"`
+	UpdatedAtLt     *time.Time   `json:"updatedAtLT,omitempty"`
+	UpdatedAtLte    *time.Time   `json:"updatedAtLTE,omitempty"`
+	UpdatedAtIsNil  *bool        `json:"updatedAtIsNil,omitempty"`
+	UpdatedAtNotNil *bool        `json:"updatedAtNotNil,omitempty"`
+	// created_by field predicates
+	CreatedBy             *string  `json:"createdBy,omitempty"`
+	CreatedByNeq          *string  `json:"createdByNEQ,omitempty"`
+	CreatedByIn           []string `json:"createdByIn,omitempty"`
+	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
+	CreatedByGt           *string  `json:"createdByGT,omitempty"`
+	CreatedByGte          *string  `json:"createdByGTE,omitempty"`
+	CreatedByLt           *string  `json:"createdByLT,omitempty"`
+	CreatedByLte          *string  `json:"createdByLTE,omitempty"`
+	CreatedByContains     *string  `json:"createdByContains,omitempty"`
+	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
+	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
+	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
+	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
+	CreatedByEqualFold    *string  `json:"createdByEqualFold,omitempty"`
+	CreatedByContainsFold *string  `json:"createdByContainsFold,omitempty"`
+	// updated_by field predicates
+	UpdatedBy             *string  `json:"updatedBy,omitempty"`
+	UpdatedByNeq          *string  `json:"updatedByNEQ,omitempty"`
+	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
+	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
+	UpdatedByGt           *string  `json:"updatedByGT,omitempty"`
+	UpdatedByGte          *string  `json:"updatedByGTE,omitempty"`
+	UpdatedByLt           *string  `json:"updatedByLT,omitempty"`
+	UpdatedByLte          *string  `json:"updatedByLTE,omitempty"`
+	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
+	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
+	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
+	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
+	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
+	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// deleted_at field predicates
+	DeletedAt       *time.Time   `json:"deletedAt,omitempty"`
+	DeletedAtNeq    *time.Time   `json:"deletedAtNEQ,omitempty"`
+	DeletedAtIn     []*time.Time `json:"deletedAtIn,omitempty"`
+	DeletedAtNotIn  []*time.Time `json:"deletedAtNotIn,omitempty"`
+	DeletedAtGt     *time.Time   `json:"deletedAtGT,omitempty"`
+	DeletedAtGte    *time.Time   `json:"deletedAtGTE,omitempty"`
+	DeletedAtLt     *time.Time   `json:"deletedAtLT,omitempty"`
+	DeletedAtLte    *time.Time   `json:"deletedAtLTE,omitempty"`
+	DeletedAtIsNil  *bool        `json:"deletedAtIsNil,omitempty"`
+	DeletedAtNotNil *bool        `json:"deletedAtNotNil,omitempty"`
+	// deleted_by field predicates
+	DeletedBy             *string  `json:"deletedBy,omitempty"`
+	DeletedByNeq          *string  `json:"deletedByNEQ,omitempty"`
+	DeletedByIn           []string `json:"deletedByIn,omitempty"`
+	DeletedByNotIn        []string `json:"deletedByNotIn,omitempty"`
+	DeletedByGt           *string  `json:"deletedByGT,omitempty"`
+	DeletedByGte          *string  `json:"deletedByGTE,omitempty"`
+	DeletedByLt           *string  `json:"deletedByLT,omitempty"`
+	DeletedByLte          *string  `json:"deletedByLTE,omitempty"`
+	DeletedByContains     *string  `json:"deletedByContains,omitempty"`
+	DeletedByHasPrefix    *string  `json:"deletedByHasPrefix,omitempty"`
+	DeletedByHasSuffix    *string  `json:"deletedByHasSuffix,omitempty"`
+	DeletedByIsNil        *bool    `json:"deletedByIsNil,omitempty"`
+	DeletedByNotNil       *bool    `json:"deletedByNotNil,omitempty"`
+	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
+	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
+}
+
+// Ordering options for ContactList connections
+type ContactListOrder struct {
+	// The ordering direction.
+	Direction OrderDirection `json:"direction"`
+	// The field by which to order ContactLists.
+	Field ContactListOrderField `json:"field"`
+}
+
+// Return response for updateContactList mutation
+type ContactListUpdatePayload struct {
+	// Updated contactList
+	ContactList *ContactList `json:"contactList"`
+}
+
+// ContactListWhereInput is used for filtering ContactList objects.
+// Input was generated by ent.
+type ContactListWhereInput struct {
+	Not *ContactListWhereInput   `json:"not,omitempty"`
+	And []*ContactListWhereInput `json:"and,omitempty"`
+	Or  []*ContactListWhereInput `json:"or,omitempty"`
+	// id field predicates
+	ID             *string  `json:"id,omitempty"`
+	IDNeq          *string  `json:"idNEQ,omitempty"`
+	IDIn           []string `json:"idIn,omitempty"`
+	IDNotIn        []string `json:"idNotIn,omitempty"`
+	IDGt           *string  `json:"idGT,omitempty"`
+	IDGte          *string  `json:"idGTE,omitempty"`
+	IDLt           *string  `json:"idLT,omitempty"`
+	IDLte          *string  `json:"idLTE,omitempty"`
+	IDEqualFold    *string  `json:"idEqualFold,omitempty"`
+	IDContainsFold *string  `json:"idContainsFold,omitempty"`
+	// created_at field predicates
+	CreatedAt       *time.Time   `json:"createdAt,omitempty"`
+	CreatedAtNeq    *time.Time   `json:"createdAtNEQ,omitempty"`
+	CreatedAtIn     []*time.Time `json:"createdAtIn,omitempty"`
+	CreatedAtNotIn  []*time.Time `json:"createdAtNotIn,omitempty"`
+	CreatedAtGt     *time.Time   `json:"createdAtGT,omitempty"`
+	CreatedAtGte    *time.Time   `json:"createdAtGTE,omitempty"`
+	CreatedAtLt     *time.Time   `json:"createdAtLT,omitempty"`
+	CreatedAtLte    *time.Time   `json:"createdAtLTE,omitempty"`
+	CreatedAtIsNil  *bool        `json:"createdAtIsNil,omitempty"`
+	CreatedAtNotNil *bool        `json:"createdAtNotNil,omitempty"`
+	// updated_at field predicates
+	UpdatedAt       *time.Time   `json:"updatedAt,omitempty"`
+	UpdatedAtNeq    *time.Time   `json:"updatedAtNEQ,omitempty"`
+	UpdatedAtIn     []*time.Time `json:"updatedAtIn,omitempty"`
+	UpdatedAtNotIn  []*time.Time `json:"updatedAtNotIn,omitempty"`
+	UpdatedAtGt     *time.Time   `json:"updatedAtGT,omitempty"`
+	UpdatedAtGte    *time.Time   `json:"updatedAtGTE,omitempty"`
+	UpdatedAtLt     *time.Time   `json:"updatedAtLT,omitempty"`
+	UpdatedAtLte    *time.Time   `json:"updatedAtLTE,omitempty"`
+	UpdatedAtIsNil  *bool        `json:"updatedAtIsNil,omitempty"`
+	UpdatedAtNotNil *bool        `json:"updatedAtNotNil,omitempty"`
+	// created_by field predicates
+	CreatedBy             *string  `json:"createdBy,omitempty"`
+	CreatedByNeq          *string  `json:"createdByNEQ,omitempty"`
+	CreatedByIn           []string `json:"createdByIn,omitempty"`
+	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
+	CreatedByGt           *string  `json:"createdByGT,omitempty"`
+	CreatedByGte          *string  `json:"createdByGTE,omitempty"`
+	CreatedByLt           *string  `json:"createdByLT,omitempty"`
+	CreatedByLte          *string  `json:"createdByLTE,omitempty"`
+	CreatedByContains     *string  `json:"createdByContains,omitempty"`
+	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
+	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
+	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
+	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
+	CreatedByEqualFold    *string  `json:"createdByEqualFold,omitempty"`
+	CreatedByContainsFold *string  `json:"createdByContainsFold,omitempty"`
+	// updated_by field predicates
+	UpdatedBy             *string  `json:"updatedBy,omitempty"`
+	UpdatedByNeq          *string  `json:"updatedByNEQ,omitempty"`
+	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
+	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
+	UpdatedByGt           *string  `json:"updatedByGT,omitempty"`
+	UpdatedByGte          *string  `json:"updatedByGTE,omitempty"`
+	UpdatedByLt           *string  `json:"updatedByLT,omitempty"`
+	UpdatedByLte          *string  `json:"updatedByLTE,omitempty"`
+	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
+	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
+	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
+	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
+	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
+	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// deleted_at field predicates
+	DeletedAt       *time.Time   `json:"deletedAt,omitempty"`
+	DeletedAtNeq    *time.Time   `json:"deletedAtNEQ,omitempty"`
+	DeletedAtIn     []*time.Time `json:"deletedAtIn,omitempty"`
+	DeletedAtNotIn  []*time.Time `json:"deletedAtNotIn,omitempty"`
+	DeletedAtGt     *time.Time   `json:"deletedAtGT,omitempty"`
+	DeletedAtGte    *time.Time   `json:"deletedAtGTE,omitempty"`
+	DeletedAtLt     *time.Time   `json:"deletedAtLT,omitempty"`
+	DeletedAtLte    *time.Time   `json:"deletedAtLTE,omitempty"`
+	DeletedAtIsNil  *bool        `json:"deletedAtIsNil,omitempty"`
+	DeletedAtNotNil *bool        `json:"deletedAtNotNil,omitempty"`
+	// deleted_by field predicates
+	DeletedBy             *string  `json:"deletedBy,omitempty"`
+	DeletedByNeq          *string  `json:"deletedByNEQ,omitempty"`
+	DeletedByIn           []string `json:"deletedByIn,omitempty"`
+	DeletedByNotIn        []string `json:"deletedByNotIn,omitempty"`
+	DeletedByGt           *string  `json:"deletedByGT,omitempty"`
+	DeletedByGte          *string  `json:"deletedByGTE,omitempty"`
+	DeletedByLt           *string  `json:"deletedByLT,omitempty"`
+	DeletedByLte          *string  `json:"deletedByLTE,omitempty"`
+	DeletedByContains     *string  `json:"deletedByContains,omitempty"`
+	DeletedByHasPrefix    *string  `json:"deletedByHasPrefix,omitempty"`
+	DeletedByHasSuffix    *string  `json:"deletedByHasSuffix,omitempty"`
+	DeletedByIsNil        *bool    `json:"deletedByIsNil,omitempty"`
+	DeletedByNotNil       *bool    `json:"deletedByNotNil,omitempty"`
+	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
+	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
+	// owner_id field predicates
+	OwnerID             *string  `json:"ownerID,omitempty"`
+	OwnerIDNeq          *string  `json:"ownerIDNEQ,omitempty"`
+	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
+	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
+	OwnerIDGt           *string  `json:"ownerIDGT,omitempty"`
+	OwnerIDGte          *string  `json:"ownerIDGTE,omitempty"`
+	OwnerIDLt           *string  `json:"ownerIDLT,omitempty"`
+	OwnerIDLte          *string  `json:"ownerIDLTE,omitempty"`
+	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
+	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
+	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
+	OwnerIDIsNil        *bool    `json:"ownerIDIsNil,omitempty"`
+	OwnerIDNotNil       *bool    `json:"ownerIDNotNil,omitempty"`
+	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
+	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
+	// name field predicates
+	Name             *string  `json:"name,omitempty"`
+	NameNeq          *string  `json:"nameNEQ,omitempty"`
+	NameIn           []string `json:"nameIn,omitempty"`
+	NameNotIn        []string `json:"nameNotIn,omitempty"`
+	NameGt           *string  `json:"nameGT,omitempty"`
+	NameGte          *string  `json:"nameGTE,omitempty"`
+	NameLt           *string  `json:"nameLT,omitempty"`
+	NameLte          *string  `json:"nameLTE,omitempty"`
+	NameContains     *string  `json:"nameContains,omitempty"`
+	NameHasPrefix    *string  `json:"nameHasPrefix,omitempty"`
+	NameHasSuffix    *string  `json:"nameHasSuffix,omitempty"`
+	NameEqualFold    *string  `json:"nameEqualFold,omitempty"`
+	NameContainsFold *string  `json:"nameContainsFold,omitempty"`
+	// visibility field predicates
+	Visibility             *string  `json:"visibility,omitempty"`
+	VisibilityNeq          *string  `json:"visibilityNEQ,omitempty"`
+	VisibilityIn           []string `json:"visibilityIn,omitempty"`
+	VisibilityNotIn        []string `json:"visibilityNotIn,omitempty"`
+	VisibilityGt           *string  `json:"visibilityGT,omitempty"`
+	VisibilityGte          *string  `json:"visibilityGTE,omitempty"`
+	VisibilityLt           *string  `json:"visibilityLT,omitempty"`
+	VisibilityLte          *string  `json:"visibilityLTE,omitempty"`
+	VisibilityContains     *string  `json:"visibilityContains,omitempty"`
+	VisibilityHasPrefix    *string  `json:"visibilityHasPrefix,omitempty"`
+	VisibilityHasSuffix    *string  `json:"visibilityHasSuffix,omitempty"`
+	VisibilityEqualFold    *string  `json:"visibilityEqualFold,omitempty"`
+	VisibilityContainsFold *string  `json:"visibilityContainsFold,omitempty"`
+	// display_name field predicates
+	DisplayName             *string  `json:"displayName,omitempty"`
+	DisplayNameNeq          *string  `json:"displayNameNEQ,omitempty"`
+	DisplayNameIn           []string `json:"displayNameIn,omitempty"`
+	DisplayNameNotIn        []string `json:"displayNameNotIn,omitempty"`
+	DisplayNameGt           *string  `json:"displayNameGT,omitempty"`
+	DisplayNameGte          *string  `json:"displayNameGTE,omitempty"`
+	DisplayNameLt           *string  `json:"displayNameLT,omitempty"`
+	DisplayNameLte          *string  `json:"displayNameLTE,omitempty"`
+	DisplayNameContains     *string  `json:"displayNameContains,omitempty"`
+	DisplayNameHasPrefix    *string  `json:"displayNameHasPrefix,omitempty"`
+	DisplayNameHasSuffix    *string  `json:"displayNameHasSuffix,omitempty"`
+	DisplayNameEqualFold    *string  `json:"displayNameEqualFold,omitempty"`
+	DisplayNameContainsFold *string  `json:"displayNameContainsFold,omitempty"`
+	// owner edge predicates
+	HasOwner     *bool                     `json:"hasOwner,omitempty"`
+	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
+	// contacts edge predicates
+	HasContacts     *bool                `json:"hasContacts,omitempty"`
+	HasContactsWith []*ContactWhereInput `json:"hasContactsWith,omitempty"`
+	// events edge predicates
+	HasEvents     *bool              `json:"hasEvents,omitempty"`
+	HasEventsWith []*EventWhereInput `json:"hasEventsWith,omitempty"`
+	// integrations edge predicates
+	HasIntegrations     *bool                    `json:"hasIntegrations,omitempty"`
+	HasIntegrationsWith []*IntegrationWhereInput `json:"hasIntegrationsWith,omitempty"`
+	// contact_list_members edge predicates
+	HasContactListMembers     *bool                              `json:"hasContactListMembers,omitempty"`
+	HasContactListMembersWith []*ContactListMembershipWhereInput `json:"hasContactListMembersWith,omitempty"`
+}
+
 // Return response for updateContact mutation
 type ContactUpdatePayload struct {
 	// Updated contact
@@ -864,9 +1711,15 @@ type ContactWhereInput struct {
 	// owner edge predicates
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
+	// contact_lists edge predicates
+	HasContactLists     *bool                    `json:"hasContactLists,omitempty"`
+	HasContactListsWith []*ContactListWhereInput `json:"hasContactListsWith,omitempty"`
 	// entities edge predicates
 	HasEntities     *bool               `json:"hasEntities,omitempty"`
 	HasEntitiesWith []*EntityWhereInput `json:"hasEntitiesWith,omitempty"`
+	// contact_list_memberships edge predicates
+	HasContactListMemberships     *bool                              `json:"hasContactListMemberships,omitempty"`
+	HasContactListMembershipsWith []*ContactListMembershipWhereInput `json:"hasContactListMembershipsWith,omitempty"`
 }
 
 // CreateAPITokenInput is used for create APIToken object.
@@ -903,9 +1756,37 @@ type CreateContactInput struct {
 	// the address of the contact
 	Address *string `json:"address,omitempty"`
 	// status of the contact
-	Status    *enums.UserStatus `json:"status,omitempty"`
-	OwnerID   *string           `json:"ownerID,omitempty"`
-	EntityIDs []string          `json:"entityIDs,omitempty"`
+	Status         *enums.UserStatus `json:"status,omitempty"`
+	OwnerID        *string           `json:"ownerID,omitempty"`
+	ContactListIDs []string          `json:"contactListIDs,omitempty"`
+	EntityIDs      []string          `json:"entityIDs,omitempty"`
+}
+
+// CreateContactListInput is used for create ContactList object.
+// Input was generated by ent.
+type CreateContactListInput struct {
+	// tags associated with the object
+	Tags []string `json:"tags,omitempty"`
+	// the name of the list
+	Name string `json:"name"`
+	// the visibility of the list, for the subscriber
+	Visibility *string `json:"visibility,omitempty"`
+	// the friendly display name of the list
+	DisplayName *string `json:"displayName,omitempty"`
+	// the description of the list
+	Description    *string  `json:"description,omitempty"`
+	OwnerID        *string  `json:"ownerID,omitempty"`
+	ContactIDs     []string `json:"contactIDs,omitempty"`
+	EventIDs       []string `json:"eventIDs,omitempty"`
+	IntegrationIDs []string `json:"integrationIDs,omitempty"`
+}
+
+// CreateContactListMembershipInput is used for create ContactListMembership object.
+// Input was generated by ent.
+type CreateContactListMembershipInput struct {
+	ContactListID string   `json:"contactListID"`
+	ContactID     string   `json:"contactID"`
+	EventIDs      []string `json:"eventIDs,omitempty"`
 }
 
 // CreateDocumentDataInput is used for create DocumentData object.
@@ -1279,6 +2160,7 @@ type CreateOrganizationInput struct {
 	EntityIDs                  []string                        `json:"entityIDs,omitempty"`
 	EntitytypeIDs              []string                        `json:"entitytypeIDs,omitempty"`
 	ContactIDs                 []string                        `json:"contactIDs,omitempty"`
+	ContactListIDs             []string                        `json:"contactListIDs,omitempty"`
 	NoteIDs                    []string                        `json:"noteIDs,omitempty"`
 	CreateOrgSettings          *CreateOrganizationSettingInput `json:"createOrgSettings,omitempty"`
 }
@@ -9805,6 +10687,7 @@ type Organization struct {
 	Entities                []*Entity                 `json:"entities,omitempty"`
 	Entitytypes             []*EntityType             `json:"entitytypes,omitempty"`
 	Contacts                []*Contact                `json:"contacts,omitempty"`
+	ContactLists            []*ContactList            `json:"contactLists,omitempty"`
 	Notes                   []*Note                   `json:"notes,omitempty"`
 	Members                 []*OrgMembership          `json:"members,omitempty"`
 }
@@ -10890,6 +11773,9 @@ type OrganizationWhereInput struct {
 	// contacts edge predicates
 	HasContacts     *bool                `json:"hasContacts,omitempty"`
 	HasContactsWith []*ContactWhereInput `json:"hasContactsWith,omitempty"`
+	// contact_lists edge predicates
+	HasContactLists     *bool                    `json:"hasContactLists,omitempty"`
+	HasContactListsWith []*ContactListWhereInput `json:"hasContactListsWith,omitempty"`
 	// notes edge predicates
 	HasNotes     *bool             `json:"hasNotes,omitempty"`
 	HasNotesWith []*NoteWhereInput `json:"hasNotesWith,omitempty"`
@@ -12062,12 +12948,52 @@ type UpdateContactInput struct {
 	Address      *string `json:"address,omitempty"`
 	ClearAddress *bool   `json:"clearAddress,omitempty"`
 	// status of the contact
-	Status          *enums.UserStatus `json:"status,omitempty"`
-	OwnerID         *string           `json:"ownerID,omitempty"`
-	ClearOwner      *bool             `json:"clearOwner,omitempty"`
-	AddEntityIDs    []string          `json:"addEntityIDs,omitempty"`
-	RemoveEntityIDs []string          `json:"removeEntityIDs,omitempty"`
-	ClearEntities   *bool             `json:"clearEntities,omitempty"`
+	Status               *enums.UserStatus `json:"status,omitempty"`
+	OwnerID              *string           `json:"ownerID,omitempty"`
+	ClearOwner           *bool             `json:"clearOwner,omitempty"`
+	AddContactListIDs    []string          `json:"addContactListIDs,omitempty"`
+	RemoveContactListIDs []string          `json:"removeContactListIDs,omitempty"`
+	ClearContactLists    *bool             `json:"clearContactLists,omitempty"`
+	AddEntityIDs         []string          `json:"addEntityIDs,omitempty"`
+	RemoveEntityIDs      []string          `json:"removeEntityIDs,omitempty"`
+	ClearEntities        *bool             `json:"clearEntities,omitempty"`
+}
+
+// UpdateContactListInput is used for update ContactList object.
+// Input was generated by ent.
+type UpdateContactListInput struct {
+	// tags associated with the object
+	Tags       []string `json:"tags,omitempty"`
+	AppendTags []string `json:"appendTags,omitempty"`
+	ClearTags  *bool    `json:"clearTags,omitempty"`
+	// the name of the list
+	Name *string `json:"name,omitempty"`
+	// the visibility of the list, for the subscriber
+	Visibility *string `json:"visibility,omitempty"`
+	// the friendly display name of the list
+	DisplayName *string `json:"displayName,omitempty"`
+	// the description of the list
+	Description          *string  `json:"description,omitempty"`
+	ClearDescription     *bool    `json:"clearDescription,omitempty"`
+	OwnerID              *string  `json:"ownerID,omitempty"`
+	ClearOwner           *bool    `json:"clearOwner,omitempty"`
+	AddContactIDs        []string `json:"addContactIDs,omitempty"`
+	RemoveContactIDs     []string `json:"removeContactIDs,omitempty"`
+	ClearContacts        *bool    `json:"clearContacts,omitempty"`
+	AddEventIDs          []string `json:"addEventIDs,omitempty"`
+	RemoveEventIDs       []string `json:"removeEventIDs,omitempty"`
+	ClearEvents          *bool    `json:"clearEvents,omitempty"`
+	AddIntegrationIDs    []string `json:"addIntegrationIDs,omitempty"`
+	RemoveIntegrationIDs []string `json:"removeIntegrationIDs,omitempty"`
+	ClearIntegrations    *bool    `json:"clearIntegrations,omitempty"`
+}
+
+// UpdateContactListMembershipInput is used for update ContactListMembership object.
+// Input was generated by ent.
+type UpdateContactListMembershipInput struct {
+	AddEventIDs    []string `json:"addEventIDs,omitempty"`
+	RemoveEventIDs []string `json:"removeEventIDs,omitempty"`
+	ClearEvents    *bool    `json:"clearEvents,omitempty"`
 }
 
 // UpdateDocumentDataInput is used for update DocumentData object.
@@ -12636,6 +13562,9 @@ type UpdateOrganizationInput struct {
 	AddContactIDs                    []string                        `json:"addContactIDs,omitempty"`
 	RemoveContactIDs                 []string                        `json:"removeContactIDs,omitempty"`
 	ClearContacts                    *bool                           `json:"clearContacts,omitempty"`
+	AddContactListIDs                []string                        `json:"addContactListIDs,omitempty"`
+	RemoveContactListIDs             []string                        `json:"removeContactListIDs,omitempty"`
+	ClearContactLists                *bool                           `json:"clearContactLists,omitempty"`
 	AddNoteIDs                       []string                        `json:"addNoteIDs,omitempty"`
 	RemoveNoteIDs                    []string                        `json:"removeNoteIDs,omitempty"`
 	ClearNotes                       *bool                           `json:"clearNotes,omitempty"`
@@ -14627,6 +15556,90 @@ type WebhookWhereInput struct {
 	// integrations edge predicates
 	HasIntegrations     *bool                    `json:"hasIntegrations,omitempty"`
 	HasIntegrationsWith []*IntegrationWhereInput `json:"hasIntegrationsWith,omitempty"`
+}
+
+// Properties by which ContactListHistory connections can be ordered.
+type ContactListHistoryOrderField string
+
+const (
+	ContactListHistoryOrderFieldName        ContactListHistoryOrderField = "name"
+	ContactListHistoryOrderFieldDisplayName ContactListHistoryOrderField = "display_name"
+)
+
+var AllContactListHistoryOrderField = []ContactListHistoryOrderField{
+	ContactListHistoryOrderFieldName,
+	ContactListHistoryOrderFieldDisplayName,
+}
+
+func (e ContactListHistoryOrderField) IsValid() bool {
+	switch e {
+	case ContactListHistoryOrderFieldName, ContactListHistoryOrderFieldDisplayName:
+		return true
+	}
+	return false
+}
+
+func (e ContactListHistoryOrderField) String() string {
+	return string(e)
+}
+
+func (e *ContactListHistoryOrderField) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = ContactListHistoryOrderField(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid ContactListHistoryOrderField", str)
+	}
+	return nil
+}
+
+func (e ContactListHistoryOrderField) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+// Properties by which ContactList connections can be ordered.
+type ContactListOrderField string
+
+const (
+	ContactListOrderFieldName        ContactListOrderField = "name"
+	ContactListOrderFieldDisplayName ContactListOrderField = "display_name"
+)
+
+var AllContactListOrderField = []ContactListOrderField{
+	ContactListOrderFieldName,
+	ContactListOrderFieldDisplayName,
+}
+
+func (e ContactListOrderField) IsValid() bool {
+	switch e {
+	case ContactListOrderFieldName, ContactListOrderFieldDisplayName:
+		return true
+	}
+	return false
+}
+
+func (e ContactListOrderField) String() string {
+	return string(e)
+}
+
+func (e *ContactListOrderField) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = ContactListOrderField(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid ContactListOrderField", str)
+	}
+	return nil
+}
+
+func (e ContactListOrderField) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
 }
 
 // Properties by which EntityHistory connections can be ordered.

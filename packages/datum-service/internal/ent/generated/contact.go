@@ -62,15 +62,21 @@ type Contact struct {
 type ContactEdges struct {
 	// Owner holds the value of the owner edge.
 	Owner *Organization `json:"owner,omitempty"`
+	// ContactLists holds the value of the contact_lists edge.
+	ContactLists []*ContactList `json:"contact_lists,omitempty"`
 	// Entities holds the value of the entities edge.
 	Entities []*Entity `json:"entities,omitempty"`
+	// ContactListMemberships holds the value of the contact_list_memberships edge.
+	ContactListMemberships []*ContactListMembership `json:"contact_list_memberships,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [2]bool
+	loadedTypes [4]bool
 	// totalCount holds the count of the edges above.
-	totalCount [2]map[string]int
+	totalCount [4]map[string]int
 
-	namedEntities map[string][]*Entity
+	namedContactLists           map[string][]*ContactList
+	namedEntities               map[string][]*Entity
+	namedContactListMemberships map[string][]*ContactListMembership
 }
 
 // OwnerOrErr returns the Owner value or an error if the edge
@@ -84,13 +90,31 @@ func (e ContactEdges) OwnerOrErr() (*Organization, error) {
 	return nil, &NotLoadedError{edge: "owner"}
 }
 
+// ContactListsOrErr returns the ContactLists value or an error if the edge
+// was not loaded in eager-loading.
+func (e ContactEdges) ContactListsOrErr() ([]*ContactList, error) {
+	if e.loadedTypes[1] {
+		return e.ContactLists, nil
+	}
+	return nil, &NotLoadedError{edge: "contact_lists"}
+}
+
 // EntitiesOrErr returns the Entities value or an error if the edge
 // was not loaded in eager-loading.
 func (e ContactEdges) EntitiesOrErr() ([]*Entity, error) {
-	if e.loadedTypes[1] {
+	if e.loadedTypes[2] {
 		return e.Entities, nil
 	}
 	return nil, &NotLoadedError{edge: "entities"}
+}
+
+// ContactListMembershipsOrErr returns the ContactListMemberships value or an error if the edge
+// was not loaded in eager-loading.
+func (e ContactEdges) ContactListMembershipsOrErr() ([]*ContactListMembership, error) {
+	if e.loadedTypes[3] {
+		return e.ContactListMemberships, nil
+	}
+	return nil, &NotLoadedError{edge: "contact_list_memberships"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -241,9 +265,19 @@ func (c *Contact) QueryOwner() *OrganizationQuery {
 	return NewContactClient(c.config).QueryOwner(c)
 }
 
+// QueryContactLists queries the "contact_lists" edge of the Contact entity.
+func (c *Contact) QueryContactLists() *ContactListQuery {
+	return NewContactClient(c.config).QueryContactLists(c)
+}
+
 // QueryEntities queries the "entities" edge of the Contact entity.
 func (c *Contact) QueryEntities() *EntityQuery {
 	return NewContactClient(c.config).QueryEntities(c)
+}
+
+// QueryContactListMemberships queries the "contact_list_memberships" edge of the Contact entity.
+func (c *Contact) QueryContactListMemberships() *ContactListMembershipQuery {
+	return NewContactClient(c.config).QueryContactListMemberships(c)
 }
 
 // Update returns a builder for updating this Contact.
@@ -320,6 +354,30 @@ func (c *Contact) String() string {
 	return builder.String()
 }
 
+// NamedContactLists returns the ContactLists named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (c *Contact) NamedContactLists(name string) ([]*ContactList, error) {
+	if c.Edges.namedContactLists == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := c.Edges.namedContactLists[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (c *Contact) appendNamedContactLists(name string, edges ...*ContactList) {
+	if c.Edges.namedContactLists == nil {
+		c.Edges.namedContactLists = make(map[string][]*ContactList)
+	}
+	if len(edges) == 0 {
+		c.Edges.namedContactLists[name] = []*ContactList{}
+	} else {
+		c.Edges.namedContactLists[name] = append(c.Edges.namedContactLists[name], edges...)
+	}
+}
+
 // NamedEntities returns the Entities named value or an error if the edge was not
 // loaded in eager-loading with this name.
 func (c *Contact) NamedEntities(name string) ([]*Entity, error) {
@@ -341,6 +399,30 @@ func (c *Contact) appendNamedEntities(name string, edges ...*Entity) {
 		c.Edges.namedEntities[name] = []*Entity{}
 	} else {
 		c.Edges.namedEntities[name] = append(c.Edges.namedEntities[name], edges...)
+	}
+}
+
+// NamedContactListMemberships returns the ContactListMemberships named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (c *Contact) NamedContactListMemberships(name string) ([]*ContactListMembership, error) {
+	if c.Edges.namedContactListMemberships == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := c.Edges.namedContactListMemberships[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (c *Contact) appendNamedContactListMemberships(name string, edges ...*ContactListMembership) {
+	if c.Edges.namedContactListMemberships == nil {
+		c.Edges.namedContactListMemberships = make(map[string][]*ContactListMembership)
+	}
+	if len(edges) == 0 {
+		c.Edges.namedContactListMemberships[name] = []*ContactListMembership{}
+	} else {
+		c.Edges.namedContactListMemberships[name] = append(c.Edges.namedContactListMemberships[name], edges...)
 	}
 }
 

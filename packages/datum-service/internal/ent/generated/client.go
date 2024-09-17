@@ -19,6 +19,10 @@ import (
 	"github.com/datum-cloud/datum-os/internal/ent/generated/apitoken"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/contact"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/contacthistory"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/contactlist"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/contactlisthistory"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/contactlistmembership"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/contactlistmembershiphistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/documentdata"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/documentdatahistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/emailverificationtoken"
@@ -98,6 +102,14 @@ type Client struct {
 	Contact *ContactClient
 	// ContactHistory is the client for interacting with the ContactHistory builders.
 	ContactHistory *ContactHistoryClient
+	// ContactList is the client for interacting with the ContactList builders.
+	ContactList *ContactListClient
+	// ContactListHistory is the client for interacting with the ContactListHistory builders.
+	ContactListHistory *ContactListHistoryClient
+	// ContactListMembership is the client for interacting with the ContactListMembership builders.
+	ContactListMembership *ContactListMembershipClient
+	// ContactListMembershipHistory is the client for interacting with the ContactListMembershipHistory builders.
+	ContactListMembershipHistory *ContactListMembershipHistoryClient
 	// DocumentData is the client for interacting with the DocumentData builders.
 	DocumentData *DocumentDataClient
 	// DocumentDataHistory is the client for interacting with the DocumentDataHistory builders.
@@ -225,6 +237,10 @@ func (c *Client) init() {
 	c.APIToken = NewAPITokenClient(c.config)
 	c.Contact = NewContactClient(c.config)
 	c.ContactHistory = NewContactHistoryClient(c.config)
+	c.ContactList = NewContactListClient(c.config)
+	c.ContactListHistory = NewContactListHistoryClient(c.config)
+	c.ContactListMembership = NewContactListMembershipClient(c.config)
+	c.ContactListMembershipHistory = NewContactListMembershipHistoryClient(c.config)
 	c.DocumentData = NewDocumentDataClient(c.config)
 	c.DocumentDataHistory = NewDocumentDataHistoryClient(c.config)
 	c.EmailVerificationToken = NewEmailVerificationTokenClient(c.config)
@@ -472,6 +488,10 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		APIToken:                      NewAPITokenClient(cfg),
 		Contact:                       NewContactClient(cfg),
 		ContactHistory:                NewContactHistoryClient(cfg),
+		ContactList:                   NewContactListClient(cfg),
+		ContactListHistory:            NewContactListHistoryClient(cfg),
+		ContactListMembership:         NewContactListMembershipClient(cfg),
+		ContactListMembershipHistory:  NewContactListMembershipHistoryClient(cfg),
 		DocumentData:                  NewDocumentDataClient(cfg),
 		DocumentDataHistory:           NewDocumentDataHistoryClient(cfg),
 		EmailVerificationToken:        NewEmailVerificationTokenClient(cfg),
@@ -548,6 +568,10 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		APIToken:                      NewAPITokenClient(cfg),
 		Contact:                       NewContactClient(cfg),
 		ContactHistory:                NewContactHistoryClient(cfg),
+		ContactList:                   NewContactListClient(cfg),
+		ContactListHistory:            NewContactListHistoryClient(cfg),
+		ContactListMembership:         NewContactListMembershipClient(cfg),
+		ContactListMembershipHistory:  NewContactListMembershipHistoryClient(cfg),
 		DocumentData:                  NewDocumentDataClient(cfg),
 		DocumentDataHistory:           NewDocumentDataHistoryClient(cfg),
 		EmailVerificationToken:        NewEmailVerificationTokenClient(cfg),
@@ -631,16 +655,18 @@ func (c *Client) Close() error {
 // In order to add hooks to a specific client, call: `client.Node.Use(...)`.
 func (c *Client) Use(hooks ...Hook) {
 	for _, n := range []interface{ Use(...Hook) }{
-		c.APIToken, c.Contact, c.ContactHistory, c.DocumentData, c.DocumentDataHistory,
-		c.EmailVerificationToken, c.Entitlement, c.EntitlementHistory,
-		c.EntitlementPlan, c.EntitlementPlanFeature, c.EntitlementPlanFeatureHistory,
-		c.EntitlementPlanHistory, c.Entity, c.EntityHistory, c.EntityType,
-		c.EntityTypeHistory, c.Event, c.EventHistory, c.Feature, c.FeatureHistory,
-		c.File, c.FileHistory, c.Group, c.GroupHistory, c.GroupMembership,
-		c.GroupMembershipHistory, c.GroupSetting, c.GroupSettingHistory, c.Hush,
-		c.HushHistory, c.Integration, c.IntegrationHistory, c.Invite, c.Note,
-		c.NoteHistory, c.OauthProvider, c.OauthProviderHistory, c.OhAuthTooToken,
-		c.OrgMembership, c.OrgMembershipHistory, c.Organization, c.OrganizationHistory,
+		c.APIToken, c.Contact, c.ContactHistory, c.ContactList, c.ContactListHistory,
+		c.ContactListMembership, c.ContactListMembershipHistory, c.DocumentData,
+		c.DocumentDataHistory, c.EmailVerificationToken, c.Entitlement,
+		c.EntitlementHistory, c.EntitlementPlan, c.EntitlementPlanFeature,
+		c.EntitlementPlanFeatureHistory, c.EntitlementPlanHistory, c.Entity,
+		c.EntityHistory, c.EntityType, c.EntityTypeHistory, c.Event, c.EventHistory,
+		c.Feature, c.FeatureHistory, c.File, c.FileHistory, c.Group, c.GroupHistory,
+		c.GroupMembership, c.GroupMembershipHistory, c.GroupSetting,
+		c.GroupSettingHistory, c.Hush, c.HushHistory, c.Integration,
+		c.IntegrationHistory, c.Invite, c.Note, c.NoteHistory, c.OauthProvider,
+		c.OauthProviderHistory, c.OhAuthTooToken, c.OrgMembership,
+		c.OrgMembershipHistory, c.Organization, c.OrganizationHistory,
 		c.OrganizationSetting, c.OrganizationSettingHistory, c.PasswordResetToken,
 		c.PersonalAccessToken, c.Subscriber, c.TFASetting, c.Template,
 		c.TemplateHistory, c.User, c.UserHistory, c.UserSetting, c.UserSettingHistory,
@@ -654,16 +680,18 @@ func (c *Client) Use(hooks ...Hook) {
 // In order to add interceptors to a specific client, call: `client.Node.Intercept(...)`.
 func (c *Client) Intercept(interceptors ...Interceptor) {
 	for _, n := range []interface{ Intercept(...Interceptor) }{
-		c.APIToken, c.Contact, c.ContactHistory, c.DocumentData, c.DocumentDataHistory,
-		c.EmailVerificationToken, c.Entitlement, c.EntitlementHistory,
-		c.EntitlementPlan, c.EntitlementPlanFeature, c.EntitlementPlanFeatureHistory,
-		c.EntitlementPlanHistory, c.Entity, c.EntityHistory, c.EntityType,
-		c.EntityTypeHistory, c.Event, c.EventHistory, c.Feature, c.FeatureHistory,
-		c.File, c.FileHistory, c.Group, c.GroupHistory, c.GroupMembership,
-		c.GroupMembershipHistory, c.GroupSetting, c.GroupSettingHistory, c.Hush,
-		c.HushHistory, c.Integration, c.IntegrationHistory, c.Invite, c.Note,
-		c.NoteHistory, c.OauthProvider, c.OauthProviderHistory, c.OhAuthTooToken,
-		c.OrgMembership, c.OrgMembershipHistory, c.Organization, c.OrganizationHistory,
+		c.APIToken, c.Contact, c.ContactHistory, c.ContactList, c.ContactListHistory,
+		c.ContactListMembership, c.ContactListMembershipHistory, c.DocumentData,
+		c.DocumentDataHistory, c.EmailVerificationToken, c.Entitlement,
+		c.EntitlementHistory, c.EntitlementPlan, c.EntitlementPlanFeature,
+		c.EntitlementPlanFeatureHistory, c.EntitlementPlanHistory, c.Entity,
+		c.EntityHistory, c.EntityType, c.EntityTypeHistory, c.Event, c.EventHistory,
+		c.Feature, c.FeatureHistory, c.File, c.FileHistory, c.Group, c.GroupHistory,
+		c.GroupMembership, c.GroupMembershipHistory, c.GroupSetting,
+		c.GroupSettingHistory, c.Hush, c.HushHistory, c.Integration,
+		c.IntegrationHistory, c.Invite, c.Note, c.NoteHistory, c.OauthProvider,
+		c.OauthProviderHistory, c.OhAuthTooToken, c.OrgMembership,
+		c.OrgMembershipHistory, c.Organization, c.OrganizationHistory,
 		c.OrganizationSetting, c.OrganizationSettingHistory, c.PasswordResetToken,
 		c.PersonalAccessToken, c.Subscriber, c.TFASetting, c.Template,
 		c.TemplateHistory, c.User, c.UserHistory, c.UserSetting, c.UserSettingHistory,
@@ -682,6 +710,14 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.Contact.mutate(ctx, m)
 	case *ContactHistoryMutation:
 		return c.ContactHistory.mutate(ctx, m)
+	case *ContactListMutation:
+		return c.ContactList.mutate(ctx, m)
+	case *ContactListHistoryMutation:
+		return c.ContactListHistory.mutate(ctx, m)
+	case *ContactListMembershipMutation:
+		return c.ContactListMembership.mutate(ctx, m)
+	case *ContactListMembershipHistoryMutation:
+		return c.ContactListMembershipHistory.mutate(ctx, m)
 	case *DocumentDataMutation:
 		return c.DocumentData.mutate(ctx, m)
 	case *DocumentDataHistoryMutation:
@@ -1076,6 +1112,25 @@ func (c *ContactClient) QueryOwner(co *Contact) *OrganizationQuery {
 	return query
 }
 
+// QueryContactLists queries the contact_lists edge of a Contact.
+func (c *ContactClient) QueryContactLists(co *Contact) *ContactListQuery {
+	query := (&ContactListClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := co.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(contact.Table, contact.FieldID, id),
+			sqlgraph.To(contactlist.Table, contactlist.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, contact.ContactListsTable, contact.ContactListsPrimaryKey...),
+		)
+		schemaConfig := co.schemaConfig
+		step.To.Schema = schemaConfig.ContactList
+		step.Edge.Schema = schemaConfig.ContactListMembership
+		fromV = sqlgraph.Neighbors(co.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryEntities queries the entities edge of a Contact.
 func (c *ContactClient) QueryEntities(co *Contact) *EntityQuery {
 	query := (&EntityClient{config: c.config}).Query()
@@ -1089,6 +1144,25 @@ func (c *ContactClient) QueryEntities(co *Contact) *EntityQuery {
 		schemaConfig := co.schemaConfig
 		step.To.Schema = schemaConfig.Entity
 		step.Edge.Schema = schemaConfig.EntityContacts
+		fromV = sqlgraph.Neighbors(co.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryContactListMemberships queries the contact_list_memberships edge of a Contact.
+func (c *ContactClient) QueryContactListMemberships(co *Contact) *ContactListMembershipQuery {
+	query := (&ContactListMembershipClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := co.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(contact.Table, contact.FieldID, id),
+			sqlgraph.To(contactlistmembership.Table, contactlistmembership.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, true, contact.ContactListMembershipsTable, contact.ContactListMembershipsColumn),
+		)
+		schemaConfig := co.schemaConfig
+		step.To.Schema = schemaConfig.ContactListMembership
+		step.Edge.Schema = schemaConfig.ContactListMembership
 		fromV = sqlgraph.Neighbors(co.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -1254,6 +1328,698 @@ func (c *ContactHistoryClient) mutate(ctx context.Context, m *ContactHistoryMuta
 		return (&ContactHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
 	default:
 		return nil, fmt.Errorf("generated: unknown ContactHistory mutation op: %q", m.Op())
+	}
+}
+
+// ContactListClient is a client for the ContactList schema.
+type ContactListClient struct {
+	config
+}
+
+// NewContactListClient returns a client for the ContactList from the given config.
+func NewContactListClient(c config) *ContactListClient {
+	return &ContactListClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `contactlist.Hooks(f(g(h())))`.
+func (c *ContactListClient) Use(hooks ...Hook) {
+	c.hooks.ContactList = append(c.hooks.ContactList, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `contactlist.Intercept(f(g(h())))`.
+func (c *ContactListClient) Intercept(interceptors ...Interceptor) {
+	c.inters.ContactList = append(c.inters.ContactList, interceptors...)
+}
+
+// Create returns a builder for creating a ContactList entity.
+func (c *ContactListClient) Create() *ContactListCreate {
+	mutation := newContactListMutation(c.config, OpCreate)
+	return &ContactListCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of ContactList entities.
+func (c *ContactListClient) CreateBulk(builders ...*ContactListCreate) *ContactListCreateBulk {
+	return &ContactListCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *ContactListClient) MapCreateBulk(slice any, setFunc func(*ContactListCreate, int)) *ContactListCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &ContactListCreateBulk{err: fmt.Errorf("calling to ContactListClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*ContactListCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &ContactListCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for ContactList.
+func (c *ContactListClient) Update() *ContactListUpdate {
+	mutation := newContactListMutation(c.config, OpUpdate)
+	return &ContactListUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *ContactListClient) UpdateOne(cl *ContactList) *ContactListUpdateOne {
+	mutation := newContactListMutation(c.config, OpUpdateOne, withContactList(cl))
+	return &ContactListUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *ContactListClient) UpdateOneID(id string) *ContactListUpdateOne {
+	mutation := newContactListMutation(c.config, OpUpdateOne, withContactListID(id))
+	return &ContactListUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for ContactList.
+func (c *ContactListClient) Delete() *ContactListDelete {
+	mutation := newContactListMutation(c.config, OpDelete)
+	return &ContactListDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *ContactListClient) DeleteOne(cl *ContactList) *ContactListDeleteOne {
+	return c.DeleteOneID(cl.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *ContactListClient) DeleteOneID(id string) *ContactListDeleteOne {
+	builder := c.Delete().Where(contactlist.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &ContactListDeleteOne{builder}
+}
+
+// Query returns a query builder for ContactList.
+func (c *ContactListClient) Query() *ContactListQuery {
+	return &ContactListQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeContactList},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a ContactList entity by its id.
+func (c *ContactListClient) Get(ctx context.Context, id string) (*ContactList, error) {
+	return c.Query().Where(contactlist.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *ContactListClient) GetX(ctx context.Context, id string) *ContactList {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryOwner queries the owner edge of a ContactList.
+func (c *ContactListClient) QueryOwner(cl *ContactList) *OrganizationQuery {
+	query := (&OrganizationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := cl.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(contactlist.Table, contactlist.FieldID, id),
+			sqlgraph.To(organization.Table, organization.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, contactlist.OwnerTable, contactlist.OwnerColumn),
+		)
+		schemaConfig := cl.schemaConfig
+		step.To.Schema = schemaConfig.Organization
+		step.Edge.Schema = schemaConfig.ContactList
+		fromV = sqlgraph.Neighbors(cl.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryContacts queries the contacts edge of a ContactList.
+func (c *ContactListClient) QueryContacts(cl *ContactList) *ContactQuery {
+	query := (&ContactClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := cl.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(contactlist.Table, contactlist.FieldID, id),
+			sqlgraph.To(contact.Table, contact.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, contactlist.ContactsTable, contactlist.ContactsPrimaryKey...),
+		)
+		schemaConfig := cl.schemaConfig
+		step.To.Schema = schemaConfig.Contact
+		step.Edge.Schema = schemaConfig.ContactListMembership
+		fromV = sqlgraph.Neighbors(cl.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryEvents queries the events edge of a ContactList.
+func (c *ContactListClient) QueryEvents(cl *ContactList) *EventQuery {
+	query := (&EventClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := cl.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(contactlist.Table, contactlist.FieldID, id),
+			sqlgraph.To(event.Table, event.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, contactlist.EventsTable, contactlist.EventsColumn),
+		)
+		schemaConfig := cl.schemaConfig
+		step.To.Schema = schemaConfig.Event
+		step.Edge.Schema = schemaConfig.Event
+		fromV = sqlgraph.Neighbors(cl.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryIntegrations queries the integrations edge of a ContactList.
+func (c *ContactListClient) QueryIntegrations(cl *ContactList) *IntegrationQuery {
+	query := (&IntegrationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := cl.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(contactlist.Table, contactlist.FieldID, id),
+			sqlgraph.To(integration.Table, integration.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, contactlist.IntegrationsTable, contactlist.IntegrationsColumn),
+		)
+		schemaConfig := cl.schemaConfig
+		step.To.Schema = schemaConfig.Integration
+		step.Edge.Schema = schemaConfig.Integration
+		fromV = sqlgraph.Neighbors(cl.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryContactListMembers queries the contact_list_members edge of a ContactList.
+func (c *ContactListClient) QueryContactListMembers(cl *ContactList) *ContactListMembershipQuery {
+	query := (&ContactListMembershipClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := cl.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(contactlist.Table, contactlist.FieldID, id),
+			sqlgraph.To(contactlistmembership.Table, contactlistmembership.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, true, contactlist.ContactListMembersTable, contactlist.ContactListMembersColumn),
+		)
+		schemaConfig := cl.schemaConfig
+		step.To.Schema = schemaConfig.ContactListMembership
+		step.Edge.Schema = schemaConfig.ContactListMembership
+		fromV = sqlgraph.Neighbors(cl.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *ContactListClient) Hooks() []Hook {
+	hooks := c.hooks.ContactList
+	return append(hooks[:len(hooks):len(hooks)], contactlist.Hooks[:]...)
+}
+
+// Interceptors returns the client interceptors.
+func (c *ContactListClient) Interceptors() []Interceptor {
+	inters := c.inters.ContactList
+	return append(inters[:len(inters):len(inters)], contactlist.Interceptors[:]...)
+}
+
+func (c *ContactListClient) mutate(ctx context.Context, m *ContactListMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&ContactListCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&ContactListUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&ContactListUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&ContactListDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("generated: unknown ContactList mutation op: %q", m.Op())
+	}
+}
+
+// ContactListHistoryClient is a client for the ContactListHistory schema.
+type ContactListHistoryClient struct {
+	config
+}
+
+// NewContactListHistoryClient returns a client for the ContactListHistory from the given config.
+func NewContactListHistoryClient(c config) *ContactListHistoryClient {
+	return &ContactListHistoryClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `contactlisthistory.Hooks(f(g(h())))`.
+func (c *ContactListHistoryClient) Use(hooks ...Hook) {
+	c.hooks.ContactListHistory = append(c.hooks.ContactListHistory, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `contactlisthistory.Intercept(f(g(h())))`.
+func (c *ContactListHistoryClient) Intercept(interceptors ...Interceptor) {
+	c.inters.ContactListHistory = append(c.inters.ContactListHistory, interceptors...)
+}
+
+// Create returns a builder for creating a ContactListHistory entity.
+func (c *ContactListHistoryClient) Create() *ContactListHistoryCreate {
+	mutation := newContactListHistoryMutation(c.config, OpCreate)
+	return &ContactListHistoryCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of ContactListHistory entities.
+func (c *ContactListHistoryClient) CreateBulk(builders ...*ContactListHistoryCreate) *ContactListHistoryCreateBulk {
+	return &ContactListHistoryCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *ContactListHistoryClient) MapCreateBulk(slice any, setFunc func(*ContactListHistoryCreate, int)) *ContactListHistoryCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &ContactListHistoryCreateBulk{err: fmt.Errorf("calling to ContactListHistoryClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*ContactListHistoryCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &ContactListHistoryCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for ContactListHistory.
+func (c *ContactListHistoryClient) Update() *ContactListHistoryUpdate {
+	mutation := newContactListHistoryMutation(c.config, OpUpdate)
+	return &ContactListHistoryUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *ContactListHistoryClient) UpdateOne(clh *ContactListHistory) *ContactListHistoryUpdateOne {
+	mutation := newContactListHistoryMutation(c.config, OpUpdateOne, withContactListHistory(clh))
+	return &ContactListHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *ContactListHistoryClient) UpdateOneID(id string) *ContactListHistoryUpdateOne {
+	mutation := newContactListHistoryMutation(c.config, OpUpdateOne, withContactListHistoryID(id))
+	return &ContactListHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for ContactListHistory.
+func (c *ContactListHistoryClient) Delete() *ContactListHistoryDelete {
+	mutation := newContactListHistoryMutation(c.config, OpDelete)
+	return &ContactListHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *ContactListHistoryClient) DeleteOne(clh *ContactListHistory) *ContactListHistoryDeleteOne {
+	return c.DeleteOneID(clh.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *ContactListHistoryClient) DeleteOneID(id string) *ContactListHistoryDeleteOne {
+	builder := c.Delete().Where(contactlisthistory.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &ContactListHistoryDeleteOne{builder}
+}
+
+// Query returns a query builder for ContactListHistory.
+func (c *ContactListHistoryClient) Query() *ContactListHistoryQuery {
+	return &ContactListHistoryQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeContactListHistory},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a ContactListHistory entity by its id.
+func (c *ContactListHistoryClient) Get(ctx context.Context, id string) (*ContactListHistory, error) {
+	return c.Query().Where(contactlisthistory.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *ContactListHistoryClient) GetX(ctx context.Context, id string) *ContactListHistory {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *ContactListHistoryClient) Hooks() []Hook {
+	hooks := c.hooks.ContactListHistory
+	return append(hooks[:len(hooks):len(hooks)], contactlisthistory.Hooks[:]...)
+}
+
+// Interceptors returns the client interceptors.
+func (c *ContactListHistoryClient) Interceptors() []Interceptor {
+	inters := c.inters.ContactListHistory
+	return append(inters[:len(inters):len(inters)], contactlisthistory.Interceptors[:]...)
+}
+
+func (c *ContactListHistoryClient) mutate(ctx context.Context, m *ContactListHistoryMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&ContactListHistoryCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&ContactListHistoryUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&ContactListHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&ContactListHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("generated: unknown ContactListHistory mutation op: %q", m.Op())
+	}
+}
+
+// ContactListMembershipClient is a client for the ContactListMembership schema.
+type ContactListMembershipClient struct {
+	config
+}
+
+// NewContactListMembershipClient returns a client for the ContactListMembership from the given config.
+func NewContactListMembershipClient(c config) *ContactListMembershipClient {
+	return &ContactListMembershipClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `contactlistmembership.Hooks(f(g(h())))`.
+func (c *ContactListMembershipClient) Use(hooks ...Hook) {
+	c.hooks.ContactListMembership = append(c.hooks.ContactListMembership, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `contactlistmembership.Intercept(f(g(h())))`.
+func (c *ContactListMembershipClient) Intercept(interceptors ...Interceptor) {
+	c.inters.ContactListMembership = append(c.inters.ContactListMembership, interceptors...)
+}
+
+// Create returns a builder for creating a ContactListMembership entity.
+func (c *ContactListMembershipClient) Create() *ContactListMembershipCreate {
+	mutation := newContactListMembershipMutation(c.config, OpCreate)
+	return &ContactListMembershipCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of ContactListMembership entities.
+func (c *ContactListMembershipClient) CreateBulk(builders ...*ContactListMembershipCreate) *ContactListMembershipCreateBulk {
+	return &ContactListMembershipCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *ContactListMembershipClient) MapCreateBulk(slice any, setFunc func(*ContactListMembershipCreate, int)) *ContactListMembershipCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &ContactListMembershipCreateBulk{err: fmt.Errorf("calling to ContactListMembershipClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*ContactListMembershipCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &ContactListMembershipCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for ContactListMembership.
+func (c *ContactListMembershipClient) Update() *ContactListMembershipUpdate {
+	mutation := newContactListMembershipMutation(c.config, OpUpdate)
+	return &ContactListMembershipUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *ContactListMembershipClient) UpdateOne(clm *ContactListMembership) *ContactListMembershipUpdateOne {
+	mutation := newContactListMembershipMutation(c.config, OpUpdateOne, withContactListMembership(clm))
+	return &ContactListMembershipUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *ContactListMembershipClient) UpdateOneID(id string) *ContactListMembershipUpdateOne {
+	mutation := newContactListMembershipMutation(c.config, OpUpdateOne, withContactListMembershipID(id))
+	return &ContactListMembershipUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for ContactListMembership.
+func (c *ContactListMembershipClient) Delete() *ContactListMembershipDelete {
+	mutation := newContactListMembershipMutation(c.config, OpDelete)
+	return &ContactListMembershipDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *ContactListMembershipClient) DeleteOne(clm *ContactListMembership) *ContactListMembershipDeleteOne {
+	return c.DeleteOneID(clm.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *ContactListMembershipClient) DeleteOneID(id string) *ContactListMembershipDeleteOne {
+	builder := c.Delete().Where(contactlistmembership.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &ContactListMembershipDeleteOne{builder}
+}
+
+// Query returns a query builder for ContactListMembership.
+func (c *ContactListMembershipClient) Query() *ContactListMembershipQuery {
+	return &ContactListMembershipQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeContactListMembership},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a ContactListMembership entity by its id.
+func (c *ContactListMembershipClient) Get(ctx context.Context, id string) (*ContactListMembership, error) {
+	return c.Query().Where(contactlistmembership.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *ContactListMembershipClient) GetX(ctx context.Context, id string) *ContactListMembership {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryContactList queries the contact_list edge of a ContactListMembership.
+func (c *ContactListMembershipClient) QueryContactList(clm *ContactListMembership) *ContactListQuery {
+	query := (&ContactListClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := clm.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(contactlistmembership.Table, contactlistmembership.FieldID, id),
+			sqlgraph.To(contactlist.Table, contactlist.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, contactlistmembership.ContactListTable, contactlistmembership.ContactListColumn),
+		)
+		schemaConfig := clm.schemaConfig
+		step.To.Schema = schemaConfig.ContactList
+		step.Edge.Schema = schemaConfig.ContactListMembership
+		fromV = sqlgraph.Neighbors(clm.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryContact queries the contact edge of a ContactListMembership.
+func (c *ContactListMembershipClient) QueryContact(clm *ContactListMembership) *ContactQuery {
+	query := (&ContactClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := clm.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(contactlistmembership.Table, contactlistmembership.FieldID, id),
+			sqlgraph.To(contact.Table, contact.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, contactlistmembership.ContactTable, contactlistmembership.ContactColumn),
+		)
+		schemaConfig := clm.schemaConfig
+		step.To.Schema = schemaConfig.Contact
+		step.Edge.Schema = schemaConfig.ContactListMembership
+		fromV = sqlgraph.Neighbors(clm.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryEvents queries the events edge of a ContactListMembership.
+func (c *ContactListMembershipClient) QueryEvents(clm *ContactListMembership) *EventQuery {
+	query := (&EventClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := clm.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(contactlistmembership.Table, contactlistmembership.FieldID, id),
+			sqlgraph.To(event.Table, event.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, contactlistmembership.EventsTable, contactlistmembership.EventsColumn),
+		)
+		schemaConfig := clm.schemaConfig
+		step.To.Schema = schemaConfig.Event
+		step.Edge.Schema = schemaConfig.Event
+		fromV = sqlgraph.Neighbors(clm.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *ContactListMembershipClient) Hooks() []Hook {
+	hooks := c.hooks.ContactListMembership
+	return append(hooks[:len(hooks):len(hooks)], contactlistmembership.Hooks[:]...)
+}
+
+// Interceptors returns the client interceptors.
+func (c *ContactListMembershipClient) Interceptors() []Interceptor {
+	inters := c.inters.ContactListMembership
+	return append(inters[:len(inters):len(inters)], contactlistmembership.Interceptors[:]...)
+}
+
+func (c *ContactListMembershipClient) mutate(ctx context.Context, m *ContactListMembershipMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&ContactListMembershipCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&ContactListMembershipUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&ContactListMembershipUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&ContactListMembershipDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("generated: unknown ContactListMembership mutation op: %q", m.Op())
+	}
+}
+
+// ContactListMembershipHistoryClient is a client for the ContactListMembershipHistory schema.
+type ContactListMembershipHistoryClient struct {
+	config
+}
+
+// NewContactListMembershipHistoryClient returns a client for the ContactListMembershipHistory from the given config.
+func NewContactListMembershipHistoryClient(c config) *ContactListMembershipHistoryClient {
+	return &ContactListMembershipHistoryClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `contactlistmembershiphistory.Hooks(f(g(h())))`.
+func (c *ContactListMembershipHistoryClient) Use(hooks ...Hook) {
+	c.hooks.ContactListMembershipHistory = append(c.hooks.ContactListMembershipHistory, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `contactlistmembershiphistory.Intercept(f(g(h())))`.
+func (c *ContactListMembershipHistoryClient) Intercept(interceptors ...Interceptor) {
+	c.inters.ContactListMembershipHistory = append(c.inters.ContactListMembershipHistory, interceptors...)
+}
+
+// Create returns a builder for creating a ContactListMembershipHistory entity.
+func (c *ContactListMembershipHistoryClient) Create() *ContactListMembershipHistoryCreate {
+	mutation := newContactListMembershipHistoryMutation(c.config, OpCreate)
+	return &ContactListMembershipHistoryCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of ContactListMembershipHistory entities.
+func (c *ContactListMembershipHistoryClient) CreateBulk(builders ...*ContactListMembershipHistoryCreate) *ContactListMembershipHistoryCreateBulk {
+	return &ContactListMembershipHistoryCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *ContactListMembershipHistoryClient) MapCreateBulk(slice any, setFunc func(*ContactListMembershipHistoryCreate, int)) *ContactListMembershipHistoryCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &ContactListMembershipHistoryCreateBulk{err: fmt.Errorf("calling to ContactListMembershipHistoryClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*ContactListMembershipHistoryCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &ContactListMembershipHistoryCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for ContactListMembershipHistory.
+func (c *ContactListMembershipHistoryClient) Update() *ContactListMembershipHistoryUpdate {
+	mutation := newContactListMembershipHistoryMutation(c.config, OpUpdate)
+	return &ContactListMembershipHistoryUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *ContactListMembershipHistoryClient) UpdateOne(clmh *ContactListMembershipHistory) *ContactListMembershipHistoryUpdateOne {
+	mutation := newContactListMembershipHistoryMutation(c.config, OpUpdateOne, withContactListMembershipHistory(clmh))
+	return &ContactListMembershipHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *ContactListMembershipHistoryClient) UpdateOneID(id string) *ContactListMembershipHistoryUpdateOne {
+	mutation := newContactListMembershipHistoryMutation(c.config, OpUpdateOne, withContactListMembershipHistoryID(id))
+	return &ContactListMembershipHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for ContactListMembershipHistory.
+func (c *ContactListMembershipHistoryClient) Delete() *ContactListMembershipHistoryDelete {
+	mutation := newContactListMembershipHistoryMutation(c.config, OpDelete)
+	return &ContactListMembershipHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *ContactListMembershipHistoryClient) DeleteOne(clmh *ContactListMembershipHistory) *ContactListMembershipHistoryDeleteOne {
+	return c.DeleteOneID(clmh.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *ContactListMembershipHistoryClient) DeleteOneID(id string) *ContactListMembershipHistoryDeleteOne {
+	builder := c.Delete().Where(contactlistmembershiphistory.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &ContactListMembershipHistoryDeleteOne{builder}
+}
+
+// Query returns a query builder for ContactListMembershipHistory.
+func (c *ContactListMembershipHistoryClient) Query() *ContactListMembershipHistoryQuery {
+	return &ContactListMembershipHistoryQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeContactListMembershipHistory},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a ContactListMembershipHistory entity by its id.
+func (c *ContactListMembershipHistoryClient) Get(ctx context.Context, id string) (*ContactListMembershipHistory, error) {
+	return c.Query().Where(contactlistmembershiphistory.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *ContactListMembershipHistoryClient) GetX(ctx context.Context, id string) *ContactListMembershipHistory {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *ContactListMembershipHistoryClient) Hooks() []Hook {
+	hooks := c.hooks.ContactListMembershipHistory
+	return append(hooks[:len(hooks):len(hooks)], contactlistmembershiphistory.Hooks[:]...)
+}
+
+// Interceptors returns the client interceptors.
+func (c *ContactListMembershipHistoryClient) Interceptors() []Interceptor {
+	inters := c.inters.ContactListMembershipHistory
+	return append(inters[:len(inters):len(inters)], contactlistmembershiphistory.Interceptors[:]...)
+}
+
+func (c *ContactListMembershipHistoryClient) mutate(ctx context.Context, m *ContactListMembershipHistoryMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&ContactListMembershipHistoryCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&ContactListMembershipHistoryUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&ContactListMembershipHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&ContactListMembershipHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("generated: unknown ContactListMembershipHistory mutation op: %q", m.Op())
 	}
 }
 
@@ -8308,6 +9074,25 @@ func (c *OrganizationClient) QueryContacts(o *Organization) *ContactQuery {
 	return query
 }
 
+// QueryContactLists queries the contact_lists edge of a Organization.
+func (c *OrganizationClient) QueryContactLists(o *Organization) *ContactListQuery {
+	query := (&ContactListClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := o.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, id),
+			sqlgraph.To(contactlist.Table, contactlist.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.ContactListsTable, organization.ContactListsColumn),
+		)
+		schemaConfig := o.schemaConfig
+		step.To.Schema = schemaConfig.ContactList
+		step.Edge.Schema = schemaConfig.ContactList
+		fromV = sqlgraph.Neighbors(o.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryNotes queries the notes edge of a Organization.
 func (c *OrganizationClient) QueryNotes(o *Organization) *NoteQuery {
 	query := (&NoteClient{config: c.config}).Query()
@@ -11066,32 +11851,35 @@ func (c *WebhookHistoryClient) mutate(ctx context.Context, m *WebhookHistoryMuta
 // hooks and interceptors per client, for fast access.
 type (
 	hooks struct {
-		APIToken, Contact, ContactHistory, DocumentData, DocumentDataHistory,
-		EmailVerificationToken, Entitlement, EntitlementHistory, EntitlementPlan,
-		EntitlementPlanFeature, EntitlementPlanFeatureHistory, EntitlementPlanHistory,
-		Entity, EntityHistory, EntityType, EntityTypeHistory, Event, EventHistory,
-		Feature, FeatureHistory, File, FileHistory, Group, GroupHistory,
-		GroupMembership, GroupMembershipHistory, GroupSetting, GroupSettingHistory,
-		Hush, HushHistory, Integration, IntegrationHistory, Invite, Note, NoteHistory,
-		OauthProvider, OauthProviderHistory, OhAuthTooToken, OrgMembership,
-		OrgMembershipHistory, Organization, OrganizationHistory, OrganizationSetting,
-		OrganizationSettingHistory, PasswordResetToken, PersonalAccessToken,
-		Subscriber, TFASetting, Template, TemplateHistory, User, UserHistory,
-		UserSetting, UserSettingHistory, Webauthn, Webhook, WebhookHistory []ent.Hook
+		APIToken, Contact, ContactHistory, ContactList, ContactListHistory,
+		ContactListMembership, ContactListMembershipHistory, DocumentData,
+		DocumentDataHistory, EmailVerificationToken, Entitlement, EntitlementHistory,
+		EntitlementPlan, EntitlementPlanFeature, EntitlementPlanFeatureHistory,
+		EntitlementPlanHistory, Entity, EntityHistory, EntityType, EntityTypeHistory,
+		Event, EventHistory, Feature, FeatureHistory, File, FileHistory, Group,
+		GroupHistory, GroupMembership, GroupMembershipHistory, GroupSetting,
+		GroupSettingHistory, Hush, HushHistory, Integration, IntegrationHistory,
+		Invite, Note, NoteHistory, OauthProvider, OauthProviderHistory, OhAuthTooToken,
+		OrgMembership, OrgMembershipHistory, Organization, OrganizationHistory,
+		OrganizationSetting, OrganizationSettingHistory, PasswordResetToken,
+		PersonalAccessToken, Subscriber, TFASetting, Template, TemplateHistory, User,
+		UserHistory, UserSetting, UserSettingHistory, Webauthn, Webhook,
+		WebhookHistory []ent.Hook
 	}
 	inters struct {
-		APIToken, Contact, ContactHistory, DocumentData, DocumentDataHistory,
-		EmailVerificationToken, Entitlement, EntitlementHistory, EntitlementPlan,
-		EntitlementPlanFeature, EntitlementPlanFeatureHistory, EntitlementPlanHistory,
-		Entity, EntityHistory, EntityType, EntityTypeHistory, Event, EventHistory,
-		Feature, FeatureHistory, File, FileHistory, Group, GroupHistory,
-		GroupMembership, GroupMembershipHistory, GroupSetting, GroupSettingHistory,
-		Hush, HushHistory, Integration, IntegrationHistory, Invite, Note, NoteHistory,
-		OauthProvider, OauthProviderHistory, OhAuthTooToken, OrgMembership,
-		OrgMembershipHistory, Organization, OrganizationHistory, OrganizationSetting,
-		OrganizationSettingHistory, PasswordResetToken, PersonalAccessToken,
-		Subscriber, TFASetting, Template, TemplateHistory, User, UserHistory,
-		UserSetting, UserSettingHistory, Webauthn, Webhook,
+		APIToken, Contact, ContactHistory, ContactList, ContactListHistory,
+		ContactListMembership, ContactListMembershipHistory, DocumentData,
+		DocumentDataHistory, EmailVerificationToken, Entitlement, EntitlementHistory,
+		EntitlementPlan, EntitlementPlanFeature, EntitlementPlanFeatureHistory,
+		EntitlementPlanHistory, Entity, EntityHistory, EntityType, EntityTypeHistory,
+		Event, EventHistory, Feature, FeatureHistory, File, FileHistory, Group,
+		GroupHistory, GroupMembership, GroupMembershipHistory, GroupSetting,
+		GroupSettingHistory, Hush, HushHistory, Integration, IntegrationHistory,
+		Invite, Note, NoteHistory, OauthProvider, OauthProviderHistory, OhAuthTooToken,
+		OrgMembership, OrgMembershipHistory, Organization, OrganizationHistory,
+		OrganizationSetting, OrganizationSettingHistory, PasswordResetToken,
+		PersonalAccessToken, Subscriber, TFASetting, Template, TemplateHistory, User,
+		UserHistory, UserSetting, UserSettingHistory, Webauthn, Webhook,
 		WebhookHistory []ent.Interceptor
 	}
 )

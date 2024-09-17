@@ -1,0 +1,126 @@
+
+mutation CreateBulkCSVContactList($input: Upload!) {
+  createBulkCSVContactList(input: $input) {
+    contactLists {
+      createdAt
+      createdBy
+      description
+      displayName
+      id
+      name
+      ownerID
+      tags
+      updatedAt
+      updatedBy
+      visibility
+    }
+  }
+}
+
+mutation CreateBulkContactList($input: [CreateContactListInput!]) {
+  createBulkContactList(input: $input) {
+    contactLists {
+      createdAt
+      createdBy
+      description
+      displayName
+      id
+      name
+      ownerID
+      tags
+      updatedAt
+      updatedBy
+      visibility
+    }
+  }
+}
+
+mutation CreateContactList($input: CreateContactListInput!) {
+  createContactList(input: $input) {
+    contactList {
+      createdAt
+      createdBy
+      description
+      displayName
+      id
+      name
+      ownerID
+      tags
+      updatedAt
+      updatedBy
+      visibility
+    }
+  }
+}
+
+query GetAllContactLists {
+  contactLists {
+    edges {
+      node {
+        createdAt
+        createdBy
+        description
+        displayName
+        id
+        name
+        ownerID
+        tags
+        updatedAt
+        updatedBy
+        visibility
+      }
+    }
+  }
+}
+query GetContactListByID($contactListId: ID!) {
+  contactList(id: $contactListId) {
+    createdAt
+    createdBy
+    description
+    displayName
+    id
+    name
+    ownerID
+    tags
+    updatedAt
+    updatedBy
+    visibility
+  }
+}
+
+query GetContactLists($where: ContactListWhereInput) {
+  contactLists(where: $where) {
+    edges {
+      node {
+        createdAt
+        createdBy
+        description
+        displayName
+        id
+        name
+        ownerID
+        tags
+        updatedAt
+        updatedBy
+        visibility
+      }
+    }
+  }
+}
+mutation UpdateContactList($updateContactListId: ID!, $input: UpdateContactListInput!) {
+  updateContactList(id: $updateContactListId, input: $input) {
+    contactList {
+      createdAt
+      createdBy
+      description
+      displayName
+      id
+      name
+      ownerID
+      tags
+      updatedAt
+      updatedBy
+      visibility
+    }
+  }
+}

@@ -1162,6 +1162,35 @@ func HasOwnerWith(preds ...predicate.Organization) predicate.Contact {
 	})
 }
 
+// HasContactLists applies the HasEdge predicate on the "contact_lists" edge.
+func HasContactLists() predicate.Contact {
+	return predicate.Contact(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, ContactListsTable, ContactListsPrimaryKey...),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.ContactList
+		step.Edge.Schema = schemaConfig.ContactListMembership
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasContactListsWith applies the HasEdge predicate on the "contact_lists" edge with a given conditions (other predicates).
+func HasContactListsWith(preds ...predicate.ContactList) predicate.Contact {
+	return predicate.Contact(func(s *sql.Selector) {
+		step := newContactListsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.ContactList
+		step.Edge.Schema = schemaConfig.ContactListMembership
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasEntities applies the HasEdge predicate on the "entities" edge.
 func HasEntities() predicate.Contact {
 	return predicate.Contact(func(s *sql.Selector) {
@@ -1183,6 +1212,35 @@ func HasEntitiesWith(preds ...predicate.Entity) predicate.Contact {
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Entity
 		step.Edge.Schema = schemaConfig.EntityContacts
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasContactListMemberships applies the HasEdge predicate on the "contact_list_memberships" edge.
+func HasContactListMemberships() predicate.Contact {
+	return predicate.Contact(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, true, ContactListMembershipsTable, ContactListMembershipsColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.ContactListMembership
+		step.Edge.Schema = schemaConfig.ContactListMembership
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasContactListMembershipsWith applies the HasEdge predicate on the "contact_list_memberships" edge with a given conditions (other predicates).
+func HasContactListMembershipsWith(preds ...predicate.ContactListMembership) predicate.Contact {
+	return predicate.Contact(func(s *sql.Selector) {
+		step := newContactListMembershipsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.ContactListMembership
+		step.Edge.Schema = schemaConfig.ContactListMembership
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

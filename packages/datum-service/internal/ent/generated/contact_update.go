@@ -13,6 +13,8 @@ import (
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/contact"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/contactlist"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/contactlistmembership"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/entity"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/organization"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/predicate"
@@ -277,6 +279,21 @@ func (cu *ContactUpdate) SetOwner(o *Organization) *ContactUpdate {
 	return cu.SetOwnerID(o.ID)
 }
 
+// AddContactListIDs adds the "contact_lists" edge to the ContactList entity by IDs.
+func (cu *ContactUpdate) AddContactListIDs(ids ...string) *ContactUpdate {
+	cu.mutation.AddContactListIDs(ids...)
+	return cu
+}
+
+// AddContactLists adds the "contact_lists" edges to the ContactList entity.
+func (cu *ContactUpdate) AddContactLists(c ...*ContactList) *ContactUpdate {
+	ids := make([]string, len(c))
+	for i := range c {
+		ids[i] = c[i].ID
+	}
+	return cu.AddContactListIDs(ids...)
+}
+
 // AddEntityIDs adds the "entities" edge to the Entity entity by IDs.
 func (cu *ContactUpdate) AddEntityIDs(ids ...string) *ContactUpdate {
 	cu.mutation.AddEntityIDs(ids...)
@@ -292,6 +309,21 @@ func (cu *ContactUpdate) AddEntities(e ...*Entity) *ContactUpdate {
 	return cu.AddEntityIDs(ids...)
 }
 
+// AddContactListMembershipIDs adds the "contact_list_memberships" edge to the ContactListMembership entity by IDs.
+func (cu *ContactUpdate) AddContactListMembershipIDs(ids ...string) *ContactUpdate {
+	cu.mutation.AddContactListMembershipIDs(ids...)
+	return cu
+}
+
+// AddContactListMemberships adds the "contact_list_memberships" edges to the ContactListMembership entity.
+func (cu *ContactUpdate) AddContactListMemberships(c ...*ContactListMembership) *ContactUpdate {
+	ids := make([]string, len(c))
+	for i := range c {
+		ids[i] = c[i].ID
+	}
+	return cu.AddContactListMembershipIDs(ids...)
+}
+
 // Mutation returns the ContactMutation object of the builder.
 func (cu *ContactUpdate) Mutation() *ContactMutation {
 	return cu.mutation
@@ -301,6 +333,27 @@ func (cu *ContactUpdate) Mutation() *ContactMutation {
 func (cu *ContactUpdate) ClearOwner() *ContactUpdate {
 	cu.mutation.ClearOwner()
 	return cu
+}
+
+// ClearContactLists clears all "contact_lists" edges to the ContactList entity.
+func (cu *ContactUpdate) ClearContactLists() *ContactUpdate {
+	cu.mutation.ClearContactLists()
+	return cu
+}
+
+// RemoveContactListIDs removes the "contact_lists" edge to ContactList entities by IDs.
+func (cu *ContactUpdate) RemoveContactListIDs(ids ...string) *ContactUpdate {
+	cu.mutation.RemoveContactListIDs(ids...)
+	return cu
+}
+
+// RemoveContactLists removes "contact_lists" edges to ContactList entities.
+func (cu *ContactUpdate) RemoveContactLists(c ...*ContactList) *ContactUpdate {
+	ids := make([]string, len(c))
+	for i := range c {
+		ids[i] = c[i].ID
+	}
+	return cu.RemoveContactListIDs(ids...)
 }
 
 // ClearEntities clears all "entities" edges to the Entity entity.
@@ -322,6 +375,27 @@ func (cu *ContactUpdate) RemoveEntities(e ...*Entity) *ContactUpdate {
 		ids[i] = e[i].ID
 	}
 	return cu.RemoveEntityIDs(ids...)
+}
+
+// ClearContactListMemberships clears all "contact_list_memberships" edges to the ContactListMembership entity.
+func (cu *ContactUpdate) ClearContactListMemberships() *ContactUpdate {
+	cu.mutation.ClearContactListMemberships()
+	return cu
+}
+
+// RemoveContactListMembershipIDs removes the "contact_list_memberships" edge to ContactListMembership entities by IDs.
+func (cu *ContactUpdate) RemoveContactListMembershipIDs(ids ...string) *ContactUpdate {
+	cu.mutation.RemoveContactListMembershipIDs(ids...)
+	return cu
+}
+
+// RemoveContactListMemberships removes "contact_list_memberships" edges to ContactListMembership entities.
+func (cu *ContactUpdate) RemoveContactListMemberships(c ...*ContactListMembership) *ContactUpdate {
+	ids := make([]string, len(c))
+	for i := range c {
+		ids[i] = c[i].ID
+	}
+	return cu.RemoveContactListMembershipIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -516,6 +590,75 @@ func (cu *ContactUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if cu.mutation.ContactListsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   contact.ContactListsTable,
+			Columns: contact.ContactListsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(contactlist.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = cu.schemaConfig.ContactListMembership
+		createE := &ContactListMembershipCreate{config: cu.config, mutation: newContactListMembershipMutation(cu.config, OpCreate)}
+		_ = createE.defaults()
+		_, specE := createE.createSpec()
+		edge.Target.Fields = specE.Fields
+		if specE.ID.Value != nil {
+			edge.Target.Fields = append(edge.Target.Fields, specE.ID)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := cu.mutation.RemovedContactListsIDs(); len(nodes) > 0 && !cu.mutation.ContactListsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   contact.ContactListsTable,
+			Columns: contact.ContactListsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(contactlist.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = cu.schemaConfig.ContactListMembership
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		createE := &ContactListMembershipCreate{config: cu.config, mutation: newContactListMembershipMutation(cu.config, OpCreate)}
+		_ = createE.defaults()
+		_, specE := createE.createSpec()
+		edge.Target.Fields = specE.Fields
+		if specE.ID.Value != nil {
+			edge.Target.Fields = append(edge.Target.Fields, specE.ID)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := cu.mutation.ContactListsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   contact.ContactListsTable,
+			Columns: contact.ContactListsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(contactlist.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = cu.schemaConfig.ContactListMembership
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		createE := &ContactListMembershipCreate{config: cu.config, mutation: newContactListMembershipMutation(cu.config, OpCreate)}
+		_ = createE.defaults()
+		_, specE := createE.createSpec()
+		edge.Target.Fields = specE.Fields
+		if specE.ID.Value != nil {
+			edge.Target.Fields = append(edge.Target.Fields, specE.ID)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if cu.mutation.EntitiesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -559,6 +702,54 @@ func (cu *ContactUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			},
 		}
 		edge.Schema = cu.schemaConfig.EntityContacts
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if cu.mutation.ContactListMembershipsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   contact.ContactListMembershipsTable,
+			Columns: []string{contact.ContactListMembershipsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(contactlistmembership.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = cu.schemaConfig.ContactListMembership
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := cu.mutation.RemovedContactListMembershipsIDs(); len(nodes) > 0 && !cu.mutation.ContactListMembershipsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   contact.ContactListMembershipsTable,
+			Columns: []string{contact.ContactListMembershipsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(contactlistmembership.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = cu.schemaConfig.ContactListMembership
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := cu.mutation.ContactListMembershipsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   contact.ContactListMembershipsTable,
+			Columns: []string{contact.ContactListMembershipsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(contactlistmembership.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = cu.schemaConfig.ContactListMembership
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -829,6 +1020,21 @@ func (cuo *ContactUpdateOne) SetOwner(o *Organization) *ContactUpdateOne {
 	return cuo.SetOwnerID(o.ID)
 }
 
+// AddContactListIDs adds the "contact_lists" edge to the ContactList entity by IDs.
+func (cuo *ContactUpdateOne) AddContactListIDs(ids ...string) *ContactUpdateOne {
+	cuo.mutation.AddContactListIDs(ids...)
+	return cuo
+}
+
+// AddContactLists adds the "contact_lists" edges to the ContactList entity.
+func (cuo *ContactUpdateOne) AddContactLists(c ...*ContactList) *ContactUpdateOne {
+	ids := make([]string, len(c))
+	for i := range c {
+		ids[i] = c[i].ID
+	}
+	return cuo.AddContactListIDs(ids...)
+}
+
 // AddEntityIDs adds the "entities" edge to the Entity entity by IDs.
 func (cuo *ContactUpdateOne) AddEntityIDs(ids ...string) *ContactUpdateOne {
 	cuo.mutation.AddEntityIDs(ids...)
@@ -844,6 +1050,21 @@ func (cuo *ContactUpdateOne) AddEntities(e ...*Entity) *ContactUpdateOne {
 	return cuo.AddEntityIDs(ids...)
 }
 
+// AddContactListMembershipIDs adds the "contact_list_memberships" edge to the ContactListMembership entity by IDs.
+func (cuo *ContactUpdateOne) AddContactListMembershipIDs(ids ...string) *ContactUpdateOne {
+	cuo.mutation.AddContactListMembershipIDs(ids...)
+	return cuo
+}
+
+// AddContactListMemberships adds the "contact_list_memberships" edges to the ContactListMembership entity.
+func (cuo *ContactUpdateOne) AddContactListMemberships(c ...*ContactListMembership) *ContactUpdateOne {
+	ids := make([]string, len(c))
+	for i := range c {
+		ids[i] = c[i].ID
+	}
+	return cuo.AddContactListMembershipIDs(ids...)
+}
+
 // Mutation returns the ContactMutation object of the builder.
 func (cuo *ContactUpdateOne) Mutation() *ContactMutation {
 	return cuo.mutation
@@ -853,6 +1074,27 @@ func (cuo *ContactUpdateOne) Mutation() *ContactMutation {
 func (cuo *ContactUpdateOne) ClearOwner() *ContactUpdateOne {
 	cuo.mutation.ClearOwner()
 	return cuo
+}
+
+// ClearContactLists clears all "contact_lists" edges to the ContactList entity.
+func (cuo *ContactUpdateOne) ClearContactLists() *ContactUpdateOne {
+	cuo.mutation.ClearContactLists()
+	return cuo
+}
+
+// RemoveContactListIDs removes the "contact_lists" edge to ContactList entities by IDs.
+func (cuo *ContactUpdateOne) RemoveContactListIDs(ids ...string) *ContactUpdateOne {
+	cuo.mutation.RemoveContactListIDs(ids...)
+	return cuo
+}
+
+// RemoveContactLists removes "contact_lists" edges to ContactList entities.
+func (cuo *ContactUpdateOne) RemoveContactLists(c ...*ContactList) *ContactUpdateOne {
+	ids := make([]string, len(c))
+	for i := range c {
+		ids[i] = c[i].ID
+	}
+	return cuo.RemoveContactListIDs(ids...)
 }
 
 // ClearEntities clears all "entities" edges to the Entity entity.
@@ -874,6 +1116,27 @@ func (cuo *ContactUpdateOne) RemoveEntities(e ...*Entity) *ContactUpdateOne {
 		ids[i] = e[i].ID
 	}
 	return cuo.RemoveEntityIDs(ids...)
+}
+
+// ClearContactListMemberships clears all "contact_list_memberships" edges to the ContactListMembership entity.
+func (cuo *ContactUpdateOne) ClearContactListMemberships() *ContactUpdateOne {
+	cuo.mutation.ClearContactListMemberships()
+	return cuo
+}
+
+// RemoveContactListMembershipIDs removes the "contact_list_memberships" edge to ContactListMembership entities by IDs.
+func (cuo *ContactUpdateOne) RemoveContactListMembershipIDs(ids ...string) *ContactUpdateOne {
+	cuo.mutation.RemoveContactListMembershipIDs(ids...)
+	return cuo
+}
+
+// RemoveContactListMemberships removes "contact_list_memberships" edges to ContactListMembership entities.
+func (cuo *ContactUpdateOne) RemoveContactListMemberships(c ...*ContactListMembership) *ContactUpdateOne {
+	ids := make([]string, len(c))
+	for i := range c {
+		ids[i] = c[i].ID
+	}
+	return cuo.RemoveContactListMembershipIDs(ids...)
 }
 
 // Where appends a list predicates to the ContactUpdate builder.
@@ -1098,6 +1361,75 @@ func (cuo *ContactUpdateOne) sqlSave(ctx context.Context) (_node *Contact, err e
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if cuo.mutation.ContactListsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   contact.ContactListsTable,
+			Columns: contact.ContactListsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(contactlist.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = cuo.schemaConfig.ContactListMembership
+		createE := &ContactListMembershipCreate{config: cuo.config, mutation: newContactListMembershipMutation(cuo.config, OpCreate)}
+		_ = createE.defaults()
+		_, specE := createE.createSpec()
+		edge.Target.Fields = specE.Fields
+		if specE.ID.Value != nil {
+			edge.Target.Fields = append(edge.Target.Fields, specE.ID)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := cuo.mutation.RemovedContactListsIDs(); len(nodes) > 0 && !cuo.mutation.ContactListsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   contact.ContactListsTable,
+			Columns: contact.ContactListsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(contactlist.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = cuo.schemaConfig.ContactListMembership
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		createE := &ContactListMembershipCreate{config: cuo.config, mutation: newContactListMembershipMutation(cuo.config, OpCreate)}
+		_ = createE.defaults()
+		_, specE := createE.createSpec()
+		edge.Target.Fields = specE.Fields
+		if specE.ID.Value != nil {
+			edge.Target.Fields = append(edge.Target.Fields, specE.ID)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := cuo.mutation.ContactListsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   contact.ContactListsTable,
+			Columns: contact.ContactListsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(contactlist.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = cuo.schemaConfig.ContactListMembership
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		createE := &ContactListMembershipCreate{config: cuo.config, mutation: newContactListMembershipMutation(cuo.config, OpCreate)}
+		_ = createE.defaults()
+		_, specE := createE.createSpec()
+		edge.Target.Fields = specE.Fields
+		if specE.ID.Value != nil {
+			edge.Target.Fields = append(edge.Target.Fields, specE.ID)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if cuo.mutation.EntitiesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -1141,6 +1473,54 @@ func (cuo *ContactUpdateOne) sqlSave(ctx context.Context) (_node *Contact, err e
 			},
 		}
 		edge.Schema = cuo.schemaConfig.EntityContacts
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if cuo.mutation.ContactListMembershipsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   contact.ContactListMembershipsTable,
+			Columns: []string{contact.ContactListMembershipsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(contactlistmembership.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = cuo.schemaConfig.ContactListMembership
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := cuo.mutation.RemovedContactListMembershipsIDs(); len(nodes) > 0 && !cuo.mutation.ContactListMembershipsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   contact.ContactListMembershipsTable,
+			Columns: []string{contact.ContactListMembershipsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(contactlistmembership.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = cuo.schemaConfig.ContactListMembership
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := cuo.mutation.ContactListMembershipsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   contact.ContactListMembershipsTable,
+			Columns: []string{contact.ContactListMembershipsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(contactlistmembership.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = cuo.schemaConfig.ContactListMembership
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
