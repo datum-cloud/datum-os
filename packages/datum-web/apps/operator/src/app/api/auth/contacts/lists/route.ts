@@ -15,7 +15,7 @@ export async function GET() {
     )
   }
 
-  const fData = await fetch(SERVICE_APP_ROUTES.lists, {
+  const fData = await fetch(SERVICE_APP_ROUTES.contactLists, {
     method: 'GET',
     headers: {
       'content-type': 'application/json',

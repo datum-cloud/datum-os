@@ -76,7 +76,25 @@ export const SearchFormSchema = z.object({
   query: z.string().describe('The search query').optional(),
 })
 
+export const ListSchema = z.object({
+  id: z.string().describe('List ID').optional(),
+  name: z
+    .string()
+    .min(2, 'Please enter a valid name')
+    .describe('Name of the list'),
+  visibility: z.enum(['public', 'private']).describe('Visibility of the list'),
+  description: z
+    .string()
+    .min(2, 'Please enter a valid description')
+    .describe('Description of the list')
+    .optional(),
+  members: z
+    .array(z.string().describe('List member ID'))
+    .describe('Array of the list members'),
+})
+
 export type ContactInput = z.infer<typeof ContactSchema>
 export type ContactFilterInput = z.infer<typeof ContactFilterFormSchema>
 export type ContactFormInput = z.infer<typeof ContactFormSchema>
 export type SearchFormInput = z.infer<typeof SearchFormSchema>
+export type ListInput = z.infer<typeof ListSchema>

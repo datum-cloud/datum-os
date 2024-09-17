@@ -1,11 +1,15 @@
 import type { QueryKey } from '@tanstack/react-query'
 
 import { OPERATOR_API_ROUTES } from '@repo/constants'
-import { camelize } from '@repo/common/keys'
+import { camelize, decamelize } from '@repo/common/keys'
 import { Datum } from '@repo/types'
 
+import { getPathWithParams } from '@repo/common/routes'
+import { queryClient } from '@/query/client'
+import type { ListInput } from '@/utils/schemas'
+
 export async function getLists(): Promise<Datum.List[]> {
-  const response = await fetch(OPERATOR_API_ROUTES.contacts)
+  const response = await fetch(OPERATOR_API_ROUTES.contactLists)
 
   if (!response.ok) {
     const result = await response.json()
@@ -15,16 +19,75 @@ export async function getLists(): Promise<Datum.List[]> {
   }
 
   const result = await response.json()
-  const contacts = result.contacts.map((contact: Record<string, any>) => {
-    const formattedResponse = camelize<Datum.Contact>(contact)
+  const formattedResult = camelize(result)
 
-    return {
-      ...formattedResponse,
-      lists: ['Admins', 'Developers', 'Newsletter'], // TODO: Make this real data...
-    }
+  const lists = formattedResult.contactLists.map((list: any) => ({
+    ...list,
+    members: [],
+  })) as Datum.List[]
+
+  return lists
+}
+
+export async function getList(id: Datum.ListId): Promise<Datum.List> {
+  const response = await fetch(
+    getPathWithParams(OPERATOR_API_ROUTES.contactList, { id }),
+  )
+
+  if (!response.ok) {
+    const result = await response.json()
+    const message = result?.message || 'Something went wrong'
+
+    throw new Error(message)
+  }
+
+  const result = await response.json()
+  const list = camelize<Datum.List>(result.list)
+
+  return list
+}
+
+export async function createLists(
+  organisationId: Datum.OrganisationId,
+  input: ListInput[],
+) {
+  const formattedInput = decamelize({
+    contactLists: input,
   })
 
-  return contacts
+  const response = await fetch(OPERATOR_API_ROUTES.createContactLists, {
+    method: 'POST',
+    body: JSON.stringify(formattedInput),
+  })
+
+  const result = await response.json()
+  const lists = camelize(result).contactLists as Datum.List[]
+
+  await queryClient.invalidateQueries({
+    queryKey: getListsKey(organisationId),
+  })
+
+  return lists
+}
+
+export async function removeLists(
+  id: Datum.OrganisationId,
+  input: Datum.ListId[],
+) {
+  const formattedInput = decamelize({
+    contactListIds: input,
+  })
+
+  await fetch(OPERATOR_API_ROUTES.deleteContactLists, {
+    method: 'DELETE',
+    body: JSON.stringify(formattedInput),
+  })
+
+  await queryClient.invalidateQueries({ queryKey: getListsKey(id) })
+}
+
+export function getListKey(id: Datum.ListId): QueryKey {
+  return ['list', id]
 }
 
 export function getListsKey(id: Datum.OrganisationId): QueryKey {

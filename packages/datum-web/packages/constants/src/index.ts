@@ -10,13 +10,16 @@ export const SERVICE_REST_API = process.env.API_REST_URL || ''
 export const SERVICE_APP_ROUTES = {
   contacts: `${SERVICE_REST_API}/v1/contacts`,
   contact: `${SERVICE_REST_API}/v1/contacts/[id]`,
-  lists: `${SERVICE_REST_API}/v1/lists`,
+  contactLists: `${SERVICE_REST_API}/v1/contacts/lists`,
 }
 
 export const OPERATOR_APP_ROUTES = {
   contacts: '/marketing/contacts',
   contact: '/marketing/contacts/[id]',
+  contactLists: '/marketing/contacts/lists',
+  contactList: '/marketing/contacts/lists/[id]',
 }
+
 export const OPERATOR_API_ROUTES = {
   contacts: '/api/auth/contacts',
   contact: '/api/auth/contacts/[id]',
@@ -24,7 +27,11 @@ export const OPERATOR_API_ROUTES = {
   deleteContacts: '/api/auth/contacts/delete',
   editContacts: '/api/auth/contacts/edit',
   uploadContacts: '/api/auth/contacts/upload',
-  lists: '/api/auth/lists',
+  contactLists: '/api/auth/contacts/lists',
+  createContactLists: '/api/auth/contacts/lists/create',
+  deleteContactLists: '/api/auth/contacts/lists/delete',
+  editContactLists: '/api/auth/contacts/lists/edit',
+  contactList: '/api/auth/contacts/lists/[id]',
 }
 
 export const OPERATOR_FILES = {
