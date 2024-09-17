@@ -1202,14 +1202,14 @@ func ContactsFromGeneratedContactListMembers(members []*generated.ContactListMem
 
 // ContactListMembersPostRequest is the body for a POST request to `/contacts/lists/:id/members`
 type ContactListMembersPostRequest struct {
-	ContactListID string   `json:"contact_list_id"`
-	ContactsIDs   []string `json:"contacts_ids"`
+	ContactListID string   `param:"id"`
+	ContactIDs    []string `json:"contact_ids"`
 }
 
 // ExampleContactListMembersPostRequest is an example POST request to `/contacts/lists/:id/members`
 var ExampleContactListMembersPostRequest = ContactListMembersPostRequest{
 	ContactListID: "01J7PBEMJAZ08HKZF71302ZD1X",
-	ContactsIDs: []string{
+	ContactIDs: []string{
 		"01J6X14S34TP3H6Z4S3AVHJSMY",
 		"01J6X14S355M2R0GP5WFX6QX91",
 	},
@@ -1229,14 +1229,14 @@ var ExampleContactListMembersPostSuccessResponse = ContactListMembersPostRespons
 
 // ContactListMembersDeleteRequest is the body for a DELETE request to `/contacts/lists/:id/members`
 type ContactListMembersDeleteRequest struct {
-	ContactListID string   `json:"contact_list_id"`
-	ContactsIDs   []string `json:"contacts_ids"`
+	ContactListID string   `param:"id"`
+	ContactIDs    []string `json:"contact_ids"`
 }
 
 // ExampleContactListMembersDeleteRequest is an example DELETE request to `/contacts/lists/:id/members`
 var ExampleContactListMembersDeleteRequest = ContactListMembersDeleteRequest{
 	ContactListID: "01J7PBEMJAZ08HKZF71302ZD1X",
-	ContactsIDs: []string{
+	ContactIDs: []string{
 		"01J6X14S34TP3H6Z4S3AVHJSMY",
 		"01J6X14S355M2R0GP5WFX6QX91",
 	},

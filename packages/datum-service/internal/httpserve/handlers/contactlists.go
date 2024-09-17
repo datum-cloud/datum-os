@@ -279,10 +279,10 @@ func (h *Handler) ContactListsMembersPost(ctx echo.Context) error {
 	contactList, err := transaction.FromContext(ctx.Request().Context()).
 		ContactListMembership.
 		MapCreateBulk(
-			contactListsMembersPostReq.ContactsIDs,
+			contactListsMembersPostReq.ContactIDs,
 			func(builder *generated.ContactListMembershipCreate, i int) {
 				builder.SetContactListID(contactListsMembersPostReq.ContactListID).
-					SetContactID(contactListsMembersPostReq.ContactsIDs[i])
+					SetContactID(contactListsMembersPostReq.ContactIDs[i])
 			}).
 		Save(ctx.Request().Context())
 	if err != nil {
@@ -325,7 +325,12 @@ func (h *Handler) ContactListsMembersDelete(ctx echo.Context) error {
 
 	affected, err := transaction.FromContext(ctx.Request().Context()).
 		ContactListMembership.Delete().
-		Where(contactlistmembership.ContactListID(contactListsMembersDeleteReq.ContactListID)).
+		Where(
+			contactlistmembership.And(
+				contactlistmembership.ContactListID(contactListsMembersDeleteReq.ContactListID),
+				contactlistmembership.ContactIDIn(contactListsMembersDeleteReq.ContactIDs...),
+			),
+		).
 		Exec(ctx.Request().Context())
 	if err != nil {
 		return h.InternalServerError(ctx, err)
