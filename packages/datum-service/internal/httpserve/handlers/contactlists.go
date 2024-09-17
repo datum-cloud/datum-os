@@ -153,6 +153,8 @@ func (h *Handler) ContactListsPut(ctx echo.Context) error {
 		return h.InternalServerError(ctx, err)
 	}
 
+	h.Logger.Debugf("Updated ContactList, %s", contactList)
+
 	return h.Success(ctx, models.ContactListsPutResponse{
 		Reply:       rout.Reply{Success: true},
 		ContactList: models.ContactListFromGeneratedContactList(contactList),
@@ -169,9 +171,9 @@ func (h *Handler) BindContactListsPut() *openapi3.Operation {
 		},
 	}
 
-	// h.AddRequestBody("ContactListsPutRequest", models.ExampleContactListsPutRequest, contactListsPut)
+	h.AddRequestBody("ContactListsPutRequest", models.ExampleContactListsPutRequest, contactListsPut)
 
-	// h.AddResponse("ContactsPutResponse", "success", models.ExampleContactListsPutSuccessResponse, contactListsPut, http.StatusOK)
+	h.AddResponse("ContactsPutResponse", "success", models.ExampleContactListsPutSuccessResponse, contactListsPut, http.StatusOK)
 	contactListsPut.AddResponse(http.StatusBadRequest, badRequest())
 	contactListsPut.AddResponse(http.StatusInternalServerError, internalServerError())
 	contactListsPut.AddResponse(http.StatusUnauthorized, unauthorized())
@@ -239,6 +241,8 @@ func (h *Handler) ContactListsMembersGet(ctx echo.Context) error {
 		return h.InternalServerError(ctx, err)
 	}
 
+	h.Logger.Debugf("ContactListMemberships, %s", contactListMembers)
+
 	contactListMembersGetRes := models.ContactListMembersGetResponse{
 		Reply:    rout.Reply{Success: true},
 		Count:    len(contactListMembers),
@@ -285,6 +289,8 @@ func (h *Handler) ContactListsMembersPost(ctx echo.Context) error {
 		return h.InternalServerError(ctx, err)
 	}
 
+	h.Logger.Debugf("Created %d ContactListMemberships, %s", len(contactList), contactListsMembersPostReq)
+
 	return h.Success(ctx, models.ContactListMembersPostResponse{
 		Reply:         rout.Reply{Success: true},
 		CountAffected: len(contactList),
@@ -325,6 +331,8 @@ func (h *Handler) ContactListsMembersDelete(ctx echo.Context) error {
 		return h.InternalServerError(ctx, err)
 	}
 
+	h.Logger.Debugf("Deleted %d ContactListMemberships, %s", affected, contactListsMembersDeleteReq)
+
 	return h.Success(ctx, models.ContactListMembersDeleteResponse{
 		Reply:         rout.Reply{Success: true},
 		CountAffected: affected,
@@ -349,4 +357,31 @@ func (h *Handler) BindContactListsMembersDelete() *openapi3.Operation {
 	contactListsMembersDelete.AddResponse(http.StatusUnauthorized, unauthorized())
 
 	return contactListsMembersDelete
+}
+
+func (h *Handler) ContactListsMembersDeleteOne(ctx echo.Context) error {
+	contactListsMembersDeleteOneReq := models.ContactListMembersDeleteOneRequest{}
+	if err := ctx.Bind(&contactListsMembersDeleteOneReq); err != nil {
+		return h.BadRequest(ctx, err)
+	}
+
+	affected, err := transaction.FromContext(ctx.Request().Context()).
+		ContactListMembership.Delete().
+		Where(
+			contactlistmembership.And(
+				contactlistmembership.ContactListID(contactListsMembersDeleteOneReq.ContactListID),
+				contactlistmembership.ContactID(contactListsMembersDeleteOneReq.ContactID),
+			),
+		).
+		Exec(ctx.Request().Context())
+	if err != nil {
+		return h.InternalServerError(ctx, err)
+	}
+
+	h.Logger.Debugf("Deleted %d ContactListMemberships, %s", affected, contactListsMembersDeleteOneReq)
+
+	return h.Success(ctx, models.ContactListMembersDeleteOneResponse{
+		Reply:         rout.Reply{Success: true},
+		CountAffected: affected,
+	})
 }

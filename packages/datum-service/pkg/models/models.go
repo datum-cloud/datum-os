@@ -1253,3 +1253,27 @@ var ExampleContactListMembersDeleteSuccessResponse = ContactListMembersDeleteRes
 	Reply:         rout.Reply{Success: true},
 	CountAffected: 2,
 }
+
+// ContactListMembersDeleteOneRequest is the body for a DELETE request to `/contacts/lists/:id/members/:contact_id`
+type ContactListMembersDeleteOneRequest struct {
+	ContactListID string `param:"id"`
+	ContactID     string `param:"contact_id"`
+}
+
+// ExampleContactListMembersDeleteOneRequest is an example DELETE request to `/contacts/lists/:id/members/:contact_id`
+var ExampleContactListMembersDeleteOneRequest = ContactListMembersDeleteOneRequest{
+	ContactListID: "01J7PBEMJAZ08HKZF71302ZD1X",
+	ContactID:     "01J6X14S34TP3H6Z4S3AVHJSMY",
+}
+
+// ContactListMembersDeleteOneResponse is the body for a DELETE request response from `/contacts/lists/:id/members/:contact_id`
+type ContactListMembersDeleteOneResponse struct {
+	rout.Reply
+	CountAffected int `json:"count"`
+}
+
+// ExampleContactListMembersDeleteOneSuccessResponse is an example DELETE request response from `/contacts/lists/:id/members/:contact_id`
+var ExampleContactListMembersDeleteOneSuccessResponse = ContactListMembersDeleteOneResponse{
+	Reply:         rout.Reply{Success: true},
+	CountAffected: 1,
+}
