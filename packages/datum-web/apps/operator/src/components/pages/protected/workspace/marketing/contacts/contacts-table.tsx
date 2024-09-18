@@ -242,7 +242,7 @@ export const CONTACT_COLUMNS: ColumnDef<Datum.Contact>[] = [
   {
     id: 'dropdown',
     accessorKey: 'id',
-    size: 80,
+    size: 60,
     enableGlobalFilter: false,
     enableSorting: false,
     header: '',
