@@ -3,12 +3,12 @@ import { tv } from 'tailwind-variants'
 export const pageStyles = tv({
   slots: {
     wrapper: 'flex gap-[26px] flex-col',
-    link: 'flex gap-1 items-center text-sunglow-900 text-button-l',
+    link: 'flex gap-1 items-center text-button-l text-sunglow-900',
     listHeader: 'flex items-end justify-between',
     listCard: 'flex gap-7 justify-start items-center',
     listImage:
       'h-[83px] w-[83px] flex items-center justify-center shrink-0 bg-winter-sky-800 rounded-[4px]',
-    listText: 'flex flex-col gap-0 justify-start items-start',
+    listText: 'flex flex-col gap-3 justify-start items-start',
     listActions: 'flex justify-start items-stretch gap-4',
     enrichedData: 'grid grid-cols-2 rounded-lg border border-blackberry-200',
     enrichedDataCell:

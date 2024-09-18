@@ -137,7 +137,6 @@ const ContactsControls = ({
                 </AccordionTrigger>
                 <AccordionContent className={accordionContentOuter()}>
                   <div className={accordionContentInner()}>
-                    {/* TODO: Replace mock lists */}
                     {mockLists.map((list) => {
                       const id = useId()
                       const isSelected = selectedLists.includes(list)

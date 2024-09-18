@@ -18,7 +18,6 @@ import {
   Trash,
 } from 'lucide-react'
 
-import { mockLists } from '@repo/constants'
 import {
   Accordion,
   AccordionContent,
@@ -32,17 +31,19 @@ import { removeContacts } from '@/query/contacts'
 
 import { pageStyles } from './page.styles'
 import ContactFormDialog from './contacts-form-dialog'
+import { useLists } from '@/hooks/useLists'
 
 type ContactsTableDropdownProps = {
   contact: Datum.Contact
 }
 
 const ContactsTableDropdown = ({ contact }: ContactsTableDropdownProps) => {
-  const { id, lists } = contact
+  const { id, lists = [] } = contact
   const [_openEditDialog, _setOpenEditDialog] = useState(false)
   const { data: session } = useSession()
   const organizationId =
     session?.user.organization ?? ('' as Datum.OrganisationId)
+  const { data: allLists = [] } = useLists(organizationId)
   const {
     accordionContainer,
     accordionContentInner,
@@ -112,17 +113,17 @@ const ContactsTableDropdown = ({ contact }: ContactsTableDropdownProps) => {
               <AccordionContent className={accordionContentOuter()}>
                 <div className={accordionContentInner()}>
                   {/* TODO: Replace mock lists */}
-                  {mockLists.map((list) => {
-                    const isSelected = lists.includes(list)
+                  {allLists.map((list) => {
+                    const isSelected = lists.includes(list.id)
 
                     if (isSelected) {
                       const newSelectedLists = lists.filter(
-                        (selectedList) => list !== selectedList,
+                        (selectedList) => list.id !== selectedList,
                       )
 
                       return (
                         <Button
-                          key={list}
+                          key={list.id}
                           size="tag"
                           variant="tagSuccess"
                           icon={
@@ -134,21 +135,21 @@ const ContactsTableDropdown = ({ contact }: ContactsTableDropdownProps) => {
                           iconPosition="left"
                           onClick={setLists.bind(null, newSelectedLists)}
                         >
-                          {list}
+                          {list.name}
                         </Button>
                       )
                     }
 
-                    const newSelectedLists = [...lists, list]
+                    const newSelectedLists = [...lists, list.id]
 
                     return (
                       <Button
-                        key={list}
+                        key={list.id}
                         variant="tag"
                         size="tag"
                         onClick={setLists.bind(null, newSelectedLists)}
                       >
-                        {list}
+                        {list.name}
                       </Button>
                     )
                   })}

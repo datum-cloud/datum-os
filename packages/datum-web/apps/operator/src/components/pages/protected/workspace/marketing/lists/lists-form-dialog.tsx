@@ -24,7 +24,7 @@ import {
 } from '@repo/ui/form'
 import { ListInput, ListSchema } from '@/utils/schemas'
 import { Datum } from '@repo/types'
-import { createLists } from '@/query/lists'
+import { createLists, editLists } from '@/query/lists'
 
 import { formStyles } from './page.styles'
 import { useRouter } from 'next/navigation'
@@ -40,6 +40,7 @@ type ListDialogFormProps = {
 }
 
 const ListsFormDialog = ({ list, open, setOpen }: ListDialogFormProps) => {
+  const isNew = !list || !list.id
   const router = useRouter()
   const {
     form: formStyle,
@@ -47,7 +48,12 @@ const ListsFormDialog = ({ list, open, setOpen }: ListDialogFormProps) => {
     labelContainer,
     requiredText,
   } = formStyles()
-  const [{ loading, error }, create] = useAsyncFn(createLists)
+  const [{ loading: loadingCreate, error: errorCreate }, create] =
+    useAsyncFn(createLists)
+  const [{ loading: loadingEdit, error: errorEdit }, edit] =
+    useAsyncFn(editLists)
+  const loading = loadingEdit || loadingCreate
+  const error = errorEdit || errorCreate
   const { data: session } = useSession()
   const organizationId =
     session?.user.organization ?? ('' as Datum.OrganisationId)
@@ -56,10 +62,9 @@ const ListsFormDialog = ({ list, open, setOpen }: ListDialogFormProps) => {
     resolver: zodResolver(ListSchema),
     mode: 'onChange',
     defaultValues: {
-      name: '',
-      description: '',
-      visibility: 'public',
-      members: [],
+      name: list?.name || '',
+      description: list?.description || '',
+      visibility: list?.visibility || 'PUBLIC',
     },
   })
 
@@ -73,8 +78,14 @@ const ListsFormDialog = ({ list, open, setOpen }: ListDialogFormProps) => {
 
   async function onSubmit(data: ListInput) {
     let id: string | undefined
-    const lists = await create(organizationId, [data])
-    id = lists[0].id
+
+    if (isNew) {
+      const contacts = await create(organizationId, [data])
+      id = contacts[0].id
+    } else {
+      const contacts = await edit(organizationId, [data])
+      id = contacts[0].id
+    }
 
     router.push(getPathWithParams(OPERATOR_APP_ROUTES.contactList, { id }))
 
@@ -91,7 +102,7 @@ const ListsFormDialog = ({ list, open, setOpen }: ListDialogFormProps) => {
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Add a list</DialogTitle>
+          <DialogTitle>{isNew ? 'Add a list' : 'Edit list info'}</DialogTitle>
           <DialogClose onClick={handleCancel} />
         </DialogHeader>
         {loading && <Loading className="min-h-96" />}
@@ -140,7 +151,7 @@ const ListsFormDialog = ({ list, open, setOpen }: ListDialogFormProps) => {
                     full
                     className="w-2/3"
                   >
-                    Add list
+                    {isNew ? 'Add list' : 'Save'}
                   </Button>
                 </DialogClose>
                 <Button

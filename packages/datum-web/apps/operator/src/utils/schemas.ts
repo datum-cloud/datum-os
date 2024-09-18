@@ -68,7 +68,7 @@ export const ContactFilterFormSchema = z.object({
           'empty',
         ])
         .describe('Operator to use for the query'),
-    })
+    }),
   ),
 })
 
@@ -82,7 +82,7 @@ export const ListSchema = z.object({
     .string()
     .min(2, 'Please enter a valid name')
     .describe('Name of the list'),
-  visibility: z.enum(['public', 'private']).describe('Visibility of the list'),
+  visibility: z.enum(['PUBLIC', 'PRIVATE']).describe('Visibility of the list'),
   description: z
     .string()
     .min(2, 'Please enter a valid description')

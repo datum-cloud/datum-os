@@ -12,6 +12,7 @@ export const SERVICE_APP_ROUTES = {
   contact: `${SERVICE_REST_API}/v1/contacts/[id]`,
   contactLists: `${SERVICE_REST_API}/v1/contacts/lists`,
   contactList: `${SERVICE_REST_API}/v1/contacts/lists/[id]`,
+  contactListMembers: `${SERVICE_REST_API}/v1/contacts/lists/[id]/members`,
 }
 
 export const OPERATOR_APP_ROUTES = {
@@ -19,6 +20,7 @@ export const OPERATOR_APP_ROUTES = {
   contact: '/marketing/contacts/[id]',
   contactLists: '/marketing/contacts/lists',
   contactList: '/marketing/contacts/lists/[id]',
+  contactListMembers: '/marketing/contacts/lists/[id]/members',
 }
 
 export const OPERATOR_API_ROUTES = {
@@ -29,10 +31,13 @@ export const OPERATOR_API_ROUTES = {
   editContacts: '/api/auth/contacts/edit',
   uploadContacts: '/api/auth/contacts/upload',
   contactLists: '/api/auth/contacts/lists',
+  contactList: '/api/auth/contacts/lists/[id]',
   createContactLists: '/api/auth/contacts/lists/create',
   deleteContactLists: '/api/auth/contacts/lists/delete',
   editContactLists: '/api/auth/contacts/lists/edit',
-  contactList: '/api/auth/contacts/lists/[id]',
+  contactListMembers: '/api/auth/contacts/lists/[id]/members',
+  createContactListMembers: '/api/auth/contacts/lists/[id]/members/create',
+  deleteContactListMembers: '/api/auth/contacts/lists/[id]/members/delete',
 }
 
 export const OPERATOR_FILES = {
@@ -41,6 +46,8 @@ export const OPERATOR_FILES = {
     url: '/templates/datum-sample.csv',
   },
 }
+
+export const DATE_FORMAT = `MMMM d, yyyy 'at' h:mm`
 
 export const mockLists = [
   'Admin',
