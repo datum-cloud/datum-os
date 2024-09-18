@@ -23,6 +23,7 @@ export async function getLists(): Promise<Datum.List[]> {
 
   const lists = formattedResult.contactLists.map((list: any) => ({
     ...list,
+    description: list.displayName,
     members: [],
   })) as Datum.List[]
 

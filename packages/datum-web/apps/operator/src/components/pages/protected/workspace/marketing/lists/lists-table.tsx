@@ -121,6 +121,15 @@ export const LIST_COLUMNS: ColumnDef<Datum.List>[] = [
     minSize: 185,
     enableGlobalFilter: true,
     enableSorting: true,
+    cell: ({ cell, row }) => (
+      <Link
+        href={getPathWithParams(OPERATOR_APP_ROUTES.contactList, {
+          id: row.original.id,
+        })}
+      >
+        <Tag variant="dark">{cell.getValue() as string}</Tag>
+      </Link>
+    ),
     sortingFn: fuzzySort,
   },
   {
@@ -133,10 +142,12 @@ export const LIST_COLUMNS: ColumnDef<Datum.List>[] = [
         children="Description"
       />
     ),
-    minSize: 185,
     enableGlobalFilter: true,
     enableSorting: true,
     sortingFn: fuzzySort,
+    meta: {
+      minWidth: 308,
+    },
   },
   {
     id: 'visibility',
@@ -151,6 +162,13 @@ export const LIST_COLUMNS: ColumnDef<Datum.List>[] = [
     minSize: 185,
     enableGlobalFilter: true,
     enableSorting: true,
+    cell: ({ cell }) => {
+      const value = cell.getValue() as string
+
+      return (
+        <Tag variant={value === 'public' ? 'public' : 'private'}>{value}</Tag>
+      )
+    },
     sortingFn: fuzzySort,
   },
   {

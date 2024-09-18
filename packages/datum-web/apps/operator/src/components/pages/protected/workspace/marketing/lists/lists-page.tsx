@@ -24,6 +24,8 @@ const ListsPage = () => {
   const { data: lists = [], error, isLoading } = useLists(organizationId)
   const { wrapper, header } = pageStyles()
 
+  console.log('lists', lists)
+
   function handleExport() {
     // TODO:Export files
     console.log('Export Selected Files')

@@ -77,7 +77,7 @@ export namespace Datum {
     id: ListId
     name: string
     description: string
-    visibility: 'public' | 'private'
+    visibility: 'PUBLIC' | 'PRIVATE'
     createdAt: Date
     status: Status
     members: ContactId[]
