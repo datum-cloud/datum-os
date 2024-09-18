@@ -118,3 +118,7 @@ p {
 .type-smallcaps-s {
   text-transform: uppercase;
 }
+
+input[type='search'] {
+  @apply [&::-webkit-search-cancel-button]:appearance-none;
+}

@@ -60,7 +60,7 @@ const fuzzySort: SortingFn<any> = (rowA, rowB, columnId) => {
   if (rowA.columnFiltersMeta[columnId]) {
     dir = compareItems(
       rowA.columnFiltersMeta[columnId]?.itemRank!,
-      rowB.columnFiltersMeta[columnId]?.itemRank!,
+      rowB.columnFiltersMeta[columnId]?.itemRank!
     )
   }
 
@@ -242,7 +242,7 @@ export const CONTACT_COLUMNS: ColumnDef<Datum.Contact>[] = [
   {
     id: 'dropdown',
     accessorKey: 'id',
-    size: 80,
+    size: 60,
     enableGlobalFilter: false,
     enableSorting: false,
     header: '',

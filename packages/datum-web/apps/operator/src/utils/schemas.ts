@@ -68,7 +68,7 @@ export const ContactFilterFormSchema = z.object({
           'empty',
         ])
         .describe('Operator to use for the query'),
-    }),
+    })
   ),
 })
 
