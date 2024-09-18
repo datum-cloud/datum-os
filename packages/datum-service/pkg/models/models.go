@@ -739,6 +739,7 @@ func ContactsGetResponseFromGeneratedContacts(genContacts []*generated.Contact) 
 		cgr.Contacts[i].Tags = append(cgr.Contacts[i].Tags, genContact.Tags...)
 	}
 
+	cgr.Reply = rout.Created().Reply
 	return cgr
 }
 
@@ -871,7 +872,7 @@ var ExampleContactsPostRequest = ContactsPostRequest{
 
 // ExampleContactsPostSuccessResponse is an example of a POST request response body from `/contacts`
 var ExampleContactsPostSuccessResponse = ContactsPostResponse{
-	Reply: rout.Reply{Success: true},
+	Reply: rout.Created().Reply,
 	Count: 2,
 	Contacts: []Contact{
 		{
