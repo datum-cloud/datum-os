@@ -13,6 +13,7 @@ import (
 	"entgo.io/ent/entc/gen"
 	"github.com/datum-cloud/datum-os/pkg/fgax"
 	"github.com/datum-cloud/datum-os/pkg/fgax/entfga"
+	"github.com/hedwigz/entviz"
 	"go.uber.org/zap"
 	"gocloud.dev/secrets"
 
@@ -118,6 +119,7 @@ func main() {
 		),
 		entc.TemplateDir("./internal/ent/templates"),
 		entc.Extensions(
+			entviz.Extension{},
 			gqlExt,
 			historyExt,
 			entfgaExt,
