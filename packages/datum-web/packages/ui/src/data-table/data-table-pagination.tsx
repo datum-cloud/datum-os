@@ -1,10 +1,4 @@
-import React from 'react'
-import {
-  ChevronLeftIcon,
-  ChevronRightIcon,
-  DoubleArrowLeftIcon,
-  DoubleArrowRightIcon,
-} from '@radix-ui/react-icons'
+import { ChevronLeftIcon, ChevronRightIcon, Ellipsis } from 'lucide-react'
 import { Table } from '@tanstack/react-table'
 
 import { Button } from '../button/button'
@@ -15,6 +9,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '../select/select'
+import { dataTableStyles } from './data-table.styles'
 
 interface DataTablePaginationProps<TData> {
   table: Table<TData>
@@ -23,19 +18,32 @@ interface DataTablePaginationProps<TData> {
 export function DataTablePagination<TData>({
   table,
 }: DataTablePaginationProps<TData>) {
+  const {
+    footer,
+    paginationButton,
+    paginationContainer,
+    paginationEllipses,
+    paginationColumn,
+    pageSizeColumn,
+    pageSizeTrigger,
+  } = dataTableStyles()
+  const currentPage = table.getState().pagination.pageIndex
+  const nextPage = currentPage + 1
+  const prevPage = currentPage - 1
+  const lastPage = table.getPageCount() - 1
+  const firstPage = 0
+  const showEllipses = table.getPageCount() > 3
+
   return (
-    <div className="w-full flex items-center justify-between gap-4 space-x-6 lg:space-x-8">
-      <div className="flex flex-row justify-start items-stretch">
+    <div className={footer()}>
+      <div className={pageSizeColumn()}>
         <Select
           value={`${table.getState().pagination.pageSize}`}
           onValueChange={(value) => {
             table.setPageSize(Number(value))
           }}
         >
-          <SelectTrigger
-            className="h-8 !text-blackberry-400 placeholder-blackberry-400"
-            style={{ width: 186 }}
-          >
+          <SelectTrigger className={pageSizeTrigger()} style={{ width: 186 }}>
             <SelectValue
               placeholder={`Show ${table.getState().pagination.pageSize} rows`}
             />
@@ -53,44 +61,97 @@ export function DataTablePagination<TData>({
           </SelectContent>
         </Select>
       </div>
-      <div className="w-full flex items-center justify-end space-x-2">
-        <Button
-          variant="outline"
-          className="hidden h-8 w-8 p-0 lg:flex"
-          onClick={() => table.setPageIndex(0)}
-          disabled={!table.getCanPreviousPage()}
-        >
-          <span className="sr-only">Go to first page</span>
-          <DoubleArrowLeftIcon className="h-4 w-4" />
-        </Button>
-        <Button
-          variant="outline"
-          className="h-8 w-8 p-0"
-          onClick={() => table.previousPage()}
-          disabled={!table.getCanPreviousPage()}
-        >
-          <span className="sr-only">Go to previous page</span>
-          <ChevronLeftIcon className="h-4 w-4" />
-        </Button>
-        <Button
-          variant="outline"
-          className="h-8 w-8 p-0"
-          onClick={() => table.nextPage()}
-          disabled={!table.getCanNextPage()}
-        >
-          <span className="sr-only">Go to next page</span>
-          <ChevronRightIcon className="h-4 w-4" />
-        </Button>
-        <Button
-          variant="outline"
-          className="hidden h-8 w-8 p-0 lg:flex"
-          onClick={() => table.setPageIndex(table.getPageCount() - 1)}
-          disabled={!table.getCanNextPage()}
-        >
-          <span className="sr-only">Go to last page</span>
-          <DoubleArrowRightIcon className="h-4 w-4" />
-        </Button>
-      </div>
+      {lastPage > 0 && (
+        <div className={paginationColumn()}>
+          <div className={paginationContainer()}>
+            <Button
+              variant="blackberryXs"
+              size="xs"
+              className={paginationButton()}
+              onClick={() => table.previousPage()}
+              disabled={!table.getCanPreviousPage()}
+            >
+              <ChevronLeftIcon className="h-4 w-4" />
+            </Button>
+            {/* First Button */}
+            <Button
+              variant="blackberryXs"
+              size="xs"
+              className={paginationButton()}
+              onClick={() => table.setPageIndex(firstPage)}
+              disabled={currentPage === firstPage}
+            >
+              {firstPage + 1}
+            </Button>
+            {/*  Ellipsis for pages before */}
+            {showEllipses && currentPage > 2 && (
+              <div className={paginationEllipses()}>
+                <Ellipsis size={14} className="text-blackberry-400" />
+              </div>
+            )}
+            {/* Previous Button */}
+            {prevPage > 0 && (
+              <Button
+                variant="blackberryXs"
+                size="xs"
+                className={paginationButton()}
+                onClick={() => table.setPageIndex(prevPage)}
+              >
+                {prevPage + 1}
+              </Button>
+            )}
+            {/* Current Button - Placeholder only */}
+            {currentPage > 0 && currentPage < lastPage && (
+              <Button
+                variant="blackberryXs"
+                size="xs"
+                className={paginationButton()}
+                onClick={() => table.setPageIndex(currentPage)}
+                disabled
+              >
+                {currentPage + 1}
+              </Button>
+            )}
+            {/* Next Button */}
+            {nextPage < lastPage && (
+              <Button
+                variant="blackberryXs"
+                size="xs"
+                className={paginationButton()}
+                onClick={() => table.setPageIndex(nextPage)}
+              >
+                {nextPage + 1}
+              </Button>
+            )}
+            {/*  Ellipsis for pages after */}
+            {showEllipses && currentPage < lastPage - 2 && (
+              <div className={paginationEllipses()}>
+                <Ellipsis size={14} className="text-blackberry-400" />
+              </div>
+            )}
+            {lastPage > 1 && (
+              <Button
+                variant="blackberryXs"
+                size="xs"
+                className={paginationButton()}
+                onClick={() => table.setPageIndex(lastPage)}
+                disabled={currentPage === lastPage}
+              >
+                {lastPage + 1}
+              </Button>
+            )}
+            <Button
+              variant="blackberryXs"
+              size="xs"
+              className="h-8 w-8 p-0 flex"
+              onClick={() => table.nextPage()}
+              disabled={!table.getCanNextPage()}
+            >
+              <ChevronRightIcon className="h-4 w-4" />
+            </Button>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

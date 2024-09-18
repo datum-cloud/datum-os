@@ -23,6 +23,10 @@ p {
   @apply text-blackberry-800/90 dark:text-blackberry-100;
 }
 
+.link {
+  @apply hover:opacity-80 transition-opacity;
+}
+
 .type-h1 {
   @apply text-h1 tracking-h1;
 }
@@ -113,4 +117,8 @@ p {
 .type-smallcaps-m,
 .type-smallcaps-s {
   text-transform: uppercase;
+}
+
+input[type='search'] {
+  @apply [&::-webkit-search-cancel-button]:appearance-none;
 }

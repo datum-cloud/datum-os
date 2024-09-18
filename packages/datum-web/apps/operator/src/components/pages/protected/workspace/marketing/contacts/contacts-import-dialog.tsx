@@ -1,3 +1,9 @@
+import { useSession } from 'next-auth/react'
+import Link from 'next/link'
+
+import { downloadFromUrl } from '@repo/common/download'
+import { OPERATOR_FILES } from '@repo/constants'
+import { Button } from '@repo/ui/button'
 import {
   Dialog,
   DialogClose,
@@ -5,10 +11,10 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@repo/ui/dialog'
-import { Label } from '@repo/ui/label'
-import { Input } from '@repo/ui/input'
-import { Button } from '@repo/ui/button'
-import Link from 'next/link'
+import { Datum } from '@repo/types'
+
+import DragAndDrop from '@/components/shared/drag-and-drop/drag-and-drop'
+import { uploadContacts } from '@/query/contacts'
 
 type ImportContactsDialogProps = {
   open: boolean
@@ -16,9 +22,17 @@ type ImportContactsDialogProps = {
 }
 
 const ImportContactsDialog = ({ open, setOpen }: ImportContactsDialogProps) => {
-  function handleCSVDownload() {
-    // TODO: Handle CSV download
-    console.log('handleCSVDownload')
+  const { data: session } = useSession()
+  const organizationId = (session?.user.organization ??
+    '') as Datum.OrganisationId
+
+  async function handleCSVUpload(files: File[]) {
+    const formData = new FormData()
+    formData.append('file', files[0])
+
+    const contacts = await uploadContacts(organizationId, formData)
+
+    return contacts
   }
 
   function handleCancel() {
@@ -34,27 +48,28 @@ const ImportContactsDialog = ({ open, setOpen }: ImportContactsDialogProps) => {
         </DialogHeader>
         <div className="flex flex-col gap-12">
           <div className="w-full flex flex-col gap-6">
-            <div className="w-full border border-dashed border-blackberry-500 rounded-[5px] flex items-center justify-center h-[109px]">
-              Drag your CSV file in here, or{' '}
-              <Button
-                variant="blackberryXs"
-                size="xs"
-                className="underline p-1 font-normal"
-              >
-                select it manually.
-              </Button>
-            </div>
+            <DragAndDrop
+              confirmationText="Import contacts"
+              entityName="contact"
+              onConfirm={handleCSVUpload}
+            />
+
             <Button
               variant="sunglowXs"
               size="xs"
               className="underline"
-              onClick={handleCSVDownload}
+              onClick={() =>
+                downloadFromUrl(
+                  OPERATOR_FILES.contactsTemplate.name,
+                  OPERATOR_FILES.contactsTemplate.url,
+                )
+              }
             >
               Download our pre-formatted CSV
             </Button>
           </div>
           <div className="flex flex-col gap-5 border border-butter-900 bg-butter-800 rounded-lg p-9">
-            <p className="text-peat-800 leading-[23.6px]">
+            <p className="text-peat-800 leading-6">
               There are additional ways of importing contacts into Datum OS:
             </p>
             <ul className="list-disc list-inside text-peat-800 leading-[23.6px]">

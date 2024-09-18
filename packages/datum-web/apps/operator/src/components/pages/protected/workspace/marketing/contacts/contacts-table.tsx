@@ -12,21 +12,26 @@ import {
   sortingFns,
   rankItem,
   compareItems,
+  ColumnFiltersState,
 } from '@repo/ui/data-table'
-import { cn } from '@repo/ui/lib/utils'
 import { Datum } from '@repo/types'
 
 import { formatDate } from '@/utils/date'
 import { sortAlphabetically } from '@/utils/sort'
 
 import ContactsTableDropdown from './contacts-table-dropdown'
-import { tableStyles } from './table.styles'
-import { tagStyles } from './tag.styles'
+import { tableStyles } from './page.styles'
+import Link from 'next/link'
+import { getPathWithParams } from '@repo/common/routes'
+import { OPERATOR_APP_ROUTES } from '@repo/constants'
+import { Tag } from '@repo/ui/tag'
 
 type ContactsTableProps = {
   contacts: Datum.Contact[]
   globalFilter: string
+  columnFilters?: ColumnFiltersState
   setGlobalFilter(input: string): void
+  onSelectionChange(contacts: Datum.Contact[]): void
 }
 
 const { header, checkboxContainer, link } = tableStyles()
@@ -47,6 +52,8 @@ const fuzzyFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
   return itemRank.passed
 }
 
+const emptyFilter: FilterFn<any> = (row, columnId, value) => Boolean(value)
+
 const fuzzySort: SortingFn<any> = (rowA, rowB, columnId) => {
   let dir = 0
 
@@ -62,6 +69,7 @@ const fuzzySort: SortingFn<any> = (rowA, rowB, columnId) => {
 
 const filterFns = {
   fuzzy: fuzzyFilter,
+  empty: emptyFilter,
 }
 
 export const CONTACT_COLUMNS: ColumnDef<Datum.Contact>[] = [
@@ -71,6 +79,9 @@ export const CONTACT_COLUMNS: ColumnDef<Datum.Contact>[] = [
     size: 60,
     enableGlobalFilter: false,
     enableSorting: false,
+    meta: {
+      pin: 'left',
+    },
     header: ({ table }) => {
       return (
         <div className={checkboxContainer()}>
@@ -101,7 +112,6 @@ export const CONTACT_COLUMNS: ColumnDef<Datum.Contact>[] = [
   {
     id: 'email',
     accessorFn: (row) => row.email || '',
-    minSize: 225,
     enableGlobalFilter: true,
     sortingFn: fuzzySort,
     header: ({ column }) => (
@@ -111,17 +121,21 @@ export const CONTACT_COLUMNS: ColumnDef<Datum.Contact>[] = [
         children="Email"
       />
     ),
-    cell: ({ cell }) => {
+    meta: {
+      minWidth: 225,
+    },
+    cell: ({ cell, row }) => {
       const value = cell.getValue() as Datum.Email
+      const id = row.original.id
 
       return (
-        <a
-          href={`mailto:${value}`}
+        <Link
+          href={getPathWithParams(OPERATOR_APP_ROUTES.contact, { id })}
           className={link()}
           rel="noopener noreferrer"
         >
           {value}
-        </a>
+        </Link>
       )
     },
   },
@@ -135,10 +149,12 @@ export const CONTACT_COLUMNS: ColumnDef<Datum.Contact>[] = [
         children="Name"
       />
     ),
-    minSize: 185,
     enableGlobalFilter: true,
     enableSorting: true,
     sortingFn: fuzzySort,
+    meta: {
+      minWidth: 185,
+    },
   },
   // NOTE: Removing temporarily per Chris' request
   // {
@@ -166,13 +182,12 @@ export const CONTACT_COLUMNS: ColumnDef<Datum.Contact>[] = [
         children="Created At"
       />
     ),
-    size: 225,
     enableGlobalFilter: true,
     enableSorting: true,
     sortingFn: fuzzySort,
-    cell: ({ cell }) => (
-      <div className="w-full">{cell.getValue() as string}</div>
-    ),
+    meta: {
+      minWidth: 225,
+    },
   },
   {
     id: 'status',
@@ -184,20 +199,16 @@ export const CONTACT_COLUMNS: ColumnDef<Datum.Contact>[] = [
         children="Status"
       />
     ),
-    size: 120,
     enableGlobalFilter: true,
     enableSorting: true,
     cell: ({ cell }) => {
       const value = cell.getValue() as Datum.Status
       const isActive = value === 'ACTIVE'
 
-      return (
-        <span
-          className={tagStyles({ status: isActive ? 'success' : 'default' })}
-        >
-          {value}
-        </span>
-      )
+      return <Tag variant={isActive ? 'success' : 'default'}>{value}</Tag>
+    },
+    meta: {
+      minWidth: 120,
     },
   },
   {
@@ -210,7 +221,6 @@ export const CONTACT_COLUMNS: ColumnDef<Datum.Contact>[] = [
         children="Lists"
       />
     ),
-    minSize: 165,
     enableGlobalFilter: false,
     enableSorting: false,
     cell: ({ cell }) => {
@@ -220,29 +230,29 @@ export const CONTACT_COLUMNS: ColumnDef<Datum.Contact>[] = [
 
       return (
         <div className="text-nowrap">
-          <span className={cn(tagStyles({ status: 'default' }), 'mr-[9px]')}>
-            {first}
-          </span>
-          {rest.length > 0 && (
-            <span className={tagStyles({ status: 'muted' })}>
-              + {rest.length}
-            </span>
-          )}
+          <Tag className="mr-[9px]">{first}</Tag>
+          {rest.length > 0 && <Tag variant="muted">+ {rest.length}</Tag>}
         </div>
       )
+    },
+    meta: {
+      minWidth: 165,
     },
   },
   {
     id: 'dropdown',
     accessorKey: 'id',
-    minSize: 80,
+    size: 60,
     enableGlobalFilter: false,
     enableSorting: false,
     header: '',
-    cell: ({ cell }) => {
-      const id = cell.getValue() as Datum.ContactId
+    meta: {
+      pin: 'right',
+    },
+    cell: ({ row }) => {
+      const contact = row.original
 
-      return <ContactsTableDropdown id={id} />
+      return <ContactsTableDropdown contact={contact} />
     },
   },
 ]
@@ -250,7 +260,9 @@ export const CONTACT_COLUMNS: ColumnDef<Datum.Contact>[] = [
 const ContactsTable = ({
   contacts,
   globalFilter,
+  columnFilters,
   setGlobalFilter,
+  onSelectionChange,
 }: ContactsTableProps) => {
   const [filteredContacts, setFilteredContacts] =
     useState<Datum.Contact[]>(contacts)
@@ -265,12 +277,14 @@ const ContactsTable = ({
     <DataTable
       globalFilter={globalFilter}
       setGlobalFilter={setGlobalFilter}
-      globalFilterFn="fuzzy"
       filterFns={filterFns}
+      globalFilterFn="fuzzy"
+      columnFilters={columnFilters}
       columns={CONTACT_COLUMNS}
       data={filteredContacts}
       layoutFixed
       bordered
+      onSelectionChange={onSelectionChange}
       highlightHeader
       showFooter
     />

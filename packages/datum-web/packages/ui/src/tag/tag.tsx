@@ -1,17 +1,24 @@
 import { HTMLAttributes, ReactNode } from 'react'
 import { tagStyles, type TagVariants } from './tag.styles'
+import { cn } from '../../lib/utils'
 
 export interface TagProps extends TagVariants, HTMLAttributes<HTMLDivElement> {
   children: ReactNode | string
+  variant?: TagVariants['status']
 }
 
-export const Tag = ({ children, ...rest }: TagProps) => {
-  const { base } = tagStyles()
+export const Tag = ({
+  children,
+  variant = 'default',
+  className,
+  ...rest
+}: TagProps) => {
+  const styles = tagStyles({ status: variant })
 
   return (
-    <div className={base()} {...rest}>
+    <span className={cn(styles, className)} {...rest}>
       {children}
-    </div>
+    </span>
   )
 }
 

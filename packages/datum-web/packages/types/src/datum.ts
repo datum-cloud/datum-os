@@ -59,8 +59,19 @@ export namespace Datum {
     onboarding = 'ONBOARDING',
     inactive = 'INACTIVE',
     suspended = 'SUSPENDED',
-    deactivated = 'SUSPENDED',
+    deactivated = 'DEACTIVATED',
   }
+
+  export type OPERATOR =
+    | 'equals'
+    | 'doesNotEqual'
+    | 'contains'
+    | 'doesNotContain'
+    | 'greaterThan'
+    | 'greaterThanOrEqualTo'
+    | 'lessThan'
+    | 'lessThanOrEqualTo'
+    | 'empty'
 
   // TODO extend list type
   export type List = {
@@ -68,7 +79,18 @@ export namespace Datum {
     name: string
   }
 
-  export type Contact = {
+  export type ContactHistoryEvent = {
+    type: 'sent' | 'opened' | 'delivered'
+    content: string
+    location: string
+    date: Date // ISO date string
+  }
+
+  export type ContactHistory = {
+    events: ContactHistoryEvent[]
+  }
+
+  export interface Contact {
     id: ContactId
     fullName: string
     title: string
@@ -81,6 +103,15 @@ export namespace Datum {
     deletedAt?: Date
     source: string
     status: Status
-    lists: string[]
+    lists: ListId[]
+    enrichedData?: any // TODO: Type this properly
+    contactHistory?: ContactHistory // TODO: Type this properly
+  }
+
+  export interface ContactCreateInput extends Partial<Contact> {
+    email: Email
+  }
+  export interface ContactEditInput extends ContactCreateInput {
+    id: ContactId
   }
 }

@@ -1,7 +1,7 @@
 'use client'
 
 import { EyeIcon } from 'lucide-react'
-import { useState } from 'react'
+import { Fragment, useEffect, useState } from 'react'
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -16,6 +16,7 @@ import {
   FilterFn,
   SortingFn,
   sortingFns,
+  RowData,
 } from '@tanstack/react-table'
 import {
   RankingInfo,
@@ -41,6 +42,7 @@ import {
 } from '../dropdown-menu/dropdown-menu'
 import { DataTableColumnHeader } from './data-column-header'
 import { DataTablePagination } from './data-table-pagination'
+import { cn } from '../../lib/utils'
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
@@ -55,7 +57,9 @@ interface DataTableProps<TData, TValue> {
   filterFns?: Record<string, FilterFn<any>>
   globalFilterFn?: any
   globalFilter?: string
+  columnFilters?: ColumnFiltersState
   setGlobalFilter?(input: string): void
+  onSelectionChange?(selection: TData[]): void
 }
 
 declare module '@tanstack/react-table' {
@@ -65,6 +69,11 @@ declare module '@tanstack/react-table' {
   }
   interface FilterMeta {
     itemRank: RankingInfo
+  }
+
+  interface ColumnMeta<TData extends RowData, TValue> {
+    pin?: 'left' | 'right'
+    minWidth?: number
   }
 }
 
@@ -80,11 +89,14 @@ export function DataTable<TData, TValue>({
   noResultsText = 'No results',
   filterFns = {},
   globalFilterFn,
-  setGlobalFilter,
   globalFilter,
+  columnFilters: _columnFilters = [],
+  setGlobalFilter,
+  onSelectionChange,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([])
-  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
+  const [columnFilters, setColumnFilters] =
+    useState<ColumnFiltersState>(_columnFilters)
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
   const [rowSelection, setRowSelection] = useState({})
 
@@ -113,6 +125,15 @@ export function DataTable<TData, TValue>({
       size: 0,
     },
   })
+
+  useEffect(() => {
+    if (onSelectionChange) {
+      const selectedRowData = Object.keys(rowSelection)
+        .filter((id) => !!data[Number(id)]) // Filter out undefined
+        .map((id) => data[Number(id)])
+      onSelectionChange(selectedRowData as TData[])
+    }
+  }, [rowSelection])
 
   return (
     <>
@@ -163,63 +184,140 @@ export function DataTable<TData, TValue>({
       )}
       <Table layoutFixed={layoutFixed}>
         <TableHeader>
-          {table.getHeaderGroups().map((headerGroup) => (
-            <TableRow key={headerGroup.id}>
-              {headerGroup.headers.map((header, index) => {
-                const columnWidth =
-                  header.getSize() === 20 ? 'auto' : `${header.getSize()}px`
+          {table.getHeaderGroups().map((headerGroup) => {
+            const hasPinnedRightCell = headerGroup.headers.some(
+              (cell) =>
+                cell.getContext().column.columnDef.meta?.pin === 'right',
+            )
 
-                const hasBorder =
-                  bordered && headerGroup.headers.length - 1 > index
-                return (
-                  <TableHead
-                    highlightHeader={highlightHeader}
-                    bordered={hasBorder}
-                    key={header.id}
-                    style={{ width: columnWidth }}
-                  >
-                    {header.isPlaceholder
-                      ? null
-                      : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext(),
-                        )}
-                  </TableHead>
-                )
-              })}
-            </TableRow>
-          ))}
-        </TableHeader>
-        <TableBody>
-          {table.getRowModel().rows?.length ? (
-            table.getRowModel().rows.map((row) => (
-              <TableRow
-                key={row.id}
-                data-state={row.getIsSelected() && 'selected'}
-              >
-                {row.getVisibleCells().map((cell, index) => {
-                  const hasBorder =
-                    bordered && row.getVisibleCells().length - 1 > index
+            return (
+              <TableRow key={headerGroup.id}>
+                {headerGroup.headers.map((header, index) => {
                   const columnWidth =
-                    cell.column.getSize() === 20
-                      ? 'auto'
-                      : `${cell.column.getSize()}px`
+                    header.getSize() === 20 ? 'auto' : `${header.getSize()}px`
+                  const minWidth =
+                    header.getContext().column.columnDef.meta?.minWidth
+
+                  const hasBorder =
+                    bordered && headerGroup.headers.length - 1 > index
+                  const pinLeft =
+                    header.getContext().column.columnDef.meta?.pin === 'left'
+                  const pinRight =
+                    header.getContext().column.columnDef.meta?.pin === 'right'
+                  const secondLastCell =
+                    index === headerGroup.headers.length - 2
 
                   return (
-                    <TableCell
-                      bordered={hasBorder}
-                      key={cell.id}
-                      style={{ width: columnWidth }}
-                    >
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext(),
+                    <Fragment key={header.id}>
+                      {pinRight && (
+                        <th
+                          className="w-[1px] p-0 bg-blackberry-200 sticky z-20"
+                          style={{ right: columnWidth }}
+                        />
                       )}
-                    </TableCell>
+                      <TableHead
+                        highlightHeader={highlightHeader}
+                        bordered={hasBorder}
+                        style={{ width: minWidth || columnWidth }}
+                        className={cn(
+                          minWidth && 'xl:!w-auto',
+                          pinLeft && 'sticky z-20 left-0 border-r-0',
+                          pinRight && 'sticky z-20 right-0',
+                          hasPinnedRightCell && secondLastCell && 'border-r-0',
+                        )}
+                      >
+                        {header.isPlaceholder
+                          ? null
+                          : flexRender(
+                              header.column.columnDef.header,
+                              header.getContext(),
+                            )}
+                      </TableHead>
+                      {pinLeft && (
+                        <th
+                          className="w-[1px] p-0 bg-blackberry-200 sticky z-20"
+                          style={{ left: columnWidth }}
+                        />
+                      )}
+                    </Fragment>
                   )
                 })}
               </TableRow>
-            ))
+            )
+          })}
+        </TableHeader>
+        <TableBody>
+          {table.getRowModel().rows?.length ? (
+            table.getRowModel().rows.map((row) => {
+              const hasPinnedRightCell = row
+                .getVisibleCells()
+                .some(
+                  (cell) =>
+                    cell.getContext().column.columnDef.meta?.pin === 'right',
+                )
+
+              return (
+                <TableRow
+                  key={row.id}
+                  className="group"
+                  data-state={row.getIsSelected() && 'selected'}
+                >
+                  {row.getVisibleCells().map((cell, index) => {
+                    const hasBorder =
+                      bordered && row.getVisibleCells().length - 1 > index
+                    const pinLeft =
+                      cell.getContext().column.columnDef.meta?.pin === 'left'
+                    const pinRight =
+                      cell.getContext().column.columnDef.meta?.pin === 'right'
+                    const columnWidth =
+                      cell.column.getSize() === 20
+                        ? 'auto'
+                        : `${cell.column.getSize()}px`
+                    const minWidth =
+                      cell.getContext().column.columnDef.meta?.minWidth
+
+                    const secondLastCell =
+                      index === row.getVisibleCells().length - 2
+
+                    return (
+                      <Fragment key={cell.id}>
+                        {pinRight && (
+                          <td
+                            className="w-[1px] p-0 bg-blackberry-200 sticky z-20"
+                            style={{ right: columnWidth }}
+                          />
+                        )}
+                        <TableCell
+                          bordered={hasBorder}
+                          style={{ width: minWidth || columnWidth }}
+                          className={cn(
+                            minWidth && 'xl:!w-auto',
+                            pinLeft &&
+                              'sticky z-20 bg-inherit left-0 bg-white group-hover:!bg-blackberry-50 group-data-[state=selected]:bg-blackberry-50 border-r-0',
+                            pinRight &&
+                              'sticky z-20 bg-inherit right-0 bg-white group-hover:!bg-blackberry-50 group-data-[state=selected]:bg-blackberry-50',
+                            hasPinnedRightCell &&
+                              secondLastCell &&
+                              'border-r-0',
+                          )}
+                        >
+                          {flexRender(
+                            cell.column.columnDef.cell,
+                            cell.getContext(),
+                          )}
+                        </TableCell>
+                        {pinLeft && (
+                          <td
+                            className="w-[1px] p-0 bg-blackberry-200 sticky z-20 left-0"
+                            style={{ left: columnWidth }}
+                          />
+                        )}
+                      </Fragment>
+                    )
+                  })}
+                </TableRow>
+              )
+            })
           ) : (
             <TableRow>
               <TableCell colSpan={columns.length} className="h-24 text-center">

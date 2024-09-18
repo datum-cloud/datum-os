@@ -36,7 +36,11 @@ export const WorkspaceSelector = () => {
   } = workspaceSelectorStyles()
 
   if (!allOrgs.data || allOrgs.fetching || allOrgs.error) {
-    return <div></div>
+    return (
+      <Link href={'/'} className={logoWrapper()}>
+        <Logo asIcon width={40} theme="dark" />
+      </Link>
+    )
   }
 
   const orgs = allOrgs.data.organizations.edges || []
@@ -79,9 +83,14 @@ export const WorkspaceSelector = () => {
   // if there is only one non-personal workspace, show the logo instead of the dropdown
   if (nonPersonalOrgs.length <= 1) {
     return (
-      <Link href={'/'} className={logoWrapper()}>
-        <Logo width={115} theme="dark" />
-      </Link>
+      <div className="flex items-center gap-4">
+        <Link href={'/'} className={logoWrapper()}>
+          <Logo asIcon width={40} theme="dark" />
+        </Link>
+        <span className="type-smallcaps-s text-[10px] leading-none flex items-center justify-center border border-blackberry-100 px-[7px] pb-[3px] rounded-[5px] h-5">
+          OS
+        </span>
+      </div>
     )
   }
 

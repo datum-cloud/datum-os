@@ -1,3 +1,4 @@
+import type { Metadata } from 'next'
 import React from 'react'
 
 import { Datum } from '@repo/types'
@@ -7,11 +8,16 @@ import { HydrationBoundary } from '@/query/hydration-boundary'
 import { getServerQueryClient } from '@/query/client'
 import { getContact, getContactKey } from '@/query/contacts'
 
-type ContactPageProps = {
-  id: Datum.ContactId
+type ContactPageProps = { params: { id: Datum.ContactId } }
+
+export const metadata: Metadata = {
+  title: {
+    template: '%s',
+    default: 'Contact Information',
+  },
 }
 
-const Page = async ({ id }: ContactPageProps) => {
+const Page = async ({ params: { id } }: ContactPageProps) => {
   const client = getServerQueryClient()
 
   await client.prefetchQuery({

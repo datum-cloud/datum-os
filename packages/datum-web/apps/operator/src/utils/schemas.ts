@@ -2,7 +2,8 @@ import z from 'zod'
 
 import { TEL_REGEX } from '@repo/constants'
 
-export const ContactCreationSchema = z.object({
+export const ContactSchema = z.object({
+  id: z.string().describe('Contact ID').optional(),
   fullName: z
     .string()
     .min(2, 'Please enter a valid name')
@@ -44,20 +45,38 @@ export const ContactCreationSchema = z.object({
     .optional(),
 })
 
-export const ContactCreationFormSchema = ContactCreationSchema.extend({
+export const ContactFormSchema = ContactSchema.extend({
   firstName: z.string().describe('First name of the contact').optional(),
   lastName: z.string().describe('Last name of the contact').optional(),
 })
 
-export const ContactUpdateSchema = ContactCreationSchema.extend({
-  id: z.string().describe('Contact ID'),
+export const ContactFilterFormSchema = z.object({
+  filters: z.record(
+    z.string().describe('Field to query from the Contact'),
+    z.object({
+      value: z.any().describe('Query value'),
+      operator: z
+        .enum([
+          'equals',
+          'doesNotEqual',
+          'contains',
+          'doesNotContain',
+          'greaterThan',
+          'greaterThanOrEqualTo',
+          'lessThan',
+          'lessThanOrEqualTo',
+          'empty',
+        ])
+        .describe('Operator to use for the query'),
+    }),
+  ),
 })
 
 export const SearchFormSchema = z.object({
   query: z.string().describe('The search query').optional(),
 })
 
-export type ContactCreationInput = z.infer<typeof ContactCreationSchema>
-export type ContactCreationFormInput = z.infer<typeof ContactCreationFormSchema>
-export type ContactUpdateInput = z.infer<typeof ContactUpdateSchema>
+export type ContactInput = z.infer<typeof ContactSchema>
+export type ContactFilterInput = z.infer<typeof ContactFilterFormSchema>
+export type ContactFormInput = z.infer<typeof ContactFormSchema>
 export type SearchFormInput = z.infer<typeof SearchFormSchema>

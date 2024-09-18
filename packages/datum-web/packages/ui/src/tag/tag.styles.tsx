@@ -1,8 +1,13 @@
 import { tv, type VariantProps } from 'tailwind-variants'
 
 const tagStyles = tv({
-  slots: {
-    base: 'font-mono border-blackberry-500 text-blackberry-500 text-[10px] uppercase px-2 py-0 font-semibold border rounded-md inline-flex justify-center items-center',
+  base: 'rounded-[5px] px-[7px] pb-[2px] h-[19px] border uppercase font-mono text-[10px] font-semibold leading-[150%] tracking-[0.4px]',
+  variants: {
+    status: {
+      success: 'border-util-green-500 text-util-green-500',
+      default: 'border-blackberry-500 text-blackberry-500',
+      muted: 'border-blackberry-500 text-blackberry-500 opacity-50',
+    },
   },
 })
 

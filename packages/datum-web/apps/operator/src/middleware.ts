@@ -31,7 +31,7 @@ export default auth((req) => {
     const sessionData = cookies().get(sessionCookieName)
 
     // if the session cookie is not present, redirect to sign in
-    if (sessionData == null || sessionData.value == "") {
+    if (sessionData == null || sessionData.value == '') {
       hasSessionCookie = false
     }
   }
@@ -56,6 +56,6 @@ export const config = {
      * - verify (verify page)
      * - invite (invite verify page)
      */
-    '\/((?!api|[_next\/static]|[_next\/image]|favicon.ico|backgrounds|backgrounds\/|icons|icons\/|login|verify|invite).*)',
+    '/((?!api|[_next/static]|[_next/image]|favicon.ico|backgrounds|backgrounds/|icons|icons/|login|verify|invite).*)',
   ],
 }

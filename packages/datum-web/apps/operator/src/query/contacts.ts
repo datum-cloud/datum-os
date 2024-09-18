@@ -5,11 +5,51 @@ import { camelize, decamelize } from '@repo/common/keys'
 import { getPathWithParams } from '@repo/common/routes'
 import { Datum } from '@repo/types'
 import { queryClient } from '@/query/client'
-import type { ContactCreationInput } from '@/utils/schemas'
+import type { ContactInput } from '@/utils/schemas'
 
-export async function getContact(
-  id: Datum.ContactId,
-): Promise<Datum.Contact | undefined> {
+const MOCK_ENRICHED_DATA = {
+  company: {
+    key: 'Company',
+    value: 'IBM Europe',
+  },
+  linkedin: {
+    key: 'LinkedIn',
+    value: 'linkedin.com/braink',
+  },
+  title: {
+    key: 'Title',
+    value: 'Marketing Director, EMEA',
+  },
+  github: {
+    key: 'GitHub',
+    value: 'github.com/braink',
+  },
+}
+
+const MOCK_CONTACT_HISTORY: Datum.ContactHistory = {
+  events: [
+    {
+      type: 'opened',
+      content: 'Welcome to Wise',
+      location: 'London, UK',
+      date: new Date('2024-09-08T19:33:09.583385-05:00'),
+    },
+    {
+      type: 'delivered',
+      content: 'Welcome to Wise',
+      location: 'Strasbourg, France',
+      date: new Date('2024-08-08T19:33:09.583385-05:00'),
+    },
+    {
+      type: 'sent',
+      content: 'Welcome to Wise',
+      location: 'London, UK',
+      date: new Date('2024-07-08T19:33:09.583385-05:00'),
+    },
+  ],
+}
+
+export async function getContact(id: Datum.ContactId): Promise<Datum.Contact> {
   const response = await fetch(
     getPathWithParams(OPERATOR_API_ROUTES.contact, { id }),
   )
@@ -24,7 +64,26 @@ export async function getContact(
   const result = await response.json()
   const contact = camelize<Datum.Contact>(result.contact)
 
-  return contact
+  const enrichedData = await getEnrichedData(id)
+  const contactHistory = await getContactHistory(id)
+
+  return { ...contact, contactHistory, enrichedData }
+}
+
+async function getContactHistory(id: Datum.ContactId) {
+  // TODO: Pull the Contact History from an API
+
+  const contactHistory = MOCK_CONTACT_HISTORY
+
+  return contactHistory
+}
+
+async function getEnrichedData(id: Datum.ContactId) {
+  // TODO: We will be hooking this up to a third party service...
+
+  const enrichedData = MOCK_ENRICHED_DATA
+
+  return enrichedData
 }
 
 export async function getContacts(): Promise<Datum.Contact[]> {
@@ -50,9 +109,28 @@ export async function getContacts(): Promise<Datum.Contact[]> {
   return contacts
 }
 
+export async function uploadContacts(
+  organisationId: Datum.OrganisationId,
+  input: FormData,
+) {
+  const response = await fetch(OPERATOR_API_ROUTES.uploadContacts, {
+    method: 'POST',
+    body: input,
+  })
+
+  const result = await response.json()
+  const contacts = result.contacts as Datum.Contact[]
+
+  await queryClient.invalidateQueries({
+    queryKey: getContactsKey(organisationId),
+  })
+
+  return contacts
+}
+
 export async function createContacts(
   organisationId: Datum.OrganisationId,
-  input: ContactCreationInput[],
+  input: ContactInput[],
 ) {
   const formattedContacts = input.map((contact) => decamelize(contact))
 
@@ -73,22 +151,41 @@ export async function createContacts(
   return contacts
 }
 
-export async function updateContact(id: Datum.ContactId, updates: any) {
-  console.log(`Update ${id} with:`, JSON.stringify(updates))
+export async function editContacts(
+  id: Datum.OrganisationId,
+  input: ContactInput[],
+) {
+  const formattedInput = decamelize({
+    contacts: input,
+  })
 
-  // TODO: Handle update and reinstate the below
-  // await queryClient.invalidateQueries({ queryKey: getContactKey(id) })
-  // return contact
+  const response = await fetch(OPERATOR_API_ROUTES.editContacts, {
+    method: 'PUT',
+    body: JSON.stringify(formattedInput),
+  })
+
+  const result = await response.json()
+  const contacts = result.contacts as Datum.Contact[]
+
+  await queryClient.invalidateQueries({ queryKey: getContactsKey(id) })
+
+  return contacts
 }
 
 export async function removeContacts(
   id: Datum.OrganisationId,
   input: Datum.ContactId[],
 ) {
-  console.log('Delete', input)
+  const formattedInput = decamelize({
+    contactIds: input,
+  })
 
-  // TODO: handle delete and reinstate the below
-  // await queryClient.invalidateQueries({ queryKey: getContactsKey(id) });
+  await fetch(OPERATOR_API_ROUTES.deleteContacts, {
+    method: 'DELETE',
+    body: JSON.stringify(formattedInput),
+  })
+
+  await queryClient.invalidateQueries({ queryKey: getContactsKey(id) })
 }
 
 export function getContactKey(id: Datum.ContactId): QueryKey {

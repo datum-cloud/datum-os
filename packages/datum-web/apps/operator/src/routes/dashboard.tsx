@@ -10,6 +10,7 @@ import {
   LayersIcon,
   ListChecks,
   ScrollText,
+  Settings2,
   SettingsIcon,
   ShapesIcon,
   ShoppingCartIcon,
@@ -21,22 +22,12 @@ import { NavHeading, type NavItem, type Separator } from '@/types'
 
 export const NavItems: (NavItem | Separator | NavHeading)[] = [
   {
-    title: 'Home',
+    title: 'Dashboard',
     href: '/dashboard',
     icon: CircleGaugeIcon,
   },
   {
-    title: 'Tasks',
-    href: '/tasks',
-    icon: ListChecks,
-  },
-  {
-    title: 'Mentions',
-    href: '/mentions',
-    icon: AtSign,
-  },
-  {
-    title: 'Logs',
+    title: 'Activity Log',
     href: '/logs',
     icon: ScrollText,
   },
@@ -65,18 +56,6 @@ export const NavItems: (NavItem | Separator | NavHeading)[] = [
     ],
   },
   {
-    title: 'Documents',
-    href: '/documents',
-    icon: FileIcon,
-    isChildren: true,
-    children: [
-      { title: 'Templates', href: '/documents/templates' },
-      { title: 'Documents', href: '/documents/documents' },
-      { title: 'Editor', href: '/documents/editor' },
-      { title: 'Form', href: '/documents/form' },
-    ],
-  },
-  {
     title: 'Sales',
     href: '/sales',
     icon: LandmarkIcon,
@@ -90,7 +69,7 @@ export const NavItems: (NavItem | Separator | NavHeading)[] = [
     ],
   },
   {
-    title: 'Orders',
+    title: 'Billing',
     href: '/orders',
     icon: ShoppingCartIcon,
     isChildren: true,
@@ -106,7 +85,7 @@ export const NavItems: (NavItem | Separator | NavHeading)[] = [
     ],
   },
   {
-    title: 'Relationships',
+    title: 'Back Office',
     href: '/relationships',
     icon: HandshakeIcon,
     isChildren: true,
@@ -125,95 +104,12 @@ export const NavItems: (NavItem | Separator | NavHeading)[] = [
     ],
   },
   {
-    title: 'Assets',
-    href: '/assets',
-    icon: ShapesIcon,
-    isChildren: true,
-    children: [
-      { title: 'Standard Agreements', href: '/assets/standard-agreements' },
-      { title: 'Standard Policies', href: '/assets/standard-policies' },
-      {
-        title: 'Marketing Assets',
-        href: '/assets/marketing-assets',
-      },
-    ],
-  },
-  {
-    title: 'Reporting',
-    href: '/reporting',
-    icon: BarChart3Icon,
-    isChildren: true,
-    children: [
-      {
-        title: 'Revenue & Usage',
-        href: '/reporting/revenue-usage',
-      },
-      {
-        title: 'Revenue Recognition',
-        href: '/reporting/revenue-recognition',
-      },
-      {
-        title: 'Attribution',
-        href: '/reporting/attribution',
-      },
-      {
-        title: 'Showback',
-        href: '/reporting/showback',
-      },
-      {
-        title: 'Compliance',
-        href: '/reporting/compliance',
-      },
-    ],
-  },
-  {
     type: 'separator',
-  },
-  {
-    title: 'Workspace settings',
-    href: '/workspace-settings',
-    icon: SettingsIcon,
-    isChildren: true,
-    children: [
-      {
-        title: 'General Settings',
-        href: '/workspace-settings/general-settings',
-      },
-      {
-        title: 'Members',
-        href: '/workspace-settings/members',
-      },
-      {
-        title: 'Audit Forwarding',
-        href: '/workspace-settings/audit-forwarding',
-      },
-      {
-        title: 'Authentication',
-        href: '/workspace-settings/authentication',
-      },
-      {
-        title: 'End User Privacy',
-        href: '/workspace-settings/end-user-privacy',
-      },
-      {
-        title: 'Billing & Usage',
-        href: '/workspace-settings/billing-usage',
-      },
-      {
-        title: 'Developers',
-        href: '/workspace-settings/developers',
-      },
-    ],
-  },
-  {
-    title: 'Alerts & Preferences',
-    href: '/alerts-preferences',
-    icon: UserRoundCogIcon,
   },
   {
     title: 'Product Configuration',
     href: '/product-configuration',
-    icon: SlidersHorizontalIcon,
+    icon: Settings2,
     isChildren: true,
     children: [
       {
@@ -251,50 +147,6 @@ export const NavItems: (NavItem | Separator | NavHeading)[] = [
       {
         title: 'Management & Reporting',
         href: '/product-configuration/management-reporting',
-      },
-    ],
-  },
-  {
-    title: 'Integrations',
-    href: '/integrations',
-    icon: LayersIcon,
-    isChildren: true,
-    children: [
-      {
-        title: 'Installed Datum Apps',
-        href: '/integrations/installed-datum-apps',
-      },
-      {
-        title: 'Authorized Datum Apps',
-        href: '/integrations/authorized-datum-apps',
-      },
-      {
-        title: 'Authorized OAuth Apps',
-        href: '/integrations/authorized-oauth-apps',
-      },
-    ],
-  },
-  {
-    title: 'Developers',
-    href: '/developers',
-    icon: AppWindowMacIcon,
-    isChildren: true,
-    children: [
-      {
-        title: 'API Tokens',
-        href: '/developers/api-tokens',
-      },
-      {
-        title: 'Register a New App',
-        href: '/developers/new-app',
-      },
-      {
-        title: 'Request Datum Swag',
-        href: '/developers/datum-swag',
-      },
-      {
-        title: 'Startup Program',
-        href: '/developers/startup-program',
       },
     ],
   },

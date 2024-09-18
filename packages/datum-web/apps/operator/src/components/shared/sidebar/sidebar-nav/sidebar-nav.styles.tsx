@@ -8,7 +8,7 @@ const sidebarNavStyles = tv({
       'font-normal absolute left-12 text-base text-nowrap duration-200',
     accordionTrigger:
       'group relative flex h-[2.2rem] justify-between px-4 py-2 text-base duration-200 hover:bg-muted hover:no-underline dark:text-peat-400',
-    link: 'font-sans px-4 py-2 group relative flex h-[2.2rem] justify-start items-center dark:text-peat-400',
+    link: 'font-sans px-4 py-2 group relative rounded-md flex h-[2.2rem] justify-start items-center dark:text-peat-400 hover:bg-winter-sky-700 transition-all',
     accordionItem: 'border-none ',
     separator: '!my-4',
     heading:

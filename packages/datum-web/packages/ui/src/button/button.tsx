@@ -70,9 +70,11 @@ const Button = forwardRef<HTMLButtonElement, ButtonWithIcons>(
         ref={ref}
         {...rest}
       >
-        <span className={cn(childWrapper(), loading && loadingText())}>
-          {rest.children}
-        </span>
+        {rest.children && (
+          <span className={cn(childWrapper(), loading && loadingText())}>
+            {rest.children}
+          </span>
+        )}
         {loading ? (
           <div className={loadingWrapper()}>
             <LoaderCircleIcon className="animate-spin shrink-0 !h-6 !w-6" />
