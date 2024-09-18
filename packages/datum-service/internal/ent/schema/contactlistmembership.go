@@ -13,6 +13,7 @@ import (
 	"github.com/datum-cloud/datum-os/internal/ent/generated"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/privacy"
 	"github.com/datum-cloud/datum-os/internal/ent/mixin"
+	"github.com/datum-cloud/datum-os/internal/ent/privacy/rule"
 	emixin "github.com/datum-cloud/datum-os/pkg/entx/mixin"
 	"github.com/datum-cloud/datum-os/pkg/fgax/entfga"
 )
@@ -94,12 +95,14 @@ func (ContactListMembership) Policy() ent.Policy {
 			privacy.GroupMembershipMutationRuleFunc(func(ctx context.Context, m *generated.GroupMembershipMutation) error {
 				return m.CheckAccessForEdit(ctx)
 			}),
+			rule.AllowIfOrgEditor(),
 			privacy.AlwaysDenyRule(),
 		},
 		Query: privacy.QueryPolicy{
 			privacy.GroupMembershipQueryRuleFunc(func(ctx context.Context, q *generated.GroupMembershipQuery) error {
 				return q.CheckAccess(ctx)
 			}),
+			rule.AllowIfOrgViewer(),
 			privacy.AlwaysDenyRule(),
 		},
 	}
