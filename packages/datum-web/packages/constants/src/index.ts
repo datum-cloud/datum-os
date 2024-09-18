@@ -11,6 +11,7 @@ export const SERVICE_APP_ROUTES = {
   contacts: `${SERVICE_REST_API}/v1/contacts`,
   contact: `${SERVICE_REST_API}/v1/contacts/[id]`,
   contactLists: `${SERVICE_REST_API}/v1/contacts/lists`,
+  contactList: `${SERVICE_REST_API}/v1/contacts/lists/[id]`,
 }
 
 export const OPERATOR_APP_ROUTES = {

@@ -43,9 +43,13 @@ export async function getList(id: Datum.ListId): Promise<Datum.List> {
   }
 
   const result = await response.json()
-  const list = camelize<Datum.List>(result.list)
+  const formattedResult = camelize(result).contactList
 
-  return list
+  return {
+    ...formattedResult,
+    description: formattedResult.displayName,
+    members: [],
+  } as Datum.List
 }
 
 export async function createLists(

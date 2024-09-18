@@ -2,22 +2,11 @@
 
 import { useSession } from 'next-auth/react'
 import React, { useState } from 'react'
-import {
-  ArrowLeft,
-  BellMinus,
-  Check,
-  ChevronDown,
-  Ellipsis,
-  Info,
-  Plus,
-  Trash,
-  User,
-} from 'lucide-react'
+import { ArrowLeft, ChevronDown, Copy, Trash, Users2 } from 'lucide-react'
 import Link from 'next/link'
 
-import { mockLists, OPERATOR_APP_ROUTES } from '@repo/constants'
+import { OPERATOR_APP_ROUTES } from '@repo/constants'
 import { Button } from '@repo/ui/button'
-import { Panel, PanelHeader } from '@repo/ui/panel'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -25,78 +14,84 @@ import {
   DropdownMenuTrigger,
 } from '@repo/ui/dropdown-menu'
 import { Tag } from '@repo/ui/tag'
-import { cn } from '@repo/ui/lib/utils'
 import { Datum } from '@repo/types'
 
-import {
-  Accordion,
-  AccordionItem,
-  AccordionContent,
-  AccordionTrigger,
-} from '@/components/shared/sidebar/sidebar-accordion/sidebar-accordion'
 import { Loading } from '@/components/shared/loading/loading'
-// import { useList } from '@/hooks/useLists'
+import { useList } from '@/hooks/useLists'
 import { removeLists } from '@/query/lists'
-import { formatDate } from '@/utils/date'
 
 import { pageStyles as listsStyles } from '../lists/page.styles'
 import ListFormDialog from '../lists/lists-form-dialog'
-// import ListTable from './list-table'
 import { pageStyles } from './page.styles'
+import { toast } from '@repo/ui/use-toast'
 
 type ListPageProps = {
   id: Datum.ListId
 }
 
 const ListPage = ({ id }: ListPageProps) => {
-  //   const { data: session } = useSession()
-  //   const organizationId = (session?.user.organization ??
-  //     '') as Datum.OrganisationId
-  //   const [selectedLists, setSelectedLists] = useState<string[]>([])
-  //   const [openEditDialog, setOpenEditDialog] = useState(false)
-  //   const {
-  //     wrapper,
-  //     link,
-  //     listHeader,
-  //     listCard,
-  //     listText,
-  //     listActions,
-  //   } = pageStyles()
-  //   const {
-  //     listDropdownItem,
-  //     listDropdownIcon,
-  //   } = listsStyles()
+  const { data: session } = useSession()
+  const organizationId = (session?.user.organization ??
+    '') as Datum.OrganisationId
+  const [selectedLists, setSelectedLists] = useState<string[]>([])
+  const [openEditDialog, setOpenEditDialog] = useState(false)
+  const { wrapper, link, listHeader, listCard, listText, listActions } =
+    pageStyles()
+  const { listDropdownItem, listDropdownIcon } = listsStyles()
 
-  //   const { error, isLoading, data: list } = useList(id)
-  //   const { name, email, source, createdAt } = list || {}
+  const { error, isLoading, data: list } = useList(id)
 
-  //   async function handleDeletion() {
-  //     await removeLists(organizationId, [id])
-  //   }
+  async function handleDeletion() {
+    await removeLists(organizationId, [id])
+  }
 
-  //   if (isLoading) {
-  //     return <Loading />
-  //   }
+  if (isLoading) {
+    return <Loading />
+  }
 
-  //   if (error || !list) {
-  //     return <div>Whoops... Something went wrong</div>
-  //   }
+  if (error || !list) {
+    return <div className={wrapper()}>Whoops... Something went wrong</div>
+  }
+
+  const { name, description, members } = list
+
+  function copyToClipboard(text: string) {
+    navigator.clipboard.writeText(text)
+
+    toast({
+      title: 'Copied to clipboard',
+      variant: 'success',
+    })
+  }
 
   return (
-    <div>
-      {/* <div className={wrapper()}> */}
-      {/* <Link href={OPERATOR_APP_ROUTES.contactLists} className={link()}>
+    <div className={wrapper()}>
+      <Link href={OPERATOR_APP_ROUTES.contactLists} className={link()}>
         <ArrowLeft size={18} />
         Back to Lists
       </Link>
       <div className={listHeader()}>
         <div className={listCard()}>
           <div className={listText()}>
-            <Tag variant="dark">{name}</Tag>
-            <h6 className="text-body-l text-blackberry-600">{email}</h6>
-            <p className="text-body-sm leading-5 text-blackberry-500">
-              Added by {source} on {formatDate(createdAt)}
-            </p>
+            <Tag status="dark" large>
+              {name}
+            </Tag>
+            <p className="text-body-l text-blackberry-600">{description}</p>
+            <div className="flex gap-4 items-center justify-start">
+              <Button
+                size="xs"
+                variant="blackberryXs"
+                icon={<Copy />}
+                iconPosition="right"
+                onClick={() => copyToClipboard(id)}
+              >
+                {id}
+              </Button>
+              <div className="flex gap-2 items-center">
+                <Users2 />
+                <Tag>{members.length}</Tag>
+              </div>
+            </div>
           </div>
         </div>
         <div className={listActions()}>
@@ -121,11 +116,12 @@ const ListPage = ({ id }: ListPageProps) => {
           </DropdownMenu>
         </div>
       </div>
+      {/* <ContactTable contacts={members} /> */}
       <ListFormDialog
         list={list}
         open={openEditDialog}
         setOpen={setOpenEditDialog}
-      /> */}
+      />
     </div>
   )
 }
