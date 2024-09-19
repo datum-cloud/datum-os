@@ -778,6 +778,8 @@ type Contact struct {
 	Address string `json:"address,omitempty"`
 	// status of the contact
 	Status string `json:"status,omitempty"`
+	// contact lists that the contact is a member of
+	ContactLists []ContactList `json:"contact_lists,omitempty"`
 }
 
 // ContactFromGeneratedContact is a helper function to return a `Contact` from a `generated.Contact`
@@ -802,6 +804,10 @@ func ContactFromGeneratedContact(genContact *generated.Contact) Contact {
 	cd.PhoneNumber = genContact.PhoneNumber
 	cd.Address = genContact.Address
 	cd.Status = string(genContact.Status)
+	cd.ContactLists = make([]ContactList, len(genContact.Edges.ContactLists))
+	for i, genContactList := range genContact.Edges.ContactLists {
+		cd.ContactLists[i] = ContactListFromGeneratedContactList(genContactList)
+	}
 
 	return cd
 }
@@ -814,10 +820,26 @@ var ExampleContactsGetSuccessResponse = ContactsGetResponse{
 		{
 			ID: "01J6X14S34TP3H6Z4S3AVHJSMY", FullName: "Serene Ilsley", Address: "66195 Gateway Junction",
 			Email: "silsley0@harvard.edu", Title: "Web Designer III", Company: "Crona-Dooley", PhoneNumber: "694-566-6857",
+			ContactLists: []ContactList{
+				{
+					ID:          "01J7PBEMJAZ08HKZF71302ZD1X",
+					Name:        "weekly-tips",
+					DisplayName: "Weekly Tips",
+					Description: "For sending out weekly tips regarding new features",
+				},
+			},
 		},
 		{
 			ID: "01J6X14S355M2R0GP5WFX6QX91", FullName: "Bobbie Kolyagin", Address: "467 Magdeline Hill",
 			Email: "bkolyagin1@blogs.com", Title: "VP Sales", Company: "Mosciski Group", PhoneNumber: "228-669-6638",
+			ContactLists: []ContactList{
+				{
+					ID:          "01J7PBEMJAZ08HKZF71302ZD1X",
+					Name:        "weekly-tips",
+					DisplayName: "Weekly Tips",
+					Description: "For sending out weekly tips regarding new features",
+				},
+			},
 		},
 	},
 }
@@ -830,7 +852,7 @@ type ContactsGetOneRequest struct {
 // ContactsGetOneResponse is the body for a GET request response to `/contacts/:id`
 type ContactsGetOneResponse struct {
 	rout.Reply
-	Contact `json:"contact"`
+	Contact
 }
 
 func ContactsGetOneResponseFromGeneratedContact(genContact *generated.Contact) *ContactsGetOneResponse {
@@ -845,6 +867,14 @@ var ExampleContactsGetOneSuccessResponse = ContactsGetOneResponse{
 	Contact: Contact{
 		ID: "01J6X14S34TP3H6Z4S3AVHJSMY", FullName: "Serene Ilsley", Address: "66195 Gateway Junction",
 		Email: "silsley0@harvard.edu", Title: "Web Designer III", Company: "Crona-Dooley", PhoneNumber: "694-566-6857",
+		ContactLists: []ContactList{
+			{
+				ID:          "01J7PBEMJAZ08HKZF71302ZD1X",
+				Name:        "weekly-tips",
+				DisplayName: "Weekly Tips",
+				Description: "For sending out weekly tips regarding new features",
+			},
+		},
 	},
 }
 
@@ -983,6 +1013,8 @@ type ContactList struct {
 	DisplayName string `json:"display_name,omitempty"`
 	// the description of the list
 	Description string `json:"description,omitempty"`
+	// the number of members in the list
+	MemberCount *int `json:"member_count,omitempty"`
 }
 
 // ContactListFromGeneratedContactList is a helper function to return a `ContactList` from a `generated.ContactList`
@@ -1051,7 +1083,7 @@ type ContactListsGetOneRequest struct {
 // ContactListsGetOneResponse is the body for a GET request response from `/contacts/lists/:id`
 type ContactListsGetOneResponse struct {
 	rout.Reply
-	ContactList `json:"contact_list"`
+	ContactList
 }
 
 // ContactListsGetOneResponseFromGeneratedContactList is a helper function to generate a `*ContactListsGetOneResponse` from a `*generated.ContactList`
@@ -1105,14 +1137,64 @@ func ContactListsPostResponseFromContactListsGetResponse(respGet *ContactListsGe
 	return respPost
 }
 
-// ContactListsPutRequest is the body for a PUT request to `/contacts/lists/:id`
+// ContactListsPutRequest is the body for a PUT request to `/contacts/lists`
 type ContactListsPutRequest struct {
-	ContactListID string      `param:"id"`
-	ContactList   ContactList `json:"contact_list"`
+	ContactLists []ContactList `json:"contact_lists"`
 }
 
-// ExampleContactListsPutRequest is an example PUT request to `/contacts/lists/:id`
+// ExampleContactListsPutRequest is an example PUT request to `/contacts/lists`
 var ExampleContactListsPutRequest = ContactListsPutRequest{
+	ContactLists: []ContactList{
+		{
+			ID:          "01J7PBEMJAZ08HKZF71302ZD1X",
+			Name:        "tos",
+			DisplayName: "Terms of Service",
+			Description: "For communicating changes to our terms of service",
+			Visibility:  "PRIVATE",
+		},
+		{
+			ID:          "01J7PBEMJAZ08HKZF71302ZD1X",
+			Name:        "weekly-tips",
+			DisplayName: "Weekly Tips",
+			Description: "For sending out weekly tips regarding new features",
+			Visibility:  "PUBLIC",
+		},
+	},
+}
+
+// ContactListsPutResponse is the body for a PUT request response from `/contacts/lists`
+type ContactListsPutResponse = ContactListsGetResponse
+
+// ExampleContactListsPutSuccessResponse is an example PUT request response from `/contacts/lists`
+var ExampleContactListsPutSuccessResponse = ContactListsPutResponse{
+	Reply: rout.OK().Reply,
+	Count: 2,
+	ContactLists: []ContactList{
+		{
+			ID:          "01J7PBEMJAZ08HKZF71302ZD1X",
+			Name:        "tos",
+			DisplayName: "Terms of Service",
+			Description: "For communicating changes to our terms of service",
+			Visibility:  "PRIVATE",
+		},
+		{
+			ID:          "01J7PBEMJAZ08HKZF71302ZD1X",
+			Name:        "weekly-tips",
+			DisplayName: "Weekly Tips",
+			Description: "For sending out weekly tips regarding new features",
+			Visibility:  "PUBLIC",
+		},
+	},
+}
+
+// ContactListsPutOneRequest is the body for a PUT request to `/contacts/lists/:id`
+type ContactListsPutOneRequest struct {
+	ContactListID string `param:"id"`
+	ContactList
+}
+
+// ExampleContactListsPutOneRequest is an example PUT request to `/contacts/lists/:id`
+var ExampleContactListsPutOneRequest = ContactListsPutOneRequest{
 	ContactListID: "01J7PBEMJAZ08HKZF71302ZD1X",
 	ContactList: ContactList{
 		Name:        "weekly-tips",
@@ -1122,14 +1204,14 @@ var ExampleContactListsPutRequest = ContactListsPutRequest{
 	},
 }
 
-// ContactListsPutResponse is the body for a PUT request response from `/contacts/lists/:id`
-type ContactListsPutResponse struct {
+// ContactListsPutOneResponse is the body for a PUT request response from `/contacts/lists/:id`
+type ContactListsPutOneResponse struct {
 	rout.Reply
-	ContactList ContactList `json:"contact_list"`
+	ContactList
 }
 
-// ExampleContactListsPutSuccessResponse is an example PUT request response from `/contacts/lists/:id`
-var ExampleContactListsPutSuccessResponse = ContactListsPutResponse{
+// ExampleContactListsPutOneSuccessResponse is an example PUT request response from `/contacts/lists/:id`
+var ExampleContactListsPutOneSuccessResponse = ContactListsPutOneResponse{
 	Reply: rout.OK().Reply,
 	ContactList: ContactList{
 		ID:          "01J7PBEMJAZ08HKZF71302ZD1X",
