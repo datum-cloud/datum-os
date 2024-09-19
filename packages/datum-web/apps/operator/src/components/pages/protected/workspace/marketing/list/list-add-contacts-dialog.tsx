@@ -78,14 +78,16 @@ const ListsAddContactsDialog = ({
                 iconPosition="left"
               />
             </div>
-            <ListContactsTable
-              id={listId}
-              contacts={contacts}
-              onSelectionChange={setSelectedContacts}
-              globalFilter={query}
-              setGlobalFilter={setQuery}
-              isDialog
-            />
+            <div className="max-h-[55dvh] overflow-y-auto">
+              <ListContactsTable
+                id={listId}
+                contacts={contacts}
+                setSelection={setSelectedContacts}
+                globalFilter={query}
+                setGlobalFilter={setQuery}
+                isDialog
+              />
+            </div>
             <DialogFooter>
               <Button
                 type="button"

@@ -71,9 +71,8 @@ export function DataTablePagination<TData>({
               onClick={() => table.previousPage()}
               disabled={!table.getCanPreviousPage()}
             >
-              <ChevronLeftIcon className="h-4 w-4" />
+              <ChevronLeftIcon className="h-4 w-4 text-blackberry-400" />
             </Button>
-            {/* First Button */}
             <Button
               variant="blackberryXs"
               size="xs"
@@ -113,7 +112,7 @@ export function DataTablePagination<TData>({
               </Button>
             )}
             {/* Next Button */}
-            {nextPage < lastPage && (
+            {nextPage > 0 && nextPage < lastPage && (
               <Button
                 variant="blackberryXs"
                 size="xs"
@@ -129,17 +128,15 @@ export function DataTablePagination<TData>({
                 <Ellipsis size={14} className="text-blackberry-400" />
               </div>
             )}
-            {lastPage > 1 && (
-              <Button
-                variant="blackberryXs"
-                size="xs"
-                className={paginationButton()}
-                onClick={() => table.setPageIndex(lastPage)}
-                disabled={currentPage === lastPage}
-              >
-                {lastPage + 1}
-              </Button>
-            )}
+            <Button
+              variant="blackberryXs"
+              size="xs"
+              className={paginationButton()}
+              onClick={() => table.setPageIndex(lastPage)}
+              disabled={currentPage === lastPage}
+            >
+              {lastPage + 1}
+            </Button>
             <Button
               variant="blackberryXs"
               size="xs"
@@ -147,7 +144,7 @@ export function DataTablePagination<TData>({
               onClick={() => table.nextPage()}
               disabled={!table.getCanNextPage()}
             >
-              <ChevronRightIcon className="h-4 w-4" />
+              <ChevronRightIcon className="h-4 w-4 text-blackberry-400" />
             </Button>
           </div>
         </div>

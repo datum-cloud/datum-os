@@ -222,7 +222,7 @@ const ListPage = ({ id }: ListPageProps) => {
         id={id}
         setExportData={setExportData}
         contacts={members}
-        onSelectionChange={setSelectedContacts}
+        setSelection={setSelectedContacts}
       />
       <ListFormDialog
         list={list}

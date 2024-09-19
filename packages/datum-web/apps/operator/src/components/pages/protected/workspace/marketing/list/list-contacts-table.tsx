@@ -23,7 +23,7 @@ import { tableStyles } from '../contacts/page.styles'
 type ListContactsTableProps = {
   id: Datum.ListId
   contacts: Datum.Contact[]
-  onSelectionChange(contacts: Datum.Contact[]): void
+  setSelection(contacts: Datum.Contact[]): void
   isDialog?: boolean
   globalFilter?: string
   columnFilters?: ColumnFiltersState
@@ -187,7 +187,7 @@ function generateColumns(
 const ListContactsTable = ({
   id,
   contacts,
-  onSelectionChange,
+  setSelection,
   isDialog = false,
   globalFilter,
   columnFilters,
@@ -202,7 +202,7 @@ const ListContactsTable = ({
       data={contacts}
       layoutFixed
       bordered
-      onSelectionChange={onSelectionChange}
+      setSelection={setSelection}
       highlightHeader
       showFooter
       globalFilter={globalFilter}

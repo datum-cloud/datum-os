@@ -9,7 +9,6 @@ import type { Datum } from '@repo/types'
 import PageTitle from '@/components/page-title'
 import ListsControls from '@/components/pages/protected/workspace/marketing/lists/lists-controls'
 import { useLists } from '@/hooks/useLists'
-import { removeLists } from '@/query/lists'
 
 import ListsTable from './lists-table'
 import { pageStyles } from './page.styles'
@@ -52,7 +51,7 @@ const ListsPage = () => {
           setGlobalFilter={setQuery}
           columnFilters={columnFilters}
           lists={lists}
-          onSelectionChange={setSelectedLists}
+          setSelection={setSelectedLists}
         />
       )}
       <ListDeleteDialog

@@ -1,3 +1,3 @@
-First Name,Last Name,Email,Lists
-Jacob,Smith,jacob@datum.net,"Admin, Newsletter"
-Zachary,Smith,zachary@datum.net,"Admin, Newsletter"
+Name,Title,Email,PhoneNumber,Company,Address,Lists
+Jacob Smith,Founder,jacob@datum.net,690-934-1530,Datum,43 Old Shore Road,"Admin, Newsletter"
+Zachary Smith, Founder,zachary@datum.net,455-981-7239,Datum,1973 Buena Vista Road,"Admin, Newsletter"

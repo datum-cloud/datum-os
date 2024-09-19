@@ -167,7 +167,9 @@ export async function editContacts(
   const result = await response.json()
   const contacts = result.contacts as Datum.Contact[]
 
-  await queryClient.invalidateQueries({ queryKey: getContactsKey(id) })
+  for (const contact of contacts) {
+    await queryClient.invalidateQueries({ queryKey: getContactKey(contact.id) })
+  }
 
   return contacts
 }
@@ -184,6 +186,10 @@ export async function removeContacts(
     method: 'DELETE',
     body: JSON.stringify(formattedInput),
   })
+
+  for (const contact of input) {
+    await queryClient.invalidateQueries({ queryKey: getContactKey(contact) })
+  }
 
   await queryClient.invalidateQueries({ queryKey: getContactsKey(id) })
 }

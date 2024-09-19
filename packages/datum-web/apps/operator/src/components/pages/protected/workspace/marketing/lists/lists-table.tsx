@@ -30,7 +30,7 @@ type ListsTableProps = {
   globalFilter: string
   columnFilters?: ColumnFiltersState
   setGlobalFilter(input: string): void
-  onSelectionChange(lists: Datum.List[]): void
+  setSelection(lists: Datum.List[]): void
 }
 
 const { header, checkboxContainer, link } = tableStyles()
@@ -217,7 +217,7 @@ const ListsTable = ({
   globalFilter,
   columnFilters,
   setGlobalFilter,
-  onSelectionChange,
+  setSelection,
 }: ListsTableProps) => {
   const [filteredLists, setFilteredLists] = useState<Datum.List[]>(lists)
 
@@ -238,7 +238,7 @@ const ListsTable = ({
       data={filteredLists}
       layoutFixed
       bordered
-      onSelectionChange={onSelectionChange}
+      setSelection={setSelection}
       highlightHeader
       showFooter
     />

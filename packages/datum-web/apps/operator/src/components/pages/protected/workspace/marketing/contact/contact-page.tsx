@@ -1,5 +1,6 @@
 'use client'
 
+import { useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react'
 import React, { useState } from 'react'
 import {
@@ -24,6 +25,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@repo/ui/dropdown-menu'
+import { Tag } from '@repo/ui/tag'
 import { cn } from '@repo/ui/lib/utils'
 import { Datum } from '@repo/types'
 
@@ -42,13 +44,13 @@ import { pageStyles as contactsStyles } from '../contacts/page.styles'
 import ContactFormDialog from '../contacts/contacts-form-dialog'
 import ContactTable from './contact-table'
 import { pageStyles } from './page.styles'
-import { Tag } from '@repo/ui/tag'
 
 type ContactPageProps = {
   id: Datum.ContactId
 }
 
 const ContactPage = ({ id }: ContactPageProps) => {
+  const router = useRouter()
   const { data: session } = useSession()
   const organizationId = (session?.user.organization ??
     '') as Datum.OrganisationId
@@ -84,6 +86,8 @@ const ContactPage = ({ id }: ContactPageProps) => {
 
   async function handleDeletion() {
     await removeContacts(organizationId, [id])
+
+    router.push(OPERATOR_APP_ROUTES.contacts)
   }
 
   if (isLoading) {
@@ -98,7 +102,7 @@ const ContactPage = ({ id }: ContactPageProps) => {
     fullName,
     email,
     source,
-    lists,
+    lists = [],
     createdAt,
     enrichedData = {},
     contactHistory,

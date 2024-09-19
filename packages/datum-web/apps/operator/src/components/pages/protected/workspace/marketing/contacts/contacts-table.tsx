@@ -29,7 +29,7 @@ import { Tag } from '@repo/ui/tag'
 
 type ContactsTableProps = {
   contacts: Datum.Contact[]
-  onSelectionChange(contacts: Datum.Contact[]): void
+  setSelection(contacts: Datum.Contact[]): void
   globalFilter?: string
   columnFilters?: ColumnFiltersState
   setGlobalFilter?(input: string): void
@@ -264,7 +264,7 @@ const ContactsTable = ({
   globalFilter,
   columnFilters,
   setGlobalFilter,
-  onSelectionChange,
+  setSelection,
   setExportData,
 }: ContactsTableProps) => {
   const [filteredContacts, setFilteredContacts] =
@@ -287,7 +287,7 @@ const ContactsTable = ({
       data={filteredContacts}
       layoutFixed
       bordered
-      onSelectionChange={onSelectionChange}
+      setSelection={setSelection}
       highlightHeader
       setExportData={setExportData}
       showFooter

@@ -62,11 +62,11 @@ const ContactsPage: React.FC = () => {
       {!error && !isLoading && (
         <ContactsTable
           setExportData={setExportData}
-          globalFilter={query}
           setGlobalFilter={setQuery}
+          setSelection={setSelectedContacts}
+          globalFilter={query}
           columnFilters={columnFilters}
           contacts={contacts}
-          onSelectionChange={setSelectedContacts}
         />
       )}
     </div>
