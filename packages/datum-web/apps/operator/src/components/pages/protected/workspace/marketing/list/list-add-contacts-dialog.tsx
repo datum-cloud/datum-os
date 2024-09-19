@@ -51,10 +51,6 @@ const ListsAddContactsDialog = ({
     setSelectedContacts([])
   }
 
-  function handleSearch() {
-    console.log('search')
-  }
-
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent>
@@ -91,8 +87,17 @@ const ListsAddContactsDialog = ({
               isDialog
             />
             <DialogFooter>
-              <Button type="button" onClick={onSubmit} full className="w-2/3">
-                Add contacts
+              <Button
+                type="button"
+                disabled={selectedContacts.length === 0}
+                onClick={onSubmit}
+                full
+                className="w-2/3"
+              >
+                Add contacts{' '}
+                {selectedContacts.length > 0
+                  ? `(${selectedContacts.length})`
+                  : ''}
               </Button>
               <Button
                 type="button"
