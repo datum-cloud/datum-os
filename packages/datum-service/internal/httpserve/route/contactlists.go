@@ -62,7 +62,7 @@ func registerContactListsHandlers(router *Router) (err error) {
 	routePut := echo.Route{
 		Name:        name + "Put",
 		Method:      http.MethodPut,
-		Path:        path + "/:id",
+		Path:        path,
 		Middlewares: authMW,
 		Handler: func(c echo.Context) error {
 			return router.Handler.ContactListsPut(c)
@@ -71,6 +71,22 @@ func registerContactListsHandlers(router *Router) (err error) {
 
 	if err = router.Addv1Route(
 		path, routePut.Method, router.Handler.BindContactListsPut(), routePut,
+	); err != nil {
+		return err
+	}
+
+	routePutOne := echo.Route{
+		Name:        name + "Put One",
+		Method:      http.MethodPut,
+		Path:        path + "/:id",
+		Middlewares: authMW,
+		Handler: func(c echo.Context) error {
+			return router.Handler.ContactListsPutOne(c)
+		},
+	}
+
+	if err = router.Addv1Route(
+		path, routePutOne.Method, router.Handler.BindContactListsPutOne(), routePutOne,
 	); err != nil {
 		return err
 	}
