@@ -10,6 +10,7 @@ import {
   DataTable,
   DataTableColumnHeader,
   ColumnFiltersState,
+  Row,
 } from '@repo/ui/data-table'
 import { Tag } from '@repo/ui/tag'
 import type { Datum } from '@repo/types'
@@ -27,6 +28,7 @@ type ListContactsTableProps = {
   globalFilter?: string
   columnFilters?: ColumnFiltersState
   setGlobalFilter?(input: string): void
+  setExportData?(data: Row<Datum.Contact>[]): void
 }
 
 const { header, checkboxContainer, link } = tableStyles()
@@ -189,6 +191,7 @@ const ListContactsTable = ({
   isDialog = false,
   globalFilter,
   columnFilters,
+  setExportData,
   setGlobalFilter,
 }: ListContactsTableProps) => {
   const columns = generateColumns(id, isDialog)
@@ -206,6 +209,7 @@ const ListContactsTable = ({
       globalFilterFn="includesString"
       columnFilters={columnFilters}
       setGlobalFilter={setGlobalFilter}
+      setExportData={setExportData}
     />
   )
 }

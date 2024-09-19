@@ -14,8 +14,10 @@ import {
 } from 'lucide-react'
 import Link from 'next/link'
 
+import { exportExcel } from '@repo/common/csv'
 import { OPERATOR_APP_ROUTES } from '@repo/constants'
 import { Button } from '@repo/ui/button'
+import { Row } from '@repo/ui/data-table'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -27,18 +29,19 @@ import { toast } from '@repo/ui/use-toast'
 import type { Datum } from '@repo/types'
 
 import { Loading } from '@/components/shared/loading/loading'
+import ListDeleteDialog from '@/components/pages/protected/workspace/marketing/list/list-delete-dialog'
+import ListsAddContactsDialog from '@/components/pages/protected/workspace/marketing/list/list-add-contacts-dialog'
+import { useContacts } from '@/hooks/useContacts'
 import { useList } from '@/hooks/useLists'
+import { editLists } from '@/query/lists'
+import { formatContactsExportData } from '@/utils/export'
+import { ListInput } from '@/utils/schemas'
 
 import { pageStyles as listsStyles } from '../lists/page.styles'
 import ListFormDialog from '../lists/lists-form-dialog'
 
 import ListContactsTable from './list-contacts-table'
 import { pageStyles } from './page.styles'
-import ListDeleteDialog from '@/components/pages/protected/workspace/marketing/list/list-delete-dialog'
-import ListsAddContactsDialog from '@/components/pages/protected/workspace/marketing/list/list-add-contacts-dialog'
-import { editLists } from '@/query/lists'
-import { ListInput } from '@/utils/schemas'
-import { useContacts } from '@/hooks/useContacts'
 
 type ListPageProps = {
   id: Datum.ListId
@@ -48,6 +51,7 @@ const ListPage = ({ id }: ListPageProps) => {
   const { data: session } = useSession()
   const organizationId = (session?.user.organization ??
     '') as Datum.OrganisationId
+  const [exportData, setExportData] = useState<Row<Datum.Contact>[]>([])
   const [selectedContacts, setSelectedContacts] = useState<Datum.Contact[]>([])
   const [openAddContactsDialog, _setOpenAddContactsDialog] = useState(false)
   const [openEditDialog, _setOpenEditDialog] = useState(false)
@@ -66,7 +70,9 @@ const ListPage = ({ id }: ListPageProps) => {
   const error = errorList || errorContacts
 
   function handleExport() {
-    console.log('Export Selected Contacts:', selectedContacts)
+    const now = new Date().toISOString()
+    const formattedData = formatContactsExportData(exportData)
+    exportExcel(`${name}-list-${now}`, formattedData)
   }
 
   async function setOpenDeleteDialog(input: boolean) {
@@ -214,6 +220,7 @@ const ListPage = ({ id }: ListPageProps) => {
       </div>
       <ListContactsTable
         id={id}
+        setExportData={setExportData}
         contacts={members}
         onSelectionChange={setSelectedContacts}
       />

@@ -17,6 +17,7 @@ import {
   SortingFn,
   sortingFns,
   RowData,
+  Row,
 } from '@tanstack/react-table'
 import {
   RankingInfo,
@@ -58,6 +59,7 @@ interface DataTableProps<TData, TValue> {
   globalFilterFn?: any
   globalFilter?: string
   columnFilters?: ColumnFiltersState
+  setExportData?(data: Row<TData>[]): void
   setGlobalFilter?(input: string): void
   onSelectionChange?(selection: TData[]): void
 }
@@ -93,6 +95,7 @@ export function DataTable<TData, TValue>({
   columnFilters: _columnFilters = [],
   setGlobalFilter,
   onSelectionChange,
+  setExportData,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([])
   const [columnFilters, setColumnFilters] =
@@ -125,6 +128,12 @@ export function DataTable<TData, TValue>({
       size: 0,
     },
   })
+
+  useEffect(() => {
+    if (setExportData) {
+      setExportData(table.getFilteredRowModel().rows)
+    }
+  }, [table.getFilteredRowModel().rows])
 
   useEffect(() => {
     if (onSelectionChange) {
@@ -371,6 +380,7 @@ export {
   type FilterFn,
   type SortingFn,
   type RankingInfo,
+  type Row,
   DataTableColumnHeader,
   DataTablePagination,
   flexRender,

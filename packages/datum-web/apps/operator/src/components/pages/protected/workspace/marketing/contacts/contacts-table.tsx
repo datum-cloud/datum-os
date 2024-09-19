@@ -13,6 +13,7 @@ import {
   rankItem,
   compareItems,
   ColumnFiltersState,
+  Row,
 } from '@repo/ui/data-table'
 import { Datum } from '@repo/types'
 
@@ -32,6 +33,7 @@ type ContactsTableProps = {
   globalFilter?: string
   columnFilters?: ColumnFiltersState
   setGlobalFilter?(input: string): void
+  setExportData?(data: Row<Datum.Contact>[]): void
 }
 
 const { header, checkboxContainer, link } = tableStyles()
@@ -263,6 +265,7 @@ const ContactsTable = ({
   columnFilters,
   setGlobalFilter,
   onSelectionChange,
+  setExportData,
 }: ContactsTableProps) => {
   const [filteredContacts, setFilteredContacts] =
     useState<Datum.Contact[]>(contacts)
@@ -286,6 +289,7 @@ const ContactsTable = ({
       bordered
       onSelectionChange={onSelectionChange}
       highlightHeader
+      setExportData={setExportData}
       showFooter
     />
   )
