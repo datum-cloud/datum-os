@@ -1,7 +1,11 @@
 'use client'
 
+import { useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react'
+import { TriangleAlert } from 'lucide-react'
 
+import { OPERATOR_APP_ROUTES } from '@repo/constants'
+import { Button } from '@repo/ui/button'
 import {
   Dialog,
   DialogClose,
@@ -9,15 +13,13 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@repo/ui/dialog'
-import { Button } from '@repo/ui/button'
 import { Datum } from '@repo/types'
+
+import { Loading } from '@/components/shared/loading/loading'
+import { useAsyncFn } from '@/hooks/useAsyncFn'
 import { removeLists } from '@/query/lists'
 
-import { useRouter } from 'next/navigation'
-import { OPERATOR_APP_ROUTES } from '@repo/constants'
-import { useAsyncFn } from '@/hooks/useAsyncFn'
-import { Loading } from '@/components/shared/loading/loading'
-import { TriangleAlert } from 'lucide-react'
+import { deleteDialogStyles } from './page.styles'
 
 type ListDeleteFormProps = {
   id: Datum.ListId
@@ -31,6 +33,8 @@ const ListDeleteDialog = ({ id, open, setOpen }: ListDeleteFormProps) => {
   const { data: session } = useSession()
   const organizationId =
     session?.user.organization ?? ('' as Datum.OrganisationId)
+
+  const { content, text, button } = deleteDialogStyles()
 
   function handleCancel() {
     setOpen(false)
@@ -50,14 +54,14 @@ const ListDeleteDialog = ({ id, open, setOpen }: ListDeleteFormProps) => {
         </DialogHeader>
         {loading && <Loading />}
         {!loading && (
-          <div className="w-full min-h-40 flex flex-col items-center justify-center gap-6 rounded bg-util-red-100">
-            <div className="flex gap-6 items-center text-util-red-500">
+          <div className={content()}>
+            <div className={text()}>
               <TriangleAlert />
               Deleting a list is irreversible
             </div>
             <Button
               variant="outline"
-              className="bg-white border-util-red-500 text-util-red-500"
+              className={button()}
               onClick={handleDelete}
             >
               Delete this list

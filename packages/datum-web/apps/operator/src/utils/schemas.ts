@@ -89,7 +89,7 @@ export const ListSchema = z.object({
     .describe('Description of the list')
     .optional(),
   members: z
-    .array(z.string().describe('List member ID'))
+    .array(z.any().describe('List member ID'))
     .describe('Array of the list members'),
 })
 

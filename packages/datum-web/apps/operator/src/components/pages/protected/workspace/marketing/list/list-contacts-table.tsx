@@ -22,6 +22,7 @@ import { tableStyles } from '../contacts/page.styles'
 type ListContactsTableProps = {
   contacts: Datum.Contact[]
   onSelectionChange(contacts: Datum.Contact[]): void
+  isDialog?: boolean
   globalFilter?: string
   columnFilters?: ColumnFiltersState
   setGlobalFilter?(input: string): void
@@ -29,7 +30,7 @@ type ListContactsTableProps = {
 
 const { header, checkboxContainer, link } = tableStyles()
 
-export const LIST_CONTACT_COLUMNS: ColumnDef<Datum.Contact>[] = [
+export const DIALOG_LIST_CONTACT_COLUMNS: ColumnDef<Datum.Contact>[] = [
   {
     id: 'select',
     accessorKey: 'id',
@@ -78,7 +79,7 @@ export const LIST_CONTACT_COLUMNS: ColumnDef<Datum.Contact>[] = [
       />
     ),
     meta: {
-      minWidth: 225,
+      minWidth: 200,
     },
     cell: ({ cell, row }) => {
       const value = cell.getValue() as Datum.Email
@@ -108,9 +109,13 @@ export const LIST_CONTACT_COLUMNS: ColumnDef<Datum.Contact>[] = [
     enableGlobalFilter: true,
     enableSorting: true,
     meta: {
-      minWidth: 185,
+      minWidth: 180,
     },
   },
+]
+
+export const LIST_CONTACT_COLUMNS: ColumnDef<Datum.Contact>[] = [
+  ...DIALOG_LIST_CONTACT_COLUMNS,
   {
     id: 'createdAt',
     accessorFn: (row) => formatDate(row.createdAt),
@@ -170,16 +175,23 @@ export const LIST_CONTACT_COLUMNS: ColumnDef<Datum.Contact>[] = [
 const ListContactsTable = ({
   contacts,
   onSelectionChange,
+  isDialog = false,
+  globalFilter,
+  columnFilters,
+  setGlobalFilter,
 }: ListContactsTableProps) => {
   return (
     <DataTable
-      columns={LIST_CONTACT_COLUMNS}
+      columns={isDialog ? DIALOG_LIST_CONTACT_COLUMNS : LIST_CONTACT_COLUMNS}
       data={contacts}
       layoutFixed
       bordered
       onSelectionChange={onSelectionChange}
       highlightHeader
       showFooter
+      globalFilter={globalFilter}
+      columnFilters={columnFilters}
+      setGlobalFilter={setGlobalFilter}
     />
   )
 }

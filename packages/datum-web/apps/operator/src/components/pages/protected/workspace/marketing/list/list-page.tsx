@@ -28,7 +28,6 @@ import type { Datum } from '@repo/types'
 
 import { Loading } from '@/components/shared/loading/loading'
 import { useList } from '@/hooks/useLists'
-import { removeLists } from '@/query/lists'
 
 import { pageStyles as listsStyles } from '../lists/page.styles'
 import ListFormDialog from '../lists/lists-form-dialog'
@@ -36,6 +35,9 @@ import ListFormDialog from '../lists/lists-form-dialog'
 import ListContactsTable from './list-contacts-table'
 import { pageStyles } from './page.styles'
 import ListDeleteDialog from '@/components/pages/protected/workspace/marketing/list/list-delete-dialog'
+import ListsAddContactsDialog from '@/components/pages/protected/workspace/marketing/list/list-add-contacts-dialog'
+import { editLists } from '@/query/lists'
+import { ListInput } from '@/utils/schemas'
 
 type ListPageProps = {
   id: Datum.ListId
@@ -46,6 +48,7 @@ const ListPage = ({ id }: ListPageProps) => {
   const organizationId = (session?.user.organization ??
     '') as Datum.OrganisationId
   const [selectedContacts, setSelectedContacts] = useState<Datum.Contact[]>([])
+  const [openAddContactsDialog, _setOpenAddContactsDialog] = useState(false)
   const [openEditDialog, _setOpenEditDialog] = useState(false)
   const [openDeleteDialog, _setOpenDeleteDialog] = useState(false)
   const { wrapper, link, listHeader, listCard, listText, listActions } =
@@ -60,6 +63,12 @@ const ListPage = ({ id }: ListPageProps) => {
 
   async function setOpenDeleteDialog(input: boolean) {
     _setOpenDeleteDialog(input)
+    // NOTE: This is needed to close the dialog without removing pointer events per https://github.com/shadcn-ui/ui/issues/468
+    setTimeout(() => (document.body.style.pointerEvents = ''), 500)
+  }
+
+  async function setOpenAddContactsDialog(input: boolean) {
+    _setOpenAddContactsDialog(input)
     // NOTE: This is needed to close the dialog without removing pointer events per https://github.com/shadcn-ui/ui/issues/468
     setTimeout(() => (document.body.style.pointerEvents = ''), 500)
   }
@@ -86,6 +95,12 @@ const ListPage = ({ id }: ListPageProps) => {
     toast({
       title: 'Copied to clipboard',
     })
+  }
+
+  async function setPrivacy(privacy: Datum.List['visibility']) {
+    await editLists(organizationId, [
+      { ...list, visibility: privacy },
+    ] as ListInput[])
   }
 
   return (
@@ -131,11 +146,17 @@ const ListPage = ({ id }: ListPageProps) => {
                   </button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="p-2">
-                  <DropdownMenuItem className={listDropdownItem()}>
+                  <DropdownMenuItem
+                    className={listDropdownItem()}
+                    onClick={() => setPrivacy('PUBLIC')}
+                  >
                     <Eye className={listDropdownIcon()} />
                     Public
                   </DropdownMenuItem>
-                  <DropdownMenuItem className={listDropdownItem()}>
+                  <DropdownMenuItem
+                    className={listDropdownItem()}
+                    onClick={() => setPrivacy('PRIVATE')}
+                  >
                     <EyeOff className={listDropdownIcon()} />
                     Private
                   </DropdownMenuItem>
@@ -148,7 +169,10 @@ const ListPage = ({ id }: ListPageProps) => {
           <Button variant="outline" onClick={handleExport}>
             Export all
           </Button>
-          <Button variant="outline" onClick={() => console.log('add contact')}>
+          <Button
+            variant="outline"
+            onClick={() => setOpenAddContactsDialog(true)}
+          >
             Add a contact
           </Button>
           <DropdownMenu>
@@ -184,6 +208,10 @@ const ListPage = ({ id }: ListPageProps) => {
         list={list}
         open={openEditDialog}
         setOpen={setOpenEditDialog}
+      />
+      <ListsAddContactsDialog
+        open={openAddContactsDialog}
+        setOpen={setOpenAddContactsDialog}
       />
       <ListDeleteDialog
         id={list.id}

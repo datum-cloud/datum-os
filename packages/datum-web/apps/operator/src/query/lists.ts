@@ -96,12 +96,37 @@ export async function createLists(
   return lists
 }
 
-export async function editLists(id: Datum.OrganisationId, input: ListInput[]) {
-  const formattedInput = decamelize({
+export async function createListMembers(
+  organisationId: Datum.OrganisationId,
+  input: Datum.ContactId[],
+) {
+  const formattedInput = {
     contacts: input,
+  }
+
+  const response = await fetch(OPERATOR_API_ROUTES.createContactListMembers, {
+    method: 'POST',
+    body: JSON.stringify(formattedInput),
   })
 
-  const response = await fetch(OPERATOR_API_ROUTES.editContacts, {
+  const result = await response.json()
+  const members = camelize(result).contacts as Datum.Contact[]
+
+  await queryClient.invalidateQueries({
+    queryKey: getListsKey(organisationId),
+  })
+
+  return members
+}
+
+export async function editLists(id: Datum.OrganisationId, input: ListInput[]) {
+  const formattedInput = decamelize({
+    contactLists: input,
+  })
+
+  console.log(formattedInput, OPERATOR_API_ROUTES.editContactLists)
+
+  const response = await fetch(OPERATOR_API_ROUTES.editContactLists, {
     method: 'PUT',
     body: JSON.stringify(formattedInput),
   })
