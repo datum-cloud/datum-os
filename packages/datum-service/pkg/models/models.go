@@ -1013,6 +1013,8 @@ type ContactList struct {
 	DisplayName string `json:"display_name,omitempty"`
 	// the description of the list
 	Description string `json:"description,omitempty"`
+	// the number of members in the list
+	MemberCount *int `json:"member_count,omitempty"`
 }
 
 // ContactListFromGeneratedContactList is a helper function to return a `ContactList` from a `generated.ContactList`

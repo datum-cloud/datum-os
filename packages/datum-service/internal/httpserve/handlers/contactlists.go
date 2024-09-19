@@ -14,12 +14,25 @@ import (
 )
 
 func (h *Handler) ContactListsGet(ctx echo.Context) error {
-	contactLists, err := transaction.FromContext(ctx.Request().Context()).ContactList.Query().WithContactListMembers().All(ctx.Request().Context())
+	contactLists, err := transaction.FromContext(ctx.Request().Context()).
+		ContactList.Query().
+		All(ctx.Request().Context())
 	if err != nil {
 		return h.InternalServerError(ctx, err)
 	}
 
 	contactListsGetResponse := models.ContactListsGetResponseFromGeneratedContacts(contactLists)
+
+	for i := range contactListsGetResponse.ContactLists {
+		count, err := transaction.FromContext(ctx.Request().Context()).
+			ContactListMembership.Query().
+			Where(contactlistmembership.ContactListID(contactListsGetResponse.ContactLists[i].ID)).
+			Count(ctx.Request().Context())
+		if err != nil {
+			return h.InternalServerError(ctx, err)
+		}
+		contactListsGetResponse.ContactLists[i].MemberCount = &count
+	}
 
 	return h.Success(ctx, contactListsGetResponse)
 }
@@ -55,6 +68,15 @@ func (h *Handler) ContactListsGetOne(ctx echo.Context) error {
 	}
 
 	contactListsGetOneResponse := models.ContactListsGetOneResponseFromGeneratedContactList(contactList)
+
+	count, err := transaction.FromContext(ctx.Request().Context()).
+		ContactListMembership.Query().
+		Where(contactlistmembership.ContactListID(contactList.ID)).
+		Count(ctx.Request().Context())
+	if err != nil {
+		return h.InternalServerError(ctx, err)
+	}
+	contactListsGetOneResponse.ContactList.MemberCount = &count
 
 	return h.Success(ctx, contactListsGetOneResponse)
 }
