@@ -3,6 +3,7 @@ FROM golang:1.23-alpine AS builder
 WORKDIR /go/src/app
 COPY . .
 
+RUN apk add build-base
 RUN go mod download
 RUN CGO_ENABLED=1 GOOS=linux go build -o /go/bin/datum -a -ldflags '-linkmode external -extldflags "-static"' .
 
