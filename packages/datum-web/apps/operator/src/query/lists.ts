@@ -97,26 +97,48 @@ export async function createLists(
 }
 
 export async function createListMembers(
-  organisationId: Datum.OrganisationId,
+  id: Datum.ListId,
   input: Datum.ContactId[],
 ) {
-  const formattedInput = {
-    contacts: input,
-  }
-
-  const response = await fetch(OPERATOR_API_ROUTES.createContactListMembers, {
-    method: 'POST',
-    body: JSON.stringify(formattedInput),
+  const formattedInput = decamelize({
+    contactIds: input,
   })
 
+  const response = await fetch(
+    getPathWithParams(OPERATOR_API_ROUTES.createContactListMembers, { id }),
+    {
+      method: 'POST',
+      body: JSON.stringify(formattedInput),
+    },
+  )
+
   const result = await response.json()
-  const members = camelize(result).contacts as Datum.Contact[]
+  const members = camelize(result).count as number
 
   await queryClient.invalidateQueries({
-    queryKey: getListsKey(organisationId),
+    queryKey: getListKey(id),
   })
 
   return members
+}
+
+export async function removeListMembers(
+  id: Datum.ListId,
+  input: Datum.ContactId[],
+) {
+  const formattedInput = decamelize({
+    contactIds: input,
+  })
+
+  await fetch(
+    getPathWithParams(OPERATOR_API_ROUTES.deleteContactListMembers, { id }),
+    {
+      method: 'DELETE',
+      body: JSON.stringify(formattedInput),
+    },
+  )
+
+  await queryClient.invalidateQueries({ queryKey: getListKey(id) })
 }
 
 export async function editLists(id: Datum.OrganisationId, input: ListInput[]) {

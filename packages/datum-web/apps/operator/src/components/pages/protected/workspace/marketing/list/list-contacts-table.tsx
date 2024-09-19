@@ -14,12 +14,13 @@ import {
 import { Tag } from '@repo/ui/tag'
 import type { Datum } from '@repo/types'
 
+import ListContactsTableDropdown from '@/components/pages/protected/workspace/marketing/list/list-contact-table-dropdown'
 import { formatDate } from '@/utils/date'
 
-import ContactsTableDropdown from '../contacts/contacts-table-dropdown'
 import { tableStyles } from '../contacts/page.styles'
 
 type ListContactsTableProps = {
+  id: Datum.ListId
   contacts: Datum.Contact[]
   onSelectionChange(contacts: Datum.Contact[]): void
   isDialog?: boolean
@@ -30,149 +31,159 @@ type ListContactsTableProps = {
 
 const { header, checkboxContainer, link } = tableStyles()
 
-export const DIALOG_LIST_CONTACT_COLUMNS: ColumnDef<Datum.Contact>[] = [
-  {
-    id: 'select',
-    accessorKey: 'id',
-    size: 60,
-    enableGlobalFilter: false,
-    enableSorting: false,
-    meta: {
-      pin: 'left',
-    },
-    header: ({ table }) => {
-      return (
-        <div className={checkboxContainer()}>
-          <Checkbox
-            checked={table.getIsAllPageRowsSelected()}
-            onCheckedChange={(value) =>
-              table.toggleAllPageRowsSelected(!!value)
-            }
-            className="bg-white"
-            aria-label="Select all contacts"
-          />
-        </div>
-      )
-    },
-    cell: ({ row }) => {
-      return (
-        <div className={checkboxContainer()}>
-          <Checkbox
-            checked={row.getIsSelected()}
-            className="bg-white"
-            onCheckedChange={(value) => row.toggleSelected(!!value)}
-            aria-label="Select contact"
-          />
-        </div>
-      )
-    },
-  },
-  {
-    id: 'email',
-    accessorFn: (row) => row.email || '',
-    enableGlobalFilter: true,
-    header: ({ column }) => (
-      <DataTableColumnHeader
-        className={header()}
-        column={column}
-        children="Email"
-      />
-    ),
-    meta: {
-      minWidth: 200,
-    },
-    cell: ({ cell, row }) => {
-      const value = cell.getValue() as Datum.Email
-      const id = row.original.id
+function generateColumns(
+  listId: Datum.ListId,
+  isDialog: boolean,
+): ColumnDef<Datum.Contact>[] {
+  const otherColumns: ColumnDef<Datum.Contact>[] = !isDialog
+    ? [
+        {
+          id: 'createdAt',
+          accessorFn: (row) => formatDate(row.createdAt),
+          header: ({ column }) => (
+            <DataTableColumnHeader
+              className={header()}
+              column={column}
+              children="Created At"
+            />
+          ),
+          enableGlobalFilter: true,
+          enableSorting: true,
+          meta: {
+            minWidth: 225,
+          },
+        },
+        {
+          id: 'status',
+          accessorKey: 'status',
+          header: ({ column }) => (
+            <DataTableColumnHeader
+              className={header()}
+              column={column}
+              children="Status"
+            />
+          ),
+          enableGlobalFilter: true,
+          enableSorting: true,
+          cell: ({ cell }) => {
+            const value = cell.getValue() as Datum.Status
+            const isActive = value === 'ACTIVE'
 
-      return (
-        <Link
-          href={getPathWithParams(OPERATOR_APP_ROUTES.contact, { id })}
-          className={link()}
-          rel="noopener noreferrer"
-        >
-          {value}
-        </Link>
-      )
-    },
-  },
-  {
-    id: 'fullName',
-    accessorKey: 'fullName',
-    header: ({ column }) => (
-      <DataTableColumnHeader
-        className={header()}
-        column={column}
-        children="Name"
-      />
-    ),
-    enableGlobalFilter: true,
-    enableSorting: true,
-    meta: {
-      minWidth: 180,
-    },
-  },
-]
+            return <Tag variant={isActive ? 'success' : 'default'}>{value}</Tag>
+          },
+          meta: {
+            minWidth: 120,
+          },
+        },
+        {
+          id: 'dropdown',
+          accessorKey: 'id',
+          size: 60,
+          enableGlobalFilter: false,
+          enableSorting: false,
+          header: '',
+          meta: {
+            pin: 'right',
+          },
+          cell: ({ row }) => {
+            const contact = row.original
 
-export const LIST_CONTACT_COLUMNS: ColumnDef<Datum.Contact>[] = [
-  ...DIALOG_LIST_CONTACT_COLUMNS,
-  {
-    id: 'createdAt',
-    accessorFn: (row) => formatDate(row.createdAt),
-    header: ({ column }) => (
-      <DataTableColumnHeader
-        className={header()}
-        column={column}
-        children="Created At"
-      />
-    ),
-    enableGlobalFilter: true,
-    enableSorting: true,
-    meta: {
-      minWidth: 225,
-    },
-  },
-  {
-    id: 'status',
-    accessorKey: 'status',
-    header: ({ column }) => (
-      <DataTableColumnHeader
-        className={header()}
-        column={column}
-        children="Status"
-      />
-    ),
-    enableGlobalFilter: true,
-    enableSorting: true,
-    cell: ({ cell }) => {
-      const value = cell.getValue() as Datum.Status
-      const isActive = value === 'ACTIVE'
+            return (
+              <ListContactsTableDropdown listId={listId} contact={contact} />
+            )
+          },
+        },
+      ]
+    : []
 
-      return <Tag variant={isActive ? 'success' : 'default'}>{value}</Tag>
+  return [
+    {
+      id: 'select',
+      accessorKey: 'id',
+      size: 60,
+      enableGlobalFilter: false,
+      enableSorting: false,
+      meta: {
+        pin: 'left',
+      },
+      header: ({ table }) => {
+        return (
+          <div className={checkboxContainer()}>
+            <Checkbox
+              checked={table.getIsAllPageRowsSelected()}
+              onCheckedChange={(value) =>
+                table.toggleAllPageRowsSelected(!!value)
+              }
+              className="bg-white"
+              aria-label="Select all contacts"
+            />
+          </div>
+        )
+      },
+      cell: ({ row }) => {
+        return (
+          <div className={checkboxContainer()}>
+            <Checkbox
+              checked={row.getIsSelected()}
+              className="bg-white"
+              onCheckedChange={(value) => row.toggleSelected(!!value)}
+              aria-label="Select contact"
+            />
+          </div>
+        )
+      },
     },
-    meta: {
-      minWidth: 120,
-    },
-  },
-  {
-    id: 'dropdown',
-    accessorKey: 'id',
-    size: 60,
-    enableGlobalFilter: false,
-    enableSorting: false,
-    header: '',
-    meta: {
-      pin: 'right',
-    },
-    cell: ({ row }) => {
-      const contact = row.original
+    {
+      id: 'email',
+      accessorFn: (row) => row.email || '',
+      enableGlobalFilter: true,
+      header: ({ column }) => (
+        <DataTableColumnHeader
+          className={header()}
+          column={column}
+          children="Email"
+        />
+      ),
+      meta: {
+        minWidth: 200,
+      },
+      cell: ({ cell, row }) => {
+        const value = cell.getValue() as Datum.Email
+        const id = row.original.id
 
-      return <ContactsTableDropdown contact={contact} />
+        return (
+          <Link
+            href={getPathWithParams(OPERATOR_APP_ROUTES.contact, { id })}
+            className={link()}
+            rel="noopener noreferrer"
+          >
+            {value}
+          </Link>
+        )
+      },
     },
-  },
-]
+    {
+      id: 'fullName',
+      accessorKey: 'fullName',
+      header: ({ column }) => (
+        <DataTableColumnHeader
+          className={header()}
+          column={column}
+          children="Name"
+        />
+      ),
+      enableGlobalFilter: true,
+      enableSorting: true,
+      meta: {
+        minWidth: 180,
+      },
+    },
+    ...otherColumns,
+  ]
+}
 
 const ListContactsTable = ({
+  id,
   contacts,
   onSelectionChange,
   isDialog = false,
@@ -180,9 +191,11 @@ const ListContactsTable = ({
   columnFilters,
   setGlobalFilter,
 }: ListContactsTableProps) => {
+  const columns = generateColumns(id, isDialog)
+
   return (
     <DataTable
-      columns={isDialog ? DIALOG_LIST_CONTACT_COLUMNS : LIST_CONTACT_COLUMNS}
+      columns={columns}
       data={contacts}
       layoutFixed
       bordered

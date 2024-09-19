@@ -90,6 +90,8 @@ export const ListSchema = z.object({
     .optional(),
   members: z
     .array(z.any().describe('List member ID'))
+    .optional()
+    .default([])
     .describe('Array of the list members'),
 })
 

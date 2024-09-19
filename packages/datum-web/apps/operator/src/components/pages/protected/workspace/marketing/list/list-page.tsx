@@ -201,6 +201,7 @@ const ListPage = ({ id }: ListPageProps) => {
         </div>
       </div>
       <ListContactsTable
+        id={id}
         contacts={members}
         onSelectionChange={setSelectedContacts}
       />
@@ -210,13 +211,15 @@ const ListPage = ({ id }: ListPageProps) => {
         setOpen={setOpenEditDialog}
       />
       <ListsAddContactsDialog
+        listId={id}
         open={openAddContactsDialog}
         setOpen={setOpenAddContactsDialog}
       />
       <ListDeleteDialog
-        id={list.id}
+        ids={[id]}
         open={openDeleteDialog}
         setOpen={setOpenDeleteDialog}
+        redirect
       />
     </div>
   )

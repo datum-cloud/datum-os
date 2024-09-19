@@ -5,6 +5,7 @@ import { useSession } from 'next-auth/react'
 import { TriangleAlert } from 'lucide-react'
 
 import { OPERATOR_APP_ROUTES } from '@repo/constants'
+import { pluralize } from '@repo/common/text'
 import { Button } from '@repo/ui/button'
 import {
   Dialog,
@@ -22,12 +23,18 @@ import { removeLists } from '@/query/lists'
 import { deleteDialogStyles } from './page.styles'
 
 type ListDeleteFormProps = {
-  id: Datum.ListId
+  ids: Datum.ListId[]
   open: boolean
   setOpen(input: boolean): void
+  redirect?: boolean
 }
 
-const ListDeleteDialog = ({ id, open, setOpen }: ListDeleteFormProps) => {
+const ListDeleteDialog = ({
+  ids,
+  open,
+  redirect = false,
+  setOpen,
+}: ListDeleteFormProps) => {
   const router = useRouter()
   const [{ loading }, deleteLists] = useAsyncFn(removeLists)
   const { data: session } = useSession()
@@ -41,15 +48,20 @@ const ListDeleteDialog = ({ id, open, setOpen }: ListDeleteFormProps) => {
   }
 
   function handleDelete() {
-    deleteLists(organizationId, [id])
-    router.push(OPERATOR_APP_ROUTES.contactLists)
+    deleteLists(organizationId, ids)
+
+    if (redirect) {
+      router.push(OPERATOR_APP_ROUTES.contactLists)
+    }
+
+    setOpen(false)
   }
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Delete list</DialogTitle>
+          <DialogTitle>Delete {ids.length > 1 ? 'lists' : 'list'}</DialogTitle>
           <DialogClose onClick={handleCancel} />
         </DialogHeader>
         {loading && <Loading />}
@@ -64,7 +76,7 @@ const ListDeleteDialog = ({ id, open, setOpen }: ListDeleteFormProps) => {
               className={button()}
               onClick={handleDelete}
             >
-              Delete this list
+              {ids.length > 1 ? `Delete lists` : 'Delete this list'}
             </Button>
           </div>
         )}

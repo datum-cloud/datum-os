@@ -13,10 +13,12 @@ import { removeLists } from '@/query/lists'
 
 import ListsTable from './lists-table'
 import { pageStyles } from './page.styles'
+import ListDeleteDialog from '@/components/pages/protected/workspace/marketing/list/list-delete-dialog'
 
 const ListsPage = () => {
   const [selectedLists, setSelectedLists] = useState<Datum.List[]>([])
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
+  const [openDeleteDialog, _setOpenDeleteDialog] = useState(false)
   const [query, setQuery] = useState('')
   const { data: session } = useSession()
   const organizationId =
@@ -29,20 +31,20 @@ const ListsPage = () => {
     console.log('Export Selected Files')
   }
 
-  async function handleBatchDeletion() {
-    await removeLists(
-      organizationId,
-      selectedLists.map(({ id }) => id),
-    )
-
-    setSelectedLists([])
+  async function setOpenDeleteDialog(input: boolean) {
+    _setOpenDeleteDialog(input)
+    // NOTE: This is needed to close the dialog without removing pointer events per https://github.com/shadcn-ui/ui/issues/468
+    setTimeout(() => (document.body.style.pointerEvents = ''), 500)
   }
 
   return (
     <div className={wrapper()}>
       <div className={header()}>
         <PageTitle title="Lists" />
-        <ListsControls onDelete={handleBatchDeletion} onExport={handleExport} />
+        <ListsControls
+          onDelete={() => setOpenDeleteDialog(true)}
+          onExport={handleExport}
+        />
       </div>
       {!error && !isLoading && (
         <ListsTable
@@ -53,6 +55,11 @@ const ListsPage = () => {
           onSelectionChange={setSelectedLists}
         />
       )}
+      <ListDeleteDialog
+        ids={selectedLists.map(({ id }) => id)}
+        open={openDeleteDialog}
+        setOpen={setOpenDeleteDialog}
+      />
     </div>
   )
 }

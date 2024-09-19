@@ -72,6 +72,7 @@ const ListsFormDialog = ({ list, open, setOpen }: ListDialogFormProps) => {
     control,
     handleSubmit,
     reset,
+    watch,
     formState: { errors },
   } = form
   const isValid = Object.keys(errors).length === 0

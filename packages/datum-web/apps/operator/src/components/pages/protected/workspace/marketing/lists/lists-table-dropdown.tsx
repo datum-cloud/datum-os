@@ -12,8 +12,10 @@ import { Ellipsis, Pencil, Trash } from 'lucide-react'
 
 import { Datum } from '@repo/types'
 
+import ListsFormDialog from '@/components/pages/protected/workspace/marketing/lists/lists-form-dialog'
+import ListDeleteDialog from '@/components/pages/protected/workspace/marketing/list/list-delete-dialog'
+
 import { pageStyles } from './page.styles'
-import { removeLists } from '@/query/lists'
 
 type ListsTableDropdownProps = {
   list: Datum.List
@@ -21,23 +23,18 @@ type ListsTableDropdownProps = {
 
 const ListsTableDropdown = ({ list }: ListsTableDropdownProps) => {
   const { id } = list
-  const [_openEditDialog, _setOpenEditDialog] = useState(false)
-  const { data: session } = useSession()
-  const organizationId =
-    session?.user.organization ?? ('' as Datum.OrganisationId)
+  const [openEditDialog, _setOpenEditDialog] = useState(false)
+  const [openDeleteDialog, _setOpenDeleteDialog] = useState(false)
   const { listDropdownItem, listDropdownIcon } = pageStyles()
-
-  async function deleteList() {
-    await removeLists(organizationId, [id])
-  }
-
-  async function setLists(newLists: Datum.ListId[]) {
-    // TODO:
-    console.log('New lists array', newLists)
-  }
 
   function setOpenEditDialog(input: boolean) {
     _setOpenEditDialog(input)
+    // NOTE: This is needed to close the dialog without removing pointer events per https://github.com/shadcn-ui/ui/issues/468
+    setTimeout(() => (document.body.style.pointerEvents = ''), 500)
+  }
+
+  function setOpenDeleteDialog(input: boolean) {
+    _setOpenDeleteDialog(input)
     // NOTE: This is needed to close the dialog without removing pointer events per https://github.com/shadcn-ui/ui/issues/468
     setTimeout(() => (document.body.style.pointerEvents = ''), 500)
   }
@@ -56,12 +53,25 @@ const ListsTableDropdown = ({ list }: ListsTableDropdownProps) => {
             <Pencil size={18} className={listDropdownIcon()} />
             Edit
           </DropdownMenuItem>
-          <DropdownMenuItem className={listDropdownItem()} onClick={deleteList}>
+          <DropdownMenuItem
+            className={listDropdownItem()}
+            onClick={() => setOpenDeleteDialog(true)}
+          >
             <Trash size={18} className={listDropdownIcon()} />
             Delete Item
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
+      <ListsFormDialog
+        list={list}
+        open={openEditDialog}
+        setOpen={setOpenEditDialog}
+      />
+      <ListDeleteDialog
+        ids={[id]}
+        open={openDeleteDialog}
+        setOpen={setOpenDeleteDialog}
+      />
     </div>
   )
 }
