@@ -14,12 +14,25 @@ import (
 )
 
 func (h *Handler) ContactListsGet(ctx echo.Context) error {
-	contactLists, err := transaction.FromContext(ctx.Request().Context()).ContactList.Query().All(ctx.Request().Context())
+	contactLists, err := transaction.FromContext(ctx.Request().Context()).
+		ContactList.Query().
+		All(ctx.Request().Context())
 	if err != nil {
 		return h.InternalServerError(ctx, err)
 	}
 
 	contactListsGetResponse := models.ContactListsGetResponseFromGeneratedContacts(contactLists)
+
+	for i := range contactListsGetResponse.ContactLists {
+		count, err := transaction.FromContext(ctx.Request().Context()).
+			ContactListMembership.Query().
+			Where(contactlistmembership.ContactListID(contactListsGetResponse.ContactLists[i].ID)).
+			Count(ctx.Request().Context())
+		if err != nil {
+			return h.InternalServerError(ctx, err)
+		}
+		contactListsGetResponse.ContactLists[i].MemberCount = &count
+	}
 
 	return h.Success(ctx, contactListsGetResponse)
 }
@@ -56,6 +69,15 @@ func (h *Handler) ContactListsGetOne(ctx echo.Context) error {
 
 	contactListsGetOneResponse := models.ContactListsGetOneResponseFromGeneratedContactList(contactList)
 
+	count, err := transaction.FromContext(ctx.Request().Context()).
+		ContactListMembership.Query().
+		Where(contactlistmembership.ContactListID(contactList.ID)).
+		Count(ctx.Request().Context())
+	if err != nil {
+		return h.InternalServerError(ctx, err)
+	}
+	contactListsGetOneResponse.ContactList.MemberCount = &count
+
 	return h.Success(ctx, contactListsGetOneResponse)
 }
 
@@ -89,7 +111,7 @@ func contactListCreateFromContactListData(cd *models.ContactList, cc *generated.
 	c(cd.Name, m.SetName)
 	c(cd.Visibility, m.SetVisibility)
 	c(cd.DisplayName, m.SetDisplayName)
-	c(cd.Description, m.SetDisplayName)
+	c(cd.Description, m.SetDescription)
 
 	return cc
 }
@@ -142,6 +164,58 @@ func (h *Handler) ContactListsPut(ctx echo.Context) error {
 		return h.BadRequest(ctx, err)
 	}
 
+	tx := transaction.FromContext(ctx.Request().Context())
+	updatedContactLists := models.ContactListsPutResponse{}
+	for _, contactList := range contactListsPutReq.ContactLists {
+		updatedContactList, err := tx.ContactList.UpdateOneID(contactList.ID).
+			SetName(contactList.Name).
+			SetVisibility(contactList.Visibility).
+			SetDisplayName(contactList.DisplayName).
+			SetDescription(contactList.Description).
+			Save(ctx.Request().Context())
+		if err != nil {
+			return h.InternalServerError(ctx, err)
+		}
+
+		h.Logger.Debugf("Updated ContactList, %s", updatedContactList)
+
+		updatedContactLists.Count += 1
+		updatedContactLists.ContactLists = append(updatedContactLists.ContactLists, models.ContactListFromGeneratedContactList(updatedContactList))
+	}
+
+	updatedContactLists.Success = true
+
+	h.Logger.Debugf("Updated ContactLists, %s", updatedContactLists)
+
+	return h.Success(ctx, updatedContactLists)
+}
+
+func (h *Handler) BindContactListsPut() *openapi3.Operation {
+	contactListsPut := openapi3.NewOperation()
+	contactListsPut.Description = "Update Contact Lists"
+	contactListsPut.OperationID = "ContactListsPut"
+	contactListsPut.Security = &openapi3.SecurityRequirements{
+		openapi3.SecurityRequirement{
+			"bearerAuth": []string{},
+		},
+	}
+
+	h.AddRequestBody("ContactListsPutRequest", models.ExampleContactListsPutRequest, contactListsPut)
+
+	h.AddResponse("ContactListsPutResponse", "success", models.ExampleContactListsPutSuccessResponse, contactListsPut, http.StatusOK)
+	contactListsPut.AddResponse(http.StatusBadRequest, badRequest())
+	contactListsPut.AddResponse(http.StatusInternalServerError, internalServerError())
+	contactListsPut.AddResponse(http.StatusUnauthorized, unauthorized())
+
+	return contactListsPut
+}
+
+func (h *Handler) ContactListsPutOne(ctx echo.Context) error {
+	contactListsPutReq := models.ContactListsPutOneRequest{}
+	if err := ctx.Bind(&contactListsPutReq); err != nil {
+		return h.BadRequest(ctx, err)
+	}
+
 	contactList, err := transaction.FromContext(ctx.Request().Context()).
 		ContactList.UpdateOneID(contactListsPutReq.ContactListID).
 		SetName(contactListsPutReq.ContactList.Name).
@@ -155,30 +229,30 @@ func (h *Handler) ContactListsPut(ctx echo.Context) error {
 
 	h.Logger.Debugf("Updated ContactList, %s", contactList)
 
-	return h.Success(ctx, models.ContactListsPutResponse{
+	return h.Success(ctx, models.ContactListsPutOneResponse{
 		Reply:       rout.Reply{Success: true},
 		ContactList: models.ContactListFromGeneratedContactList(contactList),
 	})
 }
 
-func (h *Handler) BindContactListsPut() *openapi3.Operation {
-	contactListsPut := openapi3.NewOperation()
-	contactListsPut.Description = "Update Contact Lists (Full Update)"
-	contactListsPut.OperationID = "ContactListsPut"
-	contactListsPut.Security = &openapi3.SecurityRequirements{
+func (h *Handler) BindContactListsPutOne() *openapi3.Operation {
+	contactListsPutOne := openapi3.NewOperation()
+	contactListsPutOne.Description = "Update One Contact List (Full Update)"
+	contactListsPutOne.OperationID = "ContactListsPutOne"
+	contactListsPutOne.Security = &openapi3.SecurityRequirements{
 		openapi3.SecurityRequirement{
 			"bearerAuth": []string{},
 		},
 	}
 
-	h.AddRequestBody("ContactListsPutRequest", models.ExampleContactListsPutRequest, contactListsPut)
+	h.AddRequestBody("ContactListsPutOneRequest", models.ExampleContactListsPutOneRequest, contactListsPutOne)
 
-	h.AddResponse("ContactsPutResponse", "success", models.ExampleContactListsPutSuccessResponse, contactListsPut, http.StatusOK)
-	contactListsPut.AddResponse(http.StatusBadRequest, badRequest())
-	contactListsPut.AddResponse(http.StatusInternalServerError, internalServerError())
-	contactListsPut.AddResponse(http.StatusUnauthorized, unauthorized())
+	h.AddResponse("ContactListsPutOneResponse", "success", models.ExampleContactListsPutOneSuccessResponse, contactListsPutOne, http.StatusOK)
+	contactListsPutOne.AddResponse(http.StatusBadRequest, badRequest())
+	contactListsPutOne.AddResponse(http.StatusInternalServerError, internalServerError())
+	contactListsPutOne.AddResponse(http.StatusUnauthorized, unauthorized())
 
-	return contactListsPut
+	return contactListsPutOne
 }
 
 func (h *Handler) ContactListsDelete(ctx echo.Context) error {

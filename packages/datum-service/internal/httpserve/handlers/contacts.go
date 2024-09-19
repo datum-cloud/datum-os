@@ -15,7 +15,10 @@ import (
 )
 
 func (h *Handler) ContactsGet(ctx echo.Context) error {
-	contacts, err := transaction.FromContext(ctx.Request().Context()).Contact.Query().All(ctx.Request().Context())
+	contacts, err := transaction.FromContext(ctx.Request().Context()).
+		Contact.Query().
+		WithContactLists().
+		All(ctx.Request().Context())
 	if err != nil {
 		return h.InternalServerError(ctx, err)
 	}
@@ -51,7 +54,10 @@ func (h *Handler) ContactsGetOne(ctx echo.Context) error {
 	}
 
 	contact, err := transaction.FromContext(ctx.Request().Context()).
-		Contact.Get(ctx.Request().Context(), contactsGetOneReq.ID)
+		Contact.Query().
+		Where(contact.ID(contactsGetOneReq.ID)).
+		WithContactLists().
+		Only(ctx.Request().Context())
 	if err != nil {
 		return h.InternalServerError(ctx, err)
 	}
