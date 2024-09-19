@@ -102,7 +102,7 @@ export async function getContacts(): Promise<Datum.Contact[]> {
 
     return {
       ...formattedResponse,
-      lists: ['Admins', 'Developers', 'Newsletter'], // TODO: Make this real data...
+      lists: formattedResponse?.lists || [],
     }
   })
 

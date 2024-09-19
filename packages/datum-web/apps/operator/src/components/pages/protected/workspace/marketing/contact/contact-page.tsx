@@ -15,7 +15,7 @@ import {
 } from 'lucide-react'
 import Link from 'next/link'
 
-import { mockLists, OPERATOR_APP_ROUTES } from '@repo/constants'
+import { OPERATOR_APP_ROUTES } from '@repo/constants'
 import { Button } from '@repo/ui/button'
 import { Panel, PanelHeader } from '@repo/ui/panel'
 import {
@@ -98,7 +98,7 @@ const ContactPage = ({ id }: ContactPageProps) => {
     fullName,
     email,
     source,
-    lists = ['Admin', 'Newsletter', 'Developers'], // TODO: Remove these later
+    lists,
     createdAt,
     enrichedData = {},
     contactHistory,
@@ -197,8 +197,7 @@ const ContactPage = ({ id }: ContactPageProps) => {
                   </AccordionTrigger>
                   <AccordionContent className={accordionContentOuter()}>
                     <div className={accordionContentInner()}>
-                      {/* TODO: Replace mock lists */}
-                      {mockLists.map((list) => {
+                      {lists.map((list) => {
                         const isSelected = selectedLists.includes(list)
 
                         if (isSelected) {

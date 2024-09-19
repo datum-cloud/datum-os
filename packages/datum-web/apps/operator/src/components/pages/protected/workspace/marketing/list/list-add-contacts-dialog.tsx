@@ -1,7 +1,6 @@
 'use client'
 
-import { useSession } from 'next-auth/react'
-
+import { pluralize } from '@repo/common/text'
 import {
   Dialog,
   DialogClose,
@@ -16,35 +15,28 @@ import { createListMembers } from '@/query/lists'
 import { useAsyncFn } from '@/hooks/useAsyncFn'
 import { Loading } from '@/components/shared/loading/loading'
 import ListContactsTable from '@/components/pages/protected/workspace/marketing/list/list-contacts-table'
-import { useContacts } from '@/hooks/useContacts'
 import { Button } from '@repo/ui/button'
 import { useState } from 'react'
+import { CheckCircle, Search } from 'lucide-react'
+import { DebouncedInput } from '@repo/ui/input'
 
 type ListDialogFormProps = {
   listId: Datum.ListId
+  contacts: Datum.Contact[]
   open: boolean
   setOpen(input: boolean): void
 }
 
 const ListsAddContactsDialog = ({
   listId,
+  contacts,
   open,
   setOpen,
 }: ListDialogFormProps) => {
   const [selectedContacts, setSelectedContacts] = useState<Datum.Contact[]>([])
   const [contactsAdded, setContactsAdded] = useState<number>()
-  const [{ loading: loadingCreate, error: errorCreate }, create] =
-    useAsyncFn(createListMembers)
-  const { data: session } = useSession()
-  const organizationId =
-    session?.user.organization ?? ('' as Datum.OrganisationId)
-  const {
-    data: contacts = [],
-    isLoading: loadingContacts,
-    error: errorContacts,
-  } = useContacts(organizationId)
-  const loading = loadingContacts || loadingCreate
-  const error = errorContacts || errorCreate
+  const [{ loading, error }, create] = useAsyncFn(createListMembers)
+  const [query, setQuery] = useState('')
 
   async function onSubmit() {
     const memberIds = selectedContacts.map(({ id }) => id)
@@ -59,6 +51,10 @@ const ListsAddContactsDialog = ({
     setSelectedContacts([])
   }
 
+  function handleSearch() {
+    console.log('search')
+  }
+
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent>
@@ -70,19 +66,34 @@ const ListsAddContactsDialog = ({
         {error && <p>Whoops... something went wrong</p>}
         {!loading && !contactsAdded && (
           <>
-            {/* SEARCH BAR */}
+            <div className="h-11 relative bg-white grid grid-cols-1 gap-0 items-start justify-start rounded-md border border-blackberry-400 w-full">
+              <DebouncedInput
+                value={query}
+                type="search"
+                onChange={(e) => setQuery(e)}
+                placeholder="Search contacts"
+                className="flex h-[42px] transition-all transform duration-1000 rounded-md border-none w-full translate-x-0 opacity-100 pr-11"
+              />
+              <Button
+                variant="blackberryXs"
+                size="xs"
+                className="h-[42px] aspect-square shrink-0 rounded-md !absolute top-0 right-0"
+                icon={<Search />}
+                iconPosition="left"
+              />
+            </div>
             <ListContactsTable
               id={listId}
               contacts={contacts}
               onSelectionChange={setSelectedContacts}
+              globalFilter={query}
+              setGlobalFilter={setQuery}
               isDialog
             />
             <DialogFooter>
-              <DialogClose asChild onClick={onSubmit}>
-                <Button type="button" full className="w-2/3">
-                  Add contacts
-                </Button>
-              </DialogClose>
+              <Button type="button" onClick={onSubmit} full className="w-2/3">
+                Add contacts
+              </Button>
               <Button
                 type="button"
                 onClick={handleCancel}
@@ -96,16 +107,17 @@ const ListsAddContactsDialog = ({
         )}
         {!!contactsAdded && (
           <>
-            <p>{contactsAdded} Contacts added</p>
+            <div className="flex items-center justify-center gap-2 py-6">
+              <CheckCircle />
+              Successfully added {contactsAdded}{' '}
+              {pluralize('contact', contactsAdded)}
+            </div>
             <DialogFooter>
-              <Button
-                type="button"
-                onClick={handleCancel}
-                className="w-1/3 ml-0"
-                variant="outline"
-              >
-                Close
-              </Button>
+              <DialogClose asChild>
+                <Button type="button" onClick={handleCancel} full>
+                  Close
+                </Button>
+              </DialogClose>
             </DialogFooter>
           </>
         )}

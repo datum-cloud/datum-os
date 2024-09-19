@@ -230,7 +230,7 @@ export const CONTACT_COLUMNS: ColumnDef<Datum.Contact>[] = [
 
       return (
         <div className="text-nowrap">
-          <Tag className="mr-[9px]">{first}</Tag>
+          <Tag className="mr-[9px]">{first || 'N/A'}</Tag>
           {rest.length > 0 && <Tag variant="muted">+ {rest.length}</Tag>}
         </div>
       )

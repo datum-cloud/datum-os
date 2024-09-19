@@ -203,6 +203,7 @@ const ListContactsTable = ({
       highlightHeader
       showFooter
       globalFilter={globalFilter}
+      globalFilterFn="includesString"
       columnFilters={columnFilters}
       setGlobalFilter={setGlobalFilter}
     />

@@ -32,6 +32,7 @@ import { removeContacts } from '@/query/contacts'
 import { pageStyles } from './page.styles'
 import ContactFormDialog from './contacts-form-dialog'
 import { useLists } from '@/hooks/useLists'
+import { createListMembers, removeListMembers } from '@/query/lists'
 
 type ContactsTableDropdownProps = {
   contact: Datum.Contact
@@ -58,13 +59,12 @@ const ContactsTableDropdown = ({ contact }: ContactsTableDropdownProps) => {
   }
 
   async function unsubscribeAll() {
-    // TODO:
-    console.log('Unsubscribe all')
+    await Promise.all(lists.map((listId) => removeListMembers(listId, [id])))
   }
 
   async function setLists(newLists: Datum.ListId[]) {
-    // TODO:
-    console.log('New lists array', newLists)
+    console.log('newLists', newLists)
+    await Promise.all(newLists.map((listId) => createListMembers(listId, [id])))
   }
 
   function setOpenEditDialog(input: boolean) {
@@ -133,7 +133,7 @@ const ContactsTableDropdown = ({ contact }: ContactsTableDropdownProps) => {
                             />
                           }
                           iconPosition="left"
-                          onClick={setLists.bind(null, newSelectedLists)}
+                          onClick={() => setLists(newSelectedLists)}
                         >
                           {list.name}
                         </Button>

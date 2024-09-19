@@ -38,6 +38,7 @@ import ListDeleteDialog from '@/components/pages/protected/workspace/marketing/l
 import ListsAddContactsDialog from '@/components/pages/protected/workspace/marketing/list/list-add-contacts-dialog'
 import { editLists } from '@/query/lists'
 import { ListInput } from '@/utils/schemas'
+import { useContacts } from '@/hooks/useContacts'
 
 type ListPageProps = {
   id: Datum.ListId
@@ -55,7 +56,14 @@ const ListPage = ({ id }: ListPageProps) => {
     pageStyles()
   const { listDropdownItem, listDropdownIcon } = listsStyles()
 
-  const { error, isLoading, data: list } = useList(id)
+  const { error: errorList, isLoading: loadingList, data: list } = useList(id)
+  const {
+    data: allContacts = [],
+    isLoading: loadingContacts,
+    error: errorContacts,
+  } = useContacts(organizationId)
+  const loading = loadingList || loadingContacts
+  const error = errorList || errorContacts
 
   function handleExport() {
     console.log('Export Selected Contacts:', selectedContacts)
@@ -79,7 +87,7 @@ const ListPage = ({ id }: ListPageProps) => {
     setTimeout(() => (document.body.style.pointerEvents = ''), 500)
   }
 
-  if (isLoading) {
+  if (loading) {
     return <Loading />
   }
 
@@ -88,6 +96,10 @@ const ListPage = ({ id }: ListPageProps) => {
   }
 
   const { name, description, visibility, members } = list
+  const memberIds = members.map(({ id }) => id)
+  const nonMembers = allContacts.filter(
+    (contact) => !memberIds.includes(contact.id),
+  )
 
   function copyToClipboard(text: string) {
     navigator.clipboard.writeText(text)
@@ -212,6 +224,7 @@ const ListPage = ({ id }: ListPageProps) => {
       />
       <ListsAddContactsDialog
         listId={id}
+        contacts={nonMembers}
         open={openAddContactsDialog}
         setOpen={setOpenAddContactsDialog}
       />

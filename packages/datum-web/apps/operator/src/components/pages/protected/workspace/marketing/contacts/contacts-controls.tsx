@@ -11,7 +11,6 @@ import {
   DropdownMenuTrigger,
 } from '@repo/ui/dropdown-menu'
 import type { ColumnFiltersState } from '@repo/ui/data-table'
-import { mockLists } from '@repo/constants'
 import type { Datum } from '@repo/types'
 
 import {
@@ -26,6 +25,8 @@ import FilterContactDialog from './contacts-filter-dialog'
 import ImportContactsDialog from './contacts-import-dialog'
 import ContactsSearch from './contacts-search'
 import { pageStyles } from './page.styles'
+import { useLists } from '@/hooks/useLists'
+import { useSession } from 'next-auth/react'
 
 type ContactsControlsProps = {
   search(query: string): void
@@ -54,6 +55,10 @@ const ContactsControls = ({
   const [_openContactDialog, _setOpenContactDialog] = useState(false)
   const [_openImportDialog, _setOpenImportDialog] = useState(false)
   const [selectedLists, setSelectedLists] = useState<string[]>([])
+  const { data: session } = useSession()
+  const organizationId =
+    session?.user.organization ?? ('' as Datum.OrganisationId)
+  const { data: lists = [] } = useLists(organizationId)
 
   function openContactDialog() {
     _setOpenContactDialog(true)
@@ -137,18 +142,17 @@ const ContactsControls = ({
                 </AccordionTrigger>
                 <AccordionContent className={accordionContentOuter()}>
                   <div className={accordionContentInner()}>
-                    {mockLists.map((list) => {
-                      const id = useId()
-                      const isSelected = selectedLists.includes(list)
+                    {lists.map((list) => {
+                      const isSelected = selectedLists.includes(list.id)
 
                       if (isSelected) {
                         const newSelectedLists = selectedLists.filter(
-                          (selectedList) => list !== selectedList,
+                          (selectedList) => list.id !== selectedList,
                         )
 
                         return (
                           <Button
-                            key={id}
+                            key={list.id}
                             variant="tagSuccess"
                             icon={
                               <Check
@@ -161,22 +165,22 @@ const ContactsControls = ({
                             onClick={() => setSelectedLists(newSelectedLists)}
                             size="tag"
                           >
-                            {list}
+                            {list.name}
                           </Button>
                         )
                       }
 
-                      const newSelectedLists = [...selectedLists, list]
+                      const newSelectedLists = [...selectedLists, list.id]
 
                       return (
                         <Button
-                          key={id}
+                          key={list.id}
                           variant="tag"
                           size="tag"
                           className="transition-all duration-0"
                           onClick={() => setSelectedLists(newSelectedLists)}
                         >
-                          {list}
+                          {list.name}
                         </Button>
                       )
                     })}
