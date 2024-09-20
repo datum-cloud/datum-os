@@ -165,6 +165,8 @@ export const LIST_COLUMNS: ColumnDef<Datum.List>[] = [
     cell: ({ cell }) => {
       const value = cell.getValue() as string
 
+      if (!value) return ''
+
       return (
         <Tag variant={value === 'public' ? 'public' : 'private'}>{value}</Tag>
       )
@@ -173,7 +175,7 @@ export const LIST_COLUMNS: ColumnDef<Datum.List>[] = [
   },
   {
     id: 'members',
-    accessorKey: 'members',
+    accessorKey: 'memberCount',
     header: ({ column }) => (
       <DataTableColumnHeader
         className={header()}
@@ -185,11 +187,11 @@ export const LIST_COLUMNS: ColumnDef<Datum.List>[] = [
     enableGlobalFilter: false,
     enableSorting: false,
     cell: ({ cell }) => {
-      const members = cell.getValue() as Datum.ContactId[]
+      const count = cell.getValue() as number
 
       return (
         <div className="text-nowrap">
-          <Tag className="mr-[9px]">{members.length}</Tag>
+          <Tag className="mr-[9px]">{count}</Tag>
         </div>
       )
     },

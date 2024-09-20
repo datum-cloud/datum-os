@@ -1,7 +1,6 @@
 'use client'
 
 import { useSession } from 'next-auth/react'
-import { useEffect } from 'react'
 
 import {
   Dialog,
@@ -72,7 +71,6 @@ const ListsFormDialog = ({ list, open, setOpen }: ListDialogFormProps) => {
     control,
     handleSubmit,
     reset,
-    watch,
     formState: { errors },
   } = form
   const isValid = Object.keys(errors).length === 0
@@ -81,11 +79,11 @@ const ListsFormDialog = ({ list, open, setOpen }: ListDialogFormProps) => {
     let id: string | undefined
 
     if (isNew) {
-      const contacts = await create(organizationId, [data])
-      id = contacts[0].id
+      const lists = await create(organizationId, [data])
+      id = lists[0]?.id
     } else {
-      const contacts = await edit(organizationId, [data])
-      id = contacts[0].id
+      await edit(organizationId, [{ ...list, ...data }])
+      id = list.id
     }
 
     router.push(getPathWithParams(OPERATOR_APP_ROUTES.contactList, { id }))
