@@ -41,7 +41,7 @@ function getContactInformation(row: Record<string, any>) {
   return decamelize(data) as Datum.Contact
 }
 
-export const maxDuration = 300
+export const maxDuration = 60
 
 export async function POST(request: Request) {
   try {
