@@ -7,7 +7,7 @@ export const dataTableStyles = tv({
     paginationContainer:
       'flex items-stretch justify-start gap-0 border border-blackberry-400 rounded overflow-hidden',
     paginationButton:
-      'h-8 w-8 p-0 flex border-r border-blackberry-400 !text-blackberry-400 disabled:!bg-blackberry-50',
+      'h-8 min-w-8 w-auto p-1 flex border-r border-blackberry-400 !text-blackberry-400 disabled:!bg-blackberry-50',
     paginationEllipses:
       'h-8 w-8 p-1 flex items-end justify-center border-r border-blackberry-400',
     pageSizeTrigger: 'h-8 !text-blackberry-400 placeholder-blackberry-400',

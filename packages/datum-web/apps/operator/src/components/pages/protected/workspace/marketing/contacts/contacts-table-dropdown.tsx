@@ -33,6 +33,7 @@ import { pageStyles } from './page.styles'
 import ContactFormDialog from './contacts-form-dialog'
 import { useLists } from '@/hooks/useLists'
 import { createListMembers, removeListMembers } from '@/query/lists'
+import { useAsyncFn } from '@/hooks/useAsyncFn'
 
 type ContactsTableDropdownProps = {
   contact: Datum.Contact
@@ -41,6 +42,10 @@ type ContactsTableDropdownProps = {
 const ContactsTableDropdown = ({ contact }: ContactsTableDropdownProps) => {
   const { id, contactLists = [] } = contact
   const [_openEditDialog, _setOpenEditDialog] = useState(false)
+  const [{ loading: loadingUnsubscribe }, removeSubscriber] =
+    useAsyncFn(removeListMembers)
+  const [{ loading: loadingsubscribe }, addSubscriber] =
+    useAsyncFn(createListMembers)
   const { data: session } = useSession()
   const organizationId =
     session?.user.organization ?? ('' as Datum.OrganisationId)
@@ -65,11 +70,11 @@ const ContactsTableDropdown = ({ contact }: ContactsTableDropdownProps) => {
   }
 
   async function subscribe(listId: Datum.ListId) {
-    await createListMembers(listId, [id])
+    await addSubscriber(listId, [id])
   }
 
   async function unsubscribe(listId: Datum.ListId) {
-    await removeListMembers(listId, [id])
+    await removeSubscriber(listId, [id])
   }
 
   function setOpenEditDialog(input: boolean) {
