@@ -25,6 +25,8 @@ export const formStyles = tv({
     form: 'w-full flex flex-col gap-6',
     fieldsContainer: 'relative w-full flex flex-col justify-start gap-4',
     labelContainer: 'w-full',
+    selectItem:
+      'w-full flex items-center justify-start gap-3 text-button-m cursor-pointer hover:bg-winter-sky-700',
     requiredText:
       'text-smallcaps-s font-bold text-[12px] font-mono uppercase tracking-smallcaps-s leading-[150%] text-blackberry-500 absolute top-1 right-0',
   },

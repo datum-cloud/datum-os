@@ -31,6 +31,13 @@ import { getPathWithParams } from '@repo/common/routes'
 import { OPERATOR_APP_ROUTES } from '@repo/constants'
 import { useAsyncFn } from '@/hooks/useAsyncFn'
 import { Loading } from '@/components/shared/loading/loading'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@repo/ui/select'
 
 type ListDialogFormProps = {
   open: boolean
@@ -46,6 +53,7 @@ const ListsFormDialog = ({ list, open, setOpen }: ListDialogFormProps) => {
     fieldsContainer,
     labelContainer,
     requiredText,
+    selectItem,
   } = formStyles()
   const [{ loading: loadingCreate, error: errorCreate }, create] =
     useAsyncFn(createLists)
@@ -133,6 +141,37 @@ const ListsFormDialog = ({ list, open, setOpen }: ListDialogFormProps) => {
                       <FormLabel>Description</FormLabel>
                       <FormControl>
                         <Input {...field} value={field.value || ''} />
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  name="visibility"
+                  control={control}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Visibility</FormLabel>
+                      <FormControl>
+                        <Select
+                          {...field}
+                          defaultValue={field.value || ''}
+                          onValueChange={field.onChange}
+                        >
+                          <SelectTrigger className="h-12">
+                            <SelectValue placeholder="Select visibility" />
+                          </SelectTrigger>
+                          <SelectContent sideOffset={2}>
+                            <SelectItem value="PUBLIC" className={selectItem()}>
+                              Public
+                            </SelectItem>
+                            <SelectItem
+                              value="PRIVATE"
+                              className={selectItem()}
+                            >
+                              Private
+                            </SelectItem>
+                          </SelectContent>
+                        </Select>
                       </FormControl>
                     </FormItem>
                   )}

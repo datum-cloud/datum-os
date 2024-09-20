@@ -236,7 +236,7 @@ const ListPage = ({ id }: ListPageProps) => {
         setOpen={setOpenAddContactsDialog}
       />
       <ListDeleteDialog
-        ids={[id]}
+        lists={[list]}
         open={openDeleteDialog}
         setOpen={setOpenDeleteDialog}
         redirect

@@ -47,7 +47,7 @@ const ListContactsTableDropdown = ({
             onClick={unsubscribe}
           >
             <BellMinus size={18} className={listDropdownIcon()} />
-            Unsubscribe
+            Remove from list
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

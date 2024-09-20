@@ -68,7 +68,7 @@ const ListsTableDropdown = ({ list }: ListsTableDropdownProps) => {
         setOpen={setOpenEditDialog}
       />
       <ListDeleteDialog
-        ids={[id]}
+        lists={[list]}
         open={openDeleteDialog}
         setOpen={setOpenDeleteDialog}
       />

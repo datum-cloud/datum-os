@@ -58,7 +58,7 @@ const ListsPage = () => {
         />
       )}
       <ListDeleteDialog
-        ids={selectedLists.map(({ id }) => id)}
+        lists={selectedLists}
         open={openDeleteDialog}
         setOpen={setOpenDeleteDialog}
       />

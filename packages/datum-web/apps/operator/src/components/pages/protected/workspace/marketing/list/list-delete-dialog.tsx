@@ -23,14 +23,14 @@ import { removeLists } from '@/query/lists'
 import { deleteDialogStyles } from './page.styles'
 
 type ListDeleteFormProps = {
-  ids: Datum.ListId[]
+  lists: Datum.List[]
   open: boolean
   setOpen(input: boolean): void
   redirect?: boolean
 }
 
 const ListDeleteDialog = ({
-  ids,
+  lists,
   open,
   redirect = false,
   setOpen,
@@ -48,6 +48,7 @@ const ListDeleteDialog = ({
   }
 
   function handleDelete() {
+    const ids = lists.map(({ id }) => id)
     deleteLists(organizationId, ids)
 
     if (redirect) {
@@ -61,7 +62,9 @@ const ListDeleteDialog = ({
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Delete {ids.length > 1 ? 'lists' : 'list'}</DialogTitle>
+          <DialogTitle>
+            Delete {lists.length > 1 ? 'lists' : `${lists[0]?.name || 'list'}`}
+          </DialogTitle>
           <DialogClose onClick={handleCancel} />
         </DialogHeader>
         {loading && <Loading />}
@@ -76,7 +79,9 @@ const ListDeleteDialog = ({
               className={button()}
               onClick={handleDelete}
             >
-              {ids.length > 1 ? `Delete lists` : 'Delete this list'}
+              {lists.length > 1
+                ? `Delete lists`
+                : `Delete ${lists[0]?.name || 'list'}`}
             </Button>
           </div>
         )}
