@@ -23,12 +23,6 @@ export async function DELETE(
     )
   }
 
-  console.log(
-    'DELETE',
-    id,
-    bodyData,
-    getPathWithParams(SERVICE_APP_ROUTES.contactListMembers, { id }),
-  )
   const fData = await fetch(
     getPathWithParams(SERVICE_APP_ROUTES.contactListMembers, { id }),
     {

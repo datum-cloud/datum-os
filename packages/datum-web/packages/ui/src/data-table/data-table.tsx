@@ -130,6 +130,10 @@ export function DataTable<TData, TValue>({
   })
 
   useEffect(() => {
+    setColumnFilters(_columnFilters)
+  }, [_columnFilters])
+
+  useEffect(() => {
     if (setExportData) {
       setExportData(table.getFilteredRowModel().rows)
     }

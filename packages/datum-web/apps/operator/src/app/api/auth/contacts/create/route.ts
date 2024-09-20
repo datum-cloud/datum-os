@@ -4,7 +4,6 @@ import { NextResponse } from 'next/server'
 
 export async function POST(request: Request) {
   const bodyData = await request.json()
-  console.log('BODY DATA', bodyData)
   const session = await auth()
   const token = session?.user?.accessToken
 

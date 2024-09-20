@@ -1,7 +1,10 @@
 'use client'
 
+import Link from 'next/link'
 import { useState, useEffect } from 'react'
 
+import { getPathWithParams } from '@repo/common/routes'
+import { OPERATOR_APP_ROUTES } from '@repo/constants'
 import { Checkbox } from '@repo/ui/checkbox'
 import {
   ColumnDef,
@@ -15,6 +18,7 @@ import {
   ColumnFiltersState,
   Row,
 } from '@repo/ui/data-table'
+import { Tag } from '@repo/ui/tag'
 import { Datum } from '@repo/types'
 
 import { formatDate } from '@/utils/date'
@@ -22,10 +26,6 @@ import { sortAlphabetically } from '@/utils/sort'
 
 import ContactsTableDropdown from './contacts-table-dropdown'
 import { tableStyles } from './page.styles'
-import Link from 'next/link'
-import { getPathWithParams } from '@repo/common/routes'
-import { OPERATOR_APP_ROUTES } from '@repo/constants'
-import { Tag } from '@repo/ui/tag'
 
 type ContactsTableProps = {
   contacts: Datum.Contact[]
@@ -54,15 +54,35 @@ const fuzzyFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
   return itemRank.passed
 }
 
-const emptyFilter: FilterFn<any> = (row, columnId, value) => Boolean(value)
+const booleanFilter: FilterFn<any> = (row, columnId, value) => {
+  let cellValue = row.getValue(columnId)
+
+  if (typeof cellValue === 'string') {
+    cellValue = cellValue.trim()
+  }
+
+  return Boolean(cellValue) === value
+}
 
 const fuzzySort: SortingFn<any> = (rowA, rowB, columnId) => {
   let dir = 0
 
+  if (!rowA.columnFiltersMeta[columnId] && !rowB.columnFiltersMeta[columnId]) {
+    return 0
+  }
+
+  if (!rowA.columnFiltersMeta[columnId]) {
+    return -1
+  }
+
+  if (!rowB.columnFiltersMeta[columnId]) {
+    return 1
+  }
+
   if (rowA.columnFiltersMeta[columnId]) {
     dir = compareItems(
-      rowA.columnFiltersMeta[columnId]?.itemRank!,
-      rowB.columnFiltersMeta[columnId]?.itemRank!,
+      rowA.columnFiltersMeta[columnId].itemRank!,
+      rowB.columnFiltersMeta[columnId].itemRank!,
     )
   }
 
@@ -71,7 +91,7 @@ const fuzzySort: SortingFn<any> = (rowA, rowB, columnId) => {
 
 const filterFns = {
   fuzzy: fuzzyFilter,
-  empty: emptyFilter,
+  boolean: booleanFilter,
 }
 
 export const CONTACT_COLUMNS: ColumnDef<Datum.Contact>[] = [
@@ -115,6 +135,8 @@ export const CONTACT_COLUMNS: ColumnDef<Datum.Contact>[] = [
     id: 'email',
     accessorFn: (row) => row.email || '',
     enableGlobalFilter: true,
+    filterFn: booleanFilter,
+    enableSorting: true,
     sortingFn: fuzzySort,
     header: ({ column }) => (
       <DataTableColumnHeader
@@ -151,6 +173,7 @@ export const CONTACT_COLUMNS: ColumnDef<Datum.Contact>[] = [
         children="Name"
       />
     ),
+    filterFn: booleanFilter,
     enableGlobalFilter: true,
     enableSorting: true,
     sortingFn: fuzzySort,
@@ -203,6 +226,7 @@ export const CONTACT_COLUMNS: ColumnDef<Datum.Contact>[] = [
     ),
     enableGlobalFilter: true,
     enableSorting: true,
+    sortingFn: fuzzySort,
     cell: ({ cell }) => {
       const value = cell.getValue() as Datum.Status
       const isActive = value === 'ACTIVE'

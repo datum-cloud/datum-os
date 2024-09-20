@@ -4,11 +4,7 @@ import { TEL_REGEX } from '@repo/constants'
 
 export const ContactSchema = z.object({
   id: z.string().describe('Contact ID').optional(),
-  fullName: z
-    .string()
-    .min(2, 'Please enter a valid name')
-    .describe('Name of the contact')
-    .optional(),
+  fullName: z.string().describe('Name of the contact').optional(),
   title: z
     .string()
     .min(2, 'Please enter a valid title')

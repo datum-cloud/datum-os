@@ -131,7 +131,9 @@ const ContactPage = ({ id }: ContactPageProps) => {
             <User size={60} className="text-winter-sky-900" />
           </div>
           <div className={contactText()}>
-            <h4 className="text-[27px] leading-[130%]">{fullName}</h4>
+            {fullName && (
+              <h4 className="text-[27px] leading-[130%]">{fullName}</h4>
+            )}
             <h6 className="text-body-l text-blackberry-600">{email}</h6>
             <p className="text-body-sm leading-5 text-blackberry-500">
               Added by {source} on {formatDate(createdAt)}

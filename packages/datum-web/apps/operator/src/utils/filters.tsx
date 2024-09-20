@@ -17,6 +17,7 @@ import {
   MapPin,
   Phone,
   Shapes,
+  User,
   UserRoundCog,
   Users,
   UserSquare2,
@@ -51,6 +52,12 @@ const BOOLEAN_OPTIONS: FilterOption[] = [
 ]
 
 export const CONTACT_FILTERS: Record<string, Filter> = {
+  fullName: {
+    icon: User,
+    title: 'Has a name',
+    operator: 'empty',
+    options: BOOLEAN_OPTIONS,
+  },
   address: {
     icon: MapPin,
     title: 'Has an address',
