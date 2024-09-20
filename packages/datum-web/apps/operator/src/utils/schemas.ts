@@ -72,6 +72,10 @@ export const SearchFormSchema = z.object({
   query: z.string().describe('The search query').optional(),
 })
 
+export const DeletionSchema = z.object({
+  deletionText: z.string().describe('Text to confirm deletion'),
+})
+
 export const ListSchema = z.object({
   id: z.string().describe('List ID').optional(),
   name: z
@@ -95,4 +99,5 @@ export type ContactInput = z.infer<typeof ContactSchema>
 export type ContactFilterInput = z.infer<typeof ContactFilterFormSchema>
 export type ContactFormInput = z.infer<typeof ContactFormSchema>
 export type SearchFormInput = z.infer<typeof SearchFormSchema>
+export type DeletionInput = z.infer<typeof DeletionSchema>
 export type ListInput = z.infer<typeof ListSchema>

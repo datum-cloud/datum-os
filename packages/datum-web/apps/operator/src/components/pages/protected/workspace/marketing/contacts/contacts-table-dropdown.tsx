@@ -27,13 +27,12 @@ import {
 import { Button } from '@repo/ui/button'
 import { Datum } from '@repo/types'
 
-import { removeContacts } from '@/query/contacts'
-
 import { pageStyles } from './page.styles'
 import ContactFormDialog from './contacts-form-dialog'
 import { useLists } from '@/hooks/useLists'
 import { createListMembers, removeListMembers } from '@/query/lists'
 import { useAsyncFn } from '@/hooks/useAsyncFn'
+import ContactDeleteDialog from '@/components/pages/protected/workspace/marketing/contact/contact-delete-dialog'
 
 type ContactsTableDropdownProps = {
   contact: Datum.Contact
@@ -41,7 +40,8 @@ type ContactsTableDropdownProps = {
 
 const ContactsTableDropdown = ({ contact }: ContactsTableDropdownProps) => {
   const { id, contactLists = [] } = contact
-  const [_openEditDialog, _setOpenEditDialog] = useState(false)
+  const [openEditDialog, _setOpenEditDialog] = useState(false)
+  const [openDeleteDialog, _setOpenDeleteDialog] = useState(false)
   const [{ loading: loadingUnsubscribe }, removeSubscriber] =
     useAsyncFn(removeListMembers)
   const [{ loading: loadingsubscribe }, addSubscriber] =
@@ -59,8 +59,10 @@ const ContactsTableDropdown = ({ contact }: ContactsTableDropdownProps) => {
     contactDropdownIcon,
   } = pageStyles()
 
-  async function deleteContact() {
-    await removeContacts(organizationId, [id])
+  function setOpenDeleteDialog(input: boolean) {
+    _setOpenDeleteDialog(input)
+    // NOTE: This is needed to close the dialog without removing pointer events per https://github.com/shadcn-ui/ui/issues/468
+    setTimeout(() => (document.body.style.pointerEvents = ''), 500)
   }
 
   async function unsubscribeAll() {
@@ -106,7 +108,7 @@ const ContactsTableDropdown = ({ contact }: ContactsTableDropdownProps) => {
           </DropdownMenuItem>
           <DropdownMenuItem
             className={contactDropdownItem()}
-            onClick={deleteContact}
+            onClick={() => setOpenDeleteDialog(true)}
           >
             <Trash size={18} className={contactDropdownIcon()} />
             Delete Item
@@ -169,8 +171,14 @@ const ContactsTableDropdown = ({ contact }: ContactsTableDropdownProps) => {
       </DropdownMenu>
       <ContactFormDialog
         contact={contact}
-        open={_openEditDialog}
+        open={openEditDialog}
         setOpen={setOpenEditDialog}
+      />
+      <ContactDeleteDialog
+        contacts={[contact]}
+        open={openDeleteDialog}
+        setOpen={setOpenDeleteDialog}
+        redirect
       />
     </div>
   )

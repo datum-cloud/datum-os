@@ -18,7 +18,7 @@ import { Datum } from '@repo/types'
 
 import { Loading } from '@/components/shared/loading/loading'
 import { useAsyncFn } from '@/hooks/useAsyncFn'
-import { removeLists } from '@/query/lists'
+import { removeContacts } from '@/query/contacts'
 
 import { deleteDialogStyles } from './page.styles'
 import {
@@ -34,22 +34,22 @@ import {
 import { Input } from '@repo/ui/input'
 import { DeletionInput, DeletionSchema } from '@/utils/schemas'
 
-type ListDeleteFormProps = {
-  lists: Datum.List[]
+type ContactDeleteFormProps = {
+  contacts: Datum.Contact[]
   open: boolean
   setOpen(input: boolean): void
   redirect?: boolean
 }
 
-const ListDeleteDialog = ({
-  lists,
+const ContactDeleteDialog = ({
+  contacts,
   open,
   redirect = false,
   setOpen,
-}: ListDeleteFormProps) => {
+}: ContactDeleteFormProps) => {
   const requiredText = 'delete'
   const router = useRouter()
-  const [{ loading }, deleteLists] = useAsyncFn(removeLists)
+  const [{ loading }, deleteContacts] = useAsyncFn(removeContacts)
   const { data: session } = useSession()
   const organizationId =
     session?.user.organization ?? ('' as Datum.OrganisationId)
@@ -71,11 +71,11 @@ const ListDeleteDialog = ({
   }
 
   async function onSubmit(data: DeletionInput) {
-    const ids = lists.map(({ id }) => id)
-    await deleteLists(organizationId, ids)
+    const ids = contacts.map(({ id }) => id)
+    await deleteContacts(organizationId, ids)
 
     if (redirect) {
-      router.push(OPERATOR_APP_ROUTES.contactLists)
+      router.push(OPERATOR_APP_ROUTES.contacts)
     }
 
     setOpen(false)
@@ -87,9 +87,9 @@ const ListDeleteDialog = ({
         <DialogHeader>
           <DialogTitle className="capitalize">
             Delete{' '}
-            {lists.length > 1
-              ? 'lists'
-              : `${`"${lists[0]?.name}"` ?? 'this list'}`}
+            {contacts.length > 1
+              ? 'contacts'
+              : `${`"${contacts[0]?.fullName}"` ?? 'this contact'}`}
           </DialogTitle>
           <DialogClose onClick={handleCancel} />
         </DialogHeader>
@@ -100,7 +100,7 @@ const ListDeleteDialog = ({
               <div className="flex flex-col gap-3">
                 <div className={text()}>
                   <TriangleAlert />
-                  Deleting a list is irreversible
+                  Deleting a contact is irreversible
                 </div>
                 <FormField
                   control={form.control}
@@ -111,7 +111,7 @@ const ListDeleteDialog = ({
                         Please enter the text{' '}
                         <span className="font-bold">{requiredText}</span> to
                         confirm you want to remove{' '}
-                        {lists.length > 1 ? 'these lists' : 'the list'}
+                        {contacts.length > 1 ? 'these contacts' : 'the contact'}
                       </FormLabel>
                       <FormControl>
                         <Input variant="medium" {...field} className="w-full" />
@@ -147,4 +147,4 @@ const ListDeleteDialog = ({
   )
 }
 
-export default ListDeleteDialog
+export default ContactDeleteDialog

@@ -1,6 +1,5 @@
 'use client'
 
-import { useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react'
 import React, { useState } from 'react'
 import {
@@ -37,22 +36,22 @@ import {
 } from '@/components/shared/sidebar/sidebar-accordion/sidebar-accordion'
 import { Loading } from '@/components/shared/loading/loading'
 import { useContact } from '@/hooks/useContacts'
-import { removeContacts } from '@/query/contacts'
+import { useLists } from '@/hooks/useLists'
+import { createListMembers, removeListMembers } from '@/query/lists'
 import { formatDate } from '@/utils/date'
 
 import { pageStyles as contactsStyles } from '../contacts/page.styles'
 import ContactFormDialog from '../contacts/contacts-form-dialog'
+import ContactDeleteDialog from './contact-delete-dialog'
 import ContactTable from './contact-table'
 import { pageStyles } from './page.styles'
-import { useLists } from '@/hooks/useLists'
-import { createListMembers, removeListMembers } from '@/query/lists'
 
 type ContactPageProps = {
   id: Datum.ContactId
 }
 
 const ContactPage = ({ id }: ContactPageProps) => {
-  const router = useRouter()
+  const [openDeleteDialog, _setOpenDeleteDialog] = useState(false)
   const { data: session } = useSession()
   const organizationId = (session?.user.organization ??
     '') as Datum.OrganisationId
@@ -86,10 +85,10 @@ const ContactPage = ({ id }: ContactPageProps) => {
   const { error, isLoading, data: contact } = useContact(id)
   const { data: lists = [] } = useLists(organizationId)
 
-  async function handleDeletion() {
-    await removeContacts(organizationId, [id])
-
-    router.push(OPERATOR_APP_ROUTES.contacts)
+  function setOpenDeleteDialog(input: boolean) {
+    _setOpenDeleteDialog(input)
+    // NOTE: This is needed to close the dialog without removing pointer events per https://github.com/shadcn-ui/ui/issues/468
+    setTimeout(() => (document.body.style.pointerEvents = ''), 500)
   }
 
   async function subscribe(listId: Datum.ListId) {
@@ -152,7 +151,7 @@ const ContactPage = ({ id }: ContactPageProps) => {
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="px-2 py-2.5">
               <DropdownMenuItem
-                onClick={handleDeletion}
+                onClick={() => setOpenDeleteDialog(true)}
                 className={contactDropdownItem()}
               >
                 <Trash size={18} className={contactDropdownIcon()} />
@@ -266,6 +265,12 @@ const ContactPage = ({ id }: ContactPageProps) => {
         contact={contact}
         open={openEditDialog}
         setOpen={setOpenEditDialog}
+      />
+      <ContactDeleteDialog
+        contacts={[contact]}
+        open={openDeleteDialog}
+        setOpen={setOpenDeleteDialog}
+        redirect
       />
     </div>
   )

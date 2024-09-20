@@ -75,13 +75,13 @@ const ListPage = ({ id }: ListPageProps) => {
     exportExcel(`${name}-list-${now}`, formattedData)
   }
 
-  async function setOpenDeleteDialog(input: boolean) {
+  function setOpenDeleteDialog(input: boolean) {
     _setOpenDeleteDialog(input)
     // NOTE: This is needed to close the dialog without removing pointer events per https://github.com/shadcn-ui/ui/issues/468
     setTimeout(() => (document.body.style.pointerEvents = ''), 500)
   }
 
-  async function setOpenAddContactsDialog(input: boolean) {
+  function setOpenAddContactsDialog(input: boolean) {
     _setOpenAddContactsDialog(input)
     // NOTE: This is needed to close the dialog without removing pointer events per https://github.com/shadcn-ui/ui/issues/468
     setTimeout(() => (document.body.style.pointerEvents = ''), 500)

@@ -9,15 +9,16 @@ import type { Datum } from '@repo/types'
 
 import { useContacts } from '@/hooks/useContacts'
 import PageTitle from '@/components/page-title'
-import { removeContacts } from '@/query/contacts'
 import { formatContactsExportData } from '@/utils/export'
 
 import ContactsControls from './contacts-controls'
 import ContactsTable from './contacts-table'
 import { pageStyles } from './page.styles'
+import ContactDeleteDialog from '@/components/pages/protected/workspace/marketing/contact/contact-delete-dialog'
 
 const ContactsPage: React.FC = () => {
   const [exportData, setExportData] = useState<Row<Datum.Contact>[]>([])
+  const [openDeleteDialog, _setOpenDeleteDialog] = useState(false)
   const [selectedContacts, setSelectedContacts] = useState<Datum.Contact[]>([])
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
   const [query, setQuery] = useState('')
@@ -33,13 +34,10 @@ const ContactsPage: React.FC = () => {
     exportExcel(`Contacts-${now}`, formattedData)
   }
 
-  async function handleBatchDeletion() {
-    await removeContacts(
-      organizationId,
-      selectedContacts.map(({ id }) => id),
-    )
-
-    setSelectedContacts([])
+  function setOpenDeleteDialog(input: boolean) {
+    _setOpenDeleteDialog(input)
+    // NOTE: This is needed to close the dialog without removing pointer events per https://github.com/shadcn-ui/ui/issues/468
+    setTimeout(() => (document.body.style.pointerEvents = ''), 500)
   }
 
   return (
@@ -48,7 +46,7 @@ const ContactsPage: React.FC = () => {
         <PageTitle title="Contacts" />
         <ContactsControls
           search={setQuery}
-          onDelete={handleBatchDeletion}
+          onDelete={() => setOpenDeleteDialog(true)}
           onExport={handleExport}
           onFilter={setColumnFilters}
           selectedContacts={selectedContacts}
@@ -64,6 +62,12 @@ const ContactsPage: React.FC = () => {
           contacts={contacts}
         />
       )}
+      <ContactDeleteDialog
+        contacts={selectedContacts}
+        open={openDeleteDialog}
+        setOpen={setOpenDeleteDialog}
+        redirect
+      />
     </div>
   )
 }
