@@ -164,12 +164,15 @@ func init() {
 	contactMixinHooks0 := contactMixin[0].Hooks()
 	contactMixinHooks2 := contactMixin[2].Hooks()
 	contactMixinHooks4 := contactMixin[4].Hooks()
+	contactHooks := schema.Contact{}.Hooks()
 
 	contact.Hooks[1] = contactMixinHooks0[0]
 
 	contact.Hooks[2] = contactMixinHooks2[0]
 
 	contact.Hooks[3] = contactMixinHooks4[0]
+
+	contact.Hooks[4] = contactHooks[0]
 	contactMixinInters2 := contactMixin[2].Interceptors()
 	contactMixinInters4 := contactMixin[4].Interceptors()
 	contact.Interceptors[0] = contactMixinInters2[0]
@@ -276,12 +279,24 @@ func init() {
 	// contacthistory.DefaultID holds the default value on creation for the id field.
 	contacthistory.DefaultID = contacthistoryDescID.Default.(func() string)
 	contactlistMixin := schema.ContactList{}.Mixin()
+	contactlist.Policy = privacy.NewPolicies(schema.ContactList{})
+	contactlist.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := contactlist.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
 	contactlistMixinHooks0 := contactlistMixin[0].Hooks()
 	contactlistMixinHooks1 := contactlistMixin[1].Hooks()
 	contactlistMixinHooks4 := contactlistMixin[4].Hooks()
-	contactlist.Hooks[0] = contactlistMixinHooks0[0]
-	contactlist.Hooks[1] = contactlistMixinHooks1[0]
-	contactlist.Hooks[2] = contactlistMixinHooks4[0]
+
+	contactlist.Hooks[1] = contactlistMixinHooks0[0]
+
+	contactlist.Hooks[2] = contactlistMixinHooks1[0]
+
+	contactlist.Hooks[3] = contactlistMixinHooks4[0]
 	contactlistMixinInters1 := contactlistMixin[1].Interceptors()
 	contactlistMixinInters4 := contactlistMixin[4].Interceptors()
 	contactlist.Interceptors[0] = contactlistMixinInters1[0]
@@ -384,10 +399,21 @@ func init() {
 	// contactlisthistory.DefaultID holds the default value on creation for the id field.
 	contactlisthistory.DefaultID = contactlisthistoryDescID.Default.(func() string)
 	contactlistmembershipMixin := schema.ContactListMembership{}.Mixin()
+	contactlistmembership.Policy = privacy.NewPolicies(schema.ContactListMembership{})
+	contactlistmembership.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := contactlistmembership.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
 	contactlistmembershipMixinHooks0 := contactlistmembershipMixin[0].Hooks()
 	contactlistmembershipMixinHooks2 := contactlistmembershipMixin[2].Hooks()
-	contactlistmembership.Hooks[0] = contactlistmembershipMixinHooks0[0]
-	contactlistmembership.Hooks[1] = contactlistmembershipMixinHooks2[0]
+
+	contactlistmembership.Hooks[1] = contactlistmembershipMixinHooks0[0]
+
+	contactlistmembership.Hooks[2] = contactlistmembershipMixinHooks2[0]
 	contactlistmembershipMixinInters2 := contactlistmembershipMixin[2].Interceptors()
 	contactlistmembership.Interceptors[0] = contactlistmembershipMixinInters2[0]
 	contactlistmembershipMixinFields0 := contactlistmembershipMixin[0].Fields()

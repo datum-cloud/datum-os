@@ -15,6 +15,7 @@ import (
 
 	"github.com/datum-cloud/datum-os/internal/ent/generated"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/privacy"
+	"github.com/datum-cloud/datum-os/internal/ent/hooks"
 	"github.com/datum-cloud/datum-os/internal/ent/mixin"
 	"github.com/datum-cloud/datum-os/internal/ent/privacy/rule"
 	"github.com/datum-cloud/datum-os/internal/ent/validator"
@@ -114,7 +115,9 @@ func (Contact) Annotations() []schema.Annotation {
 
 // Hooks of the Contact
 func (Contact) Hooks() []ent.Hook {
-	return []ent.Hook{}
+	return []ent.Hook{
+		hooks.HookDeleteContact(),
+	}
 }
 
 // Interceptors of the Contact
