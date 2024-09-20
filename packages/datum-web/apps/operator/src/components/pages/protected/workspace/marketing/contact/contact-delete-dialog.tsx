@@ -89,7 +89,9 @@ const ContactDeleteDialog = ({
             Delete{' '}
             {contacts.length > 1
               ? 'contacts'
-              : `${`"${contacts[0]?.fullName}"` ?? 'this contact'}`}
+              : contacts[0]?.fullName
+                ? `"${contacts[0]?.fullName}"`
+                : 'this contact'}
           </DialogTitle>
           <DialogClose onClick={handleCancel} />
         </DialogHeader>

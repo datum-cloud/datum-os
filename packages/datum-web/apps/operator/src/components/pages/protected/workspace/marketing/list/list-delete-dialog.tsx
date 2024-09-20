@@ -89,7 +89,9 @@ const ListDeleteDialog = ({
             Delete{' '}
             {lists.length > 1
               ? 'lists'
-              : `${`"${lists[0]?.name}"` ?? 'this list'}`}
+              : lists[0]?.name
+                ? `"${lists[0]?.name}"`
+                : 'this list'}
           </DialogTitle>
           <DialogClose onClick={handleCancel} />
         </DialogHeader>
