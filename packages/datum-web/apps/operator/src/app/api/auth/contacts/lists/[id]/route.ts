@@ -3,44 +3,44 @@ import { NextResponse } from 'next/server'
 import { getPathWithParams } from '@repo/common/routes'
 import { HttpStatus, SERVICE_APP_ROUTES } from '@repo/constants'
 
-import { auth } from '@/lib/auth/auth'
+import { authorize, handleError, handleResponseError } from '@/utils/requests'
 
-export async function GET(
-  request: Request,
-  { params }: { params: { id: string } },
-) {
-  const { id } = params
-
-  if (!id) {
-    throw new Error('No ID provided!')
+interface RequestParams {
+  params: {
+    id: string
   }
+}
 
-  const session = await auth()
-  const token = session?.user?.accessToken
+export async function GET(request: Request, { params }: RequestParams) {
+  try {
+    const { id } = params
 
-  if (!token) {
-    return NextResponse.json(
-      { message: 'Unauthorized - No Token Provided' },
+    if (!id) {
+      return NextResponse.json(
+        { message: 'Bad request - No ID provided' },
+        { status: HttpStatus.BadRequest },
+      )
+    }
+
+    const token = await authorize()
+    const response = await fetch(
+      getPathWithParams(SERVICE_APP_ROUTES.contactList, { id }),
       {
-        status: HttpStatus.Unauthorized,
+        method: 'GET',
+        headers: {
+          'content-type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
       },
     )
+
+    if (!response.ok) {
+      await handleResponseError(response, `Failed to get list ${id}`)
+    }
+
+    const data = await response.json()
+    return NextResponse.json(data, { status: HttpStatus.Ok })
+  } catch (error: any) {
+    return handleError(error, 'Failed to get list')
   }
-
-  const fData = await fetch(
-    getPathWithParams(SERVICE_APP_ROUTES.contactList, { id }),
-    {
-      method: 'GET',
-      headers: {
-        'content-type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-    },
-  )
-
-  if (!fData.ok) {
-    return NextResponse.json(await fData.json(), { status: fData.status })
-  }
-
-  return NextResponse.json(await fData.json(), { status: 200 })
 }

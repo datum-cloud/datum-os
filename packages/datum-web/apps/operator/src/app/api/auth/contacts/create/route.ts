@@ -1,33 +1,31 @@
-import { auth } from '@/lib/auth/auth'
-import { HttpStatus, SERVICE_APP_ROUTES } from '@repo/constants'
 import { NextResponse } from 'next/server'
 
-export async function POST(request: Request) {
-  const bodyData = await request.json()
-  const session = await auth()
-  const token = session?.user?.accessToken
+import { HttpStatus, SERVICE_APP_ROUTES } from '@repo/constants'
 
-  if (!token) {
-    return NextResponse.json(
-      { message: 'Unauthorized - No Token Provided' },
-      {
-        status: HttpStatus.Unauthorized,
+import { authorize } from '@/utils/requests'
+import { handleError, handleResponseError } from '@/utils/requests'
+
+export async function POST(request: Request): Promise<NextResponse> {
+  try {
+    const token = await authorize()
+    const bodyData = await request.json()
+
+    const response = await fetch(SERVICE_APP_ROUTES.contacts, {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json',
+        Authorization: `Bearer ${token}`,
       },
-    )
+      body: JSON.stringify(bodyData),
+    })
+
+    if (!response.ok) {
+      await handleResponseError(response, 'Failed to create contact')
+    }
+
+    const data = await response.json()
+    return NextResponse.json(data, { status: HttpStatus.Ok })
+  } catch (error: any) {
+    return handleError(error, 'Failed to create contact')
   }
-
-  const fData = await fetch(SERVICE_APP_ROUTES.contacts, {
-    method: 'POST',
-    headers: {
-      'content-type': 'application/json',
-      Authorization: `Bearer ${token}`,
-    },
-    body: JSON.stringify(bodyData),
-  })
-
-  if (!fData.ok) {
-    return NextResponse.json(await fData.json(), { status: fData.status })
-  }
-
-  return NextResponse.json(await fData.json(), { status: 200 })
 }

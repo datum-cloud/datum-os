@@ -3,44 +3,48 @@ import { NextResponse } from 'next/server'
 import { getPathWithParams } from '@repo/common/routes'
 import { HttpStatus, SERVICE_APP_ROUTES } from '@repo/constants'
 
-import { auth } from '@/lib/auth/auth'
+import { authorize } from '@/utils/requests'
+import { handleError, handleResponseError } from '@/utils/requests'
+
+interface RequestParams {
+  params: {
+    id: string
+  }
+}
 
 export async function GET(
   request: Request,
-  { params }: { params: { id: string } },
-) {
-  const { id } = params
+  { params }: RequestParams,
+): Promise<NextResponse> {
+  try {
+    const { id } = params
+    const token = await authorize()
 
-  if (!id) {
-    throw new Error('No ID provided!')
-  }
+    if (!id) {
+      return NextResponse.json(
+        { message: 'Bad request - No ID provided' },
+        { status: HttpStatus.BadRequest },
+      )
+    }
 
-  const session = await auth()
-  const token = session?.user?.accessToken
-
-  if (!token) {
-    return NextResponse.json(
-      { message: 'Unauthorized - No Token Provided' },
+    const response = await fetch(
+      getPathWithParams(SERVICE_APP_ROUTES.contact, { id }),
       {
-        status: HttpStatus.Unauthorized,
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
       },
     )
+
+    if (!response.ok) {
+      await handleResponseError(response, `Failed to fetch contact ${id}`)
+    }
+
+    const data = await response.json()
+    return NextResponse.json(data, { status: HttpStatus.Ok })
+  } catch (error: any) {
+    return handleError(error, 'Failed to fetch contact')
   }
-
-  const fData = await fetch(
-    getPathWithParams(SERVICE_APP_ROUTES.contact, { id }),
-    {
-      method: 'GET',
-      headers: {
-        'content-type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-    },
-  )
-
-  if (!fData.ok) {
-    return NextResponse.json(await fData.json(), { status: fData.status })
-  }
-
-  return NextResponse.json(await fData.json(), { status: 200 })
 }

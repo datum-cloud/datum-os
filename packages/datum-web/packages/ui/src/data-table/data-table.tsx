@@ -92,14 +92,15 @@ export function DataTable<TData, TValue>({
   filterFns = {},
   globalFilterFn,
   globalFilter,
-  columnFilters: _columnFilters = [],
+  columnFilters: _columnFilters,
   setGlobalFilter,
   setSelection,
   setExportData,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([])
-  const [columnFilters, setColumnFilters] =
-    useState<ColumnFiltersState>(_columnFilters)
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>(
+    _columnFilters || [],
+  )
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
   const [rowSelection, setRowSelection] = useState({})
 
@@ -130,7 +131,9 @@ export function DataTable<TData, TValue>({
   })
 
   useEffect(() => {
-    setColumnFilters(_columnFilters)
+    if (_columnFilters) {
+      setColumnFilters(_columnFilters)
+    }
   }, [_columnFilters])
 
   useEffect(() => {
