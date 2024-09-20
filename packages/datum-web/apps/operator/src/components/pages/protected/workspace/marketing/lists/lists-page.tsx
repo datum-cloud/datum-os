@@ -44,6 +44,7 @@ const ListsPage = () => {
       <div className={header()}>
         <PageTitle title="Lists" />
         <ListsControls
+          selectedLists={selectedLists}
           onDelete={() => setOpenDeleteDialog(true)}
           onExport={handleExport}
         />

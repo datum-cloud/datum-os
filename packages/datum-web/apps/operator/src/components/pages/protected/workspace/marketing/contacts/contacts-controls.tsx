@@ -136,6 +136,7 @@ const ContactsControls = ({
             </DropdownMenuItem>
             <DropdownMenuItem
               onClick={onDelete}
+              disabled={selectedContacts.length === 0}
               className={contactDropdownItem()}
             >
               <Trash size={18} className={contactDropdownIcon()} />

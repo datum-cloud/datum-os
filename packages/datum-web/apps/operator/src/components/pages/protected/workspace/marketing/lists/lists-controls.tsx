@@ -10,16 +10,22 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@repo/ui/dropdown-menu'
+import type { Datum } from '@repo/types'
 
 import ListsFormDialog from './lists-form-dialog'
 import { pageStyles } from './page.styles'
 
 type ListsControlsProps = {
+  selectedLists: Datum.List[]
   onDelete(): void
   onExport(): void
 }
 
-const ListsControls = ({ onDelete, onExport }: ListsControlsProps) => {
+const ListsControls = ({
+  onDelete,
+  onExport,
+  selectedLists,
+}: ListsControlsProps) => {
   const { listControls, listDropdownItem, listDropdownIcon } = pageStyles()
   const [_openListDialog, _setOpenListDialog] = useState(false)
 
@@ -64,7 +70,11 @@ const ListsControls = ({ onDelete, onExport }: ListsControlsProps) => {
               />
               Export
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={onDelete} className={listDropdownItem()}>
+            <DropdownMenuItem
+              disabled={selectedLists.length === 0}
+              onClick={onDelete}
+              className={listDropdownItem()}
+            >
               <Trash size={18} className={listDropdownIcon()} />
               Delete items
             </DropdownMenuItem>
