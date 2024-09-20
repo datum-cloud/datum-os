@@ -14,6 +14,8 @@ import (
 	"github.com/datum-cloud/datum-os/pkg/rout"
 )
 
+const createContactBatchSize = 5000
+
 func (h *Handler) ContactsGet(ctx echo.Context) error {
 	contacts, err := transaction.FromContext(ctx.Request().Context()).
 		Contact.Query().
@@ -115,14 +117,23 @@ func (h *Handler) ContactsPost(ctx echo.Context) error {
 		return h.BadRequest(ctx, err)
 	}
 
-	createdContacts, err := transaction.FromContext(ctx.Request().Context()).
-		Contact.
-		MapCreateBulk(contacts.Contacts, func(builder *generated.ContactCreate, i int) {
-			contactCreateFromContactData(&contacts.Contacts[i], builder)
-		}).
-		Save(ctx.Request().Context())
-	if err != nil {
-		return h.InternalServerError(ctx, err)
+	createdContacts := []*generated.Contact{}
+	for i := 0; i < len(contacts.Contacts); i += createContactBatchSize {
+		end := i + createContactBatchSize
+		if end > len(contacts.Contacts) {
+			end = len(contacts.Contacts)
+		}
+		batch := contacts.Contacts[i:end]
+		batchCreated, err := transaction.FromContext(ctx.Request().Context()).
+			Contact.
+			MapCreateBulk(batch, func(builder *generated.ContactCreate, j int) {
+				contactCreateFromContactData(&batch[j], builder)
+			}).
+			Save(ctx.Request().Context())
+		if err != nil {
+			return h.InternalServerError(ctx, err)
+		}
+		createdContacts = append(createdContacts, batchCreated...)
 	}
 
 	h.Logger.Debugf("Created Contacts, %s", createdContacts)
