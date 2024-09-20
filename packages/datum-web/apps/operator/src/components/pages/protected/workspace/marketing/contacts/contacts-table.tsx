@@ -215,7 +215,7 @@ export const CONTACT_COLUMNS: ColumnDef<Datum.Contact>[] = [
   },
   {
     id: 'lists',
-    accessorKey: 'lists',
+    accessorKey: 'contactLists',
     header: ({ column }) => (
       <DataTableColumnHeader
         className={header()}
@@ -226,13 +226,15 @@ export const CONTACT_COLUMNS: ColumnDef<Datum.Contact>[] = [
     enableGlobalFilter: false,
     enableSorting: false,
     cell: ({ cell }) => {
-      const lists = cell.getValue() as string[]
-      const sortedLists = lists.sort(sortAlphabetically)
+      const lists = cell.getValue() as Datum.List[]
+      const sortedLists = lists.sort((a, b) =>
+        sortAlphabetically(a.name, b.name),
+      )
       const [first, ...rest] = sortedLists
 
       return (
         <div className="text-nowrap">
-          <Tag className="mr-[9px]">{first || 'N/A'}</Tag>
+          <Tag className="mr-[9px]">{first?.name || 'N/A'}</Tag>
           {rest.length > 0 && <Tag variant="muted">+ {rest.length}</Tag>}
         </div>
       )

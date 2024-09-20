@@ -7,6 +7,33 @@ import { Datum } from '@repo/types'
 import { getPathWithParams } from '@repo/common/routes'
 import { queryClient } from '@/query/client'
 import type { ListInput } from '@/utils/schemas'
+import { getContactKey } from '@/query/contacts'
+
+function formatList(input: Record<string, any>): Datum.List {
+  const {
+    id,
+    name,
+    description,
+    visibility,
+    memberCount,
+    createdAt,
+    updatedAt,
+    status,
+    members,
+  } = input
+
+  return {
+    id,
+    name,
+    description,
+    visibility,
+    memberCount,
+    createdAt,
+    updatedAt,
+    status,
+    members,
+  }
+}
 
 export async function getLists(): Promise<Datum.List[]> {
   const response = await fetch(OPERATOR_API_ROUTES.contactLists)
@@ -21,11 +48,7 @@ export async function getLists(): Promise<Datum.List[]> {
   const result = await response.json()
   const formattedResult = camelize(result)
 
-  const lists = formattedResult.contactLists.map((list: any) => ({
-    ...list,
-    description: list.displayName,
-    members: [],
-  })) as Datum.List[]
+  const lists = formattedResult.contactLists.map(formatList)
 
   return lists
 }
@@ -43,14 +66,11 @@ export async function getList(id: Datum.ListId): Promise<Datum.List> {
   }
 
   const result = await response.json()
-  const formattedResult = camelize(result).contactList
+  const formattedResult = camelize(result)
   const members = (await getListMembers(id)) || []
+  const formattedList = formatList({ ...formattedResult, members })
 
-  return {
-    ...formattedResult,
-    description: formattedResult.displayName,
-    members,
-  } as Datum.List
+  return formattedList
 }
 
 export async function getListMembers(
@@ -119,6 +139,10 @@ export async function createListMembers(
     queryKey: getListKey(id),
   })
 
+  for (const contactId of input) {
+    await queryClient.invalidateQueries({ queryKey: getContactKey(contactId) })
+  }
+
   return members
 }
 
@@ -139,14 +163,16 @@ export async function removeListMembers(
   )
 
   await queryClient.invalidateQueries({ queryKey: getListKey(id) })
+
+  for (const contactId of input) {
+    await queryClient.invalidateQueries({ queryKey: getContactKey(contactId) })
+  }
 }
 
 export async function editLists(id: Datum.OrganisationId, input: ListInput[]) {
   const formattedInput = decamelize({
     contactLists: input,
   })
-
-  console.log(formattedInput, OPERATOR_API_ROUTES.editContactLists)
 
   const response = await fetch(OPERATOR_API_ROUTES.editContactLists, {
     method: 'PUT',
@@ -156,7 +182,11 @@ export async function editLists(id: Datum.OrganisationId, input: ListInput[]) {
   const result = await response.json()
   const contacts = camelize(result).contactLists as Datum.List[]
 
-  await queryClient.invalidateQueries({ queryKey: getListsKey(id) })
+  for (const list of input) {
+    await queryClient.invalidateQueries({
+      queryKey: getListKey(list.id as Datum.ListId),
+    })
+  }
 
   return contacts
 }

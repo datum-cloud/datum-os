@@ -49,6 +49,32 @@ const MOCK_CONTACT_HISTORY: Datum.ContactHistory = {
   ],
 }
 
+function formatContact(input: Record<string, any>): Datum.Contact {
+  const {
+    id,
+    fullName,
+    email,
+    status,
+    source,
+    updatedAt,
+    contactLists = [],
+    title,
+    createdAt,
+  } = camelize(input)
+
+  return {
+    id,
+    title,
+    fullName,
+    email,
+    status,
+    source,
+    contactLists,
+    createdAt,
+    updatedAt,
+  }
+}
+
 export async function getContact(id: Datum.ContactId): Promise<Datum.Contact> {
   const response = await fetch(
     getPathWithParams(OPERATOR_API_ROUTES.contact, { id }),
@@ -62,12 +88,16 @@ export async function getContact(id: Datum.ContactId): Promise<Datum.Contact> {
   }
 
   const result = await response.json()
-  const contact = camelize<Datum.Contact>(result.contact)
 
+  const formattedContact = formatContact(result)
   const enrichedData = await getEnrichedData(id)
   const contactHistory = await getContactHistory(id)
 
-  return { ...contact, contactHistory, enrichedData }
+  return {
+    ...formattedContact,
+    contactHistory,
+    enrichedData,
+  }
 }
 
 async function getContactHistory(id: Datum.ContactId) {
@@ -97,14 +127,7 @@ export async function getContacts(): Promise<Datum.Contact[]> {
   }
 
   const result = await response.json()
-  const contacts = result.contacts.map((contact: Record<string, any>) => {
-    const formattedResponse = camelize<Datum.Contact>(contact)
-
-    return {
-      ...formattedResponse,
-      lists: formattedResponse?.lists || [],
-    }
-  })
+  const contacts = result.contacts.map(formatContact)
 
   return contacts
 }

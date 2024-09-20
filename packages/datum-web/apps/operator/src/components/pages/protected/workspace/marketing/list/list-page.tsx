@@ -101,7 +101,7 @@ const ListPage = ({ id }: ListPageProps) => {
     return <div className={wrapper()}>Whoops... Something went wrong</div>
   }
 
-  const { name, description, visibility, members } = list
+  const { name, description, visibility, members = [] } = list
   const memberIds = members.map(({ id }) => id)
   const nonMembers = allContacts.filter(
     (contact) => !memberIds.includes(contact.id),

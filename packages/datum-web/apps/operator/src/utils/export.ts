@@ -10,13 +10,28 @@ export function formatContactsExportData(data: Row<Datum.Contact>[]) {
     return {
       Name: contact.fullName || '',
       Email: contact.email || '',
-      'Phone number': contact.phoneNumber || '',
       Title: contact.title || '',
-      Company: contact.company || '',
       Status: contact.status || '',
-      Lists: contact?.lists?.join(', ') || '',
+      Lists: contact?.contactLists?.map(({ name }) => name).join(', ') || '',
       'Created at': formatDate(contact.createdAt) || '',
       'Last updated': formatDate(contact.updatedAt) || '',
+    }
+  })
+
+  return formattedData
+}
+
+export function formatListsExportData(data: Row<Datum.List>[]) {
+  const formattedData = data.map((row) => {
+    const list = row.original
+
+    return {
+      Name: list.name || '',
+      Description: list.description || '',
+      Visibility: list.visibility || '',
+      Members: list.members?.length || '',
+      'Created at': formatDate(list.createdAt) || '',
+      'Last updated': formatDate(list.updatedAt) || '',
     }
   })
 

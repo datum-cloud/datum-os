@@ -21,12 +21,6 @@ const FORMAT_MAP: Record<string, FormatField> = {
   fullname: {
     key: 'fullName',
   },
-  phonenumber: {
-    key: 'phoneNumber',
-  },
-  phone: {
-    key: 'phoneNumber',
-  },
 }
 
 function handleName(key: string, row: Record<string, any>) {

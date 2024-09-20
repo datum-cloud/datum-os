@@ -42,11 +42,6 @@ const ContactsPage: React.FC = () => {
     setSelectedContacts([])
   }
 
-  function handleListAddition(lists: Datum.ListId[]) {
-    // TODO: Add to list
-    console.log('Add to list')
-  }
-
   return (
     <div className={wrapper()}>
       <div className={header()}>
@@ -56,7 +51,7 @@ const ContactsPage: React.FC = () => {
           onDelete={handleBatchDeletion}
           onExport={handleExport}
           onFilter={setColumnFilters}
-          onListAddition={handleListAddition}
+          selectedContacts={selectedContacts}
         />
       </div>
       {!error && !isLoading && (

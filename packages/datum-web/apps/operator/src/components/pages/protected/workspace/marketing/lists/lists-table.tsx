@@ -16,11 +16,10 @@ import {
   rankItem,
   compareItems,
   ColumnFiltersState,
+  Row,
 } from '@repo/ui/data-table'
 import { Tag } from '@repo/ui/tag'
 import type { Datum } from '@repo/types'
-
-import { sortAlphabetically } from '@/utils/sort'
 
 import ListsTableDropdown from './lists-table-dropdown'
 import { tableStyles } from './page.styles'
@@ -31,6 +30,7 @@ type ListsTableProps = {
   columnFilters?: ColumnFiltersState
   setGlobalFilter(input: string): void
   setSelection(lists: Datum.List[]): void
+  setExportData(lists: Row<Datum.List>[]): void
 }
 
 const { header, checkboxContainer, link } = tableStyles()
@@ -218,6 +218,7 @@ const ListsTable = ({
   columnFilters,
   setGlobalFilter,
   setSelection,
+  setExportData,
 }: ListsTableProps) => {
   const [filteredLists, setFilteredLists] = useState<Datum.List[]>(lists)
 
@@ -238,6 +239,7 @@ const ListsTable = ({
       data={filteredLists}
       layoutFixed
       bordered
+      setExportData={setExportData}
       setSelection={setSelection}
       highlightHeader
       showFooter

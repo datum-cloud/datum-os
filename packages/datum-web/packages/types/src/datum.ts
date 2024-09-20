@@ -79,8 +79,10 @@ export namespace Datum {
     description: string
     visibility: 'PUBLIC' | 'PRIVATE'
     createdAt: Date
+    updatedAt: Date
     status: Status
-    members: Contact[]
+    memberCount: number
+    members?: Contact[]
   }
 
   export type ContactHistoryEvent = {
@@ -98,16 +100,12 @@ export namespace Datum {
     id: ContactId
     fullName: string
     title: string
-    company: string
     email: Email
-    address: string
-    phoneNumber: string
     createdAt: Date
     updatedAt: Date
-    deletedAt?: Date
     source: string
     status: Status
-    lists: ListId[]
+    contactLists: List[]
     enrichedData?: any // TODO: Type this properly
     contactHistory?: ContactHistory // TODO: Type this properly
   }

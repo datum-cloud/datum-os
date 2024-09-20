@@ -3,7 +3,7 @@
 import { useSession } from 'next-auth/react'
 import React, { useState } from 'react'
 
-import { ColumnFiltersState } from '@repo/ui/data-table'
+import { ColumnFiltersState, Row } from '@repo/ui/data-table'
 import type { Datum } from '@repo/types'
 
 import PageTitle from '@/components/page-title'
@@ -13,10 +13,12 @@ import { useLists } from '@/hooks/useLists'
 import ListsTable from './lists-table'
 import { pageStyles } from './page.styles'
 import ListDeleteDialog from '@/components/pages/protected/workspace/marketing/list/list-delete-dialog'
+import { formatListsExportData } from '@/utils/export'
+import { exportExcel } from '@repo/common/csv'
 
 const ListsPage = () => {
+  const [exportData, setExportData] = useState<Row<Datum.List>[]>([])
   const [selectedLists, setSelectedLists] = useState<Datum.List[]>([])
-  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
   const [openDeleteDialog, _setOpenDeleteDialog] = useState(false)
   const [query, setQuery] = useState('')
   const { data: session } = useSession()
@@ -26,8 +28,9 @@ const ListsPage = () => {
   const { wrapper, header } = pageStyles()
 
   function handleExport() {
-    // TODO:Export files
-    console.log('Export Selected Files')
+    const now = new Date().toISOString()
+    const formattedData = formatListsExportData(exportData)
+    exportExcel(`Lists-${now}`, formattedData)
   }
 
   async function setOpenDeleteDialog(input: boolean) {
@@ -49,8 +52,8 @@ const ListsPage = () => {
         <ListsTable
           globalFilter={query}
           setGlobalFilter={setQuery}
-          columnFilters={columnFilters}
           lists={lists}
+          setExportData={setExportData}
           setSelection={setSelectedLists}
         />
       )}

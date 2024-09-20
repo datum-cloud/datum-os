@@ -49,13 +49,6 @@ export const OPERATOR_FILES = {
 
 export const DATE_FORMAT = `MMMM d, yyyy 'at' h:mm`
 
-export const mockLists = [
-  'Admin',
-  'Newsletter',
-  'Developers',
-  'Promo',
-] as Datum.ListId[]
-
 export const TEL_REGEX =
   /^([+]?[\s0-9]+)?(\d{3}|[(]?[0-9]+[)])?([-]?[\s]?[0-9])+$/
 

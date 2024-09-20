@@ -44,6 +44,8 @@ import { pageStyles as contactsStyles } from '../contacts/page.styles'
 import ContactFormDialog from '../contacts/contacts-form-dialog'
 import ContactTable from './contact-table'
 import { pageStyles } from './page.styles'
+import { useLists } from '@/hooks/useLists'
+import { createListMembers, removeListMembers } from '@/query/lists'
 
 type ContactPageProps = {
   id: Datum.ContactId
@@ -54,7 +56,6 @@ const ContactPage = ({ id }: ContactPageProps) => {
   const { data: session } = useSession()
   const organizationId = (session?.user.organization ??
     '') as Datum.OrganisationId
-  const [selectedLists, setSelectedLists] = useState<string[]>([])
   const [openEditDialog, setOpenEditDialog] = useState(false)
   const {
     wrapper,
@@ -83,11 +84,20 @@ const ContactPage = ({ id }: ContactPageProps) => {
   } = contactsStyles()
 
   const { error, isLoading, data: contact } = useContact(id)
+  const { data: lists = [] } = useLists(organizationId)
 
   async function handleDeletion() {
     await removeContacts(organizationId, [id])
 
     router.push(OPERATOR_APP_ROUTES.contacts)
+  }
+
+  async function subscribe(listId: Datum.ListId) {
+    await createListMembers(listId, [id])
+  }
+
+  async function unsubscribe(listId: Datum.ListId) {
+    await removeListMembers(listId, [id])
   }
 
   if (isLoading) {
@@ -102,7 +112,7 @@ const ContactPage = ({ id }: ContactPageProps) => {
     fullName,
     email,
     source,
-    lists = [],
+    contactLists = [],
     createdAt,
     enrichedData = {},
     contactHistory,
@@ -202,16 +212,14 @@ const ContactPage = ({ id }: ContactPageProps) => {
                   <AccordionContent className={accordionContentOuter()}>
                     <div className={accordionContentInner()}>
                       {lists.map((list) => {
-                        const isSelected = selectedLists.includes(list)
+                        const isSelected = contactLists.find(
+                          ({ id }) => id === list.id,
+                        )
 
                         if (isSelected) {
-                          const newSelectedLists = selectedLists.filter(
-                            (selectedList) => list !== selectedList,
-                          )
-
                           return (
                             <Button
-                              key={list}
+                              key={list.id}
                               variant="tagSuccess"
                               size="tag"
                               icon={
@@ -221,23 +229,21 @@ const ContactPage = ({ id }: ContactPageProps) => {
                                 />
                               }
                               iconPosition="left"
-                              onClick={() => setSelectedLists(newSelectedLists)}
+                              onClick={async () => await unsubscribe(list.id)}
                             >
-                              {list}
+                              {list.name}
                             </Button>
                           )
                         }
 
-                        const newSelectedLists = [...selectedLists, list]
-
                         return (
                           <Button
-                            key={list}
+                            key={list.id}
                             variant="tag"
                             size="tag"
-                            onClick={() => setSelectedLists(newSelectedLists)}
+                            onClick={async () => await subscribe(list.id)}
                           >
-                            {list}
+                            {list.name}
                           </Button>
                         )
                       })}
@@ -249,8 +255,8 @@ const ContactPage = ({ id }: ContactPageProps) => {
           </DropdownMenu>
         </div>
         <div className={listsContainer()}>
-          {lists.map((list) => (
-            <Tag key={list}>{list}</Tag>
+          {contactLists.map((list) => (
+            <Tag key={list.id}>{list.name}</Tag>
           ))}
         </div>
       </Panel>

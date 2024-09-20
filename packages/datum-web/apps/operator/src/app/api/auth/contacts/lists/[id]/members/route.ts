@@ -20,6 +20,11 @@ export async function GET(
     )
   }
 
+  console.log(
+    'URL',
+    getPathWithParams(SERVICE_APP_ROUTES.contactListMembers, { id }),
+  )
+
   const fData = await fetch(
     getPathWithParams(SERVICE_APP_ROUTES.contactListMembers, { id }),
     {

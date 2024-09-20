@@ -11,6 +11,8 @@ export async function GET(
 ) {
   const { id } = params
 
+  console.log('ID HERE ======>', id)
+
   if (!id) {
     throw new Error('No ID provided!')
   }

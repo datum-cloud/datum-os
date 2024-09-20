@@ -39,7 +39,7 @@ type ContactsTableDropdownProps = {
 }
 
 const ContactsTableDropdown = ({ contact }: ContactsTableDropdownProps) => {
-  const { id, lists = [] } = contact
+  const { id, contactLists = [] } = contact
   const [_openEditDialog, _setOpenEditDialog] = useState(false)
   const { data: session } = useSession()
   const organizationId =
@@ -59,12 +59,17 @@ const ContactsTableDropdown = ({ contact }: ContactsTableDropdownProps) => {
   }
 
   async function unsubscribeAll() {
-    await Promise.all(lists.map((listId) => removeListMembers(listId, [id])))
+    await Promise.all(
+      contactLists.map(({ id: listId }) => removeListMembers(listId, [id])),
+    )
   }
 
-  async function setLists(newLists: Datum.ListId[]) {
-    console.log('newLists', newLists)
-    await Promise.all(newLists.map((listId) => createListMembers(listId, [id])))
+  async function subscribe(listId: Datum.ListId) {
+    await createListMembers(listId, [id])
+  }
+
+  async function unsubscribe(listId: Datum.ListId) {
+    await removeListMembers(listId, [id])
   }
 
   function setOpenEditDialog(input: boolean) {
@@ -102,7 +107,10 @@ const ContactsTableDropdown = ({ contact }: ContactsTableDropdownProps) => {
             Delete Item
           </DropdownMenuItem>
           <Accordion type="single" collapsible className="w-full px-0">
-            <AccordionItem value="lists" className={accordionContainer()}>
+            <AccordionItem
+              value="contactLists"
+              className={accordionContainer()}
+            >
               <AccordionTrigger className={accordionTrigger()}>
                 <div className="flex items-center justify-start gap-3">
                   <Plus size={18} className={contactDropdownIcon()} />
@@ -112,18 +120,15 @@ const ContactsTableDropdown = ({ contact }: ContactsTableDropdownProps) => {
               </AccordionTrigger>
               <AccordionContent className={accordionContentOuter()}>
                 <div className={accordionContentInner()}>
-                  {/* TODO: Replace mock lists */}
-                  {allLists.map((list) => {
-                    const isSelected = lists.includes(list.id)
+                  {allLists.map(({ id: listId, name }) => {
+                    const isSelected = contactLists.find(
+                      (item) => item.id === listId,
+                    )
 
                     if (isSelected) {
-                      const newSelectedLists = lists.filter(
-                        (selectedList) => list.id !== selectedList,
-                      )
-
                       return (
                         <Button
-                          key={list.id}
+                          key={listId}
                           size="tag"
                           variant="tagSuccess"
                           icon={
@@ -133,23 +138,21 @@ const ContactsTableDropdown = ({ contact }: ContactsTableDropdownProps) => {
                             />
                           }
                           iconPosition="left"
-                          onClick={() => setLists(newSelectedLists)}
+                          onClick={async () => await unsubscribe(listId)}
                         >
-                          {list.name}
+                          {name}
                         </Button>
                       )
                     }
 
-                    const newSelectedLists = [...lists, list.id]
-
                     return (
                       <Button
-                        key={list.id}
+                        key={listId}
                         variant="tag"
                         size="tag"
-                        onClick={setLists.bind(null, newSelectedLists)}
+                        onClick={async () => await subscribe(listId)}
                       >
-                        {list.name}
+                        {name}
                       </Button>
                     )
                   })}
