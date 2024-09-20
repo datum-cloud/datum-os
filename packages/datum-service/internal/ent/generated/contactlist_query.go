@@ -5,6 +5,7 @@ package generated
 import (
 	"context"
 	"database/sql/driver"
+	"errors"
 	"fmt"
 	"math"
 
@@ -530,6 +531,12 @@ func (clq *ContactListQuery) prepareQuery(ctx context.Context) error {
 			return err
 		}
 		clq.sql = prev
+	}
+	if contactlist.Policy == nil {
+		return errors.New("generated: uninitialized contactlist.Policy (forgotten import generated/runtime?)")
+	}
+	if err := contactlist.Policy.EvalQuery(ctx, clq); err != nil {
+		return err
 	}
 	return nil
 }
