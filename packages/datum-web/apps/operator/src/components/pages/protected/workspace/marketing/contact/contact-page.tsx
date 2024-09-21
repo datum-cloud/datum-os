@@ -117,6 +117,8 @@ const ContactPage = ({ id }: ContactPageProps) => {
     contactHistory,
   } = contact
 
+  console.log(createdAt && typeof createdAt)
+
   return (
     <div className={wrapper()}>
       <Link href={OPERATOR_APP_ROUTES.contacts} className={link()}>
@@ -134,9 +136,11 @@ const ContactPage = ({ id }: ContactPageProps) => {
               <h4 className="text-[27px] leading-[130%]">{fullName}</h4>
             )}
             <h6 className="text-body-l text-blackberry-600">{email}</h6>
-            <p className="text-body-sm leading-5 text-blackberry-500">
-              Added by {source} on {formatDate(createdAt)}
-            </p>
+            {createdAt && (
+              <p className="text-body-sm leading-5 text-blackberry-500">
+                Added by {source} on {formatDate(createdAt)}
+              </p>
+            )}
           </div>
         </div>
         <div className={contactActions()}>

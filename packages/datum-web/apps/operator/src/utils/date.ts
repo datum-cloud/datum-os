@@ -3,10 +3,14 @@ import { format as _format } from 'date-fns'
 import { DATE_FORMAT } from '@repo/constants'
 
 export function formatDate(input: Date, format: string = DATE_FORMAT) {
-  if (!input) return ''
+  const parsedDate = new Date(input)
 
-  const date = _format(new Date(input), format)
-  const amPm = _format(input, 'a').toLowerCase()
+  if (!input || isNaN(parsedDate.getTime())) {
+    return ''
+  }
+
+  const date = _format(parsedDate, format)
+  const amPm = _format(parsedDate, 'a').toLowerCase()
 
   return `${date}${amPm}`
 }

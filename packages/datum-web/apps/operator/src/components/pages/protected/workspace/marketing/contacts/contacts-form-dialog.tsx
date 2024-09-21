@@ -67,7 +67,7 @@ const ContactFormDialog = ({
   const defaultValues = useMemo(() => {
     return {
       email: '',
-      status: 'INACTIVE',
+      status: 'ACTIVE',
       source: 'form',
       ...contact,
       firstName: name,
