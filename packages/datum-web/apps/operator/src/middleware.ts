@@ -8,7 +8,10 @@ import { auth } from './lib/auth/auth'
 import { cookies } from 'next/headers'
 import { sessionCookieName } from '@repo/dally/auth'
 
+console.log('HI THERE =====>')
+
 export default auth((req) => {
+  console.log('RUN AUTH =====>')
   /**
    * Set this header so we can read it and set the current route
    * and metadata on the client side without invoking the
@@ -56,6 +59,6 @@ export const config = {
      * - verify (verify page)
      * - invite (invite verify page)
      */
-    '/((?!api|[_next/static]|[_next/image]|favicon.ico|backgrounds|backgrounds/|icons|icons/|login|verify|invite).*)',
+    '/((?!api|_next/static|_next/image|favicon.ico|backgrounds|backgrounds/|icons|icons/|login|verify|invite).*)',
   ],
 }
