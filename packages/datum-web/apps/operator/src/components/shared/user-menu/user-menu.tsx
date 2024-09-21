@@ -1,9 +1,10 @@
 'use client'
 
+import Link from 'next/link'
+
 import { signOut, useSession } from 'next-auth/react'
 import { Avatar, AvatarFallback, AvatarImage } from '@repo/ui/avatar'
 import { userMenuStyles } from './user-menu.styles'
-import { Button } from '@repo/ui/button'
 import {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -38,9 +39,9 @@ export const UserMenu = () => {
         <DropdownMenuItem asChild className={dropdownItem()}>
           <>
             <p className={subheading()}>Signed in as</p>
-            <a href={`mailto:${sessionData?.user.email}`} className={email()}>
+            <Link href="/profile" className={email()}>
               {sessionData?.user.email}
-            </a>
+            </Link>
           </>
         </DropdownMenuItem>
         <DropdownMenuSeparator spacing="md" />
