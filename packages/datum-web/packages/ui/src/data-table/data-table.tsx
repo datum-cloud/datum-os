@@ -242,7 +242,7 @@ export function DataTable<TData, TValue>({
                         bordered={hasBorder}
                         style={{ width: minWidth || columnWidth }}
                         className={cn(
-                          minWidth && 'xl:!w-auto',
+                          minWidth && '2xl:!w-auto',
                           pinLeft && 'sticky z-10 left-0 border-r-0',
                           pinRight && 'sticky z-10 right-0',
                           hasPinnedRightCell && secondLastCell && 'border-r-0',
@@ -313,7 +313,7 @@ export function DataTable<TData, TValue>({
                           bordered={hasBorder}
                           style={{ width: minWidth || columnWidth }}
                           className={cn(
-                            minWidth && 'xl:!w-auto',
+                            minWidth && '2xl:!w-auto',
                             pinLeft &&
                               'sticky z-10 bg-inherit left-0 bg-white group-hover:!bg-blackberry-50 group-data-[state=selected]:bg-blackberry-50 border-r-0',
                             pinRight &&
