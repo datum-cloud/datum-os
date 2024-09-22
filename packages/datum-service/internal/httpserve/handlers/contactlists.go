@@ -464,3 +464,23 @@ func (h *Handler) ContactListsMembersDeleteOne(ctx echo.Context) error {
 		CountAffected: affected,
 	})
 }
+
+func (h *Handler) BindContactListsMembersDeleteOne() *openapi3.Operation {
+	contactListsMembersDeleteOne := openapi3.NewOperation()
+	contactListsMembersDeleteOne.Description = "Remove One Contact List Member"
+	contactListsMembersDeleteOne.OperationID = "ContactListsMembersDeleteOne"
+	contactListsMembersDeleteOne.Security = &openapi3.SecurityRequirements{
+		openapi3.SecurityRequirement{
+			"bearerAuth": []string{},
+		},
+	}
+
+	h.AddRequestBody("ContactListsMembersDeleteOneRequest", models.ExampleContactListMembersDeleteOneRequest, contactListsMembersDeleteOne)
+
+	h.AddResponse("ContactListsMembersDeleteOneResponse", "success", models.ExampleContactListMembersDeleteOneSuccessResponse, contactListsMembersDeleteOne, http.StatusOK)
+	contactListsMembersDeleteOne.AddResponse(http.StatusBadRequest, badRequest())
+	contactListsMembersDeleteOne.AddResponse(http.StatusInternalServerError, internalServerError())
+	contactListsMembersDeleteOne.AddResponse(http.StatusUnauthorized, unauthorized())
+
+	return contactListsMembersDeleteOne
+}

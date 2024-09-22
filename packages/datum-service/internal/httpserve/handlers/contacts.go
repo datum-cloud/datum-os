@@ -5,6 +5,8 @@ import (
 
 	"github.com/datum-cloud/datum-os/internal/ent/generated"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/contact"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/contactlist"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/contactlistmembership"
 	echo "github.com/datum-cloud/datum-os/pkg/echox"
 	"github.com/datum-cloud/datum-os/pkg/enums"
 	"github.com/datum-cloud/datum-os/pkg/middleware/transaction"
@@ -17,7 +19,12 @@ import (
 func (h *Handler) ContactsGet(ctx echo.Context) error {
 	contacts, err := transaction.FromContext(ctx.Request().Context()).
 		Contact.Query().
-		WithContactLists().
+		WithContactListMemberships(func(q *generated.ContactListMembershipQuery) {
+			q.Where(contactlistmembership.DeletedAtIsNil())
+			q.WithContactList(func(q *generated.ContactListQuery) {
+				q.Where(contactlist.DeletedAtIsNil())
+			})
+		}).
 		All(ctx.Request().Context())
 	if err != nil {
 		return h.InternalServerError(ctx, err)

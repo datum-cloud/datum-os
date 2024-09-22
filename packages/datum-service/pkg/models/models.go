@@ -804,9 +804,9 @@ func ContactFromGeneratedContact(genContact *generated.Contact) Contact {
 	cd.PhoneNumber = genContact.PhoneNumber
 	cd.Address = genContact.Address
 	cd.Status = string(genContact.Status)
-	cd.ContactLists = make([]ContactList, len(genContact.Edges.ContactLists))
-	for i, genContactList := range genContact.Edges.ContactLists {
-		cd.ContactLists[i] = ContactListFromGeneratedContactList(genContactList)
+	cd.ContactLists = make([]ContactList, len(genContact.Edges.ContactListMemberships))
+	for i, genContactListMembership := range genContact.Edges.ContactListMemberships {
+		cd.ContactLists[i] = ContactListFromGeneratedContactList(genContactListMembership.Edges.ContactList)
 	}
 
 	return cd

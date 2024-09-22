@@ -1,8 +1,6 @@
 package schema
 
 import (
-	"context"
-
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/entsql"
@@ -10,7 +8,6 @@ import (
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
-	"github.com/datum-cloud/datum-os/internal/ent/generated"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/privacy"
 	"github.com/datum-cloud/datum-os/internal/ent/mixin"
 	"github.com/datum-cloud/datum-os/internal/ent/privacy/rule"
@@ -92,16 +89,16 @@ func (ContactListMembership) Hooks() []ent.Hook {
 func (ContactListMembership) Policy() ent.Policy {
 	return privacy.Policy{
 		Mutation: privacy.MutationPolicy{
-			privacy.GroupMembershipMutationRuleFunc(func(ctx context.Context, m *generated.GroupMembershipMutation) error {
-				return m.CheckAccessForEdit(ctx)
-			}),
+			// privacy.GroupMembershipMutationRuleFunc(func(ctx context.Context, m *generated.GroupMembershipMutation) error {
+			// 	return m.CheckAccessForEdit(ctx)
+			// }),
 			rule.AllowIfOrgEditor(),
 			privacy.AlwaysDenyRule(),
 		},
 		Query: privacy.QueryPolicy{
-			privacy.GroupMembershipQueryRuleFunc(func(ctx context.Context, q *generated.GroupMembershipQuery) error {
-				return q.CheckAccess(ctx)
-			}),
+			// privacy.GroupMembershipQueryRuleFunc(func(ctx context.Context, q *generated.GroupMembershipQuery) error {
+			// 	return q.CheckAccess(ctx)
+			// }),
 			rule.AllowIfOrgViewer(),
 			privacy.AlwaysDenyRule(),
 		},
