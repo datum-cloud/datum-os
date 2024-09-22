@@ -63,7 +63,12 @@ func (h *Handler) ContactsGetOne(ctx echo.Context) error {
 	contact, err := transaction.FromContext(ctx.Request().Context()).
 		Contact.Query().
 		Where(contact.ID(contactsGetOneReq.ID)).
-		WithContactLists().
+		WithContactListMemberships(func(q *generated.ContactListMembershipQuery) {
+			q.Where(contactlistmembership.DeletedAtIsNil())
+			q.WithContactList(func(q *generated.ContactListQuery) {
+				q.Where(contactlist.DeletedAtIsNil())
+			})
+		}).
 		Only(ctx.Request().Context())
 	if err != nil {
 		return h.InternalServerError(ctx, err)
