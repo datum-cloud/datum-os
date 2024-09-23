@@ -83,11 +83,7 @@ export const ListSchema = z.object({
     .min(2, 'Please enter a valid name')
     .describe('Name of the list'),
   visibility: z.enum(['PUBLIC', 'PRIVATE']).describe('Visibility of the list'),
-  description: z
-    .string()
-    .min(2, 'Please enter a valid description')
-    .describe('Description of the list')
-    .optional(),
+  description: z.string().describe('Description of the list').optional(),
   members: z
     .array(z.any().describe('List member ID'))
     .optional()
