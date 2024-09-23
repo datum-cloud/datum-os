@@ -74,7 +74,7 @@ export function SideNav({ items, setOpen, className }: SideNavProps) {
   }, [isSidebarOpen])
 
   return (
-    <nav className={nav()}>
+    <nav className={cn(nav(), !isSidebarOpen ? 'w-14 max-w-14' : '')}>
       {items.map((item, idx) =>
         isSeparator(item) ? (
           <div key={`${idx}_${item.type}`} className={separator()}>

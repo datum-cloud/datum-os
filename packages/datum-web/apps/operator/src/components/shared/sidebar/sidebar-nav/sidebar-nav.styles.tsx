@@ -2,7 +2,7 @@ import { tv, type VariantProps } from 'tailwind-variants'
 
 const sidebarNavStyles = tv({
   slots: {
-    nav: 'space-y-1 bg-white dark:bg-peat-900 h-screen relative overflow-y-auto overflow-x-visible pt-24 pb-8 tracking-tighter',
+    nav: 'space-y-1 bg-white dark:bg-peat-900 h-screen relative overflow-x-visible pt-24 pb-8 tracking-tighter',
     icon: 'h-5 w-5 text-blackberry-400 dark:text-peat-400',
     linkLabel:
       'font-normal absolute left-12 text-base text-nowrap duration-200',
