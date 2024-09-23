@@ -1,5 +1,6 @@
 'use client'
 
+import { useSession } from 'next-auth/react'
 import { pluralize } from '@repo/common/text'
 import {
   Dialog,
@@ -33,6 +34,9 @@ const ListsAddContactsDialog = ({
   open,
   setOpen,
 }: ListDialogFormProps) => {
+  const { data: session } = useSession()
+  const organizationId =
+    session?.user.organization ?? ('' as Datum.OrganisationId)
   const [selectedContacts, setSelectedContacts] = useState<Datum.Contact[]>([])
   const [contactsAdded, setContactsAdded] = useState<number>()
   const [{ loading, error }, create] = useAsyncFn(createListMembers)
@@ -40,7 +44,7 @@ const ListsAddContactsDialog = ({
 
   async function onSubmit() {
     const memberIds = selectedContacts.map(({ id }) => id)
-    const memberCount = await create(listId, memberIds)
+    const memberCount = await create(organizationId, listId, memberIds)
 
     setContactsAdded(memberCount)
   }
