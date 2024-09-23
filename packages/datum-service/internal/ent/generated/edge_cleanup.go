@@ -47,6 +47,13 @@ func ContactEdgeCleanup(ctx context.Context, id string) error {
 	// If a user has access to delete the object, they have access to delete all edges
 	ctx = privacy.DecisionContext(ctx, privacy.Allowf("cleanup contact edge"))
 
+	if exists, err := FromContext(ctx).ContactListMembership.Query().Where((contactlistmembership.HasContactWith(contact.ID(id)))).Exist(ctx); err == nil && exists {
+		if contactlistmembershipCount, err := FromContext(ctx).ContactListMembership.Delete().Where(contactlistmembership.HasContactWith(contact.ID(id))).Exec(ctx); err != nil {
+			FromContext(ctx).Logger.Debugw("deleting contactlistmembership", "count", contactlistmembershipCount, "err", err)
+			return err
+		}
+	}
+
 	return nil
 }
 

@@ -1560,40 +1560,40 @@ func (m *APITokenMutation) ResetEdge(name string) error {
 // ContactMutation represents an operation that mutates the Contact nodes in the graph.
 type ContactMutation struct {
 	config
-	op                              Op
-	typ                             string
-	id                              *string
-	created_at                      *time.Time
-	updated_at                      *time.Time
-	created_by                      *string
-	updated_by                      *string
-	mapping_id                      *string
-	deleted_at                      *time.Time
-	deleted_by                      *string
-	tags                            *[]string
-	appendtags                      []string
-	full_name                       *string
-	title                           *string
-	company                         *string
-	email                           *string
-	phone_number                    *string
-	address                         *string
-	status                          *enums.UserStatus
-	clearedFields                   map[string]struct{}
-	owner                           *string
-	clearedowner                    bool
-	contact_lists                   map[string]struct{}
-	removedcontact_lists            map[string]struct{}
-	clearedcontact_lists            bool
-	entities                        map[string]struct{}
-	removedentities                 map[string]struct{}
-	clearedentities                 bool
-	contact_list_memberships        map[string]struct{}
-	removedcontact_list_memberships map[string]struct{}
-	clearedcontact_list_memberships bool
-	done                            bool
-	oldValue                        func(context.Context) (*Contact, error)
-	predicates                      []predicate.Contact
+	op                          Op
+	typ                         string
+	id                          *string
+	created_at                  *time.Time
+	updated_at                  *time.Time
+	created_by                  *string
+	updated_by                  *string
+	mapping_id                  *string
+	deleted_at                  *time.Time
+	deleted_by                  *string
+	tags                        *[]string
+	appendtags                  []string
+	full_name                   *string
+	title                       *string
+	company                     *string
+	email                       *string
+	phone_number                *string
+	address                     *string
+	status                      *enums.UserStatus
+	clearedFields               map[string]struct{}
+	owner                       *string
+	clearedowner                bool
+	contact_lists               map[string]struct{}
+	removedcontact_lists        map[string]struct{}
+	clearedcontact_lists        bool
+	entities                    map[string]struct{}
+	removedentities             map[string]struct{}
+	clearedentities             bool
+	contact_list_members        map[string]struct{}
+	removedcontact_list_members map[string]struct{}
+	clearedcontact_list_members bool
+	done                        bool
+	oldValue                    func(context.Context) (*Contact, error)
+	predicates                  []predicate.Contact
 }
 
 var _ ent.Mutation = (*ContactMutation)(nil)
@@ -2596,58 +2596,58 @@ func (m *ContactMutation) ResetEntities() {
 	m.removedentities = nil
 }
 
-// AddContactListMembershipIDs adds the "contact_list_memberships" edge to the ContactListMembership entity by ids.
-func (m *ContactMutation) AddContactListMembershipIDs(ids ...string) {
-	if m.contact_list_memberships == nil {
-		m.contact_list_memberships = make(map[string]struct{})
+// AddContactListMemberIDs adds the "contact_list_members" edge to the ContactListMembership entity by ids.
+func (m *ContactMutation) AddContactListMemberIDs(ids ...string) {
+	if m.contact_list_members == nil {
+		m.contact_list_members = make(map[string]struct{})
 	}
 	for i := range ids {
-		m.contact_list_memberships[ids[i]] = struct{}{}
+		m.contact_list_members[ids[i]] = struct{}{}
 	}
 }
 
-// ClearContactListMemberships clears the "contact_list_memberships" edge to the ContactListMembership entity.
-func (m *ContactMutation) ClearContactListMemberships() {
-	m.clearedcontact_list_memberships = true
+// ClearContactListMembers clears the "contact_list_members" edge to the ContactListMembership entity.
+func (m *ContactMutation) ClearContactListMembers() {
+	m.clearedcontact_list_members = true
 }
 
-// ContactListMembershipsCleared reports if the "contact_list_memberships" edge to the ContactListMembership entity was cleared.
-func (m *ContactMutation) ContactListMembershipsCleared() bool {
-	return m.clearedcontact_list_memberships
+// ContactListMembersCleared reports if the "contact_list_members" edge to the ContactListMembership entity was cleared.
+func (m *ContactMutation) ContactListMembersCleared() bool {
+	return m.clearedcontact_list_members
 }
 
-// RemoveContactListMembershipIDs removes the "contact_list_memberships" edge to the ContactListMembership entity by IDs.
-func (m *ContactMutation) RemoveContactListMembershipIDs(ids ...string) {
-	if m.removedcontact_list_memberships == nil {
-		m.removedcontact_list_memberships = make(map[string]struct{})
+// RemoveContactListMemberIDs removes the "contact_list_members" edge to the ContactListMembership entity by IDs.
+func (m *ContactMutation) RemoveContactListMemberIDs(ids ...string) {
+	if m.removedcontact_list_members == nil {
+		m.removedcontact_list_members = make(map[string]struct{})
 	}
 	for i := range ids {
-		delete(m.contact_list_memberships, ids[i])
-		m.removedcontact_list_memberships[ids[i]] = struct{}{}
+		delete(m.contact_list_members, ids[i])
+		m.removedcontact_list_members[ids[i]] = struct{}{}
 	}
 }
 
-// RemovedContactListMemberships returns the removed IDs of the "contact_list_memberships" edge to the ContactListMembership entity.
-func (m *ContactMutation) RemovedContactListMembershipsIDs() (ids []string) {
-	for id := range m.removedcontact_list_memberships {
+// RemovedContactListMembers returns the removed IDs of the "contact_list_members" edge to the ContactListMembership entity.
+func (m *ContactMutation) RemovedContactListMembersIDs() (ids []string) {
+	for id := range m.removedcontact_list_members {
 		ids = append(ids, id)
 	}
 	return
 }
 
-// ContactListMembershipsIDs returns the "contact_list_memberships" edge IDs in the mutation.
-func (m *ContactMutation) ContactListMembershipsIDs() (ids []string) {
-	for id := range m.contact_list_memberships {
+// ContactListMembersIDs returns the "contact_list_members" edge IDs in the mutation.
+func (m *ContactMutation) ContactListMembersIDs() (ids []string) {
+	for id := range m.contact_list_members {
 		ids = append(ids, id)
 	}
 	return
 }
 
-// ResetContactListMemberships resets all changes to the "contact_list_memberships" edge.
-func (m *ContactMutation) ResetContactListMemberships() {
-	m.contact_list_memberships = nil
-	m.clearedcontact_list_memberships = false
-	m.removedcontact_list_memberships = nil
+// ResetContactListMembers resets all changes to the "contact_list_members" edge.
+func (m *ContactMutation) ResetContactListMembers() {
+	m.contact_list_members = nil
+	m.clearedcontact_list_members = false
+	m.removedcontact_list_members = nil
 }
 
 // Where appends a list predicates to the ContactMutation builder.
@@ -3129,8 +3129,8 @@ func (m *ContactMutation) AddedEdges() []string {
 	if m.entities != nil {
 		edges = append(edges, contact.EdgeEntities)
 	}
-	if m.contact_list_memberships != nil {
-		edges = append(edges, contact.EdgeContactListMemberships)
+	if m.contact_list_members != nil {
+		edges = append(edges, contact.EdgeContactListMembers)
 	}
 	return edges
 }
@@ -3155,9 +3155,9 @@ func (m *ContactMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
-	case contact.EdgeContactListMemberships:
-		ids := make([]ent.Value, 0, len(m.contact_list_memberships))
-		for id := range m.contact_list_memberships {
+	case contact.EdgeContactListMembers:
+		ids := make([]ent.Value, 0, len(m.contact_list_members))
+		for id := range m.contact_list_members {
 			ids = append(ids, id)
 		}
 		return ids
@@ -3174,8 +3174,8 @@ func (m *ContactMutation) RemovedEdges() []string {
 	if m.removedentities != nil {
 		edges = append(edges, contact.EdgeEntities)
 	}
-	if m.removedcontact_list_memberships != nil {
-		edges = append(edges, contact.EdgeContactListMemberships)
+	if m.removedcontact_list_members != nil {
+		edges = append(edges, contact.EdgeContactListMembers)
 	}
 	return edges
 }
@@ -3196,9 +3196,9 @@ func (m *ContactMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
-	case contact.EdgeContactListMemberships:
-		ids := make([]ent.Value, 0, len(m.removedcontact_list_memberships))
-		for id := range m.removedcontact_list_memberships {
+	case contact.EdgeContactListMembers:
+		ids := make([]ent.Value, 0, len(m.removedcontact_list_members))
+		for id := range m.removedcontact_list_members {
 			ids = append(ids, id)
 		}
 		return ids
@@ -3218,8 +3218,8 @@ func (m *ContactMutation) ClearedEdges() []string {
 	if m.clearedentities {
 		edges = append(edges, contact.EdgeEntities)
 	}
-	if m.clearedcontact_list_memberships {
-		edges = append(edges, contact.EdgeContactListMemberships)
+	if m.clearedcontact_list_members {
+		edges = append(edges, contact.EdgeContactListMembers)
 	}
 	return edges
 }
@@ -3234,8 +3234,8 @@ func (m *ContactMutation) EdgeCleared(name string) bool {
 		return m.clearedcontact_lists
 	case contact.EdgeEntities:
 		return m.clearedentities
-	case contact.EdgeContactListMemberships:
-		return m.clearedcontact_list_memberships
+	case contact.EdgeContactListMembers:
+		return m.clearedcontact_list_members
 	}
 	return false
 }
@@ -3264,8 +3264,8 @@ func (m *ContactMutation) ResetEdge(name string) error {
 	case contact.EdgeEntities:
 		m.ResetEntities()
 		return nil
-	case contact.EdgeContactListMemberships:
-		m.ResetContactListMemberships()
+	case contact.EdgeContactListMembers:
+		m.ResetContactListMembers()
 		return nil
 	}
 	return fmt.Errorf("unknown Contact edge %s", name)

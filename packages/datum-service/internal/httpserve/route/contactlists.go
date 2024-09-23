@@ -155,5 +155,21 @@ func registerContactListsHandlers(router *Router) (err error) {
 		return err
 	}
 
+	routeMembersDeleteOne := echo.Route{
+		Name:        name + "Members Delete One",
+		Method:      http.MethodDelete,
+		Path:        path + "/:id/members/:contact_id",
+		Middlewares: authMW,
+		Handler: func(c echo.Context) error {
+			return router.Handler.ContactListsMembersDeleteOne(c)
+		},
+	}
+
+	if err = router.Addv1Route(
+		path, routeMembersDeleteOne.Method, router.Handler.BindContactListsMembersDeleteOne(), routeMembersDeleteOne,
+	); err != nil {
+		return err
+	}
+
 	return nil
 }
