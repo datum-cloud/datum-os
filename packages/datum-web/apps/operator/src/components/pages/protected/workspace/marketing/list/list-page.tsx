@@ -42,6 +42,7 @@ import ListFormDialog from '../lists/lists-form-dialog'
 
 import ListContactsTable from './list-contacts-table'
 import { pageStyles } from './page.styles'
+import { Error } from '@/components/shared/error/error'
 
 type ListPageProps = {
   id: Datum.ListId
@@ -98,7 +99,7 @@ const ListPage = ({ id }: ListPageProps) => {
   }
 
   if (error || !list) {
-    return <div className={wrapper()}>Whoops... Something went wrong</div>
+    return <Error />
   }
 
   const { name, description, visibility, members = [] } = list

@@ -15,6 +15,8 @@ import ContactsControls from './contacts-controls'
 import ContactsTable from './contacts-table'
 import { pageStyles } from './page.styles'
 import ContactDeleteDialog from '@/components/pages/protected/workspace/marketing/contact/contact-delete-dialog'
+import { Loading } from '@/components/shared/loading/loading'
+import { Error } from '@/components/shared/error/error'
 
 const ContactsPage: React.FC = () => {
   const [exportData, setExportData] = useState<Row<Datum.Contact>[]>([])
@@ -40,6 +42,14 @@ const ContactsPage: React.FC = () => {
     setTimeout(() => (document.body.style.pointerEvents = ''), 500)
   }
 
+  if (isLoading) {
+    return <Loading />
+  }
+
+  if (error) {
+    return <Error />
+  }
+
   return (
     <div className={wrapper()}>
       <div className={header()}>
@@ -52,16 +62,14 @@ const ContactsPage: React.FC = () => {
           selectedContacts={selectedContacts}
         />
       </div>
-      {!error && !isLoading && (
-        <ContactsTable
-          setExportData={setExportData}
-          setGlobalFilter={setQuery}
-          setSelection={setSelectedContacts}
-          globalFilter={query}
-          columnFilters={columnFilters}
-          contacts={contacts}
-        />
-      )}
+      <ContactsTable
+        setExportData={setExportData}
+        setGlobalFilter={setQuery}
+        setSelection={setSelectedContacts}
+        globalFilter={query}
+        columnFilters={columnFilters}
+        contacts={contacts}
+      />
       <ContactDeleteDialog
         contacts={selectedContacts}
         open={openDeleteDialog}

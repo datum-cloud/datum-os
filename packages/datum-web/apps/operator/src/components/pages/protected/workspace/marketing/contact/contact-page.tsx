@@ -45,6 +45,7 @@ import ContactFormDialog from '../contacts/contacts-form-dialog'
 import ContactDeleteDialog from './contact-delete-dialog'
 import ContactTable from './contact-table'
 import { pageStyles } from './page.styles'
+import { Error } from '@/components/shared/error/error'
 
 type ContactPageProps = {
   id: Datum.ContactId
@@ -104,7 +105,7 @@ const ContactPage = ({ id }: ContactPageProps) => {
   }
 
   if (error || !contact) {
-    return <div>Whoops... Something went wrong</div>
+    return <Error />
   }
 
   const {
@@ -116,8 +117,6 @@ const ContactPage = ({ id }: ContactPageProps) => {
     enrichedData = {},
     contactHistory,
   } = contact
-
-  console.log(createdAt && typeof createdAt)
 
   return (
     <div className={wrapper()}>
