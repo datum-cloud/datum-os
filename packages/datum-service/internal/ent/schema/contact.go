@@ -1,6 +1,7 @@
 package schema
 
 import (
+	"context"
 	"net/mail"
 
 	"entgo.io/contrib/entgql"
@@ -13,6 +14,7 @@ import (
 	emixin "github.com/datum-cloud/datum-os/pkg/entx/mixin"
 	"github.com/datum-cloud/datum-os/pkg/fgax/entfga"
 
+	"github.com/datum-cloud/datum-os/internal/ent/generated"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/privacy"
 	"github.com/datum-cloud/datum-os/internal/ent/mixin"
 	"github.com/datum-cloud/datum-os/internal/ent/privacy/rule"
@@ -133,16 +135,16 @@ func (Contact) Interceptors() []ent.Interceptor {
 func (Contact) Policy() ent.Policy {
 	return privacy.Policy{
 		Mutation: privacy.MutationPolicy{
-			// privacy.ContactMutationRuleFunc(func(ctx context.Context, m *generated.ContactMutation) error {
-			// 	return m.CheckAccessForEdit(ctx)
-			// }),
+			privacy.ContactMutationRuleFunc(func(ctx context.Context, m *generated.ContactMutation) error {
+				return m.CheckAccessForEdit(ctx)
+			}),
 			rule.AllowIfOrgEditor(),
 			privacy.AlwaysDenyRule(),
 		},
 		Query: privacy.QueryPolicy{
-			// privacy.ContactQueryRuleFunc(func(ctx context.Context, q *generated.ContactQuery) error {
-			// 	return q.CheckAccess(ctx)
-			// }),
+			privacy.ContactQueryRuleFunc(func(ctx context.Context, q *generated.ContactQuery) error {
+				return q.CheckAccess(ctx)
+			}),
 			rule.AllowIfOrgViewer(),
 			privacy.AlwaysDenyRule(),
 		},
