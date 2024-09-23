@@ -978,9 +978,9 @@ type ContactWhereInput struct {
 	HasEntities     *bool               `json:"hasEntities,omitempty"`
 	HasEntitiesWith []*EntityWhereInput `json:"hasEntitiesWith,omitempty"`
 
-	// "contact_list_memberships" edge predicates.
-	HasContactListMemberships     *bool                              `json:"hasContactListMemberships,omitempty"`
-	HasContactListMembershipsWith []*ContactListMembershipWhereInput `json:"hasContactListMembershipsWith,omitempty"`
+	// "contact_list_members" edge predicates.
+	HasContactListMembers     *bool                              `json:"hasContactListMembers,omitempty"`
+	HasContactListMembersWith []*ContactListMembershipWhereInput `json:"hasContactListMembersWith,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -1685,23 +1685,23 @@ func (i *ContactWhereInput) P() (predicate.Contact, error) {
 		}
 		predicates = append(predicates, contact.HasEntitiesWith(with...))
 	}
-	if i.HasContactListMemberships != nil {
-		p := contact.HasContactListMemberships()
-		if !*i.HasContactListMemberships {
+	if i.HasContactListMembers != nil {
+		p := contact.HasContactListMembers()
+		if !*i.HasContactListMembers {
 			p = contact.Not(p)
 		}
 		predicates = append(predicates, p)
 	}
-	if len(i.HasContactListMembershipsWith) > 0 {
-		with := make([]predicate.ContactListMembership, 0, len(i.HasContactListMembershipsWith))
-		for _, w := range i.HasContactListMembershipsWith {
+	if len(i.HasContactListMembersWith) > 0 {
+		with := make([]predicate.ContactListMembership, 0, len(i.HasContactListMembersWith))
+		for _, w := range i.HasContactListMembersWith {
 			p, err := w.P()
 			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasContactListMembershipsWith'", err)
+				return nil, fmt.Errorf("%w: field 'HasContactListMembersWith'", err)
 			}
 			with = append(with, p)
 		}
-		predicates = append(predicates, contact.HasContactListMembershipsWith(with...))
+		predicates = append(predicates, contact.HasContactListMembersWith(with...))
 	}
 	switch len(predicates) {
 	case 0:

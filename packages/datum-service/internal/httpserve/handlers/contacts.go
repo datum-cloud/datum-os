@@ -5,6 +5,8 @@ import (
 
 	"github.com/datum-cloud/datum-os/internal/ent/generated"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/contact"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/contactlist"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/contactlistmembership"
 	echo "github.com/datum-cloud/datum-os/pkg/echox"
 	"github.com/datum-cloud/datum-os/pkg/enums"
 	"github.com/datum-cloud/datum-os/pkg/middleware/transaction"
@@ -19,7 +21,12 @@ const createContactBatchSize = 5000
 func (h *Handler) ContactsGet(ctx echo.Context) error {
 	contacts, err := transaction.FromContext(ctx.Request().Context()).
 		Contact.Query().
-		WithContactLists().
+		WithContactListMembers(func(q *generated.ContactListMembershipQuery) {
+			q.Where(contactlistmembership.DeletedAtIsNil())
+			q.WithContactList(func(q *generated.ContactListQuery) {
+				q.Where(contactlist.DeletedAtIsNil())
+			})
+		}).
 		All(ctx.Request().Context())
 	if err != nil {
 		return h.InternalServerError(ctx, err)
@@ -58,7 +65,12 @@ func (h *Handler) ContactsGetOne(ctx echo.Context) error {
 	contact, err := transaction.FromContext(ctx.Request().Context()).
 		Contact.Query().
 		Where(contact.ID(contactsGetOneReq.ID)).
-		WithContactLists().
+		WithContactListMembers(func(q *generated.ContactListMembershipQuery) {
+			q.Where(contactlistmembership.DeletedAtIsNil())
+			q.WithContactList(func(q *generated.ContactListQuery) {
+				q.Where(contactlist.DeletedAtIsNil())
+			})
+		}).
 		Only(ctx.Request().Context())
 	if err != nil {
 		return h.InternalServerError(ctx, err)
@@ -221,7 +233,16 @@ func (h *Handler) ContactsDelete(ctx echo.Context) error {
 		return h.BadRequest(ctx, err)
 	}
 
-	affected, err := transaction.FromContext(ctx.Request().Context()).Contact.Delete().
+	tx := transaction.FromContext(ctx.Request().Context())
+
+	_, err = tx.ContactListMembership.Delete().
+		Where(contactlistmembership.ContactIDIn(IDs.ContactIDs...)).
+		Exec(ctx.Request().Context())
+	if err != nil {
+		return h.InternalServerError(ctx, err)
+	}
+
+	affected, err := tx.Contact.Delete().
 		Where(contact.IDIn(IDs.ContactIDs...)).
 		Exec(ctx.Request().Context())
 	if err != nil {

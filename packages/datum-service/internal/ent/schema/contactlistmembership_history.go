@@ -39,7 +39,7 @@ func (ContactListMembershipHistory) Annotations() []schema.Annotation {
 		entgql.QueryField(),
 		entgql.RelayConnection(),
 		entfga.Annotations{
-			ObjectType:   "contact_list_membership",
+			ObjectType:   "contact_list_members",
 			IDField:      "Ref",
 			IncludeHooks: false,
 		},

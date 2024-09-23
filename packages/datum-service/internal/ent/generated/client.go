@@ -1150,15 +1150,15 @@ func (c *ContactClient) QueryEntities(co *Contact) *EntityQuery {
 	return query
 }
 
-// QueryContactListMemberships queries the contact_list_memberships edge of a Contact.
-func (c *ContactClient) QueryContactListMemberships(co *Contact) *ContactListMembershipQuery {
+// QueryContactListMembers queries the contact_list_members edge of a Contact.
+func (c *ContactClient) QueryContactListMembers(co *Contact) *ContactListMembershipQuery {
 	query := (&ContactListMembershipClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := co.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(contact.Table, contact.FieldID, id),
 			sqlgraph.To(contactlistmembership.Table, contactlistmembership.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, true, contact.ContactListMembershipsTable, contact.ContactListMembershipsColumn),
+			sqlgraph.Edge(sqlgraph.O2M, true, contact.ContactListMembersTable, contact.ContactListMembersColumn),
 		)
 		schemaConfig := co.schemaConfig
 		step.To.Schema = schemaConfig.ContactListMembership

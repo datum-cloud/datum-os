@@ -303,11 +303,11 @@ type Contact struct {
 	// the address of the contact
 	Address *string `json:"address,omitempty"`
 	// status of the contact
-	Status                 enums.UserStatus         `json:"status"`
-	Owner                  *Organization            `json:"owner,omitempty"`
-	ContactLists           []*ContactList           `json:"contactLists,omitempty"`
-	Entities               []*Entity                `json:"entities,omitempty"`
-	ContactListMemberships []*ContactListMembership `json:"contactListMemberships,omitempty"`
+	Status             enums.UserStatus         `json:"status"`
+	Owner              *Organization            `json:"owner,omitempty"`
+	ContactLists       []*ContactList           `json:"contactLists,omitempty"`
+	Entities           []*Entity                `json:"entities,omitempty"`
+	ContactListMembers []*ContactListMembership `json:"contactListMembers,omitempty"`
 }
 
 func (Contact) IsNode() {}
@@ -1717,9 +1717,9 @@ type ContactWhereInput struct {
 	// entities edge predicates
 	HasEntities     *bool               `json:"hasEntities,omitempty"`
 	HasEntitiesWith []*EntityWhereInput `json:"hasEntitiesWith,omitempty"`
-	// contact_list_memberships edge predicates
-	HasContactListMemberships     *bool                              `json:"hasContactListMemberships,omitempty"`
-	HasContactListMembershipsWith []*ContactListMembershipWhereInput `json:"hasContactListMembershipsWith,omitempty"`
+	// contact_list_members edge predicates
+	HasContactListMembers     *bool                              `json:"hasContactListMembers,omitempty"`
+	HasContactListMembersWith []*ContactListMembershipWhereInput `json:"hasContactListMembersWith,omitempty"`
 }
 
 // CreateAPITokenInput is used for create APIToken object.
