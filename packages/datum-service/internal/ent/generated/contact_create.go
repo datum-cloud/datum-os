@@ -282,19 +282,19 @@ func (cc *ContactCreate) AddEntities(e ...*Entity) *ContactCreate {
 	return cc.AddEntityIDs(ids...)
 }
 
-// AddContactListMembershipIDs adds the "contact_list_memberships" edge to the ContactListMembership entity by IDs.
-func (cc *ContactCreate) AddContactListMembershipIDs(ids ...string) *ContactCreate {
-	cc.mutation.AddContactListMembershipIDs(ids...)
+// AddContactListMemberIDs adds the "contact_list_members" edge to the ContactListMembership entity by IDs.
+func (cc *ContactCreate) AddContactListMemberIDs(ids ...string) *ContactCreate {
+	cc.mutation.AddContactListMemberIDs(ids...)
 	return cc
 }
 
-// AddContactListMemberships adds the "contact_list_memberships" edges to the ContactListMembership entity.
-func (cc *ContactCreate) AddContactListMemberships(c ...*ContactListMembership) *ContactCreate {
+// AddContactListMembers adds the "contact_list_members" edges to the ContactListMembership entity.
+func (cc *ContactCreate) AddContactListMembers(c ...*ContactListMembership) *ContactCreate {
 	ids := make([]string, len(c))
 	for i := range c {
 		ids[i] = c[i].ID
 	}
-	return cc.AddContactListMembershipIDs(ids...)
+	return cc.AddContactListMemberIDs(ids...)
 }
 
 // Mutation returns the ContactMutation object of the builder.
@@ -564,12 +564,12 @@ func (cc *ContactCreate) createSpec() (*Contact, *sqlgraph.CreateSpec) {
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := cc.mutation.ContactListMembershipsIDs(); len(nodes) > 0 {
+	if nodes := cc.mutation.ContactListMembersIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: true,
-			Table:   contact.ContactListMembershipsTable,
-			Columns: []string{contact.ContactListMembershipsColumn},
+			Table:   contact.ContactListMembersTable,
+			Columns: []string{contact.ContactListMembersColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(contactlistmembership.FieldID, field.TypeString),

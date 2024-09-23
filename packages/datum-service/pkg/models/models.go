@@ -804,8 +804,8 @@ func ContactFromGeneratedContact(genContact *generated.Contact) Contact {
 	cd.PhoneNumber = genContact.PhoneNumber
 	cd.Address = genContact.Address
 	cd.Status = string(genContact.Status)
-	cd.ContactLists = make([]ContactList, len(genContact.Edges.ContactListMemberships))
-	for i, genContactListMembership := range genContact.Edges.ContactListMemberships {
+	cd.ContactLists = make([]ContactList, len(genContact.Edges.ContactListMembers))
+	for i, genContactListMembership := range genContact.Edges.ContactListMembers {
 		cd.ContactLists[i] = ContactListFromGeneratedContactList(genContactListMembership.Edges.ContactList)
 	}
 
@@ -1015,6 +1015,8 @@ type ContactList struct {
 	Description string `json:"description,omitempty"`
 	// the number of members in the list
 	MemberCount *int `json:"member_count,omitempty"`
+	// the members of the list
+	Members []Contact `json:"members,omitempty"`
 }
 
 // ContactListFromGeneratedContactList is a helper function to return a `ContactList` from a `generated.ContactList`
@@ -1036,6 +1038,8 @@ func ContactListFromGeneratedContactList(genContactList *generated.ContactList) 
 	cl.Visibility = genContactList.Visibility
 	cl.DisplayName = genContactList.DisplayName
 	cl.Description = genContactList.Description
+
+	cl.Members = ContactsFromGeneratedContactListMembers(genContactList.Edges.ContactListMembers)
 
 	return cl
 }

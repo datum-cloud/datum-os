@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/datum-cloud/datum-os/internal/ent/generated"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/contact"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/contactlist"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/contactlistmembership"
 	echo "github.com/datum-cloud/datum-os/pkg/echox"
@@ -62,20 +63,22 @@ func (h *Handler) ContactListsGetOne(ctx echo.Context) error {
 	}
 
 	contactList, err := transaction.FromContext(ctx.Request().Context()).
-		ContactList.Get(ctx.Request().Context(), contactListsGetOneReq.ID)
+		ContactList.Query().
+		Where(contactlist.ID(contactListsGetOneReq.ID)).
+		WithContactListMembers(func(q *generated.ContactListMembershipQuery) {
+			q.Where(contactlistmembership.DeletedAtIsNil())
+			q.WithContact(func(q *generated.ContactQuery) {
+				q.Where(contact.DeletedAtIsNil())
+			})
+		}).
+		Only(ctx.Request().Context())
 	if err != nil {
 		return h.InternalServerError(ctx, err)
 	}
 
 	contactListsGetOneResponse := models.ContactListsGetOneResponseFromGeneratedContactList(contactList)
 
-	count, err := transaction.FromContext(ctx.Request().Context()).
-		ContactListMembership.Query().
-		Where(contactlistmembership.ContactListID(contactList.ID)).
-		Count(ctx.Request().Context())
-	if err != nil {
-		return h.InternalServerError(ctx, err)
-	}
+	count := len(contactList.Edges.ContactListMembers)
 	contactListsGetOneResponse.ContactList.MemberCount = &count
 
 	return h.Success(ctx, contactListsGetOneResponse)

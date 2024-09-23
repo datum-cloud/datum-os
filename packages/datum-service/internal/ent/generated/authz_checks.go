@@ -647,7 +647,7 @@ func (q *ContactListMembershipQuery) CheckAccess(ctx context.Context) error {
 	if gCtx != nil {
 		ac := fgax.AccessCheck{
 			Relation:    fgax.CanView,
-			ObjectType:  "contact_list_membership",
+			ObjectType:  "contact_list_members",
 			SubjectType: auth.GetAuthzSubjectType(ctx),
 		}
 
@@ -708,7 +708,7 @@ func (q *ContactListMembershipQuery) CheckAccess(ctx context.Context) error {
 func (m *ContactListMembershipMutation) CheckAccessForEdit(ctx context.Context) error {
 	ac := fgax.AccessCheck{
 		Relation:    fgax.CanEdit,
-		ObjectType:  "contact_list_membership",
+		ObjectType:  "contact_list_members",
 		SubjectType: auth.GetAuthzSubjectType(ctx),
 	}
 
@@ -767,7 +767,7 @@ func (m *ContactListMembershipMutation) CheckAccessForEdit(ctx context.Context) 
 func (m *ContactListMembershipMutation) CheckAccessForDelete(ctx context.Context) error {
 	ac := fgax.AccessCheck{
 		Relation:    fgax.CanDelete,
-		ObjectType:  "contact_list_membership",
+		ObjectType:  "contact_list_members",
 		SubjectType: auth.GetAuthzSubjectType(ctx),
 	}
 
@@ -810,7 +810,7 @@ func (q *ContactListMembershipHistoryQuery) CheckAccess(ctx context.Context) err
 	if gCtx != nil {
 		ac := fgax.AccessCheck{
 			Relation:    fgax.CanView,
-			ObjectType:  "contact_list_membership",
+			ObjectType:  "contact_list_members",
 			SubjectType: auth.GetAuthzSubjectType(ctx),
 		}
 

@@ -86,7 +86,7 @@ func (Contact) Mixin() []ent.Mixin {
 func (Contact) Edges() []ent.Edge {
 	return []ent.Edge{
 		edge.To("contact_lists", ContactList.Type).
-			Through("contact_list_memberships", ContactListMembership.Type),
+			Through("contact_list_members", ContactListMembership.Type),
 		edge.From("entities", Entity.Type).
 			Ref("contacts"),
 	}

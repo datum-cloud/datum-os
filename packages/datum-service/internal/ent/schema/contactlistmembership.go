@@ -51,7 +51,7 @@ func (ContactListMembership) Annotations() []schema.Annotation {
 		entgql.QueryField(),
 		entgql.Mutations(entgql.MutationCreate(), (entgql.MutationUpdate())),
 		entfga.Annotations{
-			ObjectType:   "contact_list_membership",
+			ObjectType:   "contact_list_members",
 			IncludeHooks: false,
 		},
 	}

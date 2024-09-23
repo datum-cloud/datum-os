@@ -1838,12 +1838,12 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"Entity",
 	)
 	graph.MustAddE(
-		"contact_list_memberships",
+		"contact_list_members",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: true,
-			Table:   contact.ContactListMembershipsTable,
-			Columns: []string{contact.ContactListMembershipsColumn},
+			Table:   contact.ContactListMembersTable,
+			Columns: []string{contact.ContactListMembersColumn},
 			Bidi:    false,
 		},
 		"Contact",
@@ -3853,14 +3853,14 @@ func (f *ContactFilter) WhereHasEntitiesWith(preds ...predicate.Entity) {
 	})))
 }
 
-// WhereHasContactListMemberships applies a predicate to check if query has an edge contact_list_memberships.
-func (f *ContactFilter) WhereHasContactListMemberships() {
-	f.Where(entql.HasEdge("contact_list_memberships"))
+// WhereHasContactListMembers applies a predicate to check if query has an edge contact_list_members.
+func (f *ContactFilter) WhereHasContactListMembers() {
+	f.Where(entql.HasEdge("contact_list_members"))
 }
 
-// WhereHasContactListMembershipsWith applies a predicate to check if query has an edge contact_list_memberships with a given conditions (other predicates).
-func (f *ContactFilter) WhereHasContactListMembershipsWith(preds ...predicate.ContactListMembership) {
-	f.Where(entql.HasEdgeWith("contact_list_memberships", sqlgraph.WrapFunc(func(s *sql.Selector) {
+// WhereHasContactListMembersWith applies a predicate to check if query has an edge contact_list_members with a given conditions (other predicates).
+func (f *ContactFilter) WhereHasContactListMembersWith(preds ...predicate.ContactListMembership) {
+	f.Where(entql.HasEdgeWith("contact_list_members", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
