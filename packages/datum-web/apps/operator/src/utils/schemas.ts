@@ -4,11 +4,7 @@ import { TEL_REGEX } from '@repo/constants'
 
 export const ContactSchema = z.object({
   id: z.string().describe('Contact ID').optional(),
-  fullName: z
-    .string()
-    .min(2, 'Please enter a valid name')
-    .describe('Name of the contact')
-    .optional(),
+  fullName: z.string().describe('Name of the contact').optional(),
   title: z
     .string()
     .min(2, 'Please enter a valid title')
@@ -76,7 +72,28 @@ export const SearchFormSchema = z.object({
   query: z.string().describe('The search query').optional(),
 })
 
+export const DeletionSchema = z.object({
+  deletionText: z.string().describe('Text to confirm deletion'),
+})
+
+export const ListSchema = z.object({
+  id: z.string().describe('List ID').optional(),
+  name: z
+    .string()
+    .min(2, 'Please enter a valid name')
+    .describe('Name of the list'),
+  visibility: z.enum(['PUBLIC', 'PRIVATE']).describe('Visibility of the list'),
+  description: z.string().describe('Description of the list').optional(),
+  members: z
+    .array(z.any().describe('List member ID'))
+    .optional()
+    .default([])
+    .describe('Array of the list members'),
+})
+
 export type ContactInput = z.infer<typeof ContactSchema>
 export type ContactFilterInput = z.infer<typeof ContactFilterFormSchema>
 export type ContactFormInput = z.infer<typeof ContactFormSchema>
 export type SearchFormInput = z.infer<typeof SearchFormSchema>
+export type DeletionInput = z.infer<typeof DeletionSchema>
+export type ListInput = z.infer<typeof ListSchema>

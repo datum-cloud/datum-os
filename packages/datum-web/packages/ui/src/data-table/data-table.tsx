@@ -17,6 +17,7 @@ import {
   SortingFn,
   sortingFns,
   RowData,
+  Row,
 } from '@tanstack/react-table'
 import {
   RankingInfo,
@@ -58,8 +59,9 @@ interface DataTableProps<TData, TValue> {
   globalFilterFn?: any
   globalFilter?: string
   columnFilters?: ColumnFiltersState
+  setExportData?(data: Row<TData>[]): void
   setGlobalFilter?(input: string): void
-  onSelectionChange?(selection: TData[]): void
+  setSelection?(selection: TData[]): void
 }
 
 declare module '@tanstack/react-table' {
@@ -90,13 +92,15 @@ export function DataTable<TData, TValue>({
   filterFns = {},
   globalFilterFn,
   globalFilter,
-  columnFilters: _columnFilters = [],
+  columnFilters: _columnFilters,
   setGlobalFilter,
-  onSelectionChange,
+  setSelection,
+  setExportData,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([])
-  const [columnFilters, setColumnFilters] =
-    useState<ColumnFiltersState>(_columnFilters)
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>(
+    _columnFilters || [],
+  )
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
   const [rowSelection, setRowSelection] = useState({})
 
@@ -127,13 +131,31 @@ export function DataTable<TData, TValue>({
   })
 
   useEffect(() => {
-    if (onSelectionChange) {
+    if (_columnFilters) {
+      setColumnFilters(_columnFilters)
+    }
+  }, [_columnFilters])
+
+  useEffect(() => {
+    if (setExportData) {
+      setExportData(table.getFilteredRowModel().rows)
+    }
+  }, [table.getFilteredRowModel().rows])
+
+  useEffect(() => {
+    if (setSelection) {
       const selectedRowData = Object.keys(rowSelection)
         .filter((id) => !!data[Number(id)]) // Filter out undefined
         .map((id) => data[Number(id)])
-      onSelectionChange(selectedRowData as TData[])
+      setSelection(selectedRowData as TData[])
     }
   }, [rowSelection])
+
+  useEffect(() => {
+    if (Object.keys(rowSelection).length > 0) {
+      table.setRowSelection({})
+    }
+  }, [data])
 
   return (
     <>
@@ -211,7 +233,7 @@ export function DataTable<TData, TValue>({
                     <Fragment key={header.id}>
                       {pinRight && (
                         <th
-                          className="w-[1px] p-0 bg-blackberry-200 sticky z-20"
+                          className="w-[1px] p-0 bg-blackberry-200 sticky z-10"
                           style={{ right: columnWidth }}
                         />
                       )}
@@ -220,9 +242,9 @@ export function DataTable<TData, TValue>({
                         bordered={hasBorder}
                         style={{ width: minWidth || columnWidth }}
                         className={cn(
-                          minWidth && 'xl:!w-auto',
-                          pinLeft && 'sticky z-20 left-0 border-r-0',
-                          pinRight && 'sticky z-20 right-0',
+                          minWidth && '2xl:!w-auto',
+                          pinLeft && 'sticky z-10 left-0 border-r-0',
+                          pinRight && 'sticky z-10 right-0',
                           hasPinnedRightCell && secondLastCell && 'border-r-0',
                         )}
                       >
@@ -235,7 +257,7 @@ export function DataTable<TData, TValue>({
                       </TableHead>
                       {pinLeft && (
                         <th
-                          className="w-[1px] p-0 bg-blackberry-200 sticky z-20"
+                          className="w-[1px] p-0 bg-blackberry-200 sticky z-10"
                           style={{ left: columnWidth }}
                         />
                       )}
@@ -283,7 +305,7 @@ export function DataTable<TData, TValue>({
                       <Fragment key={cell.id}>
                         {pinRight && (
                           <td
-                            className="w-[1px] p-0 bg-blackberry-200 sticky z-20"
+                            className="w-[1px] p-0 bg-blackberry-200 sticky z-10"
                             style={{ right: columnWidth }}
                           />
                         )}
@@ -291,11 +313,11 @@ export function DataTable<TData, TValue>({
                           bordered={hasBorder}
                           style={{ width: minWidth || columnWidth }}
                           className={cn(
-                            minWidth && 'xl:!w-auto',
+                            minWidth && '2xl:!w-auto',
                             pinLeft &&
-                              'sticky z-20 bg-inherit left-0 bg-white group-hover:!bg-blackberry-50 group-data-[state=selected]:bg-blackberry-50 border-r-0',
+                              'sticky z-10 bg-inherit left-0 bg-white group-hover:!bg-blackberry-50 group-data-[state=selected]:bg-blackberry-50 border-r-0',
                             pinRight &&
-                              'sticky z-20 bg-inherit right-0 bg-white group-hover:!bg-blackberry-50 group-data-[state=selected]:bg-blackberry-50',
+                              'sticky z-10 bg-inherit right-0 bg-white group-hover:!bg-blackberry-50 group-data-[state=selected]:bg-blackberry-50',
                             hasPinnedRightCell &&
                               secondLastCell &&
                               'border-r-0',
@@ -308,7 +330,7 @@ export function DataTable<TData, TValue>({
                         </TableCell>
                         {pinLeft && (
                           <td
-                            className="w-[1px] p-0 bg-blackberry-200 sticky z-20 left-0"
+                            className="w-[1px] p-0 bg-blackberry-200 sticky z-10 left-0"
                             style={{ left: columnWidth }}
                           />
                         )}
@@ -371,6 +393,7 @@ export {
   type FilterFn,
   type SortingFn,
   type RankingInfo,
+  type Row,
   DataTableColumnHeader,
   DataTablePagination,
   flexRender,

@@ -1,6 +1,7 @@
 'use client'
 
-import { useId, useState } from 'react'
+import { useSession } from 'next-auth/react'
+import { useState } from 'react'
 import { Check, ChevronDown, Import, Plus, Trash, User } from 'lucide-react'
 
 import { Button } from '@repo/ui/button'
@@ -11,7 +12,6 @@ import {
   DropdownMenuTrigger,
 } from '@repo/ui/dropdown-menu'
 import type { ColumnFiltersState } from '@repo/ui/data-table'
-import { mockLists } from '@repo/constants'
 import type { Datum } from '@repo/types'
 
 import {
@@ -20,6 +20,8 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@/components/shared/sidebar/sidebar-accordion/sidebar-accordion'
+import { useLists } from '@/hooks/useLists'
+import { createListMembers, removeListMembers } from '@/query/lists'
 
 import ContactFormDialog from './contacts-form-dialog'
 import FilterContactDialog from './contacts-filter-dialog'
@@ -32,7 +34,7 @@ type ContactsControlsProps = {
   onDelete(): void
   onExport(): void
   onFilter(columnFilters: ColumnFiltersState): void
-  onListAddition(lists: Datum.ListId[]): void
+  selectedContacts: Datum.Contact[]
 }
 
 const ContactsControls = ({
@@ -40,7 +42,7 @@ const ContactsControls = ({
   onDelete,
   onExport,
   onFilter,
-  onListAddition,
+  selectedContacts,
 }: ContactsControlsProps) => {
   const {
     accordionContainer,
@@ -53,7 +55,10 @@ const ContactsControls = ({
   } = pageStyles()
   const [_openContactDialog, _setOpenContactDialog] = useState(false)
   const [_openImportDialog, _setOpenImportDialog] = useState(false)
-  const [selectedLists, setSelectedLists] = useState<string[]>([])
+  const { data: session } = useSession()
+  const organizationId =
+    session?.user.organization ?? ('' as Datum.OrganisationId)
+  const { data: lists = [] } = useLists(organizationId)
 
   function openContactDialog() {
     _setOpenContactDialog(true)
@@ -73,6 +78,16 @@ const ContactsControls = ({
     _setOpenImportDialog(input)
     // NOTE: This is needed to close the dialog without removing pointer events per https://github.com/shadcn-ui/ui/issues/468
     setTimeout(() => (document.body.style.pointerEvents = ''), 500)
+  }
+
+  async function subscribe(listId: Datum.ListId) {
+    const selectedContactsIds = selectedContacts.map(({ id }) => id)
+    await createListMembers(organizationId, listId, selectedContactsIds)
+  }
+
+  async function unsubscribe(listId: Datum.ListId) {
+    const selectedContactsIds = selectedContacts.map(({ id }) => id)
+    await removeListMembers(organizationId, listId, selectedContactsIds)
   }
 
   return (
@@ -121,6 +136,7 @@ const ContactsControls = ({
             </DropdownMenuItem>
             <DropdownMenuItem
               onClick={onDelete}
+              disabled={selectedContacts.length === 0}
               className={contactDropdownItem()}
             >
               <Trash size={18} className={contactDropdownIcon()} />
@@ -137,19 +153,17 @@ const ContactsControls = ({
                 </AccordionTrigger>
                 <AccordionContent className={accordionContentOuter()}>
                   <div className={accordionContentInner()}>
-                    {/* TODO: Replace mock lists */}
-                    {mockLists.map((list) => {
-                      const id = useId()
-                      const isSelected = selectedLists.includes(list)
+                    {lists.map((list) => {
+                      const isSelected =
+                        selectedContacts.length > 0 &&
+                        !selectedContacts.some(({ contactLists }) => {
+                          return !contactLists.some(({ id }) => id === list.id)
+                        })
 
                       if (isSelected) {
-                        const newSelectedLists = selectedLists.filter(
-                          (selectedList) => list !== selectedList,
-                        )
-
                         return (
                           <Button
-                            key={id}
+                            key={list.id}
                             variant="tagSuccess"
                             icon={
                               <Check
@@ -159,25 +173,23 @@ const ContactsControls = ({
                             }
                             iconPosition="left"
                             className="transition-all duration-0"
-                            onClick={() => setSelectedLists(newSelectedLists)}
+                            onClick={async () => await unsubscribe(list.id)}
                             size="tag"
                           >
-                            {list}
+                            {list.name}
                           </Button>
                         )
                       }
 
-                      const newSelectedLists = [...selectedLists, list]
-
                       return (
                         <Button
-                          key={id}
+                          key={list.id}
                           variant="tag"
                           size="tag"
                           className="transition-all duration-0"
-                          onClick={() => setSelectedLists(newSelectedLists)}
+                          onClick={async () => await subscribe(list.id)}
                         >
-                          {list}
+                          {list.name}
                         </Button>
                       )
                     })}

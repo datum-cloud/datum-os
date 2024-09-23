@@ -5,6 +5,9 @@ export const config: Omit<Config, 'content'> = {
   plugins: [forms],
   theme: {
     extend: {
+      screens: {
+        '2xl': '1650px',
+      },
       keyframes: {
         'accordion-down': {
           from: { height: '0' },

@@ -1,3 +1,4 @@
+import type { Metadata } from 'next'
 import React from 'react'
 
 import { Datum } from '@repo/types'
@@ -8,6 +9,10 @@ import ListsPage from '@/components/pages/protected/workspace/marketing/lists/li
 
 type ListsPageProps = {
   organisationId: Datum.OrganisationId
+}
+
+export const metadata: Metadata = {
+  title: 'Lists',
 }
 
 const Page = async ({ organisationId }: ListsPageProps) => {

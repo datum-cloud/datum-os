@@ -1,11 +1,11 @@
-import { parse } from 'csv-parse/sync' // Using sync for simplicity
 import { NextResponse } from 'next/server'
+import { parse } from 'csv-parse/sync' // Using sync for simplicity
 
 import { decamelize } from '@repo/common/keys'
 import { HttpStatus, SERVICE_APP_ROUTES } from '@repo/constants'
 import type { Datum } from '@repo/types'
 
-import { auth } from '@/lib/auth/auth'
+import { authorize, handleError, handleResponseError } from '@/utils/requests'
 
 type FormatAction = (key: string, row: Record<string, any>) => string
 
@@ -21,14 +21,6 @@ const FORMAT_MAP: Record<string, FormatField> = {
   fullname: {
     key: 'fullName',
   },
-  phone: {
-    key: 'phoneNumber',
-  },
-}
-
-function handleName(key: string, row: Record<string, any>) {
-  // TODO: Handle name fields other than Full Name
-  return ''
 }
 
 function getContactInformation(row: Record<string, any>) {
@@ -49,27 +41,22 @@ function getContactInformation(row: Record<string, any>) {
   return decamelize(data) as Datum.Contact
 }
 
+export const maxDuration = 60
+
 export async function POST(request: Request) {
-  const session = await auth()
-  const token = session?.user?.accessToken
-
-  if (!token) {
-    return NextResponse.json(
-      { message: 'Unauthorized - No Token Provided' },
-      {
-        status: HttpStatus.Unauthorized,
-      },
-    )
-  }
-
-  const formData = await request.formData()
-  const file = formData.get('file')
-
-  if (!file || !(file instanceof File)) {
-    return NextResponse.json({ error: 'No file uploaded' }, { status: 400 })
-  }
-
   try {
+    const token = await authorize()
+
+    const formData = await request.formData()
+    const file = formData.get('file')
+
+    if (!file || !(file instanceof File)) {
+      return NextResponse.json(
+        { error: 'Bad request - No file uploaded' },
+        { status: HttpStatus.BadRequest },
+      )
+    }
+
     const arrayBuffer = await file.arrayBuffer()
     const fileContent = Buffer.from(arrayBuffer).toString('utf-8')
 
@@ -84,7 +71,7 @@ export async function POST(request: Request) {
         ({ email }: Partial<Datum.Contact>) => !!email,
       ) as Datum.ContactCreateInput
 
-    const fData = await fetch(SERVICE_APP_ROUTES.contacts, {
+    const response = await fetch(SERVICE_APP_ROUTES.contacts, {
       method: 'POST',
       headers: {
         'content-type': 'application/json',
@@ -95,10 +82,13 @@ export async function POST(request: Request) {
       }),
     })
 
-    const result = await fData.json()
+    if (!response.ok) {
+      await handleResponseError(response, `Failed to upload contacts`)
+    }
 
-    return NextResponse.json(result, { status: fData.status })
-  } catch (error) {
-    return NextResponse.json({ error: 'Error parsing CSV' }, { status: 500 })
+    const data = await response.json()
+    return NextResponse.json(data, { status: HttpStatus.Ok })
+  } catch (error: any) {
+    return handleError(error, 'Failed to upload contacts')
   }
 }

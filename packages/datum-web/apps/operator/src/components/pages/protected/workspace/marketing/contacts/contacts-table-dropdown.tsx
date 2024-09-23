@@ -18,7 +18,6 @@ import {
   Trash,
 } from 'lucide-react'
 
-import { mockLists } from '@repo/constants'
 import {
   Accordion,
   AccordionContent,
@@ -28,21 +27,29 @@ import {
 import { Button } from '@repo/ui/button'
 import { Datum } from '@repo/types'
 
-import { removeContacts } from '@/query/contacts'
-
 import { pageStyles } from './page.styles'
 import ContactFormDialog from './contacts-form-dialog'
+import { useLists } from '@/hooks/useLists'
+import { createListMembers, removeListMembers } from '@/query/lists'
+import { useAsyncFn } from '@/hooks/useAsyncFn'
+import ContactDeleteDialog from '@/components/pages/protected/workspace/marketing/contact/contact-delete-dialog'
 
 type ContactsTableDropdownProps = {
   contact: Datum.Contact
 }
 
 const ContactsTableDropdown = ({ contact }: ContactsTableDropdownProps) => {
-  const { id, lists } = contact
-  const [_openEditDialog, _setOpenEditDialog] = useState(false)
+  const { id, contactLists = [] } = contact
+  const [openEditDialog, _setOpenEditDialog] = useState(false)
+  const [openDeleteDialog, _setOpenDeleteDialog] = useState(false)
+  const [{ loading: loadingUnsubscribe }, removeSubscriber] =
+    useAsyncFn(removeListMembers)
+  const [{ loading: loadingsubscribe }, addSubscriber] =
+    useAsyncFn(createListMembers)
   const { data: session } = useSession()
   const organizationId =
     session?.user.organization ?? ('' as Datum.OrganisationId)
+  const { data: allLists = [] } = useLists(organizationId)
   const {
     accordionContainer,
     accordionContentInner,
@@ -52,18 +59,26 @@ const ContactsTableDropdown = ({ contact }: ContactsTableDropdownProps) => {
     contactDropdownIcon,
   } = pageStyles()
 
-  async function deleteContact() {
-    await removeContacts(organizationId, [id])
+  function setOpenDeleteDialog(input: boolean) {
+    _setOpenDeleteDialog(input)
+    // NOTE: This is needed to close the dialog without removing pointer events per https://github.com/shadcn-ui/ui/issues/468
+    setTimeout(() => (document.body.style.pointerEvents = ''), 500)
   }
 
   async function unsubscribeAll() {
-    // TODO:
-    console.log('Unsubscribe all')
+    await Promise.all(
+      contactLists.map(({ id: listId }) =>
+        removeSubscriber(organizationId, listId, [id]),
+      ),
+    )
   }
 
-  async function setLists(newLists: Datum.ListId[]) {
-    // TODO:
-    console.log('New lists array', newLists)
+  async function subscribe(listId: Datum.ListId) {
+    await addSubscriber(organizationId, listId, [id])
+  }
+
+  async function unsubscribe(listId: Datum.ListId) {
+    await removeSubscriber(organizationId, listId, [id])
   }
 
   function setOpenEditDialog(input: boolean) {
@@ -95,13 +110,16 @@ const ContactsTableDropdown = ({ contact }: ContactsTableDropdownProps) => {
           </DropdownMenuItem>
           <DropdownMenuItem
             className={contactDropdownItem()}
-            onClick={deleteContact}
+            onClick={() => setOpenDeleteDialog(true)}
           >
             <Trash size={18} className={contactDropdownIcon()} />
             Delete Item
           </DropdownMenuItem>
           <Accordion type="single" collapsible className="w-full px-0">
-            <AccordionItem value="lists" className={accordionContainer()}>
+            <AccordionItem
+              value="contactLists"
+              className={accordionContainer()}
+            >
               <AccordionTrigger className={accordionTrigger()}>
                 <div className="flex items-center justify-start gap-3">
                   <Plus size={18} className={contactDropdownIcon()} />
@@ -111,18 +129,15 @@ const ContactsTableDropdown = ({ contact }: ContactsTableDropdownProps) => {
               </AccordionTrigger>
               <AccordionContent className={accordionContentOuter()}>
                 <div className={accordionContentInner()}>
-                  {/* TODO: Replace mock lists */}
-                  {mockLists.map((list) => {
-                    const isSelected = lists.includes(list)
+                  {allLists.map(({ id: listId, name }) => {
+                    const isSelected = contactLists.find(
+                      (item) => item.id === listId,
+                    )
 
                     if (isSelected) {
-                      const newSelectedLists = lists.filter(
-                        (selectedList) => list !== selectedList,
-                      )
-
                       return (
                         <Button
-                          key={list}
+                          key={listId}
                           size="tag"
                           variant="tagSuccess"
                           icon={
@@ -132,23 +147,21 @@ const ContactsTableDropdown = ({ contact }: ContactsTableDropdownProps) => {
                             />
                           }
                           iconPosition="left"
-                          onClick={setLists.bind(null, newSelectedLists)}
+                          onClick={async () => await unsubscribe(listId)}
                         >
-                          {list}
+                          {name}
                         </Button>
                       )
                     }
 
-                    const newSelectedLists = [...lists, list]
-
                     return (
                       <Button
-                        key={list}
+                        key={listId}
                         variant="tag"
                         size="tag"
-                        onClick={setLists.bind(null, newSelectedLists)}
+                        onClick={async () => await subscribe(listId)}
                       >
-                        {list}
+                        {name}
                       </Button>
                     )
                   })}
@@ -160,8 +173,14 @@ const ContactsTableDropdown = ({ contact }: ContactsTableDropdownProps) => {
       </DropdownMenu>
       <ContactFormDialog
         contact={contact}
-        open={_openEditDialog}
+        open={openEditDialog}
         setOpen={setOpenEditDialog}
+      />
+      <ContactDeleteDialog
+        contacts={[contact]}
+        open={openDeleteDialog}
+        setOpen={setOpenDeleteDialog}
+        redirect
       />
     </div>
   )

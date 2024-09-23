@@ -21,3 +21,12 @@ export const pageStyles = tv({
     listsContainer: 'w-full flex gap-2 flex-wrap',
   },
 })
+
+export const deleteDialogStyles = tv({
+  slots: {
+    content: 'w-full min-h-40 flex flex-col gap-6',
+    text: 'flex gap-6 items-center text-util-red-500',
+    button: 'w-2/3 bg-white border-util-red-500 text-util-red-500',
+    cancelButton: 'w-1/3 ml-0 bg-white',
+  },
+})

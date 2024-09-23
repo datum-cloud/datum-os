@@ -51,7 +51,7 @@ export const NavItems: (NavItem | Separator | NavHeading)[] = [
     isChildren: true,
     children: [
       { title: 'Contacts', href: '/marketing/contacts' },
-      { title: 'Lists', href: '/marketing/lists' },
+      { title: 'Lists', href: '/marketing/contacts/lists' },
       { title: 'Email Activity', href: '/marketing/email-activity' },
     ],
   },

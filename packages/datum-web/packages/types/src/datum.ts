@@ -73,10 +73,16 @@ export namespace Datum {
     | 'lessThanOrEqualTo'
     | 'empty'
 
-  // TODO extend list type
   export type List = {
     id: ListId
     name: string
+    description: string
+    visibility: 'PUBLIC' | 'PRIVATE'
+    createdAt: Date
+    updatedAt: Date
+    status: Status
+    memberCount: number
+    members?: Contact[]
   }
 
   export type ContactHistoryEvent = {
@@ -94,16 +100,12 @@ export namespace Datum {
     id: ContactId
     fullName: string
     title: string
-    company: string
     email: Email
-    address: string
-    phoneNumber: string
     createdAt: Date
     updatedAt: Date
-    deletedAt?: Date
     source: string
     status: Status
-    lists: ListId[]
+    contactLists: List[]
     enrichedData?: any // TODO: Type this properly
     contactHistory?: ContactHistory // TODO: Type this properly
   }

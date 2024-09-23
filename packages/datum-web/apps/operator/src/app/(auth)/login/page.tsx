@@ -10,10 +10,10 @@ import { SignupPage } from '@/components/pages/auth/signup/signup'
 
 const AuthLogin: React.FC = () => {
   const defaultTab = 'login'
-  const { bg, bgImage, content, logo } = pageStyles()
+  const { bg, bgImage, content, container, logo } = pageStyles()
   const [activeTab, setActiveTab] = useState(defaultTab)
   return (
-    <>
+    <div className={container()}>
       <div className={content()}>
         <div className={logo()}>
           <Logo theme="light" width={143} />
@@ -55,7 +55,7 @@ const AuthLogin: React.FC = () => {
           alt=""
         />
       </div>
-    </>
+    </div>
   )
 }
 

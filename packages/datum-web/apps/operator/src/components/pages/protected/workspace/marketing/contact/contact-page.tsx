@@ -15,7 +15,7 @@ import {
 } from 'lucide-react'
 import Link from 'next/link'
 
-import { mockLists, OPERATOR_APP_ROUTES } from '@repo/constants'
+import { OPERATOR_APP_ROUTES } from '@repo/constants'
 import { Button } from '@repo/ui/button'
 import { Panel, PanelHeader } from '@repo/ui/panel'
 import {
@@ -24,6 +24,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@repo/ui/dropdown-menu'
+import { Tag } from '@repo/ui/tag'
 import { cn } from '@repo/ui/lib/utils'
 import { Datum } from '@repo/types'
 
@@ -35,24 +36,25 @@ import {
 } from '@/components/shared/sidebar/sidebar-accordion/sidebar-accordion'
 import { Loading } from '@/components/shared/loading/loading'
 import { useContact } from '@/hooks/useContacts'
-import { removeContacts } from '@/query/contacts'
+import { useLists } from '@/hooks/useLists'
+import { createListMembers, removeListMembers } from '@/query/lists'
 import { formatDate } from '@/utils/date'
 
 import { pageStyles as contactsStyles } from '../contacts/page.styles'
 import ContactFormDialog from '../contacts/contacts-form-dialog'
+import ContactDeleteDialog from './contact-delete-dialog'
 import ContactTable from './contact-table'
 import { pageStyles } from './page.styles'
-import { Tag } from '@repo/ui/tag'
 
 type ContactPageProps = {
   id: Datum.ContactId
 }
 
 const ContactPage = ({ id }: ContactPageProps) => {
+  const [openDeleteDialog, _setOpenDeleteDialog] = useState(false)
   const { data: session } = useSession()
   const organizationId = (session?.user.organization ??
     '') as Datum.OrganisationId
-  const [selectedLists, setSelectedLists] = useState<string[]>([])
   const [openEditDialog, setOpenEditDialog] = useState(false)
   const {
     wrapper,
@@ -81,9 +83,20 @@ const ContactPage = ({ id }: ContactPageProps) => {
   } = contactsStyles()
 
   const { error, isLoading, data: contact } = useContact(id)
+  const { data: lists = [] } = useLists(organizationId)
 
-  async function handleDeletion() {
-    await removeContacts(organizationId, [id])
+  function setOpenDeleteDialog(input: boolean) {
+    _setOpenDeleteDialog(input)
+    // NOTE: This is needed to close the dialog without removing pointer events per https://github.com/shadcn-ui/ui/issues/468
+    setTimeout(() => (document.body.style.pointerEvents = ''), 500)
+  }
+
+  async function subscribe(listId: Datum.ListId) {
+    await createListMembers(organizationId, listId, [id])
+  }
+
+  async function unsubscribe(listId: Datum.ListId) {
+    await removeListMembers(organizationId, listId, [id])
   }
 
   if (isLoading) {
@@ -98,11 +111,13 @@ const ContactPage = ({ id }: ContactPageProps) => {
     fullName,
     email,
     source,
-    lists = ['Admin', 'Newsletter', 'Developers'], // TODO: Remove these later
+    contactLists = [],
     createdAt,
     enrichedData = {},
     contactHistory,
   } = contact
+
+  console.log(createdAt && typeof createdAt)
 
   return (
     <div className={wrapper()}>
@@ -117,11 +132,15 @@ const ContactPage = ({ id }: ContactPageProps) => {
             <User size={60} className="text-winter-sky-900" />
           </div>
           <div className={contactText()}>
-            <h4 className="text-[27px] leading-[130%]">{fullName}</h4>
+            {fullName && (
+              <h4 className="text-[27px] leading-[130%]">{fullName}</h4>
+            )}
             <h6 className="text-body-l text-blackberry-600">{email}</h6>
-            <p className="text-body-sm leading-5 text-blackberry-500">
-              Added by {source} on {formatDate(createdAt)}
-            </p>
+            {createdAt && (
+              <p className="text-body-sm leading-5 text-blackberry-500">
+                Added by {source} on {formatDate(createdAt)}
+              </p>
+            )}
           </div>
         </div>
         <div className={contactActions()}>
@@ -136,7 +155,7 @@ const ContactPage = ({ id }: ContactPageProps) => {
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="px-2 py-2.5">
               <DropdownMenuItem
-                onClick={handleDeletion}
+                onClick={() => setOpenDeleteDialog(true)}
                 className={contactDropdownItem()}
               >
                 <Trash size={18} className={contactDropdownIcon()} />
@@ -197,18 +216,15 @@ const ContactPage = ({ id }: ContactPageProps) => {
                   </AccordionTrigger>
                   <AccordionContent className={accordionContentOuter()}>
                     <div className={accordionContentInner()}>
-                      {/* TODO: Replace mock lists */}
-                      {mockLists.map((list) => {
-                        const isSelected = selectedLists.includes(list)
+                      {lists.map((list) => {
+                        const isSelected = contactLists.find(
+                          ({ id }) => id === list.id,
+                        )
 
                         if (isSelected) {
-                          const newSelectedLists = selectedLists.filter(
-                            (selectedList) => list !== selectedList,
-                          )
-
                           return (
                             <Button
-                              key={list}
+                              key={list.id}
                               variant="tagSuccess"
                               size="tag"
                               icon={
@@ -218,23 +234,21 @@ const ContactPage = ({ id }: ContactPageProps) => {
                                 />
                               }
                               iconPosition="left"
-                              onClick={() => setSelectedLists(newSelectedLists)}
+                              onClick={async () => await unsubscribe(list.id)}
                             >
-                              {list}
+                              {list.name}
                             </Button>
                           )
                         }
 
-                        const newSelectedLists = [...selectedLists, list]
-
                         return (
                           <Button
-                            key={list}
+                            key={list.id}
                             variant="tag"
                             size="tag"
-                            onClick={() => setSelectedLists(newSelectedLists)}
+                            onClick={async () => await subscribe(list.id)}
                           >
-                            {list}
+                            {list.name}
                           </Button>
                         )
                       })}
@@ -246,8 +260,8 @@ const ContactPage = ({ id }: ContactPageProps) => {
           </DropdownMenu>
         </div>
         <div className={listsContainer()}>
-          {lists.map((list) => (
-            <Tag key={list}>{list}</Tag>
+          {contactLists.map((list) => (
+            <Tag key={list.id}>{list.name}</Tag>
           ))}
         </div>
       </Panel>
@@ -255,6 +269,12 @@ const ContactPage = ({ id }: ContactPageProps) => {
         contact={contact}
         open={openEditDialog}
         setOpen={setOpenEditDialog}
+      />
+      <ContactDeleteDialog
+        contacts={[contact]}
+        open={openDeleteDialog}
+        setOpen={setOpenDeleteDialog}
+        redirect
       />
     </div>
   )

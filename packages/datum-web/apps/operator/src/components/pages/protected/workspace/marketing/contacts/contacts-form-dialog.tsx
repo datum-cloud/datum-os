@@ -1,7 +1,7 @@
 'use client'
 
 import { useSession } from 'next-auth/react'
-import { useEffect } from 'react'
+import { useEffect, useMemo } from 'react'
 
 import {
   Dialog,
@@ -64,18 +64,21 @@ const ContactFormDialog = ({
   const error = errorEdit || errorCreate
   const names = contact?.fullName?.split(' ')
   const [name, ...otherNames] = names || []
-
-  const form = useForm<ContactFormInput>({
-    resolver: zodResolver(ContactFormSchema),
-    mode: 'onChange',
-    defaultValues: {
+  const defaultValues = useMemo(() => {
+    return {
       email: '',
-      status: 'INACTIVE',
+      status: 'ACTIVE',
       source: 'form',
       ...contact,
       firstName: name,
       lastName: otherNames.join(' '),
-    },
+    }
+  }, [contact])
+
+  const form = useForm<ContactFormInput>({
+    resolver: zodResolver(ContactFormSchema),
+    mode: 'onChange',
+    values: defaultValues,
   })
 
   const {

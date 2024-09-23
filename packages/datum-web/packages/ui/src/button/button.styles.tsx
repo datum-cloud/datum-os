@@ -17,6 +17,7 @@ export const buttonStyles = tv({
       tagSuccess:
         'text-white rounded-[5px] uppercase font-mono text-[10px] font-semibold leading-[150%] tracking-[0.4px] border border-util-green-500 bg-util-green-500 disabled:opacity-50 gap-1',
       tableHeader: '!text-blackberry-600 !font-mono disabled:opacity-50',
+      destructive: '!text-white !bg-util-red-500 disabled:opacity-50',
       sunglowXs: '!text-sunglow-900',
       blackberryXs: 'text-blackberry-900',
       successXs: '!text-util-green-500',

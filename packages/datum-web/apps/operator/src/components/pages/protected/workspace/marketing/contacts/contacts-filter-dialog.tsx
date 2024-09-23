@@ -46,6 +46,13 @@ const FilterContactDialog = ({ onFilter }: FilterDialogProps) => {
 
   const { filters } = watch()
 
+  function formatFilters(filters: ContactFilterInput['filters']) {
+    return Object.entries(filters).map(([field, { value }]) => ({
+      id: field,
+      value: value.value,
+    }))
+  }
+
   function handleFilter(field: string, operator: Datum.OPERATOR, value: any) {
     setValue(`filters.${field}`, { operator, value })
   }
@@ -55,20 +62,12 @@ const FilterContactDialog = ({ onFilter }: FilterDialogProps) => {
     delete newFilters[field]
 
     reset({ filters: newFilters })
+    onFilter(formatFilters(newFilters))
   }
 
   function onSubmit(data: ContactFilterInput) {
-    console.log(data)
-    const formattedFilters = Object.entries(data.filters).map(
-      ([field, { value }]) => ({
-        id: field,
-        value: value.value,
-      }),
-    )
-    console.log('formattedFilters', formattedFilters)
-    onFilter(formattedFilters)
+    onFilter(formatFilters(data.filters))
     setOpen(false)
-    reset({ filters: {} })
   }
 
   return (
