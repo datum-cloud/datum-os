@@ -262,7 +262,16 @@ func (h *Handler) ContactListsDelete(ctx echo.Context) error {
 		return h.BadRequest(ctx, err)
 	}
 
-	affected, err := transaction.FromContext(ctx.Request().Context()).ContactList.Delete().
+	tx := transaction.FromContext(ctx.Request().Context())
+
+	_, err = tx.ContactListMembership.Delete().
+		Where(contactlistmembership.ContactListIDIn(IDs.ContactListIDs...)).
+		Exec(ctx.Request().Context())
+	if err != nil {
+		return h.InternalServerError(ctx, err)
+	}
+
+	affected, err := tx.ContactList.Delete().
 		Where(contactlist.IDIn(IDs.ContactListIDs...)).
 		Exec(ctx.Request().Context())
 	if err != nil {
