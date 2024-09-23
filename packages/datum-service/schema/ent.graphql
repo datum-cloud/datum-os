@@ -290,7 +290,7 @@ type Contact implements Node {
   owner: Organization
   contactLists: [ContactList!]
   entities: [Entity!]
-  contactListMemberships: [ContactListMembership!]
+  contactListMembers: [ContactListMembership!]
 }
 """
 A connection to a list of items.
@@ -1970,10 +1970,10 @@ input ContactWhereInput {
   hasEntities: Boolean
   hasEntitiesWith: [EntityWhereInput!]
   """
-  contact_list_memberships edge predicates
+  contact_list_members edge predicates
   """
-  hasContactListMemberships: Boolean
-  hasContactListMembershipsWith: [ContactListMembershipWhereInput!]
+  hasContactListMembers: Boolean
+  hasContactListMembersWith: [ContactListMembershipWhereInput!]
 }
 """
 CreateAPITokenInput is used for create APIToken object.

@@ -10,6 +10,7 @@ import (
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 
+	"github.com/datum-cloud/datum-os/pkg/entx"
 	emixin "github.com/datum-cloud/datum-os/pkg/entx/mixin"
 	"github.com/datum-cloud/datum-os/pkg/fgax/entfga"
 
@@ -85,7 +86,7 @@ func (Contact) Mixin() []ent.Mixin {
 func (Contact) Edges() []ent.Edge {
 	return []ent.Edge{
 		edge.To("contact_lists", ContactList.Type).
-			Through("contact_list_memberships", ContactListMembership.Type),
+			Through("contact_list_members", ContactListMembership.Type),
 		edge.From("entities", Entity.Type).
 			Ref("contacts"),
 	}
@@ -109,6 +110,14 @@ func (Contact) Annotations() []schema.Annotation {
 			OrgOwnedField:   true,
 			IDField:         "OwnerID",
 		},
+		entx.CascadeThroughAnnotationField(
+			[]entx.ThroughCleanup{
+				{
+					Field:   "Contact",
+					Through: "ContactListMembership",
+				},
+			},
+		),
 	}
 }
 

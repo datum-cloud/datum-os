@@ -1220,12 +1220,12 @@ func HasEntitiesWith(preds ...predicate.Entity) predicate.Contact {
 	})
 }
 
-// HasContactListMemberships applies the HasEdge predicate on the "contact_list_memberships" edge.
-func HasContactListMemberships() predicate.Contact {
+// HasContactListMembers applies the HasEdge predicate on the "contact_list_members" edge.
+func HasContactListMembers() predicate.Contact {
 	return predicate.Contact(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, true, ContactListMembershipsTable, ContactListMembershipsColumn),
+			sqlgraph.Edge(sqlgraph.O2M, true, ContactListMembersTable, ContactListMembersColumn),
 		)
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.ContactListMembership
@@ -1234,10 +1234,10 @@ func HasContactListMemberships() predicate.Contact {
 	})
 }
 
-// HasContactListMembershipsWith applies the HasEdge predicate on the "contact_list_memberships" edge with a given conditions (other predicates).
-func HasContactListMembershipsWith(preds ...predicate.ContactListMembership) predicate.Contact {
+// HasContactListMembersWith applies the HasEdge predicate on the "contact_list_members" edge with a given conditions (other predicates).
+func HasContactListMembersWith(preds ...predicate.ContactListMembership) predicate.Contact {
 	return predicate.Contact(func(s *sql.Selector) {
-		step := newContactListMembershipsStep()
+		step := newContactListMembersStep()
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.ContactListMembership
 		step.Edge.Schema = schemaConfig.ContactListMembership

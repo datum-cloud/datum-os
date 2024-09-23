@@ -66,17 +66,17 @@ type ContactEdges struct {
 	ContactLists []*ContactList `json:"contact_lists,omitempty"`
 	// Entities holds the value of the entities edge.
 	Entities []*Entity `json:"entities,omitempty"`
-	// ContactListMemberships holds the value of the contact_list_memberships edge.
-	ContactListMemberships []*ContactListMembership `json:"contact_list_memberships,omitempty"`
+	// ContactListMembers holds the value of the contact_list_members edge.
+	ContactListMembers []*ContactListMembership `json:"contact_list_members,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
 	loadedTypes [4]bool
 	// totalCount holds the count of the edges above.
 	totalCount [4]map[string]int
 
-	namedContactLists           map[string][]*ContactList
-	namedEntities               map[string][]*Entity
-	namedContactListMemberships map[string][]*ContactListMembership
+	namedContactLists       map[string][]*ContactList
+	namedEntities           map[string][]*Entity
+	namedContactListMembers map[string][]*ContactListMembership
 }
 
 // OwnerOrErr returns the Owner value or an error if the edge
@@ -108,13 +108,13 @@ func (e ContactEdges) EntitiesOrErr() ([]*Entity, error) {
 	return nil, &NotLoadedError{edge: "entities"}
 }
 
-// ContactListMembershipsOrErr returns the ContactListMemberships value or an error if the edge
+// ContactListMembersOrErr returns the ContactListMembers value or an error if the edge
 // was not loaded in eager-loading.
-func (e ContactEdges) ContactListMembershipsOrErr() ([]*ContactListMembership, error) {
+func (e ContactEdges) ContactListMembersOrErr() ([]*ContactListMembership, error) {
 	if e.loadedTypes[3] {
-		return e.ContactListMemberships, nil
+		return e.ContactListMembers, nil
 	}
-	return nil, &NotLoadedError{edge: "contact_list_memberships"}
+	return nil, &NotLoadedError{edge: "contact_list_members"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -275,9 +275,9 @@ func (c *Contact) QueryEntities() *EntityQuery {
 	return NewContactClient(c.config).QueryEntities(c)
 }
 
-// QueryContactListMemberships queries the "contact_list_memberships" edge of the Contact entity.
-func (c *Contact) QueryContactListMemberships() *ContactListMembershipQuery {
-	return NewContactClient(c.config).QueryContactListMemberships(c)
+// QueryContactListMembers queries the "contact_list_members" edge of the Contact entity.
+func (c *Contact) QueryContactListMembers() *ContactListMembershipQuery {
+	return NewContactClient(c.config).QueryContactListMembers(c)
 }
 
 // Update returns a builder for updating this Contact.
@@ -402,27 +402,27 @@ func (c *Contact) appendNamedEntities(name string, edges ...*Entity) {
 	}
 }
 
-// NamedContactListMemberships returns the ContactListMemberships named value or an error if the edge was not
+// NamedContactListMembers returns the ContactListMembers named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (c *Contact) NamedContactListMemberships(name string) ([]*ContactListMembership, error) {
-	if c.Edges.namedContactListMemberships == nil {
+func (c *Contact) NamedContactListMembers(name string) ([]*ContactListMembership, error) {
+	if c.Edges.namedContactListMembers == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := c.Edges.namedContactListMemberships[name]
+	nodes, ok := c.Edges.namedContactListMembers[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (c *Contact) appendNamedContactListMemberships(name string, edges ...*ContactListMembership) {
-	if c.Edges.namedContactListMemberships == nil {
-		c.Edges.namedContactListMemberships = make(map[string][]*ContactListMembership)
+func (c *Contact) appendNamedContactListMembers(name string, edges ...*ContactListMembership) {
+	if c.Edges.namedContactListMembers == nil {
+		c.Edges.namedContactListMembers = make(map[string][]*ContactListMembership)
 	}
 	if len(edges) == 0 {
-		c.Edges.namedContactListMemberships[name] = []*ContactListMembership{}
+		c.Edges.namedContactListMembers[name] = []*ContactListMembership{}
 	} else {
-		c.Edges.namedContactListMemberships[name] = append(c.Edges.namedContactListMemberships[name], edges...)
+		c.Edges.namedContactListMembers[name] = append(c.Edges.namedContactListMembers[name], edges...)
 	}
 }
 

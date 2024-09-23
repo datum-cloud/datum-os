@@ -280,7 +280,7 @@ func (c *ContactQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 				*wq = *query
 			})
 
-		case "contactListMemberships":
+		case "contactListMembers":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
@@ -289,7 +289,7 @@ func (c *ContactQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, contactlistmembershipImplementors)...); err != nil {
 				return err
 			}
-			c.WithNamedContactListMemberships(alias, func(wq *ContactListMembershipQuery) {
+			c.WithNamedContactListMembers(alias, func(wq *ContactListMembershipQuery) {
 				*wq = *query
 			})
 		case "createdAt":
