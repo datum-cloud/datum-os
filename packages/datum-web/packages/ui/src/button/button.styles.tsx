@@ -19,14 +19,14 @@ export const buttonStyles = tv({
       tableHeader: '!text-blackberry-600 !font-mono disabled:opacity-50',
       destructive: '!text-white !bg-util-red-500 disabled:opacity-50',
       sunglowXs: '!text-sunglow-900',
-      blackberryXs: 'text-blackberry-900',
+      blackberryXs: 'text-blackberry-900 dark:!text-white',
       successXs: '!text-util-green-500',
       failureXs: '!text-util-red-500',
       sunglow: '!text-white !bg-sunglow-900 font-semibold disabled:opacity-50',
       blackberry:
         '!text-white !bg-blackberry-900 font-semibold disabled:opacity-50',
       outline:
-        'border border-blackberry-800 text-blackberry-800 font-semibold disabled:opacity-50',
+        'border border-blackberry-800 dark:!border-blackberry-400 text-blackberry-800 font-semibold disabled:opacity-50',
       success:
         '!bg-util-green-500 !text-white font-semibold disabled:opacity-50',
       failure: '!bg-util-red-500 !text-white font-semibold disabled:opacity-50',

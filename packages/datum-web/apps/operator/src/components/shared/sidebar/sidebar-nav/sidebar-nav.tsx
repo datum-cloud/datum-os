@@ -130,7 +130,7 @@ export function SideNav({ items, setOpen, className }: SideNavProps) {
             onClick={() => {
               if (setOpen) setOpen(false)
             }}
-            className={link({ isCurrent: path === item.href })}
+            className={cn(link({ isCurrent: path === item.href }), 'mx-2 px-2')}
           >
             {item.icon && (
               <item.icon className={icon({ isCurrent: path === item.href })} />

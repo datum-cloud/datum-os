@@ -8,12 +8,15 @@ import { SideNav } from './sidebar-nav/sidebar-nav'
 import { NavItems, PersonalNavItems } from '@/routes/dashboard'
 import { useSession } from 'next-auth/react'
 import { useGetAllOrganizationsQuery } from '@repo/codegen/src/schema'
+import { usePathname } from 'next/navigation'
+import { OPERATOR_APP_ROUTES } from '@repo/constants'
 
 interface SidebarProps {
   className?: string
 }
 
 export default function Sidebar({ className }: SidebarProps) {
+  const pathname = usePathname()
   const { data: session } = useSession()
   const { isOpen, toggle } = useSidebar()
   const [status, setStatus] = useState(false)
@@ -26,6 +29,11 @@ export default function Sidebar({ className }: SidebarProps) {
     .map((org) => org?.node)[0]
 
   const isWorkspaceSelected = !activeOrg?.personalOrg
+  const isProfile = pathname === OPERATOR_APP_ROUTES.profile
+  const isSettings = pathname === OPERATOR_APP_ROUTES.settings
+  const isWorkspace = pathname === OPERATOR_APP_ROUTES.workspace
+  const showWorkspaceNav =
+    isWorkspaceSelected && !isProfile && !isSettings && !isWorkspace
 
   const { nav, sideNav, expandNav, expandNavIcon } = sidebarStyles({
     status,
@@ -46,7 +54,7 @@ export default function Sidebar({ className }: SidebarProps) {
       </div>
       <SideNav
         className={sideNav()}
-        items={isWorkspaceSelected ? NavItems : PersonalNavItems}
+        items={showWorkspaceNav ? NavItems : PersonalNavItems}
       />
     </div>
   )

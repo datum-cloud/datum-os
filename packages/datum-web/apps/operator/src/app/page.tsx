@@ -3,12 +3,13 @@
 import { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { Logo } from '@repo/ui/logo'
+import { OPERATOR_APP_ROUTES } from '@repo/constants'
 
 const Landing = () => {
   const router = useRouter()
 
   useEffect(() => {
-    router.push('/workspace')
+    router.push(OPERATOR_APP_ROUTES.dashboard)
   }, [router])
 
   return (

@@ -119,6 +119,7 @@ export const LoginPage = () => {
             variant="outline"
             size="md"
             icon={<GoogleIcon />}
+            className="dark:!text-blackberry-800"
             iconPosition="left"
             onClick={() => {
               google()
@@ -130,6 +131,7 @@ export const LoginPage = () => {
           <Button
             variant="outline"
             size="md"
+            className="dark:!text-blackberry-800"
             icon={<GithubIcon />}
             iconPosition="left"
             onClick={() => {
@@ -169,12 +171,12 @@ export const LoginPage = () => {
           }}
         >
           <div className={input()}>
-            <Label htmlFor="username">Email</Label>
+            <Label htmlFor="username" className="dark:text-blackberry-800">Email</Label>
             <Input name="username" placeholder="email@domain.net" />
           </div>
           {isPasswordActive && (
             <div className={input()}>
-              <Label htmlFor="password">Password</Label>
+              <Label htmlFor="password" className="dark:text-blackberry-800">Password</Label>
               <PasswordInput name="password" placeholder="password" />
             </div>
           )}

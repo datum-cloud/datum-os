@@ -8,7 +8,7 @@ import { ExistingWorkspaces } from '@/components/shared/workspace/existing-works
 const WorkspaceLanding: React.FC = () => {
   return (
     <section>
-      <PageTitle title="Welcome to Datum" centered />
+      <PageTitle title="Welcome to Datum" className="mb-10" />
       <ExistingWorkspaces />
       <CreateWorkspaceForm />
     </section>
