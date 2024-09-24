@@ -1,33 +1,21 @@
-'use client'
+import { redirect } from 'next/navigation'
 
-import { useSession } from 'next-auth/react'
-import { useEffect } from 'react'
-import { useRouter } from 'next/navigation'
-
-import { useGetAllOrganizationsQuery } from '@repo/codegen/src/schema'
 import { OPERATOR_APP_ROUTES } from '@repo/constants'
 import { Logo } from '@repo/ui/logo'
+import { auth } from '@/lib/auth/auth'
 
-const Landing = () => {
-  const router = useRouter()
-  const { data: session } = useSession()
+const Landing = async () => {
+  const session = await auth()
   const currentOrgId = session?.user.organization
-  const [allOrgs] = useGetAllOrganizationsQuery({ pause: !session })
-  const orgs = allOrgs.data?.organizations.edges || []
+  console.log(currentOrgId)
 
-  const activeOrg = orgs
-    .filter((org) => org?.node?.id === currentOrgId)
-    .map((org) => org?.node)[0]
-
-  const isWorkspaceSelected = !!activeOrg?.personalOrg
-
-  useEffect(() => {
-    if (isWorkspaceSelected) {
-      router.push(OPERATOR_APP_ROUTES.dashboard)
-    } else {
-      router.push(OPERATOR_APP_ROUTES.workspace)
-    }
-  }, [router])
+  // If the user has a current organisation direct them to the dashboard
+  // Otherwise they should be directed to the workspace page
+  if (currentOrgId) {
+    redirect(OPERATOR_APP_ROUTES.dashboard)
+  } else {
+    redirect(OPERATOR_APP_ROUTES.workspace)
+  }
 
   return (
     <main className="flex items-center justify-center h-screen relative bg-winter-sky-900 dark:bg-peat-900">

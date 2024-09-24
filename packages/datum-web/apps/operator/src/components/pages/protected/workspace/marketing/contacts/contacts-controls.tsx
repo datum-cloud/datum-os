@@ -144,7 +144,10 @@ const ContactsControls = ({
             </DropdownMenuItem>
             <Accordion type="single" collapsible className="w-full px-0">
               <AccordionItem value="lists" className={accordionContainer()}>
-                <AccordionTrigger className={accordionTrigger()}>
+                <AccordionTrigger
+                  disabled={lists.length === 0 || selectedContacts.length === 0}
+                  className={accordionTrigger()}
+                >
                   <div className="flex items-center justify-start gap-3">
                     <Plus size={18} className={contactDropdownIcon()} />
                     Add to list

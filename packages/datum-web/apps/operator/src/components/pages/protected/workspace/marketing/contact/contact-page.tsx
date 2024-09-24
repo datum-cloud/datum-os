@@ -118,8 +118,6 @@ const ContactPage = ({ id }: ContactPageProps) => {
     contactHistory,
   } = contact
 
-  console.log(createdAt && typeof createdAt)
-
   return (
     <div className={wrapper()}>
       <Link href={OPERATOR_APP_ROUTES.contacts} className={link()}>
@@ -166,11 +164,11 @@ const ContactPage = ({ id }: ContactPageProps) => {
           </DropdownMenu>
         </div>
       </div>
-      <Panel>
+      {/* <Panel>
         <PanelHeader heading="Latest activity" noBorder />
         <ContactTable history={contactHistory?.events || []} />
-      </Panel>
-      {Object.keys(enrichedData).length > 0 && (
+      </Panel> */}
+      {/* {Object.keys(enrichedData).length > 0 && (
         <Panel className="bg-blackberry-100">
           <PanelHeader
             heading="Enriched Data"
@@ -193,7 +191,7 @@ const ContactPage = ({ id }: ContactPageProps) => {
             ))}
           </div>
         </Panel>
-      )}
+      )} */}
       <Panel className={listsPanel()}>
         <div className={listsActions()}>
           <h2 className="text-xl font-medium">Current Lists</h2>
@@ -208,7 +206,10 @@ const ContactPage = ({ id }: ContactPageProps) => {
               </DropdownMenuItem>
               <Accordion type="single" collapsible className="w-full">
                 <AccordionItem value="lists" className={accordionContainer()}>
-                  <AccordionTrigger className={accordionTrigger()}>
+                  <AccordionTrigger
+                    disabled={lists.length == 0}
+                    className={accordionTrigger()}
+                  >
                     <div className={listsTrigger()}>
                       <Plus size={18} className={contactDropdownIcon()} />
                       Manage Lists

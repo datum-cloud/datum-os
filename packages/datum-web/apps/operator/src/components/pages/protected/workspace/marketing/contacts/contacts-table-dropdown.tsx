@@ -120,7 +120,10 @@ const ContactsTableDropdown = ({ contact }: ContactsTableDropdownProps) => {
               value="contactLists"
               className={accordionContainer()}
             >
-              <AccordionTrigger className={accordionTrigger()}>
+              <AccordionTrigger
+                disabled={allLists.length === 0}
+                className={accordionTrigger()}
+              >
                 <div className="flex items-center justify-start gap-3">
                   <Plus size={18} className={contactDropdownIcon()} />
                   Manage Lists

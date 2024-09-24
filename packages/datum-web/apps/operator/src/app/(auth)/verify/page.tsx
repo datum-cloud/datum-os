@@ -27,26 +27,23 @@ const VerifyUser: React.FC = () => {
   }, [verified, error])
 
   return (
-    <main className="flex flex-col min-h-screen w-full items-center space-between dark:bg-dk-surface-0 bg-surface-0">
-      <div className="flex flex-col justify-center mx-auto my-auto w-full p-6 sm:w-1/3 h-full relative ease-in-out">
-        <div className="mx-auto mb-3">
+    <main className="w-full flex flex-col min-h-screen items-center space-between dark:bg-dk-surface-0 bg-surface-0">
+      <div className="flex flex-col gap-6 justify-center items-center mx-auto my-auto w-full p-6 container h-full relative ease-in-out">
+        <div className="mx-auto">
           <Logo theme="dark" width={200} />
         </div>
-        {isLoading ? (
-          <h1 className="text-3xl text-center mt-4 animate-pulse">
-            Verifying your account...
-          </h1>
-        ) : null}
-        {!isLoading && (
-          <div>
-            <h1 className="text-3xl text-center mt-4">
+        <div className="flex items-center justify-start flex-col gap-10">
+          {isLoading ? (
+            <h4 className="text-center text-white">
+              Verifying your account...
+            </h4>
+          ) : (
+            <h4 className="text-center text-white">
               Please check your email to verify your account.
-            </h1>
-          </div>
-        )}
-        <div className="mt-12">
+            </h4>
+          )}
           <Button
-            className="mr-auto mt-2 w-full"
+            className="w-auto"
             onClick={() => {
               // TODO: Call resend email endpoint
             }}
