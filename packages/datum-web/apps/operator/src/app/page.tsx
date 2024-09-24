@@ -1,15 +1,32 @@
 'use client'
 
+import { useSession } from 'next-auth/react'
 import { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { Logo } from '@repo/ui/logo'
+
+import { useGetAllOrganizationsQuery } from '@repo/codegen/src/schema'
 import { OPERATOR_APP_ROUTES } from '@repo/constants'
+import { Logo } from '@repo/ui/logo'
 
 const Landing = () => {
   const router = useRouter()
+  const { data: session } = useSession()
+  const currentOrgId = session?.user.organization
+  const [allOrgs] = useGetAllOrganizationsQuery({ pause: !session })
+  const orgs = allOrgs.data?.organizations.edges || []
+
+  const activeOrg = orgs
+    .filter((org) => org?.node?.id === currentOrgId)
+    .map((org) => org?.node)[0]
+
+  const isWorkspaceSelected = !!activeOrg?.personalOrg
 
   useEffect(() => {
-    router.push(OPERATOR_APP_ROUTES.dashboard)
+    if (isWorkspaceSelected) {
+      router.push(OPERATOR_APP_ROUTES.dashboard)
+    } else {
+      router.push(OPERATOR_APP_ROUTES.workspace)
+    }
   }, [router])
 
   return (
