@@ -175,6 +175,7 @@ export const SignupPage = () => {
           </Label>
           <Input
             name="email"
+            className="dark:text-blackberry-800"
             placeholder="email@domain.net"
             required
             type="email"
@@ -186,10 +187,16 @@ export const SignupPage = () => {
               <Label htmlFor="password" className="dark:text-blackberry-800">
                 Password
               </Label>
-              <PasswordInput name="password" placeholder="password" required />
+              <PasswordInput
+                className="dark:text-blackberry-800"
+                name="password"
+                placeholder="password"
+                required
+              />
             </div>
             <PasswordInput
               name="confirmedPassword"
+              className="dark:text-blackberry-800"
               placeholder="confirm password"
               required
             />

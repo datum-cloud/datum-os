@@ -171,13 +171,25 @@ export const LoginPage = () => {
           }}
         >
           <div className={input()}>
-            <Label htmlFor="username" className="dark:text-blackberry-800">Email</Label>
-            <Input name="username" placeholder="email@domain.net" />
+            <Label htmlFor="username" className="dark:text-blackberry-800">
+              Email
+            </Label>
+            <Input
+              name="username"
+              className="dark:text-blackberry-800"
+              placeholder="email@domain.net"
+            />
           </div>
           {isPasswordActive && (
             <div className={input()}>
-              <Label htmlFor="password" className="dark:text-blackberry-800">Password</Label>
-              <PasswordInput name="password" placeholder="password" />
+              <Label htmlFor="password" className="dark:text-blackberry-800">
+                Password
+              </Label>
+              <PasswordInput
+                name="password"
+                className="dark:text-blackberry-800"
+                placeholder="password"
+              />
             </div>
           )}
 
