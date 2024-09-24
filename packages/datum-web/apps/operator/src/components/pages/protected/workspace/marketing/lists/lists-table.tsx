@@ -127,7 +127,9 @@ export const LIST_COLUMNS: ColumnDef<Datum.List>[] = [
           id: row.original.id,
         })}
       >
-        <Tag variant="dark">{cell.getValue() as string}</Tag>
+        <Tag variant="dark" truncate>
+          {cell.getValue() as string}
+        </Tag>
       </Link>
     ),
     sortingFn: fuzzySort,

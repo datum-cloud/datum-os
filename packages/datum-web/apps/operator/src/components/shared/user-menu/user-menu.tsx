@@ -41,6 +41,8 @@ export const UserMenu = () => {
     logOutButton,
   } = userMenuStyles()
   const [open, setOpen] = useState(false)
+  const firstName = sessionData?.user?.name?.split(' ')?.[0]
+  const hasName = !!firstName && firstName !== 'undefined'
 
   return (
     <DropdownMenu open={open} onOpenChange={setOpen}>
@@ -76,8 +78,10 @@ export const UserMenu = () => {
                   <p
                     className={cn(accordionTriggerInnerLabel(), 'text-body-m')}
                   >
-                    {sessionData?.user?.name?.split(' ')[0]}&#39;s Personal
-                    Account
+                    {hasName
+                      ? `${sessionData.user.name.split(' ')[0]}'s Personal
+                    Account`
+                      : 'Personal Account'}
                   </p>
                   <ChevronDown size={18} />
                 </div>
