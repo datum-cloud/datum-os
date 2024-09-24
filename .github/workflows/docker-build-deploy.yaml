@@ -70,7 +70,7 @@ jobs:
           subject-digest: ${{ steps.push.outputs.digest }}
           push-to-registry: true
   deploy:
-    if: github.event_name == 'push' && github.ref_name == 'ci-koyeb-deploy-on-main-merge'
+    if: github.event_name == 'push' && github.ref_name == '44/merge'
     needs: build-and-push-image
     runs-on: ubuntu-latest
     steps:
