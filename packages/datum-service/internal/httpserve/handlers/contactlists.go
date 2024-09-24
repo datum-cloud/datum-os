@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/datum-cloud/datum-os/internal/ent/generated"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/contact"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/contactlist"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/contactlistmembership"
 	echo "github.com/datum-cloud/datum-os/pkg/echox"
@@ -62,20 +63,22 @@ func (h *Handler) ContactListsGetOne(ctx echo.Context) error {
 	}
 
 	contactList, err := transaction.FromContext(ctx.Request().Context()).
-		ContactList.Get(ctx.Request().Context(), contactListsGetOneReq.ID)
+		ContactList.Query().
+		Where(contactlist.ID(contactListsGetOneReq.ID)).
+		WithContactListMembers(func(q *generated.ContactListMembershipQuery) {
+			q.Where(contactlistmembership.DeletedAtIsNil())
+			q.WithContact(func(q *generated.ContactQuery) {
+				q.Where(contact.DeletedAtIsNil())
+			})
+		}).
+		Only(ctx.Request().Context())
 	if err != nil {
 		return h.InternalServerError(ctx, err)
 	}
 
 	contactListsGetOneResponse := models.ContactListsGetOneResponseFromGeneratedContactList(contactList)
 
-	count, err := transaction.FromContext(ctx.Request().Context()).
-		ContactListMembership.Query().
-		Where(contactlistmembership.ContactListID(contactList.ID)).
-		Count(ctx.Request().Context())
-	if err != nil {
-		return h.InternalServerError(ctx, err)
-	}
+	count := len(contactList.Edges.ContactListMembers)
 	contactListsGetOneResponse.ContactList.MemberCount = &count
 
 	return h.Success(ctx, contactListsGetOneResponse)
@@ -262,7 +265,16 @@ func (h *Handler) ContactListsDelete(ctx echo.Context) error {
 		return h.BadRequest(ctx, err)
 	}
 
-	affected, err := transaction.FromContext(ctx.Request().Context()).ContactList.Delete().
+	tx := transaction.FromContext(ctx.Request().Context())
+
+	_, err = tx.ContactListMembership.Delete().
+		Where(contactlistmembership.ContactListIDIn(IDs.ContactListIDs...)).
+		Exec(ctx.Request().Context())
+	if err != nil {
+		return h.InternalServerError(ctx, err)
+	}
+
+	affected, err := tx.ContactList.Delete().
 		Where(contactlist.IDIn(IDs.ContactListIDs...)).
 		Exec(ctx.Request().Context())
 	if err != nil {
@@ -463,4 +475,24 @@ func (h *Handler) ContactListsMembersDeleteOne(ctx echo.Context) error {
 		Reply:         rout.Reply{Success: true},
 		CountAffected: affected,
 	})
+}
+
+func (h *Handler) BindContactListsMembersDeleteOne() *openapi3.Operation {
+	contactListsMembersDeleteOne := openapi3.NewOperation()
+	contactListsMembersDeleteOne.Description = "Remove One Contact List Member"
+	contactListsMembersDeleteOne.OperationID = "ContactListsMembersDeleteOne"
+	contactListsMembersDeleteOne.Security = &openapi3.SecurityRequirements{
+		openapi3.SecurityRequirement{
+			"bearerAuth": []string{},
+		},
+	}
+
+	h.AddRequestBody("ContactListsMembersDeleteOneRequest", models.ExampleContactListMembersDeleteOneRequest, contactListsMembersDeleteOne)
+
+	h.AddResponse("ContactListsMembersDeleteOneResponse", "success", models.ExampleContactListMembersDeleteOneSuccessResponse, contactListsMembersDeleteOne, http.StatusOK)
+	contactListsMembersDeleteOne.AddResponse(http.StatusBadRequest, badRequest())
+	contactListsMembersDeleteOne.AddResponse(http.StatusInternalServerError, internalServerError())
+	contactListsMembersDeleteOne.AddResponse(http.StatusUnauthorized, unauthorized())
+
+	return contactListsMembersDeleteOne
 }

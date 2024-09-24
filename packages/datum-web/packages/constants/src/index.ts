@@ -21,6 +21,10 @@ export const OPERATOR_APP_ROUTES = {
   contactLists: '/marketing/contacts/lists',
   contactList: '/marketing/contacts/lists/[id]',
   contactListMembers: '/marketing/contacts/lists/[id]/members',
+  profile: '/profile',
+  dashboard: '/dashboard',
+  settings: '/settings',
+  workspace: '/workspace',
 }
 
 export const OPERATOR_API_ROUTES = {

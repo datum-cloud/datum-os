@@ -69,7 +69,7 @@ const ImportContactsDialog = ({ open, setOpen }: ImportContactsDialogProps) => {
             </Button>
           </div>
           <div className="flex flex-col gap-5 border border-butter-900 bg-butter-800 rounded-lg p-9">
-            <p className="text-peat-800 leading-6">
+            <p className="text-peat-800 dark:text-sunglow-900 leading-6">
               There are additional ways of importing contacts into Datum OS:
             </p>
             <ul className="list-disc list-inside text-peat-800 leading-[23.6px]">

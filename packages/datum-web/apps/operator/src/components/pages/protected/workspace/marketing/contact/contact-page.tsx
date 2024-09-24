@@ -45,6 +45,7 @@ import ContactFormDialog from '../contacts/contacts-form-dialog'
 import ContactDeleteDialog from './contact-delete-dialog'
 import ContactTable from './contact-table'
 import { pageStyles } from './page.styles'
+import { Error } from '@/components/shared/error/error'
 
 type ContactPageProps = {
   id: Datum.ContactId
@@ -92,11 +93,11 @@ const ContactPage = ({ id }: ContactPageProps) => {
   }
 
   async function subscribe(listId: Datum.ListId) {
-    await createListMembers(listId, [id])
+    await createListMembers(organizationId, listId, [id])
   }
 
   async function unsubscribe(listId: Datum.ListId) {
-    await removeListMembers(listId, [id])
+    await removeListMembers(organizationId, listId, [id])
   }
 
   if (isLoading) {
@@ -104,7 +105,7 @@ const ContactPage = ({ id }: ContactPageProps) => {
   }
 
   if (error || !contact) {
-    return <div>Whoops... Something went wrong</div>
+    return <Error />
   }
 
   const {

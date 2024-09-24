@@ -74,7 +74,7 @@ export function SideNav({ items, setOpen, className }: SideNavProps) {
   }, [isSidebarOpen])
 
   return (
-    <nav className={nav()}>
+    <nav className={cn(nav(), !isSidebarOpen ? 'w-14 max-w-14' : '')}>
       {items.map((item, idx) =>
         isSeparator(item) ? (
           <div key={`${idx}_${item.type}`} className={separator()}>
@@ -130,7 +130,7 @@ export function SideNav({ items, setOpen, className }: SideNavProps) {
             onClick={() => {
               if (setOpen) setOpen(false)
             }}
-            className={link({ isCurrent: path === item.href })}
+            className={cn(link({ isCurrent: path === item.href }), 'mx-2 px-2')}
           >
             {item.icon && (
               <item.icon className={icon({ isCurrent: path === item.href })} />

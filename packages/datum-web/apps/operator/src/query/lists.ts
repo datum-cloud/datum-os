@@ -7,7 +7,7 @@ import { Datum } from '@repo/types'
 import { getPathWithParams } from '@repo/common/routes'
 import { queryClient } from '@/query/client'
 import type { ListInput } from '@/utils/schemas'
-import { getContactKey } from '@/query/contacts'
+import { getContactKey, getContactsKey } from '@/query/contacts'
 
 function formatList(input: Record<string, any>): Datum.List {
   const {
@@ -117,6 +117,7 @@ export async function createLists(
 }
 
 export async function createListMembers(
+  organisationId: Datum.OrganisationId,
   id: Datum.ListId,
   input: Datum.ContactId[],
 ) {
@@ -139,6 +140,10 @@ export async function createListMembers(
     queryKey: getListKey(id),
   })
 
+  await queryClient.invalidateQueries({
+    queryKey: getContactsKey(organisationId),
+  })
+
   for (const contactId of input) {
     await queryClient.invalidateQueries({ queryKey: getContactKey(contactId) })
   }
@@ -147,6 +152,7 @@ export async function createListMembers(
 }
 
 export async function removeListMembers(
+  organisationId: Datum.OrganisationId,
   id: Datum.ListId,
   input: Datum.ContactId[],
 ) {
@@ -163,6 +169,9 @@ export async function removeListMembers(
   )
 
   await queryClient.invalidateQueries({ queryKey: getListKey(id) })
+  await queryClient.invalidateQueries({
+    queryKey: getContactsKey(organisationId),
+  })
 
   for (const contactId of input) {
     await queryClient.invalidateQueries({ queryKey: getContactKey(contactId) })

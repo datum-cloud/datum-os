@@ -7,13 +7,13 @@ export const pageStyles = tv({
     actionIcon: 'text-blackberry-400',
     listControls: 'flex justify-start items-stretch gap-[18px]',
     listDropdownItem:
-      'w-full flex items-center justify-start gap-3 text-button-m cursor-pointer hover:bg-winter-sky-700',
+      'w-full flex items-center justify-start gap-3 text-button-m cursor-pointer hover:bg-winter-sky-700 hover:dark:bg-peat-800',
     listDropdownIcon: 'text-blackberry-400',
     nameRow: 'flex gap-2',
     copyIcon: 'text-blackberry-400 cursor-pointer',
     accordionContainer: 'w-full border-b-0 px-0',
     accordionTrigger:
-      'w-full !h-[30px] py-1.5 px-0 flex items-center font-normal hover:no-underline justify-between gap-3 text-base cursor-pointer px-2 hover:bg-winter-sky-700',
+      'w-full !h-[30px] py-1.5 px-0 flex items-center font-normal hover:no-underline justify-between gap-3 text-base cursor-pointer px-2 hover:bg-winter-sky-700 hover:dark:bg-peat-800',
     accordionContentOuter: 'w-full flex px-2',
     accordionContentInner:
       'w-full flex overflow-scroll flex-col items-start justify-start gap-2 max-w-full truncate pt-2 pb-0',
@@ -26,7 +26,7 @@ export const formStyles = tv({
     fieldsContainer: 'relative w-full flex flex-col justify-start gap-4',
     labelContainer: 'w-full',
     selectItem:
-      'w-full flex items-center justify-start gap-3 text-button-m cursor-pointer hover:bg-winter-sky-700',
+      'w-full flex items-center justify-start gap-3 text-button-m cursor-pointer hover:bg-winter-sky-700 hover:dark:bg-peat-800',
     requiredText:
       'text-smallcaps-s font-bold text-[12px] font-mono uppercase tracking-smallcaps-s leading-[150%] text-blackberry-500 absolute top-1 right-0',
   },

@@ -48,14 +48,14 @@ func (c *Contact) Entities(ctx context.Context) (result []*Entity, err error) {
 	return result, err
 }
 
-func (c *Contact) ContactListMemberships(ctx context.Context) (result []*ContactListMembership, err error) {
+func (c *Contact) ContactListMembers(ctx context.Context) (result []*ContactListMembership, err error) {
 	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
-		result, err = c.NamedContactListMemberships(graphql.GetFieldContext(ctx).Field.Alias)
+		result, err = c.NamedContactListMembers(graphql.GetFieldContext(ctx).Field.Alias)
 	} else {
-		result, err = c.Edges.ContactListMembershipsOrErr()
+		result, err = c.Edges.ContactListMembersOrErr()
 	}
 	if IsNotLoaded(err) {
-		result, err = c.QueryContactListMemberships().All(ctx)
+		result, err = c.QueryContactListMembers().All(ctx)
 	}
 	return result, err
 }

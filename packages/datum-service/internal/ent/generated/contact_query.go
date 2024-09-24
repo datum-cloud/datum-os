@@ -26,19 +26,19 @@ import (
 // ContactQuery is the builder for querying Contact entities.
 type ContactQuery struct {
 	config
-	ctx                             *QueryContext
-	order                           []contact.OrderOption
-	inters                          []Interceptor
-	predicates                      []predicate.Contact
-	withOwner                       *OrganizationQuery
-	withContactLists                *ContactListQuery
-	withEntities                    *EntityQuery
-	withContactListMemberships      *ContactListMembershipQuery
-	modifiers                       []func(*sql.Selector)
-	loadTotal                       []func(context.Context, []*Contact) error
-	withNamedContactLists           map[string]*ContactListQuery
-	withNamedEntities               map[string]*EntityQuery
-	withNamedContactListMemberships map[string]*ContactListMembershipQuery
+	ctx                         *QueryContext
+	order                       []contact.OrderOption
+	inters                      []Interceptor
+	predicates                  []predicate.Contact
+	withOwner                   *OrganizationQuery
+	withContactLists            *ContactListQuery
+	withEntities                *EntityQuery
+	withContactListMembers      *ContactListMembershipQuery
+	modifiers                   []func(*sql.Selector)
+	loadTotal                   []func(context.Context, []*Contact) error
+	withNamedContactLists       map[string]*ContactListQuery
+	withNamedEntities           map[string]*EntityQuery
+	withNamedContactListMembers map[string]*ContactListMembershipQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -150,8 +150,8 @@ func (cq *ContactQuery) QueryEntities() *EntityQuery {
 	return query
 }
 
-// QueryContactListMemberships chains the current query on the "contact_list_memberships" edge.
-func (cq *ContactQuery) QueryContactListMemberships() *ContactListMembershipQuery {
+// QueryContactListMembers chains the current query on the "contact_list_members" edge.
+func (cq *ContactQuery) QueryContactListMembers() *ContactListMembershipQuery {
 	query := (&ContactListMembershipClient{config: cq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := cq.prepareQuery(ctx); err != nil {
@@ -164,7 +164,7 @@ func (cq *ContactQuery) QueryContactListMemberships() *ContactListMembershipQuer
 		step := sqlgraph.NewStep(
 			sqlgraph.From(contact.Table, contact.FieldID, selector),
 			sqlgraph.To(contactlistmembership.Table, contactlistmembership.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, true, contact.ContactListMembershipsTable, contact.ContactListMembershipsColumn),
+			sqlgraph.Edge(sqlgraph.O2M, true, contact.ContactListMembersTable, contact.ContactListMembersColumn),
 		)
 		schemaConfig := cq.schemaConfig
 		step.To.Schema = schemaConfig.ContactListMembership
@@ -362,15 +362,15 @@ func (cq *ContactQuery) Clone() *ContactQuery {
 		return nil
 	}
 	return &ContactQuery{
-		config:                     cq.config,
-		ctx:                        cq.ctx.Clone(),
-		order:                      append([]contact.OrderOption{}, cq.order...),
-		inters:                     append([]Interceptor{}, cq.inters...),
-		predicates:                 append([]predicate.Contact{}, cq.predicates...),
-		withOwner:                  cq.withOwner.Clone(),
-		withContactLists:           cq.withContactLists.Clone(),
-		withEntities:               cq.withEntities.Clone(),
-		withContactListMemberships: cq.withContactListMemberships.Clone(),
+		config:                 cq.config,
+		ctx:                    cq.ctx.Clone(),
+		order:                  append([]contact.OrderOption{}, cq.order...),
+		inters:                 append([]Interceptor{}, cq.inters...),
+		predicates:             append([]predicate.Contact{}, cq.predicates...),
+		withOwner:              cq.withOwner.Clone(),
+		withContactLists:       cq.withContactLists.Clone(),
+		withEntities:           cq.withEntities.Clone(),
+		withContactListMembers: cq.withContactListMembers.Clone(),
 		// clone intermediate query.
 		sql:  cq.sql.Clone(),
 		path: cq.path,
@@ -410,14 +410,14 @@ func (cq *ContactQuery) WithEntities(opts ...func(*EntityQuery)) *ContactQuery {
 	return cq
 }
 
-// WithContactListMemberships tells the query-builder to eager-load the nodes that are connected to
-// the "contact_list_memberships" edge. The optional arguments are used to configure the query builder of the edge.
-func (cq *ContactQuery) WithContactListMemberships(opts ...func(*ContactListMembershipQuery)) *ContactQuery {
+// WithContactListMembers tells the query-builder to eager-load the nodes that are connected to
+// the "contact_list_members" edge. The optional arguments are used to configure the query builder of the edge.
+func (cq *ContactQuery) WithContactListMembers(opts ...func(*ContactListMembershipQuery)) *ContactQuery {
 	query := (&ContactListMembershipClient{config: cq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	cq.withContactListMemberships = query
+	cq.withContactListMembers = query
 	return cq
 }
 
@@ -509,7 +509,7 @@ func (cq *ContactQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Cont
 			cq.withOwner != nil,
 			cq.withContactLists != nil,
 			cq.withEntities != nil,
-			cq.withContactListMemberships != nil,
+			cq.withContactListMembers != nil,
 		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
@@ -555,11 +555,11 @@ func (cq *ContactQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Cont
 			return nil, err
 		}
 	}
-	if query := cq.withContactListMemberships; query != nil {
-		if err := cq.loadContactListMemberships(ctx, query, nodes,
-			func(n *Contact) { n.Edges.ContactListMemberships = []*ContactListMembership{} },
+	if query := cq.withContactListMembers; query != nil {
+		if err := cq.loadContactListMembers(ctx, query, nodes,
+			func(n *Contact) { n.Edges.ContactListMembers = []*ContactListMembership{} },
 			func(n *Contact, e *ContactListMembership) {
-				n.Edges.ContactListMemberships = append(n.Edges.ContactListMemberships, e)
+				n.Edges.ContactListMembers = append(n.Edges.ContactListMembers, e)
 			}); err != nil {
 			return nil, err
 		}
@@ -578,10 +578,10 @@ func (cq *ContactQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Cont
 			return nil, err
 		}
 	}
-	for name, query := range cq.withNamedContactListMemberships {
-		if err := cq.loadContactListMemberships(ctx, query, nodes,
-			func(n *Contact) { n.appendNamedContactListMemberships(name) },
-			func(n *Contact, e *ContactListMembership) { n.appendNamedContactListMemberships(name, e) }); err != nil {
+	for name, query := range cq.withNamedContactListMembers {
+		if err := cq.loadContactListMembers(ctx, query, nodes,
+			func(n *Contact) { n.appendNamedContactListMembers(name) },
+			func(n *Contact, e *ContactListMembership) { n.appendNamedContactListMembers(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -746,7 +746,7 @@ func (cq *ContactQuery) loadEntities(ctx context.Context, query *EntityQuery, no
 	}
 	return nil
 }
-func (cq *ContactQuery) loadContactListMemberships(ctx context.Context, query *ContactListMembershipQuery, nodes []*Contact, init func(*Contact), assign func(*Contact, *ContactListMembership)) error {
+func (cq *ContactQuery) loadContactListMembers(ctx context.Context, query *ContactListMembershipQuery, nodes []*Contact, init func(*Contact), assign func(*Contact, *ContactListMembership)) error {
 	fks := make([]driver.Value, 0, len(nodes))
 	nodeids := make(map[string]*Contact)
 	for i := range nodes {
@@ -760,7 +760,7 @@ func (cq *ContactQuery) loadContactListMemberships(ctx context.Context, query *C
 		query.ctx.AppendFieldOnce(contactlistmembership.FieldContactID)
 	}
 	query.Where(predicate.ContactListMembership(func(s *sql.Selector) {
-		s.Where(sql.InValues(s.C(contact.ContactListMembershipsColumn), fks...))
+		s.Where(sql.InValues(s.C(contact.ContactListMembersColumn), fks...))
 	}))
 	neighbors, err := query.All(ctx)
 	if err != nil {
@@ -897,17 +897,17 @@ func (cq *ContactQuery) WithNamedEntities(name string, opts ...func(*EntityQuery
 	return cq
 }
 
-// WithNamedContactListMemberships tells the query-builder to eager-load the nodes that are connected to the "contact_list_memberships"
+// WithNamedContactListMembers tells the query-builder to eager-load the nodes that are connected to the "contact_list_members"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (cq *ContactQuery) WithNamedContactListMemberships(name string, opts ...func(*ContactListMembershipQuery)) *ContactQuery {
+func (cq *ContactQuery) WithNamedContactListMembers(name string, opts ...func(*ContactListMembershipQuery)) *ContactQuery {
 	query := (&ContactListMembershipClient{config: cq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	if cq.withNamedContactListMemberships == nil {
-		cq.withNamedContactListMemberships = make(map[string]*ContactListMembershipQuery)
+	if cq.withNamedContactListMembers == nil {
+		cq.withNamedContactListMembers = make(map[string]*ContactListMembershipQuery)
 	}
-	cq.withNamedContactListMemberships[name] = query
+	cq.withNamedContactListMembers[name] = query
 	return cq
 }
 
