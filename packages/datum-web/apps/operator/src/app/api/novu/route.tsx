@@ -1,4 +1,4 @@
-// import { NextResponse } from 'next/server'
+import { NextResponse } from 'next/server'
 // import { Novu } from '@novu/node'
 // import { auth } from '@/lib/auth/auth'
 
@@ -21,4 +21,5 @@ export async function GET() {
   //   payload: {},
   // })
   // return NextResponse.json(response.data)
+  return NextResponse.json({ message: 'To be replaced' }, { status: 200 })
 }
