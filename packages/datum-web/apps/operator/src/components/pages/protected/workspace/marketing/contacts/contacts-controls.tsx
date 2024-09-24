@@ -2,7 +2,15 @@
 
 import { useSession } from 'next-auth/react'
 import { useState } from 'react'
-import { Check, ChevronDown, Import, Plus, Trash, User } from 'lucide-react'
+import {
+  Check,
+  ChevronDown,
+  Import,
+  Loader,
+  Plus,
+  Trash,
+  User,
+} from 'lucide-react'
 
 import { Button } from '@repo/ui/button'
 import {
@@ -20,6 +28,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@/components/shared/sidebar/sidebar-accordion/sidebar-accordion'
+import { useAsyncFn } from '@/hooks/useAsyncFn'
 import { useLists } from '@/hooks/useLists'
 import { createListMembers, removeListMembers } from '@/query/lists'
 
@@ -52,21 +61,16 @@ const ContactsControls = ({
     contactControls,
     contactDropdownItem,
     contactDropdownIcon,
+    loadingSpinner,
   } = pageStyles()
-  const [_openContactDialog, _setOpenContactDialog] = useState(false)
-  const [_openImportDialog, _setOpenImportDialog] = useState(false)
+  const [loadingSubscription, setLoadingSubscription] = useState<Datum.ListId>()
+  const [openContactDialog, _setOpenContactDialog] = useState(false)
+  const [openImportDialog, _setOpenImportDialog] = useState(false)
+  const [openActionsMenu, setOpenActionsMenu] = useState(false)
   const { data: session } = useSession()
   const organizationId =
     session?.user.organization ?? ('' as Datum.OrganisationId)
   const { data: lists = [] } = useLists(organizationId)
-
-  function openContactDialog() {
-    _setOpenContactDialog(true)
-  }
-
-  function openImportDialog() {
-    _setOpenImportDialog(true)
-  }
 
   function setOpenContactDialog(input: boolean) {
     _setOpenContactDialog(input)
@@ -81,13 +85,33 @@ const ContactsControls = ({
   }
 
   async function subscribe(listId: Datum.ListId) {
-    const selectedContactsIds = selectedContacts.map(({ id }) => id)
-    await createListMembers(organizationId, listId, selectedContactsIds)
+    setLoadingSubscription(listId)
+
+    const validContacts = selectedContacts.filter(
+      ({ contactLists }) => !contactLists.map(({ id }) => id).includes(listId),
+    )
+
+    const validContactIds = validContacts.map(({ id }) => id)
+
+    await createListMembers(organizationId, listId, validContactIds)
+
+    setLoadingSubscription(undefined)
+    setOpenActionsMenu(false)
   }
 
   async function unsubscribe(listId: Datum.ListId) {
-    const selectedContactsIds = selectedContacts.map(({ id }) => id)
-    await removeListMembers(organizationId, listId, selectedContactsIds)
+    setLoadingSubscription(listId)
+
+    const validContacts = selectedContacts.filter(({ contactLists }) =>
+      contactLists.map(({ id }) => id).includes(listId),
+    )
+
+    const validContactIds = validContacts.map(({ id }) => id)
+
+    await removeListMembers(organizationId, listId, validContactIds)
+
+    setLoadingSubscription(undefined)
+    setOpenActionsMenu(false)
   }
 
   return (
@@ -103,22 +127,22 @@ const ContactsControls = ({
           <DropdownMenuContent align="end" className="px-2 py-2.5">
             <DropdownMenuItem
               className={contactDropdownItem()}
-              onClick={openContactDialog}
+              onClick={() => setOpenContactDialog(true)}
             >
               <User size={18} className={contactDropdownIcon()} />
               Add single contact
             </DropdownMenuItem>
             <DropdownMenuItem
               className={contactDropdownItem()}
-              onClick={openImportDialog}
+              onClick={() => setOpenImportDialog(true)}
             >
               <Import size={18} className={contactDropdownIcon()} />
               Import
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
+        <DropdownMenu open={openActionsMenu} onOpenChange={setOpenActionsMenu}>
+          <DropdownMenuTrigger asChild onClick={() => setOpenActionsMenu(true)}>
             <Button variant="outline" icon={<ChevronDown />}>
               Actions
             </Button>
@@ -157,11 +181,16 @@ const ContactsControls = ({
                 <AccordionContent className={accordionContentOuter()}>
                   <div className={accordionContentInner()}>
                     {lists.map((list) => {
-                      const isSelected =
-                        selectedContacts.length > 0 &&
-                        !selectedContacts.some(({ contactLists }) => {
-                          return !contactLists.some(({ id }) => id === list.id)
-                        })
+                      const commonLists = lists.filter(({ id: listId }) =>
+                        selectedContacts.every(({ contactLists }) =>
+                          contactLists.map(({ id }) => id).includes(listId),
+                        ),
+                      )
+                      const commonListIds = commonLists.map(({ id }) => id)
+                      const isSelected = commonListIds.includes(list.id)
+
+                      const isLoadingSubscription =
+                        loadingSubscription === list.id
 
                       if (isSelected) {
                         return (
@@ -169,10 +198,14 @@ const ContactsControls = ({
                             key={list.id}
                             variant="tagSuccess"
                             icon={
-                              <Check
-                                size={10}
-                                className="leading-none pt-[3px]"
-                              />
+                              isLoadingSubscription ? (
+                                <Loader className={loadingSpinner()} />
+                              ) : (
+                                <Check
+                                  size={10}
+                                  className="leading-none pt-[3px]"
+                                />
+                              )
                             }
                             iconPosition="left"
                             className="transition-all duration-0"
@@ -189,6 +222,12 @@ const ContactsControls = ({
                           key={list.id}
                           variant="tag"
                           size="tag"
+                          icon={
+                            isLoadingSubscription ? (
+                              <Loader className={loadingSpinner()} />
+                            ) : undefined
+                          }
+                          iconPosition="left"
                           className="transition-all duration-0"
                           onClick={async () => await subscribe(list.id)}
                         >
@@ -205,11 +244,11 @@ const ContactsControls = ({
         <FilterContactDialog onFilter={onFilter} />
       </div>
       <ContactFormDialog
-        open={_openContactDialog}
+        open={openContactDialog}
         setOpen={setOpenContactDialog}
       />
       <ImportContactsDialog
-        open={_openImportDialog}
+        open={openImportDialog}
         setOpen={setOpenImportDialog}
       />
     </>

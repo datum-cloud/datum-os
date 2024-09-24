@@ -257,10 +257,8 @@ export const CONTACT_COLUMNS: ColumnDef<Datum.Contact>[] = [
       const [first, ...rest] = sortedLists
 
       return (
-        <div className="flex flex-wrap gap-1">
-          <Tag className="mr-[9px]" truncate>
-            {first?.name || 'N/A'}
-          </Tag>
+        <div className="flex flex-wrap gap-2">
+          <Tag truncate>{first?.name || 'N/A'}</Tag>
           {rest.length > 0 && <Tag variant="muted">+ {rest.length}</Tag>}
         </div>
       )

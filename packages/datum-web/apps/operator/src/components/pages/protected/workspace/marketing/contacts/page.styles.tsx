@@ -9,6 +9,8 @@ export const pageStyles = tv({
     contactDropdownItem:
       'w-full flex items-center justify-start gap-3 text-button-m cursor-pointer hover:bg-winter-sky-700 hover:dark:bg-peat-800',
     contactDropdownIcon: 'text-blackberry-400',
+    loadingSpinner:
+      'leading-none left-0 absolute top-[3px] !h-3 !w-3 shrink-0 origin-center animate-spin',
     nameRow: 'flex gap-2',
     copyIcon: 'text-blackberry-400 cursor-pointer',
     accordionContainer: 'w-full border-b-0 px-0',

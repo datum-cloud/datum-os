@@ -7,7 +7,6 @@ import { auth } from '@/lib/auth/auth'
 const Landing = async () => {
   const session = await auth()
   const currentOrgId = session?.user.organization
-  console.log(currentOrgId)
 
   // If the user has a current organisation direct them to the dashboard
   // Otherwise they should be directed to the workspace page

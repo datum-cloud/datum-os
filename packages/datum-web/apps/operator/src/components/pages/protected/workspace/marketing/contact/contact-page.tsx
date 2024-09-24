@@ -9,6 +9,7 @@ import {
   ChevronDown,
   Ellipsis,
   Info,
+  Loader,
   Plus,
   Trash,
   User,
@@ -54,6 +55,7 @@ type ContactPageProps = {
 const ContactPage = ({ id }: ContactPageProps) => {
   const [openDeleteDialog, _setOpenDeleteDialog] = useState(false)
   const { data: session } = useSession()
+  const [loadingSubscription, setLoadingSubscription] = useState<Datum.ListId>()
   const organizationId = (session?.user.organization ??
     '') as Datum.OrganisationId
   const [openEditDialog, setOpenEditDialog] = useState(false)
@@ -81,6 +83,7 @@ const ContactPage = ({ id }: ContactPageProps) => {
     accordionContentOuter,
     contactDropdownItem,
     contactDropdownIcon,
+    loadingSpinner,
   } = contactsStyles()
 
   const { error, isLoading, data: contact } = useContact(id)
@@ -93,11 +96,15 @@ const ContactPage = ({ id }: ContactPageProps) => {
   }
 
   async function subscribe(listId: Datum.ListId) {
+    setLoadingSubscription(listId)
     await createListMembers(organizationId, listId, [id])
+    setLoadingSubscription(undefined)
   }
 
   async function unsubscribe(listId: Datum.ListId) {
+    setLoadingSubscription(listId)
     await removeListMembers(organizationId, listId, [id])
+    setLoadingSubscription(undefined)
   }
 
   if (isLoading) {
@@ -219,9 +226,12 @@ const ContactPage = ({ id }: ContactPageProps) => {
                   <AccordionContent className={accordionContentOuter()}>
                     <div className={accordionContentInner()}>
                       {lists.map((list) => {
-                        const isSelected = contactLists.find(
-                          ({ id }) => id === list.id,
-                        )
+                        const isSelected = contactLists
+                          .map(({ id }) => id)
+                          .includes(list.id)
+
+                        const isLoadingSubscription =
+                          loadingSubscription === list.id
 
                         if (isSelected) {
                           return (
@@ -230,10 +240,14 @@ const ContactPage = ({ id }: ContactPageProps) => {
                               variant="tagSuccess"
                               size="tag"
                               icon={
-                                <Check
-                                  size={10}
-                                  className="leading-none pt-[3px]"
-                                />
+                                isLoadingSubscription ? (
+                                  <Loader className={loadingSpinner()} />
+                                ) : (
+                                  <Check
+                                    size={10}
+                                    className="leading-none pt-[3px]"
+                                  />
+                                )
                               }
                               iconPosition="left"
                               onClick={async () => await unsubscribe(list.id)}
@@ -248,6 +262,12 @@ const ContactPage = ({ id }: ContactPageProps) => {
                             key={list.id}
                             variant="tag"
                             size="tag"
+                            icon={
+                              isLoadingSubscription ? (
+                                <Loader className={loadingSpinner()} />
+                              ) : undefined
+                            }
+                            iconPosition="left"
                             onClick={async () => await subscribe(list.id)}
                           >
                             {list.name}
