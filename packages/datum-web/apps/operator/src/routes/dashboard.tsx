@@ -157,11 +157,6 @@ export const NavItems: (NavItem | Separator | NavHeading)[] = [
 
 export const PersonalNavItems: (NavItem | Separator | NavHeading)[] = [
   {
-    title: 'Dashboard',
-    href: '/dashboard',
-    icon: CircleGaugeIcon,
-  },
-  {
     title: 'My workspaces',
     href: '/workspace',
     icon: LayersIcon,

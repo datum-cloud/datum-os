@@ -26,6 +26,7 @@ export const OPERATOR_APP_ROUTES = {
   dashboard: '/dashboard',
   settings: '/settings',
   workspace: '/workspace',
+  login: '/login',
 }
 
 export const OPERATOR_API_ROUTES = {
@@ -74,3 +75,9 @@ export enum HttpStatus {
   ServiceUnavailable = 503,
   GatewayTimeout = 504,
 }
+
+export const ERROR_MESSAGES: Record<string, string> = {
+  CredentialsSignin: 'Incorrect email or password',
+}
+
+export const DEFAULT_ERROR_MESSAGE = 'There was an error. Please try again.'

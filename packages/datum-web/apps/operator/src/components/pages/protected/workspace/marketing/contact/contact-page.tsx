@@ -18,7 +18,7 @@ import Link from 'next/link'
 
 import { OPERATOR_APP_ROUTES } from '@repo/constants'
 import { Button } from '@repo/ui/button'
-import { Panel, PanelHeader } from '@repo/ui/panel'
+import { Panel } from '@repo/ui/panel'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -207,7 +207,10 @@ const ContactPage = ({ id }: ContactPageProps) => {
               <Ellipsis className={contactDropdownIcon()} />
             </DropdownMenuTrigger>
             <DropdownMenuContent className="py-2.5 px-2" side="top" align="end">
-              <DropdownMenuItem className={contactDropdownItem()}>
+              <DropdownMenuItem
+                disabled={lists.length === 0}
+                className={contactDropdownItem()}
+              >
                 <BellMinus size={18} className={contactDropdownIcon()} />
                 Unsubscribe from all
               </DropdownMenuItem>

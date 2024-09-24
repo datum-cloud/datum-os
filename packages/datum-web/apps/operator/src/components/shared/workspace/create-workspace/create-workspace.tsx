@@ -35,9 +35,6 @@ const formSchema = z.object({
     .max(32, {
       message: 'Please use 32 characters at maximum.',
     }),
-  displayName: z.string().min(2, {
-    message: 'Display name must be at least 2 characters',
-  }),
 })
 
 export const CreateWorkspaceForm = () => {
@@ -57,7 +54,6 @@ export const CreateWorkspaceForm = () => {
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: '',
-      displayName: '',
     },
   })
 
@@ -99,7 +95,7 @@ export const CreateWorkspaceForm = () => {
   }
 
   const onSubmit = (data: z.infer<typeof formSchema>) => {
-    createWorkspace({ name: data.name, displayName: data.displayName })
+    createWorkspace({ name: data.name })
   }
 
   useEffect(() => {
@@ -136,19 +132,6 @@ export const CreateWorkspaceForm = () => {
                     <Input {...field} />
                   </FormControl>
                   <Info>Please use 32 characters at maximum.</Info>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="displayName"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Display name</FormLabel>
-                  <FormControl>
-                    <Input {...field} />
-                  </FormControl>
                   <FormMessage />
                 </FormItem>
               )}

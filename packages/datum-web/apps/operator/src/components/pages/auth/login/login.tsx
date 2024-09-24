@@ -1,34 +1,35 @@
 'use client'
 
+import { startAuthentication } from '@simplewebauthn/browser'
+import { useRouter } from 'next/navigation'
+import { signIn } from 'next-auth/react'
+import { ArrowUpRight } from 'lucide-react'
+import { useState } from 'react'
+
+import { DEFAULT_ERROR_MESSAGE, ERROR_MESSAGES } from '@repo/constants'
 import { LoginUser } from '@repo/dally/user'
 import { Button } from '@repo/ui/button'
 import MessageBox from '@repo/ui/message-box'
 import SimpleForm from '@repo/ui/simple-form'
-import { ArrowUpRight, KeyRoundIcon } from 'lucide-react'
-import { signIn } from 'next-auth/react'
-import { useRouter } from 'next/navigation'
-import { useState } from 'react'
-import { Separator } from '@repo/ui/separator'
-import { loginStyles } from './login.styles'
 import { GoogleIcon } from '@repo/ui/icons/google'
+import { Separator } from '@repo/ui/separator'
 import { GithubIcon } from '@repo/ui/icons/github'
 import { Input } from '@repo/ui/input'
 import { PasswordInput } from '@repo/ui/password-input'
 import { Label } from '@repo/ui/label'
+
 import { getPasskeySignInOptions, verifyAuthentication } from '@/lib/user'
-import { startAuthentication } from '@simplewebauthn/browser'
 import { setSessionCookie } from '@/lib/auth/utils/set-session-cookie'
+
+import { loginStyles } from './login.styles'
 
 const TEMP_PASSKEY_EMAIL = 'tempuser@test.com'
 const TEMP_PASSKEY_NAME = 'Temp User'
 
 export const LoginPage = () => {
-  const { separator, buttons, keyIcon, form, input } = loginStyles()
+  const { separator, buttons, form, input } = loginStyles()
   const router = useRouter()
-  const [signInError, setSignInError] = useState(false)
-  const [signInErrorMessage, setSignInErrorMessage] = useState(
-    'There was an error. Please try again.',
-  )
+  const [signInError, setSignInError] = useState<string>()
   const [signInLoading, setSignInLoading] = useState(false)
   const showLoginError = !signInLoading && signInError
   const [isPasswordActive, setIsPasswordActive] = useState(false)
@@ -38,7 +39,7 @@ export const LoginPage = () => {
    */
   const submit = async (payload: LoginUser) => {
     setSignInLoading(true)
-    setSignInError(false)
+    setSignInError(undefined)
     try {
       const res: any = await signIn('credentials', {
         redirect: false,
@@ -48,11 +49,16 @@ export const LoginPage = () => {
         router.push('/workspace')
       } else {
         setSignInLoading(false)
-        setSignInError(true)
+        const error = ERROR_MESSAGES?.[res.error] || DEFAULT_ERROR_MESSAGE
+        setSignInError(error)
       }
-    } catch (error) {
+    } catch (error: any) {
       setSignInLoading(false)
-      setSignInError(true)
+      const errorMessage =
+        error?.message && ERROR_MESSAGES?.[error.message]
+          ? ERROR_MESSAGES?.[error.message]
+          : DEFAULT_ERROR_MESSAGE
+      setSignInError(errorMessage)
     }
   }
 
@@ -101,13 +107,16 @@ export const LoginPage = () => {
       }
 
       if (!verificationResult.success) {
-        setSignInError(true)
-        setSignInErrorMessage(`Error: ${verificationResult.error}`)
+        setSignInError(`Error: ${verificationResult.error}`)
       }
 
       return verificationResult
-    } catch (error) {
-      setSignInError(true)
+    } catch (error: any) {
+      const errorMessage =
+        error?.message && ERROR_MESSAGES?.[error.message]
+          ? ERROR_MESSAGES?.[error.message]
+          : DEFAULT_ERROR_MESSAGE
+      setSignInError(errorMessage)
     }
   }
 
@@ -204,7 +213,7 @@ export const LoginPage = () => {
           </Button>
         </SimpleForm>
         {showLoginError && (
-          <MessageBox className={'p-4 ml-1'} message={signInErrorMessage} />
+          <MessageBox className="p-4 ml-1" message={signInError} />
         )}
       </div>
     </>
