@@ -3,18 +3,20 @@
 import { useSession } from 'next-auth/react'
 import React, { useState } from 'react'
 
-import { ColumnFiltersState, Row } from '@repo/ui/data-table'
+import { exportExcel } from '@repo/common/csv'
+import { Row } from '@repo/ui/data-table'
 import type { Datum } from '@repo/types'
 
 import PageTitle from '@/components/page-title'
 import ListsControls from '@/components/pages/protected/workspace/marketing/lists/lists-controls'
+import ListDeleteDialog from '@/components/pages/protected/workspace/marketing/list/list-delete-dialog'
+import { Loading } from '@/components/shared/loading/loading'
+import { Error } from '@/components/shared/error/error'
 import { useLists } from '@/hooks/useLists'
+import { formatListsExportData } from '@/utils/export'
 
 import ListsTable from './lists-table'
 import { pageStyles } from './page.styles'
-import ListDeleteDialog from '@/components/pages/protected/workspace/marketing/list/list-delete-dialog'
-import { formatListsExportData } from '@/utils/export'
-import { exportExcel } from '@repo/common/csv'
 
 const ListsPage = () => {
   const [exportData, setExportData] = useState<Row<Datum.List>[]>([])
@@ -39,6 +41,14 @@ const ListsPage = () => {
     setTimeout(() => (document.body.style.pointerEvents = ''), 500)
   }
 
+  if (isLoading) {
+    return <Loading />
+  }
+
+  if (error) {
+    return <Error />
+  }
+
   return (
     <div className={wrapper()}>
       <div className={header()}>
@@ -49,15 +59,13 @@ const ListsPage = () => {
           onExport={handleExport}
         />
       </div>
-      {!error && !isLoading && (
-        <ListsTable
-          globalFilter={query}
-          setGlobalFilter={setQuery}
-          lists={lists}
-          setExportData={setExportData}
-          setSelection={setSelectedLists}
-        />
-      )}
+      <ListsTable
+        globalFilter={query}
+        setGlobalFilter={setQuery}
+        lists={lists}
+        setExportData={setExportData}
+        setSelection={setSelectedLists}
+      />
       <ListDeleteDialog
         lists={selectedLists}
         open={openDeleteDialog}

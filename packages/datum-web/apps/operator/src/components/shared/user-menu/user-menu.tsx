@@ -12,16 +12,40 @@ import {
   DropdownMenuItem,
   DropdownMenuSeparator,
 } from '@repo/ui/dropdown-menu'
-import { ChevronDown } from '@repo/ui/icons/chevron-down'
-import { ShieldCheck } from 'lucide-react'
+import { ChevronDown, LayersIcon, ShieldCheck, UserPen } from 'lucide-react'
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from '@/components/shared/sidebar/sidebar-accordion/sidebar-accordion'
+import { OPERATOR_APP_ROUTES } from '@repo/constants'
+import { useState } from 'react'
+import { cn } from '@repo/ui/lib/utils'
 
 export const UserMenu = () => {
   const { data: sessionData } = useSession()
-  const { trigger, email, dropdownItem, subheading, logOutButton } =
-    userMenuStyles()
+  const {
+    accordion,
+    accordionItem,
+    accordionTrigger,
+    accordionTriggerInner,
+    accordionTriggerInnerText,
+    accordionTriggerInnerLabel,
+    accordionLink,
+    accordionLinkIcon,
+    trigger,
+    email,
+    dropdownItem,
+    subheading,
+    logOutButton,
+  } = userMenuStyles()
+  const [open, setOpen] = useState(false)
+  const firstName = sessionData?.user?.name?.split(' ')?.[0]
+  const hasName = !!firstName && firstName !== 'undefined'
 
   return (
-    <DropdownMenu>
+    <DropdownMenu open={open} onOpenChange={setOpen}>
       <DropdownMenuTrigger asChild>
         <div className={trigger()}>
           <Avatar>
@@ -35,7 +59,7 @@ export const UserMenu = () => {
           <ChevronDown />
         </div>
       </DropdownMenuTrigger>
-      <DropdownMenuContent>
+      <DropdownMenuContent align="end">
         <DropdownMenuItem asChild className={dropdownItem()}>
           <>
             <p className={subheading()}>Signed in as</p>
@@ -44,6 +68,45 @@ export const UserMenu = () => {
             </Link>
           </>
         </DropdownMenuItem>
+        <DropdownMenuSeparator spacing="md" />
+        <Accordion type="single" collapsible className={accordion()}>
+          <AccordionItem value="links" className={accordionItem()}>
+            <AccordionTrigger asChild className={accordionTrigger()}>
+              <div className={accordionTriggerInner()}>
+                <p className={subheading()}>Account</p>
+                <div className={accordionTriggerInnerText()}>
+                  <p
+                    className={cn(accordionTriggerInnerLabel(), 'text-body-m')}
+                  >
+                    {hasName
+                      ? `${sessionData.user.name.split(' ')[0]}'s Personal
+                    Account`
+                      : 'Personal Account'}
+                  </p>
+                  <ChevronDown size={18} />
+                </div>
+              </div>
+            </AccordionTrigger>
+            <AccordionContent className="pb-0">
+              <Link
+                href={OPERATOR_APP_ROUTES.workspace}
+                onClick={() => setOpen(false)}
+                className={accordionLink()}
+              >
+                <LayersIcon size={18} className={accordionLinkIcon()} />
+                <span>My Workspaces</span>
+              </Link>
+              <Link
+                href={OPERATOR_APP_ROUTES.profile}
+                onClick={() => setOpen(false)}
+                className={accordionLink()}
+              >
+                <UserPen size={18} className={accordionLinkIcon()} />
+                <span>Profile</span>
+              </Link>
+            </AccordionContent>
+          </AccordionItem>
+        </Accordion>
         <DropdownMenuSeparator spacing="md" />
         <DropdownMenuItem
           asChild

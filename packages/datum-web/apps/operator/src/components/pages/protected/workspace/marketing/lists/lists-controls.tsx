@@ -42,22 +42,9 @@ const ListsControls = ({
   return (
     <>
       <div className={listControls()}>
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="outline" icon={<ChevronDown />}>
-              Add
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="px-2 py-2.5">
-            <DropdownMenuItem
-              className={listDropdownItem()}
-              onClick={openListDialog}
-            >
-              <User size={18} className={listDropdownIcon()} />
-              Add single list
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <Button variant="outline" onClick={openListDialog}>
+          Add
+        </Button>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button icon={<ChevronDown />}>Actions</Button>

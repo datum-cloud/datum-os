@@ -15,7 +15,7 @@ const DashboardLanding: React.FC = () => {
 
   return (
     <section>
-      <PageTitle title={<>Dashboard</>} />
+      <PageTitle title="Dashboard" className="mb-10" />
       <Grid rows={2}>
         <GridRow columns={2}>
           <GridCell>

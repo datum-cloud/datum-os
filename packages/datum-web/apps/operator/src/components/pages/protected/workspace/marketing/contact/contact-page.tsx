@@ -9,6 +9,7 @@ import {
   ChevronDown,
   Ellipsis,
   Info,
+  Loader,
   Plus,
   Trash,
   User,
@@ -45,6 +46,7 @@ import ContactFormDialog from '../contacts/contacts-form-dialog'
 import ContactDeleteDialog from './contact-delete-dialog'
 import ContactTable from './contact-table'
 import { pageStyles } from './page.styles'
+import { Error } from '@/components/shared/error/error'
 
 type ContactPageProps = {
   id: Datum.ContactId
@@ -53,6 +55,7 @@ type ContactPageProps = {
 const ContactPage = ({ id }: ContactPageProps) => {
   const [openDeleteDialog, _setOpenDeleteDialog] = useState(false)
   const { data: session } = useSession()
+  const [loadingSubscription, setLoadingSubscription] = useState<Datum.ListId>()
   const organizationId = (session?.user.organization ??
     '') as Datum.OrganisationId
   const [openEditDialog, setOpenEditDialog] = useState(false)
@@ -80,6 +83,7 @@ const ContactPage = ({ id }: ContactPageProps) => {
     accordionContentOuter,
     contactDropdownItem,
     contactDropdownIcon,
+    loadingSpinner,
   } = contactsStyles()
 
   const { error, isLoading, data: contact } = useContact(id)
@@ -92,11 +96,15 @@ const ContactPage = ({ id }: ContactPageProps) => {
   }
 
   async function subscribe(listId: Datum.ListId) {
+    setLoadingSubscription(listId)
     await createListMembers(organizationId, listId, [id])
+    setLoadingSubscription(undefined)
   }
 
   async function unsubscribe(listId: Datum.ListId) {
+    setLoadingSubscription(listId)
     await removeListMembers(organizationId, listId, [id])
+    setLoadingSubscription(undefined)
   }
 
   if (isLoading) {
@@ -104,7 +112,7 @@ const ContactPage = ({ id }: ContactPageProps) => {
   }
 
   if (error || !contact) {
-    return <div>Whoops... Something went wrong</div>
+    return <Error />
   }
 
   const {
@@ -116,8 +124,6 @@ const ContactPage = ({ id }: ContactPageProps) => {
     enrichedData = {},
     contactHistory,
   } = contact
-
-  console.log(createdAt && typeof createdAt)
 
   return (
     <div className={wrapper()}>
@@ -165,11 +171,11 @@ const ContactPage = ({ id }: ContactPageProps) => {
           </DropdownMenu>
         </div>
       </div>
-      <Panel>
+      {/* <Panel>
         <PanelHeader heading="Latest activity" noBorder />
         <ContactTable history={contactHistory?.events || []} />
-      </Panel>
-      {Object.keys(enrichedData).length > 0 && (
+      </Panel> */}
+      {/* {Object.keys(enrichedData).length > 0 && (
         <Panel className="bg-blackberry-100">
           <PanelHeader
             heading="Enriched Data"
@@ -192,7 +198,7 @@ const ContactPage = ({ id }: ContactPageProps) => {
             ))}
           </div>
         </Panel>
-      )}
+      )} */}
       <Panel className={listsPanel()}>
         <div className={listsActions()}>
           <h2 className="text-xl font-medium">Current Lists</h2>
@@ -207,7 +213,10 @@ const ContactPage = ({ id }: ContactPageProps) => {
               </DropdownMenuItem>
               <Accordion type="single" collapsible className="w-full">
                 <AccordionItem value="lists" className={accordionContainer()}>
-                  <AccordionTrigger className={accordionTrigger()}>
+                  <AccordionTrigger
+                    disabled={lists.length == 0}
+                    className={accordionTrigger()}
+                  >
                     <div className={listsTrigger()}>
                       <Plus size={18} className={contactDropdownIcon()} />
                       Manage Lists
@@ -217,9 +226,12 @@ const ContactPage = ({ id }: ContactPageProps) => {
                   <AccordionContent className={accordionContentOuter()}>
                     <div className={accordionContentInner()}>
                       {lists.map((list) => {
-                        const isSelected = contactLists.find(
-                          ({ id }) => id === list.id,
-                        )
+                        const isSelected = contactLists
+                          .map(({ id }) => id)
+                          .includes(list.id)
+
+                        const isLoadingSubscription =
+                          loadingSubscription === list.id
 
                         if (isSelected) {
                           return (
@@ -228,10 +240,14 @@ const ContactPage = ({ id }: ContactPageProps) => {
                               variant="tagSuccess"
                               size="tag"
                               icon={
-                                <Check
-                                  size={10}
-                                  className="leading-none pt-[3px]"
-                                />
+                                isLoadingSubscription ? (
+                                  <Loader className={loadingSpinner()} />
+                                ) : (
+                                  <Check
+                                    size={10}
+                                    className="leading-none pt-[3px]"
+                                  />
+                                )
                               }
                               iconPosition="left"
                               onClick={async () => await unsubscribe(list.id)}
@@ -246,6 +262,12 @@ const ContactPage = ({ id }: ContactPageProps) => {
                             key={list.id}
                             variant="tag"
                             size="tag"
+                            icon={
+                              isLoadingSubscription ? (
+                                <Loader className={loadingSpinner()} />
+                              ) : undefined
+                            }
+                            iconPosition="left"
                             onClick={async () => await subscribe(list.id)}
                           >
                             {list.name}

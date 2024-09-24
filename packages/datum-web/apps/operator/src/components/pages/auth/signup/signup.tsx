@@ -99,6 +99,7 @@ export const SignupPage = () => {
           variant="outline"
           size="md"
           icon={<GoogleIcon />}
+          className="dark:!text-blackberry-800"
           iconPosition="left"
           onClick={() => {
             google()
@@ -111,6 +112,7 @@ export const SignupPage = () => {
           variant="outline"
           size="md"
           icon={<GithubIcon />}
+          className="dark:!text-blackberry-800"
           iconPosition="left"
           onClick={() => {
             github()
@@ -168,9 +170,12 @@ export const SignupPage = () => {
         }}
       >
         <div className={input()}>
-          <Label htmlFor="username">Email</Label>
+          <Label htmlFor="username" className="dark:text-blackberry-800">
+            Email
+          </Label>
           <Input
             name="email"
+            className="dark:text-blackberry-800"
             placeholder="email@domain.net"
             required
             type="email"
@@ -179,11 +184,19 @@ export const SignupPage = () => {
         {isPasswordActive && (
           <>
             <div className={input()}>
-              <Label htmlFor="password">Password</Label>
-              <PasswordInput name="password" placeholder="password" required />
+              <Label htmlFor="password" className="dark:text-blackberry-800">
+                Password
+              </Label>
+              <PasswordInput
+                className="dark:text-blackberry-800"
+                name="password"
+                placeholder="password"
+                required
+              />
             </div>
             <PasswordInput
               name="confirmedPassword"
+              className="dark:text-blackberry-800"
               placeholder="confirm password"
               required
             />

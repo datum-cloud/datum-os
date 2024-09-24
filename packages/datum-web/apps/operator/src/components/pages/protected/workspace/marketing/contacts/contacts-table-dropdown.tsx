@@ -13,6 +13,7 @@ import {
   Check,
   ChevronDown,
   Ellipsis,
+  Loader,
   Pencil,
   Plus,
   Trash,
@@ -38,6 +39,11 @@ type ContactsTableDropdownProps = {
   contact: Datum.Contact
 }
 
+type LoadingState = {
+  contact: Datum.ContactId
+  list: Datum.ListId
+}
+
 const ContactsTableDropdown = ({ contact }: ContactsTableDropdownProps) => {
   const { id, contactLists = [] } = contact
   const [openEditDialog, _setOpenEditDialog] = useState(false)
@@ -46,6 +52,7 @@ const ContactsTableDropdown = ({ contact }: ContactsTableDropdownProps) => {
     useAsyncFn(removeListMembers)
   const [{ loading: loadingsubscribe }, addSubscriber] =
     useAsyncFn(createListMembers)
+  const [loadingSubscription, setLoadingSubscription] = useState<LoadingState>()
   const { data: session } = useSession()
   const organizationId =
     session?.user.organization ?? ('' as Datum.OrganisationId)
@@ -57,6 +64,7 @@ const ContactsTableDropdown = ({ contact }: ContactsTableDropdownProps) => {
     accordionTrigger,
     contactDropdownItem,
     contactDropdownIcon,
+    loadingSpinner,
   } = pageStyles()
 
   function setOpenDeleteDialog(input: boolean) {
@@ -74,11 +82,15 @@ const ContactsTableDropdown = ({ contact }: ContactsTableDropdownProps) => {
   }
 
   async function subscribe(listId: Datum.ListId) {
+    setLoadingSubscription({ contact: id, list: listId })
     await addSubscriber(organizationId, listId, [id])
+    setLoadingSubscription(undefined)
   }
 
   async function unsubscribe(listId: Datum.ListId) {
+    setLoadingSubscription({ contact: id, list: listId })
     await removeSubscriber(organizationId, listId, [id])
+    setLoadingSubscription(undefined)
   }
 
   function setOpenEditDialog(input: boolean) {
@@ -120,7 +132,10 @@ const ContactsTableDropdown = ({ contact }: ContactsTableDropdownProps) => {
               value="contactLists"
               className={accordionContainer()}
             >
-              <AccordionTrigger className={accordionTrigger()}>
+              <AccordionTrigger
+                disabled={allLists.length === 0}
+                className={accordionTrigger()}
+              >
                 <div className="flex items-center justify-start gap-3">
                   <Plus size={18} className={contactDropdownIcon()} />
                   Manage Lists
@@ -133,6 +148,10 @@ const ContactsTableDropdown = ({ contact }: ContactsTableDropdownProps) => {
                     const isSelected = contactLists.find(
                       (item) => item.id === listId,
                     )
+                    const isLoadingSubscription =
+                      loadingSubscription &&
+                      loadingSubscription.contact === id &&
+                      loadingSubscription.list === listId
 
                     if (isSelected) {
                       return (
@@ -141,10 +160,14 @@ const ContactsTableDropdown = ({ contact }: ContactsTableDropdownProps) => {
                           size="tag"
                           variant="tagSuccess"
                           icon={
-                            <Check
-                              size={10}
-                              className="leading-none pt-[3px]"
-                            />
+                            isLoadingSubscription ? (
+                              <Loader className={loadingSpinner()} />
+                            ) : (
+                              <Check
+                                size={10}
+                                className="leading-none pt-[3px]"
+                              />
+                            )
                           }
                           iconPosition="left"
                           onClick={async () => await unsubscribe(listId)}
@@ -159,6 +182,12 @@ const ContactsTableDropdown = ({ contact }: ContactsTableDropdownProps) => {
                         key={listId}
                         variant="tag"
                         size="tag"
+                        icon={
+                          isLoadingSubscription ? (
+                            <Loader className={loadingSpinner()} />
+                          ) : undefined
+                        }
+                        iconPosition="left"
                         onClick={async () => await subscribe(listId)}
                       >
                         {name}

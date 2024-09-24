@@ -28,7 +28,7 @@ const ContactsSearch = ({ search }: ContactsSearchProps) => {
   return (
     <div
       className={cn(
-        'h-11 relative bg-white flex gap-0 items-start justify-start rounded-md border border-blackberry-400',
+        'h-11 relative bg-white flex gap-0 items-start justify-start dark:bg-peat-900 rounded-md border border-blackberry-400',
         openSearch ? 'w-auto' : 'w-11',
       )}
     >
@@ -38,7 +38,7 @@ const ContactsSearch = ({ search }: ContactsSearchProps) => {
         onChange={searchQuery}
         placeholder="Search contacts"
         className={cn(
-          'flex h-[42px] transition-all transform duration-1000 w-0 rounded-md border-none',
+          'flex h-[42px] transition-all transform duration-1000 w-0 rounded-md border-none dark:text-white',
           openSearch
             ? 'w-56 translate-x-0 opacity-100 pr-11'
             : 'w-0 translate-x-100 opacity-0 p-0',
@@ -51,7 +51,7 @@ const ContactsSearch = ({ search }: ContactsSearchProps) => {
           'h-[42px] aspect-square shrink-0 rounded-md',
           openSearch ? '!absolute top-0 right-0' : '',
         )}
-        icon={<Search />}
+        icon={<Search className="dar:text-white" />}
         iconPosition="left"
         onClick={handleSearch}
       />

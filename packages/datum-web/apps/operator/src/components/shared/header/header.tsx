@@ -21,16 +21,16 @@ export default function Header() {
           <>MobileSidebar</>
         </div>
 
-        <Search onSearch={handleSearch} />
+        {/* <Search onSearch={handleSearch} /> */}
 
         <div className={userNav()}>
-          <Link href="#" className="link">
+          {/* <Link href="#" className="link">
             Datum Cloud
           </Link>
           <Link href="#" className="link">
             Docs
           </Link>
-          <Notifications />
+          <Notifications /> */}
           <UserMenu />
         </div>
       </nav>

@@ -96,7 +96,7 @@ export const WorkspaceSelector = () => {
 
   return (
     <div className={container()}>
-      <Logo width={30} asIcon theme="blackberryLight" />
+      <Logo asIcon width={40} theme="dark" />
       <div>
         <div className={workspaceLabel()}>Workspace:</div>
         <Popover>
@@ -134,22 +134,21 @@ export const WorkspaceSelector = () => {
                     <div className={orgTitle()}>{org?.node?.displayName}</div>
                     <Tag>{role}</Tag>
                   </div>
-                  <div className={orgSelect()}>
                     <Button
+                      className={orgSelect()}
                       variant="sunglow"
                       size="md"
                       onClick={() => handleWorkspaceSwitch(org?.node?.id)}
                     >
                       Select
                     </Button>
-                  </div>
                 </div>
               )
             })}
             <div>
               <Link href="/workspace" className={allWorkspacesLink()}>
-                View all {orgs.length - 1} workspaces
-                <ArrowRight width={10} />
+                View all workspaces
+                <ArrowRight size={14} />
               </Link>
             </div>
           </PopoverContent>

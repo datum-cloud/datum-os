@@ -1,15 +1,20 @@
-'use client'
+import { redirect } from 'next/navigation'
 
-import { useEffect } from 'react'
-import { useRouter } from 'next/navigation'
+import { OPERATOR_APP_ROUTES } from '@repo/constants'
 import { Logo } from '@repo/ui/logo'
+import { auth } from '@/lib/auth/auth'
 
-const Landing = () => {
-  const router = useRouter()
+const Landing = async () => {
+  const session = await auth()
+  const currentOrgId = session?.user.organization
 
-  useEffect(() => {
-    router.push('/workspace')
-  }, [router])
+  // If the user has a current organisation direct them to the dashboard
+  // Otherwise they should be directed to the workspace page
+  if (currentOrgId) {
+    redirect(OPERATOR_APP_ROUTES.dashboard)
+  } else {
+    redirect(OPERATOR_APP_ROUTES.workspace)
+  }
 
   return (
     <main className="flex items-center justify-center h-screen relative bg-winter-sky-900 dark:bg-peat-900">
