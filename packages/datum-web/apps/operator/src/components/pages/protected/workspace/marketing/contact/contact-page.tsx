@@ -93,11 +93,11 @@ const ContactPage = ({ id }: ContactPageProps) => {
   }
 
   async function subscribe(listId: Datum.ListId) {
-    await createListMembers(listId, [id])
+    await createListMembers(organizationId, listId, [id])
   }
 
   async function unsubscribe(listId: Datum.ListId) {
-    await removeListMembers(listId, [id])
+    await removeListMembers(organizationId, listId, [id])
   }
 
   if (isLoading) {
@@ -117,6 +117,8 @@ const ContactPage = ({ id }: ContactPageProps) => {
     enrichedData = {},
     contactHistory,
   } = contact
+
+  console.log(createdAt && typeof createdAt)
 
   return (
     <div className={wrapper()}>

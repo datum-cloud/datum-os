@@ -27,12 +27,15 @@ const ListContactsTableDropdown = ({
   contact,
   listId,
 }: ListContactsTableDropdownProps) => {
+  const { data: session } = useSession()
+  const organizationId =
+    session?.user.organization ?? ('' as Datum.OrganisationId)
   const { listDropdownIcon, listDropdownItem } = pageStyles()
   const { id } = contact
   const [_openEditDialog, _setOpenEditDialog] = useState(false)
 
   async function unsubscribe() {
-    await removeListMembers(listId, [id])
+    await removeListMembers(organizationId, listId, [id])
   }
 
   return (

@@ -67,16 +67,18 @@ const ContactsTableDropdown = ({ contact }: ContactsTableDropdownProps) => {
 
   async function unsubscribeAll() {
     await Promise.all(
-      contactLists.map(({ id: listId }) => removeListMembers(listId, [id])),
+      contactLists.map(({ id: listId }) =>
+        removeSubscriber(organizationId, listId, [id]),
+      ),
     )
   }
 
   async function subscribe(listId: Datum.ListId) {
-    await addSubscriber(listId, [id])
+    await addSubscriber(organizationId, listId, [id])
   }
 
   async function unsubscribe(listId: Datum.ListId) {
-    await removeSubscriber(listId, [id])
+    await removeSubscriber(organizationId, listId, [id])
   }
 
   function setOpenEditDialog(input: boolean) {

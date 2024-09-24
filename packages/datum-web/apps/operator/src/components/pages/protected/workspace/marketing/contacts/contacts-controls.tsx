@@ -82,12 +82,12 @@ const ContactsControls = ({
 
   async function subscribe(listId: Datum.ListId) {
     const selectedContactsIds = selectedContacts.map(({ id }) => id)
-    await createListMembers(listId, selectedContactsIds)
+    await createListMembers(organizationId, listId, selectedContactsIds)
   }
 
   async function unsubscribe(listId: Datum.ListId) {
     const selectedContactsIds = selectedContacts.map(({ id }) => id)
-    await removeListMembers(listId, selectedContactsIds)
+    await removeListMembers(organizationId, listId, selectedContactsIds)
   }
 
   return (

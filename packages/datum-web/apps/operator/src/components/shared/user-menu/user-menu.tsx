@@ -61,9 +61,9 @@ export const UserMenu = () => {
         <DropdownMenuItem asChild className={dropdownItem()}>
           <>
             <p className={subheading()}>Signed in as</p>
-            <a href={`mailto:${sessionData?.user.email}`} className={email()}>
+            <Link href="/profile" className={email()}>
               {sessionData?.user.email}
-            </a>
+            </Link>
           </>
         </DropdownMenuItem>
         <DropdownMenuSeparator spacing="md" />
