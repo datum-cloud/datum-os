@@ -101,6 +101,8 @@ export namespace Datum {
     fullName: string
     title: string
     email: Email
+    company: string
+    phoneNumber: string
     createdAt: Date
     updatedAt: Date
     source: string
@@ -116,4 +118,6 @@ export namespace Datum {
   export interface ContactEditInput extends ContactCreateInput {
     id: ContactId
   }
+
+  export type CsvData = Record<string, string>[]
 }

@@ -37,13 +37,17 @@ export const ContactSchema = z.object({
   status: z.string().describe('Contact status'),
   lists: z
     .array(z.string())
-    .describe('Lists to which the contact belongs')
+    .describe('IDs of the lists to which the contact belongs')
     .optional(),
 })
 
 export const ContactFormSchema = ContactSchema.extend({
   firstName: z.string().describe('First name of the contact').optional(),
   lastName: z.string().describe('Last name of the contact').optional(),
+})
+
+export const ContactBatchCreateSchema = z.object({
+  contacts: z.array(ContactSchema),
 })
 
 export const ContactFilterFormSchema = z.object({
@@ -91,6 +95,7 @@ export const ListSchema = z.object({
     .describe('Array of the list members'),
 })
 
+export type ContactBatchCreateInput = z.infer<typeof ContactBatchCreateSchema>
 export type ContactInput = z.infer<typeof ContactSchema>
 export type ContactFilterInput = z.infer<typeof ContactFilterFormSchema>
 export type ContactFormInput = z.infer<typeof ContactFormSchema>

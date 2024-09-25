@@ -1,5 +1,6 @@
 'use client'
 
+import { useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react'
 import { useState } from 'react'
 import {
@@ -12,6 +13,7 @@ import {
   User,
 } from 'lucide-react'
 
+import { OPERATOR_APP_ROUTES } from '@repo/constants'
 import { Button } from '@repo/ui/button'
 import {
   DropdownMenu,
@@ -28,7 +30,6 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@/components/shared/sidebar/sidebar-accordion/sidebar-accordion'
-import { useAsyncFn } from '@/hooks/useAsyncFn'
 import { useLists } from '@/hooks/useLists'
 import { createListMembers, removeListMembers } from '@/query/lists'
 
@@ -36,8 +37,6 @@ import ContactFormDialog from './contacts-form-dialog'
 import FilterContactDialog from './contacts-filter-dialog'
 import ContactsSearch from './contacts-search'
 import { pageStyles } from './page.styles'
-import { useRouter } from 'next/navigation'
-import { OPERATOR_APP_ROUTES } from '@repo/constants'
 
 type ContactsControlsProps = {
   search(query: string): void

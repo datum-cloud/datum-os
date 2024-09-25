@@ -124,99 +124,102 @@ const ListPage = ({ id }: ListPageProps) => {
 
   return (
     <div className={wrapper()}>
-      <Link href={OPERATOR_APP_ROUTES.contactLists} className={link()}>
-        <ArrowLeft size={18} />
-        Back to Lists
-      </Link>
-      <div className={listHeader()}>
-        <div className={listCard()}>
-          <div className={listText()}>
-            <Tag
-              status="dark"
-              className="h-[25px] text-body-sm tracking-[0.5px] border-blackberry-800"
-            >
-              {name}
-            </Tag>
-            <p className="text-body-l text-blackberry-600">{description}</p>
-            <div className="flex gap-4 items-center justify-start text-blackberry-500">
-              <Button
-                size="xs"
-                variant="blackberryXs"
-                className="!text-blackberry-500 font-mono text-body-xs"
-                icon={<Copy size={16} className="text-blackberry-500" />}
-                iconPosition="left"
-                onClick={() => copyToClipboard(id)}
+      <div className="flex flex-col gap-3">
+        <Link href={OPERATOR_APP_ROUTES.contactLists} className={link()}>
+          <ArrowLeft size={18} />
+          Back to Lists
+        </Link>
+        <div className={listHeader()}>
+          <div className={listCard()}>
+            <div className={listText()}>
+              <Tag
+                status="dark"
+                className="h-[25px] text-body-sm tracking-[0.5px] border-blackberry-800"
               >
-                {id}
-              </Button>
-              <div className="flex gap-2 items-center text-body-xs">
-                <Users2 size={16} />
-                {members.length}
-              </div>
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <button>
-                    <Tag
-                      variant="dark"
-                      className="flex items-center justify-between gap-1"
+                {name}
+              </Tag>
+              <p className="text-body-l text-blackberry-600">{description}</p>
+              <div className="flex gap-4 items-center justify-start text-blackberry-500">
+                <Button
+                  size="xs"
+                  variant="blackberryXs"
+                  className="!text-blackberry-500 font-mono text-body-xs"
+                  icon={<Copy size={16} className="text-blackberry-500" />}
+                  iconPosition="left"
+                  onClick={() => copyToClipboard(id)}
+                >
+                  {id}
+                </Button>
+                <div className="flex gap-2 items-center text-body-xs">
+                  <Users2 size={16} />
+                  {members.length}
+                </div>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <button>
+                      <Tag
+                        variant="dark"
+                        className="flex items-center justify-between gap-1"
+                      >
+                        {visibility}{' '}
+                        <ChevronDown size={16} className="pt-0.5" />
+                      </Tag>
+                    </button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="p-2">
+                    <DropdownMenuItem
+                      className={listDropdownItem()}
+                      onClick={() => setPrivacy('PUBLIC')}
                     >
-                      {visibility} <ChevronDown size={16} className="pt-0.5" />
-                    </Tag>
-                  </button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="p-2">
-                  <DropdownMenuItem
-                    className={listDropdownItem()}
-                    onClick={() => setPrivacy('PUBLIC')}
-                  >
-                    <Eye className={listDropdownIcon()} />
-                    Public
-                  </DropdownMenuItem>
-                  <DropdownMenuItem
-                    className={listDropdownItem()}
-                    onClick={() => setPrivacy('PRIVATE')}
-                  >
-                    <EyeOff className={listDropdownIcon()} />
-                    Private
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
+                      <Eye className={listDropdownIcon()} />
+                      Public
+                    </DropdownMenuItem>
+                    <DropdownMenuItem
+                      className={listDropdownItem()}
+                      onClick={() => setPrivacy('PRIVATE')}
+                    >
+                      <EyeOff className={listDropdownIcon()} />
+                      Private
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
             </div>
           </div>
-        </div>
-        <div className={listActions()}>
-          <Button variant="outline" onClick={handleExport}>
-            Export all
-          </Button>
-          <Button
-            variant="outline"
-            onClick={() => setOpenAddContactsDialog(true)}
-          >
-            Add a contact
-          </Button>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button icon={<ChevronDown />} iconPosition="right">
-                Actions
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="px-2 py-2.5">
-              <DropdownMenuItem
-                onClick={() => setOpenEditDialog(true)}
-                className={listDropdownItem()}
-              >
-                <Pencil size={18} className={listDropdownIcon()} />
-                Edit list info
-              </DropdownMenuItem>
-              <DropdownMenuItem
-                onClick={() => setOpenDeleteDialog(true)}
-                className={listDropdownItem()}
-              >
-                <Trash size={18} className={listDropdownIcon()} />
-                Delete list
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+          <div className={listActions()}>
+            <Button variant="outline" onClick={handleExport}>
+              Export all
+            </Button>
+            <Button
+              variant="outline"
+              onClick={() => setOpenAddContactsDialog(true)}
+            >
+              Add a contact
+            </Button>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button icon={<ChevronDown />} iconPosition="right">
+                  Actions
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="px-2 py-2.5">
+                <DropdownMenuItem
+                  onClick={() => setOpenEditDialog(true)}
+                  className={listDropdownItem()}
+                >
+                  <Pencil size={18} className={listDropdownIcon()} />
+                  Edit list info
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() => setOpenDeleteDialog(true)}
+                  className={listDropdownItem()}
+                >
+                  <Trash size={18} className={listDropdownIcon()} />
+                  Delete list
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
         </div>
       </div>
       <ListContactsTable

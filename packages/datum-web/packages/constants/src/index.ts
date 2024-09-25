@@ -44,6 +44,7 @@ export const OPERATOR_API_ROUTES = {
   contactListMembers: '/api/auth/contacts/lists/[id]/members',
   createContactListMembers: '/api/auth/contacts/lists/[id]/members/create',
   deleteContactListMembers: '/api/auth/contacts/lists/[id]/members/delete',
+  upload: '/api/auth/upload',
 }
 
 export const OPERATOR_FILES = {

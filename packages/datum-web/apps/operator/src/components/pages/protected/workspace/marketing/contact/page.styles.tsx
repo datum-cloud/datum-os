@@ -3,7 +3,7 @@ import { tv } from 'tailwind-variants'
 export const pageStyles = tv({
   slots: {
     wrapper: 'flex gap-[26px] flex-col',
-    link: 'flex gap-1 items-center text-sunglow-900 text-button-l',
+    link: 'flex gap-1 items-center !text-sunglow-900 text-button-l',
     contactHeader: 'flex items-end justify-between',
     contactCard: 'flex gap-7 justify-start items-center',
     contactImage:

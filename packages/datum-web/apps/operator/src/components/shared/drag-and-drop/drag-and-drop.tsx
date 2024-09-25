@@ -1,10 +1,9 @@
 import React, { ChangeEvent, DragEvent, useEffect, useState } from 'react'
-import { CheckCircle, X } from 'lucide-react'
+import { CheckCircle, Upload, X } from 'lucide-react'
 
 import { pluralize } from '@repo/common/text'
 import { Button } from '@repo/ui/button'
 import { cn } from '@repo/ui/lib/utils'
-import type { Datum } from '@repo/types'
 
 import { Loading } from '@/components/shared/loading/loading'
 import { useAsyncFn } from '@/hooks/useAsyncFn'
@@ -12,7 +11,7 @@ import { useAsyncFn } from '@/hooks/useAsyncFn'
 import { dragAndDropStyles } from './drag-and-drop.styles'
 
 type DragAndDropProps = {
-  onConfirm(files: File[]): Promise<Datum.Contact[]>
+  onConfirm(files: File[]): Promise<any>
   onSelect?(files: File[]): void
   className?: string
   confirmationText?: string
@@ -30,6 +29,7 @@ const DragAndDrop = ({
     section,
     container,
     placeholder,
+    placeholderText,
     link,
     fileContainer,
     fileContainerInner,
@@ -97,18 +97,21 @@ const DragAndDrop = ({
           <>
             {files.length < 1 ? (
               <div className={placeholder()}>
-                <p>Drag your CSV file in here, or </p>
-                <input
-                  type="file"
-                  hidden
-                  id="browse"
-                  disabled={files.length > 0}
-                  onChange={handleFileChange}
-                  accept=".csv"
-                />
-                <label htmlFor="browse" className={link()}>
-                  select it manually.
-                </label>
+                <Upload size={48} />
+                <div className={placeholderText()}>
+                  <p>Drag your CSV file in here, or </p>
+                  <input
+                    type="file"
+                    hidden
+                    id="browse"
+                    disabled={files.length > 0}
+                    onChange={handleFileChange}
+                    accept=".csv"
+                  />
+                  <label htmlFor="browse" className={link()}>
+                    select it manually.
+                  </label>
+                </div>
               </div>
             ) : (
               <div className={fileContainer()}>
