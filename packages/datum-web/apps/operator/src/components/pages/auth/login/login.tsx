@@ -27,12 +27,11 @@ const TEMP_PASSKEY_EMAIL = 'tempuser@test.com'
 const TEMP_PASSKEY_NAME = 'Temp User'
 
 export const LoginPage = () => {
-  const { separator, buttons, form, input } = loginStyles()
+  const { separator, buttons, form, input, oAuthButton } = loginStyles()
   const router = useRouter()
   const [signInError, setSignInError] = useState<string>()
   const [signInLoading, setSignInLoading] = useState(false)
   const showLoginError = !signInLoading && signInError
-  const [isPasswordActive, setIsPasswordActive] = useState(false)
 
   /**
    * Submit client-side sign-in function using username and password
@@ -62,27 +61,18 @@ export const LoginPage = () => {
     }
   }
 
-  /**
-   * Setup Github Authentication
-   */
-  const github = async () => {
+  async function handleGithubOAuth() {
     await signIn('github', {
       callbackUrl: '/workspace',
     })
   }
 
-  /**
-   * Setup Google Authentication
-   */
-  const google = async () => {
+  async function handleGoogleOAuth() {
     await signIn('google', {
       callbackUrl: '/workspace',
     })
   }
 
-  /**
-   * Setup PassKey SignIn
-   */
   async function passKeySignIn() {
     try {
       const options = await getPasskeySignInOptions({
@@ -121,37 +111,28 @@ export const LoginPage = () => {
   }
 
   return (
-    <>
-      <div className="flex flex-col mt-8 justify-start">
-        <div className={buttons()}>
-          <Button
-            variant="outline"
-            size="md"
-            icon={<GoogleIcon />}
-            className="dark:!text-blackberry-800"
-            iconPosition="left"
-            onClick={() => {
-              google()
-            }}
-          >
-            Log in with Google
-          </Button>
+    <div className="flex flex-col mt-8 justify-start">
+      <div className={buttons()}>
+        <button
+          type="button"
+          className={oAuthButton()}
+          onClick={handleGoogleOAuth}
+        >
+          <GoogleIcon />
+          Log in with Google
+        </button>
 
-          <Button
-            variant="outline"
-            size="md"
-            className="dark:!text-blackberry-800"
-            icon={<GithubIcon />}
-            iconPosition="left"
-            onClick={() => {
-              github()
-            }}
-          >
-            Log in with GitHub
-          </Button>
+        <button
+          type="button"
+          className={oAuthButton()}
+          onClick={handleGithubOAuth}
+        >
+          <GithubIcon />
+          Log in with GitHub
+        </button>
 
-          {/* NOTE: Temporarily removing */}
-          {/* <Button
+        {/* NOTE: Temporarily removing */}
+        {/* <Button
             variant="outline"
             size="md"
             icon={<KeyRoundIcon className={keyIcon()} />}
@@ -162,60 +143,58 @@ export const LoginPage = () => {
           >
             Log in with PassKey
           </Button> */}
+      </div>
+
+      <Separator label="or" className={separator()} />
+
+      <SimpleForm
+        classNames={form()}
+        onSubmit={(e: any) => {
+          submit(e)
+        }}
+      >
+        <div className={input()}>
+          <Label htmlFor="username" className="dark:text-blackberry-800">
+            Email
+          </Label>
+          <Input
+            name="username"
+            className="dark:text-blackberry-800"
+            placeholder="email@domain.net"
+          />
+        </div>
+        <div className={input()}>
+          <Label htmlFor="password" className="dark:text-blackberry-800">
+            Password
+          </Label>
+          <PasswordInput
+            name="password"
+            className="dark:text-blackberry-800"
+            placeholder="Password"
+          />
         </div>
 
-        <Separator label="or" className={separator()} />
-
-        <SimpleForm
-          classNames={form()}
-          onSubmit={(e: any) => {
-            submit(e)
-          }}
-          onChange={(e: any) => {
-            if (e.username.length > 0) {
-              setIsPasswordActive(true)
-            } else {
-              setIsPasswordActive(false)
-            }
-          }}
+        <Button
+          className="mr-auto !mt-0"
+          full
+          icon={<ArrowUpRight />}
+          iconAnimated
+          type="submit"
         >
-          <div className={input()}>
-            <Label htmlFor="username" className="dark:text-blackberry-800">
-              Email
-            </Label>
-            <Input
-              name="username"
-              className="dark:text-blackberry-800"
-              placeholder="email@domain.net"
-            />
-          </div>
-          {isPasswordActive && (
-            <div className={input()}>
-              <Label htmlFor="password" className="dark:text-blackberry-800">
-                Password
-              </Label>
-              <PasswordInput
-                name="password"
-                className="dark:text-blackberry-800"
-                placeholder="password"
-              />
-            </div>
-          )}
-
-          <Button
-            className="mr-auto mt-2"
-            full
-            icon={<ArrowUpRight />}
-            iconAnimated
-            type="submit"
-          >
-            Login
-          </Button>
-        </SimpleForm>
-        {showLoginError && (
-          <MessageBox className="p-4 ml-1" message={signInError} />
-        )}
-      </div>
-    </>
+          Login
+        </Button>
+      </SimpleForm>
+      {showLoginError && (
+        <MessageBox className="p-4 ml-1" message={signInError} />
+      )}
+      <a
+        href=""
+        target="_blank"
+        rel="noopenner noreferrer"
+        className="text-center text-body-sm text-sunglow-900 underline mt-4"
+      >
+        Forgot your password
+      </a>
+    </div>
   )
 }

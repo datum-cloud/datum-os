@@ -95,6 +95,13 @@ export const ListSchema = z.object({
     .describe('Array of the list members'),
 })
 
+export const RegisterUserSchema = z.object({
+  username: z.string(),
+  password: z.string(),
+  confirmedPassword: z.string().optional(),
+})
+
+export type RegisterUserInput = z.infer<typeof RegisterUserSchema>
 export type ContactBatchCreateInput = z.infer<typeof ContactBatchCreateSchema>
 export type ContactInput = z.infer<typeof ContactSchema>
 export type ContactFilterInput = z.infer<typeof ContactFilterFormSchema>

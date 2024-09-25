@@ -34,6 +34,18 @@ import { cn } from '@repo/ui/lib/utils'
 
 import { pageStyles } from './page.styles'
 
+function filterByUniqueEmail(input: ContactInput[]) {
+  const seenEmails = new Set()
+  return input.filter((obj) => {
+    if (seenEmails.has(obj.email)) {
+      return false
+    } else {
+      seenEmails.add(obj.email)
+      return true
+    }
+  })
+}
+
 const ContactsTabCSV = () => {
   const {
     submissionStateContainer,
@@ -57,6 +69,7 @@ const ContactsTabCSV = () => {
   const { data: lists = [] } = useLists(organizationId)
   const [data, setData] = useState<Datum.CsvData>([])
   const [subscriptions, setSubscriptions] = useState<Datum.ListId[]>([])
+  const [imported, setImported] = useState(0)
   const [associations, setAssociations] = useState<Record<string, string>>({})
   const form = useForm<ContactBatchCreateInput>({
     resolver: zodResolver(ContactBatchCreateSchema),
@@ -117,7 +130,8 @@ const ContactsTabCSV = () => {
         return output as ContactInput
       })
 
-      const contacts = await createContacts(organizationId, formattedContacts)
+      const filteredContacts = filterByUniqueEmail(formattedContacts)
+      const contacts = await createContacts(organizationId, filteredContacts)
       const contactsIds = contacts.map(({ id }) => id)
 
       if (subscriptions.length) {
@@ -127,6 +141,8 @@ const ContactsTabCSV = () => {
           }),
         )
       }
+
+      setImported(contacts.length)
     } catch (error) {
       console.error(error)
     }
@@ -144,8 +160,7 @@ const ContactsTabCSV = () => {
         return (
           <div className={submissionStateContainer()}>
             <CheckCircle />
-            Successfully imported {data.length}{' '}
-            {pluralize('contact', data.length)}
+            Successfully imported {imported} {pluralize('contact', imported)}
           </div>
         )
       } else {

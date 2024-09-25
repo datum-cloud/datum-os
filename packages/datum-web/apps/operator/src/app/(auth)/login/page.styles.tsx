@@ -7,7 +7,7 @@ const pageStyles = tv({
     bgImage: 'object-cover object-center h-full z-10',
     container: 'flex flex-col h-full max-h-full w-full py-12 overflow-auto',
     content:
-      'relative z-20 bg-white shadow-auth rounded-lg flex flex-col justify-center mx-auto my-auto py-16 px-12 w-full max-w-lg',
+      'relative z-20 bg-white shadow-auth rounded-lg flex flex-col justify-center mx-auto my-auto py-[42px] px-9 w-full max-w-[357px]',
   },
   variants: {
     activeBg: {
