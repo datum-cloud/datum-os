@@ -42,8 +42,10 @@ jobs:
       - name: Setup Go
         uses: actions/setup-go@v5
         with:
-          go-version-file: 'go.mod'
+          cache-dependency-path: packages/datum-service
+          go-version-file: packages/datum-service/go.mod
           cache: true
+
       - name: Install Syft
         uses: anchore/sbom-action/download-syft@ab9d16d4b419c9d1a02df5213fa0ebe965ca5a57 # v0.17.1
       - name: Install Cosign
@@ -57,7 +59,6 @@ jobs:
           args: release --clean
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          HOMEBREW_TAP_GITHUB_TOKEN: ${{ secrets.HOMEBREW_TAP_GITHUB_TOKEN }}
           VERSION: ${{ needs.ldflags_args.outputs.version }}
           COMMIT: ${{ needs.ldflags_args.outputs.commit }}
           COMMIT_DATE: ${{ needs.ldflags_args.outputs.commit-date }}
