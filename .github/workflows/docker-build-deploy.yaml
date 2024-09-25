@@ -81,13 +81,12 @@ jobs:
     steps:
       - name: Install Koyeb CLI
         run: |
-          curl -sSf https://get.koyeb.com/linux_amd64 | KI_INSTALL_DIR=$HOME/.koyeb sh
-          koyeb login --token ${{ secrets.KOYEB_API_TOKEN }}
+          curl -fsSL https://raw.githubusercontent.com/koyeb/koyeb-cli/master/install.sh | sh
 
       - name: Deploy
         env:
           KOYEB_SERVICE_NAME: datum-os/datum-os
           IMAGE_TAG: ${{ needs.build-and-push-image.outputs.deploy_tag }}
         run: |
-          echo "Deploying image $IMAGE_TAG to production"
-          koyeb service update ${{ env.KOYEB_SERVICE_NAME }} --docker $IMAGE_TAG --token ${{ secrets.KOYEB_API_TOKEN }}
+          echo "Deploying image $IMAGE_TAG to production"          
+          $HOME/.koyeb/bin/koyeb service update ${{ env.KOYEB_SERVICE_NAME }} --docker $IMAGE_TAG --token ${{ secrets.KOYEB_API_TOKEN }}
