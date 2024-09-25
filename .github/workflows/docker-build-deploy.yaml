@@ -19,8 +19,7 @@ jobs:
     runs-on: ubuntu-latest
     
     outputs:
-      tags: ${{ steps.meta.outputs.tags }}
-      labels: ${{ steps.meta.outputs.labels }}
+      deploy_tag: ${{ steps.set_deploy_tag.outputs.deploy_tag }}
     
     permissions:
       contents: read
@@ -53,6 +52,12 @@ jobs:
             type=semver,pattern={{major}}
             type=sha
 
+      - name: Set Deploy Tag
+        id: set_deploy_tag
+        run: |
+          imageTag=${{ fromJSON(steps.meta.outputs.json)['tags'][0] }}
+          echo "deploy_tag=${imageTag}" >> $GITHUB_OUTPUT
+
       - name: Build and push Docker image
         id: push
         uses: docker/build-push-action@v6.7.0
@@ -70,10 +75,12 @@ jobs:
           subject-digest: ${{ steps.push.outputs.digest }}
           push-to-registry: true
   deploy:
-    if: github.event_name == 'push' && github.ref_name == '44/merge'
+    if: github.event_name == 'push' && github.ref_name == 'ci-koyeb-deploy-on-main-merge'
     needs: build-and-push-image
     runs-on: ubuntu-latest
     steps:
       - name: Deploy
+        env:
+          IMAGE_TAG: ${{ needs.build-and-push-image.outputs.deploy_tag }}
         run: |
-          echo "Deploying image ${{ needs.build-and-push-image.outputs.tags }} to production"
+          echo "Deploying image $IMAGE_TAG to production"
