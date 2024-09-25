@@ -238,7 +238,11 @@ const ContactsTabCSV = () => {
               <Button variant="outline" onClick={() => setData([])}>
                 Cancel
               </Button>
-              <Button className="w-auto" type="submit">
+              <Button
+                className="w-auto"
+                disabled={Object.keys(associations).length === 0}
+                type="submit"
+              >
                 Submit
               </Button>
             </div>
