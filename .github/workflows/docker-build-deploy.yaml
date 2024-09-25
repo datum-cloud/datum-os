@@ -75,12 +75,19 @@ jobs:
           subject-digest: ${{ steps.push.outputs.digest }}
           push-to-registry: true
   deploy:
-    if: github.event_name == 'push' && github.ref_name == 'ci-koyeb-deploy-on-main-merge'
+    if: github.event_name == 'push' 
     needs: build-and-push-image
     runs-on: ubuntu-latest
     steps:
+      - name: Install Koyeb CLI
+        run: |
+          curl -sSf https://get.koyeb.com/linux_amd64 | KI_INSTALL_DIR=$HOME/.koyeb sh
+          koyeb login --token ${{ secrets.KOYEB_API_TOKEN }}
+
       - name: Deploy
         env:
+          KOYEB_SERVICE_NAME: datum-os/datum-os
           IMAGE_TAG: ${{ needs.build-and-push-image.outputs.deploy_tag }}
         run: |
           echo "Deploying image $IMAGE_TAG to production"
+          koyeb service update ${{ env.KOYEB_SERVICE_NAME }} --docker $IMAGE_TAG --token ${{ secrets.KOYEB_API_TOKEN }}
