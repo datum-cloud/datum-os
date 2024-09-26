@@ -48,7 +48,7 @@ export const ExistingWorkspaces = () => {
         })
       }
 
-      push('/dashboard')
+      push(OPERATOR_APP_ROUTES.dashboard)
     }
   }
 

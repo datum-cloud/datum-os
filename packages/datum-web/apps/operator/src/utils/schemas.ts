@@ -100,6 +100,11 @@ export const RegisterUserSchema = z.object({
   password: z.string().min(2, 'Please enter a valid password'),
 })
 
+export const ResetUserSchema = z.object({
+  email: z.string().email('Please enter a valid email'),
+})
+
+export type ResetUserInput = z.infer<typeof ResetUserSchema>
 export type RegisterUserInput = z.infer<typeof RegisterUserSchema>
 export type ContactBatchCreateInput = z.infer<typeof ContactBatchCreateSchema>
 export type ContactInput = z.infer<typeof ContactSchema>
