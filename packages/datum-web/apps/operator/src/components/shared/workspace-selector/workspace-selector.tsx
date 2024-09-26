@@ -37,7 +37,7 @@ export const WorkspaceSelector = () => {
 
   if (!allOrgs.data || allOrgs.fetching || allOrgs.error) {
     return (
-      <Link href={'/'} className={logoWrapper()}>
+      <Link href="/" className={logoWrapper()}>
         <Logo asIcon width={40} theme="dark" />
       </Link>
     )
@@ -134,14 +134,14 @@ export const WorkspaceSelector = () => {
                     <div className={orgTitle()}>{org?.node?.displayName}</div>
                     <Tag>{role}</Tag>
                   </div>
-                    <Button
-                      className={orgSelect()}
-                      variant="sunglow"
-                      size="md"
-                      onClick={() => handleWorkspaceSwitch(org?.node?.id)}
-                    >
-                      Select
-                    </Button>
+                  <Button
+                    className={orgSelect()}
+                    variant="sunglow"
+                    size="md"
+                    onClick={() => handleWorkspaceSwitch(org?.node?.id)}
+                  >
+                    Select
+                  </Button>
                 </div>
               )
             })}

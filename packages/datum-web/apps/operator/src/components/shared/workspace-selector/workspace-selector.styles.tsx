@@ -15,7 +15,7 @@ const workspaceSelectorStyles = tv({
     orgWrapper:
       'transition-all duration-500 flex gap-3 items-center py-4 px-6 border-t border-winter-sky-900 hover:bg-winter-sky-700 hover:dark:bg-peat-800 cursor-pointer relative',
     orgInfo: 'flex flex-col gap-1 items-start flex-1',
-    orgTitle: 'text-sm text-blackberry-800',
+    orgTitle: 'text-sm text-blackberry-800 dark:text-blackberry-100',
     orgSelect:
       'opacity-0 group-hover:opacity-100 transition-opacity duration-300',
   },

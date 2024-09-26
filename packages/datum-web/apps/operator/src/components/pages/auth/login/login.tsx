@@ -3,7 +3,7 @@
 import { startAuthentication } from '@simplewebauthn/browser'
 import { useRouter } from 'next/navigation'
 import { signIn } from 'next-auth/react'
-import { ArrowUpRight } from 'lucide-react'
+import { ArrowUpRight, Loader } from 'lucide-react'
 import { useState } from 'react'
 
 import {
@@ -52,7 +52,7 @@ export const LoginPage = () => {
     control,
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = form
   const [error, setError] = useState<string>()
   const { separator, buttons, formInner, input, oAuthButton } = loginStyles()
@@ -204,11 +204,14 @@ export const LoginPage = () => {
           <Button
             className="mr-auto !mt-0"
             full
-            icon={<ArrowUpRight />}
+            disabled={isSubmitting}
+            icon={!isSubmitting ? <ArrowUpRight /> : undefined}
             iconAnimated
             type="submit"
           >
-            Login
+            <div className="flex items-center gap-2">
+              {isSubmitting ? 'Loading...' : 'Login'}
+            </div>
           </Button>
         </form>
         {error && <FormMessage className="mt-1">{error}</FormMessage>}
