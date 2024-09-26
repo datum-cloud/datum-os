@@ -1,25 +1,33 @@
 'use client'
 
-import { useEffect } from 'react'
-import { Button } from '@repo/ui/button'
+import { useEffect, useState } from 'react'
+import Image from 'next/image'
 import { useSearchParams } from 'next/navigation'
 import { signIn } from 'next-auth/react'
+
+import { OPERATOR_APP_ROUTES } from '@repo/constants'
 import { Logo } from '@repo/ui/logo'
+
 import { useVerifyUser } from '../../../lib/user'
+import { pageStyles as loginStyles } from '../login/page.styles'
 
 const VerifyUser: React.FC = () => {
+  const [email, setEmail] = useState<string>()
+  const { container, content, logo, bg, bgImage } = loginStyles()
   const searchParams = useSearchParams()
   const token = searchParams?.get('token')
 
-  const { isLoading, verified, error } = useVerifyUser(token ?? null)
+  const { verified, error } = useVerifyUser(token ?? null)
 
   useEffect(() => {
     if (verified) {
       const accessToken = verified?.access_token
       const refreshToken = verified?.refresh_token
 
+      setEmail(verified?.email)
+
       signIn('credentials', {
-        callbackUrl: '/workspace',
+        callbackUrl: OPERATOR_APP_ROUTES.home,
         accessToken,
         refreshToken,
       })
@@ -27,33 +35,27 @@ const VerifyUser: React.FC = () => {
   }, [verified, error])
 
   return (
-    <main className="w-full flex flex-col min-h-screen items-center space-between dark:bg-dk-surface-0 bg-surface-0">
-      <div className="flex flex-col gap-6 justify-center items-center mx-auto my-auto w-full p-6 container h-full relative ease-in-out">
-        <div className="mx-auto">
-          <Logo theme="dark" width={200} />
+    <div className={container()}>
+      <div className={content({ wideContent: true })}>
+        <div className={logo()}>
+          <Logo theme="light" width={120} />
         </div>
-        <div className="flex items-center justify-start flex-col gap-10">
-          {isLoading ? (
-            <h4 className="text-center text-white">
-              Verifying your account...
-            </h4>
-          ) : (
-            <h4 className="text-center text-white">
-              Please check your email to verify your account.
-            </h4>
-          )}
-          <Button
-            className="w-auto"
-            onClick={() => {
-              // TODO: Call resend email endpoint
-            }}
-            type="button"
-          >
-            Didn&apos;t get the email? Click here to resend.
-          </Button>
-        </div>
+        <p className="text-center text-body-l tracking-[-0.18px]">
+          We&apos;ve sent a verification email to{' '}
+          {email ?? 'the address you provided'}, please click on the link within
+          to continue.
+        </p>
       </div>
-    </main>
+      <div className={bg({ activeBg: true })}>
+        <Image
+          src="/backgrounds/auth/signup-bg.png"
+          priority
+          fill
+          className={bgImage()}
+          alt="Background Image"
+        />
+      </div>
+    </div>
   )
 }
 

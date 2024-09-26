@@ -2,7 +2,6 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { SimpleForm } from '@repo/ui/simple-form'
 import { MessageBox } from '@repo/ui/message-box'
 import { Button } from '@repo/ui/button'
 import { ArrowUpRight, KeyRoundIcon } from 'lucide-react'
@@ -10,7 +9,6 @@ import {
   getPasskeyRegOptions,
   registerUser,
   verifyRegistration,
-  type RegisterUser,
 } from '@/lib/user'
 import { GoogleIcon } from '@repo/ui/icons/google'
 import { GithubIcon } from '@repo/ui/icons/github'
@@ -22,36 +20,53 @@ import { PasswordInput } from '@repo/ui/password-input'
 import { Label } from '@repo/ui/label'
 import { setSessionCookie } from '@/lib/auth/utils/set-session-cookie'
 import { startRegistration } from '@simplewebauthn/browser'
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+  useForm,
+  zodResolver,
+} from '@repo/ui/form'
+import { RegisterUserInput, RegisterUserSchema } from '@/utils/schemas'
+import Link from 'next/link'
+import { DEFAULT_ERROR_MESSAGE, OPERATOR_APP_ROUTES } from '@repo/constants'
+import { capitalizeFirstLetter } from '@repo/common/text'
 
 const TEMP_PASSKEY_EMAIL = 'tempuser@test.com'
 const TEMP_PASSKEY_NAME = 'Temp User'
 
 export const SignupPage = () => {
+  const form = useForm<RegisterUserInput>({
+    mode: 'onSubmit',
+    resolver: zodResolver(RegisterUserSchema),
+    defaultValues: {
+      email: '',
+      password: '',
+    },
+  })
+  const {
+    handleSubmit,
+    control,
+    register,
+    formState: { isSubmitting, errors },
+  } = form
   const router = useRouter()
-  const [signInError, setSignInError] = useState(false)
-  const [registrationErrorMessage, setregistrationErrorMessage] = useState(
-    'There was an error. Please try again.',
-  )
-  const [isLoading, setIsLoading] = useState<boolean>(false)
-  const showLoginError = !isLoading && signInError
-  const [isPasswordActive, setIsPasswordActive] = useState(false)
-  const { separator, buttons, keyIcon, form, input } = signupStyles()
+  const [error, setError] = useState<string>()
+  const { separator, buttons, keyIcon, formInner, input, oAuthButton } =
+    signupStyles()
 
-  /**
-   * Setup Github Authentication
-   */
-  const github = async () => {
+  async function handleGithubOAuth() {
     await signIn('github', {
-      callbackUrl: '/workspace',
+      callbackUrl: OPERATOR_APP_ROUTES.home,
     })
   }
 
-  /**
-   * Setup Google Authentication
-   */
-  const google = async () => {
+  async function handleGoogleOAuth() {
     await signIn('google', {
-      callbackUrl: '/workspace',
+      callbackUrl: OPERATOR_APP_ROUTES.home,
     })
   }
 
@@ -72,7 +87,7 @@ export const SignupPage = () => {
 
       if (verificationResult.success) {
         await signIn('passkey', {
-          callbackUrl: '/workspace',
+          callbackUrl: OPERATOR_APP_ROUTES.home,
           email: TEMP_PASSKEY_EMAIL,
           name: TEMP_PASSKEY_NAME,
           session: verificationResult.session,
@@ -82,44 +97,50 @@ export const SignupPage = () => {
       }
 
       if (!verificationResult.success) {
-        setSignInError(true)
-        setregistrationErrorMessage(`Error: ${verificationResult.error}`)
+        setError(DEFAULT_ERROR_MESSAGE)
       }
 
       return verificationResult
     } catch (error) {
-      setSignInError(true)
+      setError(DEFAULT_ERROR_MESSAGE)
+    }
+  }
+
+  async function onSubmit(data: RegisterUserInput) {
+    try {
+      const res: any = await registerUser(data)
+      if (res?.ok) {
+        router.push('/verify')
+      } else if (res?.message) {
+        setError(capitalizeFirstLetter(res.message))
+      } else {
+        setError(DEFAULT_ERROR_MESSAGE)
+      }
+    } catch (error) {
+      setError(DEFAULT_ERROR_MESSAGE)
     }
   }
 
   return (
     <div className="flex flex-col mt-8 justify-start">
       <div className={buttons()}>
-        <Button
-          variant="outline"
-          size="md"
-          icon={<GoogleIcon />}
-          className="dark:!text-blackberry-800"
-          iconPosition="left"
-          onClick={() => {
-            google()
-          }}
+        <button
+          type="button"
+          className={oAuthButton()}
+          onClick={handleGoogleOAuth}
         >
+          <GoogleIcon />
           Sign up with Google
-        </Button>
+        </button>
 
-        <Button
-          variant="outline"
-          size="md"
-          icon={<GithubIcon />}
-          className="dark:!text-blackberry-800"
-          iconPosition="left"
-          onClick={() => {
-            github()
-          }}
+        <button
+          type="button"
+          className={oAuthButton()}
+          onClick={handleGithubOAuth}
         >
+          <GithubIcon />
           Sign up with GitHub
-        </Button>
+        </button>
 
         {/* NOTE: Temporarily removing */}
         {/* <Button
@@ -135,86 +156,65 @@ export const SignupPage = () => {
 
       <Separator label="or" className={separator()} />
 
-      <SimpleForm
-        classNames={form()}
-        onChange={(e: any) => {
-          if (e.email.length > 0) {
-            setIsPasswordActive(true)
-          } else {
-            setIsPasswordActive(false)
-          }
-        }}
-        onSubmit={async (payload: RegisterUser) => {
-          setIsLoading(true)
-
-          try {
-            if (payload.password === payload.confirmedPassword) {
-              delete payload.confirmedPassword
-
-              const res: any = await registerUser(payload)
-              if (res?.ok) {
-                router.push('/verify')
-              } else if (res?.message) {
-                setregistrationErrorMessage(res.message)
-              } else {
-                setregistrationErrorMessage('Unknown error. Please try again.')
-              }
-            } else {
-              setregistrationErrorMessage('Passwords do not match')
-            }
-          } catch (error) {
-            setregistrationErrorMessage('Unknown error. Please try again.')
-          } finally {
-            setIsLoading(false)
-          }
-        }}
-      >
-        <div className={input()}>
-          <Label htmlFor="username" className="dark:text-blackberry-800">
-            Email
-          </Label>
-          <Input
+      <Form {...form}>
+        <form className={formInner()} onSubmit={handleSubmit(onSubmit)}>
+          <FormField
             name="email"
-            className="dark:text-blackberry-800"
-            placeholder="email@domain.net"
-            required
-            type="email"
+            control={control}
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="dark:text-blackberry-800">
+                  Email
+                </FormLabel>
+                <FormControl>
+                  <Input
+                    {...field}
+                    className="dark:text-blackberry-800"
+                    placeholder="email@domain.net"
+                    value={field.value || ''}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
           />
-        </div>
-        {isPasswordActive && (
-          <>
-            <div className={input()}>
-              <Label htmlFor="password" className="dark:text-blackberry-800">
-                Password
-              </Label>
-              <PasswordInput
-                className="dark:text-blackberry-800"
-                name="password"
-                placeholder="password"
-                required
-              />
-            </div>
+
+          <div className={input()}>
+            <Label htmlFor="password" className="dark:text-blackberry-800">
+              Password
+            </Label>
             <PasswordInput
-              name="confirmedPassword"
+              {...register('password')}
               className="dark:text-blackberry-800"
-              placeholder="confirm password"
-              required
+              placeholder="password"
             />
-          </>
-        )}
-        <Button
-          className="mr-auto mt-2 w-full"
-          icon={<ArrowUpRight />}
-          size="md"
-          type="submit"
-          iconAnimated
-        >
-          {isLoading ? 'loading' : 'Sign up'}
-        </Button>
-      </SimpleForm>
-      {showLoginError && (
-        <MessageBox className={'p-4 ml-1'} message={registrationErrorMessage} />
-      )}
+            {errors?.password && (
+              <FormMessage>{errors.password.message}</FormMessage>
+            )}
+          </div>
+          <Button
+            className="mr-auto w-full"
+            icon={<ArrowUpRight />}
+            size="md"
+            type="submit"
+            iconAnimated
+          >
+            {isSubmitting ? 'loading' : 'Sign up'}
+          </Button>
+        </form>
+        {error && <FormMessage className="mt-1">{error}</FormMessage>}
+      </Form>
+      <p className="text-center text-blackberry-600 dark:text-blackberry-600 text-body-xs leading-[130%] mt-7">
+        By continuing, you agree to Datum's 
+        <Link href="" className="underline">
+          Terms of Service
+        </Link>
+         and 
+        <Link href="" className="underline">
+          Privacy Policy
+        </Link>
+        .
+      </p>
     </div>
   )
 }

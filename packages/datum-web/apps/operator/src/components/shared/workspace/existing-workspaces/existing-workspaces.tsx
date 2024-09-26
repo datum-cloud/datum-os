@@ -7,6 +7,7 @@ import { Tag } from '@repo/ui/tag'
 import { switchWorkspace } from '@/lib/user'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
+import { OPERATOR_APP_ROUTES } from '@repo/constants'
 
 export const ExistingWorkspaces = () => {
   const { data: sessionData, update: updateSession } = useSession()
@@ -71,8 +72,8 @@ export const ExistingWorkspaces = () => {
                 <div className={orgTitle()}>{org?.node?.displayName}</div>
                 <Tag>{role}</Tag>
               </div>
-              {currentOrg !== org?.node?.id && (
-                <div className={orgSelect()}>
+              <div className={orgSelect()}>
+                {currentOrg !== org?.node?.id ? (
                   <Button
                     variant="sunglow"
                     size="md"
@@ -80,8 +81,16 @@ export const ExistingWorkspaces = () => {
                   >
                     Select
                   </Button>
-                </div>
-              )}
+                ) : (
+                  <Button
+                    variant="outline"
+                    size="md"
+                    onClick={() => push(OPERATOR_APP_ROUTES.dashboard)}
+                  >
+                    Go to Dashboard
+                  </Button>
+                )}
+              </div>
             </div>
           )
         })}

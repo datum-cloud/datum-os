@@ -16,7 +16,7 @@ const AuthLogin: React.FC = () => {
     <div className={container()}>
       <div className={content()}>
         <div className={logo()}>
-          <Logo theme="light" width={143} />
+          <Logo theme="light" width={120} />
         </div>
         <Tabs
           variant="underline"
@@ -26,10 +26,18 @@ const AuthLogin: React.FC = () => {
           }}
         >
           <TabsList>
-            <TabsTrigger value="login">Login</TabsTrigger>
-            <TabsTrigger value="signup">Signup</TabsTrigger>
+            <TabsTrigger value="login" asChild>
+              <div className="type-smallcaps-m !tracking-[0.56px] !leading-[150%] flex items-center justify-center cursor-pointer">
+                Login
+              </div>
+            </TabsTrigger>
+            <TabsTrigger value="signup" asChild>
+              <div className="type-smallcaps-m !tracking-[0.56px] !leading-[150%] flex items-center justify-center cursor-pointer">
+                Signup
+              </div>
+            </TabsTrigger>
           </TabsList>
-          <TabsContent value="login">
+          <TabsContent value="login" className="mt-0">
             <LoginPage />
           </TabsContent>
           <TabsContent value="signup">

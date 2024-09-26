@@ -6,9 +6,8 @@ export interface LoginUser {
 }
 
 export interface RegisterUser {
-  username: string
+  email: string
   password: string
-  confirmedPassword?: string
 }
 
 export async function registerUser(arg: RegisterUser) {
@@ -24,10 +23,8 @@ export async function registerUser(arg: RegisterUser) {
     return await fData.json()
   }
 
-  if (!fData.ok) {
-    return {
-      message: await fData.text(),
-    }
+  return {
+    message: await fData.text(),
   }
 }
 
@@ -38,9 +35,7 @@ export async function verifyUser(token: string) {
     return await fData.json()
   }
 
-  if (!fData.ok) {
-    return {
-      message: await fData.text(),
-    }
+  return {
+    message: await fData.text(),
   }
 }

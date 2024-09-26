@@ -16,7 +16,9 @@ export const SERVICE_APP_ROUTES = {
 }
 
 export const OPERATOR_APP_ROUTES = {
+  home: '/',
   contacts: '/marketing/contacts',
+  contactsUpload: '/marketing/contacts/upload',
   contact: '/marketing/contacts/[id]',
   contactLists: '/marketing/contacts/lists',
   contactList: '/marketing/contacts/lists/[id]',
@@ -25,6 +27,7 @@ export const OPERATOR_APP_ROUTES = {
   dashboard: '/dashboard',
   settings: '/settings',
   workspace: '/workspace',
+  login: '/login',
 }
 
 export const OPERATOR_API_ROUTES = {
@@ -42,6 +45,7 @@ export const OPERATOR_API_ROUTES = {
   contactListMembers: '/api/auth/contacts/lists/[id]/members',
   createContactListMembers: '/api/auth/contacts/lists/[id]/members/create',
   deleteContactListMembers: '/api/auth/contacts/lists/[id]/members/delete',
+  upload: '/api/auth/upload',
 }
 
 export const OPERATOR_FILES = {
@@ -73,3 +77,9 @@ export enum HttpStatus {
   ServiceUnavailable = 503,
   GatewayTimeout = 504,
 }
+
+export const ERROR_MESSAGES: Record<string, string> = {
+  CredentialsSignin: 'Incorrect email or password',
+}
+
+export const DEFAULT_ERROR_MESSAGE = 'Something went wrong. Please try again.'

@@ -1,5 +1,6 @@
 'use client'
 
+import { useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react'
 import { useState } from 'react'
 import {
@@ -12,6 +13,7 @@ import {
   User,
 } from 'lucide-react'
 
+import { OPERATOR_APP_ROUTES } from '@repo/constants'
 import { Button } from '@repo/ui/button'
 import {
   DropdownMenu,
@@ -28,13 +30,11 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@/components/shared/sidebar/sidebar-accordion/sidebar-accordion'
-import { useAsyncFn } from '@/hooks/useAsyncFn'
 import { useLists } from '@/hooks/useLists'
 import { createListMembers, removeListMembers } from '@/query/lists'
 
 import ContactFormDialog from './contacts-form-dialog'
 import FilterContactDialog from './contacts-filter-dialog'
-import ImportContactsDialog from './contacts-import-dialog'
 import ContactsSearch from './contacts-search'
 import { pageStyles } from './page.styles'
 
@@ -53,6 +53,7 @@ const ContactsControls = ({
   onFilter,
   selectedContacts,
 }: ContactsControlsProps) => {
+  const router = useRouter()
   const {
     accordionContainer,
     accordionContentOuter,
@@ -65,7 +66,6 @@ const ContactsControls = ({
   } = pageStyles()
   const [loadingSubscription, setLoadingSubscription] = useState<Datum.ListId>()
   const [openContactDialog, _setOpenContactDialog] = useState(false)
-  const [openImportDialog, _setOpenImportDialog] = useState(false)
   const [openActionsMenu, setOpenActionsMenu] = useState(false)
   const { data: session } = useSession()
   const organizationId =
@@ -74,12 +74,6 @@ const ContactsControls = ({
 
   function setOpenContactDialog(input: boolean) {
     _setOpenContactDialog(input)
-    // NOTE: This is needed to close the dialog without removing pointer events per https://github.com/shadcn-ui/ui/issues/468
-    setTimeout(() => (document.body.style.pointerEvents = ''), 500)
-  }
-
-  function setOpenImportDialog(input: boolean) {
-    _setOpenImportDialog(input)
     // NOTE: This is needed to close the dialog without removing pointer events per https://github.com/shadcn-ui/ui/issues/468
     setTimeout(() => (document.body.style.pointerEvents = ''), 500)
   }
@@ -134,7 +128,7 @@ const ContactsControls = ({
             </DropdownMenuItem>
             <DropdownMenuItem
               className={contactDropdownItem()}
-              onClick={() => setOpenImportDialog(true)}
+              onClick={() => router.push(OPERATOR_APP_ROUTES.contactsUpload)}
             >
               <Import size={18} className={contactDropdownIcon()} />
               Import
@@ -246,10 +240,6 @@ const ContactsControls = ({
       <ContactFormDialog
         open={openContactDialog}
         setOpen={setOpenContactDialog}
-      />
-      <ImportContactsDialog
-        open={openImportDialog}
-        setOpen={setOpenImportDialog}
       />
     </>
   )

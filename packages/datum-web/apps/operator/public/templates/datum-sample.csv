@@ -1,3 +1,3 @@
-Name,Email,Lists
-Jacob Smith,jacob@datum.net,"Admin, Newsletter"
-Zachary Smith,zachary@datum.net,"Admin, Newsletter"
+Name,Email,Phone Number,Title,Company
+Jacob Smith,jacob@datum.net,1234567890,Founder,Datum
+Zachary Smith,zachary@datum.net,0987654321,Founder,Datum

@@ -1,82 +1,96 @@
 'use client'
 
-import { LoginUser } from '@repo/dally/user'
-import { Button } from '@repo/ui/button'
-import MessageBox from '@repo/ui/message-box'
-import SimpleForm from '@repo/ui/simple-form'
-import { ArrowUpRight, KeyRoundIcon } from 'lucide-react'
-import { signIn } from 'next-auth/react'
+import { startAuthentication } from '@simplewebauthn/browser'
 import { useRouter } from 'next/navigation'
+import { signIn } from 'next-auth/react'
+import { ArrowUpRight } from 'lucide-react'
 import { useState } from 'react'
-import { Separator } from '@repo/ui/separator'
-import { loginStyles } from './login.styles'
+
+import {
+  DEFAULT_ERROR_MESSAGE,
+  ERROR_MESSAGES,
+  OPERATOR_APP_ROUTES,
+} from '@repo/constants'
+import { Button } from '@repo/ui/button'
 import { GoogleIcon } from '@repo/ui/icons/google'
+import { Separator } from '@repo/ui/separator'
 import { GithubIcon } from '@repo/ui/icons/github'
 import { Input } from '@repo/ui/input'
 import { PasswordInput } from '@repo/ui/password-input'
 import { Label } from '@repo/ui/label'
+
 import { getPasskeySignInOptions, verifyAuthentication } from '@/lib/user'
-import { startAuthentication } from '@simplewebauthn/browser'
 import { setSessionCookie } from '@/lib/auth/utils/set-session-cookie'
+
+import { loginStyles } from './login.styles'
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+  useForm,
+  zodResolver,
+} from '@repo/ui/form'
+import { RegisterUserInput, RegisterUserSchema } from '@/utils/schemas'
 
 const TEMP_PASSKEY_EMAIL = 'tempuser@test.com'
 const TEMP_PASSKEY_NAME = 'Temp User'
 
 export const LoginPage = () => {
-  const { separator, buttons, keyIcon, form, input } = loginStyles()
   const router = useRouter()
-  const [signInError, setSignInError] = useState(false)
-  const [signInErrorMessage, setSignInErrorMessage] = useState(
-    'There was an error. Please try again.',
-  )
-  const [signInLoading, setSignInLoading] = useState(false)
-  const showLoginError = !signInLoading && signInError
-  const [isPasswordActive, setIsPasswordActive] = useState(false)
+  const form = useForm<RegisterUserInput>({
+    mode: 'onSubmit',
+    resolver: zodResolver(RegisterUserSchema),
+    defaultValues: {
+      email: '',
+      password: '',
+    },
+  })
+  const {
+    control,
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = form
+  const [error, setError] = useState<string>()
+  const { separator, buttons, formInner, input, oAuthButton } = loginStyles()
 
-  /**
-   * Submit client-side sign-in function using username and password
-   */
-  const submit = async (payload: LoginUser) => {
-    setSignInLoading(true)
-    setSignInError(false)
+  async function onSubmit(payload: RegisterUserInput) {
     try {
       const res: any = await signIn('credentials', {
         redirect: false,
+        username: payload.email,
         ...payload,
       })
       if (res.ok && !res.error) {
-        router.push('/workspace')
+        router.push(OPERATOR_APP_ROUTES.home)
       } else {
-        setSignInLoading(false)
-        setSignInError(true)
+        const error = ERROR_MESSAGES?.[res.error] || DEFAULT_ERROR_MESSAGE
+        setError(error)
       }
-    } catch (error) {
-      setSignInLoading(false)
-      setSignInError(true)
+    } catch (error: any) {
+      const errorMessage =
+        error?.message && ERROR_MESSAGES?.[error.message]
+          ? ERROR_MESSAGES?.[error.message]
+          : DEFAULT_ERROR_MESSAGE
+      setError(errorMessage)
     }
   }
 
-  /**
-   * Setup Github Authentication
-   */
-  const github = async () => {
+  async function handleGithubOAuth() {
     await signIn('github', {
-      callbackUrl: '/workspace',
+      callbackUrl: OPERATOR_APP_ROUTES.home,
     })
   }
 
-  /**
-   * Setup Google Authentication
-   */
-  const google = async () => {
+  async function handleGoogleOAuth() {
     await signIn('google', {
-      callbackUrl: '/workspace',
+      callbackUrl: OPERATOR_APP_ROUTES.home,
     })
   }
 
-  /**
-   * Setup PassKey SignIn
-   */
   async function passKeySignIn() {
     try {
       const options = await getPasskeySignInOptions({
@@ -101,48 +115,42 @@ export const LoginPage = () => {
       }
 
       if (!verificationResult.success) {
-        setSignInError(true)
-        setSignInErrorMessage(`Error: ${verificationResult.error}`)
+        setError(`Error: ${verificationResult.error}`)
       }
 
       return verificationResult
-    } catch (error) {
-      setSignInError(true)
+    } catch (error: any) {
+      const errorMessage =
+        error?.message && ERROR_MESSAGES?.[error.message]
+          ? ERROR_MESSAGES?.[error.message]
+          : DEFAULT_ERROR_MESSAGE
+      setError(errorMessage)
     }
   }
 
   return (
-    <>
-      <div className="flex flex-col mt-8 justify-start">
-        <div className={buttons()}>
-          <Button
-            variant="outline"
-            size="md"
-            icon={<GoogleIcon />}
-            className="dark:!text-blackberry-800"
-            iconPosition="left"
-            onClick={() => {
-              google()
-            }}
-          >
-            Log in with Google
-          </Button>
+    <div className="flex flex-col mt-8 justify-start">
+      <div className={buttons()}>
+        <button
+          type="button"
+          className={oAuthButton()}
+          onClick={handleGoogleOAuth}
+        >
+          <GoogleIcon />
+          Log in with Google
+        </button>
 
-          <Button
-            variant="outline"
-            size="md"
-            className="dark:!text-blackberry-800"
-            icon={<GithubIcon />}
-            iconPosition="left"
-            onClick={() => {
-              github()
-            }}
-          >
-            Log in with GitHub
-          </Button>
+        <button
+          type="button"
+          className={oAuthButton()}
+          onClick={handleGithubOAuth}
+        >
+          <GithubIcon />
+          Log in with GitHub
+        </button>
 
-          {/* NOTE: Temporarily removing */}
-          {/* <Button
+        {/* NOTE: Temporarily removing */}
+        {/* <Button
             variant="outline"
             size="md"
             icon={<KeyRoundIcon className={keyIcon()} />}
@@ -153,48 +161,48 @@ export const LoginPage = () => {
           >
             Log in with PassKey
           </Button> */}
-        </div>
+      </div>
 
-        <Separator label="or" className={separator()} />
+      <Separator label="or" className={separator()} />
 
-        <SimpleForm
-          classNames={form()}
-          onSubmit={(e: any) => {
-            submit(e)
-          }}
-          onChange={(e: any) => {
-            if (e.username.length > 0) {
-              setIsPasswordActive(true)
-            } else {
-              setIsPasswordActive(false)
-            }
-          }}
-        >
+      <Form {...form}>
+        <form className={formInner()} onSubmit={handleSubmit(onSubmit)}>
+          <FormField
+            name="email"
+            control={control}
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="dark:text-blackberry-800">
+                  Email
+                </FormLabel>
+                <FormControl>
+                  <Input
+                    {...field}
+                    className="dark:text-blackberry-800"
+                    placeholder="email@domain.net"
+                    value={field.value || ''}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
           <div className={input()}>
-            <Label htmlFor="username" className="dark:text-blackberry-800">
-              Email
+            <Label htmlFor="password" className="dark:text-blackberry-800">
+              Password
             </Label>
-            <Input
-              name="username"
+            <PasswordInput
+              {...register('password')}
               className="dark:text-blackberry-800"
-              placeholder="email@domain.net"
+              placeholder="Password"
             />
+            {errors?.password && (
+              <FormMessage>{errors?.password?.message}</FormMessage>
+            )}
           </div>
-          {isPasswordActive && (
-            <div className={input()}>
-              <Label htmlFor="password" className="dark:text-blackberry-800">
-                Password
-              </Label>
-              <PasswordInput
-                name="password"
-                className="dark:text-blackberry-800"
-                placeholder="password"
-              />
-            </div>
-          )}
 
           <Button
-            className="mr-auto mt-2"
+            className="mr-auto !mt-0"
             full
             icon={<ArrowUpRight />}
             iconAnimated
@@ -202,11 +210,18 @@ export const LoginPage = () => {
           >
             Login
           </Button>
-        </SimpleForm>
-        {showLoginError && (
-          <MessageBox className={'p-4 ml-1'} message={signInErrorMessage} />
-        )}
-      </div>
-    </>
+        </form>
+        {error && <FormMessage className="mt-1">{error}</FormMessage>}
+      </Form>
+      {/* TODO: Add forgot password flow */}
+      {/* <a
+        href=""
+        target="_blank"
+        rel="noopenner noreferrer"
+        className="text-center text-body-sm text-sunglow-900 underline mt-4"
+      >
+        Forgot your password
+      </a> */}
+    </div>
   )
 }

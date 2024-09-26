@@ -4,8 +4,10 @@ export const dragAndDropStyles = tv({
   slots: {
     section: 'flex flex-col items-center justify-start gap-4',
     container:
-      'w-full border border-dashed border-blackberry-500 rounded-[5px] flex items-center justify-center min-h-[109px] gap-4 p-8',
-    placeholder: 'w-full flex justify-center items-center gap-1',
+      'w-full border border-dashed border-blackberry-500 rounded-[5px] flex items-center justify-center min-h-[300px] gap-4 p-8',
+    placeholder: 'w-full flex flex-col items-center justify-center gap-4',
+    placeholderText:
+      'w-full flex flex-col md:flex-row justify-center items-center gap-1',
     link: 'underline p-1 font-normal cursor-pointer',
     fileContainer: 'w-full flex flex-col items-center justify-center gap-5',
     fileContainerInner:

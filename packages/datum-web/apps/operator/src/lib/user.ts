@@ -1,14 +1,10 @@
 import useSWR from 'swr'
 
+import { RegisterUserInput } from '@/utils/schemas'
+
 export interface LoginUser {
   username: string
   password: string
-}
-
-export interface RegisterUser {
-  username: string
-  password: string
-  confirmedPassword?: string
 }
 
 export interface PasskeyRegOptionsInput {
@@ -35,7 +31,7 @@ export interface SwitchWorkspace {
   target_organization_id: string
 }
 
-export async function registerUser<T>(arg: RegisterUser) {
+export async function registerUser<T>(arg: RegisterUserInput) {
   const fData: HttpResponse<T> = await fetch('/api/auth/register', {
     method: 'POST',
     headers: {

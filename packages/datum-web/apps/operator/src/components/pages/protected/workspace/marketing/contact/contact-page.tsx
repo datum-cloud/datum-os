@@ -18,7 +18,7 @@ import Link from 'next/link'
 
 import { OPERATOR_APP_ROUTES } from '@repo/constants'
 import { Button } from '@repo/ui/button'
-import { Panel, PanelHeader } from '@repo/ui/panel'
+import { Panel } from '@repo/ui/panel'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -127,48 +127,50 @@ const ContactPage = ({ id }: ContactPageProps) => {
 
   return (
     <div className={wrapper()}>
-      <Link href={OPERATOR_APP_ROUTES.contacts} className={link()}>
-        <ArrowLeft size={18} />
-        Back to Contacts
-      </Link>
-      <div className={contactHeader()}>
-        <div className={contactCard()}>
-          {/* TODO: Fetch user image via Gravatar or similar */}
-          <div className={contactImage()}>
-            <User size={60} className="text-winter-sky-900" />
+      <div className="flex flex-col gap-3">
+        <Link href={OPERATOR_APP_ROUTES.contacts} className={link()}>
+          <ArrowLeft size={18} />
+          Back to Contacts
+        </Link>
+        <div className={contactHeader()}>
+          <div className={contactCard()}>
+            {/* TODO: Fetch user image via Gravatar or similar */}
+            <div className={contactImage()}>
+              <User size={60} className="text-winter-sky-900" />
+            </div>
+            <div className={contactText()}>
+              {fullName && (
+                <h4 className="text-[27px] leading-[130%]">{fullName}</h4>
+              )}
+              <h6 className="text-body-l text-blackberry-600">{email}</h6>
+              {createdAt && (
+                <p className="text-body-sm leading-5 text-blackberry-500">
+                  Added by {source} on {formatDate(createdAt)}
+                </p>
+              )}
+            </div>
           </div>
-          <div className={contactText()}>
-            {fullName && (
-              <h4 className="text-[27px] leading-[130%]">{fullName}</h4>
-            )}
-            <h6 className="text-body-l text-blackberry-600">{email}</h6>
-            {createdAt && (
-              <p className="text-body-sm leading-5 text-blackberry-500">
-                Added by {source} on {formatDate(createdAt)}
-              </p>
-            )}
+          <div className={contactActions()}>
+            <Button variant="outline" onClick={() => setOpenEditDialog(true)}>
+              Edit contact info
+            </Button>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button icon={<ChevronDown />} iconPosition="right">
+                  Actions
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="px-2 py-2.5">
+                <DropdownMenuItem
+                  onClick={() => setOpenDeleteDialog(true)}
+                  className={contactDropdownItem()}
+                >
+                  <Trash size={18} className={contactDropdownIcon()} />
+                  Delete contact
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
-        </div>
-        <div className={contactActions()}>
-          <Button variant="outline" onClick={() => setOpenEditDialog(true)}>
-            Edit contact info
-          </Button>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button icon={<ChevronDown />} iconPosition="right">
-                Actions
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="px-2 py-2.5">
-              <DropdownMenuItem
-                onClick={() => setOpenDeleteDialog(true)}
-                className={contactDropdownItem()}
-              >
-                <Trash size={18} className={contactDropdownIcon()} />
-                Delete contact
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
         </div>
       </div>
       {/* <Panel>
@@ -207,7 +209,10 @@ const ContactPage = ({ id }: ContactPageProps) => {
               <Ellipsis className={contactDropdownIcon()} />
             </DropdownMenuTrigger>
             <DropdownMenuContent className="py-2.5 px-2" side="top" align="end">
-              <DropdownMenuItem className={contactDropdownItem()}>
+              <DropdownMenuItem
+                disabled={lists.length === 0}
+                className={contactDropdownItem()}
+              >
                 <BellMinus size={18} className={contactDropdownIcon()} />
                 Unsubscribe from all
               </DropdownMenuItem>
