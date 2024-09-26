@@ -40,7 +40,7 @@ const VerifyUser: React.FC = () => {
         <div className={logo()}>
           <Logo theme="light" width={120} />
         </div>
-        <p className="text-center text-body-l tracking-[-0.18px]">
+        <p className="text-center text-blackberry-800 text-body-l tracking-[-0.18px]">
           We&apos;ve sent a verification email to{' '}
           {email ?? 'the address you provided'}, please click on the link within
           to continue.

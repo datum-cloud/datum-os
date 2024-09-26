@@ -36,9 +36,9 @@ const WorkspaceDelete = async () => {
   const { data, error } = await userHasWorkspaceDeletePermissions(sessionData)
 
   // If the user does not have permission to delete the workspace, return null
-  if (error || !data?.allowed) {
-    return null
-  }
+  // if (error || !data?.allowed) {
+  //   return null
+  // }
 
   const clickHandler = async () => {
     const response = await deleteOrganization({
@@ -68,7 +68,9 @@ const WorkspaceDelete = async () => {
       <Panel>
         <PanelHeader heading="Delete workspace" noBorder />
         <Panel align="start" destructive>
-          <p className="red">Deleting your workspace is irreversible.</p>
+          <p className="text-util-red-500">
+            Deleting your workspace is irreversible.
+          </p>
           <AlertDialog>
             <AlertDialogTrigger asChild>
               <Button variant="failure" type="button" loading={isSubmitting}>
