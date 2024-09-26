@@ -97,9 +97,20 @@ export const ListSchema = z.object({
 
 export const RegisterUserSchema = z.object({
   email: z.string().email('Please enter a valid email'),
-  password: z.string().min(2, 'Please enter a valid password'),
+  password: z.string().min(8, 'Please enter a valid password'),
 })
 
+export const ResetUserSchema = z.object({
+  email: z.string().email('Please enter a valid email'),
+})
+
+export const ResetPasswordSchema = z.object({
+  token: z.string().min(2, 'Please enter a valid token'),
+  password: z.string().min(8, 'Please enter a valid password'),
+})
+
+export type ResetUserInput = z.infer<typeof ResetUserSchema>
+export type ResetPasswordInput = z.infer<typeof ResetPasswordSchema>
 export type RegisterUserInput = z.infer<typeof RegisterUserSchema>
 export type ContactBatchCreateInput = z.infer<typeof ContactBatchCreateSchema>
 export type ContactInput = z.infer<typeof ContactSchema>

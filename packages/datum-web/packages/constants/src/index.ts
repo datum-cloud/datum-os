@@ -13,6 +13,8 @@ export const SERVICE_APP_ROUTES = {
   contactLists: `${SERVICE_REST_API}/v1/contacts/lists`,
   contactList: `${SERVICE_REST_API}/v1/contacts/lists/[id]`,
   contactListMembers: `${SERVICE_REST_API}/v1/contacts/lists/[id]/members`,
+  forgotPassword: `${SERVICE_REST_API}/v1/forgot-password`,
+  resetPassword: `${SERVICE_REST_API}/v1/password-reset`,
 }
 
 export const OPERATOR_APP_ROUTES = {
@@ -28,6 +30,8 @@ export const OPERATOR_APP_ROUTES = {
   settings: '/settings',
   workspace: '/workspace',
   login: '/login',
+  forgotPassword: '/forgot-password',
+  resetPassword: '/password-reset',
 }
 
 export const OPERATOR_API_ROUTES = {
@@ -45,6 +49,8 @@ export const OPERATOR_API_ROUTES = {
   contactListMembers: '/api/auth/contacts/lists/[id]/members',
   createContactListMembers: '/api/auth/contacts/lists/[id]/members/create',
   deleteContactListMembers: '/api/auth/contacts/lists/[id]/members/delete',
+  forgotPassword: '/api/auth/forgot-password',
+  resetPassword: '/api/auth/password-reset',
   upload: '/api/auth/upload',
 }
 
