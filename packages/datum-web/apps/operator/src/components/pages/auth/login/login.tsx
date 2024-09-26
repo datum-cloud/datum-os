@@ -213,14 +213,15 @@ export const LoginPage = () => {
         </form>
         {error && <FormMessage className="mt-1">{error}</FormMessage>}
       </Form>
-      <a
+      {/* TODO: Add forgot password flow */}
+      {/* <a
         href=""
         target="_blank"
         rel="noopenner noreferrer"
         className="text-center text-body-sm text-sunglow-900 underline mt-4"
       >
         Forgot your password
-      </a>
+      </a> */}
     </div>
   )
 }

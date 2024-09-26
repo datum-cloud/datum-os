@@ -33,6 +33,7 @@ import {
 import { RegisterUserInput, RegisterUserSchema } from '@/utils/schemas'
 import Link from 'next/link'
 import { DEFAULT_ERROR_MESSAGE, OPERATOR_APP_ROUTES } from '@repo/constants'
+import { capitalizeFirstLetter } from '@repo/common/text'
 
 const TEMP_PASSKEY_EMAIL = 'tempuser@test.com'
 const TEMP_PASSKEY_NAME = 'Temp User'
@@ -111,10 +112,7 @@ export const SignupPage = () => {
       if (res?.ok) {
         router.push('/verify')
       } else if (res?.message) {
-        const emailRelated = res?.message?.includes('email')
-        setError(
-          emailRelated ? 'Please use a valid email' : DEFAULT_ERROR_MESSAGE,
-        )
+        setError(capitalizeFirstLetter(res.message))
       } else {
         setError(DEFAULT_ERROR_MESSAGE)
       }
