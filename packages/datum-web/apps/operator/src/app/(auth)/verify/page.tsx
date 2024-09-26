@@ -1,10 +1,13 @@
 'use client'
 
 import { useEffect } from 'react'
-import { Button } from '@repo/ui/button'
 import { useSearchParams } from 'next/navigation'
 import { signIn } from 'next-auth/react'
+
+import { OPERATOR_APP_ROUTES } from '@repo/constants'
+import { Button } from '@repo/ui/button'
 import { Logo } from '@repo/ui/logo'
+
 import { useVerifyUser } from '../../../lib/user'
 
 const VerifyUser: React.FC = () => {
@@ -19,7 +22,7 @@ const VerifyUser: React.FC = () => {
       const refreshToken = verified?.refresh_token
 
       signIn('credentials', {
-        callbackUrl: '/workspace',
+        callbackUrl: OPERATOR_APP_ROUTES.home,
         accessToken,
         refreshToken,
       })

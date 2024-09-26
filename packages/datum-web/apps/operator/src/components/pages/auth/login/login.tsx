@@ -81,13 +81,13 @@ export const LoginPage = () => {
 
   async function handleGithubOAuth() {
     await signIn('github', {
-      callbackUrl: '/workspace',
+      callbackUrl: OPERATOR_APP_ROUTES.home,
     })
   }
 
   async function handleGoogleOAuth() {
     await signIn('google', {
-      callbackUrl: '/workspace',
+      callbackUrl: OPERATOR_APP_ROUTES.home,
     })
   }
 

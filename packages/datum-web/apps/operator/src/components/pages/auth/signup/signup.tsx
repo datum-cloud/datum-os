@@ -32,7 +32,7 @@ import {
 } from '@repo/ui/form'
 import { RegisterUserInput, RegisterUserSchema } from '@/utils/schemas'
 import Link from 'next/link'
-import { DEFAULT_ERROR_MESSAGE } from '@repo/constants'
+import { DEFAULT_ERROR_MESSAGE, OPERATOR_APP_ROUTES } from '@repo/constants'
 
 const TEMP_PASSKEY_EMAIL = 'tempuser@test.com'
 const TEMP_PASSKEY_NAME = 'Temp User'
@@ -59,13 +59,13 @@ export const SignupPage = () => {
 
   async function handleGithubOAuth() {
     await signIn('github', {
-      callbackUrl: '/workspace',
+      callbackUrl: OPERATOR_APP_ROUTES.home,
     })
   }
 
   async function handleGoogleOAuth() {
     await signIn('google', {
-      callbackUrl: '/workspace',
+      callbackUrl: OPERATOR_APP_ROUTES.home,
     })
   }
 
@@ -86,7 +86,7 @@ export const SignupPage = () => {
 
       if (verificationResult.success) {
         await signIn('passkey', {
-          callbackUrl: '/workspace',
+          callbackUrl: OPERATOR_APP_ROUTES.home,
           email: TEMP_PASSKEY_EMAIL,
           name: TEMP_PASSKEY_NAME,
           session: verificationResult.session,
