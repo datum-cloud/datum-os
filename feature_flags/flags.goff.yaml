@@ -1,0 +1,8 @@
+# Datum OS Feature Flag Definitions
+local-test:
+  description: Local test flag to verify feature flagging works
+  variations:
+    local-dev: true
+    not-local-dev: false
+  defaultRule:
+    variation: local-dev
