@@ -1,7 +1,7 @@
 'use client'
 
 import React from 'react'
-import { OpenFeature, OpenFeatureProvider } from '@openfeature/react-sdk'
+import { OpenFeature, OpenFeatureProvider, useFlag } from '@openfeature/react-sdk'
 import { EvaluationContext } from '@openfeature/core'
 import { GoFeatureFlagWebProvider } from '@openfeature/go-feature-flag-web-provider'
 
@@ -10,17 +10,6 @@ const goFeatureFlagWebProvider = new GoFeatureFlagWebProvider({
 })
 OpenFeature.setProvider(goFeatureFlagWebProvider)
 
-//
-// This is a wrapper that allows us to use feature flags in a React context.
-// It is **only used in the client**.
-//
-// Example usage:
-//
-// import { useFlag } from '@openfeature/react-sdk'
-// ...
-// const localTest = useFlag('local-test', false)
-//
-// https://openfeature.dev/docs/reference/technologies/client/web/react#evaluation-hooks
 export function FeatureFlagsProvider({
   children,
   context,
@@ -30,4 +19,18 @@ export function FeatureFlagsProvider({
 }) {
   OpenFeature.setContext(context)
   return <OpenFeatureProvider>{children}</OpenFeatureProvider>
+}
+
+//
+// This is a wrapper that allows us to use feature flags in a React context.
+// It is **only used in the client**.
+//
+// Example usage:
+//
+// import { useFeatureFlag } from '@/providers/feature-flags-provider'
+// ...
+// const localTest = useFeatureFlag('local-test', false)
+//
+export function useFeatureFlag(flagKey: string, defaultValue: any) {
+  return useFlag(flagKey, defaultValue)
 }
