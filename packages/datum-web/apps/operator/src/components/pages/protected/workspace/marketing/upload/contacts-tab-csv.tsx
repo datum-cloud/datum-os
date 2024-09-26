@@ -64,10 +64,13 @@ const ContactsTabCSV = () => {
   } = pageStyles()
   const { refresh } = useRouter()
   const { data: session } = useSession()
-  const organizationId = (session?.user.organization ??
+  const organizationId = (session?.user?.organization ??
     '') as Datum.OrganisationId
-  const { data: lists = [] } = useLists(organizationId)
+  console.log('SESSION, ORG ID', session, organizationId)
+  const { data: lists = [], isLoading } = useLists(organizationId)
+  console.log('LISTS', lists)
   const [data, setData] = useState<Datum.CsvData>([])
+  console.log('DATA', data)
   const [subscriptions, setSubscriptions] = useState<Datum.ListId[]>([])
   const [imported, setImported] = useState(0)
   const [associations, setAssociations] = useState<Record<string, string>>({})
@@ -148,8 +151,15 @@ const ContactsTabCSV = () => {
     }
   }
 
+  if (isLoading) {
+    return <Loading className="min-h-[300px]" />
+  }
+
   if (data.length > 0) {
-    const fields = Object.keys(data[0])
+    const firstRow = data?.[0]
+    console.log('FIRST ROW', firstRow)
+    const fields = firstRow ? Object.keys(firstRow) : []
+    console.log('FIELDS', fields)
 
     if (isSubmitting) {
       return <Loading className="min-h-[300px]" />
@@ -197,7 +207,7 @@ const ContactsTabCSV = () => {
                 <div className={formColumnInfo()}>
                   <h6 className={formHeader()}>{field}</h6>
                   <div className={formBoxes()}>
-                    {data.slice(0, 2).map((contact, index) => (
+                    {data?.slice(0, 2).map((contact, index) => (
                       <p
                         key={`${contact}-${index}`}
                         className={cn(
