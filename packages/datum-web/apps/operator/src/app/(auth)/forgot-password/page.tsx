@@ -18,7 +18,7 @@ import {
 } from '@repo/ui/form'
 import { Input } from '@repo/ui/input'
 import { Logo } from '@repo/ui/logo'
-import { DEFAULT_ERROR_MESSAGE, OPERATOR_APP_ROUTES } from '@repo/constants'
+import { DEFAULT_ERROR_MESSAGE, OPERATOR_API_ROUTES } from '@repo/constants'
 import { ResetUserInput, ResetUserSchema } from '@/utils/schemas'
 
 import { pageStyles as loginStyles } from '../login/page.styles'
@@ -44,7 +44,7 @@ const ForgotPassword: React.FC = () => {
 
   async function onSubmit(data: ResetUserInput) {
     try {
-      const response: any = await fetch(OPERATOR_APP_ROUTES.forgotPassword, {
+      const response: any = await fetch(OPERATOR_API_ROUTES.reset, {
         method: 'POST',
         headers: {
           'content-type': 'application/json',
