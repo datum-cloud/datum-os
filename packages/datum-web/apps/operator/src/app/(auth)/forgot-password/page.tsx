@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { ArrowUpRight } from 'lucide-react'
 import Image from 'next/image'
 
@@ -26,6 +26,7 @@ import { pageStyles } from './forgot-password.styles'
 
 const ForgotPassword: React.FC = () => {
   const [error, setError] = useState<string>()
+  const [success, setSuccess] = useState(false)
   const form = useForm<ResetUserInput>({
     mode: 'onSubmit',
     resolver: zodResolver(ResetUserSchema),
@@ -35,7 +36,7 @@ const ForgotPassword: React.FC = () => {
     handleSubmit,
     control,
     watch,
-    formState: { isSubmitSuccessful, isSubmitting },
+    formState: { isSubmitting },
   } = form
   const formValues = watch()
   const { email } = formValues
@@ -52,14 +53,28 @@ const ForgotPassword: React.FC = () => {
         body: JSON.stringify(data),
       })
 
-      if (!response.ok && response?.message) {
-        setError(capitalizeFirstLetter(response?.message))
+      if (!response.ok) {
+        if (response?.message) {
+          setError(capitalizeFirstLetter(response?.message))
+          return
+        }
+
+        setError(DEFAULT_ERROR_MESSAGE)
+        return
       }
+
+      setSuccess(true)
     } catch (error) {
       console.error(error)
       setError(DEFAULT_ERROR_MESSAGE)
     }
   }
+
+  useEffect(() => {
+    if (error) {
+      setError(undefined)
+    }
+  }, [email])
 
   return (
     <div className={container()}>
@@ -67,7 +82,7 @@ const ForgotPassword: React.FC = () => {
         <div className="flex items-center justify-center">
           <Logo theme="light" width={120} />
         </div>
-        {!isSubmitSuccessful ? (
+        {!success ? (
           <div className="flex flex-col mt-8 justify-start gap-7">
             <p className="text-center text-body-l text-blackberry-800">
               Enter your user account's verified email address and we will send

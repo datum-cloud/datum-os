@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { ArrowUpRight } from 'lucide-react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import Image from 'next/image'
@@ -24,6 +24,7 @@ import { pageStyles } from './password-reset.styles'
 const ResetPassword: React.FC = () => {
   const { push } = useRouter()
   const searchParams = useSearchParams()
+  const [success, setSuccess] = useState(false)
   const token = searchParams?.get('token') || ''
 
   if (!token || token === '') {
@@ -39,8 +40,10 @@ const ResetPassword: React.FC = () => {
   const {
     handleSubmit,
     register,
-    formState: { isSubmitSuccessful, isSubmitting, errors },
+    watch,
+    formState: { isSubmitting, errors },
   } = form
+  const { password } = watch()
   const { formInner, input } = pageStyles()
   const { container, content, bg, bgImage } = loginStyles()
 
@@ -54,14 +57,28 @@ const ResetPassword: React.FC = () => {
         body: JSON.stringify(data),
       })
 
-      if (!response.ok && response?.message) {
-        setError(capitalizeFirstLetter(response?.message))
+      if (!response.ok) {
+        if (response?.message) {
+          setError(capitalizeFirstLetter(response?.message))
+          return
+        }
+
+        setError(DEFAULT_ERROR_MESSAGE)
+        return
       }
+
+      setSuccess(true)
     } catch (error) {
       console.error(error)
       setError(DEFAULT_ERROR_MESSAGE)
     }
   }
+
+  useEffect(() => {
+    if (error) {
+      setError(undefined)
+    }
+  }, [password])
 
   return (
     <div className={container()}>
@@ -69,7 +86,7 @@ const ResetPassword: React.FC = () => {
         <div className="flex items-center justify-center">
           <Logo theme="light" width={120} />
         </div>
-        {!isSubmitSuccessful ? (
+        {!success ? (
           <div className="flex flex-col mt-8 justify-start gap-7">
             <p className="text-center text-body- text-blackberry-800">
               Enter your new password below
@@ -93,17 +110,19 @@ const ResetPassword: React.FC = () => {
                   )}
                 </div>
 
-                <Button
-                  className="mr-auto !mt-0"
-                  full
-                  icon={!isSubmitting ? <ArrowUpRight /> : undefined}
-                  iconAnimated
-                  type="submit"
-                >
-                  {isSubmitting ? 'Sending...' : 'Reset Password'}
-                </Button>
+                <div className="flex flex-col gap-1">
+                  <Button
+                    className="mr-auto !mt-0"
+                    full
+                    icon={!isSubmitting ? <ArrowUpRight /> : undefined}
+                    iconAnimated
+                    type="submit"
+                  >
+                    {isSubmitting ? 'Sending...' : 'Reset Password'}
+                  </Button>
+                  {error && <FormMessage className="mt-1">{error}</FormMessage>}
+                </div>
               </form>
-              {error && <FormMessage className="mt-1">{error}</FormMessage>}
             </Form>
           </div>
         ) : (
