@@ -16,6 +16,7 @@ export const SERVICE_APP_ROUTES = {
 }
 
 export const OPERATOR_APP_ROUTES = {
+  home: '/',
   contacts: '/marketing/contacts',
   contactsUpload: '/marketing/contacts/upload',
   contact: '/marketing/contacts/[id]',

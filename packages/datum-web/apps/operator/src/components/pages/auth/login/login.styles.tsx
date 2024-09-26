@@ -7,7 +7,7 @@ const loginStyles = tv({
     separator: 'my-7',
     buttons: 'flex flex-col gap-7',
     keyIcon: 'text-sunglow-900',
-    form: 'flex flex-col gap-7 space-y-2',
+    formInner: 'flex flex-col gap-7 space-y-2',
     input: 'flex flex-col gap-2 !mt-0',
   },
 })

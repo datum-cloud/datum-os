@@ -6,11 +6,14 @@ import { signIn } from 'next-auth/react'
 import { ArrowUpRight } from 'lucide-react'
 import { useState } from 'react'
 
-import { DEFAULT_ERROR_MESSAGE, ERROR_MESSAGES } from '@repo/constants'
+import {
+  DEFAULT_ERROR_MESSAGE,
+  ERROR_MESSAGES,
+  OPERATOR_APP_ROUTES,
+} from '@repo/constants'
 import { LoginUser } from '@repo/dally/user'
 import { Button } from '@repo/ui/button'
 import MessageBox from '@repo/ui/message-box'
-import SimpleForm from '@repo/ui/simple-form'
 import { GoogleIcon } from '@repo/ui/icons/google'
 import { Separator } from '@repo/ui/separator'
 import { GithubIcon } from '@repo/ui/icons/github'
@@ -22,42 +25,59 @@ import { getPasskeySignInOptions, verifyAuthentication } from '@/lib/user'
 import { setSessionCookie } from '@/lib/auth/utils/set-session-cookie'
 
 import { loginStyles } from './login.styles'
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+  useForm,
+  zodResolver,
+} from '@repo/ui/form'
+import { RegisterUserInput, RegisterUserSchema } from '@/utils/schemas'
 
 const TEMP_PASSKEY_EMAIL = 'tempuser@test.com'
 const TEMP_PASSKEY_NAME = 'Temp User'
 
 export const LoginPage = () => {
-  const { separator, buttons, form, input, oAuthButton } = loginStyles()
   const router = useRouter()
-  const [signInError, setSignInError] = useState<string>()
-  const [signInLoading, setSignInLoading] = useState(false)
-  const showLoginError = !signInLoading && signInError
+  const form = useForm<RegisterUserInput>({
+    mode: 'onSubmit',
+    resolver: zodResolver(RegisterUserSchema),
+    defaultValues: {
+      email: '',
+      password: '',
+    },
+  })
+  const {
+    control,
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = form
+  const [error, setError] = useState<string>()
+  const { separator, buttons, formInner, input, oAuthButton } = loginStyles()
 
-  /**
-   * Submit client-side sign-in function using username and password
-   */
-  const submit = async (payload: LoginUser) => {
-    setSignInLoading(true)
-    setSignInError(undefined)
+  async function onSubmit(payload: RegisterUserInput) {
     try {
       const res: any = await signIn('credentials', {
         redirect: false,
+        username: payload.email,
         ...payload,
       })
       if (res.ok && !res.error) {
-        router.push('/workspace')
+        router.push(OPERATOR_APP_ROUTES.home)
       } else {
-        setSignInLoading(false)
         const error = ERROR_MESSAGES?.[res.error] || DEFAULT_ERROR_MESSAGE
-        setSignInError(error)
+        setError(error)
       }
     } catch (error: any) {
-      setSignInLoading(false)
       const errorMessage =
         error?.message && ERROR_MESSAGES?.[error.message]
           ? ERROR_MESSAGES?.[error.message]
           : DEFAULT_ERROR_MESSAGE
-      setSignInError(errorMessage)
+      setError(errorMessage)
     }
   }
 
@@ -97,7 +117,7 @@ export const LoginPage = () => {
       }
 
       if (!verificationResult.success) {
-        setSignInError(`Error: ${verificationResult.error}`)
+        setError(`Error: ${verificationResult.error}`)
       }
 
       return verificationResult
@@ -106,7 +126,7 @@ export const LoginPage = () => {
         error?.message && ERROR_MESSAGES?.[error.message]
           ? ERROR_MESSAGES?.[error.message]
           : DEFAULT_ERROR_MESSAGE
-      setSignInError(errorMessage)
+      setError(errorMessage)
     }
   }
 
@@ -147,46 +167,54 @@ export const LoginPage = () => {
 
       <Separator label="or" className={separator()} />
 
-      <SimpleForm
-        classNames={form()}
-        onSubmit={(e: any) => {
-          submit(e)
-        }}
-      >
-        <div className={input()}>
-          <Label htmlFor="username" className="dark:text-blackberry-800">
-            Email
-          </Label>
-          <Input
-            name="username"
-            className="dark:text-blackberry-800"
-            placeholder="email@domain.net"
+      <Form {...form}>
+        <form className={formInner()} onSubmit={handleSubmit(onSubmit)}>
+          <FormField
+            name="email"
+            control={control}
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="dark:text-blackberry-800">
+                  Email
+                </FormLabel>
+                <FormControl>
+                  <Input
+                    {...field}
+                    className="dark:text-blackberry-800"
+                    placeholder="email@domain.net"
+                    value={field.value || ''}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
           />
-        </div>
-        <div className={input()}>
-          <Label htmlFor="password" className="dark:text-blackberry-800">
-            Password
-          </Label>
-          <PasswordInput
-            name="password"
-            className="dark:text-blackberry-800"
-            placeholder="Password"
-          />
-        </div>
+          <div className={input()}>
+            <Label htmlFor="password" className="dark:text-blackberry-800">
+              Password
+            </Label>
+            <PasswordInput
+              {...register('password')}
+              className="dark:text-blackberry-800"
+              placeholder="Password"
+            />
+            {errors?.password && (
+              <FormMessage>{errors?.password?.message}</FormMessage>
+            )}
+          </div>
 
-        <Button
-          className="mr-auto !mt-0"
-          full
-          icon={<ArrowUpRight />}
-          iconAnimated
-          type="submit"
-        >
-          Login
-        </Button>
-      </SimpleForm>
-      {showLoginError && (
-        <MessageBox className="p-4 ml-1" message={signInError} />
-      )}
+          <Button
+            className="mr-auto !mt-0"
+            full
+            icon={<ArrowUpRight />}
+            iconAnimated
+            type="submit"
+          >
+            Login
+          </Button>
+        </form>
+        {error && <FormMessage className="mt-1">{error}</FormMessage>}
+      </Form>
       <a
         href=""
         target="_blank"
