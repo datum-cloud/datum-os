@@ -5,7 +5,6 @@ const config: Pick<
   Config,
   'darkMode' | 'content' | 'presets' | 'prefix' | 'theme'
 > = {
-  darkMode: 'class',
   content: ['./src/app/**/*.tsx', './src/components/**/*.tsx'],
   presets: [sharedConfig],
   theme: {

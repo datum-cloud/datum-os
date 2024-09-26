@@ -135,7 +135,10 @@ export const MultiSelect = React.forwardRef<
                     const option = options.find((o) => o.value === value)
                     const IconComponent = option?.icon
                     return (
-                      <Tag key={value} className="inline-flex gap-1.5">
+                      <Tag
+                        key={value}
+                        className="inline-flex gap-1.5 dark:text-blackberry-100 dark:border-blackberry-100"
+                      >
                         {IconComponent && (
                           <IconComponent className="h-2.5 w-2.5 mr-2" />
                         )}
@@ -151,7 +154,10 @@ export const MultiSelect = React.forwardRef<
                     )
                   })}
                   {selectedValues.length > maxCount && (
-                    <Tag truncate>
+                    <Tag
+                      truncate
+                      className="dark:text-blackberry-100 dark:border-blackberry-100"
+                    >
                       {`+ ${selectedValues.length - maxCount} more`}
                       <XIcon
                         className="!h-3.5 !w-3.5 pt-[3px] cursor-pointer"
@@ -180,7 +186,7 @@ export const MultiSelect = React.forwardRef<
               </div>
             ) : (
               <div className="w-full flex items-center justify-between mx-auto">
-                <span className="text-body-m font-sans font-normal text-muted-foreground">
+                <span className="text-body-m font-sans font-normal text-muted-foreground dark:text-blackberry-100">
                   {placeholder}
                 </span>
                 <ChevronDown className="h-4 cursor-pointer text-muted-foreground" />

@@ -2,7 +2,6 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { MessageBox } from '@repo/ui/message-box'
 import { Button } from '@repo/ui/button'
 import { ArrowUpRight, KeyRoundIcon } from 'lucide-react'
 import {
@@ -60,13 +59,13 @@ export const SignupPage = () => {
 
   async function handleGithubOAuth() {
     await signIn('github', {
-      callbackUrl: OPERATOR_APP_ROUTES.home,
+      callbackUrl: OPERATOR_APP_ROUTES.workspace,
     })
   }
 
   async function handleGoogleOAuth() {
     await signIn('google', {
-      callbackUrl: OPERATOR_APP_ROUTES.home,
+      callbackUrl: OPERATOR_APP_ROUTES.workspace,
     })
   }
 
@@ -87,7 +86,7 @@ export const SignupPage = () => {
 
       if (verificationResult.success) {
         await signIn('passkey', {
-          callbackUrl: OPERATOR_APP_ROUTES.home,
+          callbackUrl: OPERATOR_APP_ROUTES.workspace,
           email: TEMP_PASSKEY_EMAIL,
           name: TEMP_PASSKEY_NAME,
           session: verificationResult.session,
@@ -194,12 +193,12 @@ export const SignupPage = () => {
           </div>
           <Button
             className="mr-auto w-full"
-            icon={<ArrowUpRight />}
+            icon={!isSubmitting ? <ArrowUpRight /> : undefined}
             size="md"
             type="submit"
             iconAnimated
           >
-            {isSubmitting ? 'loading' : 'Sign up'}
+            {isSubmitting ? 'Loading...' : 'Sign up'}
           </Button>
         </form>
         {error && <FormMessage className="mt-1">{error}</FormMessage>}
