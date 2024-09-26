@@ -191,7 +191,7 @@ const ContactsTabCSV = () => {
           <Panel className={formGroup()}>
             <PanelHeader heading="Add to group" noBorder />
             <p>You can add new contacts to one or multiple groups</p>
-            <MultiSelect
+            {/* <MultiSelect
               options={selectOptions}
               onValueChange={(input) =>
                 setSubscriptions(input as Datum.ListId[])
@@ -199,7 +199,7 @@ const ContactsTabCSV = () => {
               placeholder="Select lists to add contacts to"
               variant="inverted"
               animation={2}
-            />
+            /> */}
           </Panel>
 
           <Panel className={cn(formGroup(), 'mb-8')}>
