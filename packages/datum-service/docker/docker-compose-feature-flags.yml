@@ -9,14 +9,14 @@ services:
       - LISTEN=1031
       - POLLINGINTERVAL=1000
       - RETRIEVER_KIND=file
-      - RETRIEVER_PATH=/goff/flags.goff.yml
+      - RETRIEVER_PATH=/goff/flags.goff.yaml
       - STARTWITHRETRIEVERERROR=false
     ports:
       - '1031:1031'
     volumes:
       - type: bind
-        source: ./configs/feature-flags/local.flags.goff.yml
-        target: /goff/flags.goff.yml
+        source: ./configs/feature-flags/local.flags.goff.yaml
+        target: /goff/flags.goff.yaml
 
 volumes:
   redis_data:
