@@ -2,49 +2,46 @@
 
 import { useState } from 'react'
 import { ArrowUpRight } from 'lucide-react'
+import { useRouter, useSearchParams } from 'next/navigation'
 import Image from 'next/image'
 
 import { capitalizeFirstLetter } from '@repo/common/text'
 import { Button } from '@repo/ui/button'
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-  useForm,
-  zodResolver,
-} from '@repo/ui/form'
-import { Input } from '@repo/ui/input'
+import { Form, FormMessage, useForm, zodResolver } from '@repo/ui/form'
+import { Label } from '@repo/ui/label'
 import { Logo } from '@repo/ui/logo'
-import { DEFAULT_ERROR_MESSAGE, OPERATOR_API_ROUTES } from '@repo/constants'
-import { ResetUserInput, ResetUserSchema } from '@/utils/schemas'
+import { PasswordInput } from '@repo/ui/password-input'
+import {
+  DEFAULT_ERROR_MESSAGE,
+  OPERATOR_API_ROUTES,
+  OPERATOR_APP_ROUTES,
+} from '@repo/constants'
+import { ResetPasswordInput, ResetPasswordSchema } from '@/utils/schemas'
 
 import { pageStyles as loginStyles } from '../login/page.styles'
-import { pageStyles } from './forgot-password.styles'
+import { pageStyles } from './password-reset.styles'
 
-const ForgotPassword: React.FC = () => {
+const ResetPassword: React.FC = () => {
+  const { push } = useRouter()
+  const searchParams = useSearchParams()
+  const token = searchParams?.get('token') || ''
   const [error, setError] = useState<string>()
-  const form = useForm<ResetUserInput>({
+  const form = useForm<ResetPasswordInput>({
     mode: 'onSubmit',
-    resolver: zodResolver(ResetUserSchema),
-    defaultValues: { email: '' },
+    resolver: zodResolver(ResetPasswordSchema),
+    defaultValues: { token, password: '' },
   })
   const {
     handleSubmit,
-    control,
-    watch,
-    formState: { isSubmitSuccessful, isSubmitting },
+    register,
+    formState: { isSubmitSuccessful, isSubmitting, errors },
   } = form
-  const formValues = watch()
-  const { email } = formValues
-  const { formInner } = pageStyles()
+  const { formInner, input } = pageStyles()
   const { container, content, bg, bgImage } = loginStyles()
 
-  async function onSubmit(data: ResetUserInput) {
+  async function onSubmit(data: ResetPasswordInput) {
     try {
-      const response: any = await fetch(OPERATOR_API_ROUTES.forgotPassword, {
+      const response: any = await fetch(OPERATOR_API_ROUTES.resetPassword, {
         method: 'POST',
         headers: {
           'content-type': 'application/json',
@@ -70,31 +67,26 @@ const ForgotPassword: React.FC = () => {
         {!isSubmitSuccessful ? (
           <div className="flex flex-col mt-8 justify-start gap-7">
             <p className="text-center text-body-l text-blackberry-800">
-              Enter your user account's verified email address and we will send
-              you a password reset link.
+              Enter your new password below
             </p>
             <Form {...form}>
               <form className={formInner()} onSubmit={handleSubmit(onSubmit)}>
-                <FormField
-                  name="email"
-                  control={control}
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="dark:text-blackberry-800">
-                        Email
-                      </FormLabel>
-                      <FormControl>
-                        <Input
-                          {...field}
-                          className="dark:text-blackberry-800"
-                          placeholder="email@domain.net"
-                          value={field.value || ''}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
+                <div className={input()}>
+                  <Label
+                    htmlFor="password"
+                    className="dark:text-blackberry-800"
+                  >
+                    Password
+                  </Label>
+                  <PasswordInput
+                    {...register('password')}
+                    className="dark:text-blackberry-800"
+                    placeholder="Password"
+                  />
+                  {errors?.password && (
+                    <FormMessage>{errors?.password?.message}</FormMessage>
                   )}
-                />
+                </div>
 
                 <Button
                   className="mr-auto !mt-0"
@@ -112,15 +104,14 @@ const ForgotPassword: React.FC = () => {
         ) : (
           <div className="flex flex-col mt-8 justify-start gap-7">
             <p className="text-center text-body-l text-blackberry-800">
-              Please check the email address {email} for instructions to reset
-              your password
+              Your password has been successfully updated
             </p>
             <Button
-              icon={!isSubmitting ? <ArrowUpRight /> : undefined}
+              icon={<ArrowUpRight />}
               iconAnimated
-              onClick={handleSubmit(onSubmit)}
+              onClick={() => push(OPERATOR_APP_ROUTES.login)}
             >
-              {isSubmitting ? 'Sending...' : 'Resend email'}
+              Login
             </Button>
           </div>
         )}
@@ -138,4 +129,4 @@ const ForgotPassword: React.FC = () => {
   )
 }
 
-export default ForgotPassword
+export default ResetPassword
