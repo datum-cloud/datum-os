@@ -18,7 +18,7 @@ tasks:
     desc: brings up the compose environment for the datum server
     deps: [build]
     cmds:
-      - "docker compose -f ./docker/docker-compose-redis.yml -f ./docker/docker-compose-fga.yml -f ./docker/docker-compose-kafka.yml -f ./docker/docker-compose.yml -p datum up -d"
+      - "docker compose -f ./docker/docker-compose-redis.yml -f ./docker/docker-compose-feature-flags.yml -f ./docker/docker-compose-fga.yml -f ./docker/docker-compose-kafka.yml -f ./docker/docker-compose.yml -p datum up -d"
 
   datum:down:
     dir: ..
@@ -62,6 +62,12 @@ tasks:
     desc: brings the postgres compose environment down
     cmds:
       - docker compose -p postgres down
+
+  feature-flags:
+    dir: ..
+    desc: brings up the compose environment for feature flags
+    cmds:
+      - "docker compose -f ./docker/docker-compose-feature-flags.yml -p feature-flags up -d"
 
   fga:
     dir: ..

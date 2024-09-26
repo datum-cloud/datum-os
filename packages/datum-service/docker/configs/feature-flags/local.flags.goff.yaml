@@ -1,0 +1,6 @@
+local-test:
+  variations:
+    local-dev: true
+    not-local-dev: false
+  defaultRule:
+    variation: local-dev

@@ -3,6 +3,7 @@ services:
     image: datum:dev
     depends_on:
       - openfga
+      - feature-flags
     command:
       - serve
       - --debug
