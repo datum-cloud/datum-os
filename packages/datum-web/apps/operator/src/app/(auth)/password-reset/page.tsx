@@ -25,6 +25,11 @@ const ResetPassword: React.FC = () => {
   const { push } = useRouter()
   const searchParams = useSearchParams()
   const token = searchParams?.get('token') || ''
+
+  if (!token || token === '') {
+    push(OPERATOR_APP_ROUTES.home)
+  }
+
   const [error, setError] = useState<string>()
   const form = useForm<ResetPasswordInput>({
     mode: 'onSubmit',
@@ -60,13 +65,13 @@ const ResetPassword: React.FC = () => {
 
   return (
     <div className={container()}>
-      <div className={content({ wideContent: true })}>
+      <div className={content()}>
         <div className="flex items-center justify-center">
           <Logo theme="light" width={120} />
         </div>
         {!isSubmitSuccessful ? (
           <div className="flex flex-col mt-8 justify-start gap-7">
-            <p className="text-center text-body-l text-blackberry-800">
+            <p className="text-center text-body- text-blackberry-800">
               Enter your new password below
             </p>
             <Form {...form}>
@@ -104,7 +109,7 @@ const ResetPassword: React.FC = () => {
         ) : (
           <div className="flex flex-col mt-8 justify-start gap-7">
             <p className="text-center text-body-l text-blackberry-800">
-              Your password has been successfully updated
+              Your password has been updated
             </p>
             <Button
               icon={<ArrowUpRight />}
