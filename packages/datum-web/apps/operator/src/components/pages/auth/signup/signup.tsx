@@ -195,7 +195,7 @@ export const SignupPage = () => {
             )}
           </div>
           <Button
-            className="mr-auto mt-2 w-full"
+            className="mr-auto w-full"
             icon={<ArrowUpRight />}
             size="md"
             type="submit"

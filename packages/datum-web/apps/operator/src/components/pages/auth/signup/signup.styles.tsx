@@ -7,7 +7,7 @@ const signupStyles = tv({
       'flex items-center justify-center border rounded-md gap-4 px-5 h-[52px] dark:text-blackberry-800 border-winter-sky-900 font-normal font-sans',
     buttons: 'flex flex-col gap-7',
     keyIcon: 'text-sunglow-900',
-    formInner: 'flex flex-col gap-4 space-y-2',
+    formInner: 'flex flex-col gap-7',
     input: 'flex flex-col gap-2 !mt-0',
   },
 })
