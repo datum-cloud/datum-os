@@ -66,11 +66,8 @@ const ContactsTabCSV = () => {
   const { data: session } = useSession()
   const organizationId = (session?.user?.organization ??
     '') as Datum.OrganisationId
-  console.log('SESSION, ORG ID', session, organizationId)
   const { data: lists = [], isLoading } = useLists(organizationId)
-  console.log('LISTS', lists)
   const [data, setData] = useState<Datum.CsvData>([])
-  console.log('DATA', data)
   const [subscriptions, setSubscriptions] = useState<Datum.ListId[]>([])
   const [imported, setImported] = useState(0)
   const [associations, setAssociations] = useState<Record<string, string>>({})
@@ -157,9 +154,7 @@ const ContactsTabCSV = () => {
 
   if (data.length > 0) {
     const firstRow = data?.[0]
-    console.log('FIRST ROW', firstRow)
     const fields = firstRow ? Object.keys(firstRow) : []
-    console.log('FIELDS', fields)
 
     if (isSubmitting) {
       return <Loading className="min-h-[300px]" />
@@ -183,15 +178,13 @@ const ContactsTabCSV = () => {
       }
     }
 
-    console.log('GETS TO RENDER')
-
     return (
       <Form {...form}>
         <form onSubmit={handleSubmit(onSubmit)} className={formInner()}>
-          <Panel className={formGroup()}>
+          {/* <Panel className={formGroup()}>
             <PanelHeader heading="Add to group" noBorder />
             <p>You can add new contacts to one or multiple groups</p>
-            {/* <MultiSelect
+            <MultiSelect
               options={selectOptions}
               onValueChange={(input) =>
                 setSubscriptions(input as Datum.ListId[])
@@ -199,8 +192,8 @@ const ContactsTabCSV = () => {
               placeholder="Select lists to add contacts to"
               variant="inverted"
               animation={2}
-            /> */}
-          </Panel>
+            />
+          </Panel> */}
 
           <Panel className={cn(formGroup(), 'mb-8')}>
             <PanelHeader heading="Match fields" noBorder />
@@ -209,22 +202,19 @@ const ContactsTabCSV = () => {
                 <div className={formColumnInfo()}>
                   <h6 className={formHeader()}>{field}</h6>
                   <div className={formBoxes()}>
-                    {data?.slice(0, 2).map((contact, index) => {
-                      console.log(contact, contact?.[field])
-                      return (
-                        <p
-                          key={`${contact}-${index}`}
-                          className={cn(
-                            'px-4 py-2 border',
-                            index === 1
-                              ? 'rounded-b-md'
-                              : 'border-b-0 rounded-t-md',
-                          )}
-                        >
-                          {contact?.[field]}
-                        </p>
-                      )
-                    })}
+                    {data?.slice(0, 2).map((contact, index) => (
+                      <p
+                        key={`${contact}-${index}`}
+                        className={cn(
+                          'px-4 py-2 border',
+                          index === 1
+                            ? 'rounded-b-md'
+                            : 'border-b-0 rounded-t-md',
+                        )}
+                      >
+                        {contact?.[field]}
+                      </p>
+                    ))}
                   </div>
                 </div>
                 <div className={formFieldInfo()}>
