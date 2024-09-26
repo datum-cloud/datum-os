@@ -42,8 +42,6 @@
     "react-dom": "18.3.1"
   },
   "dependencies": {
-    "@openfeature/go-feature-flag-provider": "^0.7.3",
-    "@openfeature/server-sdk": "^1.15.1",
     "@react-pdf/renderer": "^3.4.4"
   }
 }
