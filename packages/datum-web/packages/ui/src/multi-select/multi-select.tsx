@@ -1,14 +1,7 @@
 // src/components/multi-select.tsx
 
 import * as React from 'react'
-import {
-  CheckIcon,
-  XCircle,
-  ChevronDown,
-  XIcon,
-  WandSparkles,
-  X,
-} from 'lucide-react'
+import { CheckIcon, ChevronDown, XIcon } from 'lucide-react'
 
 import { Popover, PopoverContent, PopoverTrigger } from '../popover/popover'
 import { Button } from '../button/button'
@@ -21,15 +14,14 @@ import {
   CommandList,
   CommandSeparator,
 } from '../command/command'
-import { Badge } from '../badge/badge'
 import { Divider } from '../divider/divider'
+import { Tag } from '../tag/tag'
 import { cn } from '../../lib/utils'
 
 import {
   multiSelectStyles,
   type MultiSelectVariants,
 } from './multi-select.styles'
-import { Tag } from '../tag/tag'
 
 interface MultiSelectProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
@@ -69,11 +61,9 @@ export const MultiSelect = React.forwardRef<
     },
     ref,
   ) => {
-    const {} = multiSelectStyles
     const [selectedValues, setSelectedValues] =
       React.useState<string[]>(defaultValue)
     const [isPopoverOpen, setIsPopoverOpen] = React.useState(false)
-    const [isAnimating, setIsAnimating] = React.useState(false)
 
     const handleInputKeyDown = (
       event: React.KeyboardEvent<HTMLInputElement>,
@@ -247,7 +237,7 @@ export const MultiSelect = React.forwardRef<
                       >
                         <CheckIcon className="h-4 w-4" />
                       </div>
-                      {option.icon && (
+                      {option?.icon && (
                         <option.icon className="mr-2 h-4 w-4 text-muted-foreground" />
                       )}
                       <span className="text-body-m">{option.label}</span>
