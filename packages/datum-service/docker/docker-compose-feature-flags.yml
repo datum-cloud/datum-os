@@ -1,0 +1,23 @@
+services:
+  feature-flags:
+    image: gofeatureflag/go-feature-flag:latest
+    container_name: feature-flags
+    restart: always
+    environment:
+      - EXPORTER_KIND=log
+      - FILEFORMAT=yaml
+      - LISTEN=1031
+      - POLLINGINTERVAL=1000
+      - RETRIEVER_KIND=file
+      - RETRIEVER_PATH=/goff/flags.goff.yml
+      - STARTWITHRETRIEVERERROR=false
+    ports:
+      - '1031:1031'
+    volumes:
+      - type: bind
+        source: ./configs/feature-flags/local.flags.goff.yml
+        target: /goff/flags.goff.yml
+
+volumes:
+  redis_data:
+    driver: local
