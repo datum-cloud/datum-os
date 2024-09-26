@@ -183,6 +183,8 @@ const ContactsTabCSV = () => {
       }
     }
 
+    console.log('GETS TO RENDER')
+
     return (
       <Form {...form}>
         <form onSubmit={handleSubmit(onSubmit)} className={formInner()}>
@@ -207,19 +209,22 @@ const ContactsTabCSV = () => {
                 <div className={formColumnInfo()}>
                   <h6 className={formHeader()}>{field}</h6>
                   <div className={formBoxes()}>
-                    {data?.slice(0, 2).map((contact, index) => (
-                      <p
-                        key={`${contact}-${index}`}
-                        className={cn(
-                          'px-4 py-2 border',
-                          index === 1
-                            ? 'rounded-b-md'
-                            : 'border-b-0 rounded-t-md',
-                        )}
-                      >
-                        {contact[field]}
-                      </p>
-                    ))}
+                    {data?.slice(0, 2).map((contact, index) => {
+                      console.log(contact, contact?.[field])
+                      return (
+                        <p
+                          key={`${contact}-${index}`}
+                          className={cn(
+                            'px-4 py-2 border',
+                            index === 1
+                              ? 'rounded-b-md'
+                              : 'border-b-0 rounded-t-md',
+                          )}
+                        >
+                          {contact?.[field]}
+                        </p>
+                      )
+                    })}
                   </div>
                 </div>
                 <div className={formFieldInfo()}>
