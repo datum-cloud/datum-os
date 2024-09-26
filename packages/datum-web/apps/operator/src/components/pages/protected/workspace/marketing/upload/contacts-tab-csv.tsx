@@ -181,7 +181,7 @@ const ContactsTabCSV = () => {
     return (
       <Form {...form}>
         <form onSubmit={handleSubmit(onSubmit)} className={formInner()}>
-          {/* <Panel className={formGroup()}>
+          <Panel className={formGroup()}>
             <PanelHeader heading="Add to group" noBorder />
             <p>You can add new contacts to one or multiple groups</p>
             <MultiSelect
@@ -193,7 +193,7 @@ const ContactsTabCSV = () => {
               variant="inverted"
               animation={2}
             />
-          </Panel> */}
+          </Panel>
 
           <Panel className={cn(formGroup(), 'mb-8')}>
             <PanelHeader heading="Match fields" noBorder />
