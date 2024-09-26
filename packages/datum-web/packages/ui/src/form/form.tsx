@@ -183,9 +183,6 @@ const FormMessage = React.forwardRef<
       className={cn(formMessage(), className)}
       {...props}
     >
-      <span className={formMessageIcon()}>
-        <InfoIcon width={16} height={16} />
-      </span>
       <>{body}</>
     </div>
   )

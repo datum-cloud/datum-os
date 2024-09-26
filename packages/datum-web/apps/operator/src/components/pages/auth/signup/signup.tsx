@@ -9,7 +9,6 @@ import {
   getPasskeyRegOptions,
   registerUser,
   verifyRegistration,
-  type RegisterUser,
 } from '@/lib/user'
 import { GoogleIcon } from '@repo/ui/icons/google'
 import { GithubIcon } from '@repo/ui/icons/github'
@@ -27,11 +26,13 @@ import {
   FormField,
   FormItem,
   FormLabel,
+  FormMessage,
   useForm,
   zodResolver,
 } from '@repo/ui/form'
 import { RegisterUserInput, RegisterUserSchema } from '@/utils/schemas'
 import Link from 'next/link'
+import { DEFAULT_ERROR_MESSAGE } from '@repo/constants'
 
 const TEMP_PASSKEY_EMAIL = 'tempuser@test.com'
 const TEMP_PASSKEY_NAME = 'Temp User'
@@ -40,12 +41,16 @@ export const SignupPage = () => {
   const form = useForm<RegisterUserInput>({
     mode: 'onSubmit',
     resolver: zodResolver(RegisterUserSchema),
+    defaultValues: {
+      email: '',
+      password: '',
+    },
   })
   const {
     handleSubmit,
     control,
     register,
-    formState: { isSubmitting },
+    formState: { isSubmitting, errors },
   } = form
   const router = useRouter()
   const [error, setError] = useState<string>()
@@ -91,33 +96,30 @@ export const SignupPage = () => {
       }
 
       if (!verificationResult.success) {
-        setError('Something went wrong. Please try again.')
+        setError(DEFAULT_ERROR_MESSAGE)
       }
 
       return verificationResult
     } catch (error) {
-      setError('Something went wrong. Please try again.')
+      setError(DEFAULT_ERROR_MESSAGE)
     }
   }
 
-  async function onSubmit(payload: RegisterUser) {
+  async function onSubmit(data: RegisterUserInput) {
     try {
-      if (payload.password === payload.confirmedPassword) {
-        delete payload.confirmedPassword
-
-        const res: any = await registerUser(payload)
-        if (res?.ok) {
-          router.push('/verify')
-        } else if (res?.message) {
-          setError('Something went wrong. Please try again.')
-        } else {
-          setError('Something went wrong. Please try again.')
-        }
+      const res: any = await registerUser(data)
+      if (res?.ok) {
+        router.push('/verify')
+      } else if (res?.message) {
+        const emailRelated = res?.message?.includes('email')
+        setError(
+          emailRelated ? 'Please use a valid email' : DEFAULT_ERROR_MESSAGE,
+        )
       } else {
-        setError('Passwords do not match')
+        setError(DEFAULT_ERROR_MESSAGE)
       }
     } catch (error) {
-      setError('Something went wrong. Please try again.')
+      setError(DEFAULT_ERROR_MESSAGE)
     }
   }
 
@@ -159,7 +161,7 @@ export const SignupPage = () => {
       <Form {...form}>
         <form className={formInner()} onSubmit={handleSubmit(onSubmit)}>
           <FormField
-            name="username"
+            name="email"
             control={control}
             render={({ field }) => (
               <FormItem>
@@ -174,6 +176,7 @@ export const SignupPage = () => {
                     value={field.value || ''}
                   />
                 </FormControl>
+                <FormMessage />
               </FormItem>
             )}
           />
@@ -187,12 +190,10 @@ export const SignupPage = () => {
               className="dark:text-blackberry-800"
               placeholder="password"
             />
+            {errors?.password && (
+              <FormMessage>{errors.password.message}</FormMessage>
+            )}
           </div>
-          <PasswordInput
-            {...register('confirmedPassword')}
-            className="dark:text-blackberry-800 !mt-0"
-            placeholder="Confirm password"
-          />
           <Button
             className="mr-auto mt-2 w-full"
             icon={<ArrowUpRight />}
@@ -203,8 +204,8 @@ export const SignupPage = () => {
             {isSubmitting ? 'loading' : 'Sign up'}
           </Button>
         </form>
+        {error && <FormMessage className="mt-1">{error}</FormMessage>}
       </Form>
-      {error && <MessageBox className="p-4" message={error} />}
       <p className="text-center text-blackberry-600 dark:text-blackberry-600 text-body-xs leading-[130%] mt-7">
         By continuing, you agree to Datum's 
         <Link href="" className="underline">

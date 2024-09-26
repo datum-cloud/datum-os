@@ -96,9 +96,8 @@ export const ListSchema = z.object({
 })
 
 export const RegisterUserSchema = z.object({
-  username: z.string(),
-  password: z.string(),
-  confirmedPassword: z.string().optional(),
+  email: z.string().email('Please enter a valid email'),
+  password: z.string().min(2, 'Please enter a valid password'),
 })
 
 export type RegisterUserInput = z.infer<typeof RegisterUserSchema>

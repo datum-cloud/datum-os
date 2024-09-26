@@ -6,9 +6,8 @@ export interface LoginUser {
 }
 
 export interface RegisterUser {
-  username: string
+  email: string
   password: string
-  confirmedPassword?: string
 }
 
 export async function registerUser(arg: RegisterUser) {
