@@ -28,6 +28,7 @@ export const OPERATOR_APP_ROUTES = {
   settings: '/settings',
   workspace: '/workspace',
   login: '/login',
+  forgotPassword: '/forgot-password',
 }
 
 export const OPERATOR_API_ROUTES = {

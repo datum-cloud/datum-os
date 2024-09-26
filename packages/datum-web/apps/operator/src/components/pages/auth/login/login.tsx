@@ -3,7 +3,7 @@
 import { startAuthentication } from '@simplewebauthn/browser'
 import { useRouter } from 'next/navigation'
 import { signIn } from 'next-auth/react'
-import { ArrowUpRight, Loader } from 'lucide-react'
+import { ArrowUpRight } from 'lucide-react'
 import { useState } from 'react'
 
 import {
@@ -34,6 +34,7 @@ import {
   zodResolver,
 } from '@repo/ui/form'
 import { RegisterUserInput, RegisterUserSchema } from '@/utils/schemas'
+import Link from 'next/link'
 
 const TEMP_PASSKEY_EMAIL = 'tempuser@test.com'
 const TEMP_PASSKEY_NAME = 'Temp User'
@@ -216,15 +217,12 @@ export const LoginPage = () => {
         </form>
         {error && <FormMessage className="mt-1">{error}</FormMessage>}
       </Form>
-      {/* TODO: Add forgot password flow */}
-      {/* <a
-        href=""
-        target="_blank"
-        rel="noopenner noreferrer"
+      <Link
+        href={OPERATOR_APP_ROUTES.forgotPassword}
         className="text-center text-body-sm text-sunglow-900 underline mt-4"
       >
         Forgot your password
-      </a> */}
+      </Link>
     </div>
   )
 }
