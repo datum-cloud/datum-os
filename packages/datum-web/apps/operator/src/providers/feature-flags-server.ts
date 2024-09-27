@@ -32,33 +32,49 @@ const context = async () => {
 // const localTest = getFeatureFlagBool('local-test', false)
 //
 export async function getFeatureFlagBool(flagKey: string, defaultValue: any) {
+  const ctx = await context()
+  if (!ctx) {
+    throw new Error('Failed to get context for feature flag')
+  }
   return featureFlagClient.getBooleanValue(
     flagKey,
     defaultValue,
-    await context(),
+    ctx,
   )
 }
 
 export async function getFeatureFlagString(flagKey: string, defaultValue: any) {
+  const ctx = await context()
+  if (!ctx) {
+    throw new Error('Failed to get context for feature flag')
+  }
   return featureFlagClient.getStringValue(
     flagKey,
     defaultValue,
-    await context(),
+    ctx,
   )
 }
 
 export async function getFeatureFlagNumber(flagKey: string, defaultValue: any) {
+  const ctx = await context()
+  if (!ctx) {
+    throw new Error('Failed to get context for feature flag')
+  }
   return featureFlagClient.getNumberValue(
     flagKey,
     defaultValue,
-    await context(),
+    ctx,
   )
 }
 
 export async function getFeatureFlagObject(flagKey: string, defaultValue: any) {
+  const ctx = await context()
+  if (!ctx) {
+    throw new Error('Failed to get context for feature flag')
+  }
   return featureFlagClient.getObjectValue(
     flagKey,
     defaultValue,
-    await context(),
+    ctx,
   )
 }
