@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"context"
+	"errors"
 
 	"github.com/spf13/cobra"
 	"go.uber.org/zap"
@@ -12,12 +13,14 @@ import (
 	"github.com/datum-cloud/datum-os/internal/httpserve/config"
 	"github.com/datum-cloud/datum-os/internal/httpserve/server"
 	"github.com/datum-cloud/datum-os/internal/httpserve/serveropts"
+	"github.com/datum-cloud/datum-os/internal/services/projects"
 	"github.com/datum-cloud/datum-os/internal/tool/grpctool"
 	"github.com/datum-cloud/datum-os/pkg/cache"
 	"github.com/datum-cloud/datum-os/pkg/fgax"
 	geodetic "github.com/datum-cloud/datum-os/pkg/geodetic/pkg/geodeticclient"
 	"github.com/datum-cloud/datum-os/pkg/otelx"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
+	resourcemanagerpb "go.datumapis.com/genproto/os/resourcemanager/v1alpha"
 	"google.golang.org/grpc/credentials/insecure"
 )
 
@@ -68,6 +71,17 @@ func serve(ctx context.Context) error {
 
 	if err != nil {
 		panic(err)
+	}
+
+	// Register the Projects server gRPC service
+	resourcemanagerpb.RegisterProjectsServer(grpcServer, &projects.Server{})
+
+	errs := errors.Join(
+		// Register the Projects service REST proxy
+		resourcemanagerpb.RegisterProjectsHandler(ctx, gRPCRestProxy, inMemoryConn),
+	)
+	if errs != nil {
+		panic(errs)
 	}
 
 	// create ent dependency injection
