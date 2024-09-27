@@ -13,7 +13,7 @@ import (
 	"github.com/datum-cloud/datum-os/internal/httpserve/config"
 	"github.com/datum-cloud/datum-os/internal/httpserve/server"
 	"github.com/datum-cloud/datum-os/internal/httpserve/serveropts"
-	"github.com/datum-cloud/datum-os/internal/services/projects"
+	"github.com/datum-cloud/datum-os/internal/services/resourcemanager"
 	"github.com/datum-cloud/datum-os/internal/tool/grpctool"
 	"github.com/datum-cloud/datum-os/pkg/cache"
 	"github.com/datum-cloud/datum-os/pkg/fgax"
