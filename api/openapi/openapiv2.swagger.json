@@ -1,0 +1,1249 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "datum/api/field_behavior.proto",
+    "version": "version not set"
+  },
+  "tags": [
+    {
+      "name": "Folders"
+    },
+    {
+      "name": "Projects"
+    }
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/v1/{folder.name}": {
+      "patch": {
+        "summary": "Updates an existing folder.",
+        "operationId": "UpdateFolder",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/googlelongrunningOperation"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "folder.name",
+            "description": "The resource name of the Folder. Will be in the format `folders/{folder}`.\nThe `parent` option can be used to determine the folder's location in the\nhierarchy.",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "pattern": "folders/[^/]+"
+          },
+          {
+            "name": "folder",
+            "description": "Required. The folder to update.",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "parent": {
+                  "type": "string",
+                  "description": "The resource name of the Folder's parent in the resource hierarchy. This\nvalue will change if the folder is moved in the resource hierachy. The\nparent will always be a folder (e.g. `folders/{folder}`) or organization\n(e.g. `organizations/{organization}`).\n\nThe [MoveFolder] method can be used to move the Folder to a new parent.",
+                  "readOnly": true
+                },
+                "uid": {
+                  "type": "string",
+                  "description": "A system-generated UUIDv4 that uniquely identifies the resource.",
+                  "readOnly": true
+                },
+                "etag": {
+                  "type": "string",
+                  "description": "A checksum calculated by the server based on the current state of the\nfolder resource. This value can be sent on update and delete requests to\nensure the client has an up-to-date value before proceeding with the mutate\ncall.",
+                  "readOnly": true
+                },
+                "createTime": {
+                  "type": "string",
+                  "format": "date-time",
+                  "description": "The time when the folder was created.",
+                  "readOnly": true
+                },
+                "updateTime": {
+                  "type": "string",
+                  "format": "date-time",
+                  "description": "The time when the folder was last updated.",
+                  "readOnly": true
+                },
+                "deleteTime": {
+                  "type": "string",
+                  "format": "date-time",
+                  "description": "The time when the folder was deleted.",
+                  "readOnly": true
+                },
+                "reconciling": {
+                  "type": "boolean",
+                  "description": "Inidicates whether the folder is being reconciled because the current\nstate of the folder does not match the desired state.",
+                  "readOnly": true
+                },
+                "annotations": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "string"
+                  },
+                  "description": "Annotations are an unstructured key-value map stored with a folder that\nmay be set by external tools to store and retrieve arbitrary metadata.\nThey are not queryable and will be preserved when modifying objects.\n\nAnnotation keys must be in a fully-qualified domain format.\n\n  annotations:\n    resourcemanager.datumapis.com/project-id: some-value\n    extensions.calico.com/network: some-network"
+                },
+                "displayName": {
+                  "type": "string",
+                  "description": "A user-provided name for the folder. This must be unique within the parent resource."
+                },
+                "description": {
+                  "type": "string",
+                  "description": "An optional description for the folder."
+                }
+              },
+              "title": "Required. The folder to update.",
+              "required": [
+                "displayName"
+              ]
+            }
+          },
+          {
+            "name": "validateOnly",
+            "description": "When set to true, the request will be validated but the folder will not be\ncreated within the system. This is helpful to perform server-side\nvalidation of requests and show validation errors to users prior to\nallowing them to submit the update request.",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "allowMissing",
+            "description": "Set to true to indicate that a new Folder should be created if the\nprovided folder doesn't already exist.",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          }
+        ],
+        "tags": [
+          "Folders"
+        ]
+      }
+    },
+    "/v1/{name_1}": {
+      "get": {
+        "summary": "Retrieves a project by its name.",
+        "description": "This will always return the expected state of the project. The project's\nstatus will always reflect the last observed status of the project.",
+        "operationId": "GetProject",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1alphaProject"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "name_1",
+            "description": "Required. The name of the project to retrieve.\nFormat: organizations/{organization}/projects/{project}",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "pattern": "projects/[^/]+"
+          }
+        ],
+        "tags": [
+          "Projects"
+        ]
+      },
+      "delete": {
+        "summary": "Delete a project from the platform.",
+        "description": "A project will not be deleted until all resources have been removed from\nthe project. Deleting a project will not immediately stop the billing for\nany resources provisioned within the project. Billing for a resource\nprovisioned within a project will only stop once the resource has been\nremoved.\n\nProjects can be scheduled for deletion in the future but no guarantees are\nprovided on when the deletion will start after the requested deletion time\nhas passed.",
+        "operationId": "DeleteProject",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/googlelongrunningOperation"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "name_1",
+            "description": "Required. The name of the project to delete.\nFormat: organizations/{organization}/projects/{project}",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "pattern": "projects/[^/]+"
+          },
+          {
+            "name": "validateOnly",
+            "description": "Indicates the request to update the project should only be validated and\nchanges must not actually take effect on the resource. API consumers can\nleverage this option to perform validation and present errors to users\nbefore submitting a real update request.",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "etag",
+            "description": "Optionally provide the computed checksum value of the current resource to\nensure updates only take effect when the latest resource was provided by\nthe caller.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "allowMissing",
+            "description": "When set to true, the request will still succeed if the project does not\nexist.",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          }
+        ],
+        "tags": [
+          "Projects"
+        ]
+      }
+    },
+    "/v1/{name_1}:move": {
+      "post": {
+        "summary": "Move a project to a new location in the resource hierarchy.",
+        "description": "Users can move projects new locations in the resource hierarchy based on\ntheir organizational needs. Changing the location in the hierarchy can have\nadverse affects on IAM policies inherited by the project. Users must be\ncareful that IAM policies applied from the existing parent are also set on\nthe new parent **before** moving the project, otherwise they risk access\ngranted through a parent's policies being removed.",
+        "operationId": "MoveProject",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/googlelongrunningOperation"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "name_1",
+            "description": "The resource name of the project that will be moved to a new location\nwithin the resource hierarchy.",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "pattern": "projects/[^/]+"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ProjectsMoveProjectBody"
+            }
+          }
+        ],
+        "tags": [
+          "Projects"
+        ]
+      }
+    },
+    "/v1/{name}": {
+      "get": {
+        "summary": "Retrieves a folder by its name.",
+        "operationId": "GetFolder",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1alphaFolder"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "name",
+            "description": "Required. The name of the folder to retrieve.\nFormat: organizations/{organization}/folders/{folder}",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "pattern": "folders/[^/]+"
+          }
+        ],
+        "tags": [
+          "Folders"
+        ]
+      },
+      "delete": {
+        "summary": "Deletes a folder.",
+        "description": "A folder must be empty before it can be deleted.",
+        "operationId": "DeleteFolder",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/googlelongrunningOperation"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "name",
+            "description": "Required. The name of the folder to delete.\nFormat: organizations/{organization}/folders/{folder}",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "pattern": "folders/[^/]+"
+          },
+          {
+            "name": "validateOnly",
+            "description": "When set to true, the request will only be validated and no actions will be\ntaken on the folder. This is helpful for confirming the request options\nare correct before calling the endpoint.",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "etag",
+            "description": "Optionally provide the computed checksum value of the current resource to\nensure updates only take effect when the latest resource was provided by\nthe caller.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "allowMissing",
+            "description": "When set to true, the request will still succeed if the folder does not\nexist.",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          }
+        ],
+        "tags": [
+          "Folders"
+        ]
+      }
+    },
+    "/v1/{name}:move": {
+      "post": {
+        "summary": "Move a folder to a new location within the resource hierarchy.",
+        "operationId": "MoveFolder",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/googlelongrunningOperation"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "name",
+            "description": "The resource name of the folder that will be moved to a new location\nwithin the resource hierarchy.",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "pattern": "folders/[^/]+"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/FoldersMoveFolderBody"
+            }
+          }
+        ],
+        "tags": [
+          "Folders"
+        ]
+      }
+    },
+    "/v1/{parent_1}": {
+      "get": {
+        "summary": "Lists folders under a parent resource.",
+        "operationId": "ListFolders2",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1alphaListFoldersResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "parent_1",
+            "description": "The parent location in the resource heirarchy to list folders in. Will\nalways be another folder (e.g. `folders/{folder}`) or an organization (e.g.\n`organizations/{organization}`).",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "pattern": "folders/[^/]+"
+          },
+          {
+            "name": "pageSize",
+            "description": "The maximum number of folders to return. If unspecified, defaults to 50.",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "pageToken",
+            "description": "Optional. A token identifying a page of results to return.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "filter",
+            "description": "Optional. A filter to apply to the results.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Folders"
+        ]
+      }
+    },
+    "/v1/{parent_1}/folders": {
+      "post": {
+        "summary": "Create a new folder within an organization's resource hierarchy.",
+        "operationId": "CreateFolder2",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/googlelongrunningOperation"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "parent_1",
+            "description": "The parent resource in the resource hierarchy where this folder will be\ncreated. Must be another Folder or an Organization. Will be in the format\n`folders/{folder}` or `organizations/{organization}`.",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "pattern": "folders/[^/]+"
+          },
+          {
+            "name": "folder",
+            "description": "The folder to create.",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1alphaFolder",
+              "required": [
+                "folder"
+              ]
+            }
+          },
+          {
+            "name": "folderId",
+            "description": "Set the ID to use for the folder. This will be used as the last section of\nthe folder's resource name.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "validateOnly",
+            "description": "When set to true, the request will be validated but the folder will not be\ncreated within the system. This is helpful to perform server-side\nvalidation of resources and show validation errors to users prior to\nallowing them to submit the creation request.",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          }
+        ],
+        "tags": [
+          "Folders"
+        ]
+      }
+    },
+    "/v1/{parent_1}/projects": {
+      "get": {
+        "summary": "Lists projects under a parent resource.",
+        "description": "Projects can be organized into Folders or set at the root of the\nOrganizatino's heirarchy.",
+        "operationId": "ListProjects2",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1alphaListProjectsResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "parent_1",
+            "description": "The parent location in the resource hierarchy that projects should be\nlisted from.",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "pattern": "folders/[^/]+"
+          },
+          {
+            "name": "pageSize",
+            "description": "Optional. The maximum number of projects to return. If unspecified, defaults to 50.",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "pageToken",
+            "description": "Optional. A token identifying a page of results to return.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "filter",
+            "description": "Optional. A filter to apply to the results.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Projects"
+        ]
+      },
+      "post": {
+        "summary": "Creates a project within the resource hierarchy.",
+        "operationId": "CreateProject2",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/googlelongrunningOperation"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "parent_1",
+            "description": "The resource name to use as the parent in the project's resource hierarchy.\nA Project can have a Folder or an Organization as it's parent. Must be in\nthe format \"organizations/{organization}\" or \"projects/{project}\".",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "pattern": "folders/[^/]+"
+          },
+          {
+            "name": "project",
+            "description": "The project to create.",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1alphaProject",
+              "required": [
+                "project"
+              ]
+            }
+          },
+          {
+            "name": "projectId",
+            "description": "Set the ID to use for the project. This will be used as the last section of\nthe project's resource name.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "validateOnly",
+            "description": "When set to true, the request will be validated but the project will not be\ncreated within the system. This is helpful to perform server-side\nvalidation of resources and show validation errors to users prior to\nallowing them to submit the creation request.",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          }
+        ],
+        "tags": [
+          "Projects"
+        ]
+      }
+    },
+    "/v1/{parent}": {
+      "get": {
+        "summary": "Lists folders under a parent resource.",
+        "operationId": "ListFolders",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1alphaListFoldersResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "parent",
+            "description": "The parent location in the resource heirarchy to list folders in. Will\nalways be another folder (e.g. `folders/{folder}`) or an organization (e.g.\n`organizations/{organization}`).",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "pattern": "organizations/[^/]+"
+          },
+          {
+            "name": "pageSize",
+            "description": "The maximum number of folders to return. If unspecified, defaults to 50.",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "pageToken",
+            "description": "Optional. A token identifying a page of results to return.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "filter",
+            "description": "Optional. A filter to apply to the results.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Folders"
+        ]
+      }
+    },
+    "/v1/{parent}/folders": {
+      "post": {
+        "summary": "Create a new folder within an organization's resource hierarchy.",
+        "operationId": "CreateFolder",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/googlelongrunningOperation"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "parent",
+            "description": "The parent resource in the resource hierarchy where this folder will be\ncreated. Must be another Folder or an Organization. Will be in the format\n`folders/{folder}` or `organizations/{organization}`.",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "pattern": "organizations/[^/]+"
+          },
+          {
+            "name": "folder",
+            "description": "The folder to create.",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1alphaFolder",
+              "required": [
+                "folder"
+              ]
+            }
+          },
+          {
+            "name": "folderId",
+            "description": "Set the ID to use for the folder. This will be used as the last section of\nthe folder's resource name.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "validateOnly",
+            "description": "When set to true, the request will be validated but the folder will not be\ncreated within the system. This is helpful to perform server-side\nvalidation of resources and show validation errors to users prior to\nallowing them to submit the creation request.",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          }
+        ],
+        "tags": [
+          "Folders"
+        ]
+      }
+    },
+    "/v1/{parent}/projects": {
+      "get": {
+        "summary": "Lists projects under a parent resource.",
+        "description": "Projects can be organized into Folders or set at the root of the\nOrganizatino's heirarchy.",
+        "operationId": "ListProjects",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1alphaListProjectsResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "parent",
+            "description": "The parent location in the resource hierarchy that projects should be\nlisted from.",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "pattern": "organizations/[^/]+"
+          },
+          {
+            "name": "pageSize",
+            "description": "Optional. The maximum number of projects to return. If unspecified, defaults to 50.",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "pageToken",
+            "description": "Optional. A token identifying a page of results to return.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "filter",
+            "description": "Optional. A filter to apply to the results.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Projects"
+        ]
+      },
+      "post": {
+        "summary": "Creates a project within the resource hierarchy.",
+        "operationId": "CreateProject",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/googlelongrunningOperation"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "parent",
+            "description": "The resource name to use as the parent in the project's resource hierarchy.\nA Project can have a Folder or an Organization as it's parent. Must be in\nthe format \"organizations/{organization}\" or \"projects/{project}\".",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "pattern": "organizations/[^/]+"
+          },
+          {
+            "name": "project",
+            "description": "The project to create.",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1alphaProject",
+              "required": [
+                "project"
+              ]
+            }
+          },
+          {
+            "name": "projectId",
+            "description": "Set the ID to use for the project. This will be used as the last section of\nthe project's resource name.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "validateOnly",
+            "description": "When set to true, the request will be validated but the project will not be\ncreated within the system. This is helpful to perform server-side\nvalidation of resources and show validation errors to users prior to\nallowing them to submit the creation request.",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          }
+        ],
+        "tags": [
+          "Projects"
+        ]
+      }
+    },
+    "/v1/{project.name}": {
+      "patch": {
+        "summary": "Updates an existing Project",
+        "operationId": "UpdateProject",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/googlelongrunningOperation"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "project.name",
+            "description": "The resource name of the Project.\nFormat: projects/{project}",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "pattern": "projects/[^/]+"
+          },
+          {
+            "name": "project",
+            "description": "Required. The project to update.",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "parent": {
+                  "type": "string",
+                  "description": "The resource name of the Project's parent in the resource hierarchy. This\nvalue will change if the project is moved in the resource hierachy. The\nparent will always be a folder (e.g. `folders/{folder}`) or organization\n(e.g. `organizations/{organization}`).\n\nThe [MoveProject] method can be used to move the Project to a new parent.",
+                  "readOnly": true
+                },
+                "uid": {
+                  "type": "string",
+                  "description": "A system-generated UUIDv4 that uniquely identifies the resource.",
+                  "readOnly": true
+                },
+                "etag": {
+                  "type": "string",
+                  "description": "A checksum calculated by the server based on the current state of the\nproject resource. This value can be sent on update and delete requests to\nensure the client has an up-to-date value before proceeding with the mutate\ncall.",
+                  "readOnly": true
+                },
+                "createTime": {
+                  "type": "string",
+                  "format": "date-time",
+                  "description": "The time when the project was created.",
+                  "readOnly": true
+                },
+                "updateTime": {
+                  "type": "string",
+                  "format": "date-time",
+                  "description": "The time when the project was last updated.",
+                  "readOnly": true
+                },
+                "deleteTime": {
+                  "type": "string",
+                  "format": "date-time",
+                  "description": "The time when the project was deleted.",
+                  "readOnly": true
+                },
+                "reconciling": {
+                  "type": "boolean",
+                  "description": "Inidicates whether the project is being reconciled because the current\nstate of the project does not match the desired state.",
+                  "readOnly": true
+                },
+                "annotations": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "string"
+                  },
+                  "description": "Annotations are an unstructured key-value map stored with a project that\nmay be set by external tools to store and retrieve arbitrary metadata.\nThey are not queryable and will be preserved when modifying objects.\n\nAnnotation keys must be in a fully-qualified domain format.\n\n  annotations:\n    resourcemanager.datumapis.com/project-id: some-value\n    extensions.calico.com/network: some-network"
+                },
+                "labels": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "string"
+                  },
+                  "description": "Labels are an unstructured key-value map that can be used to categorizing\nthe resource. Eventually the system will allow filtering on project labels."
+                },
+                "displayName": {
+                  "type": "string",
+                  "description": "A user-provided name for the project. This must be unique within the parent\nresource."
+                },
+                "description": {
+                  "type": "string",
+                  "description": "An optional description for the project."
+                }
+              },
+              "title": "Required. The project to update.",
+              "required": [
+                "displayName"
+              ]
+            }
+          },
+          {
+            "name": "validateOnly",
+            "description": "Indicates the request to update the project should only be validated and\nchanges must not actually take effect on the resource. API consumers can\nleverage this option to perform validation and present errors to users\nbefore submitting a real update request.",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "allowMissing",
+            "description": "Set to true to indicate that a new Project should be created if the\nprovided project doesn't already exist.",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          }
+        ],
+        "tags": [
+          "Projects"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "FoldersMoveFolderBody": {
+      "type": "object",
+      "properties": {
+        "destination": {
+          "type": "string",
+          "description": "The destination within the resource hierarchy the folder should be moved\nto. A folder can be moved to the root of an organization's hierarchy by\nspecifying the organization instead of another folder. Must be the resource\nname of the parent, e.g. `folders/{folder}` or\n`organizations/{organization}`."
+        },
+        "etag": {
+          "type": "string",
+          "description": "Optionally provide the computed checksum value of the current resource to\nensure a folder will only be moved when the current resource was provided\nin the request."
+        },
+        "validateOnly": {
+          "type": "boolean",
+          "description": "When set to true, the request will only be validated and no actions will be\ntaken on the folder. This is helpful for confirming the request options\nare correct before calling the endpoint."
+        }
+      },
+      "description": "The request message to use when moving a folder to a new place within an\norganization's resource hierarchy.",
+      "required": [
+        "destination"
+      ]
+    },
+    "ProjectsMoveProjectBody": {
+      "type": "object",
+      "properties": {
+        "destinationParent": {
+          "type": "string",
+          "description": "The location within the hierarchy to move the project to. The project\ncan be moved to another folder within the organization or the root of\nthe organization. Must be the resource name of the parent, e.g.\n`folders/{folder}` or `organizations/{organization}`."
+        },
+        "etag": {
+          "type": "string",
+          "description": "Optionally provide the computed checksum value of the current resource to\nensure a project will only be moved when the current resource was provided\nin the request."
+        },
+        "validateOnly": {
+          "type": "boolean",
+          "description": "When set to true, the request will only be validated and no actions will be\ntaken on the project. This is helpful for confirming the request options\nare correct before calling the endpoint."
+        }
+      },
+      "description": "The request message to use when moving a project to a new location within\nthe resource hierarchy.",
+      "required": [
+        "destinationParent"
+      ]
+    },
+    "googlelongrunningOperation": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "The server-assigned name, which is only unique within the same service that\noriginally returns it. If you use the default HTTP mapping, the\n`name` should be a resource name ending with `operations/{unique_id}`."
+        },
+        "metadata": {
+          "$ref": "#/definitions/protobufAny",
+          "description": "Service-specific metadata associated with the operation.  It typically\ncontains progress information and common metadata such as create time.\nSome services might not provide such metadata.  Any method that returns a\nlong-running operation should document the metadata type, if any."
+        },
+        "done": {
+          "type": "boolean",
+          "description": "If the value is `false`, it means the operation is still in progress.\nIf `true`, the operation is completed, and either `error` or `response` is\navailable."
+        },
+        "error": {
+          "$ref": "#/definitions/rpcStatus",
+          "description": "The error result of the operation in case of failure or cancellation."
+        },
+        "response": {
+          "$ref": "#/definitions/protobufAny",
+          "description": "The normal response of the operation in case of success.  If the original\nmethod returns no data on success, such as `Delete`, the response is\n`google.protobuf.Empty`.  If the original method is standard\n`Get`/`Create`/`Update`, the response should be the resource.  For other\nmethods, the response should have the type `XxxResponse`, where `Xxx`\nis the original method name.  For example, if the original method name\nis `TakeSnapshot()`, the inferred response type is\n`TakeSnapshotResponse`."
+        }
+      },
+      "description": "This resource represents a long-running operation that is the result of a\nnetwork API call."
+    },
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "@type": {
+          "type": "string",
+          "description": "A URL/resource name that uniquely identifies the type of the serialized\nprotocol buffer message. This string must contain at least\none \"/\" character. The last segment of the URL's path must represent\nthe fully qualified name of the type (as in\n`path/google.protobuf.Duration`). The name should be in a canonical form\n(e.g., leading \".\" is not accepted).\n\nIn practice, teams usually precompile into the binary all types that they\nexpect it to use in the context of Any. However, for URLs which use the\nscheme `http`, `https`, or no scheme, one can optionally set up a type\nserver that maps type URLs to message definitions as follows:\n\n* If no scheme is provided, `https` is assumed.\n* An HTTP GET on the URL must yield a [google.protobuf.Type][]\n  value in binary format, or produce an error.\n* Applications are allowed to cache lookup results based on the\n  URL, or have them precompiled into a binary to avoid any\n  lookup. Therefore, binary compatibility needs to be preserved\n  on changes to types. (Use versioned type names to manage\n  breaking changes.)\n\nNote: this functionality is not currently available in the official\nprotobuf release, and it is not used for type URLs beginning with\ntype.googleapis.com.\n\nSchemes other than `http`, `https` (or the empty scheme) might be\nused with implementation specific semantics."
+        }
+      },
+      "additionalProperties": {},
+      "description": "`Any` contains an arbitrary serialized protocol buffer message along with a\nURL that describes the type of the serialized message.\n\nProtobuf library provides support to pack/unpack Any values in the form\nof utility functions or additional generated methods of the Any type.\n\nExample 1: Pack and unpack a message in C++.\n\n    Foo foo = ...;\n    Any any;\n    any.PackFrom(foo);\n    ...\n    if (any.UnpackTo(\u0026foo)) {\n      ...\n    }\n\nExample 2: Pack and unpack a message in Java.\n\n    Foo foo = ...;\n    Any any = Any.pack(foo);\n    ...\n    if (any.is(Foo.class)) {\n      foo = any.unpack(Foo.class);\n    }\n\nExample 3: Pack and unpack a message in Python.\n\n    foo = Foo(...)\n    any = Any()\n    any.Pack(foo)\n    ...\n    if any.Is(Foo.DESCRIPTOR):\n      any.Unpack(foo)\n      ...\n\nExample 4: Pack and unpack a message in Go\n\n     foo := \u0026pb.Foo{...}\n     any, err := anypb.New(foo)\n     if err != nil {\n       ...\n     }\n     ...\n     foo := \u0026pb.Foo{}\n     if err := any.UnmarshalTo(foo); err != nil {\n       ...\n     }\n\nThe pack methods provided by protobuf library will by default use\n'type.googleapis.com/full.type.name' as the type URL and the unpack\nmethods only use the fully qualified type name after the last '/'\nin the type URL, for example \"foo.bar.com/x/y.z\" will yield type\nname \"y.z\".\n\n\nJSON\n\nThe JSON representation of an `Any` value uses the regular\nrepresentation of the deserialized, embedded message, with an\nadditional field `@type` which contains the type URL. Example:\n\n    package google.profile;\n    message Person {\n      string first_name = 1;\n      string last_name = 2;\n    }\n\n    {\n      \"@type\": \"type.googleapis.com/google.profile.Person\",\n      \"firstName\": \u003cstring\u003e,\n      \"lastName\": \u003cstring\u003e\n    }\n\nIf the embedded message type is well-known and has a custom JSON\nrepresentation, that representation will be embedded adding a field\n`value` which holds the custom JSON in addition to the `@type`\nfield. Example (for message [google.protobuf.Duration][]):\n\n    {\n      \"@type\": \"type.googleapis.com/google.protobuf.Duration\",\n      \"value\": \"1.212s\"\n    }"
+    },
+    "rpcStatus": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32",
+          "description": "The status code, which should be an enum value of\n[google.rpc.Code][google.rpc.Code]."
+        },
+        "message": {
+          "type": "string",
+          "description": "A developer-facing error message, which should be in English. Any\nuser-facing error message should be localized and sent in the\n[google.rpc.Status.details][google.rpc.Status.details] field, or localized\nby the client."
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/protobufAny"
+          },
+          "description": "A list of messages that carry the error details.  There is a common set of\nmessage types for APIs to use."
+        }
+      },
+      "description": "The `Status` type defines a logical error model that is suitable for\ndifferent programming environments, including REST APIs and RPC APIs. It is\nused by [gRPC](https://github.com/grpc). Each `Status` message contains\nthree pieces of data: error code, error message, and error details.\n\nYou can find out more about this error model and how to work with it in the\n[API Design Guide](https://cloud.google.com/apis/design/errors)."
+    },
+    "v1alphaFolder": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "The resource name of the Folder. Will be in the format `folders/{folder}`.\nThe `parent` option can be used to determine the folder's location in the\nhierarchy."
+        },
+        "parent": {
+          "type": "string",
+          "description": "The resource name of the Folder's parent in the resource hierarchy. This\nvalue will change if the folder is moved in the resource hierachy. The\nparent will always be a folder (e.g. `folders/{folder}`) or organization\n(e.g. `organizations/{organization}`).\n\nThe [MoveFolder] method can be used to move the Folder to a new parent.",
+          "readOnly": true
+        },
+        "uid": {
+          "type": "string",
+          "description": "A system-generated UUIDv4 that uniquely identifies the resource.",
+          "readOnly": true
+        },
+        "etag": {
+          "type": "string",
+          "description": "A checksum calculated by the server based on the current state of the\nfolder resource. This value can be sent on update and delete requests to\nensure the client has an up-to-date value before proceeding with the mutate\ncall.",
+          "readOnly": true
+        },
+        "createTime": {
+          "type": "string",
+          "format": "date-time",
+          "description": "The time when the folder was created.",
+          "readOnly": true
+        },
+        "updateTime": {
+          "type": "string",
+          "format": "date-time",
+          "description": "The time when the folder was last updated.",
+          "readOnly": true
+        },
+        "deleteTime": {
+          "type": "string",
+          "format": "date-time",
+          "description": "The time when the folder was deleted.",
+          "readOnly": true
+        },
+        "reconciling": {
+          "type": "boolean",
+          "description": "Inidicates whether the folder is being reconciled because the current\nstate of the folder does not match the desired state.",
+          "readOnly": true
+        },
+        "annotations": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "description": "Annotations are an unstructured key-value map stored with a folder that\nmay be set by external tools to store and retrieve arbitrary metadata.\nThey are not queryable and will be preserved when modifying objects.\n\nAnnotation keys must be in a fully-qualified domain format.\n\n  annotations:\n    resourcemanager.datumapis.com/project-id: some-value\n    extensions.calico.com/network: some-network"
+        },
+        "displayName": {
+          "type": "string",
+          "description": "A user-provided name for the folder. This must be unique within the parent resource."
+        },
+        "description": {
+          "type": "string",
+          "description": "An optional description for the folder."
+        }
+      },
+      "description": "The Folder resource message.",
+      "required": [
+        "displayName"
+      ]
+    },
+    "v1alphaListFoldersResponse": {
+      "type": "object",
+      "properties": {
+        "folders": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1alphaFolder"
+          },
+          "description": "The list of folders."
+        },
+        "nextPageToken": {
+          "type": "string",
+          "description": "A token to retrieve the next page of results."
+        }
+      },
+      "description": "The response message for listing folders."
+    },
+    "v1alphaListProjectsResponse": {
+      "type": "object",
+      "properties": {
+        "projects": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1alphaProject"
+          },
+          "description": "The list of projects."
+        },
+        "nextPageToken": {
+          "type": "string",
+          "description": "A token to retrieve the next page of results."
+        }
+      },
+      "description": "The response message for listing projects."
+    },
+    "v1alphaProject": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "title": "The resource name of the Project.\nFormat: projects/{project}"
+        },
+        "parent": {
+          "type": "string",
+          "description": "The resource name of the Project's parent in the resource hierarchy. This\nvalue will change if the project is moved in the resource hierachy. The\nparent will always be a folder (e.g. `folders/{folder}`) or organization\n(e.g. `organizations/{organization}`).\n\nThe [MoveProject] method can be used to move the Project to a new parent.",
+          "readOnly": true
+        },
+        "uid": {
+          "type": "string",
+          "description": "A system-generated UUIDv4 that uniquely identifies the resource.",
+          "readOnly": true
+        },
+        "etag": {
+          "type": "string",
+          "description": "A checksum calculated by the server based on the current state of the\nproject resource. This value can be sent on update and delete requests to\nensure the client has an up-to-date value before proceeding with the mutate\ncall.",
+          "readOnly": true
+        },
+        "createTime": {
+          "type": "string",
+          "format": "date-time",
+          "description": "The time when the project was created.",
+          "readOnly": true
+        },
+        "updateTime": {
+          "type": "string",
+          "format": "date-time",
+          "description": "The time when the project was last updated.",
+          "readOnly": true
+        },
+        "deleteTime": {
+          "type": "string",
+          "format": "date-time",
+          "description": "The time when the project was deleted.",
+          "readOnly": true
+        },
+        "reconciling": {
+          "type": "boolean",
+          "description": "Inidicates whether the project is being reconciled because the current\nstate of the project does not match the desired state.",
+          "readOnly": true
+        },
+        "annotations": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "description": "Annotations are an unstructured key-value map stored with a project that\nmay be set by external tools to store and retrieve arbitrary metadata.\nThey are not queryable and will be preserved when modifying objects.\n\nAnnotation keys must be in a fully-qualified domain format.\n\n  annotations:\n    resourcemanager.datumapis.com/project-id: some-value\n    extensions.calico.com/network: some-network"
+        },
+        "labels": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "description": "Labels are an unstructured key-value map that can be used to categorizing\nthe resource. Eventually the system will allow filtering on project labels."
+        },
+        "displayName": {
+          "type": "string",
+          "description": "A user-provided name for the project. This must be unique within the parent\nresource."
+        },
+        "description": {
+          "type": "string",
+          "description": "An optional description for the project."
+        }
+      },
+      "description": "The Project resource message.",
+      "required": [
+        "displayName"
+      ]
+    }
+  }
+}
