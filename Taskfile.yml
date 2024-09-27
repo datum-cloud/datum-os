@@ -1,0 +1,13 @@
+version: '3'
+
+shopt: [globstar]
+
+includes:
+  api:
+    taskfile: ./api/Taskfile.yml
+    dir: ./api
+
+tasks:
+  install-tools:
+    deps:
+      - api:install-tools
