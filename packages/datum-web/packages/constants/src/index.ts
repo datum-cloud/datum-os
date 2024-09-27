@@ -89,3 +89,8 @@ export const ERROR_MESSAGES: Record<string, string> = {
 }
 
 export const DEFAULT_ERROR_MESSAGE = 'Something went wrong. Please try again.'
+
+export const DEFAULT_AVATAR_DIMENSIONS: Datum.ImageDimensions = {
+  width: 256,
+  height: 256,
+}

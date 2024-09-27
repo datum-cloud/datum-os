@@ -12239,7 +12239,7 @@ export type GetUserProfileQueryVariables = Exact<{
 }>;
 
 
-export type GetUserProfileQuery = { __typename?: 'Query', user: { __typename?: 'User', id: string, firstName?: string | null, lastName?: string | null, displayName: string, email: string, avatarRemoteURL?: string | null, setting: { __typename?: 'UserSetting', status: UserSettingUserStatus, tags?: Array<string> | null } } };
+export type GetUserProfileQuery = { __typename?: 'Query', user: { __typename?: 'User', id: string, firstName?: string | null, lastName?: string | null, displayName: string, email: string, avatarRemoteURL?: string | null, avatarLocalFile?: string | null, setting: { __typename?: 'UserSetting', status: UserSettingUserStatus, tags?: Array<string> | null } } };
 
 export type UpdateUserInfoMutationVariables = Exact<{
   updateUserId: Scalars['ID']['input'];
@@ -12670,6 +12670,7 @@ export const GetUserProfileDocument = gql`
     displayName
     email
     avatarRemoteURL
+    avatarLocalFile
     setting {
       status
       tags

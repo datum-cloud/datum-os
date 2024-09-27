@@ -120,4 +120,9 @@ export namespace Datum {
   }
 
   export type CsvData = Record<string, string>[]
+
+  export type ImageDimensions = {
+    height: number
+    width: number
+  }
 }
