@@ -12241,13 +12241,13 @@ export type GetUserProfileQueryVariables = Exact<{
 
 export type GetUserProfileQuery = { __typename?: 'Query', user: { __typename?: 'User', id: string, firstName?: string | null, lastName?: string | null, displayName: string, email: string, avatarRemoteURL?: string | null, setting: { __typename?: 'UserSetting', status: UserSettingUserStatus, tags?: Array<string> | null } } };
 
-export type UpdateUserNameMutationVariables = Exact<{
+export type UpdateUserInfoMutationVariables = Exact<{
   updateUserId: Scalars['ID']['input'];
   input: UpdateUserInput;
 }>;
 
 
-export type UpdateUserNameMutation = { __typename?: 'Mutation', updateUser: { __typename?: 'UserUpdatePayload', user: { __typename?: 'User', id: string } } };
+export type UpdateUserInfoMutation = { __typename?: 'Mutation', updateUser: { __typename?: 'UserUpdatePayload', user: { __typename?: 'User', id: string } } };
 
 
 export const GetDocumentDataDocument = gql`
@@ -12681,8 +12681,8 @@ export const GetUserProfileDocument = gql`
 export function useGetUserProfileQuery(options: Omit<Urql.UseQueryArgs<GetUserProfileQueryVariables>, 'query'>) {
   return Urql.useQuery<GetUserProfileQuery, GetUserProfileQueryVariables>({ query: GetUserProfileDocument, ...options });
 };
-export const UpdateUserNameDocument = gql`
-    mutation updateUserName($updateUserId: ID!, $input: UpdateUserInput!) {
+export const UpdateUserInfoDocument = gql`
+    mutation updateUserInfo($updateUserId: ID!, $input: UpdateUserInput!) {
   updateUser(id: $updateUserId, input: $input) {
     user {
       id
@@ -12691,6 +12691,6 @@ export const UpdateUserNameDocument = gql`
 }
     `;
 
-export function useUpdateUserNameMutation() {
-  return Urql.useMutation<UpdateUserNameMutation, UpdateUserNameMutationVariables>(UpdateUserNameDocument);
+export function useUpdateUserInfoMutation() {
+  return Urql.useMutation<UpdateUserInfoMutation, UpdateUserInfoMutationVariables>(UpdateUserInfoDocument);
 };

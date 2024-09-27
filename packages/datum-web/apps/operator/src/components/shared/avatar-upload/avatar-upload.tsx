@@ -1,6 +1,9 @@
 'use client'
 
-import { useGetAllOrganizationsQuery } from '@repo/codegen/src/schema'
+import {
+  useGetAllOrganizationsQuery,
+  useUpdateUserInfoMutation,
+} from '@repo/codegen/src/schema'
 import {
   avatarUploadStyles,
   AvatarUploadVariants,
@@ -9,6 +12,7 @@ import { cn } from '@repo/ui/lib/utils'
 import { Panel, PanelHeader } from '@repo/ui/panel'
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogDescription,
   DialogFooter,
@@ -31,6 +35,7 @@ interface AvatarUploadProps extends AvatarUploadVariants {
 const AvatarUpload = ({ className }: AvatarUploadProps) => {
   const { toast } = useToast()
   const { data: sessionData } = useSession()
+  const userId = sessionData?.user.userId
   const currentOrgId = sessionData?.user.organization
   const [allOrgs] = useGetAllOrganizationsQuery({ pause: !sessionData })
   const currentWorkspace = allOrgs.data?.organizations.edges?.filter(
@@ -41,6 +46,8 @@ const AvatarUpload = ({ className }: AvatarUploadProps) => {
   const [crop, setCrop] = useState({ x: 0, y: 0 })
   const [zoom, setZoom] = useState(1)
   const [uploadedImage, setUploadedImage] = useState<string | null>(null)
+  const [{ fetching: isSubmitting }, updateUserInfo] =
+    useUpdateUserInfoMutation()
   const [avatarUrl, setAvatarUrl] = useState<null | string>()
   const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area | null>(null)
 
@@ -98,11 +105,25 @@ const AvatarUpload = ({ className }: AvatarUploadProps) => {
         croppedAreaPixels,
       )
       setAvatarUrl(croppedImageUrl)
-      closeModal()
-      toast({
-        title: 'Avatar updated successfully',
-        variant: 'success',
+      const { error } = await updateUserInfo({
+        updateUserId: userId,
+        input: {
+          avatarRemoteURL: croppedImageUrl,
+        },
       })
+
+      if (error) {
+        toast({
+          title: error.message,
+          variant: 'destructive',
+        })
+      } else {
+        closeModal()
+        toast({
+          title: 'Avatar updated successfully',
+          variant: 'success',
+        })
+      }
     }
   }
 
@@ -123,12 +144,13 @@ const AvatarUpload = ({ className }: AvatarUploadProps) => {
       </div>
 
       <Dialog open={isCroppingModalOpen}>
-        <DialogContent className="w-[600px] max-w-[100%]">
+        <DialogContent>
           <DialogHeader>
             <DialogTitle>Edit your avatar</DialogTitle>
             <DialogDescription>
               Please crop, resize and click 'Save avatar'
             </DialogDescription>
+            <DialogClose onClick={closeModal} />
           </DialogHeader>
           <div className={cropContainer()}>
             {uploadedImage && (

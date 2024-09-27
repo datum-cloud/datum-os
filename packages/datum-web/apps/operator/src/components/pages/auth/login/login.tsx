@@ -4,7 +4,7 @@ import { startAuthentication } from '@simplewebauthn/browser'
 import { useRouter } from 'next/navigation'
 import { signIn } from 'next-auth/react'
 import { ArrowUpRight } from 'lucide-react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import {
   DEFAULT_ERROR_MESSAGE,
@@ -53,10 +53,13 @@ export const LoginPage = () => {
     control,
     register,
     handleSubmit,
+    watch,
     formState: { errors, isSubmitting },
   } = form
   const [error, setError] = useState<string>()
   const { separator, buttons, formInner, input, oAuthButton } = loginStyles()
+
+  const { email, password } = watch()
 
   async function onSubmit(payload: RegisterUserInput) {
     try {
@@ -128,6 +131,12 @@ export const LoginPage = () => {
       setError(errorMessage)
     }
   }
+
+  useEffect(() => {
+    if (error) {
+      setError(undefined)
+    }
+  }, [email, password])
 
   return (
     <div className="flex flex-col mt-8 justify-start">

@@ -109,7 +109,17 @@ export const ResetPasswordSchema = z.object({
   password: z.string().min(8, 'Please enter a valid password'),
 })
 
+export const UserNameSchema = z.object({
+  firstName: z.string().min(2, {
+    message: 'First name must be at least 2 characters',
+  }),
+  lastName: z.string().min(2, {
+    message: 'Last name must be at least 2 characters',
+  }),
+})
+
 export type ResetUserInput = z.infer<typeof ResetUserSchema>
+export type UserNameInput = z.infer<typeof UserNameSchema>
 export type ResetPasswordInput = z.infer<typeof ResetPasswordSchema>
 export type RegisterUserInput = z.infer<typeof RegisterUserSchema>
 export type ContactBatchCreateInput = z.infer<typeof ContactBatchCreateSchema>
