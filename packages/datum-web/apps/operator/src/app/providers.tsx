@@ -5,7 +5,7 @@ import { createClient } from '@/lib/urql'
 import { useSession } from 'next-auth/react'
 import { ThemeProvider } from '@/providers/theme'
 import { ClientProvider } from '@/query/client-provider'
-import { FeatureFlagsProvider } from '@/providers/feature-flags-provider'
+import { FeatureFlagsProvider } from '@/providers/feature-flags'
 interface ProvidersProps {
   children: any
 }
