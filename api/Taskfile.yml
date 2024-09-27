@@ -1,0 +1,158 @@
+version: '3'
+
+tasks:
+  install-tools:
+    deps:
+      - grpc-install
+      - api-linter-install
+
+  grpc-install:
+    desc: Install/update protoc and plugins.
+    cmds:
+      - go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
+      - go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
+      - go install github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-grpc-gateway@latest
+      - go install github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-openapiv2@latest
+
+  api-linter-install:
+    desc: Install/update api-linter.
+    cmds:
+      - go install github.com/googleapis/api-linter/cmd/api-linter@v1.67.3
+
+  lint:
+    desc: Run the AIP linter against protobuf definitions.
+    cmds:
+      - api-linter -I ../third_party/protos
+        --config api-linter.yaml
+        --set-exit-status
+        --output-format github
+        ./datum/**/*.proto
+
+  generate-proto:
+    deps:
+      - generate-grpc
+      - generate-http-api-docs
+
+  generate-grpc:
+    cmds:
+      - protoc
+          -I . -I ../third_party/protos
+          --go_out=../lib/api-go
+          --go_opt=module=go.datumapis.com/genproto
+          --go-grpc_out=../lib/api-go
+          --go-grpc_opt=module=go.datumapis.com/genproto
+          --grpc-gateway_out=../lib/api-go
+          --grpc-gateway_opt=module=go.datumapis.com/genproto
+          datum/**/*.proto
+
+  generate-http-api-docs:
+    cmds:
+      - protoc
+          -I . -I ../third_party/protos
+          --openapiv2_out=./openapi
+          --openapiv2_opt=allow_merge=true,merge_file_name=openapiv2,simple_operation_ids=true
+          datum/**/*.proto
+
+  generate-type:
+    desc: Generate a declarative type.
+    summary: |
+      Outputs protobuf definitions for an AIP compliant declariative friendly
+      type.
+
+      Vars:
+        S: Singular type name in CamelCase format.
+        P: Plural type name in CamelCase format.
+        SN: Service name (e.g. compute.datumapis.com)
+
+      Usage:
+        api:generate-type S=Example P=Examples
+
+    silent: true
+    requires:
+      vars:
+        - S
+        - P
+        - SN
+    vars:
+      SINGULAR_TYPE_NAME: "{{if .S}}{{.S}}{{else}}Example{{end}}"
+      PLURAL_TYPE_NAME: "{{if .P}}{{.P}}{{else}}Examples{{end}}"
+      SERVICE_NAME: "{{if .SN}}{{.SN}}{{else}}compute.datumapis.com{{end}}"
+      SNAKE_CASE_SINGULAR_TYPE_NAME: "{{if .S}}{{regexReplaceAll \"([A-Z])\" .S \"_${1}\" | trimPrefix \"_\" | lower}}{{else}}example{{end}}"
+      TEMPLATE: |
+        message {{.SINGULAR_TYPE_NAME}} {
+          option (google.api.resource) = {
+            type: \"{{ .SERVICE_NAME }}/{{.SINGULAR_TYPE_NAME}}\"
+            pattern: \"TODO\"
+            style: DECLARATIVE_FRIENDLY
+            singular: \"{{substr 0 1 .SINGULAR_TYPE_NAME | lower}}{{substr 1 -1 .SINGULAR_TYPE_NAME}}\"
+            plural: \"{{.PLURAL_TYPE_NAME}}\"
+          };
+
+          // The resource name of this {{.SINGULAR_TYPE_NAME}}.
+          string name = 1 [
+            (google.api.field_behavior) = IDENTIFIER,
+            (google.api.field_behavior) = OUTPUT_ONLY
+          ];
+
+          // The resource ID of this {{.SINGULAR_TYPE_NAME}} within its parent resource.
+          string {{.SNAKE_CASE_SINGULAR_TYPE_NAME}}_id = 2 [
+            (google.api.field_behavior) = OUTPUT_ONLY
+          ];
+
+          // Server assigned unique identifier for the {{.SINGULAR_TYPE_NAME}}. The value
+          // is a UUID4 string and guaranteed to remain unchanged until the resource is
+          // deleted.
+          string uid = 3 [
+            (google.api.field_behavior) = OUTPUT_ONLY,
+            (google.api.field_info).format = UUID4
+          ];
+
+          // Human-readable display name of this {{.SINGULAR_TYPE_NAME}} that you can modify.
+          // The maximum length is 63 characters.
+          string display_name = 4 [(google.api.field_behavior) = OPTIONAL];
+
+          // Annotations is an unstructured key-value map stored with a {{.SINGULAR_TYPE_NAME}} that
+          // may be set by external tools to store and retrieve arbitrary metadata.
+          // They are not queryable and should be preserved when modifying objects.
+          map<string, string> annotations = 5 [(google.api.field_behavior) = OPTIONAL];
+
+          // Labels is an unstructured key-value map stored with a {{.SINGULAR_TYPE_NAME}} that
+          // may be set by external tools to enable platform features which identify
+          // {{.PLURAL_TYPE_NAME}} via label selections.
+          map<string, string> labels = 6 [(google.api.field_behavior) = OPTIONAL];
+
+          // Output only. The time when the {{.SINGULAR_TYPE_NAME}} is created.
+          google.protobuf.Timestamp create_time = 7
+              [(google.api.field_behavior) = OUTPUT_ONLY];
+
+          // Output only. The last time that the {{.SINGULAR_TYPE_NAME}} is updated.
+          google.protobuf.Timestamp update_time = 8
+              [(google.api.field_behavior) = OUTPUT_ONLY];
+
+          // Output only. For a deleted resource, the deletion time. It is only
+          // populated as a response to a Delete request.
+          google.protobuf.Timestamp delete_time = 9
+              [(google.api.field_behavior) = OUTPUT_ONLY];
+
+          // Output only. If set, there are currently changes in flight to the {{.SINGULAR_TYPE_NAME}}.
+          bool reconciling = 10 [(google.api.field_behavior) = OUTPUT_ONLY];
+
+          // This checksum is computed by the server based on the value of
+          // other fields, and might be sent on update requests to ensure the client has
+          // an up-to-date value before proceeding.
+          string etag = 11 [(google.api.field_behavior) = OUTPUT_ONLY];
+
+          {{.SINGULAR_TYPE_NAME}}Spec spec = 12 [(google.api.field_behavior) = REQUIRED];
+
+          {{.SINGULAR_TYPE_NAME}}Status status = 13 [(google.api.field_behavior) = OUTPUT_ONLY];
+        }
+
+        message {{.SINGULAR_TYPE_NAME}}Spec {
+
+        }
+
+        message {{.SINGULAR_TYPE_NAME}}Status {
+
+        }
+    cmds:
+      - 'echo "{{.TEMPLATE}}"'
