@@ -54,7 +54,7 @@ const DashboardPage = () => {
               </p>
               <Button
                 onClick={() => {
-                  push('/workspace-settings/general-settings')
+                  push('/workspace/settings')
                 }}
                 icon={<ArrowUpRight />}
                 size="md"
@@ -80,7 +80,7 @@ const DashboardPage = () => {
               </p>
               <Button
                 onClick={() => {
-                  push('/workspace-settings/members')
+                  push('/workspace/users')
                 }}
                 icon={<ArrowUpRight />}
                 size="md"

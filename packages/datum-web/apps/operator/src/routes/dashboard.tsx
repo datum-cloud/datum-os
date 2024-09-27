@@ -30,6 +30,11 @@ export const NavItems: (NavItem | Separator | NavHeading)[] = [
     icon: CircleGaugeIcon,
   },
   // {
+  //   title: 'Settings',
+  //   href: '/workspace/settings',
+  //   icon: Pencil,
+  // },
+  // {
   //   title: 'Activity Log',
   //   href: '/logs',
   //   icon: ScrollText,
@@ -39,12 +44,12 @@ export const NavItems: (NavItem | Separator | NavHeading)[] = [
   },
   // {
   //   title: 'Customers',
-  //   href: '/customers',
+  //   href: '/workspace/customers',
   //   icon: Users,
   //   isChildren: true,
   //   children: [
-  //     { title: 'Users', href: '/customers/users' },
-  //     { title: 'Organizations', href: '/customers/organizations' },
+  //     { title: 'Users', href: '/workspace/customers/users' },
+  //     // { title: 'Organizations', href: '/customers/organizations' },
   //   ],
   // },
   {
