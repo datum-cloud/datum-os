@@ -44,6 +44,7 @@ import {
 import { DataTableColumnHeader } from './data-column-header'
 import { DataTablePagination } from './data-table-pagination'
 import { cn } from '../../lib/utils'
+import { on } from 'process'
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
@@ -59,7 +60,7 @@ interface DataTableProps<TData, TValue> {
   globalFilterFn?: any
   globalFilter?: string
   columnFilters?: ColumnFiltersState
-  setExportData?(data: Row<TData>[]): void
+  onRowsFetched?(data: Row<TData>[]): void
   setGlobalFilter?(input: string): void
   setSelection?(selection: TData[]): void
 }
@@ -95,7 +96,7 @@ export function DataTable<TData, TValue>({
   columnFilters: _columnFilters,
   setGlobalFilter,
   setSelection,
-  setExportData,
+  onRowsFetched,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([])
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>(
@@ -137,12 +138,6 @@ export function DataTable<TData, TValue>({
   }, [_columnFilters])
 
   useEffect(() => {
-    if (setExportData) {
-      setExportData(table.getFilteredRowModel().rows)
-    }
-  }, [table.getFilteredRowModel().rows])
-
-  useEffect(() => {
     if (setSelection) {
       const selectedRowData = Object.keys(rowSelection)
         .filter((id) => !!data[Number(id)]) // Filter out undefined
@@ -156,6 +151,11 @@ export function DataTable<TData, TValue>({
       table.setRowSelection({})
     }
   }, [data])
+
+  if (onRowsFetched) {
+    const sortedRows = table.getSortedRowModel().rows
+    onRowsFetched(sortedRows)
+  }
 
   return (
     <>
