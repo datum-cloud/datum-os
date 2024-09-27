@@ -127,7 +127,7 @@ const ContactPage = ({ id }: ContactPageProps) => {
 
   return (
     <div className={wrapper()}>
-      <div className="flex flex-col gap-3">
+      <div className="w-full flex flex-col justify-start items-start gap-3">
         <Link href={OPERATOR_APP_ROUTES.contacts} className={link()}>
           <ArrowLeft size={18} />
           Back to Contacts

@@ -1,4 +1,3 @@
-import { PageHeading } from '@repo/ui/page-heading'
 import type { Metadata } from 'next/types'
 import { AvatarUpload } from '@/components/shared/avatar-upload/avatar-upload'
 import { pageStyles } from './page.styles'

@@ -7,6 +7,7 @@ import { GoFeatureFlagWebProvider } from '@openfeature/go-feature-flag-web-provi
 
 const goFeatureFlagWebProvider = new GoFeatureFlagWebProvider({
   endpoint: process.env.NEXT_PUBLIC_FEATURE_FLAG_PROVIDER_URL!,
+  apiKey: process.env.NEXT_PUBLIC_FEATURE_FLAG_PROVIDER_API_KEY!,
 })
 OpenFeature.setProvider(goFeatureFlagWebProvider)
 

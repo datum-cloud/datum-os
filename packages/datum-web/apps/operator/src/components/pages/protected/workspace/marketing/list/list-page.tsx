@@ -124,7 +124,7 @@ const ListPage = ({ id }: ListPageProps) => {
 
   return (
     <div className={wrapper()}>
-      <div className="flex flex-col gap-3">
+      <div className="justify-start items-start w-full flex flex-col gap-3">
         <Link href={OPERATOR_APP_ROUTES.contactLists} className={link()}>
           <ArrowLeft size={18} />
           Back to Lists
@@ -224,7 +224,7 @@ const ListPage = ({ id }: ListPageProps) => {
       </div>
       <ListContactsTable
         id={id}
-        setExportData={setExportData}
+        onRowsFetched={setExportData}
         contacts={members}
         setSelection={setSelectedContacts}
       />
