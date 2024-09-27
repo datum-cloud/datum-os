@@ -33,7 +33,7 @@ type ContactsTableProps = {
   globalFilter?: string
   columnFilters?: ColumnFiltersState
   setGlobalFilter?(input: string): void
-  setExportData?(data: Row<Datum.Contact>[]): void
+  onRowsFetched?(data: Row<Datum.Contact>[]): void
 }
 
 const { header, checkboxContainer, link } = tableStyles()
@@ -66,18 +66,6 @@ const booleanFilter: FilterFn<any> = (row, columnId, value) => {
 
 const fuzzySort: SortingFn<any> = (rowA, rowB, columnId) => {
   let dir = 0
-
-  if (!rowA.columnFiltersMeta[columnId] && !rowB.columnFiltersMeta[columnId]) {
-    return 0
-  }
-
-  if (!rowA.columnFiltersMeta[columnId]) {
-    return -1
-  }
-
-  if (!rowB.columnFiltersMeta[columnId]) {
-    return 1
-  }
 
   if (rowA.columnFiltersMeta[columnId]) {
     dir = compareItems(
@@ -195,7 +183,6 @@ export const CONTACT_COLUMNS: ColumnDef<Datum.Contact>[] = [
   //   minSize: 140,
   //   enableGlobalFilter: true,
   //   enableSorting: true,
-  //   sortingFn: fuzzySort,
   // },
   {
     id: 'createdAt',
@@ -209,7 +196,6 @@ export const CONTACT_COLUMNS: ColumnDef<Datum.Contact>[] = [
     ),
     enableGlobalFilter: true,
     enableSorting: true,
-    sortingFn: fuzzySort,
     meta: {
       minWidth: 225,
     },
@@ -226,7 +212,6 @@ export const CONTACT_COLUMNS: ColumnDef<Datum.Contact>[] = [
     ),
     enableGlobalFilter: true,
     enableSorting: true,
-    sortingFn: fuzzySort,
     cell: ({ cell }) => {
       const value = cell.getValue() as Datum.Status
       const isActive = value === 'ACTIVE'
@@ -291,7 +276,7 @@ const ContactsTable = ({
   columnFilters,
   setGlobalFilter,
   setSelection,
-  setExportData,
+  onRowsFetched,
 }: ContactsTableProps) => {
   const [filteredContacts, setFilteredContacts] =
     useState<Datum.Contact[]>(contacts)
@@ -315,8 +300,8 @@ const ContactsTable = ({
       bordered
       setSelection={setSelection}
       highlightHeader
-      setExportData={setExportData}
       showFooter
+      onRowsFetched={onRowsFetched}
     />
   )
 }

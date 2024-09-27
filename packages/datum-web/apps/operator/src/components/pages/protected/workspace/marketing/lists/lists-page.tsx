@@ -63,7 +63,7 @@ const ListsPage = () => {
         globalFilter={query}
         setGlobalFilter={setQuery}
         lists={lists}
-        setExportData={setExportData}
+        onRowsFetched={setExportData}
         setSelection={setSelectedLists}
       />
       <ListDeleteDialog

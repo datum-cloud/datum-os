@@ -4,7 +4,7 @@ export const pageStyles = tv({
   slots: {
     wrapper: 'flex gap-[26px] flex-col',
     link: 'flex gap-1 items-center text-button-l text-sunglow-900',
-    listHeader: 'flex items-end justify-between',
+    listHeader: 'w-full flex items-end justify-between',
     listCard: 'flex gap-7 justify-start items-center',
     listImage:
       'h-[83px] w-[83px] flex items-center justify-center shrink-0 bg-winter-sky-800 rounded-[4px]',

@@ -28,7 +28,7 @@ type ListContactsTableProps = {
   globalFilter?: string
   columnFilters?: ColumnFiltersState
   setGlobalFilter?(input: string): void
-  setExportData?(data: Row<Datum.Contact>[]): void
+  onRowsFetched?(data: Row<Datum.Contact>[]): void
 }
 
 const { header, checkboxContainer, link } = tableStyles()
@@ -191,7 +191,7 @@ const ListContactsTable = ({
   isDialog = false,
   globalFilter,
   columnFilters,
-  setExportData,
+  onRowsFetched,
   setGlobalFilter,
 }: ListContactsTableProps) => {
   const columns = generateColumns(id, isDialog)
@@ -209,7 +209,7 @@ const ListContactsTable = ({
       globalFilterFn="includesString"
       columnFilters={columnFilters}
       setGlobalFilter={setGlobalFilter}
-      setExportData={setExportData}
+      onRowsFetched={onRowsFetched}
     />
   )
 }

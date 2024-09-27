@@ -17,7 +17,7 @@ const UploadContactsPage: React.FC = () => {
 
   return (
     <div className={wrapper()}>
-      <div className="flex flex-col gap-1">
+      <div className="flex flex-col justify-start items-start gap-1">
         <Link href={OPERATOR_APP_ROUTES.contacts} className={link()}>
           <ArrowLeft size={18} />
           Back to Contacts

@@ -9,14 +9,14 @@ import type { Datum } from '@repo/types'
 
 import { useContacts } from '@/hooks/useContacts'
 import PageTitle from '@/components/page-title'
+import ContactDeleteDialog from '@/components/pages/protected/workspace/marketing/contact/contact-delete-dialog'
+import { Loading } from '@/components/shared/loading/loading'
+import { Error } from '@/components/shared/error/error'
 import { formatContactsExportData } from '@/utils/export'
 
 import ContactsControls from './contacts-controls'
 import ContactsTable from './contacts-table'
 import { pageStyles } from './page.styles'
-import ContactDeleteDialog from '@/components/pages/protected/workspace/marketing/contact/contact-delete-dialog'
-import { Loading } from '@/components/shared/loading/loading'
-import { Error } from '@/components/shared/error/error'
 
 const ContactsPage: React.FC = () => {
   const [exportData, setExportData] = useState<Row<Datum.Contact>[]>([])
@@ -63,12 +63,12 @@ const ContactsPage: React.FC = () => {
         />
       </div>
       <ContactsTable
-        setExportData={setExportData}
         setGlobalFilter={setQuery}
         setSelection={setSelectedContacts}
         globalFilter={query}
         columnFilters={columnFilters}
         contacts={contacts}
+        onRowsFetched={setExportData}
       />
       <ContactDeleteDialog
         contacts={selectedContacts}
