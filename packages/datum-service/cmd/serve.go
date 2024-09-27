@@ -74,7 +74,7 @@ func serve(ctx context.Context) error {
 	}
 
 	// Register the Projects server gRPC service
-	resourcemanagerpb.RegisterProjectsServer(grpcServer, &projects.Server{})
+	resourcemanagerpb.RegisterProjectsServer(grpcServer, &resourcemanager.Projects{})
 
 	errs := errors.Join(
 		// Register the Projects service REST proxy
