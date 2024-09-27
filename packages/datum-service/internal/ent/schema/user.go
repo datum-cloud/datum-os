@@ -27,8 +27,9 @@ import (
 )
 
 const (
-	urlMaxLen  = 255
-	nameMaxLen = 64
+	dataUrlMaxLen = 60 * 1024 // 60 KB
+	urlMaxLen     = 2 * 1024  // 2 KB
+	nameMaxLen    = 64
 )
 
 // User holds the schema definition for the User entity.
@@ -93,7 +94,7 @@ func (User) Fields() []ent.Field {
 			Nillable(),
 		field.String("avatar_local_file").
 			Comment("The user's local avatar file").
-			MaxLen(urlMaxLen).
+			MaxLen(dataUrlMaxLen).
 			Optional().
 			Nillable(),
 		field.Time("avatar_updated_at").
