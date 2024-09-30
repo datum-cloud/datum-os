@@ -21,7 +21,7 @@ import type { Datum } from '@repo/types'
 import DragAndDrop from '@/components/shared/drag-and-drop/drag-and-drop'
 import { Loading } from '@/components/shared/loading/loading'
 import { useLists } from '@/hooks/useLists'
-import { createContacts } from '@/query/contacts'
+import { batchManyCreateContacts, createContacts } from '@/query/contacts'
 import { createListMembers } from '@/query/lists'
 import { uploadCsv } from '@/utils/upload'
 import {
@@ -131,7 +131,10 @@ const ContactsTabCSV = () => {
       })
 
       const filteredContacts = filterByUniqueEmail(formattedContacts)
-      const contacts = await createContacts(organizationId, filteredContacts)
+      const contacts = await batchManyCreateContacts(
+        organizationId,
+        filteredContacts,
+      )
       const contactsIds = contacts.map(({ id }) => id)
 
       if (subscriptions.length) {

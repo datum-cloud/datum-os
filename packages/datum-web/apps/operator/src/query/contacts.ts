@@ -1,6 +1,6 @@
 import type { QueryKey } from '@tanstack/react-query'
 
-import { OPERATOR_API_ROUTES } from '@repo/constants'
+import { DEFAULT_BATCH_SIZE, OPERATOR_API_ROUTES } from '@repo/constants'
 import { camelize, decamelize } from '@repo/common/keys'
 import { getPathWithParams } from '@repo/common/routes'
 import { Datum } from '@repo/types'
@@ -176,6 +176,24 @@ export async function createContacts(
   })
 
   return contacts
+}
+
+export async function batchManyCreateContacts(
+  organisationId: Datum.OrganisationId,
+  input: ContactInput[],
+) {
+  const batchSize = DEFAULT_BATCH_SIZE
+  const batches = []
+
+  for (let i = 0; i < input.length; i += batchSize) {
+    batches.push(input.slice(i, i + batchSize))
+  }
+
+  const createdContactsBatches = await Promise.all(
+    batches.map((batch) => createContacts(organisationId, batch)),
+  )
+
+  return createdContactsBatches.flat()
 }
 
 export async function editContacts(

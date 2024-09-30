@@ -84,7 +84,7 @@ const WorkspaceNameForm = () => {
       />
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
-          <InputRow>
+          <div className="flex items-stretch gap-4">
             <FormField
               control={form.control}
               name="displayName"
@@ -100,11 +100,12 @@ const WorkspaceNameForm = () => {
             <Button
               variant={isSuccess ? 'success' : 'sunglow'}
               type="submit"
+              className="h-12"
               loading={isSubmitting}
             >
               {isSubmitting ? 'Saving' : isSuccess ? 'Saved' : 'Save'}
             </Button>
-          </InputRow>
+          </div>
         </form>
       </Form>
     </Panel>

@@ -96,6 +96,7 @@ const WorkspaceEmailForm = () => {
             <Button
               variant={isSuccess ? 'success' : 'sunglow'}
               type="submit"
+              className="h-12"
               loading={isSubmitting}
             >
               {isSubmitting ? 'Saving' : isSuccess ? 'Saved' : 'Save'}
