@@ -28,12 +28,10 @@ export default function Sidebar({ className }: SidebarProps) {
     .filter((org) => org?.node?.id === currentOrgId)
     .map((org) => org?.node)[0]
 
-  const isWorkspaceSelected = !activeOrg?.personalOrg
   const isProfile = pathname === OPERATOR_APP_ROUTES.profile
   const isSettings = pathname === OPERATOR_APP_ROUTES.settings
   const isWorkspace = pathname === OPERATOR_APP_ROUTES.workspace
-  const showWorkspaceNav =
-    isWorkspaceSelected && !isProfile && !isSettings && !isWorkspace
+  const showWorkspaceNav = !isProfile && !isSettings && !isWorkspace
 
   const { nav, sideNav, expandNav, expandNavIcon } = sidebarStyles({
     status,
