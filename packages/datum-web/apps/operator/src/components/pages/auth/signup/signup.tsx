@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { Button } from '@repo/ui/button'
 import { ArrowUpRight, KeyRoundIcon } from 'lucide-react'
@@ -49,6 +49,7 @@ export const SignupPage = () => {
   const {
     handleSubmit,
     control,
+    watch,
     register,
     formState: { isSubmitting, errors },
   } = form
@@ -56,6 +57,7 @@ export const SignupPage = () => {
   const [error, setError] = useState<string>()
   const { separator, buttons, keyIcon, formInner, input, oAuthButton } =
     signupStyles()
+  const { email, password } = watch()
 
   async function handleGithubOAuth() {
     await signIn('github', {
@@ -69,9 +71,6 @@ export const SignupPage = () => {
     })
   }
 
-  /**
-   * Setup PassKey Registration
-   */
   async function registerPassKey() {
     try {
       const options = await getPasskeyRegOptions({
@@ -119,6 +118,12 @@ export const SignupPage = () => {
       setError(DEFAULT_ERROR_MESSAGE)
     }
   }
+
+  useEffect(() => {
+    if (error) {
+      setError(undefined)
+    }
+  }, [email, password])
 
   return (
     <div className="flex flex-col mt-8 justify-start">

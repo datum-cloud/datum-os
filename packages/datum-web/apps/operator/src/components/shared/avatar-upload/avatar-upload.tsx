@@ -1,6 +1,10 @@
 'use client'
 
-import { useGetAllOrganizationsQuery } from '@repo/codegen/src/schema'
+import {
+  GetUserProfileQueryVariables,
+  useGetUserProfileQuery,
+  useUpdateUserInfoMutation,
+} from '@repo/codegen/src/schema'
 import {
   avatarUploadStyles,
   AvatarUploadVariants,
@@ -9,13 +13,14 @@ import { cn } from '@repo/ui/lib/utils'
 import { Panel, PanelHeader } from '@repo/ui/panel'
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
 } from '@repo/ui/dialog'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useState } from 'react'
 import { FileWithPath, useDropzone } from 'react-dropzone'
 import { useSession } from 'next-auth/react'
 import { Button } from '@repo/ui/button'
@@ -31,17 +36,22 @@ interface AvatarUploadProps extends AvatarUploadVariants {
 const AvatarUpload = ({ className }: AvatarUploadProps) => {
   const { toast } = useToast()
   const { data: sessionData } = useSession()
-  const currentOrgId = sessionData?.user.organization
-  const [allOrgs] = useGetAllOrganizationsQuery({ pause: !sessionData })
-  const currentWorkspace = allOrgs.data?.organizations.edges?.filter(
-    (org) => org?.node?.id === currentOrgId,
-  )[0]?.node
+  const userId = sessionData?.user.userId
+  const variables: GetUserProfileQueryVariables = {
+    userId: userId ?? '',
+  }
+  const [{ data }] = useGetUserProfileQuery({
+    variables,
+    pause: !sessionData,
+  })
+  const avatar =
+    data?.user?.avatarLocalFile || data?.user?.avatarRemoteURL || null
 
   const [isCroppingModalOpen, setIsCroppingModalOpen] = useState(false)
   const [crop, setCrop] = useState({ x: 0, y: 0 })
   const [zoom, setZoom] = useState(1)
   const [uploadedImage, setUploadedImage] = useState<string | null>(null)
-  const [avatarUrl, setAvatarUrl] = useState<null | string>()
+  const [{}, updateUserInfo] = useUpdateUserInfoMutation()
   const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area | null>(null)
 
   const dropMessage = 'Drop to upload!'
@@ -50,12 +60,6 @@ const AvatarUpload = ({ className }: AvatarUploadProps) => {
       Drag your image in here, or <u>select it manually</u>.
     </>
   )
-
-  useEffect(() => {
-    if (currentWorkspace?.avatarRemoteURL) {
-      setAvatarUrl(currentWorkspace?.avatarRemoteURL)
-    }
-  }, [currentWorkspace])
 
   const onDrop = useCallback((acceptedFiles: FileWithPath[]) => {
     const file = acceptedFiles[0]
@@ -97,12 +101,26 @@ const AvatarUpload = ({ className }: AvatarUploadProps) => {
         uploadedImage,
         croppedAreaPixels,
       )
-      setAvatarUrl(croppedImageUrl)
-      closeModal()
-      toast({
-        title: 'Avatar updated successfully',
-        variant: 'success',
+
+      const { error } = await updateUserInfo({
+        updateUserId: userId,
+        input: {
+          avatarLocalFile: croppedImageUrl,
+        },
       })
+
+      if (error) {
+        toast({
+          title: error.message,
+          variant: 'destructive',
+        })
+      } else {
+        closeModal()
+        toast({
+          title: 'Avatar updated successfully',
+          variant: 'success',
+        })
+      }
     }
   }
 
@@ -114,21 +132,22 @@ const AvatarUpload = ({ className }: AvatarUploadProps) => {
         <p>{isDragActive ? dropMessage : defaultMessage}</p>
         <div className={avatarPreview()}>
           <Avatar variant="extra-large">
-            {avatarUrl && <AvatarImage src={avatarUrl} />}
+            {avatar && <AvatarImage src={avatar} />}
             <AvatarFallback>
-              {currentWorkspace?.name?.substring(0, 2)}
+              {data?.user?.firstName?.substring(0, 2)}
             </AvatarFallback>
           </Avatar>
         </div>
       </div>
 
       <Dialog open={isCroppingModalOpen}>
-        <DialogContent className="w-[600px] max-w-[100%]">
+        <DialogContent>
           <DialogHeader>
             <DialogTitle>Edit your avatar</DialogTitle>
             <DialogDescription>
               Please crop, resize and click 'Save avatar'
             </DialogDescription>
+            <DialogClose onClick={closeModal} />
           </DialogHeader>
           <div className={cropContainer()}>
             {uploadedImage && (

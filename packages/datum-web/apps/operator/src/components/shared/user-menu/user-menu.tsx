@@ -13,27 +13,14 @@ import {
   DropdownMenuSeparator,
 } from '@repo/ui/dropdown-menu'
 import { ChevronDown, LayersIcon, ShieldCheck, UserPen } from 'lucide-react'
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from '@/components/shared/sidebar/sidebar-accordion/sidebar-accordion'
 import { OPERATOR_APP_ROUTES } from '@repo/constants'
 import { useState } from 'react'
-import { cn } from '@repo/ui/lib/utils'
 
 export const UserMenu = () => {
   const { data: sessionData } = useSession()
   const {
-    accordion,
-    accordionItem,
-    accordionTrigger,
-    accordionTriggerInner,
-    accordionTriggerInnerText,
-    accordionTriggerInnerLabel,
-    accordionLink,
-    accordionLinkIcon,
+    dropdownLink,
+    dropdownLinkIcon,
     trigger,
     email,
     dropdownItem,
@@ -42,7 +29,6 @@ export const UserMenu = () => {
   } = userMenuStyles()
   const [open, setOpen] = useState(false)
   const firstName = sessionData?.user?.name?.split(' ')?.[0]
-  const hasName = !!firstName && firstName !== 'undefined'
 
   return (
     <DropdownMenu open={open} onOpenChange={setOpen}>
@@ -52,9 +38,7 @@ export const UserMenu = () => {
             {sessionData?.user?.image && (
               <AvatarImage src={sessionData?.user?.image} />
             )}
-            <AvatarFallback>
-              {sessionData?.user?.name?.substring(0, 2)}
-            </AvatarFallback>
+            <AvatarFallback>{firstName?.substring(0, 2)}</AvatarFallback>
           </Avatar>
           <ChevronDown />
         </div>
@@ -69,44 +53,26 @@ export const UserMenu = () => {
           </>
         </DropdownMenuItem>
         <DropdownMenuSeparator spacing="md" />
-        <Accordion type="single" collapsible className={accordion()}>
-          <AccordionItem value="links" className={accordionItem()}>
-            <AccordionTrigger asChild className={accordionTrigger()}>
-              <div className={accordionTriggerInner()}>
-                <p className={subheading()}>Account</p>
-                <div className={accordionTriggerInnerText()}>
-                  <p
-                    className={cn(accordionTriggerInnerLabel(), 'text-body-m')}
-                  >
-                    {hasName
-                      ? `${sessionData.user.name.split(' ')[0]}'s Personal
-                    Account`
-                      : 'Personal Account'}
-                  </p>
-                  <ChevronDown size={18} />
-                </div>
-              </div>
-            </AccordionTrigger>
-            <AccordionContent className="pb-0">
-              <Link
-                href={OPERATOR_APP_ROUTES.workspace}
-                onClick={() => setOpen(false)}
-                className={accordionLink()}
-              >
-                <LayersIcon size={18} className={accordionLinkIcon()} />
-                <span>My Workspaces</span>
-              </Link>
-              <Link
-                href={OPERATOR_APP_ROUTES.profile}
-                onClick={() => setOpen(false)}
-                className={accordionLink()}
-              >
-                <UserPen size={18} className={accordionLinkIcon()} />
-                <span>Profile</span>
-              </Link>
-            </AccordionContent>
-          </AccordionItem>
-        </Accordion>
+        <DropdownMenuItem asChild>
+          <Link
+            href={OPERATOR_APP_ROUTES.profile}
+            onClick={() => setOpen(false)}
+            className={dropdownLink()}
+          >
+            <UserPen size={24} className={dropdownLinkIcon()} />
+            <span>My Profile</span>
+          </Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem asChild>
+          <Link
+            href={OPERATOR_APP_ROUTES.workspace}
+            onClick={() => setOpen(false)}
+            className={dropdownLink()}
+          >
+            <LayersIcon size={24} className={dropdownLinkIcon()} />
+            <span>My Workspaces</span>
+          </Link>
+        </DropdownMenuItem>
         <DropdownMenuSeparator spacing="md" />
         <DropdownMenuItem
           asChild

@@ -36,9 +36,9 @@ const WorkspaceDelete = async () => {
   const { data, error } = await userHasWorkspaceDeletePermissions(sessionData)
 
   // If the user does not have permission to delete the workspace, return null
-  // if (error || !data?.allowed) {
-  //   return null
-  // }
+  if (error || !data?.allowed) {
+    return null
+  }
 
   const clickHandler = async () => {
     const response = await deleteOrganization({

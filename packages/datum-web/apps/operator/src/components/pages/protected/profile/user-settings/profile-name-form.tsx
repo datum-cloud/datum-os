@@ -1,14 +1,16 @@
 'use client'
+
+import { useEffect, useState } from 'react'
+import { useSession } from 'next-auth/react'
+import { useForm } from 'react-hook-form'
+
 import {
   GetUserProfileQueryVariables,
   useGetUserProfileQuery,
-  useUpdateUserNameMutation,
+  useUpdateUserInfoMutation,
 } from '@repo/codegen/src/schema'
-import { Input, InputRow } from '@repo/ui/input'
+import { Input } from '@repo/ui/input'
 import { Panel, PanelHeader } from '@repo/ui/panel'
-import { useSession } from 'next-auth/react'
-import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
 import {
   Form,
   FormItem,
@@ -16,17 +18,21 @@ import {
   FormControl,
   FormMessage,
   FormLabel,
+  zodResolver,
 } from '@repo/ui/form'
-import { z } from 'zod'
 import { Button } from '@repo/ui/button'
-import { useEffect, useState } from 'react'
+
 import { RESET_SUCCESS_STATE_MS } from '@/constants'
+import { UserNameInput, UserNameSchema } from '@/utils/schemas'
+
+import { profileFormStyles } from './profile-name-form.styles'
 
 const ProfileNameForm = () => {
+  const { formInner, formFieldsContainer, formInput } = profileFormStyles()
   const [isSuccess, setIsSuccess] = useState(false)
-  const [{ fetching: isSubmitting }, updateUserName] =
-    useUpdateUserNameMutation()
-  const { data: sessionData } = useSession()
+  const [{ fetching: isSubmitting }, updateUserInfo] =
+    useUpdateUserInfoMutation()
+  const { data: sessionData, update } = useSession()
   const userId = sessionData?.user.userId
 
   const variables: GetUserProfileQueryVariables = {
@@ -38,17 +44,8 @@ const ProfileNameForm = () => {
     pause: !sessionData,
   })
 
-  const formSchema = z.object({
-    firstName: z.string().min(2, {
-      message: 'First name must be at least 2 characters',
-    }),
-    lastName: z.string().min(2, {
-      message: 'Last name must be at least 2 characters',
-    }),
-  })
-
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<UserNameInput>({
+    resolver: zodResolver(UserNameSchema),
     defaultValues: {
       firstName: userData?.user.firstName || '',
       lastName: userData?.user.lastName || '',
@@ -64,14 +61,8 @@ const ProfileNameForm = () => {
     }
   }, [userData, form])
 
-  const updateName = async ({
-    firstName,
-    lastName,
-  }: {
-    firstName: string
-    lastName: string
-  }) => {
-    await updateUserName({
+  const updateName = async ({ firstName, lastName }: UserNameInput) => {
+    await updateUserInfo({
       updateUserId: userId,
       input: {
         firstName: firstName,
@@ -81,8 +72,15 @@ const ProfileNameForm = () => {
     setIsSuccess(true)
   }
 
-  const onSubmit = (data: z.infer<typeof formSchema>) => {
+  const onSubmit = (data: UserNameInput) => {
     updateName({ firstName: data.firstName, lastName: data.lastName })
+    update({
+      ...sessionData,
+      user: {
+        ...sessionData?.user,
+        name: `${data.firstName} ${data.lastName}`,
+      },
+    })
   }
 
   useEffect(() => {
@@ -98,8 +96,8 @@ const ProfileNameForm = () => {
     <Panel>
       <PanelHeader heading="Your name" noBorder />
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)}>
-          <InputRow>
+        <form onSubmit={form.handleSubmit(onSubmit)} className={formInner()}>
+          <div className={formFieldsContainer()}>
             <FormField
               control={form.control}
               name="firstName"
@@ -107,7 +105,11 @@ const ProfileNameForm = () => {
                 <FormItem>
                   <FormLabel>First name</FormLabel>
                   <FormControl>
-                    <Input variant="medium" {...field} />
+                    <Input
+                      className={formInput()}
+                      variant="medium"
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -120,20 +122,26 @@ const ProfileNameForm = () => {
                 <FormItem>
                   <FormLabel>Last name</FormLabel>
                   <FormControl>
-                    <Input variant="medium" {...field} />
+                    <Input
+                      className={formInput()}
+                      variant="medium"
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
-            <Button
-              variant={isSuccess ? 'success' : 'sunglow'}
-              type="submit"
-              loading={isSubmitting}
-            >
-              {isSubmitting ? 'Saving' : isSuccess ? 'Saved' : 'Save'}
-            </Button>
-          </InputRow>
+          </div>
+          <Button
+            variant={isSuccess ? 'success' : 'sunglow'}
+            type="submit"
+            size="md"
+            className="h-12"
+            loading={isSubmitting}
+          >
+            {isSubmitting ? 'Saving' : isSuccess ? 'Saved' : 'Save'}
+          </Button>
         </form>
       </Form>
     </Panel>
