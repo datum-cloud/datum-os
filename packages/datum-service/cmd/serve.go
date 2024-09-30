@@ -51,6 +51,9 @@ func serve(ctx context.Context) error {
 	grpcServer := grpc.NewServer()
 	gRPCRestProxy := runtime.NewServeMux()
 
+	// Register the Projects server gRPC service
+	resourcemanagerpb.RegisterProjectsServer(grpcServer, &resourcemanager.Projects{})
+
 	// Supports creating an in-memory listenre so we don't need to expose a
 	// gRPC service externally.
 	inMemoryListener := grpctool.NewDialListener()
@@ -72,9 +75,6 @@ func serve(ctx context.Context) error {
 	if err != nil {
 		panic(err)
 	}
-
-	// Register the Projects server gRPC service
-	resourcemanagerpb.RegisterProjectsServer(grpcServer, &resourcemanager.Projects{})
 
 	errs := errors.Join(
 		// Register the Projects service REST proxy
