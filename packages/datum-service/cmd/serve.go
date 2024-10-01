@@ -2,7 +2,6 @@ package cmd
 
 import (
 	"context"
-	"errors"
 
 	"github.com/spf13/cobra"
 	"go.uber.org/zap"
@@ -13,15 +12,10 @@ import (
 	"github.com/datum-cloud/datum-os/internal/httpserve/config"
 	"github.com/datum-cloud/datum-os/internal/httpserve/server"
 	"github.com/datum-cloud/datum-os/internal/httpserve/serveropts"
-	"github.com/datum-cloud/datum-os/internal/services/resourcemanager"
-	"github.com/datum-cloud/datum-os/internal/tool/grpctool"
 	"github.com/datum-cloud/datum-os/pkg/cache"
 	"github.com/datum-cloud/datum-os/pkg/fgax"
 	geodetic "github.com/datum-cloud/datum-os/pkg/geodetic/pkg/geodeticclient"
 	"github.com/datum-cloud/datum-os/pkg/otelx"
-	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
-	resourcemanagerpb "go.datumapis.com/genproto/os/resourcemanager/v1alpha"
-	"google.golang.org/grpc/credentials/insecure"
 )
 
 var serveCmd = &cobra.Command{
@@ -45,44 +39,6 @@ func serve(ctx context.Context) error {
 		fgaClient *fgax.Client
 		err       error
 	)
-
-	// Creates a new gRPC server that can be used to expose gRPC services. All
-	// gRPC services are defined in `api/` at the root of the repo.
-	grpcServer := grpc.NewServer()
-	gRPCRestProxy := runtime.NewServeMux()
-
-	// Register the Projects server gRPC service
-	resourcemanagerpb.RegisterProjectsServer(grpcServer, &resourcemanager.Projects{})
-
-	// Supports creating an in-memory listenre so we don't need to expose a
-	// gRPC service externally.
-	inMemoryListener := grpctool.NewDialListener()
-
-	go func() {
-		err := grpcServer.Serve(inMemoryListener)
-		if err != nil {
-			panic(err)
-		}
-	}()
-
-	inMemoryConn, err := grpc.NewClient(
-		"passthrough:api-server",
-		grpc.WithSharedWriteBuffer(true),
-		grpc.WithTransportCredentials(insecure.NewCredentials()),
-		grpc.WithContextDialer(inMemoryListener.DialContext),
-	)
-
-	if err != nil {
-		panic(err)
-	}
-
-	errs := errors.Join(
-		// Register the Projects service REST proxy
-		resourcemanagerpb.RegisterProjectsHandler(ctx, gRPCRestProxy, inMemoryConn),
-	)
-	if errs != nil {
-		panic(errs)
-	}
 
 	// create ent dependency injection
 	entOpts := []ent.Option{ent.Logger(*logger)}
@@ -197,7 +153,7 @@ func serve(ctx context.Context) error {
 	// Setup Graph API Handlers
 	so.AddServerOptions(serveropts.WithGraphRoute(srv, entdbClient))
 
-	if err := srv.StartEchoServer(ctx, gRPCRestProxy); err != nil {
+	if err := srv.StartEchoServer(ctx); err != nil {
 		logger.Error("failed to run server", zap.Error(err))
 	}
 

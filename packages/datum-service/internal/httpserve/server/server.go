@@ -9,7 +9,6 @@ import (
 	"github.com/datum-cloud/datum-os/internal/httpserve/config"
 	"github.com/datum-cloud/datum-os/internal/httpserve/route"
 	echodebug "github.com/datum-cloud/datum-os/pkg/middleware/debug"
-	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 )
 
 type Server struct {
@@ -54,7 +53,7 @@ func NewServer(c config.Config, l *zap.SugaredLogger) *Server {
 }
 
 // StartEchoServer creates and starts the echo server with configured middleware and handlers
-func (s *Server) StartEchoServer(ctx context.Context, grpcRESTProxy *runtime.ServeMux) error {
+func (s *Server) StartEchoServer(ctx context.Context) error {
 	srv, err := NewRouter()
 	if err != nil {
 		return err
