@@ -6,6 +6,7 @@ tasks:
       - task -l
 
   install-tools:
+    desc: Install/update protoc and plugins.
     deps:
       - grpc-install
       - api-linter-install
@@ -13,10 +14,14 @@ tasks:
   grpc-install:
     desc: Install/update protoc and plugins.
     cmds:
-      - go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
-      - go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
-      - go install github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-grpc-gateway@latest
+      - brew install protobuf
+      - go install github.com/google/gnostic@latest
+      - go install github.com/googleapis/gnostic-grpc@latest
+      - go install github.com/golang/protobuf/protoc-gen-go@latest
       - go install github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-openapiv2@latest
+      - go install github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-grpc-gateway@latest
+      - go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
+      - go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
 
   api-linter-install:
     desc: Install/update api-linter.
@@ -33,11 +38,13 @@ tasks:
         ./datum/**/*.proto
 
   generate-proto:
+    desc: Generate protobuf definitions.
     deps:
       - generate-grpc
       - generate-http-api-docs
 
   generate-grpc:
+    desc: Generate grpc definitions.
     cmds:
       - protoc
           -I . -I ../third_party/protos
@@ -50,6 +57,7 @@ tasks:
           datum/**/*.proto
 
   generate-gnostic:
+    desc: Generate openapi definitions.
     cmds:
       - protoc
           -I . -I ../third_party/protos
@@ -57,6 +65,7 @@ tasks:
           datum/**/*.proto
 
   generate-http-api-docs:
+    desc: Generate http api docs.
     cmds:
       - protoc
           -I . -I ../third_party/protos
