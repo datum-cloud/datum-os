@@ -6,8 +6,6 @@ import (
 	"github.com/spf13/cobra"
 	"go.uber.org/zap"
 
-	"github.com/datum-cloud/datum-os/pkg/fgax"
-
 	ent "github.com/datum-cloud/datum-os/internal/ent/generated"
 	"github.com/datum-cloud/datum-os/internal/entdb"
 	"github.com/datum-cloud/datum-os/internal/httpserve/authmanager"
@@ -15,6 +13,7 @@ import (
 	"github.com/datum-cloud/datum-os/internal/httpserve/server"
 	"github.com/datum-cloud/datum-os/internal/httpserve/serveropts"
 	"github.com/datum-cloud/datum-os/pkg/cache"
+	"github.com/datum-cloud/datum-os/pkg/fgax"
 	"github.com/datum-cloud/datum-os/pkg/otelx"
 )
 
@@ -79,12 +78,14 @@ func serve(ctx context.Context) error {
 		logger.Fatalw("failed to initialize tracer", "error", err)
 	}
 
-	// setup Authz connection
-	// this must come before the database setup because the FGA Client
-	// is used as an ent dependency
-	fgaClient, err = fgax.CreateFGAClientWithStore(ctx, so.Config.Settings.Authz, so.Config.Logger)
-	if err != nil {
-		return err
+	if so.Config.Settings.Authz.Enabled {
+		// setup Authz connection
+		// this must come before the database setup because the FGA Client
+		// is used as an ent dependency
+		fgaClient, err = fgax.CreateFGAClientWithStore(ctx, so.Config.Settings.Authz, so.Config.Logger)
+		if err != nil {
+			return err
+		}
 	}
 
 	// Setup Redis connection
@@ -101,10 +102,13 @@ func serve(ctx context.Context) error {
 		serveropts.WithOTP(),
 	)
 
+	if so.Config.Settings.Authz.Enabled {
+		entOpts = append(entOpts, ent.Authz(*fgaClient))
+	}
+
 	// add additional ent dependencies
 	entOpts = append(
 		entOpts,
-		ent.Authz(*fgaClient),
 		ent.Emails(so.Config.Handler.EmailManager),
 		ent.Marionette(so.Config.Handler.TaskMan),
 		ent.Analytics(so.Config.Handler.AnalyticsClient),

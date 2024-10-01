@@ -1,16 +1,15 @@
 version: '3'
 
-env:
-  ENV: config
-
-dotenv: ['.env', '{{.ENV}}/.env']
-
 includes:
   codegen:
     taskfile: ./packages/codegen/Taskfile.yaml
     dir: ./packages/codegen
 
 tasks:
+  default:
+    cmds:
+      - task -l
+
   build:
     desc: build all apps and package
     cmd: bun run build
