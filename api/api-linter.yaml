@@ -2,6 +2,7 @@
 - included_paths:
   - "datum/**/v1alpha/*.proto"
   - "datum/api/*.proto"
+  - "datum/iam/annotations.proto"
   disabled_rules:
     - "core::0191::java-package"
     - "core::0191::java-multiple-files"
@@ -9,5 +10,11 @@
 # This file isn't versioned because it defines a OneOf field behavior extension.
 - included_paths:
     - "datum/api/field_behavior.proto"
+  disabled_rules:
+    - "core::0215::versioned-packages"
+# This file isn't versioned because it provides IAM protobuf annotations to
+# define things like required permissions.
+- included_paths:
+  - "datum/iam/annotations.proto"
   disabled_rules:
     - "core::0215::versioned-packages"

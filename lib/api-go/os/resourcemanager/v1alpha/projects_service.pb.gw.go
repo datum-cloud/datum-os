@@ -624,7 +624,7 @@ func RegisterProjectsHandlerServer(ctx context.Context, mux *runtime.ServeMux, s
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/datum.os.resourcemanager.v1alpha.Projects/CreateProject", runtime.WithHTTPPathPattern("/v1/{parent=organizations/*}/projects"))
+		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/datum.os.resourcemanager.v1alpha.Projects/CreateProject", runtime.WithHTTPPathPattern("/resourcemanager/v1alpha/{parent=organizations/*}/projects"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -649,7 +649,7 @@ func RegisterProjectsHandlerServer(ctx context.Context, mux *runtime.ServeMux, s
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/datum.os.resourcemanager.v1alpha.Projects/CreateProject", runtime.WithHTTPPathPattern("/v1/{parent=folders/*}/projects"))
+		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/datum.os.resourcemanager.v1alpha.Projects/CreateProject", runtime.WithHTTPPathPattern("/resourcemanager/v1alpha/{parent=folders/*}/projects"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -674,7 +674,7 @@ func RegisterProjectsHandlerServer(ctx context.Context, mux *runtime.ServeMux, s
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/datum.os.resourcemanager.v1alpha.Projects/GetProject", runtime.WithHTTPPathPattern("/v1/{name=projects/*}"))
+		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/datum.os.resourcemanager.v1alpha.Projects/GetProject", runtime.WithHTTPPathPattern("/resourcemanager/v1alpha/{name=projects/*}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -699,7 +699,7 @@ func RegisterProjectsHandlerServer(ctx context.Context, mux *runtime.ServeMux, s
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/datum.os.resourcemanager.v1alpha.Projects/ListProjects", runtime.WithHTTPPathPattern("/v1/{parent=organizations/*}/projects"))
+		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/datum.os.resourcemanager.v1alpha.Projects/ListProjects", runtime.WithHTTPPathPattern("/resourcemanager/v1alpha/{parent=organizations/*}/projects"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -724,7 +724,7 @@ func RegisterProjectsHandlerServer(ctx context.Context, mux *runtime.ServeMux, s
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/datum.os.resourcemanager.v1alpha.Projects/ListProjects", runtime.WithHTTPPathPattern("/v1/{parent=folders/*}/projects"))
+		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/datum.os.resourcemanager.v1alpha.Projects/ListProjects", runtime.WithHTTPPathPattern("/resourcemanager/v1alpha/{parent=folders/*}/projects"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -749,7 +749,7 @@ func RegisterProjectsHandlerServer(ctx context.Context, mux *runtime.ServeMux, s
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/datum.os.resourcemanager.v1alpha.Projects/UpdateProject", runtime.WithHTTPPathPattern("/v1/{project.name=projects/*}"))
+		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/datum.os.resourcemanager.v1alpha.Projects/UpdateProject", runtime.WithHTTPPathPattern("/resourcemanager/v1alpha/{project.name=projects/*}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -774,7 +774,7 @@ func RegisterProjectsHandlerServer(ctx context.Context, mux *runtime.ServeMux, s
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/datum.os.resourcemanager.v1alpha.Projects/DeleteProject", runtime.WithHTTPPathPattern("/v1/{name=projects/*}"))
+		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/datum.os.resourcemanager.v1alpha.Projects/DeleteProject", runtime.WithHTTPPathPattern("/resourcemanager/v1alpha/{name=projects/*}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -799,7 +799,7 @@ func RegisterProjectsHandlerServer(ctx context.Context, mux *runtime.ServeMux, s
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/datum.os.resourcemanager.v1alpha.Projects/MoveProject", runtime.WithHTTPPathPattern("/v1/{name=projects/*}:move"))
+		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/datum.os.resourcemanager.v1alpha.Projects/MoveProject", runtime.WithHTTPPathPattern("/resourcemanager/v1alpha/{name=projects/*}:move"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -863,7 +863,7 @@ func RegisterProjectsHandlerClient(ctx context.Context, mux *runtime.ServeMux, c
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/datum.os.resourcemanager.v1alpha.Projects/CreateProject", runtime.WithHTTPPathPattern("/v1/{parent=organizations/*}/projects"))
+		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/datum.os.resourcemanager.v1alpha.Projects/CreateProject", runtime.WithHTTPPathPattern("/resourcemanager/v1alpha/{parent=organizations/*}/projects"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -885,7 +885,7 @@ func RegisterProjectsHandlerClient(ctx context.Context, mux *runtime.ServeMux, c
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/datum.os.resourcemanager.v1alpha.Projects/CreateProject", runtime.WithHTTPPathPattern("/v1/{parent=folders/*}/projects"))
+		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/datum.os.resourcemanager.v1alpha.Projects/CreateProject", runtime.WithHTTPPathPattern("/resourcemanager/v1alpha/{parent=folders/*}/projects"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -907,7 +907,7 @@ func RegisterProjectsHandlerClient(ctx context.Context, mux *runtime.ServeMux, c
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/datum.os.resourcemanager.v1alpha.Projects/GetProject", runtime.WithHTTPPathPattern("/v1/{name=projects/*}"))
+		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/datum.os.resourcemanager.v1alpha.Projects/GetProject", runtime.WithHTTPPathPattern("/resourcemanager/v1alpha/{name=projects/*}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -929,7 +929,7 @@ func RegisterProjectsHandlerClient(ctx context.Context, mux *runtime.ServeMux, c
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/datum.os.resourcemanager.v1alpha.Projects/ListProjects", runtime.WithHTTPPathPattern("/v1/{parent=organizations/*}/projects"))
+		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/datum.os.resourcemanager.v1alpha.Projects/ListProjects", runtime.WithHTTPPathPattern("/resourcemanager/v1alpha/{parent=organizations/*}/projects"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -951,7 +951,7 @@ func RegisterProjectsHandlerClient(ctx context.Context, mux *runtime.ServeMux, c
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/datum.os.resourcemanager.v1alpha.Projects/ListProjects", runtime.WithHTTPPathPattern("/v1/{parent=folders/*}/projects"))
+		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/datum.os.resourcemanager.v1alpha.Projects/ListProjects", runtime.WithHTTPPathPattern("/resourcemanager/v1alpha/{parent=folders/*}/projects"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -973,7 +973,7 @@ func RegisterProjectsHandlerClient(ctx context.Context, mux *runtime.ServeMux, c
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/datum.os.resourcemanager.v1alpha.Projects/UpdateProject", runtime.WithHTTPPathPattern("/v1/{project.name=projects/*}"))
+		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/datum.os.resourcemanager.v1alpha.Projects/UpdateProject", runtime.WithHTTPPathPattern("/resourcemanager/v1alpha/{project.name=projects/*}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -995,7 +995,7 @@ func RegisterProjectsHandlerClient(ctx context.Context, mux *runtime.ServeMux, c
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/datum.os.resourcemanager.v1alpha.Projects/DeleteProject", runtime.WithHTTPPathPattern("/v1/{name=projects/*}"))
+		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/datum.os.resourcemanager.v1alpha.Projects/DeleteProject", runtime.WithHTTPPathPattern("/resourcemanager/v1alpha/{name=projects/*}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -1017,7 +1017,7 @@ func RegisterProjectsHandlerClient(ctx context.Context, mux *runtime.ServeMux, c
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/datum.os.resourcemanager.v1alpha.Projects/MoveProject", runtime.WithHTTPPathPattern("/v1/{name=projects/*}:move"))
+		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/datum.os.resourcemanager.v1alpha.Projects/MoveProject", runtime.WithHTTPPathPattern("/resourcemanager/v1alpha/{name=projects/*}:move"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -1037,21 +1037,21 @@ func RegisterProjectsHandlerClient(ctx context.Context, mux *runtime.ServeMux, c
 }
 
 var (
-	pattern_Projects_CreateProject_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 2, 5, 2, 2, 3}, []string{"v1", "organizations", "parent", "projects"}, ""))
+	pattern_Projects_CreateProject_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 2, 5, 3, 2, 4}, []string{"resourcemanager", "v1alpha", "organizations", "parent", "projects"}, ""))
 
-	pattern_Projects_CreateProject_1 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 2, 5, 2, 2, 3}, []string{"v1", "folders", "parent", "projects"}, ""))
+	pattern_Projects_CreateProject_1 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 2, 5, 3, 2, 4}, []string{"resourcemanager", "v1alpha", "folders", "parent", "projects"}, ""))
 
-	pattern_Projects_GetProject_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 2, 5, 2}, []string{"v1", "projects", "name"}, ""))
+	pattern_Projects_GetProject_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 2, 5, 3}, []string{"resourcemanager", "v1alpha", "projects", "name"}, ""))
 
-	pattern_Projects_ListProjects_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 2, 5, 2, 2, 3}, []string{"v1", "organizations", "parent", "projects"}, ""))
+	pattern_Projects_ListProjects_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 2, 5, 3, 2, 4}, []string{"resourcemanager", "v1alpha", "organizations", "parent", "projects"}, ""))
 
-	pattern_Projects_ListProjects_1 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 2, 5, 2, 2, 3}, []string{"v1", "folders", "parent", "projects"}, ""))
+	pattern_Projects_ListProjects_1 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 2, 5, 3, 2, 4}, []string{"resourcemanager", "v1alpha", "folders", "parent", "projects"}, ""))
 
-	pattern_Projects_UpdateProject_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 2, 5, 2}, []string{"v1", "projects", "project.name"}, ""))
+	pattern_Projects_UpdateProject_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 2, 5, 3}, []string{"resourcemanager", "v1alpha", "projects", "project.name"}, ""))
 
-	pattern_Projects_DeleteProject_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 2, 5, 2}, []string{"v1", "projects", "name"}, ""))
+	pattern_Projects_DeleteProject_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 2, 5, 3}, []string{"resourcemanager", "v1alpha", "projects", "name"}, ""))
 
-	pattern_Projects_MoveProject_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 2, 5, 2}, []string{"v1", "projects", "name"}, "move"))
+	pattern_Projects_MoveProject_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 2, 5, 3}, []string{"resourcemanager", "v1alpha", "projects", "name"}, "move"))
 )
 
 var (

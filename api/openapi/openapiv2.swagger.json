@@ -19,6 +19,483 @@
     "application/json"
   ],
   "paths": {
+    "/resourcemanager/v1alpha/{name}": {
+      "get": {
+        "summary": "Retrieves a project by its name.",
+        "description": "This will always return the expected state of the project. The project's\nstatus will always reflect the last observed status of the project.",
+        "operationId": "GetProject",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1alphaProject"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "name",
+            "description": "Required. The name of the project to retrieve.\nFormat: organizations/{organization}/projects/{project}",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "pattern": "projects/[^/]+"
+          }
+        ],
+        "tags": [
+          "Projects"
+        ]
+      },
+      "delete": {
+        "summary": "Delete a project from the platform.",
+        "description": "A project will not be deleted until all resources have been removed from\nthe project. Deleting a project will not immediately stop the billing for\nany resources provisioned within the project. Billing for a resource\nprovisioned within a project will only stop once the resource has been\nremoved.\n\nProjects can be scheduled for deletion in the future but no guarantees are\nprovided on when the deletion will start after the requested deletion time\nhas passed.",
+        "operationId": "DeleteProject",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/googlelongrunningOperation"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "name",
+            "description": "Required. The name of the project to delete.\nFormat: organizations/{organization}/projects/{project}",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "pattern": "projects/[^/]+"
+          },
+          {
+            "name": "validateOnly",
+            "description": "Indicates the request to update the project should only be validated and\nchanges must not actually take effect on the resource. API consumers can\nleverage this option to perform validation and present errors to users\nbefore submitting a real update request.",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "etag",
+            "description": "Optionally provide the computed checksum value of the current resource to\nensure updates only take effect when the latest resource was provided by\nthe caller.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "allowMissing",
+            "description": "When set to true, the request will still succeed if the project does not\nexist.",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          }
+        ],
+        "tags": [
+          "Projects"
+        ]
+      }
+    },
+    "/resourcemanager/v1alpha/{name}:move": {
+      "post": {
+        "summary": "Move a project to a new location in the resource hierarchy.",
+        "description": "Users can move projects new locations in the resource hierarchy based on\ntheir organizational needs. Changing the location in the hierarchy can have\nadverse affects on IAM policies inherited by the project. Users must be\ncareful that IAM policies applied from the existing parent are also set on\nthe new parent **before** moving the project, otherwise they risk access\ngranted through a parent's policies being removed.",
+        "operationId": "MoveProject",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/googlelongrunningOperation"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "name",
+            "description": "The resource name of the project that will be moved to a new location\nwithin the resource hierarchy.",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "pattern": "projects/[^/]+"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ProjectsMoveProjectBody"
+            }
+          }
+        ],
+        "tags": [
+          "Projects"
+        ]
+      }
+    },
+    "/resourcemanager/v1alpha/{parent_1}/projects": {
+      "get": {
+        "summary": "Lists projects under a parent resource.",
+        "description": "Projects can be organized into Folders or set at the root of the\nOrganizatino's heirarchy.",
+        "operationId": "ListProjects2",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1alphaListProjectsResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "parent_1",
+            "description": "The parent location in the resource hierarchy that projects should be\nlisted from.",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "pattern": "folders/[^/]+"
+          },
+          {
+            "name": "pageSize",
+            "description": "Optional. The maximum number of projects to return. If unspecified, defaults to 50.",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "pageToken",
+            "description": "Optional. A token identifying a page of results to return.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "filter",
+            "description": "Optional. A filter to apply to the results.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Projects"
+        ]
+      },
+      "post": {
+        "summary": "Creates a project within the resource hierarchy.",
+        "operationId": "CreateProject2",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/googlelongrunningOperation"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "parent_1",
+            "description": "The resource name to use as the parent in the project's resource hierarchy.\nA Project can have a Folder or an Organization as it's parent. Must be in\nthe format \"organizations/{organization}\" or \"projects/{project}\".",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "pattern": "folders/[^/]+"
+          },
+          {
+            "name": "project",
+            "description": "The project to create.",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1alphaProject",
+              "required": [
+                "project"
+              ]
+            }
+          },
+          {
+            "name": "projectId",
+            "description": "Set the ID to use for the project. This will be used as the last section of\nthe project's resource name.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "validateOnly",
+            "description": "When set to true, the request will be validated but the project will not be\ncreated within the system. This is helpful to perform server-side\nvalidation of resources and show validation errors to users prior to\nallowing them to submit the creation request.",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          }
+        ],
+        "tags": [
+          "Projects"
+        ]
+      }
+    },
+    "/resourcemanager/v1alpha/{parent}/projects": {
+      "get": {
+        "summary": "Lists projects under a parent resource.",
+        "description": "Projects can be organized into Folders or set at the root of the\nOrganizatino's heirarchy.",
+        "operationId": "ListProjects",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1alphaListProjectsResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "parent",
+            "description": "The parent location in the resource hierarchy that projects should be\nlisted from.",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "pattern": "organizations/[^/]+"
+          },
+          {
+            "name": "pageSize",
+            "description": "Optional. The maximum number of projects to return. If unspecified, defaults to 50.",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "pageToken",
+            "description": "Optional. A token identifying a page of results to return.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "filter",
+            "description": "Optional. A filter to apply to the results.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Projects"
+        ]
+      },
+      "post": {
+        "summary": "Creates a project within the resource hierarchy.",
+        "operationId": "CreateProject",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/googlelongrunningOperation"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "parent",
+            "description": "The resource name to use as the parent in the project's resource hierarchy.\nA Project can have a Folder or an Organization as it's parent. Must be in\nthe format \"organizations/{organization}\" or \"projects/{project}\".",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "pattern": "organizations/[^/]+"
+          },
+          {
+            "name": "project",
+            "description": "The project to create.",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1alphaProject",
+              "required": [
+                "project"
+              ]
+            }
+          },
+          {
+            "name": "projectId",
+            "description": "Set the ID to use for the project. This will be used as the last section of\nthe project's resource name.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "validateOnly",
+            "description": "When set to true, the request will be validated but the project will not be\ncreated within the system. This is helpful to perform server-side\nvalidation of resources and show validation errors to users prior to\nallowing them to submit the creation request.",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          }
+        ],
+        "tags": [
+          "Projects"
+        ]
+      }
+    },
+    "/resourcemanager/v1alpha/{project.name}": {
+      "patch": {
+        "summary": "Updates an existing Project",
+        "operationId": "UpdateProject",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/googlelongrunningOperation"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "project.name",
+            "description": "The resource name of the Project.\nFormat: projects/{project}",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "pattern": "projects/[^/]+"
+          },
+          {
+            "name": "project",
+            "description": "Required. The project to update.",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "parent": {
+                  "type": "string",
+                  "description": "The resource name of the Project's parent in the resource hierarchy. This\nvalue will change if the project is moved in the resource hierachy. The\nparent will always be a folder (e.g. `folders/{folder}`) or organization\n(e.g. `organizations/{organization}`).\n\nThe [MoveProject] method can be used to move the Project to a new parent.",
+                  "readOnly": true
+                },
+                "uid": {
+                  "type": "string",
+                  "description": "A system-generated UUIDv4 that uniquely identifies the resource.",
+                  "readOnly": true
+                },
+                "etag": {
+                  "type": "string",
+                  "description": "A checksum calculated by the server based on the current state of the\nproject resource. This value can be sent on update and delete requests to\nensure the client has an up-to-date value before proceeding with the mutate\ncall.",
+                  "readOnly": true
+                },
+                "createTime": {
+                  "type": "string",
+                  "format": "date-time",
+                  "description": "The time when the project was created.",
+                  "readOnly": true
+                },
+                "updateTime": {
+                  "type": "string",
+                  "format": "date-time",
+                  "description": "The time when the project was last updated.",
+                  "readOnly": true
+                },
+                "deleteTime": {
+                  "type": "string",
+                  "format": "date-time",
+                  "description": "The time when the project was deleted.",
+                  "readOnly": true
+                },
+                "reconciling": {
+                  "type": "boolean",
+                  "description": "Inidicates whether the project is being reconciled because the current\nstate of the project does not match the desired state.",
+                  "readOnly": true
+                },
+                "annotations": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "string"
+                  },
+                  "description": "Annotations are an unstructured key-value map stored with a project that\nmay be set by external tools to store and retrieve arbitrary metadata.\nThey are not queryable and will be preserved when modifying objects.\n\nAnnotation keys must be in a fully-qualified domain format.\n\n  annotations:\n    resourcemanager.datumapis.com/project-id: some-value\n    extensions.calico.com/network: some-network"
+                },
+                "labels": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "string"
+                  },
+                  "description": "Labels are an unstructured key-value map that can be used to categorizing\nthe resource. Eventually the system will allow filtering on project labels."
+                },
+                "displayName": {
+                  "type": "string",
+                  "description": "A user-provided name for the project. This must be unique within the parent\nresource."
+                },
+                "description": {
+                  "type": "string",
+                  "description": "An optional description for the project."
+                }
+              },
+              "title": "Required. The project to update.",
+              "required": [
+                "displayName"
+              ]
+            }
+          },
+          {
+            "name": "validateOnly",
+            "description": "Indicates the request to update the project should only be validated and\nchanges must not actually take effect on the resource. API consumers can\nleverage this option to perform validation and present errors to users\nbefore submitting a real update request.",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "allowMissing",
+            "description": "Set to true to indicate that a new Project should be created if the\nprovided project doesn't already exist.",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          }
+        ],
+        "tags": [
+          "Projects"
+        ]
+      }
+    },
     "/v1/{folder.name}": {
       "patch": {
         "summary": "Updates an existing folder.",
@@ -131,135 +608,6 @@
         ],
         "tags": [
           "Folders"
-        ]
-      }
-    },
-    "/v1/{name_1}": {
-      "get": {
-        "summary": "Retrieves a project by its name.",
-        "description": "This will always return the expected state of the project. The project's\nstatus will always reflect the last observed status of the project.",
-        "operationId": "GetProject",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1alphaProject"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "name_1",
-            "description": "Required. The name of the project to retrieve.\nFormat: organizations/{organization}/projects/{project}",
-            "in": "path",
-            "required": true,
-            "type": "string",
-            "pattern": "projects/[^/]+"
-          }
-        ],
-        "tags": [
-          "Projects"
-        ]
-      },
-      "delete": {
-        "summary": "Delete a project from the platform.",
-        "description": "A project will not be deleted until all resources have been removed from\nthe project. Deleting a project will not immediately stop the billing for\nany resources provisioned within the project. Billing for a resource\nprovisioned within a project will only stop once the resource has been\nremoved.\n\nProjects can be scheduled for deletion in the future but no guarantees are\nprovided on when the deletion will start after the requested deletion time\nhas passed.",
-        "operationId": "DeleteProject",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/googlelongrunningOperation"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "name_1",
-            "description": "Required. The name of the project to delete.\nFormat: organizations/{organization}/projects/{project}",
-            "in": "path",
-            "required": true,
-            "type": "string",
-            "pattern": "projects/[^/]+"
-          },
-          {
-            "name": "validateOnly",
-            "description": "Indicates the request to update the project should only be validated and\nchanges must not actually take effect on the resource. API consumers can\nleverage this option to perform validation and present errors to users\nbefore submitting a real update request.",
-            "in": "query",
-            "required": false,
-            "type": "boolean"
-          },
-          {
-            "name": "etag",
-            "description": "Optionally provide the computed checksum value of the current resource to\nensure updates only take effect when the latest resource was provided by\nthe caller.",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "allowMissing",
-            "description": "When set to true, the request will still succeed if the project does not\nexist.",
-            "in": "query",
-            "required": false,
-            "type": "boolean"
-          }
-        ],
-        "tags": [
-          "Projects"
-        ]
-      }
-    },
-    "/v1/{name_1}:move": {
-      "post": {
-        "summary": "Move a project to a new location in the resource hierarchy.",
-        "description": "Users can move projects new locations in the resource hierarchy based on\ntheir organizational needs. Changing the location in the hierarchy can have\nadverse affects on IAM policies inherited by the project. Users must be\ncareful that IAM policies applied from the existing parent are also set on\nthe new parent **before** moving the project, otherwise they risk access\ngranted through a parent's policies being removed.",
-        "operationId": "MoveProject",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/googlelongrunningOperation"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "name_1",
-            "description": "The resource name of the project that will be moved to a new location\nwithin the resource hierarchy.",
-            "in": "path",
-            "required": true,
-            "type": "string",
-            "pattern": "projects/[^/]+"
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/ProjectsMoveProjectBody"
-            }
-          }
-        ],
-        "tags": [
-          "Projects"
         ]
       }
     },
@@ -504,119 +852,6 @@
         ]
       }
     },
-    "/v1/{parent_1}/projects": {
-      "get": {
-        "summary": "Lists projects under a parent resource.",
-        "description": "Projects can be organized into Folders or set at the root of the\nOrganizatino's heirarchy.",
-        "operationId": "ListProjects2",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1alphaListProjectsResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "parent_1",
-            "description": "The parent location in the resource hierarchy that projects should be\nlisted from.",
-            "in": "path",
-            "required": true,
-            "type": "string",
-            "pattern": "folders/[^/]+"
-          },
-          {
-            "name": "pageSize",
-            "description": "Optional. The maximum number of projects to return. If unspecified, defaults to 50.",
-            "in": "query",
-            "required": false,
-            "type": "integer",
-            "format": "int32"
-          },
-          {
-            "name": "pageToken",
-            "description": "Optional. A token identifying a page of results to return.",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "filter",
-            "description": "Optional. A filter to apply to the results.",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          }
-        ],
-        "tags": [
-          "Projects"
-        ]
-      },
-      "post": {
-        "summary": "Creates a project within the resource hierarchy.",
-        "operationId": "CreateProject2",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/googlelongrunningOperation"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "parent_1",
-            "description": "The resource name to use as the parent in the project's resource hierarchy.\nA Project can have a Folder or an Organization as it's parent. Must be in\nthe format \"organizations/{organization}\" or \"projects/{project}\".",
-            "in": "path",
-            "required": true,
-            "type": "string",
-            "pattern": "folders/[^/]+"
-          },
-          {
-            "name": "project",
-            "description": "The project to create.",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/v1alphaProject",
-              "required": [
-                "project"
-              ]
-            }
-          },
-          {
-            "name": "projectId",
-            "description": "Set the ID to use for the project. This will be used as the last section of\nthe project's resource name.",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "validateOnly",
-            "description": "When set to true, the request will be validated but the project will not be\ncreated within the system. This is helpful to perform server-side\nvalidation of resources and show validation errors to users prior to\nallowing them to submit the creation request.",
-            "in": "query",
-            "required": false,
-            "type": "boolean"
-          }
-        ],
-        "tags": [
-          "Projects"
-        ]
-      }
-    },
     "/v1/{parent}": {
       "get": {
         "summary": "Lists folders under a parent resource.",
@@ -728,241 +963,6 @@
         ],
         "tags": [
           "Folders"
-        ]
-      }
-    },
-    "/v1/{parent}/projects": {
-      "get": {
-        "summary": "Lists projects under a parent resource.",
-        "description": "Projects can be organized into Folders or set at the root of the\nOrganizatino's heirarchy.",
-        "operationId": "ListProjects",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1alphaListProjectsResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "parent",
-            "description": "The parent location in the resource hierarchy that projects should be\nlisted from.",
-            "in": "path",
-            "required": true,
-            "type": "string",
-            "pattern": "organizations/[^/]+"
-          },
-          {
-            "name": "pageSize",
-            "description": "Optional. The maximum number of projects to return. If unspecified, defaults to 50.",
-            "in": "query",
-            "required": false,
-            "type": "integer",
-            "format": "int32"
-          },
-          {
-            "name": "pageToken",
-            "description": "Optional. A token identifying a page of results to return.",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "filter",
-            "description": "Optional. A filter to apply to the results.",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          }
-        ],
-        "tags": [
-          "Projects"
-        ]
-      },
-      "post": {
-        "summary": "Creates a project within the resource hierarchy.",
-        "operationId": "CreateProject",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/googlelongrunningOperation"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "parent",
-            "description": "The resource name to use as the parent in the project's resource hierarchy.\nA Project can have a Folder or an Organization as it's parent. Must be in\nthe format \"organizations/{organization}\" or \"projects/{project}\".",
-            "in": "path",
-            "required": true,
-            "type": "string",
-            "pattern": "organizations/[^/]+"
-          },
-          {
-            "name": "project",
-            "description": "The project to create.",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/v1alphaProject",
-              "required": [
-                "project"
-              ]
-            }
-          },
-          {
-            "name": "projectId",
-            "description": "Set the ID to use for the project. This will be used as the last section of\nthe project's resource name.",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "validateOnly",
-            "description": "When set to true, the request will be validated but the project will not be\ncreated within the system. This is helpful to perform server-side\nvalidation of resources and show validation errors to users prior to\nallowing them to submit the creation request.",
-            "in": "query",
-            "required": false,
-            "type": "boolean"
-          }
-        ],
-        "tags": [
-          "Projects"
-        ]
-      }
-    },
-    "/v1/{project.name}": {
-      "patch": {
-        "summary": "Updates an existing Project",
-        "operationId": "UpdateProject",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/googlelongrunningOperation"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "project.name",
-            "description": "The resource name of the Project.\nFormat: projects/{project}",
-            "in": "path",
-            "required": true,
-            "type": "string",
-            "pattern": "projects/[^/]+"
-          },
-          {
-            "name": "project",
-            "description": "Required. The project to update.",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "type": "object",
-              "properties": {
-                "parent": {
-                  "type": "string",
-                  "description": "The resource name of the Project's parent in the resource hierarchy. This\nvalue will change if the project is moved in the resource hierachy. The\nparent will always be a folder (e.g. `folders/{folder}`) or organization\n(e.g. `organizations/{organization}`).\n\nThe [MoveProject] method can be used to move the Project to a new parent.",
-                  "readOnly": true
-                },
-                "uid": {
-                  "type": "string",
-                  "description": "A system-generated UUIDv4 that uniquely identifies the resource.",
-                  "readOnly": true
-                },
-                "etag": {
-                  "type": "string",
-                  "description": "A checksum calculated by the server based on the current state of the\nproject resource. This value can be sent on update and delete requests to\nensure the client has an up-to-date value before proceeding with the mutate\ncall.",
-                  "readOnly": true
-                },
-                "createTime": {
-                  "type": "string",
-                  "format": "date-time",
-                  "description": "The time when the project was created.",
-                  "readOnly": true
-                },
-                "updateTime": {
-                  "type": "string",
-                  "format": "date-time",
-                  "description": "The time when the project was last updated.",
-                  "readOnly": true
-                },
-                "deleteTime": {
-                  "type": "string",
-                  "format": "date-time",
-                  "description": "The time when the project was deleted.",
-                  "readOnly": true
-                },
-                "reconciling": {
-                  "type": "boolean",
-                  "description": "Inidicates whether the project is being reconciled because the current\nstate of the project does not match the desired state.",
-                  "readOnly": true
-                },
-                "annotations": {
-                  "type": "object",
-                  "additionalProperties": {
-                    "type": "string"
-                  },
-                  "description": "Annotations are an unstructured key-value map stored with a project that\nmay be set by external tools to store and retrieve arbitrary metadata.\nThey are not queryable and will be preserved when modifying objects.\n\nAnnotation keys must be in a fully-qualified domain format.\n\n  annotations:\n    resourcemanager.datumapis.com/project-id: some-value\n    extensions.calico.com/network: some-network"
-                },
-                "labels": {
-                  "type": "object",
-                  "additionalProperties": {
-                    "type": "string"
-                  },
-                  "description": "Labels are an unstructured key-value map that can be used to categorizing\nthe resource. Eventually the system will allow filtering on project labels."
-                },
-                "displayName": {
-                  "type": "string",
-                  "description": "A user-provided name for the project. This must be unique within the parent\nresource."
-                },
-                "description": {
-                  "type": "string",
-                  "description": "An optional description for the project."
-                }
-              },
-              "title": "Required. The project to update.",
-              "required": [
-                "displayName"
-              ]
-            }
-          },
-          {
-            "name": "validateOnly",
-            "description": "Indicates the request to update the project should only be validated and\nchanges must not actually take effect on the resource. API consumers can\nleverage this option to perform validation and present errors to users\nbefore submitting a real update request.",
-            "in": "query",
-            "required": false,
-            "type": "boolean"
-          },
-          {
-            "name": "allowMissing",
-            "description": "Set to true to indicate that a new Project should be created if the\nprovided project doesn't already exist.",
-            "in": "query",
-            "required": false,
-            "type": "boolean"
-          }
-        ],
-        "tags": [
-          "Projects"
         ]
       }
     }

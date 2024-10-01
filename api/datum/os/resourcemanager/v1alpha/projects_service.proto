@@ -4,6 +4,7 @@ option go_package = "go.datumapis.com/genproto/os/resourcemanager/v1alpha";
 
 package datum.os.resourcemanager.v1alpha;
 
+import "datum/iam/annotations.proto";
 import "datum/os/resourcemanager/v1alpha/projects_resources.proto";
 import "google/api/annotations.proto";
 import "google/api/resource.proto";
@@ -26,12 +27,13 @@ import "google/longrunning/operations.proto";
 service Projects {
   // Creates a project within the resource hierarchy.
   rpc CreateProject(CreateProjectRequest) returns (google.longrunning.Operation) {
+    option (datum.iam.required_permissions) = "projects.create";
     option (google.api.method_signature) = "parent,project,project_id";
     option (google.api.http) = {
-      post: "/v1/{parent=organizations/*}/projects",
+      post: "/resourcemanager/v1alpha/{parent=organizations/*}/projects",
       body: "project"
       additional_bindings: {
-        post: "/v1/{parent=folders/*}/projects",
+        post: "/resourcemanager/v1alpha/{parent=folders/*}/projects",
         body: "project"
       }
     };
@@ -46,9 +48,10 @@ service Projects {
   // This will always return the expected state of the project. The project's
   // status will always reflect the last observed status of the project.
   rpc GetProject(GetProjectRequest) returns (Project) {
+    option (datum.iam.required_permissions) = "projects.get";
     option (google.api.method_signature) = "name";
     option (google.api.http) = {
-      get: "/v1/{name=projects/*}"
+      get: "/resourcemanager/v1alpha/{name=projects/*}"
     };
   }
 
@@ -57,20 +60,22 @@ service Projects {
   // Projects can be organized into Folders or set at the root of the
   // Organizatino's heirarchy.
   rpc ListProjects(ListProjectsRequest) returns (ListProjectsResponse) {
+    option (datum.iam.required_permissions) = "projects.list";
     option (google.api.method_signature) = "parent";
     option (google.api.http) = {
-      get: "/v1/{parent=organizations/*}/projects",
+      get: "/resourcemanager/v1alpha/{parent=organizations/*}/projects",
       additional_bindings: {
-        get: "/v1/{parent=folders/*}/projects"
+        get: "/resourcemanager/v1alpha/{parent=folders/*}/projects"
       }
     };
   }
 
   // Updates an existing Project
   rpc UpdateProject(UpdateProjectRequest) returns (google.longrunning.Operation) {
+    option (datum.iam.required_permissions) = "projects.update";
     option (google.api.method_signature) = "project,update_mask";
     option (google.api.http) = {
-      patch: "/v1/{project.name=projects/*}"
+      patch: "/resourcemanager/v1alpha/{project.name=projects/*}"
       body: "project"
     };
     option (google.longrunning.operation_info) = {
@@ -91,9 +96,10 @@ service Projects {
   // provided on when the deletion will start after the requested deletion time
   // has passed.
   rpc DeleteProject(DeleteProjectRequest) returns (google.longrunning.Operation) {
+    option (datum.iam.required_permissions) = "projects.delete";
     option (google.api.method_signature) = "name";
     option (google.api.http) = {
-      delete: "/v1/{name=projects/*}"
+      delete: "/resourcemanager/v1alpha/{name=projects/*}"
     };
     option (google.longrunning.operation_info) = {
       response_type: "Project"
@@ -113,8 +119,9 @@ service Projects {
   // (-- Imperative only API to move a project to different locations in the
   // resource hierarchy. --)
   rpc MoveProject(MoveProjectRequest) returns (google.longrunning.Operation) {
+    option (datum.iam.required_permissions) = "projects.move";
     option (google.api.http) = {
-      post: "/v1/{name=projects/*}:move",
+      post: "/resourcemanager/v1alpha/{name=projects/*}:move",
       body: "*"
     };
     option (google.api.method_signature) = "name,destination_parent";
