@@ -47,11 +47,12 @@ declarative friendly type. Two task variables must be provided:
 
 - `S`: Singular type name in CamelCase format.
 - `P`: Plural type name in CamelCase format.
+- `SN`: Service name in domain format.
 
 Usage:
 
 ```shell
-task api:generate-type S=Example P=Examples
+task api:generate-type S=Example P=Examples SN=example.com
 ```
 
 After placing the output in your desired file, consider the following:

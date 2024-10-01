@@ -46,7 +46,7 @@ tasks:
   generate-grpc:
     desc: Generate grpc definitions.
     cmds:
-      - protoc
+      - protoc 
           -I . -I ../third_party/protos
           --go_out=../lib/api-go
           --go_opt=module=go.datumapis.com/genproto
@@ -54,7 +54,7 @@ tasks:
           --go-grpc_opt=module=go.datumapis.com/genproto
           --grpc-gateway_out=../lib/api-go
           --grpc-gateway_opt=module=go.datumapis.com/genproto
-          datum/**/*.proto
+          ./datum/**/*.proto
 
   generate-gnostic:
     desc: Generate openapi definitions.
@@ -62,7 +62,7 @@ tasks:
       - protoc
           -I . -I ../third_party/protos
           --openapi_out=./openapi
-          datum/**/*.proto
+          ./datum/**/*.proto
 
   generate-http-api-docs:
     desc: Generate http api docs.
@@ -104,7 +104,7 @@ tasks:
             type: \"{{ .SERVICE_NAME }}/{{.SINGULAR_TYPE_NAME}}\"
             pattern: \"TODO\"
             style: DECLARATIVE_FRIENDLY
-            singular: \"{{substr 0 1 .SINGULAR_TYPE_NAME | lower}}{{substr 1 -1 .SINGULAR_TYPE_NAME}}\"
+            singular: \"{{.SINGULAR_TYPE_NAME}}\"
             plural: \"{{.PLURAL_TYPE_NAME}}\"
           };
 
