@@ -14,7 +14,6 @@ import (
 	"github.com/datum-cloud/datum-os/internal/httpserve/serveropts"
 	"github.com/datum-cloud/datum-os/pkg/cache"
 	"github.com/datum-cloud/datum-os/pkg/fgax"
-	geodetic "github.com/datum-cloud/datum-os/pkg/geodetic/pkg/geodeticclient"
 	"github.com/datum-cloud/datum-os/pkg/otelx"
 )
 
