@@ -105,11 +105,6 @@ func (s *Server) StartEchoServer(ctx context.Context, grpcRESTProxy *runtime.Ser
 
 	s.logger.Infow(datumBlock)
 
-	srv.Echo.RouteNotFound("/*", func(c echo.Context) error {
-		grpcRESTProxy.ServeHTTP(c.Response().Writer, c.Request())
-		return nil
-	})
-
 	// otherwise, start without TLS
 	return sc.Start(srv.Echo)
 }
