@@ -6,6 +6,10 @@ includes:
     dir: ./packages/codegen
 
 tasks:
+  default:
+    cmds:
+      - task -l
+
   build:
     desc: build all apps and package
     cmd: bun run build
