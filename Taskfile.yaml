@@ -1,0 +1,28 @@
+version: '3'
+
+shopt: [globstar]
+
+env:
+  ENV: ./packages/datum-web/config
+
+dotenv: ['.env', '{{.ENV}}/.env']
+
+includes:
+  api:
+    taskfile: ./api/Taskfile.yaml
+    dir: ./api
+  datum-service:
+    taskfile: ./packages/datum-service/Taskfile.yaml
+    dir: ./packages/datum-service
+  datum-web:
+    taskfile: ./packages/datum-web/Taskfile.yaml
+    dir: ./packages/datum-web
+
+tasks:
+  default:
+    cmds:
+      - task -l
+
+  install-tools:
+    deps:
+      - api:install-tools

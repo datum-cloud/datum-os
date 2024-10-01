@@ -45,6 +45,13 @@ tasks:
           --grpc-gateway_opt=module=go.datumapis.com/genproto
           datum/**/*.proto
 
+  generate-gnostic:
+    cmds:
+      - protoc
+          -I . -I ../third_party/protos
+          --openapi_out=./openapi
+          datum/**/*.proto
+
   generate-http-api-docs:
     cmds:
       - protoc

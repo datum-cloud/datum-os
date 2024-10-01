@@ -1,10 +1,5 @@
 version: '3'
 
-env:
-  ENV: config
-
-dotenv: ['.env', '{{.ENV}}/.env']
-
 includes:
   codegen:
     taskfile: ./packages/codegen/Taskfile.yaml
