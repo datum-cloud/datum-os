@@ -1,6 +1,10 @@
 version: '3'
 
 tasks:
+  default:
+    cmds:
+      - task -l
+
   install-tools:
     deps:
       - grpc-install
