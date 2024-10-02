@@ -62,9 +62,9 @@ tasks:
     desc: Generate openapi definitions.
     cmds: 
       - protoc 
-            -I . -I ../third_party/protos
-            --openapi_out=./openapi
-            ./datum/**/*.proto
+          -I . -I ../third_party/protos
+          --openapi_out=./openapi
+          ./datum/**/*.proto
 
   generate-http-api-docs:
     desc: Generate http api docs.
