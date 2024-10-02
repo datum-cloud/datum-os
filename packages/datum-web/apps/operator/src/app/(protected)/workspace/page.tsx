@@ -12,11 +12,10 @@ import { Error } from '@/components/shared/error/error'
 
 const WorkspaceLanding: React.FC = () => {
   const { data: sessionData } = useSession()
-  const [{ data, error }] = useGetAllOrganizationsQuery({
-    pause: !sessionData,
-  })
-
-  if (error) {
+  const [allOrgs] = useGetAllOrganizationsQuery({ pause: !sessionData })
+  const data = allOrgs?.data
+  console.log(data, allOrgs)
+  if (allOrgs?.error) {
     return <Error />
   }
 

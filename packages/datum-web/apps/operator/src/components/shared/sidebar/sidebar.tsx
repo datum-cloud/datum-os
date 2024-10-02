@@ -17,23 +17,12 @@ interface SidebarProps {
 
 export default function Sidebar({ className }: SidebarProps) {
   const pathname = usePathname()
-  const { data: session } = useSession()
   const { isOpen, toggle } = useSidebar()
   const [status, setStatus] = useState(false)
-  const currentOrgId = session?.user.organization
-  const [allOrgs] = useGetAllOrganizationsQuery({ pause: !session })
-  const orgs = allOrgs.data?.organizations.edges || []
-
-  const activeOrg = orgs
-    .filter((org) => org?.node?.id === currentOrgId)
-    .map((org) => org?.node)[0]
-
-  const isWorkspaceSelected = !activeOrg?.personalOrg
   const isProfile = pathname === OPERATOR_APP_ROUTES.profile
   const isSettings = pathname === OPERATOR_APP_ROUTES.settings
   const isWorkspace = pathname === OPERATOR_APP_ROUTES.workspace
-  const showWorkspaceNav =
-    isWorkspaceSelected && !isProfile && !isSettings && !isWorkspace
+  const showWorkspaceNav = !isProfile && !isSettings && !isWorkspace
 
   const { nav, sideNav, expandNav, expandNavIcon } = sidebarStyles({
     status,

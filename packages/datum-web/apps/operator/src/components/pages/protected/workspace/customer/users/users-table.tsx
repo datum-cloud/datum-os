@@ -1,0 +1,326 @@
+'use client'
+
+import Link from 'next/link'
+import { useState, useEffect } from 'react'
+
+import { useGetUserProfileQuery } from '@repo/codegen/src/schema'
+import { Avatar, AvatarFallback, AvatarImage } from '@repo/ui/avatar'
+import { Checkbox } from '@repo/ui/checkbox'
+import {
+  ColumnDef,
+  FilterFn,
+  SortingFn,
+  DataTable,
+  DataTableColumnHeader,
+  sortingFns,
+  rankItem,
+  compareItems,
+  ColumnFiltersState,
+  Row,
+} from '@repo/ui/data-table'
+import { Tag, TagVariants } from '@repo/ui/tag'
+import { Datum } from '@repo/types'
+
+import { formatDate } from '@/utils/date'
+
+import { tableStyles } from './page.styles'
+
+type UsersTableProps = {
+  users: Datum.User[]
+  setSelection(users: Datum.User[]): void
+  globalFilter?: string
+  columnFilters?: ColumnFiltersState
+  setGlobalFilter?(input: string): void
+  onRowsFetched?(data: Row<Datum.User>[]): void
+}
+
+const { header, checkboxContainer, link, userDetails } = tableStyles()
+
+const fuzzyFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
+  if (!value || value === '') return true
+
+  const cellValue = row.getValue(columnId)
+
+  if (!cellValue) return false
+
+  const itemRank = rankItem(cellValue, value)
+
+  addMeta({
+    itemRank,
+  })
+
+  return itemRank.passed
+}
+
+const booleanFilter: FilterFn<any> = (row, columnId, value) => {
+  let cellValue = row.getValue(columnId)
+
+  if (typeof cellValue === 'string') {
+    cellValue = cellValue.trim()
+  }
+
+  return Boolean(cellValue) === value
+}
+
+const fuzzySort: SortingFn<any> = (rowA, rowB, columnId) => {
+  let dir = 0
+
+  if (rowA.columnFiltersMeta[columnId]) {
+    dir = compareItems(
+      rowA.columnFiltersMeta[columnId].itemRank!,
+      rowB.columnFiltersMeta[columnId].itemRank!,
+    )
+  }
+
+  return dir === 0 ? sortingFns.alphanumeric(rowA, rowB, columnId) : dir
+}
+
+const filterFns = {
+  fuzzy: fuzzyFilter,
+  boolean: booleanFilter,
+}
+
+export const USER_COLUMNS: ColumnDef<Datum.User>[] = [
+  {
+    id: 'select',
+    accessorKey: 'id',
+    size: 60,
+    enableGlobalFilter: false,
+    enableSorting: false,
+    meta: {
+      pin: 'left',
+    },
+    header: ({ table }) => {
+      return (
+        <div className={checkboxContainer()}>
+          <Checkbox
+            checked={table.getIsAllPageRowsSelected()}
+            onCheckedChange={(value) =>
+              table.toggleAllPageRowsSelected(!!value)
+            }
+            className="bg-white"
+            aria-label="Select all users"
+          />
+        </div>
+      )
+    },
+    cell: ({ row }) => {
+      return (
+        <div className={checkboxContainer()}>
+          <Checkbox
+            checked={row.getIsSelected()}
+            className="bg-white"
+            onCheckedChange={(value) => row.toggleSelected(!!value)}
+            aria-label="Select user"
+          />
+        </div>
+      )
+    },
+  },
+  {
+    id: 'user',
+    accessorFn: (row) =>
+      `${row.user?.firstName ?? ''}${row.user?.lastName ? row.user?.lastName : ''}`,
+    enableGlobalFilter: true,
+    filterFn: booleanFilter,
+    enableSorting: true,
+    sortingFn: fuzzySort,
+    header: ({ column }) => (
+      <DataTableColumnHeader
+        className={header()}
+        column={column}
+        children="User"
+      />
+    ),
+    meta: {
+      minWidth: 236,
+    },
+    cell: ({ row }) => {
+      const value = row.original as Datum.User
+      const { firstName, lastName, avatarLocalFile, avatarRemoteURL } =
+        value?.user
+      const avatar = avatarLocalFile || avatarRemoteURL
+
+      return (
+        <div className={userDetails()}>
+          <Avatar variant="small">
+            {avatar && <AvatarImage src={avatar} />}
+            <AvatarFallback>{firstName?.substring(0, 2)}</AvatarFallback>
+          </Avatar>
+          <p>
+            {firstName} {lastName}
+          </p>
+        </div>
+      )
+    },
+  },
+  {
+    id: 'email',
+    accessorFn: (row) => row.user.email || '',
+    enableGlobalFilter: true,
+    filterFn: booleanFilter,
+    enableSorting: true,
+    sortingFn: fuzzySort,
+    header: ({ column }) => (
+      <DataTableColumnHeader
+        className={header()}
+        column={column}
+        children="Email"
+      />
+    ),
+    meta: {
+      minWidth: 212,
+    },
+    cell: ({ cell }) => {
+      const value = cell.getValue() as Datum.Email
+
+      return (
+        <Link
+          href={`mailto:${value}`}
+          className={link()}
+          rel="noopener noreferrer"
+        >
+          {value}
+        </Link>
+      )
+    },
+  },
+  {
+    id: 'provider',
+    accessorFn: (row) => row.user.authProvider || '',
+    header: ({ column }) => (
+      <DataTableColumnHeader
+        className={header()}
+        column={column}
+        children="Provider"
+      />
+    ),
+    filterFn: booleanFilter,
+    enableGlobalFilter: false,
+    enableSorting: true,
+    sortingFn: fuzzySort,
+    meta: {
+      minWidth: 192,
+    },
+  },
+  {
+    id: 'status',
+    accessorFn: (row) => row.user.id,
+    header: ({ column }) => (
+      <DataTableColumnHeader
+        className={header()}
+        column={column}
+        children="Status"
+      />
+    ),
+    filterFn: booleanFilter,
+    enableGlobalFilter: true,
+    enableSorting: true,
+    sortingFn: fuzzySort,
+    cell: ({ cell }) => {
+      const value = cell.getValue() as Datum.UserId
+      const [{ data }] = useGetUserProfileQuery({
+        variables: { userId: value },
+      })
+      const { status } = data?.user?.setting || {}
+      console.log('STATUS', status)
+
+      let variant: TagVariants['status'] = 'default'
+
+      if (status === 'ACTIVE') variant = 'success'
+      if (status === 'SUSPENDED') variant = 'destructive'
+
+      return <Tag variant={variant}>{status ?? 'N/A'}</Tag>
+    },
+    meta: {
+      minWidth: 132,
+    },
+  },
+  //   {
+  //     id: 'logins',
+  //     header: ({ column }) => (
+  //       <DataTableColumnHeader
+  //         className={header()}
+  //         column={column}
+  //         children="Logins"
+  //       />
+  //     ),
+  //     enableGlobalFilter: false,
+  //     enableSorting: true,
+  //     cell: ({ row }) => {
+  //       const value = row.original as Datum.User
+  //       const [{ data }] = useGetUserProfileQuery({
+  //         variables: { userId: value.user.id },
+  //       })
+  //       // TODO: Get number of logins and replace below
+  //       const { logins } = data?.user || {}
+
+  //       return <Tag>{logins}</Tag>
+  //     },
+  //     meta: {
+  //       minWidth: 102,
+  //     },
+  //   },
+  {
+    id: 'lastSeen',
+    accessorFn: (row) => row.user.lastSeen || '',
+    header: ({ column }) => (
+      <DataTableColumnHeader
+        className={header()}
+        column={column}
+        children="Last Login"
+      />
+    ),
+    enableGlobalFilter: false,
+    enableSorting: true,
+    sortingFn: fuzzySort,
+    cell: ({ row }) => {
+      const value = row.original as Datum.User
+
+      const lastLogin = value?.user?.lastSeen || ''
+      const formattedDate = formatDate(new Date(lastLogin))
+
+      return <>{formattedDate}</>
+    },
+    meta: {
+      minWidth: 220,
+    },
+  },
+]
+
+const UsersTable = ({
+  users,
+  globalFilter,
+  columnFilters,
+  setGlobalFilter,
+  setSelection,
+  onRowsFetched,
+}: UsersTableProps) => {
+  const [filteredUsers, setFilteredUsers] = useState<Datum.User[]>(users)
+
+  useEffect(() => {
+    if (users) {
+      setFilteredUsers(users)
+    }
+  }, [users])
+
+  return (
+    <DataTable
+      globalFilter={globalFilter}
+      setGlobalFilter={setGlobalFilter}
+      filterFns={filterFns}
+      globalFilterFn="fuzzy"
+      columnFilters={columnFilters}
+      columns={USER_COLUMNS}
+      data={filteredUsers}
+      layoutFixed
+      bordered
+      setSelection={setSelection}
+      highlightHeader
+      showFooter
+      onRowsFetched={onRowsFetched}
+    />
+  )
+}
+
+export default UsersTable

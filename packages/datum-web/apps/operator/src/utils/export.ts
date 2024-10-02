@@ -37,3 +37,22 @@ export function formatListsExportData(data: Row<Datum.List>[]) {
 
   return formattedData
 }
+
+export function formatUsersExportData(data: Row<Datum.User>[]) {
+  const formattedData = data.map((row) => {
+    const user = row.original.user
+
+    return {
+      'First Name': user.firstName || '',
+      'Last Name': user.lastName || '',
+      Email: user.email || '',
+      Provider: user.authProvider || '',
+      'Created At': formatDate(user.createdAt) || '',
+      'Last Seen': user.lastSeen || '',
+      // TODO: Return status from backend
+      Status: 'ACTIVE',
+    }
+  })
+
+  return formattedData
+}

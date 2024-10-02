@@ -64,6 +64,7 @@ const WorkspaceInviteForm = ({ inviteAdmins }: { inviteAdmins: boolean }) => {
     control,
     handleSubmit,
     setValue,
+    watch,
     formState: { errors },
   } = form
 

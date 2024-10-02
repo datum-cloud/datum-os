@@ -1,26 +1,17 @@
 'use client'
 
 import React, { ReactNode, useEffect, useRef, useState } from 'react'
+
 import { cn } from '../../lib/utils'
-import {
-  inputRowStyles,
-  InputRowVariants,
-  inputStyles,
-  type InputVariants,
-} from './input.styles'
+
+import { inputStyles } from './input.styles'
 
 export interface InputProps
-  extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'prefix'>,
-    InputVariants {
+  extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'prefix'> {
   icon?: ReactNode
   prefix?: ReactNode
   debounce?: number
   onIconClick?: () => void
-}
-
-interface InputRowProps extends InputRowVariants {
-  className?: string
-  children: ReactNode
 }
 interface DebouncedInputProps extends Omit<InputProps, 'onChange' | 'value'> {
   value: string
@@ -29,14 +20,8 @@ interface DebouncedInputProps extends Omit<InputProps, 'onChange' | 'value'> {
 }
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
-  (
-    { className, type, icon, prefix, variant, onIconClick, debounce, ...props },
-    ref,
-  ) => {
-    const { input, inputWrapper, iconWrapper, prefixWrapper } = inputStyles({
-      variant,
-    })
-    const hasIcon = Boolean(icon)
+  ({ className, type, icon, prefix, onIconClick, debounce, ...props }, ref) => {
+    const { input, inputWrapper, iconWrapper, prefixWrapper } = inputStyles()
     const hasPrefix = Boolean(prefix)
     const prefixRef = useRef<HTMLDivElement>(null)
     const [prefixWidth, setPrefixWidth] = useState(0)
@@ -48,7 +33,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
     }, [prefix])
 
     return (
-      <div className={inputWrapper({ hasIcon, hasPrefix })}>
+      <div className={inputWrapper()}>
         {prefix && (
           <div ref={prefixRef} className={prefixWrapper()}>
             {prefix}
@@ -56,7 +41,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
         )}
         <input
           type={type}
-          className={cn(input({ hasIcon, hasPrefix }), className)}
+          className={cn(input(), className)}
           ref={ref}
           {...props}
           style={{ paddingLeft: hasPrefix ? prefixWidth + 12 : undefined }}
@@ -76,11 +61,6 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
 )
 
 Input.displayName = 'Input'
-
-const InputRow: React.FC<InputRowProps> = ({ children, className }) => {
-  const styles = inputRowStyles()
-  return <div className={cn(styles.wrapper(), className)}>{children}</div>
-}
 
 const DebouncedInput: React.FC<DebouncedInputProps> = ({
   value: initialValue,
@@ -111,4 +91,4 @@ const DebouncedInput: React.FC<DebouncedInputProps> = ({
   )
 }
 
-export { DebouncedInput, Input, InputRow }
+export { DebouncedInput, Input }

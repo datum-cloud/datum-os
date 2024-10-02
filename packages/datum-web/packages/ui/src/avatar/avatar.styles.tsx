@@ -10,6 +10,10 @@ export const avatarStyles = tv({
   },
   variants: {
     size: {
+      small: {
+        avatarImageWrap: 'h-[26px] w-[26px]',
+        avatarFallBack: 'text-body-xs',
+      },
       medium: {
         avatarImageWrap: 'h-[34px] w-[34px]',
       },

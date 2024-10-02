@@ -72,9 +72,11 @@ query GetOrganizationMembers($organizationId: ID!) {
         lastName
         authProvider
         avatarRemoteURL
+        avatarLocalFile
         email
         role
         createdAt
+        lastSeen
       }
     }
   }

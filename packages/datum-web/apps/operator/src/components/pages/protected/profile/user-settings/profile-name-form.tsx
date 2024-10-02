@@ -105,11 +105,7 @@ const ProfileNameForm = () => {
                 <FormItem>
                   <FormLabel>First name</FormLabel>
                   <FormControl>
-                    <Input
-                      className={formInput()}
-                      variant="medium"
-                      {...field}
-                    />
+                    <Input className={formInput()} {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -122,11 +118,7 @@ const ProfileNameForm = () => {
                 <FormItem>
                   <FormLabel>Last name</FormLabel>
                   <FormControl>
-                    <Input
-                      className={formInput()}
-                      variant="medium"
-                      {...field}
-                    />
+                    <Input className={formInput()} {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

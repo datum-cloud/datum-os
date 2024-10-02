@@ -26,21 +26,7 @@ import {
 
 import { Datum } from '@repo/types'
 
-type FilterOption = {
-  key: string
-  value: any
-}
-
-type Filter = {
-  icon: React.ForwardRefExoticComponent<
-    Omit<LucideProps, 'ref'> & React.RefAttributes<SVGSVGElement>
-  >
-  title: string
-  operator: Datum.OPERATOR
-  options?: FilterOption[]
-}
-
-const BOOLEAN_OPTIONS: FilterOption[] = [
+const BOOLEAN_OPTIONS: Datum.FilterOption[] = [
   {
     key: 'Yes',
     value: true,
@@ -51,7 +37,7 @@ const BOOLEAN_OPTIONS: FilterOption[] = [
   },
 ]
 
-export const CONTACT_FILTERS: Record<string, Filter> = {
+export const CONTACT_FILTERS: Record<string, Datum.Filter> = {
   fullName: {
     icon: User,
     title: 'Has a name',
@@ -104,6 +90,51 @@ export const CONTACT_FILTERS: Record<string, Filter> = {
   //     title: 'Lists',
   //     options: [],
   //   },
+}
+
+export const USER_FILTERS: Record<string, Datum.Filter> = {
+  firstName: {
+    icon: User,
+    title: 'Has a first name',
+    operator: 'empty',
+    options: BOOLEAN_OPTIONS,
+  },
+  lastName: {
+    icon: User,
+    title: 'Has a last name',
+    operator: 'empty',
+    options: BOOLEAN_OPTIONS,
+  },
+  email: {
+    icon: Mail,
+    title: 'Has an email',
+    operator: 'empty',
+    options: BOOLEAN_OPTIONS,
+  },
+  logins: {
+    icon: Phone,
+    title: 'Number of logins',
+    operator: 'empty',
+    options: BOOLEAN_OPTIONS,
+  },
+  status: {
+    icon: LogOut,
+    title: 'User Status',
+    operator: 'equals',
+    options: [
+      { key: 'Active', value: 'ACTIVE' },
+      { key: 'Inactive', value: 'INACTIVE' },
+      { key: 'Onboarding', value: 'ONBOARDING' },
+      { key: 'Suspended', value: 'SUSPENDED' },
+      { key: 'Deactivated', value: 'DEACTIVATED' },
+    ],
+  },
+  provider: {
+    icon: Factory,
+    title: 'Has a provider',
+    operator: 'empty',
+    options: BOOLEAN_OPTIONS,
+  },
 }
 
 export const ORGANISATION_FILTERS = {

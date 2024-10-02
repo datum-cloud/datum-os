@@ -116,7 +116,7 @@ const ContactDeleteDialog = ({
                         {contacts.length > 1 ? 'these contacts' : 'the contact'}
                       </FormLabel>
                       <FormControl>
-                        <Input variant="medium" {...field} className="w-full" />
+                        <Input {...field} className="w-full" />
                       </FormControl>
                       <FormMessage />
                     </FormItem>

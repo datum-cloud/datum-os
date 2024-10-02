@@ -32,6 +32,7 @@ export const OPERATOR_APP_ROUTES = {
   login: '/login',
   forgotPassword: '/forgot-password',
   resetPassword: '/password-reset',
+  users: '/workspace/customers/users',
 }
 
 export const OPERATOR_API_ROUTES = {
@@ -94,3 +95,7 @@ export const DEFAULT_AVATAR_DIMENSIONS: Datum.ImageDimensions = {
   width: 256,
   height: 256,
 }
+
+export const PRIMARY_COLOR = '#F27A67'
+export const SECONDARY_COLOR = '#9C94B0'
+export const SPINNER_BG = '#FBC8BF'

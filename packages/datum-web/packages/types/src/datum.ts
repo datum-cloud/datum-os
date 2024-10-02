@@ -1,3 +1,6 @@
+import { LucideProps } from 'lucide-react'
+
+import { GetOrganizationMembersQuery } from '@repo/codegen/src/schema'
 export namespace Datum {
   declare const __brand: unique symbol
 
@@ -73,6 +76,20 @@ export namespace Datum {
     | 'lessThanOrEqualTo'
     | 'empty'
 
+  export type FilterOption = {
+    key: string
+    value: any
+  }
+
+  export type Filter = {
+    icon: React.ForwardRefExoticComponent<
+      Omit<LucideProps, 'ref'> & React.RefAttributes<SVGSVGElement>
+    >
+    title: string
+    operator: Datum.OPERATOR
+    options?: FilterOption[]
+  }
+
   export type List = {
     id: ListId
     name: string
@@ -125,4 +142,10 @@ export namespace Datum {
     height: number
     width: number
   }
+
+  export type UserId = Brand<Id, 'UserId'>
+
+  export type User = NonNullable<
+    NonNullable<GetOrganizationMembersQuery['organization']>['members']
+  >[number]
 }
