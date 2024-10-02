@@ -1,0 +1,9 @@
+# This task file can hold any tasks that can only run on macOS. This will be
+# included in the main taskfile.
+version: '3'
+tasks:
+  protobuf-install:
+    run: once
+    desc: Install the protobuf libraries
+    cmds:
+    - brew install protobuf
