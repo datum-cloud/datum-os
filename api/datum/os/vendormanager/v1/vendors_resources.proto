@@ -2,9 +2,11 @@ syntax = "proto3";
 
 package datum.os.vendormanager.v1;
 
-import "google/api/resource.proto";
+option go_package = "go.api.datum.net/os/vendormanager/v1";
+
 import "google/api/field_behavior.proto";
 import "google/api/field_info.proto";
+import "google/api/resource.proto";
 import "google/protobuf/timestamp.proto";
 
 message Vendor {

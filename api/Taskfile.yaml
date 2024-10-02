@@ -1,5 +1,7 @@
 version: '3'
 
+shopt: [globstar]
+
 tasks:
   default:
     cmds:
@@ -58,11 +60,11 @@ tasks:
 
   generate-gnostic:
     desc: Generate openapi definitions.
-    cmds:
-      - protoc
-          -I . -I ../third_party/protos
-          --openapi_out=./openapi
-          ./datum/**/*.proto
+    cmds: 
+      - protoc 
+            -I . -I ../third_party/protos
+            --openapi_out=./openapi
+            ./datum/**/*.proto
 
   generate-http-api-docs:
     desc: Generate http api docs.
