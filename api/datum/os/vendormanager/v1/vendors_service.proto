@@ -2,10 +2,15 @@ syntax = "proto3";
 
 package datum.os.vendormanager.v1;
 
-import "google/api/field_behavior.proto";
-import "google/api/resource.proto";
-import "google/protobuf/timestamp.proto";
+option go_package = "go.api.datum.net/os/vendormanager/v1";
 
+import "google/api/annotations.proto";
+import "google/api/field_behavior.proto";
+// import "google/api/field_info.proto";
+import "google/api/resource.proto";
+import "google/protobuf/empty.proto";
+import "google/protobuf/field_mask.proto";
+// import "google/protobuf/timestamp.proto";
 import "datum/os/vendormanager/v1/vendors_resources.proto";
 
 service Vendors {
@@ -17,7 +22,7 @@ service Vendors {
     }
     rpc GetVendor(GetVendorRequest) returns (Vendor) {
         option (google.api.http) = {
-            get: "/v1/vendors/{name=vendors/*}"
+            get: "/v1/{name=vendors/*}"
         };
     }
     rpc ListVendors(ListVendorsRequest) returns (ListVendorsResponse) {
@@ -27,12 +32,12 @@ service Vendors {
     }
     rpc UpdateVendor(UpdateVendorRequest) returns (Vendor) {
         option (google.api.http) = {
-            patch: "/v1/vendors/{vendor.name=vendors/*}"
+            patch: "/v1/{vendor.name=vendors/*}"
         };
     }
     rpc DeleteVendor(DeleteVendorRequest) returns (google.protobuf.Empty) {
         option (google.api.http) = {
-            delete: "/v1/vendors/{name=vendors/*}"
+            delete: "/v1/{name=vendors/*}"
         };
     }
 }
@@ -41,12 +46,13 @@ message CreateVendorRequest {
     string parent = 1 [
         (google.api.field_behavior) = REQUIRED,
         (google.api.resource_reference) = {
+            type: "*"
             child_type: "api.datum.net/Vendor"
         }
     ];
     Vendor vendor = 2 [(google.api.field_behavior) = REQUIRED];
     string vendor_id = 3 [(google.api.field_behavior) = REQUIRED];
-    google.api.FieldMask update_mask = 4 [(google.api.field_behavior) = OPTIONAL];
+    bool validate_only = 4 [(google.api.field_behavior) = OPTIONAL];
 }
 
 message GetVendorRequest {
@@ -78,7 +84,7 @@ message ListVendorsResponse {
 
 message UpdateVendorRequest {
     Vendor vendor = 1 [(google.api.field_behavior) = REQUIRED];
-    google.api.FieldMask update_mask = 2 [(google.api.field_behavior) = REQUIRED];
+    google.protobuf.FieldMask update_mask = 2 [(google.api.field_behavior) = REQUIRED];
 }
 
 message DeleteVendorRequest {

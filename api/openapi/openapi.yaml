@@ -1,0 +1,328 @@
+# Generated with protoc-gen-openapi
+# https://github.com/google/gnostic/tree/master/cmd/protoc-gen-openapi
+
+openapi: 3.0.3
+info:
+    title: Vendors API
+    version: 0.0.1
+paths:
+    /v1/vendors:
+        get:
+            tags:
+                - Vendors
+            operationId: Vendors_ListVendors
+            parameters:
+                - name: parent
+                  in: query
+                  schema:
+                    type: string
+                - name: pageSize
+                  in: query
+                  schema:
+                    type: integer
+                    format: int32
+                - name: pageToken
+                  in: query
+                  schema:
+                    type: string
+                - name: filter
+                  in: query
+                  schema:
+                    type: string
+                - name: orderBy
+                  in: query
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ListVendorsResponse'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+        post:
+            tags:
+                - Vendors
+            operationId: Vendors_CreateVendor
+            parameters:
+                - name: parent
+                  in: query
+                  schema:
+                    type: string
+                - name: vendorId
+                  in: query
+                  schema:
+                    type: string
+                - name: validateOnly
+                  in: query
+                  schema:
+                    type: boolean
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/Vendor'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Vendor'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+    /v1/vendors/{vendor}:
+        get:
+            tags:
+                - Vendors
+            operationId: Vendors_GetVendor
+            parameters:
+                - name: vendor
+                  in: path
+                  description: The vendor id.
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Vendor'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+        delete:
+            tags:
+                - Vendors
+            operationId: Vendors_DeleteVendor
+            parameters:
+                - name: vendor
+                  in: path
+                  description: The vendor id.
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content: {}
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+        patch:
+            tags:
+                - Vendors
+            operationId: Vendors_UpdateVendor
+            parameters:
+                - name: vendor
+                  in: path
+                  description: The vendor id.
+                  required: true
+                  schema:
+                    type: string
+                - name: vendor.name
+                  in: query
+                  description: The resource name of this Vendor.
+                  schema:
+                    type: string
+                - name: vendor.vendorId
+                  in: query
+                  description: The resource ID of this Vendor within its parent resource.
+                  schema:
+                    type: string
+                - name: vendor.uid
+                  in: query
+                  description: |-
+                    Server assigned unique identifier for the Vendor. The value
+                     is a UUID4 string and guaranteed to remain unchanged until the resource is
+                     deleted.
+                  schema:
+                    type: string
+                - name: vendor.displayName
+                  in: query
+                  description: |-
+                    Human-readable display name of this Vendor that you can modify.
+                     The maximum length is 63 characters.
+                  schema:
+                    type: string
+                - name: vendor.createTime
+                  in: query
+                  description: Output only. The time when the Vendor is created.
+                  schema:
+                    type: string
+                    format: date-time
+                - name: vendor.updateTime
+                  in: query
+                  description: Output only. The last time that the Vendor is updated.
+                  schema:
+                    type: string
+                    format: date-time
+                - name: vendor.deleteTime
+                  in: query
+                  description: |-
+                    Output only. For a deleted resource, the deletion time. It is only
+                     populated as a response to a Delete request.
+                  schema:
+                    type: string
+                    format: date-time
+                - name: vendor.reconciling
+                  in: query
+                  description: Output only. If set, there are currently changes in flight to the Vendor.
+                  schema:
+                    type: boolean
+                - name: vendor.etag
+                  in: query
+                  description: |-
+                    This checksum is computed by the server based on the value of
+                     other fields, and might be sent on update requests to ensure the client has
+                     an up-to-date value before proceeding.
+                  schema:
+                    type: string
+                - name: updateMask
+                  in: query
+                  schema:
+                    type: string
+                    format: field-mask
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Vendor'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+components:
+    schemas:
+        GoogleProtobufAny:
+            type: object
+            properties:
+                '@type':
+                    type: string
+                    description: The type of the serialized message.
+            additionalProperties: true
+            description: Contains an arbitrary serialized message along with a @type that describes the type of the serialized message.
+        ListVendorsResponse:
+            type: object
+            properties:
+                vendors:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/Vendor'
+                nextPageToken:
+                    type: string
+        Status:
+            type: object
+            properties:
+                code:
+                    type: integer
+                    description: The status code, which should be an enum value of [google.rpc.Code][google.rpc.Code].
+                    format: int32
+                message:
+                    type: string
+                    description: A developer-facing error message, which should be in English. Any user-facing error message should be localized and sent in the [google.rpc.Status.details][google.rpc.Status.details] field, or localized by the client.
+                details:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/GoogleProtobufAny'
+                    description: A list of messages that carry the error details.  There is a common set of message types for APIs to use.
+            description: 'The `Status` type defines a logical error model that is suitable for different programming environments, including REST APIs and RPC APIs. It is used by [gRPC](https://github.com/grpc). Each `Status` message contains three pieces of data: error code, error message, and error details. You can find out more about this error model and how to work with it in the [API Design Guide](https://cloud.google.com/apis/design/errors).'
+        Vendor:
+            required:
+                - spec
+            type: object
+            properties:
+                name:
+                    readOnly: true
+                    type: string
+                    description: The resource name of this Vendor.
+                vendorId:
+                    readOnly: true
+                    type: string
+                    description: The resource ID of this Vendor within its parent resource.
+                uid:
+                    readOnly: true
+                    type: string
+                    description: |-
+                        Server assigned unique identifier for the Vendor. The value
+                         is a UUID4 string and guaranteed to remain unchanged until the resource is
+                         deleted.
+                displayName:
+                    type: string
+                    description: |-
+                        Human-readable display name of this Vendor that you can modify.
+                         The maximum length is 63 characters.
+                annotations:
+                    type: object
+                    additionalProperties:
+                        type: string
+                    description: |-
+                        Annotations is an unstructured key-value map stored with a Vendor that
+                         may be set by external tools to store and retrieve arbitrary metadata.
+                         They are not queryable and should be preserved when modifying objects.
+                labels:
+                    type: object
+                    additionalProperties:
+                        type: string
+                    description: |-
+                        Labels is an unstructured key-value map stored with a Vendor that
+                         may be set by external tools to enable platform features which identify
+                         Vendors via label selections.
+                createTime:
+                    readOnly: true
+                    type: string
+                    description: Output only. The time when the Vendor is created.
+                    format: date-time
+                updateTime:
+                    readOnly: true
+                    type: string
+                    description: Output only. The last time that the Vendor is updated.
+                    format: date-time
+                deleteTime:
+                    readOnly: true
+                    type: string
+                    description: |-
+                        Output only. For a deleted resource, the deletion time. It is only
+                         populated as a response to a Delete request.
+                    format: date-time
+                reconciling:
+                    readOnly: true
+                    type: boolean
+                    description: Output only. If set, there are currently changes in flight to the Vendor.
+                etag:
+                    readOnly: true
+                    type: string
+                    description: |-
+                        This checksum is computed by the server based on the value of
+                         other fields, and might be sent on update requests to ensure the client has
+                         an up-to-date value before proceeding.
+                spec:
+                    $ref: '#/components/schemas/VendorSpec'
+        VendorSpec:
+            type: object
+            properties: {}
+tags:
+    - name: Vendors
