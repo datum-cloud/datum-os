@@ -112,7 +112,7 @@ const FilterUserDialog = ({ onFilter, entityFilters }: FilterDialogProps) => {
                                 size="xs"
                                 onClick={() => deleteFilter(field)}
                               >
-                                <X className="!h-3 !w-3" />
+                                <X className="!h-3 !w-3 pt-[2px]" />
                               </Button>
                             </div>
                           )

@@ -54,6 +54,6 @@ export const statisticsStyles = tv({
     cardContent: 'relative flex gap-8 justify-between items-stretch px-8',
     cardTitle: 'text-body-m font-medium',
     cardTag: 'flex items-center gap-0.5 pt-[1px]',
-    cardChart: 'h-[8vw]',
+    cardChart: 'min-h-12',
   },
 })
