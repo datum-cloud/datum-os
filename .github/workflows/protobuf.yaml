@@ -4,7 +4,8 @@ on:
   pull_request: {}
 
 jobs:
-  lint:
+  lint-api:
+    name: Lint API Definitions
     runs-on: ubuntu-latest
     # TODO: Use a prebuild image that includes Task, the AIP Linter, and other
     #       tooling. Might be able to share the same prebuilt image as a
@@ -12,13 +13,10 @@ jobs:
     container: golang:1.23-bookworm
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
     - name: Install Task
       run: |
-        sh -c "$(curl --location https://taskfile.dev/install.sh)" -- -d -b ~/.local/bin v3.39.2 && \
-        apt-get update && apt-get install -y protobuf-compiler
-    - name: Setup Tools
-      run: ~/.local/bin/task api:api-linter-install
+        sh -c "$(curl --location https://taskfile.dev/install.sh)" -- -d -b ~/.local/bin v3.39.2
     - name: Run API linter
       run: ~/.local/bin/task api:lint >> linter-output.log
     # TODO: There's probably better ways to do this
@@ -34,3 +32,39 @@ jobs:
     - name: Transform linter results
       if: always()
       run: sed '/error file=datum\//s//error file=api\/datum\//' linter-output.log
+
+  generate:
+    name: Generate Protobuf Files
+    runs-on: ubuntu-latest
+    container: golang:1.23-bookworm
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+    - name: Set Safe Directory
+      run: git config --global --add safe.directory /__w/datum-os/datum-os
+    - name: Install Task
+      run: |
+        sh -c "$(curl --location https://taskfile.dev/install.sh)" -- -d -b ~/.local/bin v3.39.2
+    - name: Generate protobuf
+      run: ~/.local/bin/task api:generate-proto
+    # Verify that no new changes were detected after protobuf was compiled
+    - uses: tj-actions/verify-changed-files@v20
+      id: verify-changed-files
+      with:
+        fail-if-changed: true
+        fail-message: |
+          Uncommitted changes were detected. Execute `task api:generate-proto` to regenerate protobuf files and commit any changes.
+    - name: Output changed files detected
+      if: failure() && steps.verify-changed-files.outputs.files_changed == 'true'
+      env:
+        CHANGED_FILES: ${{ steps.verify-changed-files.outputs.changed_files }}
+      run: |
+        echo '### WARNING: Uncommitted file changes detected' >> $GITHUB_STEP_SUMMARY
+        echo '\n' >> $GITHUB_STEP_SUMMARY
+        echo -n 'The following file changes were detected after generating the protobuf ' >> $GITHUB_STEP_SUMMARY
+        echo -n 'definitions. Please execute `task api:generate-proto` and review any ' >> $GITHUB_STEP_SUMMARY
+        echo 'uncommitted changes.' >> $GITHUB_STEP_SUMMARY
+        echo '\n' >> $GITHUB_STEP_SUMMARY
+        echo '```' >> $GITHUB_STEP_SUMMARY
+        echo "$CHANGED_FILES" >> $GITHUB_STEP_SUMMARY
+        echo '```' >> $GITHUB_STEP_SUMMARY

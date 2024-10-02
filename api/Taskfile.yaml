@@ -1,11 +1,17 @@
 version: '3'
 
 shopt: [globstar]
+includes:
+  # Include any operating system specific task files so commands can be changed
+  # based on the developer's operating system.
+  build:
+    taskfile: ./Taskfile_{{OS}}.yaml
+    flatten: true
 
 tasks:
   default:
     cmds:
-      - task -l
+      - task --list-all
 
   install-tools:
     desc: Install/update protoc and plugins.
@@ -14,24 +20,28 @@ tasks:
       - api-linter-install
 
   grpc-install:
+    run: once
+    deps:
+      - protobuf-install
     desc: Install/update protoc and plugins.
     cmds:
-      - brew install protobuf
       - go install github.com/google/gnostic/cmd/protoc-gen-openapi@latest
       - go install github.com/googleapis/gnostic-grpc@latest
       - go install github.com/golang/protobuf/protoc-gen-go@latest
-      - go install github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-openapiv2@latest
       - go install github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-grpc-gateway@latest
       - go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
       - go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
 
   api-linter-install:
     desc: Install/update api-linter.
+    run: once
     cmds:
       - go install github.com/googleapis/api-linter/cmd/api-linter@v1.67.3
 
   lint:
     desc: Run the AIP linter against protobuf definitions.
+    deps:
+      - api-linter-install
     cmds:
       - api-linter -I ../third_party/protos
         --config api-linter.yaml
@@ -47,6 +57,8 @@ tasks:
 
   generate-grpc:
     desc: Generate grpc definitions.
+    deps:
+      - grpc-install
     cmds:
       - protoc
           -I . -I ../third_party/protos
@@ -60,8 +72,10 @@ tasks:
 
   generate-openapi:
     desc: Generate openapi definitions.
-    cmds: 
-      - protoc 
+    deps:
+      - grpc-install
+    cmds:
+      - protoc
           -I . -I ../third_party/protos
           --openapi_out=./openapi
           ./datum/**/*.proto
