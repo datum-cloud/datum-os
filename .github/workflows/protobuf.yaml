@@ -1,0 +1,36 @@
+name: Build Protobuf
+
+on:
+  pull_request: {}
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    # TODO: Use a prebuild image that includes Task, the AIP Linter, and other
+    #       tooling. Might be able to share the same prebuilt image as a
+    #       container for the development environment?
+    container: golang:1.23-bookworm
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+    - name: Install Task
+      run: |
+        sh -c "$(curl --location https://taskfile.dev/install.sh)" -- -d -b ~/.local/bin v3.39.2 && \
+        apt-get update && apt-get install -y protobuf-compiler
+    - name: Setup Tools
+      run: ~/.local/bin/task api:api-linter-install
+    - name: Run API linter
+      run: ~/.local/bin/task api:lint >> linter-output.log
+    # TODO: There's probably better ways to do this
+    #
+    # This is required because the API linter must run in the `api` directory
+    # which causes linter violations to use the wrong path from the root of the
+    # repository. The sed command below will change the file path from `datum/`
+    # to `api/datum` so GitHub can correctly understand
+    #
+    # I went with a separate action step here because I wasn't able to pipe the
+    # output from the linter command to sed because of the non-zero exit code.
+    # There's ways around that, but this was easier.
+    - name: Transform linter results
+      if: always()
+      run: sed '/error file=datum\//s//error file=api\/datum\//' linter-output.log
