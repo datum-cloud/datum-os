@@ -1,10 +1,14 @@
 syntax = "proto3";
 
+option go_package = "go.datumapis.com/os/genproto/os/vendormanager/v1";
+
 package datum.os.vendormanager.v1;
 
+import "google/api/annotations.proto";
 import "google/api/field_behavior.proto";
+import "google/protobuf/field_mask.proto";
 import "google/api/resource.proto";
-import "google/protobuf/timestamp.proto";
+import "google/protobuf/empty.proto";
 
 import "datum/os/vendormanager/v1/vendors_resources.proto";
 
@@ -46,7 +50,7 @@ message CreateVendorRequest {
     ];
     Vendor vendor = 2 [(google.api.field_behavior) = REQUIRED];
     string vendor_id = 3 [(google.api.field_behavior) = REQUIRED];
-    google.api.FieldMask update_mask = 4 [(google.api.field_behavior) = OPTIONAL];
+    google.protobuf.FieldMask update_mask = 4 [(google.api.field_behavior) = OPTIONAL];
 }
 
 message GetVendorRequest {
@@ -78,7 +82,7 @@ message ListVendorsResponse {
 
 message UpdateVendorRequest {
     Vendor vendor = 1 [(google.api.field_behavior) = REQUIRED];
-    google.api.FieldMask update_mask = 2 [(google.api.field_behavior) = REQUIRED];
+    google.protobuf.FieldMask update_mask = 2 [(google.api.field_behavior) = REQUIRED];
 }
 
 message DeleteVendorRequest {
