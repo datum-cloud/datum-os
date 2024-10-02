@@ -104,7 +104,7 @@ const FilterUserDialog = ({ onFilter, entityFilters }: FilterDialogProps) => {
                           return (
                             <div
                               key={`${valueKey}-${index}`}
-                              className="flex flex-row items-center gap-1 border rounded border-blackberry-600 text-body-xs px-2 py-1"
+                              className="flex flex-row items-center gap-1 border rounded border-blackberry-600 dark:border-peat-800 text-body-xs px-2 py-1"
                             >
                               {title}: {valueKey}
                               <Button
@@ -166,7 +166,7 @@ const FilterUserDialog = ({ onFilter, entityFilters }: FilterDialogProps) => {
                               options.map((option, index) => (
                                 <DropdownMenuItem
                                   key={option.key}
-                                  className="p-3 cursor-pointer hover:bg-winter-sky-800"
+                                  className="p-3 cursor-pointer hover:bg-winter-sky-800 dark:hover:bg-peat-800"
                                   onClick={() =>
                                     handleFilter(key, operator, option)
                                   }

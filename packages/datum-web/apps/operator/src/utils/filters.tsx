@@ -8,6 +8,7 @@ import {
   Cpu,
   Factory,
   GanttChartSquare,
+  Hash,
   LineChart,
   Lock,
   LogOut,
@@ -18,6 +19,7 @@ import {
   Phone,
   Shapes,
   User,
+  UserCheck,
   UserRoundCog,
   Users,
   UserSquare2,
@@ -112,13 +114,13 @@ export const USER_FILTERS: Record<string, Datum.Filter> = {
     options: BOOLEAN_OPTIONS,
   },
   logins: {
-    icon: Phone,
+    icon: Hash,
     title: 'Number of logins',
     operator: 'empty',
     options: BOOLEAN_OPTIONS,
   },
   status: {
-    icon: LogOut,
+    icon: UserCheck,
     title: 'User Status',
     operator: 'equals',
     options: [

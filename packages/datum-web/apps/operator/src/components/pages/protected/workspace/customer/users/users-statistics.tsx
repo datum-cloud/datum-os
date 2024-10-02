@@ -1,10 +1,13 @@
 'use client'
 
-import { Card, CardContent, CardHeader, CardTitle } from '@repo/ui/chart-card'
+import { ArrowDown, ArrowUp } from 'lucide-react'
+
 import { ChartConfig, ChartContainer, Recharts } from '@repo/ui/chart'
+import { Card, CardContent, CardHeader, CardTitle } from '@repo/ui/chart-card'
 import { PRIMARY_COLOR, SECONDARY_COLOR } from '@repo/constants'
 import { Tag } from '@repo/ui/tag'
-import { ArrowDown, ArrowUp } from 'lucide-react'
+
+import { statisticsStyles } from './page.styles'
 
 type UsersStatisticsProps = {
   newUsersWeekly: UserStatistics
@@ -19,6 +22,15 @@ const UsersStatistics = ({
   newUsersMonthly,
   activeUsers,
 }: UsersStatisticsProps) => {
+  const {
+    container,
+    card,
+    cardHeader,
+    cardContent,
+    cardTitle,
+    cardTag,
+    cardChart,
+  } = statisticsStyles()
   const charts = [
     {
       title: 'New Users (Weekly)',
@@ -42,7 +54,7 @@ const UsersStatistics = ({
   } satisfies ChartConfig
 
   return (
-    <div className="w-full flex justify-start items-stretch gap-6">
+    <div className={container()}>
       {charts.map(({ title, data }, index) => {
         if (!data.length) return null
 
@@ -53,16 +65,15 @@ const UsersStatistics = ({
           0) as number
         const total = Object.values(latestEntry)?.[1] || 0
         const latestChange = latestEntryValue - penultimateEntryValue
-        console.log(latestChange, latestEntryValue, penultimateEntryValue)
         const positiveChange = latestChange > 0
 
         return (
-          <Card key={title} className="w-full max-w-[367px] md:w-1/3">
-            <CardHeader className="flex flex-row justify-between items-center pb-[18px] px-8">
-              <CardTitle className="text-body-m font-medium">{title}</CardTitle>
+          <Card key={title} className={card()}>
+            <CardHeader className={cardHeader()}>
+              <CardTitle className={cardTitle()}>{title}</CardTitle>
               <Tag
                 variant={positiveChange ? 'success' : 'destructive'}
-                className="flex items-center gap-0.5 pt-[1px]"
+                className={cardTag()}
               >
                 {positiveChange ? (
                   <ArrowUp size={10} />
@@ -72,12 +83,12 @@ const UsersStatistics = ({
                 {latestChange}
               </Tag>
             </CardHeader>
-            <CardContent className="relative flex gap-8 justify-between items-stretch px-8">
+            <CardContent className={cardContent()}>
               <div className="flex items-center justify-start">
                 <h3 className="type-h4">{String(total)}</h3>
               </div>
               <div className="w-full">
-                <ChartContainer config={chartConfig} className="h-[8vw]">
+                <ChartContainer config={chartConfig} className={cardChart()}>
                   <Recharts.LineChart
                     accessibilityLayer
                     data={data}

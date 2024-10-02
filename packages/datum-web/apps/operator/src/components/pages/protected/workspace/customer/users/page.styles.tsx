@@ -29,7 +29,8 @@ export const tableStyles = tv({
       'w-full flex items-center gap-2 justify-between font-mono text-[12px] tracking-[0.48px] font-semibold text-blackberry-600 uppercase bg-winter-sky-700',
     checkboxContainer: 'flex items-center justify-center',
     link: 'block truncate text-sunglow-900 hover:underline',
-    userDetails: 'flex items-center justify-start gap-3',
+    userDetails: 'flex items-center justify-start gap-3 text-blackberry-800',
+    userDetailsText: 'text-blackberry-800',
   },
 })
 
@@ -42,5 +43,17 @@ export const formStyles = tv({
       'w-full flex items-center justify-start gap-3 text-button-m cursor-pointer hover:bg-winter-sky-700 hover:dark:bg-peat-800',
     requiredText:
       'text-smallcaps-s font-bold text-[12px] font-mono uppercase tracking-smallcaps-s leading-[150%] text-blackberry-500 absolute top-1 right-0',
+  },
+})
+
+export const statisticsStyles = tv({
+  slots: {
+    container: 'w-full flex justify-start items-stretch gap-6',
+    card: 'w-full max-w-[367px] md:w-1/3',
+    cardHeader: 'flex flex-row justify-between items-center pb-[18px] px-8',
+    cardContent: 'relative flex gap-8 justify-between items-stretch px-8',
+    cardTitle: 'text-body-m font-medium',
+    cardTag: 'flex items-center gap-0.5 pt-[1px]',
+    cardChart: 'h-[8vw]',
   },
 })

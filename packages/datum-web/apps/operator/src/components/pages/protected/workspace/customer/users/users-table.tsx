@@ -34,7 +34,8 @@ type UsersTableProps = {
   onRowsFetched?(data: Row<Datum.User>[]): void
 }
 
-const { header, checkboxContainer, link, userDetails } = tableStyles()
+const { header, checkboxContainer, link, userDetails, userDetailsText } =
+  tableStyles()
 
 const fuzzyFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
   if (!value || value === '') return true
@@ -147,7 +148,7 @@ export const USER_COLUMNS: ColumnDef<Datum.User>[] = [
             {avatar && <AvatarImage src={avatar} />}
             <AvatarFallback>{firstName?.substring(0, 2)}</AvatarFallback>
           </Avatar>
-          <p>
+          <p className={userDetailsText()}>
             {firstName} {lastName}
           </p>
         </div>
