@@ -92,25 +92,25 @@ export const NavItems: (NavItem | Separator | NavHeading)[] = [
   //     { title: 'Compliance', href: '/orders/compliance' },
   //   ],
   // },
-  // {
-  //   title: 'Back Office',
-  //   href: '/relationships',
-  //   icon: HandshakeIcon,
-  //   isChildren: true,
-  //   children: [
-  //     {
-  //       title: 'Marketing Subscribers',
-  //       href: '/relationships/marketing-subscribers',
-  //     },
-  //     { title: 'Partners', href: '/relationships/partners' },
-  //     { title: 'Marketplaces', href: '/relationships/marketplaces' },
-  //     {
-  //       title: 'Vendors',
-  //       href: '/relationships/vendors',
-  //     },
-  //     { title: 'Internal Users', href: '/relationships/internal-users' },
-  //   ],
-  // },
+  {
+    title: 'Back Office',
+    href: '/relationships',
+    icon: HandshakeIcon,
+    isChildren: true,
+    children: [
+      {
+        title: 'Vendors',
+        href: '/relationships/vendors',
+      },
+      // {
+      //   title: 'Marketing Subscribers',
+      //   href: '/relationships/marketing-subscribers',
+      // },
+      // { title: 'Partners', href: '/relationships/partners' },
+      // { title: 'Marketplaces', href: '/relationships/marketplaces' },
+      // { title: 'Internal Users', href: '/relationships/internal-users' },
+    ],
+  },
   {
     type: 'separator',
   },
