@@ -1,0 +1,9 @@
+# This task file can hold any tasks that can only run on a linux based operating
+# system. This will be included in the main taskfile.
+version: '3'
+tasks:
+  protobuf-install:
+    run: once
+    desc: Install the protobuf libraries
+    cmds:
+    - apt-get update && apt-get install -y protobuf-compiler
