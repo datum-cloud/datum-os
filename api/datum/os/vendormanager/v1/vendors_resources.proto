@@ -1,8 +1,8 @@
 syntax = "proto3";
 
-package datum.os.vendormanager.v1;
+option go_package = "go.datumapis.com/os/genproto/os/vendormanager/v1";
 
-option go_package = "go.api.datum.net/os/vendormanager/v1";
+package datum.os.vendormanager.v1;
 
 import "google/api/field_behavior.proto";
 import "google/api/field_info.proto";
@@ -76,5 +76,5 @@ message Vendor {
 }
 
 message VendorSpec {
-    
+
 }
