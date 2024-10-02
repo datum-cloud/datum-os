@@ -38,6 +38,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@repo/ui/select'
+import { Error } from '@/components/shared/error/error'
+import { useEffect } from 'react'
 
 type ListDialogFormProps = {
   open: boolean
@@ -55,11 +57,8 @@ const ListsFormDialog = ({ list, open, setOpen }: ListDialogFormProps) => {
     requiredText,
     selectItem,
   } = formStyles()
-  const [{ loading: loadingCreate, error: errorCreate }, create] =
-    useAsyncFn(createLists)
-  const [{ loading: loadingEdit, error: errorEdit }, edit] =
-    useAsyncFn(editLists)
-  const loading = loadingEdit || loadingCreate
+  const [{ error: errorCreate }, create] = useAsyncFn(createLists)
+  const [{ error: errorEdit }, edit] = useAsyncFn(editLists)
   const error = errorEdit || errorCreate
   const { data: session } = useSession()
   const organizationId =
@@ -79,9 +78,19 @@ const ListsFormDialog = ({ list, open, setOpen }: ListDialogFormProps) => {
     control,
     handleSubmit,
     reset,
-    formState: { errors },
+    formState: { errors, isSubmitting, isSubmitted },
   } = form
   const isValid = Object.keys(errors).length === 0
+
+  useEffect(() => {
+    if (open) {
+      reset({
+        name: list?.name || '',
+        description: list?.description || '',
+        visibility: list?.visibility || 'PUBLIC',
+      })
+    }
+  }, [open, list, reset])
 
   async function onSubmit(data: ListInput) {
     let id: string | undefined
@@ -89,20 +98,21 @@ const ListsFormDialog = ({ list, open, setOpen }: ListDialogFormProps) => {
     if (isNew) {
       const lists = await create(organizationId, [data])
       id = lists[0]?.id
+      await router.push(
+        getPathWithParams(OPERATOR_APP_ROUTES.contactList, { id }),
+      )
+      // NOTE: Needed to prevent the dialog closing prematurely
+      handleCancel()
     } else {
       await edit(organizationId, [{ ...list, ...data }])
       id = list.id
+      handleCancel()
     }
-
-    router.push(getPathWithParams(OPERATOR_APP_ROUTES.contactList, { id }))
-
-    reset()
-    setOpen(false)
   }
 
   function handleCancel() {
-    reset()
     setOpen(false)
+    reset()
   }
 
   return (
@@ -112,9 +122,11 @@ const ListsFormDialog = ({ list, open, setOpen }: ListDialogFormProps) => {
           <DialogTitle>{isNew ? 'Add a list' : 'Edit list info'}</DialogTitle>
           <DialogClose onClick={handleCancel} />
         </DialogHeader>
-        {loading && <Loading className="min-h-96" />}
-        {error && <p>Whoops... something went wrong</p>}
-        {!loading && (
+        {isSubmitting || isSubmitted ? (
+          <Loading className="min-h-96" />
+        ) : error ? (
+          <Error />
+        ) : (
           <Form {...form}>
             <form onSubmit={handleSubmit(onSubmit)} className={formStyle()}>
               <div className={fieldsContainer()}>

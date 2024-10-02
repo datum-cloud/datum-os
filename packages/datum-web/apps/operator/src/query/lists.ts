@@ -197,6 +197,8 @@ export async function editLists(id: Datum.OrganisationId, input: ListInput[]) {
     })
   }
 
+  await queryClient.invalidateQueries({ queryKey: getListsKey(id) })
+
   return contacts
 }
 

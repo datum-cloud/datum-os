@@ -151,39 +151,39 @@ const UsersPage: React.FC = () => {
     setTimeout(() => (document.body.style.pointerEvents = ''), 500)
   }
 
-  if (fetching) {
-    return <Loading />
-  }
-
-  if (error) {
-    return <Error />
-  }
-
   return (
     <div className={wrapper()}>
       <PageTitle title="Users" />
-      <UsersStatistics
-        activeUsers={activeMonthlyUsers}
-        newUsersMonthly={newUsersMonthly}
-        newUsersWeekly={newUsersWeekly}
-      />
-      <div className={header()}>
-        <UsersControls
-          search={setQuery}
-          onDelete={() => setOpenDeleteDialog(true)}
-          onExport={handleExport}
-          onFilter={setColumnFilters}
-          selectedUsers={selectedUsers}
-        />
-      </div>
-      <UsersTable
-        setGlobalFilter={setQuery}
-        setSelection={setSelectedUsers}
-        globalFilter={query}
-        columnFilters={columnFilters}
-        users={users}
-        onRowsFetched={setExportData}
-      />
+      {fetching ? (
+        <Loading />
+      ) : error ? (
+        <Error />
+      ) : (
+        <>
+          <UsersStatistics
+            activeUsers={activeMonthlyUsers}
+            newUsersMonthly={newUsersMonthly}
+            newUsersWeekly={newUsersWeekly}
+          />
+          <div className={header()}>
+            <UsersControls
+              search={setQuery}
+              onDelete={() => setOpenDeleteDialog(true)}
+              onExport={handleExport}
+              onFilter={setColumnFilters}
+              selectedUsers={selectedUsers}
+            />
+          </div>
+          <UsersTable
+            setGlobalFilter={setQuery}
+            setSelection={setSelectedUsers}
+            globalFilter={query}
+            columnFilters={columnFilters}
+            users={users}
+            onRowsFetched={setExportData}
+          />
+        </>
+      )}
     </div>
   )
 }

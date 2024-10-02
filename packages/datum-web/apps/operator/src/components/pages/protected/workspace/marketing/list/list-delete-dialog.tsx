@@ -33,6 +33,7 @@ import {
 } from '@repo/ui/form'
 import { Input } from '@repo/ui/input'
 import { DeletionInput, DeletionSchema } from '@/utils/schemas'
+import { useEffect } from 'react'
 
 type ListDeleteFormProps = {
   lists: Datum.List[]
@@ -63,11 +64,17 @@ const ListDeleteDialog = ({
     },
   })
 
-  const { handleSubmit, watch } = form
+  const {
+    handleSubmit,
+    watch,
+    reset,
+    formState: { isSubmitted, isSubmitting },
+  } = form
   const { deletionText } = watch()
 
   function handleCancel() {
     setOpen(false)
+    reset()
   }
 
   async function onSubmit(data: DeletionInput) {
@@ -75,10 +82,11 @@ const ListDeleteDialog = ({
     await deleteLists(organizationId, ids)
 
     if (redirect) {
-      router.push(OPERATOR_APP_ROUTES.contactLists)
+      await router.push(OPERATOR_APP_ROUTES.contactLists)
+      handleCancel()
+    } else {
+      handleCancel()
     }
-
-    setOpen(false)
   }
 
   return (
@@ -95,8 +103,9 @@ const ListDeleteDialog = ({
           </DialogTitle>
           <DialogClose onClick={handleCancel} />
         </DialogHeader>
-        {loading && <Loading className="min-h-96" />}
-        {!loading && (
+        {isSubmitted || isSubmitting ? (
+          <Loading className="min-h-96" />
+        ) : (
           <Form {...form}>
             <form className={content()} onSubmit={handleSubmit(onSubmit)}>
               <div className="flex flex-col gap-3">
