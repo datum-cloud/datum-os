@@ -48,8 +48,9 @@ export const formStyles = tv({
 
 export const statisticsStyles = tv({
   slots: {
-    container: 'w-full flex justify-start items-stretch gap-6',
-    card: 'w-full max-w-[367px] md:w-1/3',
+    container:
+      'w-full flex flex-col lg:flex-row justify-start items-stretch gap-6',
+    card: 'w-full lg:max-w-[367px] md:w-1/3',
     cardHeader: 'flex flex-row justify-between items-center pb-[18px] px-8',
     cardContent: 'relative flex gap-8 justify-between items-stretch px-8',
     cardDescription: 'mt-0.5',

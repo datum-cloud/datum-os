@@ -26,6 +26,7 @@ type UsersControlsProps = {
   onExport(): void
   onFilter(columnFilters: ColumnFiltersState): void
   selectedUsers?: Datum.User[]
+  admin?: boolean
 }
 
 const UsersControls = ({
@@ -34,6 +35,7 @@ const UsersControls = ({
   onExport,
   onFilter,
   selectedUsers,
+  admin = false,
 }: UsersControlsProps) => {
   const {
     controlsContainer,
@@ -99,7 +101,11 @@ const UsersControls = ({
           <FilterDialog onFilter={onFilter} entityFilters={USER_FILTERS} />
         </div>
       </div>
-      <UsersFormDialog open={openUserDialog} setOpen={setOpenUserDialog} />
+      <UsersFormDialog
+        open={openUserDialog}
+        setOpen={setOpenUserDialog}
+        admin={admin}
+      />
     </>
   )
 }

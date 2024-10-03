@@ -18,6 +18,7 @@ import { formatUsersExportData } from '@/utils/export'
 import UserDeleteDialog from './users-delete-dialog'
 import UsersTable from './users-table'
 import { pageStyles } from './page.styles'
+import { canInviteAdminsRelation, useCheckPermissions } from '@/lib/authz/utils'
 
 function getPastFiveMonths() {
   const now = new Date()
@@ -96,6 +97,10 @@ const UsersPage: React.FC = () => {
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
   const [query, setQuery] = useState('')
   const { data: session } = useSession()
+  const { data: inviteAdminPermissions } = useCheckPermissions(
+    session,
+    canInviteAdminsRelation,
+  )
 
   const [{ data, fetching, error }] = useGetOrgMembersByOrgIdQuery({
     variables: {
@@ -112,7 +117,7 @@ const UsersPage: React.FC = () => {
             ...edge?.node?.user,
             orgRole: edge?.node?.role,
             joinedAt: edge?.node?.createdAt,
-          }
+          },
       )
       .filter(Boolean) || []) as Datum.OrgUser[]
   }, [data])
@@ -159,6 +164,7 @@ const UsersPage: React.FC = () => {
           onExport={handleExport}
           onFilter={setColumnFilters}
           selectedUsers={selectedUsers}
+          admin={inviteAdminPermissions?.allowed}
         />
       </div>
       <UsersTable
