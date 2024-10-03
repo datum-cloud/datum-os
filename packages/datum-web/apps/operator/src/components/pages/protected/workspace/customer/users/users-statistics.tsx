@@ -101,7 +101,7 @@ const UsersStatistics = ({
                 ) : (
                   <ArrowDown size={10} />
                 )}
-                {latestChange}
+                {Math.abs(latestChange)}
               </Tag>
             </CardHeader>
             <CardContent className={cardContent()}>
