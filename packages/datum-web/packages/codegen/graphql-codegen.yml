@@ -22,7 +22,7 @@ config:
     Upload: File
   schema: yup
 overwrite: true
-schema: https://raw.githubusercontent.com/datum-cloud/datum-os/main/schema.graphql
+schema: '../../../datum-service/schema.graphql'
 documents: './query/*.graphql'
 generates:
   ./src/introspectionschema.json:

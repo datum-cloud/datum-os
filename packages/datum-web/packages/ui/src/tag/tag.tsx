@@ -35,4 +35,4 @@ export const Tag = ({
   )
 }
 
-export { tagStyles }
+export { tagStyles, TagVariants }

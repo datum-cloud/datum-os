@@ -10,6 +10,7 @@ const tagStyles = tv({
       muted: 'border-blackberry-500 text-blackberry-500 opacity-50',
       public: '!border-blackberry-700 text-blackberry-700',
       private: '!border-blackberry-400 text-blackberry-400',
+      destructive: '!border-util-red-500 text-util-red-500',
     },
   },
 })

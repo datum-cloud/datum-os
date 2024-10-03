@@ -1,5 +1,4 @@
-import PageTitle from '@/components/page-title'
-import MembersPage from '@/components/pages/protected/workspace/members/members-page'
+import UsersPage from '@/components/pages/protected/workspace/customer/users/users-page'
 
 import type { Metadata } from 'next/types'
 
@@ -8,12 +7,7 @@ export const metadata: Metadata = {
 }
 
 const Page: React.FC = () => {
-  return (
-    <>
-      <PageTitle title="Users" className="mb-10" />
-      <MembersPage />
-    </>
-  )
+  return <UsersPage />
 }
 
 export default Page

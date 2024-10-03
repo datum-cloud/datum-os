@@ -29,11 +29,11 @@ export const NavItems: (NavItem | Separator | NavHeading)[] = [
     href: '/dashboard',
     icon: CircleGaugeIcon,
   },
-  // {
-  //   title: 'Settings',
-  //   href: '/workspace/settings',
-  //   icon: Pencil,
-  // },
+  {
+    title: 'Settings',
+    href: '/workspace/settings',
+    icon: Pencil,
+  },
   // {
   //   title: 'Activity Log',
   //   href: '/logs',
@@ -42,16 +42,16 @@ export const NavItems: (NavItem | Separator | NavHeading)[] = [
   {
     type: 'separator',
   },
-  // {
-  //   title: 'Customers',
-  //   href: '/workspace/customers',
-  //   icon: Users,
-  //   isChildren: true,
-  //   children: [
-  //     { title: 'Users', href: '/workspace/customers/users' },
-  //     // { title: 'Organizations', href: '/customers/organizations' },
-  //   ],
-  // },
+  {
+    title: 'Customers',
+    href: '/workspace/customers',
+    icon: Users,
+    isChildren: true,
+    children: [
+      { title: 'Users', href: '/workspace/customers/users' },
+      // { title: 'Organizations', href: '/customers/organizations' },
+    ],
+  },
   {
     title: 'Marketing',
     href: '/marketing',
