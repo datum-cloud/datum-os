@@ -26,8 +26,8 @@ type UserStatistics = Record<string, string | number>[]
 const UsersStatistics = ({
   newUsersWeekly,
   newUsersMonthly,
-  // activeUsers,
-}: UsersStatisticsProps) => {
+}: // activeUsers,
+UsersStatisticsProps) => {
   const {
     container,
     card,
@@ -89,8 +89,8 @@ const UsersStatistics = ({
                   noChange
                     ? 'default'
                     : positiveChange
-                      ? 'success'
-                      : 'destructive'
+                    ? 'success'
+                    : 'destructive'
                 }
                 className={cardTag()}
               >

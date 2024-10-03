@@ -126,6 +126,7 @@ export const LIST_COLUMNS: ColumnDef<Datum.List>[] = [
         href={getPathWithParams(OPERATOR_APP_ROUTES.contactList, {
           id: row.original.id,
         })}
+        className="h-full inline-flex items-center justify-start"
       >
         <Tag variant="dark" truncate>
           {cell.getValue() as string}

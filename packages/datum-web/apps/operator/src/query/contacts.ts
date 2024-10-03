@@ -216,6 +216,10 @@ export async function editContacts(
     await queryClient.invalidateQueries({ queryKey: getContactKey(contact.id) })
   }
 
+  await queryClient.invalidateQueries({
+    queryKey: getContactsKey(id),
+  })
+
   return contacts
 }
 

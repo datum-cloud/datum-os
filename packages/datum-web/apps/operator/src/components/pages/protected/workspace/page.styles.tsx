@@ -1,6 +1,12 @@
-import { tv, type VariantProps } from 'tailwind-variants'
+import { tv } from 'tailwind-variants'
 
-const existingWorkspacesStyles = tv({
+export const createWorkspaceStyles = tv({
+  slots: {
+    container: 'flex content-center gap-4 w-full mx-auto',
+  },
+})
+
+export const existingWorkspacesStyles = tv({
   slots: {
     container: 'flex content-center gap-4 w-full mx-auto mb-6',
     orgWrapper:
@@ -10,9 +16,3 @@ const existingWorkspacesStyles = tv({
     orgSelect: 'transition-opacity duration-300',
   },
 })
-
-export type ExistingWorkspacesVariants = VariantProps<
-  typeof existingWorkspacesStyles
->
-
-export { existingWorkspacesStyles }

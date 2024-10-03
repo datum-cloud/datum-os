@@ -65,8 +65,9 @@ const UsersFormDialog = ({ open, setOpen }: UsersDialogFormProps) => {
 
   useEffect(() => {
     const setInvitePermissions = async () => {
-      const { data: inviteAdminPermissions, error } =
-        await userCanInviteAdmins(session)
+      const { data: inviteAdminPermissions, error } = await userCanInviteAdmins(
+        session
+      )
 
       setCanInviteAdmins(inviteAdminPermissions?.allowed)
     }

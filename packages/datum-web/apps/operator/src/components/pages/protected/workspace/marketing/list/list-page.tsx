@@ -187,7 +187,11 @@ const ListPage = ({ id }: ListPageProps) => {
             </div>
           </div>
           <div className={listActions()}>
-            <Button variant="outline" onClick={handleExport}>
+            <Button
+              variant="outline"
+              disabled={!members.length}
+              onClick={handleExport}
+            >
               Export all
             </Button>
             <Button

@@ -35,18 +35,10 @@ const ListsPage = () => {
     exportExcel(`Lists-${now}`, formattedData)
   }
 
-  async function setOpenDeleteDialog(input: boolean) {
+  function setOpenDeleteDialog(input: boolean) {
     _setOpenDeleteDialog(input)
     // NOTE: This is needed to close the dialog without removing pointer events per https://github.com/shadcn-ui/ui/issues/468
     setTimeout(() => (document.body.style.pointerEvents = ''), 500)
-  }
-
-  if (isLoading) {
-    return <Loading />
-  }
-
-  if (error) {
-    return <Error />
   }
 
   return (
@@ -59,13 +51,19 @@ const ListsPage = () => {
           onExport={handleExport}
         />
       </div>
-      <ListsTable
-        globalFilter={query}
-        setGlobalFilter={setQuery}
-        lists={lists}
-        onRowsFetched={setExportData}
-        setSelection={setSelectedLists}
-      />
+      {isLoading ? (
+        <Loading className="h-full w-full grow" />
+      ) : error ? (
+        <Error />
+      ) : (
+        <ListsTable
+          globalFilter={query}
+          setGlobalFilter={setQuery}
+          lists={lists}
+          onRowsFetched={setExportData}
+          setSelection={setSelectedLists}
+        />
+      )}
       <ListDeleteDialog
         lists={selectedLists}
         open={openDeleteDialog}

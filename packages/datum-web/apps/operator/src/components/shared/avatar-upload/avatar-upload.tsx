@@ -1,14 +1,10 @@
 'use client'
 
-import {
-  GetUserProfileQueryVariables,
-  useGetUserProfileQuery,
-  useUpdateUserInfoMutation,
-} from '@repo/codegen/src/schema'
-import {
-  avatarUploadStyles,
-  AvatarUploadVariants,
-} from './avatar-upload.styles'
+import { useCallback, useState } from 'react'
+import { FileWithPath, useDropzone } from 'react-dropzone'
+import Cropper, { Area, Point } from 'react-easy-crop'
+
+import { Avatar, AvatarFallback, AvatarImage } from '@repo/ui/avatar'
 import { cn } from '@repo/ui/lib/utils'
 import { Panel, PanelHeader } from '@repo/ui/panel'
 import {
@@ -20,38 +16,37 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@repo/ui/dialog'
-import { useCallback, useState } from 'react'
-import { FileWithPath, useDropzone } from 'react-dropzone'
-import { useSession } from 'next-auth/react'
 import { Button } from '@repo/ui/button'
-import Cropper, { Area, Point } from 'react-easy-crop'
-import { Avatar, AvatarFallback, AvatarImage } from '@repo/ui/avatar'
+
 import getCroppedImg from './utils/getCroppedImage'
-import { useToast } from '@repo/ui/use-toast'
+import {
+  avatarUploadStyles,
+  AvatarUploadVariants,
+} from './avatar-upload.styles'
 
 interface AvatarUploadProps extends AvatarUploadVariants {
+  avatar: string
+  setAvatar(input: string): Promise<void>
+  title?: string
+  imageType?: 'avatar' | 'logo' | 'image'
+  fallbackText?: string
+  noBorder?: boolean
   className?: string
 }
 
-const AvatarUpload = ({ className }: AvatarUploadProps) => {
-  const { toast } = useToast()
-  const { data: sessionData } = useSession()
-  const userId = sessionData?.user.userId
-  const variables: GetUserProfileQueryVariables = {
-    userId: userId ?? '',
-  }
-  const [{ data }] = useGetUserProfileQuery({
-    variables,
-    pause: !sessionData,
-  })
-  const avatar =
-    data?.user?.avatarLocalFile || data?.user?.avatarRemoteURL || null
-
+const AvatarUpload = ({
+  avatar,
+  setAvatar,
+  title,
+  imageType = 'avatar',
+  fallbackText,
+  noBorder = false,
+  className,
+}: AvatarUploadProps) => {
   const [isCroppingModalOpen, setIsCroppingModalOpen] = useState(false)
   const [crop, setCrop] = useState({ x: 0, y: 0 })
   const [zoom, setZoom] = useState(1)
   const [uploadedImage, setUploadedImage] = useState<string | null>(null)
-  const [{}, updateUserInfo] = useUpdateUserInfoMutation()
   const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area | null>(null)
 
   const dropMessage = 'Drop to upload!'
@@ -95,47 +90,32 @@ const AvatarUpload = ({ className }: AvatarUploadProps) => {
     setCroppedAreaPixels(croppedAreaPixels)
   }
 
-  const saveCroppedImage = async () => {
+  async function saveCroppedImage() {
     if (uploadedImage && croppedAreaPixels) {
       const croppedImageUrl = await getCroppedImg(
         uploadedImage,
         croppedAreaPixels,
       )
 
-      const { error } = await updateUserInfo({
-        updateUserId: userId,
-        input: {
-          avatarLocalFile: croppedImageUrl,
-        },
-      })
+      await setAvatar(croppedImageUrl)
 
-      if (error) {
-        toast({
-          title: error.message,
-          variant: 'destructive',
-        })
-      } else {
-        closeModal()
-        toast({
-          title: 'Avatar updated successfully',
-          variant: 'success',
-        })
-      }
+      closeModal()
     }
   }
 
   return (
     <Panel>
-      <PanelHeader heading="Avatar" noBorder />
+      <PanelHeader
+        heading={title || <span className="capitalize">{imageType}</span>}
+        noBorder={noBorder}
+      />
       <div {...getRootProps()} className={cn(wrapper(), className)}>
         <input {...getInputProps()} />
         <p>{isDragActive ? dropMessage : defaultMessage}</p>
         <div className={avatarPreview()}>
           <Avatar variant="extra-large">
             {avatar && <AvatarImage src={avatar} />}
-            <AvatarFallback>
-              {data?.user?.firstName?.substring(0, 2)}
-            </AvatarFallback>
+            <AvatarFallback>{fallbackText?.substring(0, 2)}</AvatarFallback>
           </Avatar>
         </div>
       </div>
@@ -143,9 +123,9 @@ const AvatarUpload = ({ className }: AvatarUploadProps) => {
       <Dialog open={isCroppingModalOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Edit your avatar</DialogTitle>
+            <DialogTitle>Edit your {imageType}</DialogTitle>
             <DialogDescription>
-              Please crop, resize and click 'Save avatar'
+              Please crop, resize and click 'Save {imageType}'
             </DialogDescription>
             <DialogClose onClick={closeModal} />
           </DialogHeader>
@@ -167,7 +147,7 @@ const AvatarUpload = ({ className }: AvatarUploadProps) => {
             <Button variant="outline" onClick={closeModal}>
               Cancel
             </Button>
-            <Button onClick={saveCroppedImage}>Save avatar</Button>
+            <Button onClick={saveCroppedImage}>Save {imageType}</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
