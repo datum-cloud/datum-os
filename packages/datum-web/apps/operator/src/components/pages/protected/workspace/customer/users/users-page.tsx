@@ -52,7 +52,7 @@ function getMonthlyUsers(users: Datum.OrgUser[]) {
 
   const monthlyUsers = pastFiveMonths.map((monthTimestamp, index) => {
     const usersInMonth = users.filter((user) => {
-      const userCreatedAt = new Date(user.createdAt).getTime()
+      const userCreatedAt = new Date(user.joinedAt).getTime()
       return (
         userCreatedAt >= monthTimestamp &&
         (index === 0 || userCreatedAt < pastFiveMonths[index - 1])
@@ -74,7 +74,7 @@ function getWeeklyUsers(users: Datum.OrgUser[]) {
 
   const weeklyUsers = pastFiveWeeks.map((weekTimestamp, index) => {
     const usersInWeek = users.filter((user) => {
-      const userCreatedAt = new Date(user.createdAt).getTime()
+      const userCreatedAt = new Date(user.joinedAt).getTime()
       return (
         userCreatedAt >= weekTimestamp &&
         (index === 0 || userCreatedAt < pastFiveWeeks[index - 1])
