@@ -7,6 +7,9 @@ query GetUserProfile($userId: ID!) {
     email
     avatarRemoteURL
     avatarLocalFile
+    authProvider
+    createdAt
+    lastSeen
     setting {
       status
       tags
@@ -19,5 +22,11 @@ mutation updateUserInfo($updateUserId: ID!, $input: UpdateUserInput!) {
     user {
       id
     }
+  }
+}
+
+mutation DeleteUser($deleteUserId: ID!) {
+  deleteUser(id: $deleteUserId) {
+    deletedID
   }
 }

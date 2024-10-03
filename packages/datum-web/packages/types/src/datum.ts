@@ -143,9 +143,29 @@ export namespace Datum {
     width: number
   }
 
+  export type InvitationId = Brand<Id, 'InvitationId'>
+
+  export type Invitation = {
+    id: InvitationId
+    recipient: string
+    status: string
+    createdAt?: any
+    role: string
+  }
+
   export type UserId = Brand<Id, 'UserId'>
 
-  export type User = NonNullable<
-    NonNullable<GetOrganizationMembersQuery['organization']>['members']
-  >[number]
+  export type User = {
+    id: Datum.UserId
+    firstName?: string
+    lastName?: string
+    authProvider: string
+    avatarRemoteURL?: string
+    avatarLocalFile?: string
+    email: string
+    role?: string
+    createdAt?: any
+    lastSeen?: any
+    setting: { status: string }
+  }
 }

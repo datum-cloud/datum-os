@@ -40,7 +40,7 @@ export function formatListsExportData(data: Row<Datum.List>[]) {
 
 export function formatUsersExportData(data: Row<Datum.User>[]) {
   const formattedData = data.map((row) => {
-    const user = row.original.user
+    const user = row.original
 
     return {
       'First Name': user.firstName || '',

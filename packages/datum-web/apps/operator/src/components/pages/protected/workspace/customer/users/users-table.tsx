@@ -3,7 +3,8 @@
 import Link from 'next/link'
 import { useState, useEffect } from 'react'
 
-import { useGetUserProfileQuery } from '@repo/codegen/src/schema'
+import { getPathWithParams } from '@repo/common/routes'
+import { OPERATOR_APP_ROUTES } from '@repo/constants'
 import { Avatar, AvatarFallback, AvatarImage } from '@repo/ui/avatar'
 import { Checkbox } from '@repo/ui/checkbox'
 import {
@@ -27,7 +28,7 @@ import { tableStyles } from './page.styles'
 
 type UsersTableProps = {
   users: Datum.User[]
-  setSelection(users: Datum.User[]): void
+  setSelection?(users: Datum.User[]): void
   globalFilter?: string
   columnFilters?: ColumnFiltersState
   setGlobalFilter?(input: string): void
@@ -84,7 +85,7 @@ const filterFns = {
 export const USER_COLUMNS: ColumnDef<Datum.User>[] = [
   {
     id: 'select',
-    accessorKey: 'id',
+    accessorFn: (row) => row.id,
     size: 60,
     enableGlobalFilter: false,
     enableSorting: false,
@@ -105,7 +106,7 @@ export const USER_COLUMNS: ColumnDef<Datum.User>[] = [
         </div>
       )
     },
-    cell: ({ row }) => {
+    cell: ({ row, table }) => {
       return (
         <div className={checkboxContainer()}>
           <Checkbox
@@ -121,7 +122,7 @@ export const USER_COLUMNS: ColumnDef<Datum.User>[] = [
   {
     id: 'user',
     accessorFn: (row) =>
-      `${row.user?.firstName ?? ''}${row.user?.lastName ? row.user?.lastName : ''}`,
+      `${row?.firstName ?? ''}${row?.lastName ? row?.lastName : ''}`,
     enableGlobalFilter: true,
     filterFn: booleanFilter,
     enableSorting: true,
@@ -139,7 +140,7 @@ export const USER_COLUMNS: ColumnDef<Datum.User>[] = [
     cell: ({ row }) => {
       const value = row.original as Datum.User
       const { firstName, lastName, avatarLocalFile, avatarRemoteURL } =
-        value?.user
+        value || {}
       const avatar = avatarLocalFile || avatarRemoteURL
 
       return (
@@ -157,7 +158,7 @@ export const USER_COLUMNS: ColumnDef<Datum.User>[] = [
   },
   {
     id: 'email',
-    accessorFn: (row) => row.user.email || '',
+    accessorFn: (row) => row?.email || '',
     enableGlobalFilter: true,
     filterFn: booleanFilter,
     enableSorting: true,
@@ -172,12 +173,14 @@ export const USER_COLUMNS: ColumnDef<Datum.User>[] = [
     meta: {
       minWidth: 212,
     },
-    cell: ({ cell }) => {
+    cell: ({ cell, row }) => {
       const value = cell.getValue() as Datum.Email
 
       return (
         <Link
-          href={`mailto:${value}`}
+          href={getPathWithParams(OPERATOR_APP_ROUTES.user, {
+            id: row.original?.id,
+          })}
           className={link()}
           rel="noopener noreferrer"
         >
@@ -188,7 +191,7 @@ export const USER_COLUMNS: ColumnDef<Datum.User>[] = [
   },
   {
     id: 'provider',
-    accessorFn: (row) => row.user.authProvider || '',
+    accessorFn: (row) => row?.authProvider || '',
     header: ({ column }) => (
       <DataTableColumnHeader
         className={header()}
@@ -206,7 +209,7 @@ export const USER_COLUMNS: ColumnDef<Datum.User>[] = [
   },
   {
     id: 'status',
-    accessorFn: (row) => row.user.id,
+    accessorFn: (row) => row?.setting?.status,
     header: ({ column }) => (
       <DataTableColumnHeader
         className={header()}
@@ -219,12 +222,7 @@ export const USER_COLUMNS: ColumnDef<Datum.User>[] = [
     enableSorting: true,
     sortingFn: fuzzySort,
     cell: ({ cell }) => {
-      const value = cell.getValue() as Datum.UserId
-      const [{ data }] = useGetUserProfileQuery({
-        variables: { userId: value },
-      })
-      const { status } = data?.user?.setting || {}
-      console.log('STATUS', status)
+      const status = cell.getValue() as string
 
       let variant: TagVariants['status'] = 'default'
 
@@ -264,7 +262,7 @@ export const USER_COLUMNS: ColumnDef<Datum.User>[] = [
   //   },
   {
     id: 'lastSeen',
-    accessorFn: (row) => row.user.lastSeen || '',
+    accessorFn: (row) => row?.lastSeen || '',
     header: ({ column }) => (
       <DataTableColumnHeader
         className={header()}
@@ -278,7 +276,7 @@ export const USER_COLUMNS: ColumnDef<Datum.User>[] = [
     cell: ({ row }) => {
       const value = row.original as Datum.User
 
-      const lastLogin = value?.user?.lastSeen || ''
+      const lastLogin = value?.lastSeen || ''
       const formattedDate = formatDate(new Date(lastLogin))
 
       return <>{formattedDate}</>

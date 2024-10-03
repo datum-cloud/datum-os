@@ -12872,6 +12872,20 @@ export type GetAllGroupsQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type GetAllGroupsQuery = { __typename?: 'Query', groups: { __typename?: 'GroupConnection', edges?: Array<{ __typename?: 'GroupEdge', node?: { __typename?: 'Group', id: string, name: string, description?: string | null, displayName: string, logoURL?: string | null, setting: { __typename?: 'GroupSetting', visibility: GroupSettingVisibility, joinPolicy: GroupSettingJoinPolicy, syncToSlack?: boolean | null, syncToGithub?: boolean | null, tags?: Array<string> | null } } | null } | null> | null } };
 
+export type GetInviteByIdQueryVariables = Exact<{
+  inviteId: Scalars['ID']['input'];
+}>;
+
+
+export type GetInviteByIdQuery = { __typename?: 'Query', invite: { __typename?: 'Invite', expires?: any | null, id: string, recipient: string, requestorID?: string | null, role: InviteRole, sendAttempts: number, status: InviteInviteStatus, createdAt?: any | null, createdBy?: string | null, updatedAt?: any | null, updatedBy?: string | null, owner?: { __typename?: 'Organization', displayName: string, id: string, name: string } | null } };
+
+export type InvitesByOrgIdQueryVariables = Exact<{
+  where?: InputMaybe<InviteWhereInput>;
+}>;
+
+
+export type InvitesByOrgIdQuery = { __typename?: 'Query', invites: { __typename?: 'InviteConnection', edges?: Array<{ __typename?: 'InviteEdge', node?: { __typename?: 'Invite', owner?: { __typename?: 'Organization', id: string, invites?: Array<{ __typename?: 'Invite', recipient: string, requestorID?: string | null, role: InviteRole, sendAttempts: number, status: InviteInviteStatus }> | null } | null } | null } | null> | null } };
+
 export type GetAllOrganizationsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -12890,6 +12904,13 @@ export type GetOrganizationMembersQueryVariables = Exact<{
 
 
 export type GetOrganizationMembersQuery = { __typename?: 'Query', organization: { __typename?: 'Organization', members?: Array<{ __typename?: 'OrgMembership', id: string, createdAt?: any | null, role: OrgMembershipRole, user: { __typename?: 'User', id: string, firstName?: string | null, lastName?: string | null, authProvider: UserAuthProvider, avatarRemoteURL?: string | null, avatarLocalFile?: string | null, email: string, role?: UserRole | null, createdAt?: any | null, lastSeen?: any | null } }> | null } };
+
+export type GetOrgMembersByOrgIdQueryVariables = Exact<{
+  where?: InputMaybe<OrgMembershipWhereInput>;
+}>;
+
+
+export type GetOrgMembersByOrgIdQuery = { __typename?: 'Query', orgMemberships: { __typename?: 'OrgMembershipConnection', edges?: Array<{ __typename?: 'OrgMembershipEdge', node?: { __typename?: 'OrgMembership', id: string, organizationID: string, userID: string, role: OrgMembershipRole, user: { __typename?: 'User', id: string, firstName?: string | null, lastName?: string | null, authProvider: UserAuthProvider, avatarRemoteURL?: string | null, avatarLocalFile?: string | null, email: string, role?: UserRole | null, createdAt?: any | null, lastSeen?: any | null, setting: { __typename?: 'UserSetting', status: UserSettingUserStatus } } } | null } | null> | null } };
 
 export type GetInvitesQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -12997,7 +13018,7 @@ export type GetUserProfileQueryVariables = Exact<{
 }>;
 
 
-export type GetUserProfileQuery = { __typename?: 'Query', user: { __typename?: 'User', id: string, firstName?: string | null, lastName?: string | null, displayName: string, email: string, avatarRemoteURL?: string | null, avatarLocalFile?: string | null, setting: { __typename?: 'UserSetting', status: UserSettingUserStatus, tags?: Array<string> | null } } };
+export type GetUserProfileQuery = { __typename?: 'Query', user: { __typename?: 'User', id: string, firstName?: string | null, lastName?: string | null, displayName: string, email: string, avatarRemoteURL?: string | null, avatarLocalFile?: string | null, authProvider: UserAuthProvider, createdAt?: any | null, lastSeen?: any | null, setting: { __typename?: 'UserSetting', status: UserSettingUserStatus, tags?: Array<string> | null } } };
 
 export type UpdateUserInfoMutationVariables = Exact<{
   updateUserId: Scalars['ID']['input'];
@@ -13006,6 +13027,13 @@ export type UpdateUserInfoMutationVariables = Exact<{
 
 
 export type UpdateUserInfoMutation = { __typename?: 'Mutation', updateUser: { __typename?: 'UserUpdatePayload', user: { __typename?: 'User', id: string } } };
+
+export type DeleteUserMutationVariables = Exact<{
+  deleteUserId: Scalars['ID']['input'];
+}>;
+
+
+export type DeleteUserMutation = { __typename?: 'Mutation', deleteUser: { __typename?: 'UserDeletePayload', deletedID: string } };
 
 
 export const GetDocumentDataDocument = gql`
@@ -13087,6 +13115,56 @@ export const GetAllGroupsDocument = gql`
 
 export function useGetAllGroupsQuery(options?: Omit<Urql.UseQueryArgs<GetAllGroupsQueryVariables>, 'query'>) {
   return Urql.useQuery<GetAllGroupsQuery, GetAllGroupsQueryVariables>({ query: GetAllGroupsDocument, ...options });
+};
+export const GetInviteByIdDocument = gql`
+    query GetInviteByID($inviteId: ID!) {
+  invite(id: $inviteId) {
+    expires
+    id
+    recipient
+    requestorID
+    role
+    sendAttempts
+    status
+    owner {
+      displayName
+      id
+      name
+    }
+    createdAt
+    createdBy
+    updatedAt
+    updatedBy
+  }
+}
+    `;
+
+export function useGetInviteByIdQuery(options: Omit<Urql.UseQueryArgs<GetInviteByIdQueryVariables>, 'query'>) {
+  return Urql.useQuery<GetInviteByIdQuery, GetInviteByIdQueryVariables>({ query: GetInviteByIdDocument, ...options });
+};
+export const InvitesByOrgIdDocument = gql`
+    query InvitesByOrgID($where: InviteWhereInput) {
+  invites(where: $where) {
+    edges {
+      node {
+        owner {
+          id
+          invites {
+            recipient
+            requestorID
+            role
+            sendAttempts
+            status
+          }
+        }
+      }
+    }
+  }
+}
+    `;
+
+export function useInvitesByOrgIdQuery(options?: Omit<Urql.UseQueryArgs<InvitesByOrgIdQueryVariables>, 'query'>) {
+  return Urql.useQuery<InvitesByOrgIdQuery, InvitesByOrgIdQueryVariables>({ query: InvitesByOrgIdDocument, ...options });
 };
 export const GetAllOrganizationsDocument = gql`
     query GetAllOrganizations {
@@ -13186,6 +13264,41 @@ export const GetOrganizationMembersDocument = gql`
 
 export function useGetOrganizationMembersQuery(options: Omit<Urql.UseQueryArgs<GetOrganizationMembersQueryVariables>, 'query'>) {
   return Urql.useQuery<GetOrganizationMembersQuery, GetOrganizationMembersQueryVariables>({ query: GetOrganizationMembersDocument, ...options });
+};
+export const GetOrgMembersByOrgIdDocument = gql`
+    query GetOrgMembersByOrgID($where: OrgMembershipWhereInput) {
+  orgMemberships(where: $where) {
+    edges {
+      node {
+        id
+        organizationID
+        userID
+        role
+        user {
+          id
+          firstName
+          lastName
+          authProvider
+          avatarRemoteURL
+          avatarLocalFile
+          email
+          role
+          createdAt
+          lastSeen
+          authProvider
+          createdAt
+          setting {
+            status
+          }
+        }
+      }
+    }
+  }
+}
+    `;
+
+export function useGetOrgMembersByOrgIdQuery(options?: Omit<Urql.UseQueryArgs<GetOrgMembersByOrgIdQueryVariables>, 'query'>) {
+  return Urql.useQuery<GetOrgMembersByOrgIdQuery, GetOrgMembersByOrgIdQueryVariables>({ query: GetOrgMembersByOrgIdDocument, ...options });
 };
 export const GetInvitesDocument = gql`
     query GetInvites {
@@ -13431,6 +13544,9 @@ export const GetUserProfileDocument = gql`
     email
     avatarRemoteURL
     avatarLocalFile
+    authProvider
+    createdAt
+    lastSeen
     setting {
       status
       tags
@@ -13454,4 +13570,15 @@ export const UpdateUserInfoDocument = gql`
 
 export function useUpdateUserInfoMutation() {
   return Urql.useMutation<UpdateUserInfoMutation, UpdateUserInfoMutationVariables>(UpdateUserInfoDocument);
+};
+export const DeleteUserDocument = gql`
+    mutation DeleteUser($deleteUserId: ID!) {
+  deleteUser(id: $deleteUserId) {
+    deletedID
+  }
+}
+    `;
+
+export function useDeleteUserMutation() {
+  return Urql.useMutation<DeleteUserMutation, DeleteUserMutationVariables>(DeleteUserDocument);
 };

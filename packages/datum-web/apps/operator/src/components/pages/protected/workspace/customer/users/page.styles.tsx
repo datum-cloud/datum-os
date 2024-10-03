@@ -52,8 +52,18 @@ export const statisticsStyles = tv({
     card: 'w-full max-w-[367px] md:w-1/3',
     cardHeader: 'flex flex-row justify-between items-center pb-[18px] px-8',
     cardContent: 'relative flex gap-8 justify-between items-stretch px-8',
+    cardDescription: 'mt-0.5',
     cardTitle: 'text-body-m font-medium',
     cardTag: 'flex items-center gap-0.5 pt-[1px]',
-    cardChart: 'min-h-12',
+    cardChart: 'min-h-12 max-h-36',
+  },
+})
+
+export const deleteDialogStyles = tv({
+  slots: {
+    content: 'w-full min-h-40 flex flex-col gap-6',
+    text: 'flex gap-6 items-center text-util-red-500',
+    button: 'w-2/3 bg-white border-util-red-500 text-util-red-500',
+    cancelButton: 'w-1/3 ml-0 bg-white',
   },
 })

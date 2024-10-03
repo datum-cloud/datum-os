@@ -1,12 +1,9 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import { useSession } from 'next-auth/react'
 
-import {
-  GetOrganizationMembersQueryVariables,
-  useGetOrganizationMembersQuery,
-} from '@repo/codegen/src/schema'
+import { useGetOrgMembersByOrgIdQuery } from '@repo/codegen/src/schema'
 import { exportExcel } from '@repo/common/csv'
 import type { ColumnFiltersState, Row } from '@repo/ui/data-table'
 import type { Datum } from '@repo/types'
@@ -18,7 +15,7 @@ import UsersControls from '@/components/pages/protected/workspace/customer/users
 import UsersStatistics from '@/components/pages/protected/workspace/customer/users/users-statistics'
 import { formatUsersExportData } from '@/utils/export'
 
-// import UserDeleteDialog from './users-delete-dialog'
+import UserDeleteDialog from './users-delete-dialog'
 import UsersTable from './users-table'
 import { pageStyles } from './page.styles'
 
@@ -54,7 +51,7 @@ function getMonthlyUsers(users: Datum.User[]) {
 
   const monthlyUsers = pastFiveMonths.map((monthTimestamp, index) => {
     const usersInMonth = users.filter((user) => {
-      const userCreatedAt = new Date(user.user.createdAt).getTime()
+      const userCreatedAt = new Date(user.createdAt).getTime()
       return (
         userCreatedAt >= monthTimestamp &&
         (index === 0 || userCreatedAt < pastFiveMonths[index - 1])
@@ -62,11 +59,11 @@ function getMonthlyUsers(users: Datum.User[]) {
     })
     return {
       month: 5 - index,
-      users: usersInMonth.length,
+      desktop: usersInMonth.length,
     }
   })
 
-  return monthlyUsers
+  return monthlyUsers.reverse()
 }
 
 function getWeeklyUsers(users: Datum.User[]) {
@@ -75,7 +72,7 @@ function getWeeklyUsers(users: Datum.User[]) {
 
   const weeklyUsers = pastFiveWeeks.map((weekTimestamp, index) => {
     const usersInWeek = users.filter((user) => {
-      const userCreatedAt = new Date(user.user.createdAt).getTime()
+      const userCreatedAt = new Date(user.createdAt).getTime()
       return (
         userCreatedAt >= weekTimestamp &&
         (index === 0 || userCreatedAt < pastFiveWeeks[index - 1])
@@ -83,36 +80,12 @@ function getWeeklyUsers(users: Datum.User[]) {
     })
     return {
       week: 5 - index,
-      users: usersInWeek.length,
+      desktop: usersInWeek.length,
     }
   })
 
-  return weeklyUsers
+  return weeklyUsers.reverse()
 }
-
-// TODO: Remove this...
-// MOCK DATA
-const activeMonthlyUsers = [
-  { month: '1', desktop: 100 },
-  { month: '2', desktop: 250 },
-  { month: '3', desktop: 200 },
-  { month: '4', desktop: 450 },
-  { month: '5', desktop: 500 },
-]
-const newUsersMonthly = [
-  { month: '1', desktop: 209 },
-  { month: '2', desktop: 73 },
-  { month: '3', desktop: 237 },
-  { month: '4', desktop: 277 },
-  { month: '5', desktop: 304 },
-]
-const newUsersWeekly = [
-  { week: '1', desktop: 110 },
-  { week: '2', desktop: 84 },
-  { week: '3', desktop: 200 },
-  { week: '4', desktop: 305 },
-  { week: '5', desktop: 491 },
-]
 
 const UsersPage: React.FC = () => {
   const [exportData, setExportData] = useState<Row<Datum.User>[]>([])
@@ -122,21 +95,23 @@ const UsersPage: React.FC = () => {
   const [query, setQuery] = useState('')
   const { data: session } = useSession()
 
-  const variables: GetOrganizationMembersQueryVariables = {
-    organizationId: session?.user.organization ?? '',
-  }
-
-  const [{ data, fetching, error }] = useGetOrganizationMembersQuery({
-    variables,
+  const [{ data, fetching, error }] = useGetOrgMembersByOrgIdQuery({
+    variables: {
+      where: { organizationID: session?.user.organization ?? '' },
+    },
     pause: !session,
   })
 
-  const users: Datum.User[] = data?.organization?.members || []
-  // TODO: Return status from the backend and reinstate the below rather than mock data...
-  // const activeUsers = users.filter(user => user.user.setting.status === 'ACTIVE')
-  // const activeUsersMonthly = users.length > 0 ? getMonthlyUsers(activeUsers) : []
-  // const newUsersMonthly = users.length > 0 ? getMonthlyUsers(users) : []
-  // const newUsersWeekly = users.length > 0 ? getWeeklyUsers(users) : []
+  const users = useMemo(() => {
+    return (data?.orgMemberships?.edges
+      ?.map((edge) => edge?.node?.user)
+      .filter(Boolean) || []) as Datum.User[]
+  }, [data])
+  const activeUsers = users.filter((user) => user.setting.status === 'ACTIVE')
+  const activeUsersMonthly =
+    users.length > 0 ? getMonthlyUsers(activeUsers) : []
+  const newUsersMonthly = users.length > 0 ? getMonthlyUsers(users) : []
+  const newUsersWeekly = users.length > 0 ? getWeeklyUsers(users) : []
   const { wrapper, header } = pageStyles()
 
   function handleExport() {
@@ -163,7 +138,7 @@ const UsersPage: React.FC = () => {
     <div className={wrapper()}>
       <PageTitle title="Users" />
       <UsersStatistics
-        activeUsers={activeMonthlyUsers}
+        activeUsers={activeUsersMonthly}
         newUsersMonthly={newUsersMonthly}
         newUsersWeekly={newUsersWeekly}
       />
@@ -183,6 +158,11 @@ const UsersPage: React.FC = () => {
         columnFilters={columnFilters}
         users={users}
         onRowsFetched={setExportData}
+      />
+      <UserDeleteDialog
+        users={selectedUsers}
+        open={openDeleteDialog}
+        setOpen={setOpenDeleteDialog}
       />
     </div>
   )

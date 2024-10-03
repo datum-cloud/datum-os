@@ -25,7 +25,7 @@ type UsersControlsProps = {
   onDelete(): void
   onExport(): void
   onFilter(columnFilters: ColumnFiltersState): void
-  selectedUsers: Datum.User[]
+  selectedUsers?: Datum.User[]
 }
 
 const UsersControls = ({
@@ -85,14 +85,15 @@ const UsersControls = ({
                 />
                 Export
               </DropdownMenuItem>
-              <DropdownMenuItem
+              {/* TODO: Reinstate this */}
+              {/* <DropdownMenuItem
                 onClick={onDelete}
-                disabled={selectedUsers.length === 0}
+                disabled={selectedUsers && selectedUsers.length === 0}
                 className={contactDropdownItem()}
               >
                 <Trash size={18} className={contactDropdownIcon()} />
                 Delete items
-              </DropdownMenuItem>
+              </DropdownMenuItem> */}
             </DropdownMenuContent>
           </DropdownMenu>
           <FilterDialog onFilter={onFilter} entityFilters={USER_FILTERS} />

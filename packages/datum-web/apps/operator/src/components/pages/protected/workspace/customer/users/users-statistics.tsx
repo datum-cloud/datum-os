@@ -1,9 +1,15 @@
 'use client'
 
-import { ArrowDown, ArrowUp } from 'lucide-react'
+import { ArrowDown, ArrowUp, Minus } from 'lucide-react'
 
 import { ChartConfig, ChartContainer, Recharts } from '@repo/ui/chart'
-import { Card, CardContent, CardHeader, CardTitle } from '@repo/ui/chart-card'
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@repo/ui/chart-card'
 import { PRIMARY_COLOR, SECONDARY_COLOR } from '@repo/constants'
 import { Tag } from '@repo/ui/tag'
 
@@ -33,15 +39,18 @@ const UsersStatistics = ({
   } = statisticsStyles()
   const charts = [
     {
-      title: 'New Users (Weekly)',
+      title: 'New Users',
+      description: '(Weekly)',
       data: newUsersWeekly,
     },
     {
-      title: 'New Users (Monthly)',
+      title: 'New Users',
+      description: '(Monthly)',
       data: newUsersMonthly,
     },
     {
       title: 'Active Users',
+      description: '(Monthly)',
       data: activeUsers,
     },
   ]
@@ -55,7 +64,7 @@ const UsersStatistics = ({
 
   return (
     <div className={container()}>
-      {charts.map(({ title, data }, index) => {
+      {charts.map(({ title, description, data }, index) => {
         if (!data.length) return null
 
         const latestEntry = data[data.length - 1]
@@ -65,17 +74,29 @@ const UsersStatistics = ({
           0) as number
         const total = Object.values(latestEntry)?.[1] || 0
         const latestChange = latestEntryValue - penultimateEntryValue
+        const noChange = latestChange === 0
         const positiveChange = latestChange > 0
 
         return (
-          <Card key={title} className={card()}>
+          <Card key={`${title}-${index}`} className={card()}>
             <CardHeader className={cardHeader()}>
-              <CardTitle className={cardTitle()}>{title}</CardTitle>
+              <div>
+                <CardTitle className={cardTitle()}>{title}</CardTitle>
+                <CardDescription>{description}</CardDescription>
+              </div>
               <Tag
-                variant={positiveChange ? 'success' : 'destructive'}
+                variant={
+                  noChange
+                    ? 'default'
+                    : positiveChange
+                      ? 'success'
+                      : 'destructive'
+                }
                 className={cardTag()}
               >
-                {positiveChange ? (
+                {noChange ? (
+                  <Minus size={10} />
+                ) : positiveChange ? (
                   <ArrowUp size={10} />
                 ) : (
                   <ArrowDown size={10} />
