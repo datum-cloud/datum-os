@@ -52,6 +52,9 @@ type Context interface {
 	// Path returns the registered path for the handler.
 	Path() string
 
+	// Param is an alias for PathParam.
+	Param(name string) string
+
 	// PathParam returns path parameter by name.
 	PathParam(name string) string
 
@@ -406,6 +409,11 @@ func (c *DefaultContext) RawPathParams() *PathParams {
 // If you mess up size of pathParams size your application will panic/crash during routing
 func (c *DefaultContext) SetRawPathParams(params *PathParams) {
 	c.pathParams = params
+}
+
+// Param is an alias for PathParam.
+func (c *DefaultContext) Param(name string) string {
+	return c.PathParam(name)
 }
 
 // PathParam returns path parameter by name.
