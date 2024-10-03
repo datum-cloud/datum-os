@@ -1,0 +1,39 @@
+query GetInviteByID($inviteId: ID!) {
+  invite(id: $inviteId) {
+    expires
+    id
+    recipient
+    requestorID
+    role
+    sendAttempts
+    status
+    owner {
+      displayName
+      id
+      name
+    }
+    createdAt
+    createdBy
+    updatedAt
+    updatedBy
+  }
+}
+
+query InvitesByOrgID($where: InviteWhereInput) {
+  invites(where: $where) {
+    edges {
+      node {
+        owner {
+          id
+          invites {
+            recipient
+            requestorID
+            role
+            sendAttempts
+            status
+          }
+        }
+      }
+    }
+  }
+}

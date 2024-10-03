@@ -1,7 +1,7 @@
 'use client'
 
 import { EyeIcon } from 'lucide-react'
-import { Fragment, useEffect, useState } from 'react'
+import { Fragment, useCallback, useEffect, useState } from 'react'
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -152,10 +152,21 @@ export function DataTable<TData, TValue>({
     }
   }, [data])
 
-  if (onRowsFetched) {
-    const sortedRows = table.getSortedRowModel().rows
-    onRowsFetched(sortedRows)
-  }
+  const fetchRows = useCallback(() => {
+    if (onRowsFetched) {
+      const sortedRows = table.getSortedRowModel().rows
+      onRowsFetched(sortedRows)
+    }
+  }, [table, onRowsFetched])
+
+  useEffect(() => {
+    fetchRows()
+  }, [
+    fetchRows,
+    table.getState().sorting,
+    table.getState().columnFilters,
+    table.getState().globalFilter,
+  ])
 
   return (
     <>

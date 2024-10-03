@@ -21,21 +21,21 @@ import {
   DropdownMenuTrigger,
 } from '@repo/ui/dropdown-menu'
 import { Datum } from '@repo/types'
+import { FilterFormSchema, FilterInput } from '@/utils/schemas'
 
-import { CONTACT_FILTERS } from '@/utils/filters'
-import { ContactFilterFormSchema, ContactFilterInput } from '@/utils/schemas'
-
-import { filterStyles } from './page.styles'
+import { filterDialogStyles } from './filter-dialog.styles'
 
 type FilterDialogProps = {
   onFilter(input: ColumnFiltersState): void
+  entityFilters: Record<string, Datum.Filter>
 }
 
-const FilterContactDialog = ({ onFilter }: FilterDialogProps) => {
+const FilterUserDialog = ({ onFilter, entityFilters }: FilterDialogProps) => {
   const [open, setOpen] = React.useState(false)
-  const { column, dialogContent, filterContainer, filterTitle } = filterStyles()
-  const form = useForm<ContactFilterInput>({
-    resolver: zodResolver(ContactFilterFormSchema),
+  const { column, dialogContent, filterContainer, filterTitle } =
+    filterDialogStyles()
+  const form = useForm<FilterInput>({
+    resolver: zodResolver(FilterFormSchema),
     mode: 'onChange',
     defaultValues: {
       filters: {},
@@ -46,7 +46,7 @@ const FilterContactDialog = ({ onFilter }: FilterDialogProps) => {
 
   const { filters } = watch()
 
-  function formatFilters(filters: ContactFilterInput['filters']) {
+  function formatFilters(filters: FilterInput['filters']) {
     return Object.entries(filters).map(([field, { value }]) => ({
       id: field,
       value: value.value,
@@ -65,7 +65,7 @@ const FilterContactDialog = ({ onFilter }: FilterDialogProps) => {
     onFilter(formatFilters(newFilters))
   }
 
-  function onSubmit(data: ContactFilterInput) {
+  function onSubmit(data: FilterInput) {
     onFilter(formatFilters(data.filters))
     setOpen(false)
   }
@@ -91,7 +91,7 @@ const FilterContactDialog = ({ onFilter }: FilterDialogProps) => {
                     {Object.keys(filters).length > 0 ? (
                       Object.entries(filters).map(
                         ([field, { value }], index) => {
-                          const details = CONTACT_FILTERS[field]
+                          const details = entityFilters[field]
 
                           if (!details) return null
 
@@ -104,7 +104,7 @@ const FilterContactDialog = ({ onFilter }: FilterDialogProps) => {
                           return (
                             <div
                               key={`${valueKey}-${index}`}
-                              className="flex flex-row items-center gap-1 border rounded border-blackberry-600 text-body-xs px-2 py-1"
+                              className="flex flex-row items-center gap-1 border rounded border-blackberry-600 dark:border-peat-800 text-body-xs px-2 py-1"
                             >
                               {title}: {valueKey}
                               <Button
@@ -112,7 +112,7 @@ const FilterContactDialog = ({ onFilter }: FilterDialogProps) => {
                                 size="xs"
                                 onClick={() => deleteFilter(field)}
                               >
-                                <X className="!h-3 !w-3" />
+                                <X className="!h-3 !w-3 pt-[2px]" />
                               </Button>
                             </div>
                           )
@@ -130,9 +130,9 @@ const FilterContactDialog = ({ onFilter }: FilterDialogProps) => {
             </Panel>
             <div className={filterContainer()}>
               <div className={column()}>
-                <h4 className={filterTitle()}>Contacts</h4>
+                <h4 className={filterTitle()}>Users</h4>
                 <div className="flex flex-col gap-1 justify-start items-start">
-                  {Object.entries(CONTACT_FILTERS).map(
+                  {Object.entries(entityFilters).map(
                     ([key, details], index) => {
                       const filterValue = Object.keys(filters).find(
                         (field) => field === key,
@@ -166,7 +166,7 @@ const FilterContactDialog = ({ onFilter }: FilterDialogProps) => {
                               options.map((option, index) => (
                                 <DropdownMenuItem
                                   key={option.key}
-                                  className="p-3 cursor-pointer hover:bg-winter-sky-800"
+                                  className="p-3 cursor-pointer hover:bg-winter-sky-800 dark:hover:bg-peat-800"
                                   onClick={() =>
                                     handleFilter(key, operator, option)
                                   }
@@ -189,4 +189,4 @@ const FilterContactDialog = ({ onFilter }: FilterDialogProps) => {
   )
 }
 
-export default FilterContactDialog
+export default FilterUserDialog

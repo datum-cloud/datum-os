@@ -15,10 +15,7 @@ import {
 import { ChevronDown, LayersIcon, ShieldCheck, UserPen } from 'lucide-react'
 import { OPERATOR_APP_ROUTES } from '@repo/constants'
 import { useState } from 'react'
-import {
-  GetUserProfileQueryVariables,
-  useGetUserProfileQuery,
-} from '@repo/codegen/src/schema'
+import { useGetUserProfileQuery } from '@repo/codegen/src/schema'
 
 export const UserMenu = () => {
   const { data: sessionData } = useSession()
@@ -33,16 +30,12 @@ export const UserMenu = () => {
   } = userMenuStyles()
   const [open, setOpen] = useState(false)
   const firstName = sessionData?.user?.name?.split(' ')?.[0]
-  const userId = sessionData?.user.userId
-  const variables: GetUserProfileQueryVariables = {
-    userId: userId ?? '',
-  }
-  const [{ data }] = useGetUserProfileQuery({
-    variables,
+  const [{ data: userData }] = useGetUserProfileQuery({
+    variables: { userId: sessionData?.user.userId },
     pause: !sessionData,
   })
   const avatar =
-    data?.user?.avatarLocalFile || data?.user?.avatarRemoteURL || null
+    userData?.user?.avatarLocalFile || userData?.user?.avatarRemoteURL
 
   return (
     <DropdownMenu open={open} onOpenChange={setOpen}>

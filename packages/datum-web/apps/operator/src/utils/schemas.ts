@@ -1,4 +1,5 @@
 import z from 'zod'
+import { InviteRole } from '@repo/codegen/src/schema'
 
 import { TEL_REGEX } from '@repo/constants'
 
@@ -50,9 +51,9 @@ export const ContactBatchCreateSchema = z.object({
   contacts: z.array(ContactSchema),
 })
 
-export const ContactFilterFormSchema = z.object({
+export const FilterFormSchema = z.object({
   filters: z.record(
-    z.string().describe('Field to query from the Contact'),
+    z.string().describe('Field to query'),
     z.object({
       value: z.any().describe('Query value'),
       operator: z
@@ -118,13 +119,23 @@ export const UserNameSchema = z.object({
   }),
 })
 
+export const UserInviteSchema = z.object({
+  emails: z.array(z.string().email({ message: 'Invalid email address' })),
+  role: z
+    .nativeEnum(InviteRole, {
+      errorMap: () => ({ message: 'Invalid role' }),
+    })
+    .default(InviteRole.MEMBER),
+})
+
+export type UserInviteInput = z.infer<typeof UserInviteSchema>
 export type ResetUserInput = z.infer<typeof ResetUserSchema>
 export type UserNameInput = z.infer<typeof UserNameSchema>
 export type ResetPasswordInput = z.infer<typeof ResetPasswordSchema>
 export type RegisterUserInput = z.infer<typeof RegisterUserSchema>
 export type ContactBatchCreateInput = z.infer<typeof ContactBatchCreateSchema>
 export type ContactInput = z.infer<typeof ContactSchema>
-export type ContactFilterInput = z.infer<typeof ContactFilterFormSchema>
+export type FilterInput = z.infer<typeof FilterFormSchema>
 export type ContactFormInput = z.infer<typeof ContactFormSchema>
 export type SearchFormInput = z.infer<typeof SearchFormSchema>
 export type DeletionInput = z.infer<typeof DeletionSchema>

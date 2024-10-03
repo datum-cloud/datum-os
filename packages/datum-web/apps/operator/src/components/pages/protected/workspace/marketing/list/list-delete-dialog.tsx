@@ -116,7 +116,7 @@ const ListDeleteDialog = ({
                         {lists.length > 1 ? 'these lists' : 'the list'}
                       </FormLabel>
                       <FormControl>
-                        <Input variant="medium" {...field} className="w-full" />
+                        <Input {...field} className="w-full" />
                       </FormControl>
                       <FormMessage />
                     </FormItem>

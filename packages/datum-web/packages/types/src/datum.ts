@@ -1,3 +1,6 @@
+import { LucideProps } from 'lucide-react'
+
+import { GetOrganizationMembersQuery } from '@repo/codegen/src/schema'
 export namespace Datum {
   declare const __brand: unique symbol
 
@@ -73,6 +76,20 @@ export namespace Datum {
     | 'lessThanOrEqualTo'
     | 'empty'
 
+  export type FilterOption = {
+    key: string
+    value: any
+  }
+
+  export type Filter = {
+    icon: React.ForwardRefExoticComponent<
+      Omit<LucideProps, 'ref'> & React.RefAttributes<SVGSVGElement>
+    >
+    title: string
+    operator: Datum.OPERATOR
+    options?: FilterOption[]
+  }
+
   export type List = {
     id: ListId
     name: string
@@ -124,5 +141,36 @@ export namespace Datum {
   export type ImageDimensions = {
     height: number
     width: number
+  }
+
+  export type InvitationId = Brand<Id, 'InvitationId'>
+
+  export type Invitation = {
+    id: InvitationId
+    recipient: string
+    status: string
+    createdAt?: any
+    role: string
+  }
+
+  export type UserId = Brand<Id, 'UserId'>
+
+  export type User = {
+    id: Datum.UserId
+    firstName?: string
+    lastName?: string
+    authProvider: string
+    avatarRemoteURL?: string
+    avatarLocalFile?: string
+    email: string
+    role?: string
+    createdAt?: any
+    lastSeen?: any
+    setting: { status: string }
+  }
+
+  export interface OrgUser extends User {
+    orgRole: string
+    joinedAt: string
   }
 }

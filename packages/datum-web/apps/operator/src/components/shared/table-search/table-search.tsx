@@ -1,16 +1,27 @@
-import { Search } from 'lucide-react'
+import { Search as SearchIcon } from 'lucide-react'
 import { useState } from 'react'
 
 import { Button } from '@repo/ui/button'
 import { DebouncedInput } from '@repo/ui/input'
 import { cn } from '@repo/ui/lib/utils'
 
-type ContactsSearchProps = {
+import { searchStyles } from './table-search.styles'
+
+type SearchProps = {
   search(input: string): void
+  placeholder?: string
+  compact?: boolean
+  alignment?: 'left' | 'right'
 }
 
-const ContactsSearch = ({ search }: ContactsSearchProps) => {
-  const [openSearch, setOpenSearch] = useState(false)
+const Search = ({
+  compact = false,
+  alignment = 'left',
+  search,
+  placeholder = 'Search',
+}: SearchProps) => {
+  const { container, input, button } = searchStyles()
+  const [openSearch, setOpenSearch] = useState(!compact)
   const [query, setQuery] = useState('')
 
   function handleSearch() {
@@ -28,30 +39,34 @@ const ContactsSearch = ({ search }: ContactsSearchProps) => {
   return (
     <div
       className={cn(
-        'h-11 relative bg-white flex gap-0 items-start justify-start dark:bg-peat-900 rounded-md border border-blackberry-400',
+        container(),
         openSearch ? 'w-auto' : 'w-11',
+        alignment === 'right' && 'flex-row-reverse',
       )}
     >
       <DebouncedInput
         value={query}
         type="search"
         onChange={searchQuery}
-        placeholder="Search contacts"
+        placeholder={placeholder}
         className={cn(
-          'flex h-[42px] transition-all transform duration-1000 w-0 rounded-md border-none dark:text-white',
+          input(),
           openSearch
-            ? 'w-56 translate-x-0 opacity-100 pr-11'
+            ? 'w-64 translate-x-0 opacity-100'
             : 'w-0 translate-x-100 opacity-0 p-0',
+          alignment === 'right' && openSearch && 'pr-11',
+          alignment === 'left' && openSearch && 'pl-11',
         )}
       />
       <Button
         variant="blackberryXs"
         size="xs"
         className={cn(
-          'h-[42px] aspect-square shrink-0 rounded-md',
-          openSearch ? '!absolute top-0 right-0' : '',
+          button(),
+          openSearch ? '!absolute top-0' : '',
+          alignment === 'right' ? 'right-0' : 'left-0',
         )}
-        icon={<Search className="dar:text-white" />}
+        icon={<SearchIcon className="dar:text-white" />}
         iconPosition="left"
         onClick={handleSearch}
       />
@@ -59,4 +74,4 @@ const ContactsSearch = ({ search }: ContactsSearchProps) => {
   )
 }
 
-export default ContactsSearch
+export default Search

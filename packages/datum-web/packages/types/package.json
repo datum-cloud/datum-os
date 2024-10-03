@@ -8,6 +8,7 @@
     "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
+    "@repo/codegen": "*",
     "@types/react": "18.3.3",
     "next": "^14.1.0"
   }

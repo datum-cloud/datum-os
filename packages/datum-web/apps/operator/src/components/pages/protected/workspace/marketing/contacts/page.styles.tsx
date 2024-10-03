@@ -41,16 +41,6 @@ export const tableStyles = tv({
   },
 })
 
-export const filterStyles = tv({
-  slots: {
-    column: 'flex flex-col w-full basis-full gap-5',
-    dialogContent:
-      'w-full flex flex-col justify-start items-start h-auto p-6 gap-6',
-    filterContainer: 'w-full flex gap-4',
-    filterTitle: 'text-lg font-semibold font-sans capitalize',
-  },
-})
-
 export const tagStyles = tv({
   base: 'rounded-[5px] px-[7px] pt-[1px] pb-[2px] h-5 border uppercase font-mono text-[10px] font-semibold leading-[150%] tracking-[0.4px]',
   variants: {

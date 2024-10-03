@@ -3,7 +3,7 @@ import {
   useGetAllOrganizationsQuery,
   useUpdateOrganizationMutation,
 } from '@repo/codegen/src/schema'
-import { Input, InputRow } from '@repo/ui/input'
+import { Input } from '@repo/ui/input'
 import { Panel, PanelHeader } from '@repo/ui/panel'
 import { useSession } from 'next-auth/react'
 import { useForm } from 'react-hook-form'
@@ -80,14 +80,14 @@ const WorkspaceEmailForm = () => {
       <PanelHeader heading="Billing email" noBorder />
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
-          <InputRow>
+          <div className="w-full flex items-stretch gap-4">
             <FormField
               control={form.control}
               name="email"
               render={({ field }) => (
-                <FormItem>
+                <FormItem className="w-full">
                   <FormControl>
-                    <Input variant="medium" type="email" {...field} />
+                    <Input type="email" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -101,7 +101,7 @@ const WorkspaceEmailForm = () => {
             >
               {isSubmitting ? 'Saving' : isSuccess ? 'Saved' : 'Save'}
             </Button>
-          </InputRow>
+          </div>
         </form>
       </Form>
     </Panel>

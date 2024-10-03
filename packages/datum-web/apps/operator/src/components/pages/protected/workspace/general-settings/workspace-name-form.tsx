@@ -3,7 +3,7 @@ import {
   useGetAllOrganizationsQuery,
   useUpdateOrganizationMutation,
 } from '@repo/codegen/src/schema'
-import { Input, InputRow } from '@repo/ui/input'
+import { Input } from '@repo/ui/input'
 import { Panel, PanelHeader } from '@repo/ui/panel'
 import { useSession } from 'next-auth/react'
 import { useForm } from 'react-hook-form'
@@ -84,14 +84,14 @@ const WorkspaceNameForm = () => {
       />
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
-          <div className="flex items-stretch gap-4">
+          <div className="w-full flex items-stretch gap-4">
             <FormField
               control={form.control}
               name="displayName"
               render={({ field }) => (
-                <FormItem>
+                <FormItem className="w-full">
                   <FormControl>
-                    <Input variant="medium" {...field} />
+                    <Input {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

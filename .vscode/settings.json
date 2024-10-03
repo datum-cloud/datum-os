@@ -4,5 +4,13 @@
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "[go]": {
     "editor.defaultFormatter": "golang.go"
+  },
+  "protoc": {
+    "compile_on_save": false,
+    "options": [
+      "--proto_path=protos/v3",
+      "--proto_path=protos/v2",
+      "--proto_path=${workspaceRoot}/third_party"
+    ]
   }
 }

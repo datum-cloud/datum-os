@@ -30,13 +30,14 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@/components/shared/sidebar/sidebar-accordion/sidebar-accordion'
+import Search from '@/components/shared/table-search/table-search'
 import { useLists } from '@/hooks/useLists'
 import { createListMembers, removeListMembers } from '@/query/lists'
 
 import ContactFormDialog from './contacts-form-dialog'
-import FilterContactDialog from './contacts-filter-dialog'
-import ContactsSearch from './contacts-search'
+import FilterDialog from '@/components/shared/filter-dialog/filter-dialog'
 import { pageStyles } from './page.styles'
+import { CONTACT_FILTERS } from '@/utils/filters'
 
 type ContactsControlsProps = {
   search(query: string): void
@@ -111,7 +112,12 @@ const ContactsControls = ({
   return (
     <>
       <div className={contactControls()}>
-        <ContactsSearch search={search} />
+        <Search
+          compact
+          alignment="right"
+          placeholder="Search contacts"
+          search={search}
+        />
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" icon={<ChevronDown />}>
@@ -235,7 +241,7 @@ const ContactsControls = ({
             </Accordion>
           </DropdownMenuContent>
         </DropdownMenu>
-        <FilterContactDialog onFilter={onFilter} />
+        <FilterDialog onFilter={onFilter} entityFilters={CONTACT_FILTERS} />
       </div>
       <ContactFormDialog
         open={openContactDialog}
