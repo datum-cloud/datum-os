@@ -30,17 +30,7 @@ const Panel: React.FC<PanelProps> = ({
   children,
 }) => {
   const styles = panelStyles({ gap, align, justify, textAlign, destructive })
-  const inner = destructive ? (
-    <div className={styles.iconRow()}>
-      <div className={styles.icon()}>
-        <TriangleAlert strokeWidth={1.5} />
-      </div>
-      <div className={styles.contentColumn()}>{children}</div>
-    </div>
-  ) : (
-    children
-  )
-  return <div className={cn(styles.panel(), className)}>{inner}</div>
+  return <div className={cn(styles.panel(), className)}>{children}</div>
 }
 
 const PanelHeader: React.FC<PanelHeaderProps> = ({

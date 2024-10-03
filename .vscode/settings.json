@@ -2,6 +2,7 @@
   "prettier.configPath": "./packages/datum-web/.prettierrc.json",
   "prettier.prettierPath": "./packages/datum-web/node_modules/prettier",
   "editor.defaultFormatter": "esbenp.prettier-vscode",
+  // "editor.formatOnSave": false,
   "[go]": {
     "editor.defaultFormatter": "golang.go"
   },

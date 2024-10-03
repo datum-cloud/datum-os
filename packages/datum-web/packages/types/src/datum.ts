@@ -43,11 +43,13 @@ export namespace Datum {
 
   export type Slug = Brand<string, 'Slug'>
 
+  export type WorkspaceId = Brand<string, 'WorkspaceId'>
+
   export type Path = Brand<string, 'Path'>
 
   export type PartialWithField<
     T,
-    U = { [K in keyof T]: Pick<T, K> }
+    U = { [K in keyof T]: Pick<T, K> },
   > = Partial<T> & U[keyof U]
 
   export type PartialWithSpecific<T, K extends keyof T> = Partial<T> &
