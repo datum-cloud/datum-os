@@ -13,8 +13,8 @@ import { Error } from '@/components/shared/error/error'
 const WorkspaceLanding: React.FC = () => {
   const { data: sessionData } = useSession()
   const [allOrgs] = useGetAllOrganizationsQuery({ pause: !sessionData })
+
   const data = allOrgs?.data
-  console.log(data, allOrgs)
   if (allOrgs?.error) {
     return <Error />
   }
@@ -22,7 +22,7 @@ const WorkspaceLanding: React.FC = () => {
   const renderWorkspaces = () => {
     if (!data) return null
     const personalOrg = data.organizations.edges?.find(
-      (org) => org?.node?.personalOrg,
+      (org) => org?.node?.personalOrg
     )
     const orgs =
       data.organizations.edges?.filter((org) => !org?.node?.personalOrg) || []

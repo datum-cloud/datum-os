@@ -119,6 +119,15 @@ export const USER_FILTERS: Record<string, Datum.Filter> = {
     operator: 'empty',
     options: BOOLEAN_OPTIONS,
   },
+  role: {
+    icon: UserCheck,
+    title: 'Role',
+    operator: 'equals',
+    options: [
+      { key: 'Admin', value: 'ADMIN' },
+      { key: 'Member', value: 'MEMBER' },
+    ],
+  },
   status: {
     icon: UserCheck,
     title: 'User Status',

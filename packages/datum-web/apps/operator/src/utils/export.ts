@@ -38,19 +38,19 @@ export function formatListsExportData(data: Row<Datum.List>[]) {
   return formattedData
 }
 
-export function formatUsersExportData(data: Row<Datum.User>[]) {
+export function formatUsersExportData(data: Row<Datum.OrgUser>[]) {
   const formattedData = data.map((row) => {
-    const user = row.original.user
+    const user = row.original
 
     return {
       'First Name': user.firstName || '',
       'Last Name': user.lastName || '',
       Email: user.email || '',
       Provider: user.authProvider || '',
-      'Created At': formatDate(user.createdAt) || '',
+      Role: user.orgRole || '',
+      Joined: formatDate(new Date(user.joinedAt)) || '',
       'Last Seen': user.lastSeen || '',
-      // TODO: Return status from backend
-      Status: 'ACTIVE',
+      Status: user.setting.status || '',
     }
   })
 

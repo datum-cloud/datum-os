@@ -3,7 +3,8 @@
 import Link from 'next/link'
 import { useState, useEffect } from 'react'
 
-import { useGetUserProfileQuery } from '@repo/codegen/src/schema'
+import { getPathWithParams } from '@repo/common/routes'
+import { OPERATOR_APP_ROUTES } from '@repo/constants'
 import { Avatar, AvatarFallback, AvatarImage } from '@repo/ui/avatar'
 import { Checkbox } from '@repo/ui/checkbox'
 import {
@@ -26,12 +27,12 @@ import { formatDate } from '@/utils/date'
 import { tableStyles } from './page.styles'
 
 type UsersTableProps = {
-  users: Datum.User[]
-  setSelection(users: Datum.User[]): void
+  users: Datum.OrgUser[]
+  setSelection?(users: Datum.OrgUser[]): void
   globalFilter?: string
   columnFilters?: ColumnFiltersState
   setGlobalFilter?(input: string): void
-  onRowsFetched?(data: Row<Datum.User>[]): void
+  onRowsFetched?(data: Row<Datum.OrgUser>[]): void
 }
 
 const { header, checkboxContainer, link, userDetails, userDetailsText } =
@@ -69,7 +70,7 @@ const fuzzySort: SortingFn<any> = (rowA, rowB, columnId) => {
   if (rowA.columnFiltersMeta[columnId]) {
     dir = compareItems(
       rowA.columnFiltersMeta[columnId].itemRank!,
-      rowB.columnFiltersMeta[columnId].itemRank!,
+      rowB.columnFiltersMeta[columnId].itemRank!
     )
   }
 
@@ -81,10 +82,10 @@ const filterFns = {
   boolean: booleanFilter,
 }
 
-export const USER_COLUMNS: ColumnDef<Datum.User>[] = [
+export const USER_COLUMNS: ColumnDef<Datum.OrgUser>[] = [
   {
     id: 'select',
-    accessorKey: 'id',
+    accessorFn: (row) => row.id,
     size: 60,
     enableGlobalFilter: false,
     enableSorting: false,
@@ -105,7 +106,7 @@ export const USER_COLUMNS: ColumnDef<Datum.User>[] = [
         </div>
       )
     },
-    cell: ({ row }) => {
+    cell: ({ row, table }) => {
       return (
         <div className={checkboxContainer()}>
           <Checkbox
@@ -121,7 +122,7 @@ export const USER_COLUMNS: ColumnDef<Datum.User>[] = [
   {
     id: 'user',
     accessorFn: (row) =>
-      `${row.user?.firstName ?? ''}${row.user?.lastName ? row.user?.lastName : ''}`,
+      `${row?.firstName ?? ''}${row?.lastName ? row?.lastName : ''}`,
     enableGlobalFilter: true,
     filterFn: booleanFilter,
     enableSorting: true,
@@ -137,9 +138,9 @@ export const USER_COLUMNS: ColumnDef<Datum.User>[] = [
       minWidth: 236,
     },
     cell: ({ row }) => {
-      const value = row.original as Datum.User
+      const value = row.original as Datum.OrgUser
       const { firstName, lastName, avatarLocalFile, avatarRemoteURL } =
-        value?.user
+        value || {}
       const avatar = avatarLocalFile || avatarRemoteURL
 
       return (
@@ -157,7 +158,7 @@ export const USER_COLUMNS: ColumnDef<Datum.User>[] = [
   },
   {
     id: 'email',
-    accessorFn: (row) => row.user.email || '',
+    accessorFn: (row) => row?.email || '',
     enableGlobalFilter: true,
     filterFn: booleanFilter,
     enableSorting: true,
@@ -172,12 +173,14 @@ export const USER_COLUMNS: ColumnDef<Datum.User>[] = [
     meta: {
       minWidth: 212,
     },
-    cell: ({ cell }) => {
+    cell: ({ cell, row }) => {
       const value = cell.getValue() as Datum.Email
 
       return (
         <Link
-          href={`mailto:${value}`}
+          href={getPathWithParams(OPERATOR_APP_ROUTES.user, {
+            id: row.original?.id,
+          })}
           className={link()}
           rel="noopener noreferrer"
         >
@@ -188,7 +191,7 @@ export const USER_COLUMNS: ColumnDef<Datum.User>[] = [
   },
   {
     id: 'provider',
-    accessorFn: (row) => row.user.authProvider || '',
+    accessorFn: (row) => row?.authProvider || '',
     header: ({ column }) => (
       <DataTableColumnHeader
         className={header()}
@@ -205,8 +208,24 @@ export const USER_COLUMNS: ColumnDef<Datum.User>[] = [
     },
   },
   {
+    id: 'role',
+    accessorFn: (row) => row?.orgRole || '',
+    header: ({ column }) => (
+      <DataTableColumnHeader
+        className={header()}
+        column={column}
+        children="Role"
+      />
+    ),
+    enableGlobalFilter: false,
+    enableSorting: true,
+    meta: {
+      minWidth: 150,
+    },
+  },
+  {
     id: 'status',
-    accessorFn: (row) => row.user.id,
+    accessorFn: (row) => row?.setting?.status,
     header: ({ column }) => (
       <DataTableColumnHeader
         className={header()}
@@ -219,12 +238,7 @@ export const USER_COLUMNS: ColumnDef<Datum.User>[] = [
     enableSorting: true,
     sortingFn: fuzzySort,
     cell: ({ cell }) => {
-      const value = cell.getValue() as Datum.UserId
-      const [{ data }] = useGetUserProfileQuery({
-        variables: { userId: value },
-      })
-      const { status } = data?.user?.setting || {}
-      console.log('STATUS', status)
+      const status = cell.getValue() as string
 
       let variant: TagVariants['status'] = 'default'
 
@@ -237,34 +251,9 @@ export const USER_COLUMNS: ColumnDef<Datum.User>[] = [
       minWidth: 132,
     },
   },
-  //   {
-  //     id: 'logins',
-  //     header: ({ column }) => (
-  //       <DataTableColumnHeader
-  //         className={header()}
-  //         column={column}
-  //         children="Logins"
-  //       />
-  //     ),
-  //     enableGlobalFilter: false,
-  //     enableSorting: true,
-  //     cell: ({ row }) => {
-  //       const value = row.original as Datum.User
-  //       const [{ data }] = useGetUserProfileQuery({
-  //         variables: { userId: value.user.id },
-  //       })
-  //       // TODO: Get number of logins and replace below
-  //       const { logins } = data?.user || {}
-
-  //       return <Tag>{logins}</Tag>
-  //     },
-  //     meta: {
-  //       minWidth: 102,
-  //     },
-  //   },
   {
     id: 'lastSeen',
-    accessorFn: (row) => row.user.lastSeen || '',
+    accessorFn: (row) => row?.lastSeen || '',
     header: ({ column }) => (
       <DataTableColumnHeader
         className={header()}
@@ -276,9 +265,9 @@ export const USER_COLUMNS: ColumnDef<Datum.User>[] = [
     enableSorting: true,
     sortingFn: fuzzySort,
     cell: ({ row }) => {
-      const value = row.original as Datum.User
+      const value = row.original as Datum.OrgUser
 
-      const lastLogin = value?.user?.lastSeen || ''
+      const lastLogin = value?.lastSeen || ''
       const formattedDate = formatDate(new Date(lastLogin))
 
       return <>{formattedDate}</>
@@ -297,7 +286,7 @@ const UsersTable = ({
   setSelection,
   onRowsFetched,
 }: UsersTableProps) => {
-  const [filteredUsers, setFilteredUsers] = useState<Datum.User[]>(users)
+  const [filteredUsers, setFilteredUsers] = useState<Datum.OrgUser[]>(users)
 
   useEffect(() => {
     if (users) {

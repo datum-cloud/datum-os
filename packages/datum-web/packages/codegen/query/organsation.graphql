@@ -82,6 +82,37 @@ query GetOrganizationMembers($organizationId: ID!) {
   }
 }
 
+query GetOrgMembersByOrgID($where: OrgMembershipWhereInput) {
+  orgMemberships(where: $where) {
+    edges {
+      node {
+        id
+        organizationID
+        userID
+        role
+        createdAt
+        user {
+          id
+          firstName
+          lastName
+          authProvider
+          avatarRemoteURL
+          avatarLocalFile
+          email
+          role
+          createdAt
+          lastSeen
+          authProvider
+          createdAt
+          setting {
+            status
+          }
+        }
+      }
+    }
+  }
+}
+
 query GetInvites {
   invites {
     edges {

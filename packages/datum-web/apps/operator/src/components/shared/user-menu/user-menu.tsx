@@ -34,16 +34,15 @@ export const UserMenu = () => {
     variables: { userId: sessionData?.user.userId },
     pause: !sessionData,
   })
-  const avatar = userData?.user?.avatarLocalFile || userData?.user?.avatarRemoteURL
+  const avatar =
+    userData?.user?.avatarLocalFile || userData?.user?.avatarRemoteURL
 
   return (
     <DropdownMenu open={open} onOpenChange={setOpen}>
       <DropdownMenuTrigger asChild>
         <div className={trigger()}>
           <Avatar>
-            {avatar && (
-              <AvatarImage src={avatar} />
-            )}
+            {avatar && <AvatarImage src={avatar} />}
             <AvatarFallback>{firstName?.substring(0, 2)}</AvatarFallback>
           </Avatar>
           <ChevronDown />
