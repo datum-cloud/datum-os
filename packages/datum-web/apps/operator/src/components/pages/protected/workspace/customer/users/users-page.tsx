@@ -45,7 +45,8 @@ function getPastFiveWeeks() {
   return weeks
 }
 
-function getMonthlyUsers(users: Datum.User[]) {
+// NOTE: Because we are using the orgMember entity the 'createdAt' field essentially serves as the date joined
+function getMonthlyUsers(users: Datum.OrgUser[]) {
   if (users.length === 0) return []
   const pastFiveMonths = getPastFiveMonths()
 
@@ -66,7 +67,8 @@ function getMonthlyUsers(users: Datum.User[]) {
   return monthlyUsers.reverse()
 }
 
-function getWeeklyUsers(users: Datum.User[]) {
+// NOTE: Because we are using the orgMember entity the 'createdAt' field essentially serves as the date joined
+function getWeeklyUsers(users: Datum.OrgUser[]) {
   if (users.length === 0) return []
   const pastFiveWeeks = getPastFiveWeeks()
 
@@ -88,9 +90,9 @@ function getWeeklyUsers(users: Datum.User[]) {
 }
 
 const UsersPage: React.FC = () => {
-  const [exportData, setExportData] = useState<Row<Datum.User>[]>([])
+  const [exportData, setExportData] = useState<Row<Datum.OrgUser>[]>([])
   const [openDeleteDialog, _setOpenDeleteDialog] = useState(false)
-  const [selectedUsers, setSelectedUsers] = useState<Datum.User[]>([])
+  const [selectedUsers, setSelectedUsers] = useState<Datum.OrgUser[]>([])
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
   const [query, setQuery] = useState('')
   const { data: session } = useSession()
@@ -104,12 +106,20 @@ const UsersPage: React.FC = () => {
 
   const users = useMemo(() => {
     return (data?.orgMemberships?.edges
-      ?.map((edge) => edge?.node?.user)
-      .filter(Boolean) || []) as Datum.User[]
+      ?.map(
+        (edge) =>
+          edge?.node?.user && {
+            ...edge?.node?.user,
+            orgRole: edge?.node?.role,
+            joinedAt: edge?.node?.createdAt,
+          },
+      )
+      .filter(Boolean) || []) as Datum.OrgUser[]
   }, [data])
-  const activeUsers = users.filter((user) => user.setting.status === 'ACTIVE')
-  const activeUsersMonthly =
-    users.length > 0 ? getMonthlyUsers(activeUsers) : []
+  // TODO: Add this logic correctly, when we have access to active users by month in the future
+  // const activeUsers = users.filter((user) => user.setting.status === 'ACTIVE')
+  // const activeUsersMonthly =
+  //   users.length > 0 ? getMonthlyUsers(activeUsers) : []
   const newUsersMonthly = users.length > 0 ? getMonthlyUsers(users) : []
   const newUsersWeekly = users.length > 0 ? getWeeklyUsers(users) : []
   const { wrapper, header } = pageStyles()
@@ -138,7 +148,7 @@ const UsersPage: React.FC = () => {
     <div className={wrapper()}>
       <PageTitle title="Users" />
       <UsersStatistics
-        activeUsers={activeUsersMonthly}
+        // activeUsers={activeUsersMonthly}
         newUsersMonthly={newUsersMonthly}
         newUsersWeekly={newUsersWeekly}
       />

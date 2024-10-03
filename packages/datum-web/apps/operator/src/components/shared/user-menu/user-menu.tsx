@@ -1,6 +1,5 @@
 'use client'
 
-import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 
 import { signOut, useSession } from 'next-auth/react'
@@ -19,7 +18,6 @@ import { useState } from 'react'
 import { useGetUserProfileQuery } from '@repo/codegen/src/schema'
 
 export const UserMenu = () => {
-  const { push } = useRouter()
   const { data: sessionData } = useSession()
   const {
     dropdownLink,
@@ -38,10 +36,6 @@ export const UserMenu = () => {
   })
   const avatar =
     userData?.user?.avatarLocalFile || userData?.user?.avatarRemoteURL
-
-  if (!sessionData) {
-    push(OPERATOR_APP_ROUTES.login)
-  }
 
   return (
     <DropdownMenu open={open} onOpenChange={setOpen}>

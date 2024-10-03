@@ -18,7 +18,7 @@ import { statisticsStyles } from './page.styles'
 type UsersStatisticsProps = {
   newUsersWeekly: UserStatistics
   newUsersMonthly: UserStatistics
-  activeUsers: UserStatistics
+  // activeUsers: UserStatistics
 }
 
 type UserStatistics = Record<string, string | number>[]
@@ -26,7 +26,7 @@ type UserStatistics = Record<string, string | number>[]
 const UsersStatistics = ({
   newUsersWeekly,
   newUsersMonthly,
-  activeUsers,
+  // activeUsers,
 }: UsersStatisticsProps) => {
   const {
     container,
@@ -48,11 +48,11 @@ const UsersStatistics = ({
       description: '(Monthly)',
       data: newUsersMonthly,
     },
-    {
-      title: 'Active Users',
-      description: '(Monthly)',
-      data: activeUsers,
-    },
+    // {
+    //   title: 'Active Users',
+    //   description: '(Monthly)',
+    //   data: activeUsers,
+    // },
   ]
 
   const chartConfig = {

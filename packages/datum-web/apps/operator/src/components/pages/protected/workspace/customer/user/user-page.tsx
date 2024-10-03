@@ -69,10 +69,12 @@ const UserPage = ({ id }: UserPageProps) => {
       pause: !session,
     })
 
-  const [{ data: invites, fetching: fetchingInvites, error: errorInvites }] =
-    useGetInvitesQuery({
-      pause: !session,
-    })
+  const [
+    { data: invites, fetching: fetchingInvites, error: errorInvites },
+    refetch,
+  ] = useGetInvitesQuery({
+    pause: !session,
+  })
 
   const fetching = fetchingUser || fetchingInvites
   const error = errorUser || errorInvites
@@ -175,6 +177,11 @@ const UserPage = ({ id }: UserPageProps) => {
       </div>
       <UserInvitationTable
         invitations={userInvitations}
+        refetch={() =>
+          refetch({
+            requestPolicy: 'network-only',
+          })
+        }
         setSelection={setSelectedInvitations}
       />
       {/* <UserFormDialog

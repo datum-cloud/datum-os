@@ -90,6 +90,7 @@ query GetOrgMembersByOrgID($where: OrgMembershipWhereInput) {
         organizationID
         userID
         role
+        createdAt
         user {
           id
           firstName

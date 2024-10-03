@@ -168,4 +168,9 @@ export namespace Datum {
     lastSeen?: any
     setting: { status: string }
   }
+
+  export interface OrgUser extends User {
+    orgRole: string
+    joinedAt: string
+  }
 }

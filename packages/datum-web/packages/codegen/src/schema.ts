@@ -12910,7 +12910,7 @@ export type GetOrgMembersByOrgIdQueryVariables = Exact<{
 }>;
 
 
-export type GetOrgMembersByOrgIdQuery = { __typename?: 'Query', orgMemberships: { __typename?: 'OrgMembershipConnection', edges?: Array<{ __typename?: 'OrgMembershipEdge', node?: { __typename?: 'OrgMembership', id: string, organizationID: string, userID: string, role: OrgMembershipRole, user: { __typename?: 'User', id: string, firstName?: string | null, lastName?: string | null, authProvider: UserAuthProvider, avatarRemoteURL?: string | null, avatarLocalFile?: string | null, email: string, role?: UserRole | null, createdAt?: any | null, lastSeen?: any | null, setting: { __typename?: 'UserSetting', status: UserSettingUserStatus } } } | null } | null> | null } };
+export type GetOrgMembersByOrgIdQuery = { __typename?: 'Query', orgMemberships: { __typename?: 'OrgMembershipConnection', edges?: Array<{ __typename?: 'OrgMembershipEdge', node?: { __typename?: 'OrgMembership', id: string, organizationID: string, userID: string, role: OrgMembershipRole, createdAt?: any | null, user: { __typename?: 'User', id: string, firstName?: string | null, lastName?: string | null, authProvider: UserAuthProvider, avatarRemoteURL?: string | null, avatarLocalFile?: string | null, email: string, role?: UserRole | null, createdAt?: any | null, lastSeen?: any | null, setting: { __typename?: 'UserSetting', status: UserSettingUserStatus } } } | null } | null> | null } };
 
 export type GetInvitesQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -13034,6 +13034,11 @@ export type DeleteUserMutationVariables = Exact<{
 
 
 export type DeleteUserMutation = { __typename?: 'Mutation', deleteUser: { __typename?: 'UserDeletePayload', deletedID: string } };
+
+export type GetAllUserHistoriesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetAllUserHistoriesQuery = { __typename?: 'Query', userHistories: { __typename?: 'UserHistoryConnection', edges?: Array<{ __typename?: 'UserHistoryEdge', node?: { __typename?: 'UserHistory', authProvider: UserHistoryAuthProvider, avatarLocalFile?: string | null, avatarRemoteURL?: string | null, avatarUpdatedAt?: any | null, createdAt?: any | null, createdBy?: string | null, displayName: string, email: string, firstName?: string | null, historyTime: any, id: string, lastName?: string | null, lastSeen?: any | null, operation: UserHistoryOpType, ref?: string | null, role?: UserHistoryRole | null, sub?: string | null, tags?: Array<string> | null, updatedAt?: any | null, updatedBy?: string | null } | null } | null> | null } };
 
 
 export const GetDocumentDataDocument = gql`
@@ -13274,6 +13279,7 @@ export const GetOrgMembersByOrgIdDocument = gql`
         organizationID
         userID
         role
+        createdAt
         user {
           id
           firstName
@@ -13581,4 +13587,38 @@ export const DeleteUserDocument = gql`
 
 export function useDeleteUserMutation() {
   return Urql.useMutation<DeleteUserMutation, DeleteUserMutationVariables>(DeleteUserDocument);
+};
+export const GetAllUserHistoriesDocument = gql`
+    query GetAllUserHistories {
+  userHistories {
+    edges {
+      node {
+        authProvider
+        avatarLocalFile
+        avatarRemoteURL
+        avatarUpdatedAt
+        createdAt
+        createdBy
+        displayName
+        email
+        firstName
+        historyTime
+        id
+        lastName
+        lastSeen
+        operation
+        ref
+        role
+        sub
+        tags
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}
+    `;
+
+export function useGetAllUserHistoriesQuery(options?: Omit<Urql.UseQueryArgs<GetAllUserHistoriesQueryVariables>, 'query'>) {
+  return Urql.useQuery<GetAllUserHistoriesQuery, GetAllUserHistoriesQueryVariables>({ query: GetAllUserHistoriesDocument, ...options });
 };

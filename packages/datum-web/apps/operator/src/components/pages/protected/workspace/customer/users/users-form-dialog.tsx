@@ -31,7 +31,7 @@ import {
   useCreateBulkInviteMutation,
 } from '@repo/codegen/src/schema'
 import { useGqlError } from '@/hooks/useGqlError'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { toast } from '@repo/ui/use-toast'
 import { TagInput } from '@repo/ui/tag-input'
 import {
@@ -41,19 +41,18 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@repo/ui/select'
+import { useSession } from 'next-auth/react'
+import { userCanInviteAdmins } from '@/lib/authz/utils'
 
 type UsersDialogFormProps = {
   open: boolean
   setOpen(input: boolean): void
-  inviteAdmins?: boolean
 }
 
-const UsersFormDialog = ({
-  inviteAdmins = false,
-  open,
-  setOpen,
-}: UsersDialogFormProps) => {
+const UsersFormDialog = ({ open, setOpen }: UsersDialogFormProps) => {
+  const { data: session } = useSession()
   const [result, inviteMembers] = useCreateBulkInviteMutation()
+  const [canInviteAdmins, setCanInviteAdmins] = useState(false)
   const { error, fetching } = result
   const { errorMessages } = useGqlError(error)
   const {
@@ -64,11 +63,21 @@ const UsersFormDialog = ({
     selectItem,
   } = formStyles()
 
+  useEffect(() => {
+    const setInvitePermissions = async () => {
+      const { data: inviteAdminPermissions, error } =
+        await userCanInviteAdmins(session)
+
+      setCanInviteAdmins(inviteAdminPermissions?.allowed)
+    }
+    setInvitePermissions()
+  }, [session])
+
   const form = useForm<UserInviteInput>({
     resolver: zodResolver(UserInviteSchema),
     mode: 'onChange',
     defaultValues: {
-        emails: [],
+      emails: [],
       role: InviteRole.MEMBER,
     },
   })
@@ -200,7 +209,7 @@ const UsersFormDialog = ({
                               .reverse()
                               .filter(([key]) => !key.includes('USER'))
                               .filter(([key]) => {
-                                if (!inviteAdmins) {
+                                if (!canInviteAdmins) {
                                   return !key.includes('ADMIN')
                                 }
 
