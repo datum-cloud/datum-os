@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { Button } from '@repo/ui/button'
 import { ArrowUpRight, KeyRoundIcon } from 'lucide-react'
 import {
@@ -33,11 +33,17 @@ import { RegisterUserInput, RegisterUserSchema } from '@/utils/schemas'
 import Link from 'next/link'
 import { DEFAULT_ERROR_MESSAGE, OPERATOR_APP_ROUTES } from '@repo/constants'
 import { capitalizeFirstLetter } from '@repo/common/text'
+import { getPathWithQuery } from '@repo/common/routes'
 
 const TEMP_PASSKEY_EMAIL = 'tempuser@test.com'
 const TEMP_PASSKEY_NAME = 'Temp User'
 
 export const SignupPage = () => {
+  const searchParams = useSearchParams()
+  const inviteToken = searchParams.get('inviteToken')
+  const callbackUrl = inviteToken
+    ? getPathWithQuery(OPERATOR_APP_ROUTES.invite, { token: inviteToken })
+    : OPERATOR_APP_ROUTES.workspace
   const form = useForm<RegisterUserInput>({
     mode: 'onSubmit',
     resolver: zodResolver(RegisterUserSchema),
@@ -61,13 +67,13 @@ export const SignupPage = () => {
 
   async function handleGithubOAuth() {
     await signIn('github', {
-      callbackUrl: OPERATOR_APP_ROUTES.workspace,
+      callbackUrl,
     })
   }
 
   async function handleGoogleOAuth() {
     await signIn('google', {
-      callbackUrl: OPERATOR_APP_ROUTES.workspace,
+      callbackUrl,
     })
   }
 
@@ -85,7 +91,7 @@ export const SignupPage = () => {
 
       if (verificationResult.success) {
         await signIn('passkey', {
-          callbackUrl: OPERATOR_APP_ROUTES.workspace,
+          callbackUrl,
           email: TEMP_PASSKEY_EMAIL,
           name: TEMP_PASSKEY_NAME,
           session: verificationResult.session,
@@ -108,7 +114,13 @@ export const SignupPage = () => {
     try {
       const res: any = await registerUser(data)
       if (res?.ok) {
-        router.push('/verify')
+        // TODO: email needs invite and verify token to complete this flow
+        const verifyUrl = inviteToken
+          ? getPathWithQuery(OPERATOR_APP_ROUTES.verify, {
+              inviteToken: inviteToken,
+            })
+          : OPERATOR_APP_ROUTES.verify
+        router.push(verifyUrl)
       } else if (res?.message) {
         setError(capitalizeFirstLetter(res.message))
       } else {

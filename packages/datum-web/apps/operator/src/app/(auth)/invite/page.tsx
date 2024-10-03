@@ -6,8 +6,11 @@ import { useSession } from 'next-auth/react'
 import { Logo } from '@repo/ui/logo'
 import { useRouter } from 'next/navigation'
 import { useAcceptWorkspaceInvite } from '../../../lib/user'
+import { OPERATOR_APP_ROUTES } from '@repo/constants'
+import { getPathWithQuery } from '@repo/common/routes'
 
 const AcceptInvite: React.FC = () => {
+  console.log('HIT INVITATION PAGE')
   const searchParams = useSearchParams()
   const { data: session, update } = useSession()
   const { push } = useRouter()
@@ -28,7 +31,11 @@ const AcceptInvite: React.FC = () => {
           },
         })
 
-        push('/dashboard')
+        push(OPERATOR_APP_ROUTES.workspace)
+      } else {
+        push(
+          getPathWithQuery(OPERATOR_APP_ROUTES.login, { inviteToken: token }),
+        )
       }
     }
 

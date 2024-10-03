@@ -25,6 +25,7 @@ const WorkspacePage = () => {
   const [{ data: allOrgs, fetching, error }] = useGetAllOrganizationsQuery({
     pause: !sessionData,
   })
+  const userId = sessionData?.user.userId
   const [{ error: createError }, addOrganization] =
     useCreateOrganizationMutation()
   const numOrgs = allOrgs?.organizations?.edges?.length ?? 0
@@ -91,6 +92,7 @@ const WorkspacePage = () => {
       ) : (
         <>
           <ExistingWorkspaces
+            userId={userId}
             currentOrg={currentOrg}
             switchOrg={handleWorkspaceSwitch}
             personalOrg={personalOrg}

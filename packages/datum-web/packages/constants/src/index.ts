@@ -34,6 +34,8 @@ export const OPERATOR_APP_ROUTES = {
   resetPassword: '/password-reset',
   users: '/workspace/customers/users',
   user: '/workspace/customers/users/[id]',
+  invite: '/invite',
+  verify: '/verify',
 }
 
 export const OPERATOR_API_ROUTES = {

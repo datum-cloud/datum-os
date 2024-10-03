@@ -10,6 +10,7 @@ import { Datum } from '@repo/types'
 import { existingWorkspacesStyles } from './page.styles'
 
 type ExistingWorkspacesProps = {
+  userId: Datum.UserId
   personalOrg: any
   currentOrg: any
   switchOrg: (orgId: Datum.OrganisationId) => void
@@ -17,6 +18,7 @@ type ExistingWorkspacesProps = {
 }
 
 export const ExistingWorkspaces = ({
+  userId,
   currentOrg,
   switchOrg,
   personalOrg,
@@ -65,7 +67,11 @@ export const ExistingWorkspaces = ({
           </div>
         )}
         {orgs?.map((org) => {
-          const role = org?.node?.members?.[0]?.role ?? 'Owner'
+          const defaultRole =
+            org?.node?.setting?.createdBy === userId ? 'OWNER' : 'MEMBER'
+          const role =
+            org?.node?.members?.find((member: any) => member.id === userId)
+              ?.role || defaultRole
 
           return (
             <div key={org?.node?.id} className={`${orgWrapper()} group`}>

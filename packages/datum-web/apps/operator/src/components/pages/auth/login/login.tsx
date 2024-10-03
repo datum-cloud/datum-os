@@ -1,7 +1,7 @@
 'use client'
 
 import { startAuthentication } from '@simplewebauthn/browser'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { signIn } from 'next-auth/react'
 import { ArrowUpRight } from 'lucide-react'
 import { useEffect, useState } from 'react'
@@ -35,11 +35,17 @@ import {
 } from '@repo/ui/form'
 import { RegisterUserInput, RegisterUserSchema } from '@/utils/schemas'
 import Link from 'next/link'
+import { getPathWithQuery } from '@repo/common/routes'
 
 const TEMP_PASSKEY_EMAIL = 'tempuser@test.com'
 const TEMP_PASSKEY_NAME = 'Temp User'
 
 export const LoginPage = () => {
+  const searchParams = useSearchParams()
+  const inviteToken = searchParams.get('inviteToken')
+  const callbackUrl = inviteToken
+    ? getPathWithQuery(OPERATOR_APP_ROUTES.invite, { token: inviteToken })
+    : OPERATOR_APP_ROUTES.home
   const router = useRouter()
   const form = useForm<RegisterUserInput>({
     mode: 'onSubmit',
@@ -69,7 +75,7 @@ export const LoginPage = () => {
         ...payload,
       })
       if (res.ok && !res.error) {
-        router.push(OPERATOR_APP_ROUTES.home)
+        router.push(callbackUrl)
       } else {
         const error = ERROR_MESSAGES?.[res.error] || DEFAULT_ERROR_MESSAGE
         setError(error)
@@ -85,13 +91,13 @@ export const LoginPage = () => {
 
   async function handleGithubOAuth() {
     await signIn('github', {
-      callbackUrl: OPERATOR_APP_ROUTES.home,
+      callbackUrl,
     })
   }
 
   async function handleGoogleOAuth() {
     await signIn('google', {
-      callbackUrl: OPERATOR_APP_ROUTES.home,
+      callbackUrl,
     })
   }
 
@@ -109,7 +115,7 @@ export const LoginPage = () => {
 
       if (verificationResult.success) {
         await signIn('passkey', {
-          callbackUrl: '/workspace',
+          callbackUrl,
           email: TEMP_PASSKEY_EMAIL,
           name: TEMP_PASSKEY_NAME,
           session: verificationResult.session,
