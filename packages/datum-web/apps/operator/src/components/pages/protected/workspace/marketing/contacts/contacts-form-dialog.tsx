@@ -102,20 +102,18 @@ const ContactFormDialog = ({
     if (isNew) {
       const contacts = await create(organizationId, [data])
       id = contacts[0].id
+      await router.push(getPathWithParams(OPERATOR_APP_ROUTES.contact, { id }))
+      await handleCancel()
     } else {
       const contacts = await edit(organizationId, [data])
       id = contacts[0].id
+      handleCancel()
     }
-
-    router.push(getPathWithParams(OPERATOR_APP_ROUTES.contact, { id }))
-
-    reset()
-    setOpen(false)
   }
 
   function handleCancel() {
-    reset()
     setOpen(false)
+    reset()
   }
 
   return (

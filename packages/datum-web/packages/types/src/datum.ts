@@ -43,6 +43,8 @@ export namespace Datum {
 
   export type Slug = Brand<string, 'Slug'>
 
+  export type WorkspaceId = Brand<string, 'WorkspaceId'>
+
   export type Path = Brand<string, 'Path'>
 
   export type PartialWithField<

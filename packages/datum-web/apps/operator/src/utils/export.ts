@@ -50,7 +50,6 @@ export function formatUsersExportData(data: Row<Datum.OrgUser>[]) {
       Role: user.orgRole || '',
       Joined: formatDate(new Date(user.joinedAt)) || '',
       'Last Seen': user.lastSeen || '',
-      // TODO: Return status from backend
       Status: user.setting.status || '',
     }
   })

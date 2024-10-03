@@ -70,7 +70,7 @@ const fuzzySort: SortingFn<any> = (rowA, rowB, columnId) => {
   if (rowA.columnFiltersMeta[columnId]) {
     dir = compareItems(
       rowA.columnFiltersMeta[columnId].itemRank!,
-      rowB.columnFiltersMeta[columnId].itemRank!,
+      rowB.columnFiltersMeta[columnId].itemRank!
     )
   }
 

@@ -112,7 +112,7 @@ const UsersPage: React.FC = () => {
             ...edge?.node?.user,
             orgRole: edge?.node?.role,
             joinedAt: edge?.node?.createdAt,
-          },
+          }
       )
       .filter(Boolean) || []) as Datum.OrgUser[]
   }, [data])

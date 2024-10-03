@@ -1,3 +1,5 @@
+'use client'
+
 import { useSession } from 'next-auth/react'
 
 import { useState } from 'react'
@@ -148,10 +150,6 @@ const ContactsTabCSV = () => {
     }
   }
 
-  if (isLoading) {
-    return <Loading className="min-h-[300px]" />
-  }
-
   if (data.length > 0) {
     const firstRow = data?.[0]
     const fields = firstRow ? Object.keys(firstRow) : []
@@ -178,22 +176,28 @@ const ContactsTabCSV = () => {
       }
     }
 
+    if (isLoading) {
+      return <Loading className="min-h-[300px]" />
+    }
+
     return (
       <Form {...form}>
         <form onSubmit={handleSubmit(onSubmit)} className={formInner()}>
-          <Panel className={formGroup()}>
-            <PanelHeader heading="Add to group" noBorder />
-            <p>You can add new contacts to one or multiple groups</p>
-            <MultiSelect
-              options={selectOptions}
-              onValueChange={(input) =>
-                setSubscriptions(input as Datum.ListId[])
-              }
-              placeholder="Select lists to add contacts to"
-              variant="inverted"
-              animation={2}
-            />
-          </Panel>
+          {selectOptions.length > 0 && (
+            <Panel className={formGroup()}>
+              <PanelHeader heading="Add to group" noBorder />
+              <p>You can add new contacts to one or multiple groups</p>
+              <MultiSelect
+                options={selectOptions}
+                onValueChange={(input) =>
+                  setSubscriptions(input as Datum.ListId[])
+                }
+                placeholder="Select lists to add contacts to"
+                variant="inverted"
+                animation={2}
+              />
+            </Panel>
+          )}
 
           <Panel className={cn(formGroup(), 'mb-8')}>
             <PanelHeader heading="Match fields" noBorder />

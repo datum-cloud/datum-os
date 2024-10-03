@@ -1,4 +1,3 @@
-import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 
 import { OPERATOR_APP_ROUTES } from '@repo/constants'
@@ -6,52 +5,31 @@ import { Panel, PanelHeader } from '@repo/ui/panel'
 import { Avatar, AvatarFallback } from '@repo/ui/avatar'
 import { Button } from '@repo/ui/button'
 import { Tag } from '@repo/ui/tag'
+import { Datum } from '@repo/types'
 
-import { switchWorkspace } from '@/lib/user'
-
-import { existingWorkspacesStyles } from './existing-workspaces.styles'
+import { existingWorkspacesStyles } from './page.styles'
 
 type ExistingWorkspacesProps = {
   personalOrg: any
+  currentOrg: any
+  switchOrg: (orgId: Datum.OrganisationId) => void
   orgs: any[]
 }
 
 export const ExistingWorkspaces = ({
+  currentOrg,
+  switchOrg,
   personalOrg,
   orgs,
 }: ExistingWorkspacesProps) => {
   const { push } = useRouter()
-  const { data: sessionData, update: updateSession } = useSession()
-  const currentOrg = sessionData?.user.organization
   const { container, orgWrapper, orgInfo, orgSelect, orgTitle } =
     existingWorkspacesStyles()
-
-  const handleWorkspaceSwitch = async (orgId?: string) => {
-    if (orgId) {
-      const response = await switchWorkspace({
-        target_organization_id: orgId,
-      })
-
-      if (sessionData && response) {
-        await updateSession({
-          ...response.session,
-          user: {
-            ...sessionData.user,
-            accessToken: response.access_token,
-            organization: orgId,
-            refreshToken: response.refresh_token,
-          },
-        })
-      }
-
-      push(OPERATOR_APP_ROUTES.dashboard)
-    }
-  }
 
   return (
     <div className={container()}>
       <Panel>
-        <PanelHeader heading="Existing workspaces" />
+        <PanelHeader heading="Existing workspaces" noBorder />
         {personalOrg && (
           <div key={personalOrg?.node?.id} className={`${orgWrapper()} group`}>
             <div>
@@ -70,7 +48,7 @@ export const ExistingWorkspaces = ({
                 <Button
                   variant="sunglow"
                   size="md"
-                  onClick={() => handleWorkspaceSwitch(personalOrg?.node?.id)}
+                  onClick={() => switchOrg(personalOrg?.node?.id)}
                 >
                   Select
                 </Button>
@@ -107,7 +85,7 @@ export const ExistingWorkspaces = ({
                   <Button
                     variant="sunglow"
                     size="md"
-                    onClick={() => handleWorkspaceSwitch(org?.node?.id)}
+                    onClick={() => switchOrg(org?.node?.id)}
                   >
                     Select
                   </Button>

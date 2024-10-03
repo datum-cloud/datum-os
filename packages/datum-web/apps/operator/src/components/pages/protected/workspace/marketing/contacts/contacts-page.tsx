@@ -42,14 +42,6 @@ const ContactsPage: React.FC = () => {
     setTimeout(() => (document.body.style.pointerEvents = ''), 500)
   }
 
-  if (isLoading) {
-    return <Loading />
-  }
-
-  if (error) {
-    return <Error />
-  }
-
   return (
     <div className={wrapper()}>
       <div className={header()}>
@@ -62,14 +54,20 @@ const ContactsPage: React.FC = () => {
           selectedContacts={selectedContacts}
         />
       </div>
-      <ContactsTable
-        setGlobalFilter={setQuery}
-        setSelection={setSelectedContacts}
-        globalFilter={query}
-        columnFilters={columnFilters}
-        contacts={contacts}
-        onRowsFetched={setExportData}
-      />
+      {isLoading ? (
+        <Loading className="h-full w-full grow" />
+      ) : error ? (
+        <Error />
+      ) : (
+        <ContactsTable
+          setGlobalFilter={setQuery}
+          setSelection={setSelectedContacts}
+          globalFilter={query}
+          columnFilters={columnFilters}
+          contacts={contacts}
+          onRowsFetched={setExportData}
+        />
+      )}
       <ContactDeleteDialog
         contacts={selectedContacts}
         open={openDeleteDialog}

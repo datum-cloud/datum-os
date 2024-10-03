@@ -73,6 +73,21 @@ export const FilterFormSchema = z.object({
   ),
 })
 
+export const WorkspaceNameSchema = z.object({
+  name: z
+    .string()
+    .min(2, {
+      message: 'Name must be at least 2 characters',
+    })
+    .max(32, {
+      message: 'Please use 32 characters at maximum.',
+    }),
+})
+
+export const WorkspaceEmailSchema = z.object({
+  email: z.string().email('Please enter a valid email'),
+})
+
 export const SearchFormSchema = z.object({
   query: z.string().describe('The search query').optional(),
 })
@@ -128,6 +143,8 @@ export const UserInviteSchema = z.object({
     .default(InviteRole.MEMBER),
 })
 
+export type WorkspaceNameInput = z.infer<typeof WorkspaceNameSchema>
+export type WorkspaceEmailInput = z.infer<typeof WorkspaceEmailSchema>
 export type UserInviteInput = z.infer<typeof UserInviteSchema>
 export type ResetUserInput = z.infer<typeof ResetUserSchema>
 export type UserNameInput = z.infer<typeof UserNameSchema>

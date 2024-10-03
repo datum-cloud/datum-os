@@ -2,7 +2,7 @@ import { tv } from 'tailwind-variants'
 
 export const pageStyles = tv({
   slots: {
-    wrapper: 'flex gap-[26px] flex-col',
+    wrapper: 'flex gap-[26px] flex-col h-full',
     header: 'flex items-stretch justify-between',
     actionIcon: 'text-blackberry-400',
     listControls: 'flex justify-start items-stretch gap-[18px]',
