@@ -3,6 +3,7 @@ package route
 import (
 	"net/http"
 
+	"github.com/datum-cloud/datum-os/internal/httpserve/mw"
 	echo "github.com/datum-cloud/datum-os/pkg/echox"
 )
 
@@ -16,7 +17,7 @@ func registerInviteHandler(router *Router) (err error) {
 		Name:        name,
 		Method:      method,
 		Path:        path,
-		Middlewares: authMW,
+		Middlewares: mw.GetAuthMiddleware(),
 		Handler: func(c echo.Context) error {
 			return router.Handler.OrganizationInviteAccept(c)
 		},

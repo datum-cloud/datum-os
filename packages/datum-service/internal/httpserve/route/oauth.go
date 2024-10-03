@@ -3,6 +3,7 @@ package route
 import (
 	"net/http"
 
+	"github.com/datum-cloud/datum-os/internal/httpserve/mw"
 	echo "github.com/datum-cloud/datum-os/pkg/echox"
 
 	"github.com/datum-cloud/datum-os/pkg/httpsling"
@@ -19,7 +20,7 @@ func registerOAuthRegisterHandler(router *Router) (err error) {
 		Name:        name,
 		Method:      method,
 		Path:        path,
-		Middlewares: mw,
+		Middlewares: mw.GetMiddleware(),
 		Handler: func(c echo.Context) error {
 			return router.Handler.OauthRegister(c)
 		},
@@ -42,7 +43,7 @@ func registerUserInfoHandler(router *Router) (err error) {
 		Name:        name,
 		Method:      method,
 		Path:        path,
-		Middlewares: authMW,
+		Middlewares: mw.GetAuthMiddleware(),
 		Handler: func(c echo.Context) error {
 			c.Response().Header().Set(httpsling.HeaderContentType, httpsling.ContentTypeJSONUTF8)
 
@@ -67,7 +68,7 @@ func registerGithubLoginHandler(router *Router) (err error) {
 		Name:        name,
 		Method:      method,
 		Path:        path,
-		Middlewares: mw,
+		Middlewares: mw.GetMiddleware(),
 		Handler:     githubLogin(router),
 	}
 
@@ -88,7 +89,7 @@ func registerGithubCallbackHandler(router *Router) (err error) {
 		Name:        name,
 		Method:      method,
 		Path:        path,
-		Middlewares: mw,
+		Middlewares: mw.GetMiddleware(),
 		Handler:     githubCallback(router),
 	}
 
@@ -109,7 +110,7 @@ func registerGoogleLoginHandler(router *Router) (err error) {
 		Name:        name,
 		Method:      method,
 		Path:        path,
-		Middlewares: mw,
+		Middlewares: mw.GetMiddleware(),
 		Handler:     googleLogin(router),
 	}
 
@@ -130,7 +131,7 @@ func registerGoogleCallbackHandler(router *Router) (err error) {
 		Name:        name,
 		Method:      method,
 		Path:        path,
-		Middlewares: mw,
+		Middlewares: mw.GetMiddleware(),
 		Handler:     googleCallback(router),
 	}
 
