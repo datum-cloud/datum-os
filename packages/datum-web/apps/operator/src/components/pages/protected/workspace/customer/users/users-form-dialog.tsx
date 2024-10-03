@@ -40,7 +40,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@repo/ui/select'
-import { usePermissions } from '@/hooks/usePermissions'
 
 type UsersDialogFormProps = {
   open: boolean
