@@ -112,6 +112,13 @@ const INVITATION_COLUMNS: ColumnDef<Datum.Invitation>[] = [
 
       return <UserInvitationTableDropdown invitationId={invitationId} />
     },
+    enableColumnFilter: false,
+    enableSorting: false,
+    enableGlobalFilter: false,
+    size: 60,
+    meta: {
+      pin: 'right',
+    },
   },
 ]
 
