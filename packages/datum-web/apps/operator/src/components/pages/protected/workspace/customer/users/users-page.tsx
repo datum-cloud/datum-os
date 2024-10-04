@@ -117,7 +117,7 @@ const UsersPage: React.FC = () => {
             ...edge?.node?.user,
             orgRole: edge?.node?.role,
             joinedAt: edge?.node?.createdAt,
-          }
+          },
       )
       .filter(Boolean) || []) as Datum.OrgUser[]
   }, [data])
@@ -146,6 +146,7 @@ const UsersPage: React.FC = () => {
   }
 
   if (error) {
+    console.error('GRAPHQL ERROR', error)
     return <Error />
   }
 
