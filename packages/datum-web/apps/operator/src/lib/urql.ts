@@ -1,13 +1,20 @@
-import { Client, cacheExchange, fetchExchange } from 'urql'
-import { datumGQLUrl } from '@repo/dally/auth'
 import { Session } from 'next-auth'
+import { Client, type CombinedError, cacheExchange, fetchExchange } from 'urql'
+import { retryExchange } from '@urql/exchange-retry'
+
+import { datumGQLUrl } from '@repo/dally/auth'
 
 export const createClient = (session: Session | null) =>
   new Client({
     url: datumGQLUrl,
-    // - cacheExchange: implements the default "document caching" behavior
-    // - fetchExchange: send our requests to the GraphQL API
-    exchanges: [cacheExchange, fetchExchange],
+    exchanges: [
+      cacheExchange,
+      retryExchange({
+        maxNumberAttempts: 5,
+        retryIf: (error: CombinedError) => !!error && !error.networkError,
+      }),
+      fetchExchange,
+    ],
     fetchOptions: () => {
       const token = session?.user?.accessToken
       return {
