@@ -17,9 +17,9 @@ export default function Header() {
       <nav className={nav()}>
         <WorkspaceSelector />
 
-        <div className={mobileSidebar()}>
+        {/* <div className={mobileSidebar()}>
           <>MobileSidebar</>
-        </div>
+        </div> */}
 
         {/* <Search onSearch={handleSearch} /> */}
 
