@@ -93,6 +93,8 @@ export const ERROR_MESSAGES: Record<string, string> = {
   CredentialsSignin: 'Incorrect email or password',
 }
 
+export const DEFAULT_BATCH_SIZE = 2000
+
 export const DEFAULT_ERROR_MESSAGE = 'Something went wrong. Please try again.'
 
 export const DEFAULT_AVATAR_DIMENSIONS: Datum.ImageDimensions = {
