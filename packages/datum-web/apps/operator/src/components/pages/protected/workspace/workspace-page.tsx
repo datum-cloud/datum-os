@@ -9,22 +9,37 @@ import {
   useGetAllOrganizationsQuery,
 } from '@repo/codegen/src/schema'
 import { toast } from '@repo/ui/use-toast'
+import { Panel, PanelHeader } from '@repo/ui/panel'
+import {
+  Form,
+  FormItem,
+  FormLabel,
+  FormField,
+  FormControl,
+  FormMessage,
+  useForm,
+  zodResolver,
+} from '@repo/ui/form'
+import { Info } from '@repo/ui/info'
+import { Input } from '@repo/ui/input'
+import { Button } from '@repo/ui/button'
 
 import PageTitle from '@/components/page-title'
+import { createWorkspaceStyles } from '@/components/pages/protected/workspace/page.styles'
 import { Error } from '@/components/shared/error/error'
 import { Loading } from '@/components/shared/loading/loading'
 import { switchWorkspace } from '@/lib/user'
-import { WorkspaceNameInput } from '@/utils/schemas'
+import { WorkspaceNameInput, WorkspaceNameSchema } from '@/utils/schemas'
 
-import { CreateWorkspaceForm } from './workspace-create'
 import { ExistingWorkspaces } from './workspace-existing'
 
 const WorkspacePage = () => {
   const { push } = useRouter()
   const { data: sessionData, update: updateSession } = useSession()
-  const [{ data: allOrgs, fetching, error }] = useGetAllOrganizationsQuery({
-    pause: !sessionData,
-  })
+  const [{ data: allOrgs, fetching, stale, error }] =
+    useGetAllOrganizationsQuery({
+      pause: !sessionData,
+    })
   const userId = sessionData?.user.userId
   const [{ error: createError }, addOrganization] =
     useCreateOrganizationMutation()
@@ -36,11 +51,24 @@ const WorkspacePage = () => {
   const creationHeading =
     numOrgs === 0 ? 'Create your first workspace' : 'Create a workspace'
   const personalOrg = allOrgs?.organizations.edges?.find(
-    (org) => org?.node?.personalOrg
+    (org) => org?.node?.personalOrg,
   )
   const orgs =
     allOrgs?.organizations.edges?.filter((org) => !org?.node?.personalOrg) || []
   const currentOrg = sessionData?.user.organization
+
+  const { container } = createWorkspaceStyles()
+
+  const form = useForm<WorkspaceNameInput>({
+    resolver: zodResolver(WorkspaceNameSchema),
+    defaultValues: {
+      name: '',
+    },
+  })
+
+  const {
+    formState: { isSubmitting },
+  } = form
 
   async function handleWorkspaceSwitch(orgId?: string) {
     if (orgId) {
@@ -82,29 +110,58 @@ const WorkspacePage = () => {
     }
   }
 
+  async function onSubmit(data: WorkspaceNameInput) {
+    await createWorkspace({ name: data.name })
+  }
+
+  if (fetching) {
+    return <Loading />
+  }
+
+  if (error) {
+    return <Error />
+  }
+
   return (
     <>
       <PageTitle title="My Workspaces" className="mb-10" />
-      {fetching ? (
-        <Loading />
-      ) : error ? (
-        <Error />
-      ) : (
-        <>
-          <ExistingWorkspaces
-            userId={userId}
-            currentOrg={currentOrg}
-            switchOrg={handleWorkspaceSwitch}
-            personalOrg={personalOrg}
-            orgs={orgs}
-          />
-          <CreateWorkspaceForm
+      <ExistingWorkspaces
+        userId={userId}
+        currentOrg={currentOrg}
+        switchOrg={handleWorkspaceSwitch}
+        personalOrg={personalOrg}
+        orgs={orgs}
+      />
+      <div className={container()}>
+        <Panel>
+          <PanelHeader
             heading={creationHeading}
             subheading={creationSubheading}
-            createWorkspace={createWorkspace}
+            noBorder
           />
-        </>
-      )}
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+              <FormField
+                control={form.control}
+                name="name"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Name</FormLabel>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
+                    <Info>Please use 32 characters at maximum.</Info>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <Button type="submit">
+                {isSubmitting ? 'Creating workspace' : 'Create workspace'}
+              </Button>
+            </form>
+          </Form>
+        </Panel>
+      </div>
     </>
   )
 }

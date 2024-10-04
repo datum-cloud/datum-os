@@ -29,6 +29,7 @@ export const OPERATOR_APP_ROUTES = {
   dashboard: '/dashboard',
   settings: '/settings',
   workspace: '/workspace',
+  workspaceSettings: '/workspace/settings',
   login: '/login',
   forgotPassword: '/forgot-password',
   resetPassword: '/password-reset',

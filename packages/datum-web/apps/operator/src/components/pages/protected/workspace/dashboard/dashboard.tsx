@@ -7,6 +7,7 @@ import { Grid, GridRow, GridCell } from '@repo/ui/grid'
 import { Panel } from '@repo/ui/panel'
 import { Button } from '@repo/ui/button'
 import PageTitle from '@/components/page-title'
+import { OPERATOR_APP_ROUTES } from '@repo/constants'
 
 const DashboardPage = () => {
   const { push } = useRouter()
@@ -54,7 +55,7 @@ const DashboardPage = () => {
               </p>
               <Button
                 onClick={() => {
-                  push('/workspace/settings')
+                  push(OPERATOR_APP_ROUTES.workspaceSettings)
                 }}
                 icon={<ArrowUpRight />}
                 size="md"
@@ -80,7 +81,7 @@ const DashboardPage = () => {
               </p>
               <Button
                 onClick={() => {
-                  push('/workspace/users')
+                  push(OPERATOR_APP_ROUTES.users)
                 }}
                 icon={<ArrowUpRight />}
                 size="md"
