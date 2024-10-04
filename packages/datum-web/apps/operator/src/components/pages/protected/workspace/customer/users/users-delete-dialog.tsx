@@ -30,13 +30,13 @@ import {
 } from '@repo/ui/form'
 import { Input } from '@repo/ui/input'
 import { DeletionInput, DeletionSchema } from '@/utils/schemas'
-import { useDeleteUserMutation } from '@repo/codegen/src/schema'
 
 type UserDeleteFormProps = {
   users: Datum.User[]
   open: boolean
   setOpen(input: boolean): void
   redirect?: boolean
+  handleDelete(deleteUserId: Datum.UserId): Promise<void>
 }
 
 const UserDeleteDialog = ({
@@ -44,10 +44,10 @@ const UserDeleteDialog = ({
   open,
   redirect = false,
   setOpen,
+  handleDelete,
 }: UserDeleteFormProps) => {
   const requiredText = 'delete'
   const router = useRouter()
-  const [{ fetching }, deleteUser] = useDeleteUserMutation()
 
   const { content, text, button, cancelButton } = deleteDialogStyles()
   const form = useForm<DeletionInput>({
@@ -58,7 +58,11 @@ const UserDeleteDialog = ({
     },
   })
 
-  const { handleSubmit, watch } = form
+  const {
+    handleSubmit,
+    watch,
+    formState: { isSubmitting },
+  } = form
   const { deletionText } = watch()
 
   function handleCancel() {
@@ -67,7 +71,7 @@ const UserDeleteDialog = ({
 
   async function onSubmit(data: DeletionInput) {
     const ids = users.map(({ id }) => id)
-    await Promise.all(ids.map((id) => deleteUser({ deleteUserId: id })))
+    await Promise.all(ids.map((id) => handleDelete(id)))
 
     if (redirect) {
       router.push(OPERATOR_APP_ROUTES.users)
@@ -90,8 +94,8 @@ const UserDeleteDialog = ({
           </DialogTitle>
           <DialogClose onClick={handleCancel} />
         </DialogHeader>
-        {fetching && <Loading className="min-h-96" />}
-        {!fetching && (
+        {isSubmitting && <Loading className="min-h-96" />}
+        {!isSubmitting && (
           <Form {...form}>
             <form className={content()} onSubmit={handleSubmit(onSubmit)}>
               <div className="flex flex-col gap-3">

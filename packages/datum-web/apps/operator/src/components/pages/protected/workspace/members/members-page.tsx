@@ -8,7 +8,7 @@ import { useState } from 'react'
 import { useSession } from 'next-auth/react'
 import { useGetInvitesQuery } from '@repo/codegen/src/schema'
 import { MembersTable } from './members-table'
-import { userCanInviteAdmins } from '@/lib/authz/utils'
+import { canInviteAdminsRelation, useCheckPermissions } from '@/lib/authz/utils'
 
 const MembersPage: React.FC = async () => {
   const { wrapper, inviteCount, inviteRow } = pageStyles()
@@ -20,8 +20,10 @@ const MembersPage: React.FC = async () => {
   })
 
   // Check if the user can invite admins or only members
-  const { data: inviteAdminPermissions, error } =
-    await userCanInviteAdmins(session)
+  const { data: inviteAdminPermissions } = useCheckPermissions(
+    session,
+    canInviteAdminsRelation,
+  )
 
   const numInvites = Array.isArray(data?.invites.edges)
     ? data?.invites.edges.length

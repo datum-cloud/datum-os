@@ -69,7 +69,7 @@ const WorkspaceDeleteDialog = ({
   }
 
   async function onSubmit(data: DeletionInput) {
-    handleDelete()
+    await handleDelete()
 
     await router.push(OPERATOR_APP_ROUTES.workspace)
     handleCancel()

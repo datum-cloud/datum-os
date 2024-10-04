@@ -19,6 +19,7 @@ import { pageStyles } from './page.styles'
 import { toast } from '@repo/ui/use-toast'
 import { OPERATOR_APP_ROUTES } from '@repo/constants'
 import { useRouter } from 'next/navigation'
+import { canDeleteRelation, useCheckPermissions } from '@/lib/authz/utils'
 
 const WorkspaceSettingsPage = () => {
   const { push } = useRouter()
@@ -27,14 +28,17 @@ const WorkspaceSettingsPage = () => {
   const currentOrgId = sessionData?.user.organization
   const [allOrgs] = useGetAllOrganizationsQuery({ pause: !sessionData })
   const currentWorkspace = allOrgs.data?.organizations.edges?.filter(
-    (org) => org?.node?.id === currentOrgId,
+    (org) => org?.node?.id === currentOrgId
   )[0]?.node
   const [{ fetching, error }, updateOrganization] =
     useUpdateOrganizationMutation()
   const [{ fetching: isDeleting, error: deleteError }, deleteOrganization] =
     useDeleteOrganizationMutation()
 
-  const hasDeletePermissions = true
+  const { data: deletePermissions } = useCheckPermissions(
+    sessionData,
+    canDeleteRelation
+  )
 
   async function updateWorkspace(input: UpdateOrganizationInput) {
     await updateOrganization({
@@ -115,7 +119,7 @@ const WorkspaceSettingsPage = () => {
           email={currentWorkspace?.setting?.billingEmail || ''}
           setEmail={updateWorkspace}
         />
-        {hasDeletePermissions && (
+        {deletePermissions?.allowed && (
           <WorkspaceDelete
             name={currentWorkspace?.name || ''}
             handleDelete={handleDelete}

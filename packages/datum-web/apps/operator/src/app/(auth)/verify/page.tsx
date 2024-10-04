@@ -5,6 +5,7 @@ import Image from 'next/image'
 import { useSearchParams } from 'next/navigation'
 import { signIn } from 'next-auth/react'
 
+import { getPathWithQuery } from '@repo/common/routes'
 import { OPERATOR_APP_ROUTES } from '@repo/constants'
 import { Logo } from '@repo/ui/logo'
 
@@ -16,6 +17,10 @@ const VerifyUser: React.FC = () => {
   const { container, content, logo, bg, bgImage } = loginStyles()
   const searchParams = useSearchParams()
   const token = searchParams?.get('token')
+  const inviteToken = searchParams?.get('inviteToken')
+  const callbackUrl = inviteToken
+    ? getPathWithQuery(OPERATOR_APP_ROUTES.invite, { token: inviteToken })
+    : OPERATOR_APP_ROUTES.home
 
   const { verified, error } = useVerifyUser(token ?? null)
 
@@ -27,7 +32,7 @@ const VerifyUser: React.FC = () => {
       setEmail(verified?.email)
 
       signIn('credentials', {
-        callbackUrl: OPERATOR_APP_ROUTES.home,
+        callbackUrl,
         accessToken,
         refreshToken,
       })

@@ -30,7 +30,6 @@ import {
   InviteRole,
   useCreateBulkInviteMutation,
 } from '@repo/codegen/src/schema'
-import { useGqlError } from '@/hooks/useGqlError'
 import { useEffect, useState } from 'react'
 import { toast } from '@repo/ui/use-toast'
 import { TagInput } from '@repo/ui/tag-input'
@@ -41,38 +40,21 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@repo/ui/select'
-import { useSession } from 'next-auth/react'
-import { userCanInviteAdmins } from '@/lib/authz/utils'
 
 type UsersDialogFormProps = {
   open: boolean
   setOpen(input: boolean): void
+  admin: boolean
 }
 
-const UsersFormDialog = ({ open, setOpen }: UsersDialogFormProps) => {
-  const { data: session } = useSession()
+const UsersFormDialog: React.FC<UsersDialogFormProps> = ({
+  open,
+  setOpen,
+  admin,
+}) => {
   const [result, inviteMembers] = useCreateBulkInviteMutation()
-  const [canInviteAdmins, setCanInviteAdmins] = useState(false)
   const { error, fetching } = result
-  const { errorMessages } = useGqlError(error)
-  const {
-    form: formStyle,
-    fieldsContainer,
-    labelContainer,
-    requiredText,
-    selectItem,
-  } = formStyles()
-
-  useEffect(() => {
-    const setInvitePermissions = async () => {
-      const { data: inviteAdminPermissions, error } = await userCanInviteAdmins(
-        session
-      )
-
-      setCanInviteAdmins(inviteAdminPermissions?.allowed)
-    }
-    setInvitePermissions()
-  }, [session])
+  const { form: formStyle, fieldsContainer, selectItem } = formStyles()
 
   const form = useForm<UserInviteInput>({
     resolver: zodResolver(UserInviteSchema),
@@ -210,7 +192,7 @@ const UsersFormDialog = ({ open, setOpen }: UsersDialogFormProps) => {
                               .reverse()
                               .filter(([key]) => !key.includes('USER'))
                               .filter(([key]) => {
-                                if (!canInviteAdmins) {
+                                if (!admin) {
                                   return !key.includes('ADMIN')
                                 }
 
