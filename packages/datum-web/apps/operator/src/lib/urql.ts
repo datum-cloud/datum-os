@@ -13,6 +13,7 @@ export const createClient = (session: Session | null) =>
       return {
         headers: { authorization: token ? `Bearer ${token}` : '' },
         credentials: 'include',
+        timeout: 30000,
       }
     },
   })
