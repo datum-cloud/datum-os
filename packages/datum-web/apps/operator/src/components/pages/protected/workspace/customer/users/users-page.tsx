@@ -3,7 +3,10 @@
 import React, { useMemo, useState } from 'react'
 import { useSession } from 'next-auth/react'
 
-import { useGetOrgMembersByOrgIdQuery } from '@repo/codegen/src/schema'
+import {
+  useDeleteUserMutation,
+  useGetOrgMembersByOrgIdQuery,
+} from '@repo/codegen/src/schema'
 import { exportExcel } from '@repo/common/csv'
 import type { ColumnFiltersState, Row } from '@repo/ui/data-table'
 import type { Datum } from '@repo/types'
@@ -102,6 +105,7 @@ const UsersPage: React.FC = () => {
     canInviteAdminsRelation,
   )
 
+  const [_, deleteUser] = useDeleteUserMutation()
   const [{ data, fetching, error }] = useGetOrgMembersByOrgIdQuery({
     variables: {
       where: { organizationID: session?.user.organization ?? '' },
@@ -150,6 +154,10 @@ const UsersPage: React.FC = () => {
     return <Error />
   }
 
+  async function handleDelete(deleteUserId: Datum.UserId) {
+    await deleteUser({ deleteUserId })
+  }
+
   return (
     <div className={wrapper()}>
       <PageTitle title="Users" />
@@ -180,6 +188,7 @@ const UsersPage: React.FC = () => {
         users={selectedUsers}
         open={openDeleteDialog}
         setOpen={setOpenDeleteDialog}
+        handleDelete={handleDelete}
       />
     </div>
   )
