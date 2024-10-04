@@ -36,7 +36,7 @@ const WorkspacePage = () => {
   const creationHeading =
     numOrgs === 0 ? 'Create your first workspace' : 'Create a workspace'
   const personalOrg = allOrgs?.organizations.edges?.find(
-    (org) => org?.node?.personalOrg,
+    (org) => org?.node?.personalOrg
   )
   const orgs =
     allOrgs?.organizations.edges?.filter((org) => !org?.node?.personalOrg) || []

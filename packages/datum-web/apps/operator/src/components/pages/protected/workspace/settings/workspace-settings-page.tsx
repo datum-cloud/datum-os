@@ -28,7 +28,7 @@ const WorkspaceSettingsPage = () => {
   const currentOrgId = sessionData?.user.organization
   const [allOrgs] = useGetAllOrganizationsQuery({ pause: !sessionData })
   const currentWorkspace = allOrgs.data?.organizations.edges?.filter(
-    (org) => org?.node?.id === currentOrgId,
+    (org) => org?.node?.id === currentOrgId
   )[0]?.node
   const [{ fetching, error }, updateOrganization] =
     useUpdateOrganizationMutation()
@@ -37,7 +37,7 @@ const WorkspaceSettingsPage = () => {
 
   const { data: deletePermissions } = useCheckPermissions(
     sessionData,
-    canDeleteRelation,
+    canDeleteRelation
   )
 
   async function updateWorkspace(input: UpdateOrganizationInput) {
