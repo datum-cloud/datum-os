@@ -1,24 +1,22 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { signIn } from 'next-auth/react'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { Button } from '@repo/ui/button'
+import { startRegistration } from '@simplewebauthn/browser'
 import { ArrowUpRight, KeyRoundIcon } from 'lucide-react'
-import {
-  getPasskeyRegOptions,
-  registerUser,
-  verifyRegistration,
-} from '@/lib/user'
+import Link from 'next/link'
+
+import { capitalizeFirstLetter } from '@repo/common/text'
+import { getPathWithQuery } from '@repo/common/routes'
+import { DEFAULT_ERROR_MESSAGE, OPERATOR_APP_ROUTES } from '@repo/constants'
+import { Button } from '@repo/ui/button'
 import { GoogleIcon } from '@repo/ui/icons/google'
 import { GithubIcon } from '@repo/ui/icons/github'
-import { signIn } from 'next-auth/react'
-import { signupStyles } from './signup.styles'
 import { Separator } from '@repo/ui/separator'
 import { Input } from '@repo/ui/input'
 import { PasswordInput } from '@repo/ui/password-input'
 import { Label } from '@repo/ui/label'
-import { setSessionCookie } from '@/lib/auth/utils/set-session-cookie'
-import { startRegistration } from '@simplewebauthn/browser'
 import {
   Form,
   FormControl,
@@ -29,11 +27,16 @@ import {
   useForm,
   zodResolver,
 } from '@repo/ui/form'
+
+import { setSessionCookie } from '@/lib/auth/utils/set-session-cookie'
+import {
+  getPasskeyRegOptions,
+  registerUser,
+  verifyRegistration,
+} from '@/lib/user'
 import { RegisterUserInput, RegisterUserSchema } from '@/utils/schemas'
-import Link from 'next/link'
-import { DEFAULT_ERROR_MESSAGE, OPERATOR_APP_ROUTES } from '@repo/constants'
-import { capitalizeFirstLetter } from '@repo/common/text'
-import { getPathWithQuery } from '@repo/common/routes'
+
+import { signupStyles } from './signup.styles'
 
 const TEMP_PASSKEY_EMAIL = 'tempuser@test.com'
 const TEMP_PASSKEY_NAME = 'Temp User'

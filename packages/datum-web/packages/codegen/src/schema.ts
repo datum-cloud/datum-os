@@ -14,7 +14,7 @@ export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & {
 }
 export type MakeEmpty<
   T extends { [key: string]: unknown },
-  K extends keyof T
+  K extends keyof T,
 > = { [_ in K]?: never }
 export type Incremental<T> =
   | T
@@ -13482,7 +13482,7 @@ export const GetDocumentDataDocument = gql`
 `
 
 export function useGetDocumentDataQuery(
-  options: Omit<Urql.UseQueryArgs<GetDocumentDataQueryVariables>, 'query'>
+  options: Omit<Urql.UseQueryArgs<GetDocumentDataQueryVariables>, 'query'>,
 ) {
   return Urql.useQuery<GetDocumentDataQuery, GetDocumentDataQueryVariables>({
     query: GetDocumentDataDocument,
@@ -13566,7 +13566,7 @@ export const GetAllGroupsDocument = gql`
 `
 
 export function useGetAllGroupsQuery(
-  options?: Omit<Urql.UseQueryArgs<GetAllGroupsQueryVariables>, 'query'>
+  options?: Omit<Urql.UseQueryArgs<GetAllGroupsQueryVariables>, 'query'>,
 ) {
   return Urql.useQuery<GetAllGroupsQuery, GetAllGroupsQueryVariables>({
     query: GetAllGroupsDocument,
@@ -13597,7 +13597,7 @@ export const GetInviteByIdDocument = gql`
 `
 
 export function useGetInviteByIdQuery(
-  options: Omit<Urql.UseQueryArgs<GetInviteByIdQueryVariables>, 'query'>
+  options: Omit<Urql.UseQueryArgs<GetInviteByIdQueryVariables>, 'query'>,
 ) {
   return Urql.useQuery<GetInviteByIdQuery, GetInviteByIdQueryVariables>({
     query: GetInviteByIdDocument,
@@ -13626,7 +13626,7 @@ export const InvitesByOrgIdDocument = gql`
 `
 
 export function useInvitesByOrgIdQuery(
-  options?: Omit<Urql.UseQueryArgs<InvitesByOrgIdQueryVariables>, 'query'>
+  options?: Omit<Urql.UseQueryArgs<InvitesByOrgIdQueryVariables>, 'query'>,
 ) {
   return Urql.useQuery<InvitesByOrgIdQuery, InvitesByOrgIdQueryVariables>({
     query: InvitesByOrgIdDocument,
@@ -13691,7 +13691,7 @@ export const GetAllOrganizationsDocument = gql`
 `
 
 export function useGetAllOrganizationsQuery(
-  options?: Omit<Urql.UseQueryArgs<GetAllOrganizationsQueryVariables>, 'query'>
+  options?: Omit<Urql.UseQueryArgs<GetAllOrganizationsQueryVariables>, 'query'>,
 ) {
   return Urql.useQuery<
     GetAllOrganizationsQuery,
@@ -13711,7 +13711,7 @@ export function useGetOrganizationNameByIdQuery(
   options: Omit<
     Urql.UseQueryArgs<GetOrganizationNameByIdQueryVariables>,
     'query'
-  >
+  >,
 ) {
   return Urql.useQuery<
     GetOrganizationNameByIdQuery,
@@ -13746,7 +13746,7 @@ export function useGetOrganizationMembersQuery(
   options: Omit<
     Urql.UseQueryArgs<GetOrganizationMembersQueryVariables>,
     'query'
-  >
+  >,
 ) {
   return Urql.useQuery<
     GetOrganizationMembersQuery,
@@ -13787,7 +13787,10 @@ export const GetOrgMembersByOrgIdDocument = gql`
 `
 
 export function useGetOrgMembersByOrgIdQuery(
-  options?: Omit<Urql.UseQueryArgs<GetOrgMembersByOrgIdQueryVariables>, 'query'>
+  options?: Omit<
+    Urql.UseQueryArgs<GetOrgMembersByOrgIdQueryVariables>,
+    'query'
+  >,
 ) {
   return Urql.useQuery<
     GetOrgMembersByOrgIdQuery,
@@ -13812,7 +13815,7 @@ export const GetInvitesDocument = gql`
 `
 
 export function useGetInvitesQuery(
-  options?: Omit<Urql.UseQueryArgs<GetInvitesQueryVariables>, 'query'>
+  options?: Omit<Urql.UseQueryArgs<GetInvitesQueryVariables>, 'query'>,
 ) {
   return Urql.useQuery<GetInvitesQuery, GetInvitesQueryVariables>({
     query: GetInvitesDocument,
@@ -13983,7 +13986,7 @@ export const GetAllTemplatesDocument = gql`
 `
 
 export function useGetAllTemplatesQuery(
-  options?: Omit<Urql.UseQueryArgs<GetAllTemplatesQueryVariables>, 'query'>
+  options?: Omit<Urql.UseQueryArgs<GetAllTemplatesQueryVariables>, 'query'>,
 ) {
   return Urql.useQuery<GetAllTemplatesQuery, GetAllTemplatesQueryVariables>({
     query: GetAllTemplatesDocument,
@@ -14008,7 +14011,7 @@ export const FilterTemplatesDocument = gql`
 `
 
 export function useFilterTemplatesQuery(
-  options?: Omit<Urql.UseQueryArgs<FilterTemplatesQueryVariables>, 'query'>
+  options?: Omit<Urql.UseQueryArgs<FilterTemplatesQueryVariables>, 'query'>,
 ) {
   return Urql.useQuery<FilterTemplatesQuery, FilterTemplatesQueryVariables>({
     query: FilterTemplatesDocument,
@@ -14029,7 +14032,7 @@ export const GetTemplateDocument = gql`
 `
 
 export function useGetTemplateQuery(
-  options: Omit<Urql.UseQueryArgs<GetTemplateQueryVariables>, 'query'>
+  options: Omit<Urql.UseQueryArgs<GetTemplateQueryVariables>, 'query'>,
 ) {
   return Urql.useQuery<GetTemplateQuery, GetTemplateQueryVariables>({
     query: GetTemplateDocument,
@@ -14071,7 +14074,7 @@ export function useGetPersonalAccessTokensQuery(
   options?: Omit<
     Urql.UseQueryArgs<GetPersonalAccessTokensQueryVariables>,
     'query'
-  >
+  >,
 ) {
   return Urql.useQuery<
     GetPersonalAccessTokensQuery,
@@ -14114,7 +14117,7 @@ export const GetUserProfileDocument = gql`
 `
 
 export function useGetUserProfileQuery(
-  options: Omit<Urql.UseQueryArgs<GetUserProfileQueryVariables>, 'query'>
+  options: Omit<Urql.UseQueryArgs<GetUserProfileQueryVariables>, 'query'>,
 ) {
   return Urql.useQuery<GetUserProfileQuery, GetUserProfileQueryVariables>({
     query: GetUserProfileDocument,
@@ -14147,7 +14150,7 @@ export const DeleteUserDocument = gql`
 
 export function useDeleteUserMutation() {
   return Urql.useMutation<DeleteUserMutation, DeleteUserMutationVariables>(
-    DeleteUserDocument
+    DeleteUserDocument,
   )
 }
 export const GetAllUserHistoriesDocument = gql`
@@ -14182,7 +14185,7 @@ export const GetAllUserHistoriesDocument = gql`
 `
 
 export function useGetAllUserHistoriesQuery(
-  options?: Omit<Urql.UseQueryArgs<GetAllUserHistoriesQueryVariables>, 'query'>
+  options?: Omit<Urql.UseQueryArgs<GetAllUserHistoriesQueryVariables>, 'query'>,
 ) {
   return Urql.useQuery<
     GetAllUserHistoriesQuery,

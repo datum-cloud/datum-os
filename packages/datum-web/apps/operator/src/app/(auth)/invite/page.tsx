@@ -1,13 +1,14 @@
 'use client'
 
 import { useEffect } from 'react'
-import { useSearchParams } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { useSession } from 'next-auth/react'
-import { Logo } from '@repo/ui/logo'
-import { useRouter } from 'next/navigation'
-import { useAcceptWorkspaceInvite } from '../../../lib/user'
+
 import { OPERATOR_APP_ROUTES } from '@repo/constants'
 import { getPathWithQuery } from '@repo/common/routes'
+import { Logo } from '@repo/ui/logo'
+
+import { useAcceptWorkspaceInvite } from '../../../lib/user'
 
 const AcceptInvite: React.FC = () => {
   console.log('HIT INVITATION PAGE')

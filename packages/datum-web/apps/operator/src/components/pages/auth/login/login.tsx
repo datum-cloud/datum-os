@@ -5,24 +5,15 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import { signIn } from 'next-auth/react'
 import { ArrowUpRight } from 'lucide-react'
 import { useEffect, useState } from 'react'
+import Link from 'next/link'
 
+import { getPathWithQuery } from '@repo/common/routes'
 import {
   DEFAULT_ERROR_MESSAGE,
   ERROR_MESSAGES,
   OPERATOR_APP_ROUTES,
 } from '@repo/constants'
 import { Button } from '@repo/ui/button'
-import { GoogleIcon } from '@repo/ui/icons/google'
-import { Separator } from '@repo/ui/separator'
-import { GithubIcon } from '@repo/ui/icons/github'
-import { Input } from '@repo/ui/input'
-import { PasswordInput } from '@repo/ui/password-input'
-import { Label } from '@repo/ui/label'
-
-import { getPasskeySignInOptions, verifyAuthentication } from '@/lib/user'
-import { setSessionCookie } from '@/lib/auth/utils/set-session-cookie'
-
-import { loginStyles } from './login.styles'
 import {
   Form,
   FormControl,
@@ -33,9 +24,18 @@ import {
   useForm,
   zodResolver,
 } from '@repo/ui/form'
+import { GoogleIcon } from '@repo/ui/icons/google'
+import { Separator } from '@repo/ui/separator'
+import { GithubIcon } from '@repo/ui/icons/github'
+import { Input } from '@repo/ui/input'
+import { PasswordInput } from '@repo/ui/password-input'
+import { Label } from '@repo/ui/label'
+
+import { getPasskeySignInOptions, verifyAuthentication } from '@/lib/user'
+import { setSessionCookie } from '@/lib/auth/utils/set-session-cookie'
 import { RegisterUserInput, RegisterUserSchema } from '@/utils/schemas'
-import Link from 'next/link'
-import { getPathWithQuery } from '@repo/common/routes'
+
+import { loginStyles } from './login.styles'
 
 const TEMP_PASSKEY_EMAIL = 'tempuser@test.com'
 const TEMP_PASSKEY_NAME = 'Temp User'
