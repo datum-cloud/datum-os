@@ -1,6 +1,7 @@
 version: '3'
 
 shopt: [globstar]
+
 includes:
   # Include any operating system specific task files so commands can be changed
   # based on the developer's operating system.
@@ -22,7 +23,7 @@ tasks:
   grpc-install:
     run: once
     deps:
-      - protobuf-install
+      - build:protobuf-install
     desc: Install/update protoc and plugins.
     cmds:
       - go install github.com/google/gnostic/cmd/protoc-gen-openapi@latest
@@ -111,8 +112,8 @@ tasks:
             type: \"{{ .SERVICE_NAME }}/{{.SINGULAR_TYPE_NAME}}\"
             pattern: \"TODO\"
             style: DECLARATIVE_FRIENDLY
-            singular: \"{{.SINGULAR_TYPE_NAME}}\"
-            plural: \"{{.PLURAL_TYPE_NAME}}\"
+            singular: \"{{substr 0 1 .SINGULAR_TYPE_NAME | lower}}{{substr 1 -1 .SINGULAR_TYPE_NAME}}\"
+            plural: \"{{substr 0 1 .PLURAL_TYPE_NAME | lower}}{{substr 1 -1 .PLURAL_TYPE_NAME}}\"
           };
 
           // The resource name of this {{.SINGULAR_TYPE_NAME}}.
