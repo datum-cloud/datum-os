@@ -33,6 +33,117 @@ type ListVendorsResponse struct {
 	Vendors       *[]Vendor `json:"vendors,omitempty"`
 }
 
+// PostalAddress Represents a postal address, e.g. for postal delivery or payments addresses.
+//
+//	Given a postal address, a postal service can deliver items to a premise, P.O.
+//	Box or similar.
+//	It is not intended to model geographical locations (roads, towns,
+//	mountains).
+//
+//	In typical usage an address would be created via user input or from importing
+//	existing data, depending on the type of process.
+//
+//	Advice on address input / editing:
+//	 - Use an i18n-ready address widget such as
+//	   https://github.com/google/libaddressinput)
+//	- Users should not be presented with UI elements for input or editing of
+//	  fields outside countries where that field is used.
+//
+//	For more guidance on how to use this schema, please see:
+//	https://support.google.com/business/answer/6397478
+type PostalAddress struct {
+	// AddressLines Unstructured address lines describing the lower levels of an address.
+	//
+	//  Because values in address_lines do not have type information and may
+	//  sometimes contain multiple values in a single field (e.g.
+	//  "Austin, TX"), it is important that the line order is clear. The order of
+	//  address lines should be "envelope order" for the country/region of the
+	//  address. In places where this can vary (e.g. Japan), address_language is
+	//  used to make it explicit (e.g. "ja" for large-to-small ordering and
+	//  "ja-Latn" or "en" for small-to-large). This way, the most specific line of
+	//  an address can be selected based on the language.
+	//
+	//  The minimum permitted structural representation of an address consists
+	//  of a region_code with all remaining information placed in the
+	//  address_lines. It would be possible to format such an address very
+	//  approximately without geocoding, but no semantic reasoning could be
+	//  made about any of the address components until it was at least
+	//  partially resolved.
+	//
+	//  Creating an address only containing a region_code and address_lines, and
+	//  then geocoding is the recommended way to handle completely unstructured
+	//  addresses (as opposed to guessing which parts of the address should be
+	//  localities or administrative areas).
+	AddressLines *[]string `json:"addressLines,omitempty"`
+
+	// AdministrativeArea Optional. Highest administrative subdivision which is used for postal
+	//  addresses of a country or region.
+	//  For example, this can be a state, a province, an oblast, or a prefecture.
+	//  Specifically, for Spain this is the province and not the autonomous
+	//  community (e.g. "Barcelona" and not "Catalonia").
+	//  Many countries don't use an administrative area in postal addresses. E.g.
+	//  in Switzerland this should be left unpopulated.
+	AdministrativeArea *string `json:"administrativeArea,omitempty"`
+
+	// LanguageCode Optional. BCP-47 language code of the contents of this address (if
+	//  known). This is often the UI language of the input form or is expected
+	//  to match one of the languages used in the address' country/region, or their
+	//  transliterated equivalents.
+	//  This can affect formatting in certain countries, but is not critical
+	//  to the correctness of the data and will never affect any validation or
+	//  other non-formatting related operations.
+	//
+	//  If this value is not known, it should be omitted (rather than specifying a
+	//  possibly incorrect default).
+	//
+	//  Examples: "zh-Hant", "ja", "ja-Latn", "en".
+	LanguageCode *string `json:"languageCode,omitempty"`
+
+	// Locality Optional. Generally refers to the city/town portion of the address.
+	//  Examples: US city, IT comune, UK post town.
+	//  In regions of the world where localities are not well defined or do not fit
+	//  into this structure well, leave locality empty and use address_lines.
+	Locality *string `json:"locality,omitempty"`
+
+	// Organization Optional. The name of the organization at the address.
+	Organization *string `json:"organization,omitempty"`
+
+	// PostalCode Optional. Postal code of the address. Not all countries use or require
+	//  postal codes to be present, but where they are used, they may trigger
+	//  additional validation with other parts of the address (e.g. state/zip
+	//  validation in the U.S.A.).
+	PostalCode *string `json:"postalCode,omitempty"`
+
+	// Recipients Optional. The recipient at the address.
+	//  This field may, under certain circumstances, contain multiline information.
+	//  For example, it might contain "care of" information.
+	Recipients *[]string `json:"recipients,omitempty"`
+
+	// RegionCode Required. CLDR region code of the country/region of the address. This
+	//  is never inferred and it is up to the user to ensure the value is
+	//  correct. See http://cldr.unicode.org/ and
+	//  http://www.unicode.org/cldr/charts/30/supplemental/territory_information.html
+	//  for details. Example: "CH" for Switzerland.
+	RegionCode *string `json:"regionCode,omitempty"`
+
+	// Revision The schema revision of the `PostalAddress`. This must be set to 0, which is
+	//  the latest revision.
+	//
+	//  All new revisions **must** be backward compatible with old revisions.
+	Revision *int32 `json:"revision,omitempty"`
+
+	// SortingCode Optional. Additional, country-specific, sorting code. This is not used
+	//  in most regions. Where it is used, the value is either a string like
+	//  "CEDEX", optionally followed by a number (e.g. "CEDEX 7"), or just a number
+	//  alone, representing the "sector code" (Jamaica), "delivery area indicator"
+	//  (Malawi) or "post office indicator" (e.g. Côte d'Ivoire).
+	SortingCode *string `json:"sortingCode,omitempty"`
+
+	// Sublocality Optional. Sublocality of the address.
+	//  For example, this can be neighborhoods, boroughs, districts.
+	Sublocality *string `json:"sublocality,omitempty"`
+}
+
 // Status The `Status` type defines a logical error model that is suitable for different programming environments, including REST APIs and RPC APIs. It is used by [gRPC](https://github.com/grpc). Each `Status` message contains three pieces of data: error code, error message, and error details. You can find out more about this error model and how to work with it in the [API Design Guide](https://cloud.google.com/apis/design/errors).
 type Status struct {
 	// Code The status code, which should be an enum value of [google.rpc.Code][google.rpc.Code].
@@ -45,7 +156,7 @@ type Status struct {
 	Message *string `json:"message,omitempty"`
 }
 
-// Vendor defines model for Vendor.
+// Vendor Vendor is a resource representing a Vendor.
 type Vendor struct {
 	// Annotations Annotations is an unstructured key-value map stored with a Vendor that
 	//  may be set by external tools to store and retrieve arbitrary metadata.
@@ -77,8 +188,10 @@ type Vendor struct {
 	Name *string `json:"name,omitempty"`
 
 	// Reconciling Output only. If set, there are currently changes in flight to the Vendor.
-	Reconciling *bool      `json:"reconciling,omitempty"`
-	Spec        VendorSpec `json:"spec"`
+	Reconciling *bool `json:"reconciling,omitempty"`
+
+	// Spec The specification of the Vendor.
+	Spec VendorSpec `json:"spec"`
 
 	// Uid Server assigned unique identifier for the Vendor. The value
 	//  is a UUID4 string and guaranteed to remain unchanged until the resource is
@@ -92,8 +205,26 @@ type Vendor struct {
 	VendorId *string `json:"vendorId,omitempty"`
 }
 
-// VendorSpec defines model for VendorSpec.
-type VendorSpec = map[string]interface{}
+// VendorSpec VendorSpec is the specification of a Vendor.
+type VendorSpec struct {
+	// Address The physical address of the corporation.
+	Address *PostalAddress `json:"address,omitempty"`
+
+	// CompanyName The name of the company.
+	CompanyName string `json:"companyName"`
+
+	// CorporationDba The DBA (Doing Business As) name of the corporation.
+	CorporationDba string `json:"corporationDba"`
+
+	// CorporationType The type of corporation (e.g. LLC, S-Corp, C-Corp).
+	CorporationType string `json:"corporationType"`
+
+	// Description The description of the corporation and the services it provides.
+	Description string `json:"description"`
+
+	// TaxIdentifier The tax identifier of the corporation (e.g. 123456789).
+	TaxIdentifier string `json:"taxIdentifier"`
+}
 
 // VendorsListVendorsParams defines parameters for VendorsListVendors.
 type VendorsListVendorsParams struct {
@@ -145,7 +276,113 @@ type VendorsUpdateVendorParams struct {
 	//  other fields, and might be sent on update requests to ensure the client has
 	//  an up-to-date value before proceeding.
 	VendorEtag *string `form:"vendor.etag,omitempty" json:"vendor.etag,omitempty"`
-	UpdateMask *string `form:"updateMask,omitempty" json:"updateMask,omitempty"`
+
+	// VendorSpecCompanyName The name of the company.
+	VendorSpecCompanyName *string `form:"vendor.spec.companyName,omitempty" json:"vendor.spec.companyName,omitempty"`
+
+	// VendorSpecCorporationType The type of corporation (e.g. LLC, S-Corp, C-Corp).
+	VendorSpecCorporationType *string `form:"vendor.spec.corporationType,omitempty" json:"vendor.spec.corporationType,omitempty"`
+
+	// VendorSpecCorporationDba The DBA (Doing Business As) name of the corporation.
+	VendorSpecCorporationDba *string `form:"vendor.spec.corporationDba,omitempty" json:"vendor.spec.corporationDba,omitempty"`
+
+	// VendorSpecDescription The description of the corporation and the services it provides.
+	VendorSpecDescription *string `form:"vendor.spec.description,omitempty" json:"vendor.spec.description,omitempty"`
+
+	// VendorSpecTaxIdentifier The tax identifier of the corporation (e.g. 123456789).
+	VendorSpecTaxIdentifier *string `form:"vendor.spec.taxIdentifier,omitempty" json:"vendor.spec.taxIdentifier,omitempty"`
+
+	// VendorSpecAddressRevision The schema revision of the `PostalAddress`. This must be set to 0, which is
+	//  the latest revision.
+	//
+	//  All new revisions **must** be backward compatible with old revisions.
+	VendorSpecAddressRevision *int32 `form:"vendor.spec.address.revision,omitempty" json:"vendor.spec.address.revision,omitempty"`
+
+	// VendorSpecAddressRegionCode Required. CLDR region code of the country/region of the address. This
+	//  is never inferred and it is up to the user to ensure the value is
+	//  correct. See http://cldr.unicode.org/ and
+	//  http://www.unicode.org/cldr/charts/30/supplemental/territory_information.html
+	//  for details. Example: "CH" for Switzerland.
+	VendorSpecAddressRegionCode *string `form:"vendor.spec.address.regionCode,omitempty" json:"vendor.spec.address.regionCode,omitempty"`
+
+	// VendorSpecAddressLanguageCode Optional. BCP-47 language code of the contents of this address (if
+	//  known). This is often the UI language of the input form or is expected
+	//  to match one of the languages used in the address' country/region, or their
+	//  transliterated equivalents.
+	//  This can affect formatting in certain countries, but is not critical
+	//  to the correctness of the data and will never affect any validation or
+	//  other non-formatting related operations.
+	//
+	//  If this value is not known, it should be omitted (rather than specifying a
+	//  possibly incorrect default).
+	//
+	//  Examples: "zh-Hant", "ja", "ja-Latn", "en".
+	VendorSpecAddressLanguageCode *string `form:"vendor.spec.address.languageCode,omitempty" json:"vendor.spec.address.languageCode,omitempty"`
+
+	// VendorSpecAddressPostalCode Optional. Postal code of the address. Not all countries use or require
+	//  postal codes to be present, but where they are used, they may trigger
+	//  additional validation with other parts of the address (e.g. state/zip
+	//  validation in the U.S.A.).
+	VendorSpecAddressPostalCode *string `form:"vendor.spec.address.postalCode,omitempty" json:"vendor.spec.address.postalCode,omitempty"`
+
+	// VendorSpecAddressSortingCode Optional. Additional, country-specific, sorting code. This is not used
+	//  in most regions. Where it is used, the value is either a string like
+	//  "CEDEX", optionally followed by a number (e.g. "CEDEX 7"), or just a number
+	//  alone, representing the "sector code" (Jamaica), "delivery area indicator"
+	//  (Malawi) or "post office indicator" (e.g. Côte d'Ivoire).
+	VendorSpecAddressSortingCode *string `form:"vendor.spec.address.sortingCode,omitempty" json:"vendor.spec.address.sortingCode,omitempty"`
+
+	// VendorSpecAddressAdministrativeArea Optional. Highest administrative subdivision which is used for postal
+	//  addresses of a country or region.
+	//  For example, this can be a state, a province, an oblast, or a prefecture.
+	//  Specifically, for Spain this is the province and not the autonomous
+	//  community (e.g. "Barcelona" and not "Catalonia").
+	//  Many countries don't use an administrative area in postal addresses. E.g.
+	//  in Switzerland this should be left unpopulated.
+	VendorSpecAddressAdministrativeArea *string `form:"vendor.spec.address.administrativeArea,omitempty" json:"vendor.spec.address.administrativeArea,omitempty"`
+
+	// VendorSpecAddressLocality Optional. Generally refers to the city/town portion of the address.
+	//  Examples: US city, IT comune, UK post town.
+	//  In regions of the world where localities are not well defined or do not fit
+	//  into this structure well, leave locality empty and use address_lines.
+	VendorSpecAddressLocality *string `form:"vendor.spec.address.locality,omitempty" json:"vendor.spec.address.locality,omitempty"`
+
+	// VendorSpecAddressSublocality Optional. Sublocality of the address.
+	//  For example, this can be neighborhoods, boroughs, districts.
+	VendorSpecAddressSublocality *string `form:"vendor.spec.address.sublocality,omitempty" json:"vendor.spec.address.sublocality,omitempty"`
+
+	// VendorSpecAddressAddressLines Unstructured address lines describing the lower levels of an address.
+	//
+	//  Because values in address_lines do not have type information and may
+	//  sometimes contain multiple values in a single field (e.g.
+	//  "Austin, TX"), it is important that the line order is clear. The order of
+	//  address lines should be "envelope order" for the country/region of the
+	//  address. In places where this can vary (e.g. Japan), address_language is
+	//  used to make it explicit (e.g. "ja" for large-to-small ordering and
+	//  "ja-Latn" or "en" for small-to-large). This way, the most specific line of
+	//  an address can be selected based on the language.
+	//
+	//  The minimum permitted structural representation of an address consists
+	//  of a region_code with all remaining information placed in the
+	//  address_lines. It would be possible to format such an address very
+	//  approximately without geocoding, but no semantic reasoning could be
+	//  made about any of the address components until it was at least
+	//  partially resolved.
+	//
+	//  Creating an address only containing a region_code and address_lines, and
+	//  then geocoding is the recommended way to handle completely unstructured
+	//  addresses (as opposed to guessing which parts of the address should be
+	//  localities or administrative areas).
+	VendorSpecAddressAddressLines *[]string `form:"vendor.spec.address.addressLines,omitempty" json:"vendor.spec.address.addressLines,omitempty"`
+
+	// VendorSpecAddressRecipients Optional. The recipient at the address.
+	//  This field may, under certain circumstances, contain multiline information.
+	//  For example, it might contain "care of" information.
+	VendorSpecAddressRecipients *[]string `form:"vendor.spec.address.recipients,omitempty" json:"vendor.spec.address.recipients,omitempty"`
+
+	// VendorSpecAddressOrganization Optional. The name of the organization at the address.
+	VendorSpecAddressOrganization *string `form:"vendor.spec.address.organization,omitempty" json:"vendor.spec.address.organization,omitempty"`
+	UpdateMask                    *string `form:"updateMask,omitempty" json:"updateMask,omitempty"`
 }
 
 // VendorsCreateVendorJSONRequestBody defines body for VendorsCreateVendor for application/json ContentType.
@@ -222,19 +459,19 @@ func (a GoogleProtobufAny) MarshalJSON() ([]byte, error) {
 // ServerInterface represents all server handlers.
 type ServerInterface interface {
 
-	// (GET /v1/vendors)
+	// (GET /v1alpha/vendors)
 	VendorsListVendors(ctx echox.Context, params VendorsListVendorsParams) error
 
-	// (POST /v1/vendors)
+	// (POST /v1alpha/vendors)
 	VendorsCreateVendor(ctx echox.Context, params VendorsCreateVendorParams) error
 
-	// (DELETE /v1/vendors/{vendor})
+	// (DELETE /v1alpha/vendors/{vendor})
 	VendorsDeleteVendor(ctx echox.Context, vendor string) error
 
-	// (GET /v1/vendors/{vendor})
+	// (GET /v1alpha/vendors/{vendor})
 	VendorsGetVendor(ctx echox.Context, vendor string) error
 
-	// (PATCH /v1/vendors/{vendor})
+	// (PATCH /v1alpha/vendors/{vendor})
 	VendorsUpdateVendor(ctx echox.Context, vendor string, params VendorsUpdateVendorParams) error
 }
 
@@ -429,6 +666,118 @@ func (w *ServerInterfaceWrapper) VendorsUpdateVendor(ctx echox.Context) error {
 		return echox.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter vendor.etag: %s", err))
 	}
 
+	// ------------- Optional query parameter "vendor.spec.companyName" -------------
+
+	err = runtime.BindQueryParameter("form", true, false, "vendor.spec.companyName", ctx.QueryParams(), &params.VendorSpecCompanyName)
+	if err != nil {
+		return echox.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter vendor.spec.companyName: %s", err))
+	}
+
+	// ------------- Optional query parameter "vendor.spec.corporationType" -------------
+
+	err = runtime.BindQueryParameter("form", true, false, "vendor.spec.corporationType", ctx.QueryParams(), &params.VendorSpecCorporationType)
+	if err != nil {
+		return echox.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter vendor.spec.corporationType: %s", err))
+	}
+
+	// ------------- Optional query parameter "vendor.spec.corporationDba" -------------
+
+	err = runtime.BindQueryParameter("form", true, false, "vendor.spec.corporationDba", ctx.QueryParams(), &params.VendorSpecCorporationDba)
+	if err != nil {
+		return echox.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter vendor.spec.corporationDba: %s", err))
+	}
+
+	// ------------- Optional query parameter "vendor.spec.description" -------------
+
+	err = runtime.BindQueryParameter("form", true, false, "vendor.spec.description", ctx.QueryParams(), &params.VendorSpecDescription)
+	if err != nil {
+		return echox.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter vendor.spec.description: %s", err))
+	}
+
+	// ------------- Optional query parameter "vendor.spec.taxIdentifier" -------------
+
+	err = runtime.BindQueryParameter("form", true, false, "vendor.spec.taxIdentifier", ctx.QueryParams(), &params.VendorSpecTaxIdentifier)
+	if err != nil {
+		return echox.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter vendor.spec.taxIdentifier: %s", err))
+	}
+
+	// ------------- Optional query parameter "vendor.spec.address.revision" -------------
+
+	err = runtime.BindQueryParameter("form", true, false, "vendor.spec.address.revision", ctx.QueryParams(), &params.VendorSpecAddressRevision)
+	if err != nil {
+		return echox.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter vendor.spec.address.revision: %s", err))
+	}
+
+	// ------------- Optional query parameter "vendor.spec.address.regionCode" -------------
+
+	err = runtime.BindQueryParameter("form", true, false, "vendor.spec.address.regionCode", ctx.QueryParams(), &params.VendorSpecAddressRegionCode)
+	if err != nil {
+		return echox.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter vendor.spec.address.regionCode: %s", err))
+	}
+
+	// ------------- Optional query parameter "vendor.spec.address.languageCode" -------------
+
+	err = runtime.BindQueryParameter("form", true, false, "vendor.spec.address.languageCode", ctx.QueryParams(), &params.VendorSpecAddressLanguageCode)
+	if err != nil {
+		return echox.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter vendor.spec.address.languageCode: %s", err))
+	}
+
+	// ------------- Optional query parameter "vendor.spec.address.postalCode" -------------
+
+	err = runtime.BindQueryParameter("form", true, false, "vendor.spec.address.postalCode", ctx.QueryParams(), &params.VendorSpecAddressPostalCode)
+	if err != nil {
+		return echox.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter vendor.spec.address.postalCode: %s", err))
+	}
+
+	// ------------- Optional query parameter "vendor.spec.address.sortingCode" -------------
+
+	err = runtime.BindQueryParameter("form", true, false, "vendor.spec.address.sortingCode", ctx.QueryParams(), &params.VendorSpecAddressSortingCode)
+	if err != nil {
+		return echox.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter vendor.spec.address.sortingCode: %s", err))
+	}
+
+	// ------------- Optional query parameter "vendor.spec.address.administrativeArea" -------------
+
+	err = runtime.BindQueryParameter("form", true, false, "vendor.spec.address.administrativeArea", ctx.QueryParams(), &params.VendorSpecAddressAdministrativeArea)
+	if err != nil {
+		return echox.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter vendor.spec.address.administrativeArea: %s", err))
+	}
+
+	// ------------- Optional query parameter "vendor.spec.address.locality" -------------
+
+	err = runtime.BindQueryParameter("form", true, false, "vendor.spec.address.locality", ctx.QueryParams(), &params.VendorSpecAddressLocality)
+	if err != nil {
+		return echox.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter vendor.spec.address.locality: %s", err))
+	}
+
+	// ------------- Optional query parameter "vendor.spec.address.sublocality" -------------
+
+	err = runtime.BindQueryParameter("form", true, false, "vendor.spec.address.sublocality", ctx.QueryParams(), &params.VendorSpecAddressSublocality)
+	if err != nil {
+		return echox.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter vendor.spec.address.sublocality: %s", err))
+	}
+
+	// ------------- Optional query parameter "vendor.spec.address.addressLines" -------------
+
+	err = runtime.BindQueryParameter("form", true, false, "vendor.spec.address.addressLines", ctx.QueryParams(), &params.VendorSpecAddressAddressLines)
+	if err != nil {
+		return echox.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter vendor.spec.address.addressLines: %s", err))
+	}
+
+	// ------------- Optional query parameter "vendor.spec.address.recipients" -------------
+
+	err = runtime.BindQueryParameter("form", true, false, "vendor.spec.address.recipients", ctx.QueryParams(), &params.VendorSpecAddressRecipients)
+	if err != nil {
+		return echox.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter vendor.spec.address.recipients: %s", err))
+	}
+
+	// ------------- Optional query parameter "vendor.spec.address.organization" -------------
+
+	err = runtime.BindQueryParameter("form", true, false, "vendor.spec.address.organization", ctx.QueryParams(), &params.VendorSpecAddressOrganization)
+	if err != nil {
+		return echox.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter vendor.spec.address.organization: %s", err))
+	}
+
 	// ------------- Optional query parameter "updateMask" -------------
 
 	err = runtime.BindQueryParameter("form", true, false, "updateMask", ctx.QueryParams(), &params.UpdateMask)
@@ -469,48 +818,91 @@ func RegisterHandlersWithBaseURL(router EchoxRouter, si ServerInterface, baseURL
 		Handler: si,
 	}
 
-	router.GET(baseURL+"/v1/vendors", wrapper.VendorsListVendors, m...)
-	router.POST(baseURL+"/v1/vendors", wrapper.VendorsCreateVendor, m...)
-	router.DELETE(baseURL+"/v1/vendors/:vendor", wrapper.VendorsDeleteVendor, m...)
-	router.GET(baseURL+"/v1/vendors/:vendor", wrapper.VendorsGetVendor, m...)
-	router.PATCH(baseURL+"/v1/vendors/:vendor", wrapper.VendorsUpdateVendor, m...)
+	router.GET(baseURL+"/v1alpha/vendors", wrapper.VendorsListVendors, m...)
+	router.POST(baseURL+"/v1alpha/vendors", wrapper.VendorsCreateVendor, m...)
+	router.DELETE(baseURL+"/v1alpha/vendors/:vendor", wrapper.VendorsDeleteVendor, m...)
+	router.GET(baseURL+"/v1alpha/vendors/:vendor", wrapper.VendorsGetVendor, m...)
+	router.PATCH(baseURL+"/v1alpha/vendors/:vendor", wrapper.VendorsUpdateVendor, m...)
 
 }
 
 // Base64 encoded, gzipped, json marshaled Swagger object
 var swaggerSpec = []string{
 
-	"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",
+	"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",
+	"//+flDhgME8AAA==",
 }
 
 // GetSwagger returns the content of the embedded swagger specification file

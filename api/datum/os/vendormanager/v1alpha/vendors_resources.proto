@@ -1,24 +1,28 @@
 syntax = "proto3";
 
-option go_package = "go.datumapis.com/os/genproto/os/vendormanager/v1";
+option go_package = "go.datumapis.com/os/genproto/os/vendormanager/v1alpha";
 
-package datum.os.vendormanager.v1;
+package datum.os.vendormanager.v1alpha;
 
 import "google/api/field_behavior.proto";
 import "google/api/field_info.proto";
 import "google/api/resource.proto";
 import "google/protobuf/timestamp.proto";
+import "google/type/postal_address.proto";
 
+// Vendor is a resource representing a Vendor.
 message Vendor {
   option (google.api.resource) = {
     type: "api.datum.net/Vendor"
     pattern: "vendors/{vendor}"
+    pattern: "organizations/{organization}/vendors/{vendor}"
     style: DECLARATIVE_FRIENDLY
-    singular: "Vendor"
-    plural: "Vendors"
+    singular: "vendor"
+    plural: "vendors"
   };
 
   // The resource name of this Vendor.
+  // Format: vendors/{vendor}
   string name = 1 [
     (google.api.field_behavior) = IDENTIFIER,
     (google.api.field_behavior) = OUTPUT_ONLY
@@ -72,9 +76,30 @@ message Vendor {
   // an up-to-date value before proceeding.
   string etag = 11 [(google.api.field_behavior) = OUTPUT_ONLY];
 
+  // The specification of the Vendor.
   VendorSpec spec = 12 [(google.api.field_behavior) = REQUIRED];
 }
 
+// VendorSpec is the specification of a Vendor.
 message VendorSpec {
+  // The name of the company or individual contractor.
+  string name = 1 [(google.api.field_behavior) = REQUIRED];
 
+  // The type of corporation (e.g. LLC, S-Corp, C-Corp).
+  string corporation_type = 2 [(google.api.field_behavior) = OPTIONAL];
+
+  // The DBA (Doing Business As) name of the corporation.
+  string corporation_dba = 3 [(google.api.field_behavior) = OPTIONAL];
+
+  // The description of the corporation or contractor and the services it provides.
+  string description = 4 [(google.api.field_behavior) = OPTIONAL];
+
+  // The tax identifier of the corporation (e.g. 123456789).
+  string tax_id = 5 [(google.api.field_behavior) = OPTIONAL];
+
+  // The URL of the website of the corporation or contractor.
+  string website_uri = 6 [(google.api.field_behavior) = OPTIONAL];
+
+  // The physical address of the corporation.
+  google.type.PostalAddress address = 7 [(google.api.field_behavior) = OPTIONAL];
 }
