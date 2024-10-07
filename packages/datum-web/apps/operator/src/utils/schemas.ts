@@ -111,6 +111,11 @@ export const ListSchema = z.object({
     .describe('Array of the list members'),
 })
 
+export const MemberSchema = z.object({
+  id: z.string().describe('Member ID').optional(),
+  role: z.string().describe('Role of the member'),
+})
+
 export const RegisterUserSchema = z.object({
   email: z.string().email('Please enter a valid email'),
   password: z.string().min(8, 'Please enter a valid password'),
@@ -143,6 +148,7 @@ export const UserInviteSchema = z.object({
     .default(InviteRole.MEMBER),
 })
 
+export type MemberInput = z.infer<typeof MemberSchema>
 export type WorkspaceNameInput = z.infer<typeof WorkspaceNameSchema>
 export type WorkspaceEmailInput = z.infer<typeof WorkspaceEmailSchema>
 export type UserInviteInput = z.infer<typeof UserInviteSchema>

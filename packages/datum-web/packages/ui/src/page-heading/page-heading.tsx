@@ -20,7 +20,7 @@ const PageHeading: React.FC<PageHeadingProps> = ({
   return (
     <div className={cn(styles.wrapper(), className)}>
       {eyebrow && <span className={styles.eyebrow()}>{eyebrow}</span>}
-      <h2 className={styles.heading()}>{heading}</h2>
+      <h2 className="type-h4">{heading}</h2>
     </div>
   )
 }

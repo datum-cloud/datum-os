@@ -11,6 +11,7 @@ import {
   ListChecks,
   Pencil,
   ScrollText,
+  Settings,
   Settings2,
   SettingsIcon,
   ShapesIcon,
@@ -21,34 +22,30 @@ import {
   UserRoundCogIcon,
   Users,
 } from 'lucide-react'
+
 import { NavHeading, type NavItem, type Separator } from '@/types'
 
 export const NavItems: (NavItem | Separator | NavHeading)[] = [
-  {
-    title: 'Dashboard',
-    href: '/dashboard',
-    icon: CircleGaugeIcon,
-  },
-  {
-    title: 'Settings',
-    href: '/workspace/settings',
-    icon: Pencil,
-  },
+  // {
+  //   title: 'Dashboard',
+  //   href: '/dashboard',
+  //   icon: CircleGaugeIcon,
+  // },
   // {
   //   title: 'Activity Log',
   //   href: '/logs',
   //   icon: ScrollText,
   // },
-  {
-    type: 'separator',
-  },
+  // {
+  //   type: 'separator',
+  // },
   {
     title: 'Customers',
     href: '/workspace/customers',
     icon: Users,
     isChildren: true,
     children: [
-      { title: 'Users', href: '/workspace/customers/users' },
+      { title: 'Users', href: '/customers/users' },
       // { title: 'Organizations', href: '/customers/organizations' },
     ],
   },
@@ -113,6 +110,42 @@ export const NavItems: (NavItem | Separator | NavHeading)[] = [
   // },
   {
     type: 'separator',
+  },
+  {
+    title: 'Workspace Settings',
+    href: '/workspace/settings',
+    icon: Settings,
+    isChildren: true,
+    children: [
+      {
+        title: 'General Settings',
+        href: '/workspace/settings',
+      },
+      {
+        title: 'Team Management',
+        href: '/workspace/members',
+      },
+      // {
+      //   title: 'Authentication',
+      //   href: '/workspace/settings/authentication',
+      // },
+      // {
+      //   title: 'Alerts & Preferences',
+      //   href: '/workspace/settings/alerts-and-preferences',
+      // },
+      // {
+      //   title: 'Developers',
+      //   href: '/workspace/settings/developers',
+      // },
+      // {
+      //   title: 'Billing & Usage',
+      //   href: '/workspace/settings/billing-and-usage',
+      // },
+      // {
+      //   title: 'End User Privacy',
+      //   href: '/workspace/settings/end-user-privacy',
+      // },
+    ],
   },
   // {
   //   title: 'Product Configuration',

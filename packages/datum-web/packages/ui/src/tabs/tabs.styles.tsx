@@ -18,7 +18,7 @@ const tabsStyles = tv({
       solid: {
         tabsList: 'rounded-md bg-winter-sky-800 p-[10px] items-start',
         tabsTrigger:
-          'py-[15px] px-5 rounded-[5px] border border-transparent data-[state=active]:border-winter-sky-900 data-[state=active]:bg-white',
+          'py-[15px] px-5 rounded-[5px] border border-transparent data-[state=active]:border-winter-sky-900 dark:data-[state=active]:bg-peat-800 dark:data-[state=inactive]:text-peat-800 data-[state=active]:bg-white',
         tabsContent: 'mt-[26px]',
       },
     },
