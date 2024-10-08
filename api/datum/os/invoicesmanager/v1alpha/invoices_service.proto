@@ -1,0 +1,209 @@
+syntax = "proto3";
+
+option go_package = "go.datumapis.com/os/genproto/os/invoicesmanager/v1alpha";
+
+package datum.os.invoicesmanager.v1alpha;
+
+import "google/api/annotations.proto";
+import "google/api/client.proto";
+import "google/api/field_behavior.proto";
+import "google/api/resource.proto";
+import "google/longrunning/operations.proto";
+import "google/protobuf/empty.proto";
+import "google/protobuf/field_mask.proto";
+import "datum/os/invoicesmanager/v1alpha/invoices_resources.proto";
+
+// Invoices is the service for managing Invoices.
+service Invoices {
+  // CreateInvoice creates an Invoice.
+  rpc CreateInvoice(CreateInvoiceRequest) returns (google.longrunning.Operation) {
+    option (google.api.method_signature) = "parent,invoice,invoice_id";
+    option (google.api.http) = {
+      post: "/v1alpha/{parent=invoices}"
+      body: "invoice"
+      additional_bindings {
+        post: "/v1alpha/{parent=vendors/*/invoices}"
+        body: "invoice"
+      }
+      additional_bindings {
+        post: "/v1alpha/{parent=organizations/*/invoices}"
+        body: "invoice"
+      }
+    };
+    option (google.longrunning.operation_info) = {
+      response_type: "Invoice"
+      metadata_type: "google.cloud.common.OperationMetadata"
+    };
+  }
+
+  // GetInvoice gets an Invoice.
+  rpc GetInvoice(GetInvoiceRequest) returns (Invoice) {
+    option (google.api.method_signature) = "name";
+    option (google.api.http) = {
+      get: "/v1alpha/{name=invoices/*}"
+      additional_bindings {
+        get: "/v1alpha/{name=vendors/*/invoices/*}"
+      }
+      additional_bindings {
+        get: "/v1alpha/{name=organizations/*/invoices/*}"
+      }
+    };
+  }
+
+  // ListInvoices lists Invoices.
+  rpc ListInvoices(ListInvoicesRequest) returns (ListInvoicesResponse) {
+    option (google.api.method_signature) = "parent";
+    option (google.api.http) = {
+      get: "/v1alpha/{parent=invoices/*}"
+      additional_bindings {
+        get: "/v1alpha/{parent=vendors/*/invoices/*}"
+      }
+      additional_bindings {
+        get: "/v1alpha/{parent=organizations/*/invoices/*}"
+      }
+    };
+  }
+
+  // UpdateInvoice updates an Invoice.
+  rpc UpdateInvoice(UpdateInvoiceRequest) returns (google.longrunning.Operation) {
+    option (google.api.method_signature) = "invoice,update_mask";
+    option (google.api.http) = {
+      patch: "/v1alpha/{invoice.name=invoices/*}"
+      body: "invoice"
+      additional_bindings {
+        patch: "/v1alpha/{invoice.name=vendors/*/invoices/*}"
+        body: "invoice"
+      }
+      additional_bindings {
+        patch: "/v1alpha/{invoice.name=organizations/*/invoices/*}"
+        body: "invoice"
+      }
+    };
+    option (google.longrunning.operation_info) = {
+      response_type: "Invoice"
+      metadata_type: "google.cloud.common.OperationMetadata"
+    };
+  }
+
+  // DeleteInvoice deletes an Invoice.
+  rpc DeleteInvoice(DeleteInvoiceRequest) returns (google.longrunning.Operation) {
+    option (google.api.method_signature) = "name";
+    option (google.api.http) = {
+      delete: "/v1alpha/{name=invoices/*}"
+      additional_bindings {
+        delete: "/v1alpha/{name=vendors/*/invoices/*}"
+      }
+      additional_bindings {
+        delete: "/v1alpha/{name=organizations/*/invoices/*}"
+      }
+    };
+    option (google.longrunning.operation_info) = {
+      response_type: "google.protobuf.Empty"
+      metadata_type: "google.cloud.common.OperationMetadata"
+    };
+  }
+}
+
+// CreateInvoiceRequest is the request for creating an Invoice.
+message CreateInvoiceRequest {
+  // The parent resource where the Invoice will be created. Defaults to the current user's organization.
+  // Format: invoices
+  // Additional format: vendors/{vendor_id}/invoices
+  // Additional format: organizations/{organization_id}/invoices
+  string parent = 1 [
+    (google.api.field_behavior) = REQUIRED,
+    (google.api.resource_reference) = {
+      type: "*"
+      child_type: "api.datum.net/Invoice"
+    }
+  ];
+  // The ID to use for the Invoice. If not specified, an ID will be automatically generated.
+  // If the ID is automatically generated, the Client is responsible for reconciliation.
+  string invoice_id = 2 [(google.api.field_behavior) = OPTIONAL];
+  // The Invoice to create.
+  Invoice invoice = 3 [(google.api.field_behavior) = REQUIRED];
+  // If true, the request is validated and nothing is persisted.
+  bool validate_only = 4 [(google.api.field_behavior) = OPTIONAL];
+}
+
+// GetInvoiceRequest is the request for getting an Invoice.
+message GetInvoiceRequest {
+  // The name of the Invoice to get.
+  // Format: invoices/{invoice_id}
+  // Additional format: vendors/{vendor_id}/invoices/{invoice_id}
+  // Additional format: organizations/{organization_id}/invoices/{invoice_id}
+  string name = 1 [
+    (google.api.field_behavior) = REQUIRED,
+    (google.api.resource_reference) = {
+      type: "api.datum.net/Invoice"
+    }
+  ];
+}
+
+// ListInvoicesRequest is the request for listing Invoices.
+message ListInvoicesRequest {
+  // The parent resource to list Invoices from.
+  // Format: invoices
+  // Additional format: vendors/{vendor_id}/invoices
+  // Additional format: organizations/{organization_id}/invoices
+  string parent = 1 [
+    (google.api.field_behavior) = REQUIRED,
+    (google.api.resource_reference) = {
+      type: "*"
+      child_type: "api.datum.net/Invoice"
+    }
+  ];
+  // The maximum number of Invoices to return. The service may return fewer than this value.
+  // If unspecified, at most 50 Invoices will be returned. The maximum value is 1000; values above 1000 will be coerced to 1000.
+  int32 page_size = 2 [(google.api.field_behavior) = OPTIONAL];
+  // A page token, received from a previous `ListInvoices` call. Provide this to retrieve the subsequent page.
+  // When paginating, all other parameters must match the call that provided the page token.
+  string page_token = 3 [(google.api.field_behavior) = OPTIONAL];
+  // A filter expression that filters the Invoices to be listed.
+  string filter = 4 [(google.api.field_behavior) = OPTIONAL];
+  // The order by fields for the Invoices. The default order is ascending. There is no descending order.
+  string order_by = 5 [(google.api.field_behavior) = OPTIONAL];
+}
+
+// ListInvoicesResponse is the response for listing Invoices.
+message ListInvoicesResponse {
+  // The list of Invoices.
+  repeated Invoice invoices = 1;
+  // A token to retrieve the next page of results.
+  // Pass this value in the ListInvoicesRequest.page_token field in a subsequent call to `ListInvoices` to retrieve the next page of results.
+  // If the page token is not set, there are no more results.
+  string next_page_token = 2;
+}
+
+// UpdateInvoiceRequest is the request for updating an Invoice.
+message UpdateInvoiceRequest {
+  // The Invoice to update.
+  Invoice invoice = 1 [(google.api.field_behavior) = REQUIRED];
+  // The update mask for the Invoice. 
+  google.protobuf.FieldMask update_mask = 2 [(google.api.field_behavior) = OPTIONAL];
+  // Allow missing Invoice. If true, the Invoice will be created if it does not exist. In this case,
+  // field_mask is ignored.
+  bool allow_missing = 3 [(google.api.field_behavior) = OPTIONAL];
+  // If true, the request is validated and nothing is persisted.
+  bool validate_only = 4 [(google.api.field_behavior) = OPTIONAL];
+}
+
+// DeleteInvoiceRequest is the request for deleting an Invoice by name.
+message DeleteInvoiceRequest {
+  // The name of the Invoice to delete.
+  // Format: invoices/{invoice_id}
+  // Additional format: vendors/{vendor_id}/invoices/{invoice_id}
+  // Additional format: organizations/{organization_id}/invoices/{invoice_id}
+  string name = 1 [
+    (google.api.field_behavior) = REQUIRED,
+    (google.api.resource_reference) = {
+      type: "api.datum.net/Invoice"
+    }
+  ];
+  // The etag of the Invoice to delete. If this is not provided, the Invoice will be deleted unconditionally.
+  // If provided, the Invoice will be deleted only if the etag matches the etag of the currently stored Invoice.
+  // If the etag is provided and does not match the etag of the currently stored Invoice, the request will be rejected.
+  string etag = 2 [(google.api.field_behavior) = OPTIONAL];
+  // If true, the request is validated and nothing is persisted.
+  bool validate_only = 3 [(google.api.field_behavior) = OPTIONAL];
+}
