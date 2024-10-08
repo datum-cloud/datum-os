@@ -6,6 +6,34 @@ tasks:
     run: once
     desc: Install the protobuf libraries
     env:
-      PROTOBUF_VERSION: 5.28.2
+      PR_REL: https://github.com/protocolbuffers/protobuf/releases
+      PROTOBUF_VERSION: 28.2
     cmds:
-    - ../install_protoc.sh
+    - apt-get update && apt-get install -y unzip
+    - curl -L $PR_REL/download/v$PROTOBUF_VERSION/protoc-$PROTOBUF_VERSION-linux-x86_64.zip -o $HOME/protoc-$PROTOBUF_VERSION-linux-x86_64.zip
+    - unzip $HOME/protoc-$PROTOBUF_VERSION-linux-x86_64.zip -d $HOME/.local
+
+  generate-grpc:
+    desc: Generate grpc definitions.
+    deps:
+      - grpc-install
+    cmds:
+      - $HOME/.local/bin/protoc
+          -I . -I ../third_party/protos
+          --go_out=../lib/api-go
+          --go_opt=module=go.datumapis.com/os/genproto
+          --go-grpc_out=../lib/api-go
+          --go-grpc_opt=module=go.datumapis.com/os/genproto
+          --grpc-gateway_out=../lib/api-go
+          --grpc-gateway_opt=module=go.datumapis.com/os/genproto
+          ./datum/**/*.proto
+
+  generate-openapi:
+    desc: Generate openapi definitions.
+    deps:
+      - grpc-install
+    cmds:
+      - $HOME/.local/bin/protoc
+          -I . -I ../third_party/protos
+          --openapi_out=./openapi
+          ./datum/**/*.proto
