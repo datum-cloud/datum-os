@@ -13,6 +13,7 @@ import "google/protobuf/field_mask.proto";
 import "datum/os/organizationmanager/v1alpha/organizations_resources.proto";
 
 // Organizations is the service for managing Organizations.
+// TODO: Add support for parent/child relationships for Organizations.
 service Organizations {
     // CreateOrganization creates a new Organization.
     rpc CreateOrganization(CreateOrganizationRequest) returns (google.longrunning.Operation) {

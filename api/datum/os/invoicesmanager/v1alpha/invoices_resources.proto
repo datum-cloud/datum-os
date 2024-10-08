@@ -84,11 +84,11 @@ message Invoice {
   
   // Spec is the specification of the Invoice.
   message Spec {
-  
+    // TODO: Add fields for the Invoice spec.
   }
   
   // Status is the current status of the Invoice.
   message Status {
-  
+    // TODO: Add fields for the Invoice status.
   }  
 }
