@@ -7,7 +7,7 @@ includes:
   # based on the developer's operating system.
   build:
     taskfile: ./Taskfile_{{OS}}.yaml
-    flatten: true
+   #flatten: true # Flatten does not appear to work consistently across all operating systems.
 
 tasks:
   default:
@@ -22,7 +22,7 @@ tasks:
 
   grpc-install:
     run: once
-    deps: [protobuf-install]
+    deps: [build:protobuf-install]
     desc: Install/update protoc and plugins.
     cmds:
       - go install github.com/google/gnostic/cmd/protoc-gen-openapi@latest
