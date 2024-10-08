@@ -82,10 +82,10 @@ message Organization {
 
 // OrganizationSpec is the specification of an Organization.
 message Spec {
-
+  // TODO: Add fields for the Organization spec.
 }
 
 // OrganizationStatus is the status of an Organization.
 message Status {
-
+  // TODO: Add fields for the Organization status.
 }
