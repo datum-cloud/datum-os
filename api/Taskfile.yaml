@@ -22,8 +22,7 @@ tasks:
 
   grpc-install:
     run: once
-    deps:
-      - build:protobuf-install
+    deps: [protobuf-install]
     desc: Install/update protoc and plugins.
     cmds:
       - go install github.com/google/gnostic/cmd/protoc-gen-openapi@latest
