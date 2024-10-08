@@ -1,4 +1,4 @@
-import { tv, type VariantProps } from 'tailwind-variants'
+import { type VariantProps, tv } from 'tailwind-variants'
 
 export const pageStyles = tv({
   slots: {
@@ -43,6 +43,13 @@ export const deleteDialogStyles = tv({
     text: 'flex gap-6 items-center text-util-red-500',
     button: 'w-2/3 bg-white border-util-red-500 text-util-red-500',
     cancelButton: 'w-1/3 ml-0 bg-white',
+  },
+})
+
+export const inviteStyles = tv({
+  slots: {
+    buttonRow: 'mt-[26px] flex justify-between',
+    roleRow: 'flex items-center gap-2',
   },
 })
 

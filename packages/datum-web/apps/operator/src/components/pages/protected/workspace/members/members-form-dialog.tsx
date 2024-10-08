@@ -44,7 +44,6 @@ type MembersDialogFormProps = {
   member: Datum.OrgUser
   open: boolean
   setOpen(input: boolean): void
-  onDelete(): void
 }
 
 const MembersFormDialog = ({
@@ -96,14 +95,13 @@ const MembersFormDialog = ({
 
     if (error) {
       toast({
-        title: 'Error',
-        description: error.message,
+        title: `Error ${error.message}`,
         variant: 'destructive',
       })
     } else {
       toast({
-        title: 'Success',
-        description: 'Role updated successfully',
+        title: 'Role updated successfully',
+        variant: 'success',
       })
     }
     handleCancel()

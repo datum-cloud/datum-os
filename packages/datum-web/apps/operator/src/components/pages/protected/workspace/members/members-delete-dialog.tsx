@@ -2,7 +2,6 @@
 
 import { TriangleAlert } from 'lucide-react'
 
-import { useRemoveUserFromOrgMutation } from '@repo/codegen/src/schema'
 import { Datum } from '@repo/types'
 import { Button } from '@repo/ui/button'
 import {
@@ -34,18 +33,16 @@ type MembersDeleteFormProps = {
   members: Datum.OrgUser[]
   open: boolean
   setOpen(input: boolean): void
-  redirect?: boolean
+  handleDelete(members: Datum.OrgUser[]): Promise<void>
 }
 
 const MembersDeleteDialog = ({
   members,
   open,
-  redirect = false,
   setOpen,
+  handleDelete,
 }: MembersDeleteFormProps) => {
   const requiredText = 'remove'
-  const [{ fetching, error }, removeUserFromOrg] =
-    useRemoveUserFromOrgMutation()
 
   const { content, text, button, cancelButton } = deleteDialogStyles()
   const form = useForm<DeletionInput>({
@@ -70,10 +67,8 @@ const MembersDeleteDialog = ({
   }
 
   async function onSubmit(data: DeletionInput) {
-    const ids = members.map(({ id }) => id)
-    for (const id of ids) {
-      removeUserFromOrg({ deleteOrgMembershipId: id })
-    }
+    await handleDelete(members)
+    handleCancel()
   }
 
   return (
@@ -84,7 +79,7 @@ const MembersDeleteDialog = ({
             Remove{' '}
             {members.length > 1
               ? 'members'
-              : `${members[0]?.firstName} ${members[0]?.lastName}`}
+              : `"${members[0]?.firstName} ${members[0]?.lastName}"`}
           </DialogTitle>
           <DialogClose onClick={handleCancel} />
         </DialogHeader>

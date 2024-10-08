@@ -31,6 +31,7 @@ type MembersTableProps = {
   columnFilters?: ColumnFiltersState
   setGlobalFilter?(input: string): void
   onRowsFetched?(data: Row<Datum.OrgUser>[]): void
+  handleDelete(member: Datum.OrgUser[]): Promise<void>
 }
 
 export const MembersTable = ({
@@ -40,6 +41,7 @@ export const MembersTable = ({
   columnFilters,
   setGlobalFilter,
   onRowsFetched,
+  handleDelete,
 }: MembersTableProps) => {
   const { checkboxContainer, userDetails, userDetailsText, header } =
     pageStyles()
@@ -227,7 +229,9 @@ export const MembersTable = ({
       cell: ({ row }) => {
         const member = row.original
 
-        return <MembersTableDropdown member={member} />
+        return (
+          <MembersTableDropdown member={member} handleDelete={handleDelete} />
+        )
       },
     },
   ]

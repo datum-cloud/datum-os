@@ -18,9 +18,13 @@ import { pageStyles } from './page.styles'
 
 type MembersTableDropdownProps = {
   member: Datum.OrgUser
+  handleDelete(members: Datum.OrgUser[]): Promise<void>
 }
 
-const MembersTableDropdown = ({ member }: MembersTableDropdownProps) => {
+const MembersTableDropdown = ({
+  member,
+  handleDelete,
+}: MembersTableDropdownProps) => {
   const [openEditDialog, _setOpenEditDialog] = useState(false)
   const [openDeleteDialog, _setOpenDeleteDialog] = useState(false)
   const { membersDropdownItem, membersDropdownIcon } = pageStyles()
@@ -51,14 +55,14 @@ const MembersTableDropdown = ({ member }: MembersTableDropdownProps) => {
             onClick={() => setOpenEditDialog(true)}
           >
             <Pencil size={18} className={membersDropdownIcon()} />
-            Edit Role
+            Edit role
           </DropdownMenuItem>
           <DropdownMenuItem
             className={membersDropdownItem()}
             onClick={() => setOpenDeleteDialog(true)}
           >
             <Minus size={18} className={membersDropdownIcon()} />
-            Remove
+            Remove team member
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
@@ -66,14 +70,12 @@ const MembersTableDropdown = ({ member }: MembersTableDropdownProps) => {
         member={member}
         open={openEditDialog}
         setOpen={setOpenEditDialog}
-        // TODO:
-        onDelete={() => console.log('Delete this contact!')}
       />
       <MembersDeleteDialog
         members={[member]}
         open={openDeleteDialog}
         setOpen={setOpenDeleteDialog}
-        redirect
+        handleDelete={handleDelete}
       />
     </div>
   )
