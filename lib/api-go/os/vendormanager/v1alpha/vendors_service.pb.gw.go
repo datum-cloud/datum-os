@@ -886,7 +886,7 @@ func RegisterVendorsHandlerServer(ctx context.Context, mux *runtime.ServeMux, se
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/datum.os.vendormanager.v1alpha.Vendors/ListVendors", runtime.WithHTTPPathPattern("/v1alpha/{parent=vendors/*}"))
+		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/datum.os.vendormanager.v1alpha.Vendors/ListVendors", runtime.WithHTTPPathPattern("/v1alpha/{parent=vendors}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -1163,7 +1163,7 @@ func RegisterVendorsHandlerClient(ctx context.Context, mux *runtime.ServeMux, cl
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/datum.os.vendormanager.v1alpha.Vendors/ListVendors", runtime.WithHTTPPathPattern("/v1alpha/{parent=vendors/*}"))
+		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/datum.os.vendormanager.v1alpha.Vendors/ListVendors", runtime.WithHTTPPathPattern("/v1alpha/{parent=vendors}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -1301,7 +1301,7 @@ var (
 
 	pattern_Vendors_GetVendor_1 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 2, 2, 1, 0, 4, 4, 5, 3}, []string{"v1alpha", "organizations", "vendors", "name"}, ""))
 
-	pattern_Vendors_ListVendors_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 2, 5, 2}, []string{"v1alpha", "vendors", "parent"}, ""))
+	pattern_Vendors_ListVendors_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 4, 1, 5, 2}, []string{"v1alpha", "vendors", "parent"}, ""))
 
 	pattern_Vendors_ListVendors_1 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 2, 2, 4, 3, 5, 3}, []string{"v1alpha", "organizations", "vendors", "parent"}, ""))
 
