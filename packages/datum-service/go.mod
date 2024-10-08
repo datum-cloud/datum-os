@@ -68,7 +68,7 @@ require (
 )
 
 // We must use our fork because our echo server is not compatible with the original oapi-codegen generator. :(
-replace github.com/oapi-codegen/oapi-codegen/v2 => /Users/aus/Code/oapi-codegen
+replace github.com/oapi-codegen/oapi-codegen/v2 => github.com/datum-cloud/oapi-codegen/v2 v2.4.1
 
 require (
 	cloud.google.com/go/auth v0.8.1 // indirect

@@ -7,8 +7,8 @@ package datum.os.vendormanager.v1alpha;
 import "google/api/annotations.proto";
 import "google/api/client.proto";
 import "google/api/field_behavior.proto";
-import "google/longrunning/operations.proto";
 import "google/api/resource.proto";
+import "google/longrunning/operations.proto";
 import "google/protobuf/empty.proto";
 import "google/protobuf/field_mask.proto";
 import "datum/os/vendormanager/v1alpha/vendors_resources.proto";
@@ -46,7 +46,7 @@ service Vendors {
     rpc ListVendors(ListVendorsRequest) returns (ListVendorsResponse) {
         option (google.api.method_signature) = "parent";
         option (google.api.http) = {
-            get: "/v1alpha/{parent=vendors/*}"
+            get: "/v1alpha/{parent=vendors}"
             additional_bindings {
                 get: "/v1alpha/{parent=organizations/*/vendors}"
             }
@@ -70,18 +70,27 @@ service Vendors {
         };
     }
 
-    // // DeleteVendor deletes a Vendor by name.
-    // rpc DeleteVendor(DeleteVendorRequest) returns (google.longrunning.Operation) {
-    //     option (google.api.method_signature) = "name";
-    //     option (google.api.http) = {
-    //         delete: "/v1alpha/vendors/{name=vendor}"
-    //     };
-    // }
+    // DeleteVendor deletes a Vendor by name.
+    rpc DeleteVendor(DeleteVendorRequest) returns (google.longrunning.Operation) {
+        option (google.api.method_signature) = "name";
+        option (google.api.http) = {
+            delete: "/v1alpha/{name=vendors/*}"
+            additional_bindings {
+                delete: "/v1alpha/{name=organizations/*/vendors/*}"
+            }
+        };
+        option (google.longrunning.operation_info) = {
+            response_type: "google.protobuf.Empty"
+            metadata_type: "google.cloud.common.OperationMetadata"
+        };
+    }
 }
 
 // CreateVendorRequest is the request for creating a Vendor.
 message CreateVendorRequest {
     // The parent resource where the Vendor will be created. Defaults to the current user's organization.
+    // Format: vendors
+    // Additional format: organizations/{organization}/vendors
     string parent = 1 [
         (google.api.field_behavior) = REQUIRED,
         (google.api.resource_reference) = {
@@ -102,7 +111,7 @@ message CreateVendorRequest {
 message GetVendorRequest {
     // The name of the Vendor to get.
     // Format: vendors/{vendor}
-    // Format: organizations/{organization}/vendors/{vendor}
+    // Additional format: organizations/{organization}/vendors/{vendor}
     string name = 1 [
         (google.api.field_behavior) = REQUIRED,
         (google.api.resource_reference) = {
@@ -146,25 +155,28 @@ message ListVendorsResponse {
 // UpdateVendorRequest is the request for updating a Vendor.
 message UpdateVendorRequest {
     // The Vendor to update.
-    Vendor vendor = 2 [(google.api.field_behavior) = REQUIRED];
+    Vendor vendor = 1 [(google.api.field_behavior) = REQUIRED];
     // The field mask to update the Vendor.
-    google.protobuf.FieldMask update_mask = 3 [(google.api.field_behavior) = OPTIONAL];
+    google.protobuf.FieldMask update_mask = 2 [(google.api.field_behavior) = OPTIONAL];
     // Allow missing Vendor. If true, the Vendor will be created if it does not exist. In this case,
     // field_mask is ignored.
-    bool allow_missing = 4 [(google.api.field_behavior) = OPTIONAL];
+    bool allow_missing = 3 [(google.api.field_behavior) = OPTIONAL];
     // If true, the request is validated and nothing is persisted.
-    bool validate_only = 5 [(google.api.field_behavior) = OPTIONAL];
+    bool validate_only = 4 [(google.api.field_behavior) = OPTIONAL];
 }
 
-// // DeleteVendorRequest is the request for deleting a Vendor by name.
-// message DeleteVendorRequest {
-//     // The name of the Vendor to delete.
-//     string name = 1 [
-//         (google.api.field_behavior) = REQUIRED,
-//         (google.api.resource_reference) = {
-//             type: "api.datum.net/Vendor"
-//         }
-//     ];
-//     // If true, the request is validated and nothing is persisted.
-//     bool validate_only = 2 [(google.api.field_behavior) = OPTIONAL];
-// }
+// DeleteVendorRequest is the request for deleting a Vendor by name.
+message DeleteVendorRequest {
+    // The name of the Vendor to delete.
+    string name = 1 [
+        (google.api.field_behavior) = REQUIRED,
+        (google.api.resource_reference) = {
+            type: "api.datum.net/Vendor"
+        }
+    ];
+    // The etag of the Vendor to delete. If this is not the same etag as the currently stored Vendor,
+    // the request will be rejected. If not provided, the Vendor will be deleted unconditionally.
+    string etag = 2 [(google.api.field_behavior) = OPTIONAL];
+    // If true, the request is validated and nothing is persisted.
+    bool validate_only = 3 [(google.api.field_behavior) = OPTIONAL];
+}
