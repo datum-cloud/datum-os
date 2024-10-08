@@ -95,6 +95,12 @@ message Vendor {
 
     // The profile of the Vendor.
     Profile profile = 2 [(google.api.field_behavior) = REQUIRED];
+
+    // The onboarding state of the Vendor. Defaults to ONBOARDING_STATE_PENDING on creation.
+    // (-- api-linter: core::0216::state-field-output-only=disabled
+    //     aip.dev/not-precedent: We are modeling our Vendor APIs from Square's Vendor APIs. 
+    //     The 'state' of a Vendor is not output only. It is settable by the user. --)
+    OnboardingState state = 3 [(google.api.field_behavior) = OPTIONAL];
   }
 
   // Profile is the profile of a Vendor.
@@ -138,4 +144,16 @@ enum VendorType {
   VENDOR_TYPE_PERSON = 1;
   // Vendor is a corporation.
   VENDOR_TYPE_CORPORATION = 2;
+}
+
+// OnboardingState is the state of a Vendor's onboarding process.
+enum OnboardingState {
+  // OnboardingState is not specified.
+  ONBOARDING_STATE_UNSPECIFIED = 0;
+  // OnboardingState is pending. The vendor is pending approval. No invoices can be created until the vendor is approved.
+  ONBOARDING_STATE_PENDING = 1;
+  // OnboardingState is active. The vendor is active and can have invoices created. Invoices will be paid out to the vendor.
+  ONBOARDING_STATE_ACTIVE = 2;
+  // OnboardingState is inactive. The vendor is inactive and cannot have invoices created. Existing invoices will be allowed to be paid out.
+  ONBOARDING_STATE_INACTIVE = 3;
 }
