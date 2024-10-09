@@ -1,29 +1,40 @@
 <!doctype html>
 <html>
-<head>
-  <meta name="viewport" content="width=device-width" />
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-  <title>{{ block "title" . }}{{ end }}</title>
-  {{ template "style.html" . }}
-</head>
-<body>
-  <span class="preheader">{{ block "preheader" . }}{{ end }}</span>
-  <div style="max-width: 570px; margin: 64px auto; padding: 0 16px;">
-    <div style="border: 1px solid #E1EBEA; border-radius: 8px; overflow: hidden;">
-      <table role="presentation" border="0" cellpadding="0" cellspacing="0" class="body" style="width: 100%;">
-        <tr>
-          <td style="padding: 48px;">
-            {{ template "header.html" . }}
-
-            {{ block "content" . }}{{ end }}
-
-            {{ template "help.html" . }}
-
-            {{ template "footer.html" . }}
-          </td>
-        </tr>
-      </table>
+  <head>
+    <meta name="viewport" content="width=device-width" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>{{ block "title" . }}{{ end }}</title>
+    {{ template "style.html" . }}
+    <style>
+      @media screen and (min-width: 600px) {
+        .container {
+          padding: 48px !important;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <span class="preheader">{{ block "preheader" . }}{{ end }}</span>
+    <div style="max-width: 570px; margin: 64px auto; padding: 0 16px">
+      <div
+        style="border: 1px solid #e1ebea; border-radius: 8px; overflow: hidden"
+      >
+        <table
+          role="presentation"
+          border="0"
+          cellpadding="0"
+          cellspacing="0"
+          class="body"
+          style="width: 100%"
+        >
+          <tr>
+            <td class="container" style="padding: 16px">
+              {{ template "header.html" . }} {{ block "content" . }}{{ end }} {{
+              template "help.html" . }} {{ template "footer.html" . }}
+            </td>
+          </tr>
+        </table>
+      </div>
     </div>
-  </div>
-</body>
+  </body>
 </html>
