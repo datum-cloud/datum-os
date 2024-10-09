@@ -1,12 +1,12 @@
 'use client'
 
+import { TriangleAlert } from 'lucide-react'
 import { useState } from 'react'
 
+import { Button } from '@repo/ui/button'
 import { Panel, PanelHeader } from '@repo/ui/panel'
 
 import WorkspaceDeleteDialog from '@/components/pages/protected/workspace/settings/workspace-delete-dialog'
-import { Button } from '@repo/ui/button'
-import { TriangleAlert } from 'lucide-react'
 
 type WorkspaceDeleteProps = {
   name: string
@@ -24,19 +24,23 @@ const WorkspaceDelete = ({ name, handleDelete }: WorkspaceDeleteProps) => {
     <>
       <Panel>
         <PanelHeader heading="Delete workspace" noBorder />
-        <Panel align="start" destructive>
-          <div className="w-full flex justify-start items-center gap-3">
-            <TriangleAlert />
+        <Panel
+          align="start"
+          destructive
+          className="flex flex-row items-start gap-3 justify-start"
+        >
+          <TriangleAlert className="mt-0.5" />
+          <div className="w-full flex flex-col justify-start items-start gap-4">
             <p className="text-util-red-500">
               Deleting your workspace is irreversible.
             </p>
+            <Button
+              variant="destructiveOutline"
+              onClick={() => setOpenDeleteDialog(true)}
+            >
+              Delete this workspace
+            </Button>
           </div>
-          <Button
-            variant="destructive"
-            onClick={() => setOpenDeleteDialog(true)}
-          >
-            Delete this workspace
-          </Button>
         </Panel>
       </Panel>
       <WorkspaceDeleteDialog

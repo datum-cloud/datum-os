@@ -3,7 +3,6 @@
 import { Ellipsis, Minus, Pencil } from 'lucide-react'
 import React, { useState } from 'react'
 
-import { useRemoveUserFromOrgMutation } from '@repo/codegen/src/schema'
 import type { Datum } from '@repo/types'
 import {
   DropdownMenu,
@@ -12,30 +11,22 @@ import {
   DropdownMenuTrigger,
 } from '@repo/ui/dropdown-menu'
 
-import MembersDeleteDialog from './members-delete-dialog'
 import MembersFormDialog from './members-form-dialog'
 import { pageStyles } from './page.styles'
 
 type MembersTableDropdownProps = {
+  isAdmin: boolean
   member: Datum.OrgUser
-  handleDelete(members: Datum.OrgUser[]): Promise<void>
+  handleDelete(members: Datum.OrgUser[]): void
 }
 
 const MembersTableDropdown = ({
+  isAdmin,
   member,
   handleDelete,
 }: MembersTableDropdownProps) => {
   const [openEditDialog, _setOpenEditDialog] = useState(false)
-  const [openDeleteDialog, _setOpenDeleteDialog] = useState(false)
   const { membersDropdownItem, membersDropdownIcon } = pageStyles()
-  const [{ fetching, error }, removeUserFromOrg] =
-    useRemoveUserFromOrgMutation()
-
-  function setOpenDeleteDialog(input: boolean) {
-    _setOpenDeleteDialog(input)
-    // NOTE: This is needed to close the dialog without removing pointer events per https://github.com/shadcn-ui/ui/issues/468
-    setTimeout(() => (document.body.style.pointerEvents = ''), 500)
-  }
 
   function setOpenEditDialog(input: boolean) {
     _setOpenEditDialog(input)
@@ -46,7 +37,7 @@ const MembersTableDropdown = ({
   return (
     <div className="flex items-center justify-center">
       <DropdownMenu>
-        <DropdownMenuTrigger className="p-0.5">
+        <DropdownMenuTrigger disabled={!isAdmin} className="p-0.5">
           <Ellipsis className={membersDropdownIcon()} />
         </DropdownMenuTrigger>
         <DropdownMenuContent className="py-2.5 px-2" align="end">
@@ -59,7 +50,7 @@ const MembersTableDropdown = ({
           </DropdownMenuItem>
           <DropdownMenuItem
             className={membersDropdownItem()}
-            onClick={() => setOpenDeleteDialog(true)}
+            onClick={() => handleDelete([member])}
           >
             <Minus size={18} className={membersDropdownIcon()} />
             Remove team member
@@ -70,12 +61,6 @@ const MembersTableDropdown = ({
         member={member}
         open={openEditDialog}
         setOpen={setOpenEditDialog}
-      />
-      <MembersDeleteDialog
-        members={[member]}
-        open={openDeleteDialog}
-        setOpen={setOpenDeleteDialog}
-        handleDelete={handleDelete}
       />
     </div>
   )

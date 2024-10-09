@@ -9,6 +9,7 @@ import {
   InviteRole,
   useCreateBulkInviteMutation,
 } from '@repo/codegen/src/schema'
+import { pluralize } from '@repo/common/text'
 import { Button } from '@repo/ui/button'
 import {
   Form,
@@ -35,7 +36,12 @@ import { UserInviteInput, UserInviteSchema } from '@/utils/schemas'
 
 import { inviteStyles } from './page.styles'
 
-const InviteForm = ({ inviteAdmins }: { inviteAdmins: boolean }) => {
+type InviteFormProps = {
+  inviteAdmins: boolean
+  refetchInvites(): void
+}
+
+const InviteForm = ({ inviteAdmins, refetchInvites }: InviteFormProps) => {
   const { buttonRow, roleRow } = inviteStyles()
   const { toast } = useToast()
 
@@ -53,10 +59,13 @@ const InviteForm = ({ inviteAdmins }: { inviteAdmins: boolean }) => {
 
   const {
     control,
+    watch,
     handleSubmit,
     setValue,
     formState: { errors },
   } = form
+
+  const values = watch()
 
   const [emails, setEmails] = useState<Tag[]>([])
   const [activeTagIndex, setActiveTagIndex] = useState<number | null>(null)
@@ -74,11 +83,18 @@ const InviteForm = ({ inviteAdmins }: { inviteAdmins: boolean }) => {
       input: inviteInput,
     })
 
-    response.data &&
+    if (response.error) {
+      toast({
+        title: 'Error inviting members',
+        variant: 'destructive',
+      })
+    } else {
       toast({
         title: `Invite${emails.length > 1 ? 's' : ''} sent successfully`,
         variant: 'success',
       })
+      refetchInvites()
+    }
     setEmails([])
   }
 
@@ -100,13 +116,20 @@ const InviteForm = ({ inviteAdmins }: { inviteAdmins: boolean }) => {
     return /\S+@\S+\.\S+/.test(email)
   }
 
-  const handleBlur = () => {
-    if (isValidEmail(currentValue)) {
+  function handleEmails(newTags: Tag[]) {
+    const emailTags = newTags.map((tag) => tag.text)
+    setEmails(newTags)
+    setValue('emails', emailTags)
+    setCurrentValue('')
+  }
+
+  function handleBlur() {
+    if (isValidEmail(currentValue) && !values.emails.includes(currentValue)) {
       const newTag = { id: currentValue, text: currentValue }
       setEmails((prev) => [...prev, newTag])
       setValue('emails', [...emails.map((tag) => tag.text), currentValue])
-      setCurrentValue('')
     }
+    setCurrentValue('')
   }
 
   return (
@@ -127,11 +150,7 @@ const InviteForm = ({ inviteAdmins }: { inviteAdmins: boolean }) => {
                   <TagInput
                     {...field}
                     tags={emails}
-                    setTags={(newTags: Tag[]) => {
-                      const emailTags = newTags.map((tag) => tag.text)
-                      setEmails(newTags)
-                      setValue('emails', emailTags)
-                    }}
+                    setTags={handleEmails}
                     activeTagIndex={activeTagIndex}
                     setActiveTagIndex={setActiveTagIndex}
                     inputProps={{ value: currentValue }}
@@ -190,7 +209,7 @@ const InviteForm = ({ inviteAdmins }: { inviteAdmins: boolean }) => {
               />
             </div>
             <Button type="submit" disabled={emails.length === 0}>
-              Send invitation{emails.length > 1 && 's'}
+              Send {pluralize('invitation', emails.length)}
             </Button>
           </div>
         </form>

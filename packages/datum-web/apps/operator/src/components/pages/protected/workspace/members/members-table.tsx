@@ -26,15 +26,17 @@ import { pageStyles } from './page.styles'
 
 type MembersTableProps = {
   members: Datum.OrgUser[]
+  isAdmin: boolean
   setSelection?(users: Datum.OrgUser[]): void
   globalFilter?: string
   columnFilters?: ColumnFiltersState
   setGlobalFilter?(input: string): void
   onRowsFetched?(data: Row<Datum.OrgUser>[]): void
-  handleDelete(member: Datum.OrgUser[]): Promise<void>
+  handleDelete(member: Datum.OrgUser[]): void
 }
 
 export const MembersTable = ({
+  isAdmin,
   members,
   setSelection,
   globalFilter,
@@ -165,7 +167,6 @@ export const MembersTable = ({
         const { firstName, lastName, avatarLocalFile, avatarRemoteURL } =
           value || {}
         const avatar = avatarLocalFile || avatarRemoteURL
-        console.log('USER', row.original)
 
         return (
           <div className={userDetails()}>
@@ -230,7 +231,11 @@ export const MembersTable = ({
         const member = row.original
 
         return (
-          <MembersTableDropdown member={member} handleDelete={handleDelete} />
+          <MembersTableDropdown
+            isAdmin={isAdmin}
+            member={member}
+            handleDelete={handleDelete}
+          />
         )
       },
     },

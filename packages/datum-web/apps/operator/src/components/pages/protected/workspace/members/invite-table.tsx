@@ -2,60 +2,42 @@
 
 import { ColumnDef } from '@tanstack/react-table'
 import { format } from 'date-fns'
-import { useSession } from 'next-auth/react'
 
-import {
-  InviteInviteStatus,
-  InviteRole,
-  useGetInvitesQuery,
-} from '@repo/codegen/src/schema'
-import { DataTable } from '@repo/ui/data-table'
+import { InviteInviteStatus } from '@repo/codegen/src/schema'
+import { Datum } from '@repo/types'
+import { DataTable, DataTableColumnHeader } from '@repo/ui/data-table'
 import { Tag } from '@repo/ui/tag'
 
-import { Loading } from '@/components/shared/loading/loading'
-
 import { InvitesDropdown } from './invite-dropdown'
+import { pageStyles } from './page.styles'
 
-type InviteNode = {
-  __typename?: 'Invite' | undefined
-  id: string
-  recipient: string
-  status: InviteInviteStatus
-  createdAt?: any
-  role: InviteRole
+type InviteTableProps = {
+  invites: Datum.Invitation[]
+  handleDelete(inviteIds: Datum.InvitationId[]): void
 }
 
-type InviteEdge = {
-  __typename?: 'InviteEdge' | undefined
-  node?: InviteNode | null
-}
-
-const InviteTable = () => {
-  const { data: session } = useSession()
-
-  const [{ data, fetching, error }, refetch] = useGetInvitesQuery({
-    pause: !session,
-  })
-
-  if (fetching) return <Loading />
-
-  if (error || !data) return null
-
-  const invites: InviteNode[] =
-    data.invites.edges
-      ?.filter(
-        (edge): edge is InviteEdge => edge !== null && edge.node !== null,
-      )
-      .map((edge) => edge.node as InviteNode) || []
-
-  const columns: ColumnDef<InviteNode>[] = [
+const InviteTable = ({ invites, handleDelete }: InviteTableProps) => {
+  const { header } = pageStyles()
+  const columns: ColumnDef<Datum.Invitation>[] = [
     {
       accessorKey: 'recipient',
-      header: 'Invited user',
+      header: ({ column }) => (
+        <DataTableColumnHeader
+          className={header()}
+          column={column}
+          children="Invited user"
+        />
+      ),
     },
     {
       accessorKey: 'status',
-      header: 'Status',
+      header: ({ column }) => (
+        <DataTableColumnHeader
+          className={header()}
+          column={column}
+          children="Status"
+        />
+      ),
       cell: ({ cell }) => {
         const status = cell.getValue() as InviteInviteStatus
         let statusLabel
@@ -78,13 +60,25 @@ const InviteTable = () => {
     },
     {
       accessorKey: 'createdAt',
-      header: 'Sent',
+      header: ({ column }) => (
+        <DataTableColumnHeader
+          className={header()}
+          column={column}
+          children="Sent"
+        />
+      ),
       cell: ({ cell }) =>
         format(new Date(cell.getValue() as string), 'd MMM yyyy'),
     },
     {
       accessorKey: 'role',
-      header: 'Role',
+      header: ({ column }) => (
+        <DataTableColumnHeader
+          className={header()}
+          column={column}
+          children="Role"
+        />
+      ),
     },
     {
       accessorKey: 'id',
@@ -92,8 +86,8 @@ const InviteTable = () => {
       size: 60,
       cell: ({ cell }) => (
         <InvitesDropdown
-          inviteId={cell.getValue() as string}
-          refetchInvites={refetch}
+          inviteId={cell.getValue() as Datum.InvitationId}
+          handleDelete={handleDelete}
         />
       ),
     },

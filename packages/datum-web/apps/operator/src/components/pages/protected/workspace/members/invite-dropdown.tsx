@@ -1,54 +1,25 @@
 'use client'
 
 import { Ellipsis, RotateCw, Trash2 } from 'lucide-react'
-import { type UseQueryExecute } from 'urql'
 
-import { useDeleteOrganizationInviteMutation } from '@repo/codegen/src/schema'
+import { Datum } from '@repo/types'
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@repo/ui/dropdown-menu'
-import { useToast } from '@repo/ui/use-toast'
 
 import { pageStyles } from './page.styles'
 
 type InviteDropdownProps = {
-  inviteId: string
-  refetchInvites: UseQueryExecute
+  inviteId: Datum.InvitationId
+  handleDelete(invites: Datum.InvitationId[]): void
+  // handleResend(invites: Datum.InvitationId[]): void
 }
 
-const InvitesDropdown = ({ inviteId, refetchInvites }: InviteDropdownProps) => {
+const InvitesDropdown = ({ inviteId, handleDelete }: InviteDropdownProps) => {
   const { membersDropdownIcon, membersDropdownItem } = pageStyles()
-  const { toast } = useToast()
-  const [_, deleteInvite] = useDeleteOrganizationInviteMutation()
-
-  async function handleDeleteInvite() {
-    const response = await deleteInvite({ deleteInviteId: inviteId })
-
-    if (response.error) {
-      toast({
-        title: 'There was a problem deleting this invite, please try again',
-        variant: 'destructive',
-      })
-    }
-
-    if (response.data) {
-      toast({
-        title: 'Invite deleted successfully',
-        variant: 'success',
-      })
-      refetchInvites({
-        requestPolicy: 'network-only',
-      })
-    }
-  }
-
-  async function handleResendInvite() {
-    // TODO
-    alert('Coming soon')
-  }
 
   return (
     <DropdownMenu>
@@ -56,16 +27,16 @@ const InvitesDropdown = ({ inviteId, refetchInvites }: InviteDropdownProps) => {
         <Ellipsis className={membersDropdownIcon()} />
       </DropdownMenuTrigger>
       <DropdownMenuContent className="py-2.5 px-2" align="end">
-        <DropdownMenuItem
+        {/* <DropdownMenuItem
           className={membersDropdownItem()}
           onSelect={handleResendInvite}
         >
           <RotateCw size={18} className={membersDropdownIcon()} /> Resend
           Invitation
-        </DropdownMenuItem>
+        </DropdownMenuItem> */}
         <DropdownMenuItem
           className={membersDropdownItem()}
-          onSelect={handleDeleteInvite}
+          onClick={() => handleDelete([inviteId])}
         >
           <Trash2 size={18} className={membersDropdownIcon()} /> Delete
           Invitation

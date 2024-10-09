@@ -174,7 +174,6 @@ export namespace Datum {
   }
 
   export interface OrgUser extends User {
-    orgId: OrganisationId
     orgRole: string
     membershipId: MembershipId
     joinedAt: string

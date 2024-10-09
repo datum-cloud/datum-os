@@ -1,10 +1,11 @@
 'use client'
 
-import { ChevronDown, Import, Minus, PlusIcon, Trash } from 'lucide-react'
+import { ChevronDown, Import, Minus, PlusIcon } from 'lucide-react'
 import { useSession } from 'next-auth/react'
 import { useMemo, useState } from 'react'
 
 import {
+  useDeleteInviteMutation,
   useGetInvitesQuery,
   useGetOrgMembersByOrgIdQuery,
   useRemoveUserFromOrgMutation,
@@ -24,7 +25,11 @@ import { useToast } from '@repo/ui/use-toast'
 
 import PageTitle from '@/components/page-title'
 import Search from '@/components/shared/table-search/table-search'
-import { canInviteAdminsRelation, useCheckPermissions } from '@/lib/authz/utils'
+import {
+  canDeleteRelation,
+  canInviteAdminsRelation,
+  useCheckPermissions,
+} from '@/lib/authz/utils'
 import { formatUsersExportData } from '@/utils/export'
 
 import { InviteForm } from './invite-form'
@@ -52,19 +57,33 @@ const MembersPage: React.FC = () => {
   const [exportData, setExportData] = useState<Row<Datum.OrgUser>[]>([])
   const [activeTab, setActiveTab] = useState(defaultTab)
   const { data: session } = useSession()
-  const [{ data, fetching, error, stale }] = useGetInvitesQuery({
+  const [{ data: invitesData }, refetchInvites] = useGetInvitesQuery({
     pause: !session,
   })
-  const [{ fetching: isDeleting, error: deletionError }, removeUserFromOrg] =
-    useRemoveUserFromOrgMutation()
+  const [{ data: membersData }, refetchMembers] = useGetOrgMembersByOrgIdQuery({
+    variables: {
+      where: { organizationID: session?.user.organization ?? '' },
+    },
+    pause: !session,
+  })
+  const [_member, removeUserFromOrg] = useRemoveUserFromOrgMutation()
+  const [_invite, deleteInvite] = useDeleteInviteMutation()
+  const { data: adminPrivileges } = useCheckPermissions(
+    session,
+    canDeleteRelation,
+  )
 
-  const [{ data: membersData, error: membersError, stale: membersStale }] =
-    useGetOrgMembersByOrgIdQuery({
-      variables: {
-        where: { organizationID: session?.user.organization ?? '' },
-      },
-      pause: !session,
-    })
+  // Check if the user can invite admins or only members
+  const { data: inviteAdminPermissions } = useCheckPermissions(
+    session,
+    canInviteAdminsRelation,
+  )
+
+  const invites = useMemo(() => {
+    return (invitesData?.invites?.edges
+      ?.map((edge) => edge?.node)
+      .filter(Boolean) || []) as Datum.Invitation[]
+  }, [invitesData])
 
   const members = useMemo(() => {
     return (membersData?.orgMemberships?.edges
@@ -72,7 +91,6 @@ const MembersPage: React.FC = () => {
         (edge) =>
           edge?.node?.user && {
             ...edge?.node?.user,
-            orgId: edge?.node?.organizationID,
             membershipId: edge?.node?.id,
             orgRole: edge?.node?.role,
             joinedAt: edge?.node?.createdAt,
@@ -93,34 +111,69 @@ const MembersPage: React.FC = () => {
     setTimeout(() => (document.body.style.pointerEvents = ''), 500)
   }
 
-  async function handleDelete(members: Datum.OrgUser[]) {
-    const ids = members.map(({ id }) => id)
-    for (const id of ids) {
-      await removeUserFromOrg({ deleteOrgMembershipId: id })
-    }
+  async function handleDeleteInvite(inviteIds: Datum.InvitationId[]) {
+    try {
+      for (const id of inviteIds) {
+        const result = await deleteInvite({ deleteInviteId: id })
 
-    if (error) {
+        if (result.error) {
+          toast({
+            title: `Error ${result.error.message}`,
+            variant: 'destructive',
+          })
+        } else {
+          toast({
+            title: 'Invite deleted successfully',
+            variant: 'success',
+          })
+
+          refetchInvites({
+            requestPolicy: 'network-only',
+          })
+        }
+      }
+    } catch (err) {
       toast({
-        title: `Error ${error.message}`,
+        title: `Unexpected error: ${(err as Error).message}`,
         variant: 'destructive',
-      })
-    } else {
-      toast({
-        title: 'Team member removed successfully',
-        variant: 'success',
       })
     }
   }
 
-  // Check if the user can invite admins or only members
-  const { data: inviteAdminPermissions } = useCheckPermissions(
-    session,
-    canInviteAdminsRelation,
-  )
+  async function handleDelete(members: Datum.OrgUser[]) {
+    try {
+      const ids = members.map(({ membershipId }) => membershipId)
+      for (const id of ids) {
+        const result = await removeUserFromOrg({ deleteOrgMembershipId: id })
 
-  const numInvites = Array.isArray(data?.invites.edges)
-    ? data?.invites.edges.length
-    : 0
+        if (result.error) {
+          setOpenDeleteDialog(false)
+          toast({
+            title: `Error ${result.error.message}`,
+            variant: 'destructive',
+          })
+        } else {
+          setOpenDeleteDialog(false)
+          toast({
+            title: 'Team member removed successfully',
+            variant: 'success',
+          })
+          refetchMembers({ requestPolicy: 'network-only' })
+        }
+      }
+    } catch (err) {
+      setOpenDeleteDialog(false)
+      toast({
+        title: `Unexpected error: ${(err as Error).message}`,
+        variant: 'destructive',
+      })
+    }
+  }
+
+  function handleDeleteModal(members: Datum.OrgUser[]) {
+    setSelectedUsers(members)
+    setOpenDeleteDialog(true)
+  }
 
   return (
     <>
@@ -133,12 +186,12 @@ const MembersPage: React.FC = () => {
         }}
       >
         <TabsList>
-          <TabsTrigger value="members">Member list</TabsTrigger>
+          <TabsTrigger value="members">Team members</TabsTrigger>
           <TabsTrigger value="invites">
             <div className={inviteRow()}>
               <span>Invitations</span>
-              {numInvites > 0 && (
-                <div className={inviteCount()}>{numInvites}</div>
+              {invites.length > 0 && (
+                <div className={inviteCount()}>{invites.length}</div>
               )}
             </div>
           </TabsTrigger>
@@ -193,7 +246,8 @@ const MembersPage: React.FC = () => {
             globalFilter={query}
             setSelection={setSelectedUsers}
             onRowsFetched={setExportData}
-            handleDelete={handleDelete}
+            handleDelete={handleDeleteModal}
+            isAdmin={adminPrivileges?.allowed}
           />
           <MembersDeleteDialog
             members={selectedUsers}
@@ -204,8 +258,11 @@ const MembersPage: React.FC = () => {
         </TabsContent>
         <TabsContent value="invites">
           <div className={wrapper()}>
-            <InviteForm inviteAdmins={inviteAdminPermissions?.allowed} />
-            <InviteTable />
+            <InviteForm
+              inviteAdmins={inviteAdminPermissions?.allowed}
+              refetchInvites={refetchInvites}
+            />
+            <InviteTable invites={invites} handleDelete={handleDeleteInvite} />
           </div>
         </TabsContent>
       </Tabs>

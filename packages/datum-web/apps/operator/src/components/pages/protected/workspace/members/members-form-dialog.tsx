@@ -52,11 +52,9 @@ const MembersFormDialog = ({
   setOpen,
 }: MembersDialogFormProps) => {
   const { toast } = useToast()
-  const { orgRole, orgId } = member
+  const { orgRole, membershipId } = member
   const { form: formStyle, fieldsContainer, selectItem } = formStyles()
-  const [{ fetching, error }, updateUserRoleInOrg] =
-    useUpdateUserRoleInOrgMutation()
-  console.log(error, fetching)
+  const [_, updateUserRoleInOrg] = useUpdateUserRoleInOrgMutation()
 
   const form = useForm<MemberInput>({
     resolver: zodResolver(MemberSchema),
@@ -83,28 +81,32 @@ const MembersFormDialog = ({
   }, [open, member, reset])
 
   async function onSubmit(data: MemberInput) {
-    console.log('SUBMIT', data)
-    updateUserRoleInOrg({
-      updateOrgMemberId: orgId,
-      input: {
-        role: data.role as OrgMembershipRole,
-      },
-    })
+    try {
+      const result = await updateUserRoleInOrg({
+        updateOrgMemberId: membershipId,
+        input: {
+          role: data.role as OrgMembershipRole,
+        },
+      })
 
-    console.log('ERROR', error)
-
-    if (error) {
+      if (result.error) {
+        toast({
+          title: `Error ${result.error.message}`,
+          variant: 'destructive',
+        })
+      } else {
+        toast({
+          title: 'Role updated successfully',
+          variant: 'success',
+        })
+        handleCancel()
+      }
+    } catch (err) {
       toast({
-        title: `Error ${error.message}`,
+        title: `Unexpected error: ${(err as Error).message}`,
         variant: 'destructive',
       })
-    } else {
-      toast({
-        title: 'Role updated successfully',
-        variant: 'success',
-      })
     }
-    handleCancel()
   }
 
   function handleCancel() {

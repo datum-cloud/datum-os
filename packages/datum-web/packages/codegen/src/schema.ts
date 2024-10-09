@@ -12886,6 +12886,13 @@ export type InvitesByOrgIdQueryVariables = Exact<{
 
 export type InvitesByOrgIdQuery = { __typename?: 'Query', invites: { __typename?: 'InviteConnection', edges?: Array<{ __typename?: 'InviteEdge', node?: { __typename?: 'Invite', owner?: { __typename?: 'Organization', id: string, invites?: Array<{ __typename?: 'Invite', recipient: string, requestorID?: string | null, role: InviteRole, sendAttempts: number, status: InviteInviteStatus }> | null } | null } | null } | null> | null } };
 
+export type DeleteInviteMutationVariables = Exact<{
+  deleteInviteId: Scalars['ID']['input'];
+}>;
+
+
+export type DeleteInviteMutation = { __typename?: 'Mutation', deleteInvite: { __typename?: 'InviteDeletePayload', deletedID: string } };
+
 export type GetAllOrganizationsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -13255,6 +13262,17 @@ export const InvitesByOrgIdDocument = gql`
 
 export function useInvitesByOrgIdQuery(options?: Omit<Urql.UseQueryArgs<InvitesByOrgIdQueryVariables>, 'query'>) {
   return Urql.useQuery<InvitesByOrgIdQuery, InvitesByOrgIdQueryVariables>({ query: InvitesByOrgIdDocument, ...options });
+};
+export const DeleteInviteDocument = gql`
+    mutation DeleteInvite($deleteInviteId: ID!) {
+  deleteInvite(id: $deleteInviteId) {
+    deletedID
+  }
+}
+    `;
+
+export function useDeleteInviteMutation() {
+  return Urql.useMutation<DeleteInviteMutation, DeleteInviteMutationVariables>(DeleteInviteDocument);
 };
 export const GetAllOrganizationsDocument = gql`
     query GetAllOrganizations {
