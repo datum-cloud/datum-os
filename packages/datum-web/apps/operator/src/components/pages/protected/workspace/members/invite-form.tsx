@@ -2,6 +2,7 @@
 
 import { Tag } from 'emblor'
 import React, { useEffect, useState } from 'react'
+import { UseQueryExecute } from 'urql'
 
 import {
   CreateInviteInput,
@@ -38,7 +39,7 @@ import { inviteStyles } from './page.styles'
 
 type InviteFormProps = {
   inviteAdmins: boolean
-  refetchInvites(): void
+  refetchInvites: UseQueryExecute
 }
 
 const InviteForm = ({ inviteAdmins, refetchInvites }: InviteFormProps) => {
@@ -93,7 +94,9 @@ const InviteForm = ({ inviteAdmins, refetchInvites }: InviteFormProps) => {
         title: `Invite${emails.length > 1 ? 's' : ''} sent successfully`,
         variant: 'success',
       })
-      refetchInvites()
+      refetchInvites({
+        requestPolicy: 'network-only',
+      })
     }
     setEmails([])
   }

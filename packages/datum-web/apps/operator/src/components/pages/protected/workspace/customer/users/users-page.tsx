@@ -1,28 +1,28 @@
 'use client'
 
-// TODO: Refactor the API calls here to use Subscribers, not OrgMembers
-import React, { useMemo, useState } from 'react'
+// TODO: Refactor the API calls here to get a different segment of users
 import { useSession } from 'next-auth/react'
+import React, { useMemo, useState } from 'react'
 
 import {
   useDeleteUserMutation,
   useGetOrgMembersByOrgIdQuery,
 } from '@repo/codegen/src/schema'
 import { exportExcel } from '@repo/common/csv'
-import type { ColumnFiltersState, Row } from '@repo/ui/data-table'
 import type { Datum } from '@repo/types'
+import type { ColumnFiltersState, Row } from '@repo/ui/data-table'
 
 import PageTitle from '@/components/page-title'
-import { Loading } from '@/components/shared/loading/loading'
-import { Error } from '@/components/shared/error/error'
 import UsersControls from '@/components/pages/protected/workspace/customer/users/users-controls'
 import UsersStatistics from '@/components/pages/protected/workspace/customer/users/users-statistics'
+import { Error } from '@/components/shared/error/error'
+import { Loading } from '@/components/shared/loading/loading'
+import { canInviteAdminsRelation, useCheckPermissions } from '@/lib/authz/utils'
 import { formatUsersExportData } from '@/utils/export'
 
+import { pageStyles } from './page.styles'
 import UserDeleteDialog from './users-delete-dialog'
 import UsersTable from './users-table'
-import { pageStyles } from './page.styles'
-import { canInviteAdminsRelation, useCheckPermissions } from '@/lib/authz/utils'
 
 function getPastFiveMonths() {
   const now = new Date()

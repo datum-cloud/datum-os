@@ -146,8 +146,13 @@ export const MembersTable = ({
     },
     {
       id: 'user',
-      accessorFn: (row) =>
-        `${row?.firstName ?? ''}${row?.lastName ? row?.lastName : ''}`,
+      accessorFn: (row) => {
+        const { firstName, lastName, email } = row || {}
+
+        return firstName || lastName
+          ? `${firstName ?? ''}${lastName ? lastName : ''}`
+          : email
+      },
       enableGlobalFilter: true,
       filterFn: booleanFilter,
       enableSorting: true,
