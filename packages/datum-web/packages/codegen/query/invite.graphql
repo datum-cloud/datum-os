@@ -37,3 +37,9 @@ query InvitesByOrgID($where: InviteWhereInput) {
     }
   }
 }
+
+mutation DeleteInvite($deleteInviteId: ID!) {
+  deleteInvite(id: $deleteInviteId) {
+    deletedID
+  }
+}

@@ -62,7 +62,7 @@ const UsersControls = ({
         />
         <div className={controlsButtons()}>
           <Button variant="outline" onClick={() => setOpenUserDialog(true)}>
-            Add
+            Create New
           </Button>
           <DropdownMenu
             open={openActionsMenu}

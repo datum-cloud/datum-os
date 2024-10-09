@@ -20,6 +20,7 @@ import { toast } from '@repo/ui/use-toast'
 import { OPERATOR_APP_ROUTES } from '@repo/constants'
 import { useRouter } from 'next/navigation'
 import { canDeleteRelation, useCheckPermissions } from '@/lib/authz/utils'
+import { PageHeading } from '@repo/ui/page-heading'
 
 const WorkspaceSettingsPage = () => {
   const { push } = useRouter()
@@ -28,7 +29,7 @@ const WorkspaceSettingsPage = () => {
   const currentOrgId = sessionData?.user.organization
   const [allOrgs] = useGetAllOrganizationsQuery({ pause: !sessionData })
   const currentWorkspace = allOrgs.data?.organizations.edges?.filter(
-    (org) => org?.node?.id === currentOrgId
+    (org) => org?.node?.id === currentOrgId,
   )[0]?.node
   const [{ fetching, error }, updateOrganization] =
     useUpdateOrganizationMutation()
@@ -37,7 +38,7 @@ const WorkspaceSettingsPage = () => {
 
   const { data: deletePermissions } = useCheckPermissions(
     sessionData,
-    canDeleteRelation
+    canDeleteRelation,
   )
 
   async function updateWorkspace(input: UpdateOrganizationInput) {
@@ -101,7 +102,7 @@ const WorkspaceSettingsPage = () => {
 
   return (
     <>
-      <PageTitle title="Workspace Settings" className="mb-10" />
+      <PageTitle title="General Settings" className="mb-10" />
       <div className={wrapper()}>
         <WorkspaceNameForm
           name={currentWorkspace?.name || ''}

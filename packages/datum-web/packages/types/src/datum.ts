@@ -1,6 +1,7 @@
 import { LucideProps } from 'lucide-react'
 
 import { GetOrganizationMembersQuery } from '@repo/codegen/src/schema'
+
 export namespace Datum {
   declare const __brand: unique symbol
 
@@ -156,6 +157,7 @@ export namespace Datum {
   }
 
   export type UserId = Brand<Id, 'UserId'>
+  export type MembershipId = Brand<Id, 'MembershipId'>
 
   export type User = {
     id: Datum.UserId
@@ -173,6 +175,7 @@ export namespace Datum {
 
   export interface OrgUser extends User {
     orgRole: string
+    membershipId: MembershipId
     joinedAt: string
   }
 }

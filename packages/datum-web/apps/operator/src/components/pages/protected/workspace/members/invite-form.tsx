@@ -1,28 +1,8 @@
 'use client'
-import React, { useEffect, useState } from 'react'
-import { useForm, SubmitHandler, Control } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { z, infer as zInfer } from 'zod'
-import { TagInput } from '@repo/ui/tag-input'
-import { Panel, PanelHeader } from '@repo/ui/panel'
-import { useToast } from '@repo/ui/use-toast'
-import {
-  Form,
-  FormItem,
-  FormField,
-  FormControl,
-  FormMessage,
-} from '@repo/ui/form'
-import { Button } from '@repo/ui/button'
+
 import { Tag } from 'emblor'
-import {
-  Select,
-  SelectTrigger,
-  SelectContent,
-  SelectItem,
-  SelectValue,
-} from '@repo/ui/select'
-import { workspaceInviteStyles } from './workspace-invite-form.styles'
+import React, { useEffect, useState } from 'react'
+import { UseQueryExecute } from 'urql'
 
 import {
   CreateInviteInput,
@@ -30,47 +10,69 @@ import {
   InviteRole,
   useCreateBulkInviteMutation,
 } from '@repo/codegen/src/schema'
+import { pluralize } from '@repo/common/text'
+import { Button } from '@repo/ui/button'
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormMessage,
+  useForm,
+  zodResolver,
+} from '@repo/ui/form'
+import { Panel, PanelHeader } from '@repo/ui/panel'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@repo/ui/select'
+import { TagInput } from '@repo/ui/tag-input'
+import { useToast } from '@repo/ui/use-toast'
+
 import { useGqlError } from '@/hooks/useGqlError'
+import { UserInviteInput, UserInviteSchema } from '@/utils/schemas'
 
-const formSchema = z.object({
-  emails: z.array(z.string().email({ message: 'Invalid email address' })),
-  role: z
-    .nativeEnum(InviteRole, {
-      errorMap: () => ({ message: 'Invalid role' }),
-    })
-    .default(InviteRole.MEMBER),
-})
+import { inviteStyles } from './page.styles'
 
-type FormData = zInfer<typeof formSchema>
+type InviteFormProps = {
+  inviteAdmins: boolean
+  refetchInvites: UseQueryExecute
+}
 
-const WorkspaceInviteForm = ({ inviteAdmins }: { inviteAdmins: boolean }) => {
-  const { buttonRow, roleRow } = workspaceInviteStyles()
+const InviteForm = ({ inviteAdmins, refetchInvites }: InviteFormProps) => {
+  const { buttonRow, roleRow } = inviteStyles()
   const { toast } = useToast()
 
   const [result, inviteMembers] = useCreateBulkInviteMutation()
   const { error, fetching } = result
   const { errorMessages } = useGqlError(error)
 
-  const form = useForm<FormData>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<UserInviteInput>({
+    resolver: zodResolver(UserInviteSchema),
     defaultValues: {
+      emails: [],
       role: InviteRole.MEMBER,
     },
   })
 
   const {
     control,
+    watch,
     handleSubmit,
     setValue,
-    watch,
     formState: { errors },
   } = form
+
+  const values = watch()
 
   const [emails, setEmails] = useState<Tag[]>([])
   const [activeTagIndex, setActiveTagIndex] = useState<number | null>(null)
   const [currentValue, setCurrentValue] = useState('')
 
-  const onSubmit: SubmitHandler<FormData> = async (data) => {
+  async function onSubmit(data: UserInviteInput) {
     const inviteInput: InputMaybe<
       Array<CreateInviteInput> | CreateInviteInput
     > = data.emails.map((email) => ({
@@ -82,11 +84,20 @@ const WorkspaceInviteForm = ({ inviteAdmins }: { inviteAdmins: boolean }) => {
       input: inviteInput,
     })
 
-    response.data &&
+    if (response.error) {
+      toast({
+        title: 'Error inviting members',
+        variant: 'destructive',
+      })
+    } else {
       toast({
         title: `Invite${emails.length > 1 ? 's' : ''} sent successfully`,
         variant: 'success',
       })
+      refetchInvites({
+        requestPolicy: 'network-only',
+      })
+    }
     setEmails([])
   }
 
@@ -108,13 +119,20 @@ const WorkspaceInviteForm = ({ inviteAdmins }: { inviteAdmins: boolean }) => {
     return /\S+@\S+\.\S+/.test(email)
   }
 
-  const handleBlur = () => {
-    if (isValidEmail(currentValue)) {
+  function handleEmails(newTags: Tag[]) {
+    const emailTags = newTags.map((tag) => tag.text)
+    setEmails(newTags)
+    setValue('emails', emailTags)
+    setCurrentValue('')
+  }
+
+  function handleBlur() {
+    if (isValidEmail(currentValue) && !values.emails.includes(currentValue)) {
       const newTag = { id: currentValue, text: currentValue }
       setEmails((prev) => [...prev, newTag])
       setValue('emails', [...emails.map((tag) => tag.text), currentValue])
-      setCurrentValue('')
     }
+    setCurrentValue('')
   }
 
   return (
@@ -128,18 +146,14 @@ const WorkspaceInviteForm = ({ inviteAdmins }: { inviteAdmins: boolean }) => {
         <form onSubmit={handleSubmit(onSubmit)}>
           <FormField
             name="emails"
-            control={control as unknown as Control<FormData>}
+            control={control}
             render={({ field }) => (
               <FormItem>
                 <FormControl>
                   <TagInput
                     {...field}
                     tags={emails}
-                    setTags={(newTags: Tag[]) => {
-                      const emailTags = newTags.map((tag) => tag.text)
-                      setEmails(newTags)
-                      setValue('emails', emailTags)
-                    }}
+                    setTags={handleEmails}
                     activeTagIndex={activeTagIndex}
                     setActiveTagIndex={setActiveTagIndex}
                     inputProps={{ value: currentValue }}
@@ -167,7 +181,7 @@ const WorkspaceInviteForm = ({ inviteAdmins }: { inviteAdmins: boolean }) => {
                         onValueChange={field.onChange}
                         defaultValue={field.value}
                       >
-                        <SelectTrigger>
+                        <SelectTrigger className="w-[186px] h-11">
                           <SelectValue placeholder="Select role" />
                         </SelectTrigger>
                         <SelectContent>
@@ -198,7 +212,7 @@ const WorkspaceInviteForm = ({ inviteAdmins }: { inviteAdmins: boolean }) => {
               />
             </div>
             <Button type="submit" disabled={emails.length === 0}>
-              Send invitation{emails.length > 1 && 's'}
+              Send {pluralize('invitation', emails.length)}
             </Button>
           </div>
         </form>
@@ -207,4 +221,4 @@ const WorkspaceInviteForm = ({ inviteAdmins }: { inviteAdmins: boolean }) => {
   )
 }
 
-export { WorkspaceInviteForm }
+export { InviteForm }

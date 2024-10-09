@@ -81,7 +81,7 @@ const DashboardPage = () => {
               </p>
               <Button
                 onClick={() => {
-                  push(OPERATOR_APP_ROUTES.users)
+                  push(OPERATOR_APP_ROUTES.workspaceMembers)
                 }}
                 icon={<ArrowUpRight />}
                 size="md"

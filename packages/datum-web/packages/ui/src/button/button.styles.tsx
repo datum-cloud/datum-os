@@ -1,5 +1,5 @@
-import { type ReactNode, type ButtonHTMLAttributes } from 'react'
-import { tv, type VariantProps } from 'tailwind-variants'
+import { type ButtonHTMLAttributes, type ReactNode } from 'react'
+import { type VariantProps, tv } from 'tailwind-variants'
 
 export const buttonStyles = tv({
   slots: {
@@ -18,6 +18,8 @@ export const buttonStyles = tv({
         'text-white rounded-[5px] uppercase font-mono text-[10px] font-semibold leading-[150%] tracking-[0.4px] border border-util-green-500 bg-util-green-500 disabled:opacity-50 gap-1',
       tableHeader: '!text-blackberry-600 !font-mono disabled:opacity-50',
       destructive: '!text-white !bg-util-red-500 disabled:opacity-50',
+      destructiveOutline:
+        'text-util-red-500 bg-white border border-util-red-500 disabled:opacity-50 hover:bg-util-red-500 hover:!text-white',
       sunglowXs: '!text-sunglow-900',
       blackberryXs: 'text-blackberry-900 dark:!text-white',
       successXs: '!text-util-green-500',

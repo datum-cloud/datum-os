@@ -1,7 +1,14 @@
 'use client'
 
 import { Tag } from 'emblor'
+import { useState } from 'react'
 
+import {
+  InviteRole,
+  useCreateBulkInviteMutation,
+} from '@repo/codegen/src/schema'
+import { pluralize } from '@repo/common/text'
+import { Button } from '@repo/ui/button'
 import {
   Dialog,
   DialogClose,
@@ -10,8 +17,6 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@repo/ui/dialog'
-import { pluralize } from '@repo/common/text'
-import { Button } from '@repo/ui/button'
 import {
   Form,
   FormControl,
@@ -22,17 +27,6 @@ import {
   useForm,
   zodResolver,
 } from '@repo/ui/form'
-import { UserInviteInput, UserInviteSchema } from '@/utils/schemas'
-
-import { formStyles } from './page.styles'
-import { Loading } from '@/components/shared/loading/loading'
-import {
-  InviteRole,
-  useCreateBulkInviteMutation,
-} from '@repo/codegen/src/schema'
-import { useEffect, useState } from 'react'
-import { toast } from '@repo/ui/use-toast'
-import { TagInput } from '@repo/ui/tag-input'
 import {
   Select,
   SelectContent,
@@ -40,6 +34,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@repo/ui/select'
+import { TagInput } from '@repo/ui/tag-input'
+import { toast } from '@repo/ui/use-toast'
+
+import { Loading } from '@/components/shared/loading/loading'
+import { UserInviteInput, UserInviteSchema } from '@/utils/schemas'
+
+import { formStyles } from './page.styles'
 
 type UsersDialogFormProps = {
   open: boolean

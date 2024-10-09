@@ -1,87 +1,95 @@
 'use client'
 
-import {
-  GetOrganizationMembersQuery,
-  GetOrganizationMembersQueryVariables,
-  useGetOrganizationMembersQuery,
-  UserAuthProvider,
-} from '@repo/codegen/src/schema'
-import { useSession } from 'next-auth/react'
-import { pageStyles } from './page.styles'
-import { useState, useEffect, Dispatch, SetStateAction } from 'react'
-import { Input } from '@repo/ui/input'
-import { Button } from '@repo/ui/button'
-import { Copy, KeyRoundIcon, MoreHorizontal, PlusIcon } from 'lucide-react'
-import { DataTable } from '@repo/ui/data-table'
 import { ColumnDef } from '@tanstack/react-table'
-import { Avatar, AvatarFallback, AvatarImage } from '@repo/ui/avatar'
-import Image from 'next/image'
 import { format } from 'date-fns'
-import { useCopyToClipboard } from '@uidotdev/usehooks'
-import { useToast } from '@repo/ui/use-toast'
+import { KeyRoundIcon } from 'lucide-react'
+import Image from 'next/image'
+
+import { UserAuthProvider } from '@repo/codegen/src/schema'
+import { Datum } from '@repo/types'
+import { Avatar, AvatarFallback, AvatarImage } from '@repo/ui/avatar'
+import { Checkbox } from '@repo/ui/checkbox'
+import {
+  ColumnFiltersState,
+  DataTable,
+  DataTableColumnHeader,
+  FilterFn,
+  Row,
+  SortingFn,
+  compareItems,
+  rankItem,
+  sortingFns,
+} from '@repo/ui/data-table'
+
+import MembersTableDropdown from './members-table-dropdown'
+import { pageStyles } from './page.styles'
 
 type MembersTableProps = {
-  setActiveTab: Dispatch<SetStateAction<string>>
+  members: Datum.OrgUser[]
+  isAdmin: boolean
+  setSelection?(users: Datum.OrgUser[]): void
+  globalFilter?: string
+  columnFilters?: ColumnFiltersState
+  setGlobalFilter?(input: string): void
+  onRowsFetched?(data: Row<Datum.OrgUser>[]): void
+  handleDelete(member: Datum.OrgUser[]): void
 }
 
-type Member = NonNullable<
-  NonNullable<GetOrganizationMembersQuery['organization']>['members']
->[number]
+export const MembersTable = ({
+  isAdmin,
+  members,
+  setSelection,
+  globalFilter,
+  columnFilters,
+  setGlobalFilter,
+  onRowsFetched,
+  handleDelete,
+}: MembersTableProps) => {
+  const { checkboxContainer, userDetails, userDetailsText, header } =
+    pageStyles()
 
-export const MembersTable = ({ setActiveTab }: MembersTableProps) => {
-  const {
-    membersSearchRow,
-    membersSearchField,
-    membersButtons,
-    actionIcon,
-    nameRow,
-    copyIcon,
-  } = pageStyles()
-  const { data: session } = useSession()
-  const [filteredMembers, setFilteredMembers] = useState<Member[]>([])
-  const [searchTerm, setSearchTerm] = useState('')
-  const [copiedText, copyToClipboard] = useCopyToClipboard()
-  const { toast } = useToast()
+  const fuzzyFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
+    if (!value || value === '') return true
 
-  const variables: GetOrganizationMembersQueryVariables = {
-    organizationId: session?.user.organization ?? '',
+    const cellValue = row.getValue(columnId)
+
+    if (!cellValue) return false
+
+    const itemRank = rankItem(cellValue, value)
+
+    addMeta({
+      itemRank,
+    })
+
+    return itemRank.passed
   }
 
-  const [{ data, fetching, error }] = useGetOrganizationMembersQuery({
-    variables,
-    pause: !session,
-  })
+  const booleanFilter: FilterFn<any> = (row, columnId, value) => {
+    let cellValue = row.getValue(columnId)
 
-  useEffect(() => {
-    if (copiedText) {
-      toast({
-        title: 'Copied to clipboard',
-        variant: 'success',
-      })
+    if (typeof cellValue === 'string') {
+      cellValue = cellValue.trim()
     }
-  }, [copiedText])
 
-  useEffect(() => {
-    if (data?.organization?.members) {
-      setFilteredMembers(data.organization.members)
-    }
-  }, [data])
+    return Boolean(cellValue) === value
+  }
 
-  if (error || fetching) return null
+  const fuzzySort: SortingFn<any> = (rowA, rowB, columnId) => {
+    let dir = 0
 
-  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const searchValue = e.target.value.toLowerCase()
-    setSearchTerm(searchValue)
-
-    if (data?.organization?.members) {
-      const filtered = data.organization.members.filter(
-        ({ user: { firstName, lastName } }) => {
-          const fullName = `${firstName?.toLowerCase() ?? ''} ${lastName?.toLowerCase() ?? ''}`
-          return fullName.includes(searchValue)
-        },
+    if (rowA.columnFiltersMeta[columnId]) {
+      dir = compareItems(
+        rowA.columnFiltersMeta[columnId].itemRank!,
+        rowB.columnFiltersMeta[columnId].itemRank!,
       )
-      setFilteredMembers(filtered)
     }
+
+    return dir === 0 ? sortingFns.alphanumeric(rowA, rowB, columnId) : dir
+  }
+
+  const filterFns = {
+    fuzzy: fuzzyFilter,
+    boolean: booleanFilter,
   }
 
   const providerIcon = (provider: UserAuthProvider) => {
@@ -99,95 +107,160 @@ export const MembersTable = ({ setActiveTab }: MembersTableProps) => {
     }
   }
 
-  const columns: ColumnDef<Member>[] = [
+  const columns: ColumnDef<Datum.OrgUser>[] = [
     {
-      accessorKey: 'user.id',
-      header: '',
-      cell: ({ row }) => (
-        <Avatar variant="medium">
-          {row.original.user.avatarRemoteURL && (
-            <AvatarImage src={row.original.user.avatarRemoteURL} />
-          )}
-          <AvatarFallback>
-            {row.original.user.firstName?.substring(0, 2)}
-          </AvatarFallback>
-        </Avatar>
-      ),
-      size: 40,
-    },
-    {
-      accessorKey: 'user.firstname',
-      header: '',
-      cell: ({ row }) => {
-        const fullName =
-          `${row.original.user.firstName} ${row.original.user.lastName}` || ''
-
+      id: 'select',
+      accessorFn: (row) => row.id,
+      size: 60,
+      enableGlobalFilter: false,
+      enableSorting: false,
+      meta: {
+        pin: 'left',
+      },
+      header: ({ table }) => {
         return (
-          <div className={nameRow()}>
-            {`${row.original.user.firstName} ${row.original.user.lastName}`}
-            <Copy
-              width={16}
-              height={16}
-              className={copyIcon()}
-              onClick={() => copyToClipboard(fullName)}
+          <div className={checkboxContainer()}>
+            <Checkbox
+              checked={table.getIsAllPageRowsSelected()}
+              onCheckedChange={(value) =>
+                table.toggleAllPageRowsSelected(!!value)
+              }
+              className="bg-white"
+              aria-label="Select all users"
+            />
+          </div>
+        )
+      },
+      cell: ({ row }) => {
+        return (
+          <div className={checkboxContainer()}>
+            <Checkbox
+              checked={row.getIsSelected()}
+              className="bg-white"
+              onCheckedChange={(value) => row.toggleSelected(!!value)}
+              aria-label="Select user"
             />
           </div>
         )
       },
     },
     {
-      accessorKey: 'user.email',
-      header: '',
+      id: 'user',
+      accessorFn: (row) => {
+        const { firstName, lastName, email } = row || {}
+
+        return firstName || lastName
+          ? `${firstName ?? ''}${lastName ? lastName : ''}`
+          : email
+      },
+      enableGlobalFilter: true,
+      filterFn: booleanFilter,
+      enableSorting: true,
+      sortingFn: fuzzySort,
+      header: ({ column }) => (
+        <DataTableColumnHeader
+          className={header()}
+          column={column}
+          children="User"
+        />
+      ),
+      meta: {
+        minWidth: 236,
+      },
+      cell: ({ row }) => {
+        const value = row.original as Datum.OrgUser
+        const { firstName, lastName, avatarLocalFile, avatarRemoteURL } =
+          value || {}
+        const avatar = avatarLocalFile || avatarRemoteURL
+
+        return (
+          <div className={userDetails()}>
+            <Avatar variant="small">
+              {avatar && <AvatarImage src={avatar} />}
+              <AvatarFallback>{firstName?.substring(0, 2)}</AvatarFallback>
+            </Avatar>
+            <p className={userDetailsText()}>
+              {firstName} {lastName}
+            </p>
+          </div>
+        )
+      },
     },
     {
-      accessorKey: 'createdAt',
-      header: 'Joined',
+      accessorKey: 'joinedAt',
+      header: ({ column }) => (
+        <DataTableColumnHeader
+          className={header()}
+          column={column}
+          children="Joined"
+        />
+      ),
       cell: ({ cell }) =>
         format(new Date(cell.getValue() as string), 'd MMM yyyy'),
     },
     {
-      accessorKey: 'user.authProvider',
-      header: 'Provider',
+      accessorKey: 'authProvider',
+      header: ({ column }) => (
+        <DataTableColumnHeader
+          className={header()}
+          column={column}
+          children="Provider"
+        />
+      ),
       cell: ({ cell }) => (
         <>{providerIcon(cell.getValue() as UserAuthProvider)}</>
       ),
     },
     {
-      accessorKey: 'role',
-      header: 'Role',
+      accessorKey: 'orgRole',
+      header: ({ column }) => (
+        <DataTableColumnHeader
+          className={header()}
+          column={column}
+          children="Role"
+        />
+      ),
       cell: ({ cell }) => <>{cell.getValue()}</>,
     },
     {
-      accessorKey: 'user',
+      id: 'dropdown',
+      accessorKey: 'id',
+      size: 60,
+      enableGlobalFilter: false,
+      enableSorting: false,
       header: '',
-      cell: () => (
-        <MoreHorizontal className={actionIcon()} onClick={() => alert('TBC')} />
-      ),
-      size: 40,
+      meta: {
+        pin: 'right',
+      },
+      cell: ({ row }) => {
+        const member = row.original
+
+        return (
+          <MembersTableDropdown
+            isAdmin={isAdmin}
+            member={member}
+            handleDelete={handleDelete}
+          />
+        )
+      },
     },
   ]
 
   return (
-    <div>
-      <div className={membersSearchRow()}>
-        <div className={membersSearchField()}>
-          <Input
-            placeholder="Search for user"
-            value={searchTerm}
-            onChange={handleSearch}
-          />
-        </div>
-        <div className={membersButtons()}>
-          <Button
-            icon={<PlusIcon />}
-            iconPosition="left"
-            onClick={() => setActiveTab('invites')}
-          >
-            Send an invite
-          </Button>
-        </div>
-      </div>
-      <DataTable columns={columns} data={filteredMembers} />
-    </div>
+    <DataTable
+      globalFilter={globalFilter}
+      setGlobalFilter={setGlobalFilter}
+      filterFns={filterFns}
+      globalFilterFn="fuzzy"
+      columnFilters={columnFilters}
+      columns={columns}
+      data={members}
+      layoutFixed
+      bordered
+      setSelection={setSelection}
+      highlightHeader
+      showFooter
+      onRowsFetched={onRowsFetched}
+    />
   )
 }

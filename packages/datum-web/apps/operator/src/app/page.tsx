@@ -20,7 +20,8 @@ const Landing = () => {
   useEffect(() => {
     if (!fetching && session) {
       if (orgs.length > 0) {
-        router.push(OPERATOR_APP_ROUTES.dashboard)
+        // NOTE: Change this to the dashboard when the dashboard functionality is complete
+        router.push(OPERATOR_APP_ROUTES.users)
       } else {
         router.push(OPERATOR_APP_ROUTES.workspace)
       }
