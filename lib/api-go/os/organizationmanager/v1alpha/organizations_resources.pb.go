@@ -187,7 +187,7 @@ func (x *Organization) GetStatus() *Status {
 	return nil
 }
 
-// OrganizationSpec is the specification of an Organization.
+// OrganizationSpec is the specification of an Organization. TODO!
 type Spec struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -224,7 +224,7 @@ func (*Spec) Descriptor() ([]byte, []int) {
 	return file_datum_os_organizationmanager_v1alpha_organizations_resources_proto_rawDescGZIP(), []int{1}
 }
 
-// OrganizationStatus is the status of an Organization.
+// OrganizationStatus is the status of an Organization. TODO!
 type Status struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache

@@ -188,7 +188,7 @@ func (x *Invoice) GetStatus() *Invoice_Status {
 	return nil
 }
 
-// Spec is the specification of the Invoice.
+// Spec is the specification of the Invoice. TODO!
 type Invoice_Spec struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -225,7 +225,7 @@ func (*Invoice_Spec) Descriptor() ([]byte, []int) {
 	return file_datum_os_invoicesmanager_v1alpha_invoices_resources_proto_rawDescGZIP(), []int{0, 2}
 }
 
-// Status is the current status of the Invoice.
+// Status is the current status of the Invoice. TODO!
 type Invoice_Status struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
