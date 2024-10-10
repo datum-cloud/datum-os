@@ -78,7 +78,7 @@ func (VendorProfile) Edges() []ent.Edge {
 
 func (VendorProfile) Indexes() []ent.Index {
 	return []ent.Index{
-		index.Fields("id").Unique(),
+		index.Fields("vendor_id").Unique(),
 	}
 }
 

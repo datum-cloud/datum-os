@@ -34,7 +34,10 @@ func (PostalAddress) Fields() []ent.Field {
 		field.String("region_code").
 			Comment("CLDR region code of the country/region of the address. See https://cldr.unicode.org/ for more details.").
 			NotEmpty().
-			MaxLen(2),
+			MaxLen(2).
+			Annotations(
+				entgql.OrderField("region_code"),
+			),
 		field.String("language_code").
 			Comment("BCP-47 language code of the contents of this address (if known).").
 			Optional().
@@ -88,8 +91,6 @@ func (PostalAddress) Edges() []ent.Edge {
 
 func (PostalAddress) Indexes() []ent.Index {
 	return []ent.Index{
-		index.Fields("id").
-			Unique(),
 		// We have an organization with many postal addresses, and we want to set the postal addresses to be unique under each organization
 		index.Fields("region_code", "locality", "sublocality", "administrative_area", "postal_code", "address_lines").
 			Edges("owner").
