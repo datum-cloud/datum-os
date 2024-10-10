@@ -5,3 +5,13 @@ This directory contains some of the common emails which would be sent to users o
 ## Editing
 
 These are the actual emails, language, format, that will be sent to users of the Datum platform so please exercise care with their updates. If you're uncertain, feel free to reachout to @matoszz for assistance.
+
+## Preview Workflow (Temporary)
+
+For right now the best way to test these email templates is to run:
+
+`task test:emails`
+
+Once run, you can preview the email templates in the `pkg/utils/emails/testdata/eyeballTestEmailBuilders` directory by changing the .mime file extension to .html and opening the file in your browser.
+
+**NOTE:** You will need to remove the comments above the html file before previewing if you want an unadulterated view of the email template.

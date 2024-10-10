@@ -1,33 +1,37 @@
-{{ template "base.html" . }}
-
-{{ define "title" }}Welcome to Datum!{{ end }}
-{{ define "preheader" }}You have successfully completed your Datum registration{{ end }}
-
-{{ define "content" }}
+{{ template "base.html" . }} {{ define "title" }}Welcome to Datum!{{ end }} {{
+define "preheader" }}You have successfully completed your Datum registration{{
+end }} {{ define "content" }}
 <div class="content">
-  <p>Huzzah {{ .FirstName }}!!</p>
+  <p>Huzzah {{ .FirstName }}!</p>
 
   <p>
-    Welcome to the Datum platform - you can now log in to your account
-    <a href="https://console.datum.net">here</a>
+    Welcome to the Datum platform. You can now log in to your account by
+    clicking on the button below
   </p>
 
-  <h2>What Next?</h2>
+  <table border="0" cellspacing="0" cellpadding="0" style="margin: 36px 0 32px">
+    <tr>
+      <td align="center" class="button" style="margin-bottom: 0">
+        <a rel="noopener" target="_blank" href="https://console.datum.net"
+          >Login to Datum</a
+        >
+      </td>
+    </tr>
+  </table>
 
-  <p>
-    We've created a personal Organization just for you to help you get started - you can create additional Organizations
-    for your businesses, or just jump right in to see all the amazing features we've cooked up for you.
+  <h2>What&#39;s Next?</h2>
+
+  <p style="margin-bottom: 14px">
+    We&#39;ve created a personal Organization just for you to help you get
+    started - you can create additional Organizations for your businesses, or
+    just jump right in to see all the amazing features we've cooked up for you.
+    <br />
+    <br />
     Check out the
     <a href="https://docs.datum.net/getting-started">starter guide</a> for more
-    information or our <a href="https://docs.datum.net/examples">end-to-end examples</a>
+    information or our
+    <a href="https://docs.datum.net/examples">end-to-end examples</a>
     for ideas and inspiration.
   </p>
-
-  <p>
-    If you have any questions, please reach out to us at
-    <a href="mailto:support@datum.net">support@datum.net</a>.
-  </p>
-
-  <p>><br />The Datum Team<br /></p>
 </div>
 {{ end }}

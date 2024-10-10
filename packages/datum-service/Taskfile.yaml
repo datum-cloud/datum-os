@@ -1,4 +1,4 @@
-version: "3"
+version: '3'
 
 includes:
   cli:
@@ -19,11 +19,11 @@ includes:
     taskfile: ./jsonschema/Taskfile.yaml
 
 env:
-  ATLAS_SQLITE_DB_URI: "sqlite://file?mode=memory&_fk=1"
-  ATLAS_POSTGRES_DB_URI: "postgres:16-alpine"
-  TEST_DB_URL: "docker://postgres:16-alpine"
-  TEST_DB_CONTAINER_EXPIRY: "2" # in minutes
-  TEST_FGA_URL: "localhost:8080"
+  ATLAS_SQLITE_DB_URI: 'sqlite://file?mode=memory&_fk=1'
+  ATLAS_POSTGRES_DB_URI: 'postgres:16-alpine'
+  TEST_DB_URL: 'docker://postgres:16-alpine'
+  TEST_DB_CONTAINER_EXPIRY: '2' # in minutes
+  TEST_FGA_URL: 'localhost:8080'
   ENV: config
 
 tasks:
@@ -47,7 +47,7 @@ tasks:
     desc: runs and outputs results of created go tests
     aliases: ['go:test:psql', 'test:psql']
     env:
-      TEST_DB_URL: "docker://postgres:16-alpine"
+      TEST_DB_URL: 'docker://postgres:16-alpine'
     cmds:
       - go test -v ./...
 
@@ -55,7 +55,7 @@ tasks:
     desc: runs and outputs results of created go tests
     aliases: ['test:libsql']
     env:
-      TEST_DB_URL: "libsql://file::memory:?cache=shared"
+      TEST_DB_URL: 'libsql://file::memory:?cache=shared'
     cmds:
       - go test -v ./...
 
@@ -99,7 +99,7 @@ tasks:
 
   # dev tasks
   run-dev:
-    dotenv: ["{{.ENV}}/.env-dev"]
+    dotenv: ['{{.ENV}}/.env-dev']
     desc: runs the datum server in dev mode
     cmds:
       - task: compose:redis
@@ -108,7 +108,7 @@ tasks:
       - task: run-api
 
   run-api:
-    dotenv: ["{{.ENV}}/.env-dev"]
+    dotenv: ['{{.ENV}}/.env-dev']
     desc: runs the datum server in dev mode, assumes all other dependencies are running
     cmds:
       - go run main.go serve --debug --pretty
@@ -127,7 +127,7 @@ tasks:
     cmds:
       - task: generate
       - task: tidy
-      - "git config --global --add safe.directory /workdir"
+      - 'git config --global --add safe.directory /workdir'
       - |
         status=$(git status --porcelain)
         if [ -n "$status" ]; then
@@ -139,8 +139,8 @@ tasks:
   clean:local:
     desc: cleans up datum.db and datum-cli local
     cmds:
-      - "rm -f datum.db"
-      - "rm -f datum-cli"
+      - 'rm -f datum.db'
+      - 'rm -f datum-cli'
       - task: buildcli
 
   shell:
@@ -228,6 +228,11 @@ tasks:
       - test -d /usr/local/go-{{.GO_VERSION}} || curl -L -o go{{.GO_VERSION}}.darwin-arm64.tar.gz {{.GO_URL}} && sudo tar -C /usr/local -xzf go{{.GO_VERSION}}.darwin-arm64.tar.gz
     status:
       - test -d /usr/local/go-{{.GO_VERSION}}
+
+  test:emails:
+    desc: generate test emails from the email template files
+    cmds:
+      - go test -v ./pkg/utils/emails -eyeball
 
   rover:
     aliases:
