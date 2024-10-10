@@ -76,6 +76,8 @@ func (PostalAddress) Fields() []ent.Field {
 					"For example, it might contain 'care of' information."),
 		field.String("organization").
 			Comment("Organization of the address.").
+			Optional().
+			Nillable().
 			MaxLen(100),
 	}
 }
