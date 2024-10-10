@@ -82,13 +82,11 @@ message Invoice {
   // Status is the current status of the Invoice.
   Status status = 13 [(google.api.field_behavior) = OUTPUT_ONLY];
   
-  // Spec is the specification of the Invoice.
+  // Spec is the specification of the Invoice. TODO!
   message Spec {
-    // TODO: Add fields for the Invoice spec.
   }
   
-  // Status is the current status of the Invoice.
+  // Status is the current status of the Invoice. TODO!
   message Status {
-    // TODO: Add fields for the Invoice status.
   }  
 }

@@ -32,6 +32,7 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 //
 // Organizations is the service for managing Organizations.
+// TODO: Add support for parent/child relationships for Organizations.
 type OrganizationsClient interface {
 	// CreateOrganization creates a new Organization.
 	CreateOrganization(ctx context.Context, in *CreateOrganizationRequest, opts ...grpc.CallOption) (*longrunningpb.Operation, error)
@@ -108,6 +109,7 @@ func (c *organizationsClient) DeleteOrganization(ctx context.Context, in *Delete
 // for forward compatibility.
 //
 // Organizations is the service for managing Organizations.
+// TODO: Add support for parent/child relationships for Organizations.
 type OrganizationsServer interface {
 	// CreateOrganization creates a new Organization.
 	CreateOrganization(context.Context, *CreateOrganizationRequest) (*longrunningpb.Operation, error)

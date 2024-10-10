@@ -80,12 +80,10 @@ message Organization {
   Status status = 13 [(google.api.field_behavior) = OUTPUT_ONLY];
 }
 
-// OrganizationSpec is the specification of an Organization.
+// OrganizationSpec is the specification of an Organization. TODO!
 message Spec {
-  // TODO: Add fields for the Organization spec.
 }
 
-// OrganizationStatus is the status of an Organization.
+// OrganizationStatus is the status of an Organization. TODO!
 message Status {
-  // TODO: Add fields for the Organization status.
 }

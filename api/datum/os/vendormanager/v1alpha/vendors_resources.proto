@@ -133,6 +133,28 @@ message Vendor {
     // The phone number of the person or corporation.
     repeated google.type.PhoneNumber phone_numbers = 10
         [(google.api.field_behavior) = OPTIONAL];
+
+    // The payment preference of the Vendor.
+    repeated PaymentPreference payment_preference = 11 [(google.api.field_behavior) = OPTIONAL];
+
+    // The tax information of the person or corporation.
+    TaxInfo tax_info = 12 [(google.api.field_behavior) = OPTIONAL]; 
+  }
+
+  // PaymentPreference is the payment preference of a Vendor.
+  message PaymentPreference {
+    // Is this the preferred payment method?
+    bool preferred = 1 [(google.api.field_behavior) = REQUIRED];
+    // The payment method of the Vendor.
+    PaymentMethod method = 2 [(google.api.field_behavior) = REQUIRED];
+  }
+
+  // TaxInfo is the tax information of a Vendor.
+  message TaxInfo {
+    // The tax id of the person or corporation.
+    string tax_id = 1 [(google.api.field_behavior) = REQUIRED]; 
+    // The tax id type of the person or corporation.
+    TaxIDType tax_id_type = 2 [(google.api.field_behavior) = REQUIRED];
   }
 }
 
@@ -156,4 +178,32 @@ enum OnboardingState {
   ONBOARDING_STATE_ACTIVE = 2;
   // OnboardingState is inactive. The vendor is inactive and cannot have invoices created. Existing invoices will be allowed to be paid out.
   ONBOARDING_STATE_INACTIVE = 3;
+}
+
+// PaymentMethod is the payment method of a Vendor.
+enum PaymentMethod {
+  // PaymentMethod is not specified.
+  PAYMENT_METHOD_UNSPECIFIED = 0;
+  // PaymentMethod is domestic wire transfer.
+  PAYMENT_METHOD_DOMESTIC_WIRE_TRANSFER = 1;
+  // PaymentMethod is international wire transfer.
+  PAYMENT_METHOD_INTERNATIONAL_WIRE_TRANSFER = 2;
+  // PaymentMethod is Automated Clearing House (ACH) transfer.
+  PAYMENT_METHOD_ACH = 3;
+  // PaymentMethod is a credit card.
+  PAYMENT_METHOD_CREDIT_CARD = 4;
+}
+
+  // TaxIDType is the type of tax id of a Vendor.
+enum TaxIDType {
+  // TaxIDType is not specified.
+  TAX_ID_TYPE_UNSPECIFIED = 0;
+  // TaxIDType is a SSN.
+  TAX_ID_TYPE_SSN = 1;
+  // TaxIDType is a EIN.
+  TAX_ID_TYPE_EIN = 2;
+  // TaxIDType is an ATIN.
+  TAX_ID_TYPE_ATIN = 3;
+  // TaxIDType is an ITIN.
+  TAX_ID_TYPE_ITIN = 4;
 }
