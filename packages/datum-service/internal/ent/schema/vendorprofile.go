@@ -102,11 +102,11 @@ func (VendorProfile) Policy() ent.Policy {
 	return privacy.Policy{
 		Mutation: privacy.MutationPolicy{
 			// TODO: Implement mutation policy for VendorProfile
-			privacy.AlwaysDenyRule(),
+			privacy.AlwaysAllowRule(),
 		},
 		Query: privacy.QueryPolicy{
 			// TODO: Implement query policy for VendorProfile
-			privacy.AlwaysDenyRule(),
+			privacy.AlwaysAllowRule(),
 		},
 	}
 }
