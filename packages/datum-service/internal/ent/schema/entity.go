@@ -84,6 +84,7 @@ func (Entity) Edges() []ent.Edge {
 		edge.To("contacts", Contact.Type),
 		edge.To("documents", DocumentData.Type),
 		edge.To("notes", Note.Type),
+		edge.To("postal_addresses", PostalAddress.Type),
 		edge.To("files", File.Type),
 		edge.To("entity_type", EntityType.Type).
 			Field("entity_type_id").

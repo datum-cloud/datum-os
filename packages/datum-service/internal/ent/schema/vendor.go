@@ -67,8 +67,6 @@ func (Vendor) Edges() []ent.Edge {
 
 func (Vendor) Indexes() []ent.Index {
 	return []ent.Index{
-		index.Fields("id").
-			Unique(), // enforce globally unique ids
 		index.Fields("display_name").
 			Edges("owner").
 			Unique().
