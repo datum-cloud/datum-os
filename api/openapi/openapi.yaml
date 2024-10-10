@@ -1286,11 +1286,11 @@ components:
         Invoice_Spec:
             type: object
             properties: {}
-            description: Spec is the specification of the Invoice.
+            description: Spec is the specification of the Invoice. TODO!
         Invoice_Status:
             type: object
             properties: {}
-            description: Status is the current status of the Invoice.
+            description: Status is the current status of the Invoice. TODO!
         ListInvoicesResponse:
             type: object
             properties:
@@ -1681,7 +1681,7 @@ components:
         Spec:
             type: object
             properties: {}
-            description: OrganizationSpec is the specification of an Organization.
+            description: OrganizationSpec is the specification of an Organization. TODO!
         Status:
             type: object
             properties:
@@ -1775,6 +1775,20 @@ components:
                         - $ref: '#/components/schemas/Vendor_Spec'
                     description: The specification of the Vendor.
             description: Vendor is a resource representing a Vendor.
+        Vendor_PaymentPreference:
+            required:
+                - preferred
+                - method
+            type: object
+            properties:
+                preferred:
+                    type: boolean
+                    description: Is this the preferred payment method?
+                method:
+                    type: integer
+                    description: The payment method of the Vendor.
+                    format: enum
+            description: PaymentPreference is the payment preference of a Vendor.
         Vendor_Profile:
             type: object
             properties:
@@ -1806,6 +1820,15 @@ components:
                     items:
                         $ref: '#/components/schemas/PhoneNumber'
                     description: The phone number of the person or corporation.
+                paymentPreference:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/Vendor_PaymentPreference'
+                    description: The payment preference of the Vendor.
+                taxInfo:
+                    allOf:
+                        - $ref: '#/components/schemas/Vendor_TaxInfo'
+                    description: The tax information of the person or corporation.
             description: Profile is the profile of a Vendor.
         Vendor_Spec:
             required:
@@ -1826,10 +1849,26 @@ components:
                     description: "The onboarding state of the Vendor. Defaults to ONBOARDING_STATE_PENDING on creation.\n (-- api-linter: core::0216::state-field-output-only=disabled\n     aip.dev/not-precedent: We are modeling our Vendor APIs from Square's Vendor APIs. \n     The 'state' of a Vendor is not output only. It is settable by the user. --)"
                     format: enum
             description: Spec is the specification of a Vendor.
+        Vendor_TaxInfo:
+            required:
+                - taxId
+                - taxIdType
+            type: object
+            properties:
+                taxId:
+                    type: string
+                    description: The tax id of the person or corporation.
+                taxIdType:
+                    type: integer
+                    description: The tax id type of the person or corporation.
+                    format: enum
+            description: TaxInfo is the tax information of a Vendor.
 tags:
     - name: Invoices
       description: Invoices is the service for managing Invoices.
     - name: Organizations
-      description: Organizations is the service for managing Organizations.
+      description: |-
+        Organizations is the service for managing Organizations.
+         TODO: Add support for parent/child relationships for Organizations.
     - name: Vendors
       description: Vendors is the service for managing Vendors.
