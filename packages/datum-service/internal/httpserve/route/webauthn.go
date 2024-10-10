@@ -3,6 +3,7 @@ package route
 import (
 	"net/http"
 
+	"github.com/datum-cloud/datum-os/internal/httpserve/mw"
 	echo "github.com/datum-cloud/datum-os/pkg/echox"
 )
 
@@ -16,7 +17,7 @@ func registerWebauthnRegistrationHandler(router *Router) (err error) {
 		Name:        name,
 		Method:      method,
 		Path:        path,
-		Middlewares: mw,
+		Middlewares: mw.GetMiddleware(),
 		Handler: func(c echo.Context) error {
 			return router.Handler.BeginWebauthnRegistration(c)
 		},
@@ -39,7 +40,7 @@ func registerWebauthnVerificationsHandler(router *Router) (err error) {
 		Name:        name,
 		Method:      method,
 		Path:        path,
-		Middlewares: mw,
+		Middlewares: mw.GetMiddleware(),
 		Handler: func(c echo.Context) error {
 			return router.Handler.FinishWebauthnRegistration(c)
 		},
@@ -62,7 +63,7 @@ func registerWebauthnAuthenticationHandler(router *Router) (err error) {
 		Name:        name,
 		Method:      method,
 		Path:        path,
-		Middlewares: mw,
+		Middlewares: mw.GetMiddleware(),
 		Handler: func(c echo.Context) error {
 			return router.Handler.BeginWebauthnLogin(c)
 		},
@@ -85,7 +86,7 @@ func registerWebauthnAuthVerificationHandler(router *Router) (err error) {
 		Name:        name,
 		Method:      method,
 		Path:        path,
-		Middlewares: mw,
+		Middlewares: mw.GetMiddleware(),
 		Handler: func(c echo.Context) error {
 			return router.Handler.FinishWebauthnLogin(c)
 		},

@@ -2,11 +2,6 @@ version: '3'
 
 shopt: [globstar]
 
-env:
-  ENV: ./packages/datum-web/config
-
-dotenv: ['.env', '{{.ENV}}/.env']
-
 includes:
   api:
     taskfile: ./api/Taskfile.yaml
@@ -21,7 +16,7 @@ includes:
 tasks:
   default:
     cmds:
-      - task -l
+      - task --list-all
 
   install-tools:
     deps:

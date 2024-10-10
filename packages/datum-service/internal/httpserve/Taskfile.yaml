@@ -1,0 +1,20 @@
+version: "3"
+
+shopt: [globstar]
+
+tasks:
+  default:
+    cmds:
+      - task --list-all
+
+  install-deps:
+    desc: Install dependencies
+    cmds:
+      - go mod download
+
+  generate:
+    desc: Generate go echo server handlers from openapi spec
+    deps:
+      - install-deps
+    cmds:
+      - go generate ./...

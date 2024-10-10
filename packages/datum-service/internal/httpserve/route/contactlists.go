@@ -3,6 +3,7 @@ package route
 import (
 	"net/http"
 
+	"github.com/datum-cloud/datum-os/internal/httpserve/mw"
 	echo "github.com/datum-cloud/datum-os/pkg/echox"
 )
 
@@ -15,7 +16,7 @@ func registerContactListsHandlers(router *Router) (err error) {
 		Name:        name + "Get",
 		Method:      http.MethodGet,
 		Path:        path,
-		Middlewares: authMW,
+		Middlewares: mw.GetAuthMiddleware(),
 		Handler: func(c echo.Context) error {
 			return router.Handler.ContactListsGet(c)
 		},
@@ -31,7 +32,7 @@ func registerContactListsHandlers(router *Router) (err error) {
 		Name:        name + "GetOne",
 		Method:      http.MethodGet,
 		Path:        path + "/:id",
-		Middlewares: authMW,
+		Middlewares: mw.GetAuthMiddleware(),
 		Handler: func(c echo.Context) error {
 			return router.Handler.ContactListsGetOne(c)
 		},
@@ -47,7 +48,7 @@ func registerContactListsHandlers(router *Router) (err error) {
 		Name:        name + "Post",
 		Method:      http.MethodPost,
 		Path:        path,
-		Middlewares: authMW,
+		Middlewares: mw.GetAuthMiddleware(),
 		Handler: func(c echo.Context) error {
 			return router.Handler.ContactListsPost(c)
 		},
@@ -63,7 +64,7 @@ func registerContactListsHandlers(router *Router) (err error) {
 		Name:        name + "Put",
 		Method:      http.MethodPut,
 		Path:        path,
-		Middlewares: authMW,
+		Middlewares: mw.GetAuthMiddleware(),
 		Handler: func(c echo.Context) error {
 			return router.Handler.ContactListsPut(c)
 		},
@@ -79,7 +80,7 @@ func registerContactListsHandlers(router *Router) (err error) {
 		Name:        name + "Put One",
 		Method:      http.MethodPut,
 		Path:        path + "/:id",
-		Middlewares: authMW,
+		Middlewares: mw.GetAuthMiddleware(),
 		Handler: func(c echo.Context) error {
 			return router.Handler.ContactListsPutOne(c)
 		},
@@ -95,7 +96,7 @@ func registerContactListsHandlers(router *Router) (err error) {
 		Name:        name + "Delete",
 		Method:      http.MethodDelete,
 		Path:        path,
-		Middlewares: authMW,
+		Middlewares: mw.GetAuthMiddleware(),
 		Handler: func(c echo.Context) error {
 			return router.Handler.ContactListsDelete(c)
 		},
@@ -111,7 +112,7 @@ func registerContactListsHandlers(router *Router) (err error) {
 		Name:        name + "Members Get",
 		Method:      http.MethodGet,
 		Path:        path + "/:id/members",
-		Middlewares: authMW,
+		Middlewares: mw.GetAuthMiddleware(),
 		Handler: func(c echo.Context) error {
 			return router.Handler.ContactListsMembersGet(c)
 		},
@@ -127,7 +128,7 @@ func registerContactListsHandlers(router *Router) (err error) {
 		Name:        name + "Members Post",
 		Method:      http.MethodPost,
 		Path:        path + "/:id/members",
-		Middlewares: authMW,
+		Middlewares: mw.GetAuthMiddleware(),
 		Handler: func(c echo.Context) error {
 			return router.Handler.ContactListsMembersPost(c)
 		},
@@ -143,7 +144,7 @@ func registerContactListsHandlers(router *Router) (err error) {
 		Name:        name + "Members Delete",
 		Method:      http.MethodDelete,
 		Path:        path + "/:id/members",
-		Middlewares: authMW,
+		Middlewares: mw.GetAuthMiddleware(),
 		Handler: func(c echo.Context) error {
 			return router.Handler.ContactListsMembersDelete(c)
 		},
@@ -159,7 +160,7 @@ func registerContactListsHandlers(router *Router) (err error) {
 		Name:        name + "Members Delete One",
 		Method:      http.MethodDelete,
 		Path:        path + "/:id/members/:contact_id",
-		Middlewares: authMW,
+		Middlewares: mw.GetAuthMiddleware(),
 		Handler: func(c echo.Context) error {
 			return router.Handler.ContactListsMembersDeleteOne(c)
 		},

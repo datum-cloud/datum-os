@@ -1,23 +1,10 @@
 package route
 
 import (
-	"time"
-
 	echo "github.com/datum-cloud/datum-os/pkg/echox"
-	"github.com/datum-cloud/datum-os/pkg/echox/middleware"
 	"github.com/getkin/kin-openapi/openapi3"
 
 	"github.com/datum-cloud/datum-os/internal/httpserve/handlers"
-	"github.com/datum-cloud/datum-os/pkg/middleware/ratelimit"
-	"github.com/datum-cloud/datum-os/pkg/middleware/transaction"
-)
-
-var (
-	mw     = []echo.MiddlewareFunc{middleware.Recover()}
-	authMW = []echo.MiddlewareFunc{}
-
-	restrictedRateLimit   = &ratelimit.Config{RateLimit: 10, BurstLimit: 10, ExpiresIn: 15 * time.Minute} //nolint:mnd
-	restrictedEndpointsMW = []echo.MiddlewareFunc{}
 )
 
 // Router is a struct that holds the echo router, the OpenAPI schema, and the handler - it's a way to group these components together
@@ -96,22 +83,6 @@ func (r *Router) Base() *echo.Group {
 
 // RegisterRoutes with the echo routers - Router is defined within openapi.go
 func RegisterRoutes(router *Router) error {
-	// add transaction middleware
-	transactionConfig := transaction.Client{
-		EntDBClient: router.Handler.DBClient,
-		Logger:      router.Handler.Logger,
-	}
-
-	mw = append(mw, transactionConfig.Middleware)
-
-	// Middleware for restricted endpoints
-	restrictedEndpointsMW = append(restrictedEndpointsMW, mw...)
-	restrictedEndpointsMW = append(restrictedEndpointsMW, ratelimit.RateLimiterWithConfig(restrictedRateLimit)) // add restricted ratelimit middleware
-
-	// Middleware for authenticated endpoints
-	authMW = append(authMW, mw...)
-	authMW = append(authMW, router.Handler.AuthMiddleware...)
-
 	// routeHandlers that take the router and handler as input
 	routeHandlers := []interface{}{
 		registerReadinessHandler,
