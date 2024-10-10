@@ -87,10 +87,10 @@ func (Vendor) Annotations() []schema.Annotation {
 func (Vendor) Policy() ent.Policy {
 	return privacy.Policy{
 		Mutation: privacy.MutationPolicy{
-			privacy.AlwaysDenyRule(),
+			privacy.AlwaysAllowRule(),
 		},
 		Query: privacy.QueryPolicy{
-			privacy.AlwaysDenyRule(),
+			privacy.AlwaysAllowRule(),
 		},
 	}
 }

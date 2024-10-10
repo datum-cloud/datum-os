@@ -110,11 +110,11 @@ func (PostalAddress) Policy() ent.Policy {
 	return privacy.Policy{
 		// TODO: Implement mutation policy for PostalAddress
 		Mutation: privacy.MutationPolicy{
-			privacy.AlwaysDenyRule(),
+			privacy.AlwaysAllowRule(),
 		},
 		// TODO: Implement query policy for PostalAddress
 		Query: privacy.QueryPolicy{
-			privacy.AlwaysDenyRule(),
+			privacy.AlwaysAllowRule(),
 		},
 	}
 }
