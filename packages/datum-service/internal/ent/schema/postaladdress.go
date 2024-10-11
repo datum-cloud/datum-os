@@ -103,6 +103,7 @@ func (PostalAddress) Indexes() []ent.Index {
 
 func (PostalAddress) Annotations() []schema.Annotation {
 	return []schema.Annotation{
+		entgql.Type("PostalAddress"),
 		entgql.QueryField(),
 		entgql.RelayConnection(),
 		entgql.Mutations(entgql.MutationCreate(), (entgql.MutationUpdate())),
