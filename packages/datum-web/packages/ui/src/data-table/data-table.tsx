@@ -1,10 +1,17 @@
 'use client'
 
-import { EyeIcon } from 'lucide-react'
-import { Fragment, useCallback, useEffect, useState } from 'react'
+import {
+  RankingInfo,
+  compareItems,
+  rankItem,
+} from '@tanstack/match-sorter-utils'
 import {
   ColumnDef,
   ColumnFiltersState,
+  FilterFn,
+  Row,
+  RowData,
+  SortingFn,
   SortingState,
   VisibilityState,
   flexRender,
@@ -12,19 +19,22 @@ import {
   getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
-  useReactTable,
-  FilterFn,
-  SortingFn,
   sortingFns,
-  RowData,
-  Row,
+  useReactTable,
 } from '@tanstack/react-table'
-import {
-  RankingInfo,
-  rankItem,
-  compareItems,
-} from '@tanstack/match-sorter-utils'
+import { EyeIcon } from 'lucide-react'
+import { on } from 'process'
+import { Fragment, useCallback, useEffect, useState } from 'react'
 
+import { cn } from '../../lib/utils'
+import { Button } from '../button/button'
+import {
+  DropdownMenu,
+  DropdownMenuCheckboxItem,
+  DropdownMenuContent,
+  DropdownMenuTrigger,
+} from '../dropdown-menu/dropdown-menu'
+import { Input } from '../input/input'
 import {
   Table,
   TableBody,
@@ -33,18 +43,8 @@ import {
   TableHeader,
   TableRow,
 } from '../table/table'
-import { Button } from '../button/button'
-import { Input } from '../input/input'
-import {
-  DropdownMenu,
-  DropdownMenuCheckboxItem,
-  DropdownMenuContent,
-  DropdownMenuTrigger,
-} from '../dropdown-menu/dropdown-menu'
 import { DataTableColumnHeader } from './data-column-header'
 import { DataTablePagination } from './data-table-pagination'
-import { cn } from '../../lib/utils'
-import { on } from 'process'
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
@@ -325,13 +325,12 @@ export function DataTable<TData, TValue>({
                           style={{ width: minWidth || columnWidth }}
                           className={cn(
                             minWidth && '2xl:!w-auto',
-                            pinLeft &&
-                              'sticky z-10 bg-inherit left-0 bg-white group-hover:!bg-blackberry-50 group-data-[state=selected]:bg-blackberry-50 border-r-0',
-                            pinRight &&
-                              'sticky z-10 bg-inherit right-0 bg-white group-hover:!bg-blackberry-50 group-data-[state=selected]:bg-blackberry-50',
+                            pinLeft && 'sticky z-10 left-0 border-r-0',
+                            pinRight && 'sticky z-10 bg-white right-0',
                             hasPinnedRightCell &&
                               secondLastCell &&
                               'border-r-0',
+                            'group-hover:!bg-blackberry-50 group-data-[state=selected]:bg-blackberry-50',
                           )}
                         >
                           {flexRender(

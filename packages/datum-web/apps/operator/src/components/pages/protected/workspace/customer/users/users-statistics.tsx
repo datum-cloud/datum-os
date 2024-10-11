@@ -43,12 +43,12 @@ UsersStatisticsProps) => {
   const charts = [
     {
       title: 'New Users',
-      description: '(Weekly)',
+      description: '(This week)',
       data: newUsersWeekly,
     },
     {
       title: 'New Users',
-      description: '(Monthly)',
+      description: '(This month)',
       data: newUsersMonthly,
     },
     // {

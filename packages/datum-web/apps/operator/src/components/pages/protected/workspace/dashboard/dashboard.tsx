@@ -1,5 +1,6 @@
 'use client'
 
+import { format } from 'date-fns'
 import { AtSign, Settings } from 'lucide-react'
 import { useSession } from 'next-auth/react'
 import Link from 'next/link'
@@ -49,7 +50,16 @@ const DashboardPage = () => {
   const { card, cardContent, link, row } = pageStyles()
   return (
     <section className="flex flex-col gap-6">
-      <PageTitle title="Dashboard" className="mb-10" />
+      <PageTitle
+        title="Dashboard"
+        description={
+          <span className="text-sunglow-900">
+            {format(new Date(), 'MMMM do, yyyy')}
+          </span>
+        }
+        className="mb-10"
+      />
+
       <div className={row()}>
         <UsersStatistics
           newUsersWeekly={newUsersWeekly}
