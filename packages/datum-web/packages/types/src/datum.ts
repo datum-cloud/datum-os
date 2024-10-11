@@ -178,4 +178,67 @@ export namespace Datum {
     membershipId: MembershipId
     joinedAt: string
   }
+
+  export type TagId = Brand<Id, 'TagId'>
+
+  export type Tag = {
+    id: TagId
+    name: string
+    createdAt: Date
+    updatedAt: Date
+  }
+
+  export type NoteId = Brand<Id, 'NoteId'>
+
+  export type Note = {
+    id: NoteId
+    content: string
+    createdAt: Date
+    updatedAt: Date
+  }
+
+  export type InvoiceStatus = 'PAID' | 'NEEDS REVIEW' | 'ACCEPTED'
+
+  export type InvoiceId = Brand<Id, 'InvoicedId'>
+
+  export type Invoice = {
+    id: InvoiceId
+    file: File
+    dueDate: Date
+    invoiceDate: Date
+    status: InvoiceStatus
+    amount: Float
+    createdAt: Date
+    updatedAt: Date
+  }
+
+  export type DocumentId = Brand<Id, 'DocumentId'>
+
+  export type Document = {
+    id: DocumentId
+    file: File
+    createdAt: Date
+    updatedAt: Date
+  }
+
+  export type VendorStatus = 'ACTIVE' | 'PENDING' | 'IN PROGRESS' | 'INACTIVE'
+
+  export type VendorId = Brand<Id, 'VendorId'>
+
+  export type Vendor = {
+    id: VendorId
+    name: string
+    description: string
+    createdAt: Date
+    updatedAt: Date
+    status: VendorStatus
+    notes: Note[]
+    contacts: Contact[]
+    primaryContact: Contact
+    invoices: Invoice[]
+    tags: Tag[]
+    taxInfo: any
+    owner: User
+    activityLog: any[]
+  }
 }

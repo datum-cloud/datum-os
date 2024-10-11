@@ -38,6 +38,8 @@ export const OPERATOR_APP_ROUTES = {
   user: '/customers/users/[id]',
   invite: '/invite',
   verify: '/verify',
+  vendors: '/relationships/vendors',
+  vendor: '/relationships/vendors/[id]',
 }
 
 export const OPERATOR_API_ROUTES = {
@@ -58,6 +60,11 @@ export const OPERATOR_API_ROUTES = {
   forgotPassword: '/api/auth/forgot-password',
   resetPassword: '/api/auth/password-reset',
   upload: '/api/auth/upload',
+  vendors: '/api/auth/vendors',
+  vendor: '/api/auth/vendors/[id]',
+  createVendors: '/api/auth/vendors/create',
+  deleteVendors: '/api/auth/vendors/delete',
+  editVendors: '/api/auth/vendors/edit',
 }
 
 export const OPERATOR_FILES = {

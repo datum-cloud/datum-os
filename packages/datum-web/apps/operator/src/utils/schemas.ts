@@ -1,6 +1,6 @@
 import z from 'zod'
-import { InviteRole } from '@repo/codegen/src/schema'
 
+import { InviteRole } from '@repo/codegen/src/schema'
 import { TEL_REGEX } from '@repo/constants'
 
 export const ContactSchema = z.object({
@@ -148,6 +148,28 @@ export const UserInviteSchema = z.object({
     .default(InviteRole.MEMBER),
 })
 
+export const VendorSchema = z.object({
+  id: z.string().describe('Vendor ID').optional(),
+  name: z
+    .string()
+    .min(2, 'Please enter a valid name')
+    .describe('Name of the vendor'),
+  description: z.string().describe('Description of the vendor').optional(),
+  notes: z
+    .array(z.string().min(2, 'Please enter a valid note'))
+    .describe('Additional notes about the vendor')
+    .optional(),
+  contacts: z.array(z.any()).describe('Associated contacts').optional(),
+  primaryContact: z.string(z.any()).describe('Primary contact').optional(),
+  invoices: z.array(z.any()).describe('Associated invoices').optional(),
+  tags: z.array(z.any()).describe('Tags associated with the vendor').optional(),
+  taxInfo: z.string().describe('Tax information of the vendor').optional(),
+  owner: z.string().describe('ID of the vendor owner').optional(),
+  activityLog: z.array(z.any()).describe('Activity log entries').optional(),
+  status: z.string().describe('Current status of the vendor'),
+})
+
+export type VendorInput = z.infer<typeof VendorSchema>
 export type MemberInput = z.infer<typeof MemberSchema>
 export type WorkspaceNameInput = z.infer<typeof WorkspaceNameSchema>
 export type WorkspaceEmailInput = z.infer<typeof WorkspaceEmailSchema>
