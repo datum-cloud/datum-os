@@ -1,0 +1,168 @@
+
+mutation CreateBulkCSVPostalAddress($input: Upload!) {
+  createBulkCSVPostalAddress(input: $input) {
+    postalAddresses {
+      addressLines
+      administrativeArea
+      createdAt
+      createdBy
+      id
+      languageCode
+      locality
+      organization
+      ownerID
+      postalCode
+      recipients
+      regionCode
+      sortingCode
+      sublocality
+      tags
+      updatedAt
+      updatedBy
+    }
+  }
+}
+
+mutation CreateBulkPostalAddress($input: [CreatePostalAddressInput!]) {
+  createBulkPostalAddress(input: $input) {
+    postalAddresses {
+      addressLines
+      administrativeArea
+      createdAt
+      createdBy
+      id
+      languageCode
+      locality
+      organization
+      ownerID
+      postalCode
+      recipients
+      regionCode
+      sortingCode
+      sublocality
+      tags
+      updatedAt
+      updatedBy
+    }
+  }
+}
+
+mutation CreatePostalAddress($input: CreatePostalAddressInput!) {
+  createPostalAddress(input: $input) {
+    postalAddress {
+      addressLines
+      administrativeArea
+      createdAt
+      createdBy
+      id
+      languageCode
+      locality
+      organization
+      ownerID
+      postalCode
+      recipients
+      regionCode
+      sortingCode
+      sublocality
+      tags
+      updatedAt
+      updatedBy
+    }
+  }
+}
+
+query GetAllPostalAddresses {
+  postalAddresses {
+    edges {
+      node {
+        addressLines
+        administrativeArea
+        createdAt
+        createdBy
+        id
+        languageCode
+        locality
+        organization
+        ownerID
+        postalCode
+        recipients
+        regionCode
+        sortingCode
+        sublocality
+        tags
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}
+query GetPostalAddressByID($postalAddressId: ID!) {
+  postalAddress(id: $postalAddressId) {
+    addressLines
+    administrativeArea
+    createdAt
+    createdBy
+    id
+    languageCode
+    locality
+    organization
+    ownerID
+    postalCode
+    recipients
+    regionCode
+    sortingCode
+    sublocality
+    tags
+    updatedAt
+    updatedBy
+  }
+}
+
+query GetPostalAddresses($where: PostalAddressWhereInput) {
+  postalAddresses(where: $where) {
+    edges {
+      node {
+        addressLines
+        administrativeArea
+        createdAt
+        createdBy
+        id
+        languageCode
+        locality
+        organization
+        ownerID
+        postalCode
+        recipients
+        regionCode
+        sortingCode
+        sublocality
+        tags
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}
+mutation UpdatePostalAddress($updatePostalAddressId: ID!, $input: UpdatePostalAddressInput!) {
+  updatePostalAddress(id: $updatePostalAddressId, input: $input) {
+    postalAddress {
+      addressLines
+      administrativeArea
+      createdAt
+      createdBy
+      id
+      languageCode
+      locality
+      organization
+      ownerID
+      postalCode
+      recipients
+      regionCode
+      sortingCode
+      sublocality
+      tags
+      updatedAt
+      updatedBy
+    }
+  }
+}

@@ -111,13 +111,19 @@ type OrganizationEdges struct {
 	ContactLists []*ContactList `json:"contact_lists,omitempty"`
 	// Notes holds the value of the notes edge.
 	Notes []*Note `json:"notes,omitempty"`
+	// Vendors holds the value of the vendors edge.
+	Vendors []*Vendor `json:"vendors,omitempty"`
+	// VendorProfiles holds the value of the vendor_profiles edge.
+	VendorProfiles []*VendorProfile `json:"vendor_profiles,omitempty"`
+	// PostalAddresses holds the value of the postal_addresses edge.
+	PostalAddresses []*PostalAddress `json:"postal_addresses,omitempty"`
 	// Members holds the value of the members edge.
 	Members []*OrgMembership `json:"members,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [28]bool
+	loadedTypes [31]bool
 	// totalCount holds the count of the edges above.
-	totalCount [28]map[string]int
+	totalCount [31]map[string]int
 
 	namedChildren                map[string][]*Organization
 	namedGroups                  map[string][]*Group
@@ -144,6 +150,9 @@ type OrganizationEdges struct {
 	namedContacts                map[string][]*Contact
 	namedContactLists            map[string][]*ContactList
 	namedNotes                   map[string][]*Note
+	namedVendors                 map[string][]*Vendor
+	namedVendorProfiles          map[string][]*VendorProfile
+	namedPostalAddresses         map[string][]*PostalAddress
 	namedMembers                 map[string][]*OrgMembership
 }
 
@@ -394,10 +403,37 @@ func (e OrganizationEdges) NotesOrErr() ([]*Note, error) {
 	return nil, &NotLoadedError{edge: "notes"}
 }
 
+// VendorsOrErr returns the Vendors value or an error if the edge
+// was not loaded in eager-loading.
+func (e OrganizationEdges) VendorsOrErr() ([]*Vendor, error) {
+	if e.loadedTypes[27] {
+		return e.Vendors, nil
+	}
+	return nil, &NotLoadedError{edge: "vendors"}
+}
+
+// VendorProfilesOrErr returns the VendorProfiles value or an error if the edge
+// was not loaded in eager-loading.
+func (e OrganizationEdges) VendorProfilesOrErr() ([]*VendorProfile, error) {
+	if e.loadedTypes[28] {
+		return e.VendorProfiles, nil
+	}
+	return nil, &NotLoadedError{edge: "vendor_profiles"}
+}
+
+// PostalAddressesOrErr returns the PostalAddresses value or an error if the edge
+// was not loaded in eager-loading.
+func (e OrganizationEdges) PostalAddressesOrErr() ([]*PostalAddress, error) {
+	if e.loadedTypes[29] {
+		return e.PostalAddresses, nil
+	}
+	return nil, &NotLoadedError{edge: "postal_addresses"}
+}
+
 // MembersOrErr returns the Members value or an error if the edge
 // was not loaded in eager-loading.
 func (e OrganizationEdges) MembersOrErr() ([]*OrgMembership, error) {
-	if e.loadedTypes[27] {
+	if e.loadedTypes[30] {
 		return e.Members, nil
 	}
 	return nil, &NotLoadedError{edge: "members"}
@@ -676,6 +712,21 @@ func (o *Organization) QueryContactLists() *ContactListQuery {
 // QueryNotes queries the "notes" edge of the Organization entity.
 func (o *Organization) QueryNotes() *NoteQuery {
 	return NewOrganizationClient(o.config).QueryNotes(o)
+}
+
+// QueryVendors queries the "vendors" edge of the Organization entity.
+func (o *Organization) QueryVendors() *VendorQuery {
+	return NewOrganizationClient(o.config).QueryVendors(o)
+}
+
+// QueryVendorProfiles queries the "vendor_profiles" edge of the Organization entity.
+func (o *Organization) QueryVendorProfiles() *VendorProfileQuery {
+	return NewOrganizationClient(o.config).QueryVendorProfiles(o)
+}
+
+// QueryPostalAddresses queries the "postal_addresses" edge of the Organization entity.
+func (o *Organization) QueryPostalAddresses() *PostalAddressQuery {
+	return NewOrganizationClient(o.config).QueryPostalAddresses(o)
 }
 
 // QueryMembers queries the "members" edge of the Organization entity.
@@ -1353,6 +1404,78 @@ func (o *Organization) appendNamedNotes(name string, edges ...*Note) {
 		o.Edges.namedNotes[name] = []*Note{}
 	} else {
 		o.Edges.namedNotes[name] = append(o.Edges.namedNotes[name], edges...)
+	}
+}
+
+// NamedVendors returns the Vendors named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (o *Organization) NamedVendors(name string) ([]*Vendor, error) {
+	if o.Edges.namedVendors == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := o.Edges.namedVendors[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (o *Organization) appendNamedVendors(name string, edges ...*Vendor) {
+	if o.Edges.namedVendors == nil {
+		o.Edges.namedVendors = make(map[string][]*Vendor)
+	}
+	if len(edges) == 0 {
+		o.Edges.namedVendors[name] = []*Vendor{}
+	} else {
+		o.Edges.namedVendors[name] = append(o.Edges.namedVendors[name], edges...)
+	}
+}
+
+// NamedVendorProfiles returns the VendorProfiles named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (o *Organization) NamedVendorProfiles(name string) ([]*VendorProfile, error) {
+	if o.Edges.namedVendorProfiles == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := o.Edges.namedVendorProfiles[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (o *Organization) appendNamedVendorProfiles(name string, edges ...*VendorProfile) {
+	if o.Edges.namedVendorProfiles == nil {
+		o.Edges.namedVendorProfiles = make(map[string][]*VendorProfile)
+	}
+	if len(edges) == 0 {
+		o.Edges.namedVendorProfiles[name] = []*VendorProfile{}
+	} else {
+		o.Edges.namedVendorProfiles[name] = append(o.Edges.namedVendorProfiles[name], edges...)
+	}
+}
+
+// NamedPostalAddresses returns the PostalAddresses named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (o *Organization) NamedPostalAddresses(name string) ([]*PostalAddress, error) {
+	if o.Edges.namedPostalAddresses == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := o.Edges.namedPostalAddresses[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (o *Organization) appendNamedPostalAddresses(name string, edges ...*PostalAddress) {
+	if o.Edges.namedPostalAddresses == nil {
+		o.Edges.namedPostalAddresses = make(map[string][]*PostalAddress)
+	}
+	if len(edges) == 0 {
+		o.Edges.namedPostalAddresses[name] = []*PostalAddress{}
+	} else {
+		o.Edges.namedPostalAddresses[name] = append(o.Edges.namedPostalAddresses[name], edges...)
 	}
 }
 

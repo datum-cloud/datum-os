@@ -20,6 +20,7 @@ import (
 	"github.com/datum-cloud/datum-os/internal/ent/generated/file"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/note"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/organization"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/postaladdress"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/predicate"
 
 	"github.com/datum-cloud/datum-os/internal/ent/generated/internal"
@@ -28,23 +29,25 @@ import (
 // EntityQuery is the builder for querying Entity entities.
 type EntityQuery struct {
 	config
-	ctx                *QueryContext
-	order              []entity.OrderOption
-	inters             []Interceptor
-	predicates         []predicate.Entity
-	withOwner          *OrganizationQuery
-	withContacts       *ContactQuery
-	withDocuments      *DocumentDataQuery
-	withNotes          *NoteQuery
-	withFiles          *FileQuery
-	withEntityType     *EntityTypeQuery
-	withFKs            bool
-	modifiers          []func(*sql.Selector)
-	loadTotal          []func(context.Context, []*Entity) error
-	withNamedContacts  map[string]*ContactQuery
-	withNamedDocuments map[string]*DocumentDataQuery
-	withNamedNotes     map[string]*NoteQuery
-	withNamedFiles     map[string]*FileQuery
+	ctx                      *QueryContext
+	order                    []entity.OrderOption
+	inters                   []Interceptor
+	predicates               []predicate.Entity
+	withOwner                *OrganizationQuery
+	withContacts             *ContactQuery
+	withDocuments            *DocumentDataQuery
+	withNotes                *NoteQuery
+	withPostalAddresses      *PostalAddressQuery
+	withFiles                *FileQuery
+	withEntityType           *EntityTypeQuery
+	withFKs                  bool
+	modifiers                []func(*sql.Selector)
+	loadTotal                []func(context.Context, []*Entity) error
+	withNamedContacts        map[string]*ContactQuery
+	withNamedDocuments       map[string]*DocumentDataQuery
+	withNamedNotes           map[string]*NoteQuery
+	withNamedPostalAddresses map[string]*PostalAddressQuery
+	withNamedFiles           map[string]*FileQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -175,6 +178,31 @@ func (eq *EntityQuery) QueryNotes() *NoteQuery {
 		schemaConfig := eq.schemaConfig
 		step.To.Schema = schemaConfig.Note
 		step.Edge.Schema = schemaConfig.Note
+		fromU = sqlgraph.SetNeighbors(eq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryPostalAddresses chains the current query on the "postal_addresses" edge.
+func (eq *EntityQuery) QueryPostalAddresses() *PostalAddressQuery {
+	query := (&PostalAddressClient{config: eq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := eq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := eq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(entity.Table, entity.FieldID, selector),
+			sqlgraph.To(postaladdress.Table, postaladdress.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, entity.PostalAddressesTable, entity.PostalAddressesColumn),
+		)
+		schemaConfig := eq.schemaConfig
+		step.To.Schema = schemaConfig.PostalAddress
+		step.Edge.Schema = schemaConfig.PostalAddress
 		fromU = sqlgraph.SetNeighbors(eq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -418,17 +446,18 @@ func (eq *EntityQuery) Clone() *EntityQuery {
 		return nil
 	}
 	return &EntityQuery{
-		config:         eq.config,
-		ctx:            eq.ctx.Clone(),
-		order:          append([]entity.OrderOption{}, eq.order...),
-		inters:         append([]Interceptor{}, eq.inters...),
-		predicates:     append([]predicate.Entity{}, eq.predicates...),
-		withOwner:      eq.withOwner.Clone(),
-		withContacts:   eq.withContacts.Clone(),
-		withDocuments:  eq.withDocuments.Clone(),
-		withNotes:      eq.withNotes.Clone(),
-		withFiles:      eq.withFiles.Clone(),
-		withEntityType: eq.withEntityType.Clone(),
+		config:              eq.config,
+		ctx:                 eq.ctx.Clone(),
+		order:               append([]entity.OrderOption{}, eq.order...),
+		inters:              append([]Interceptor{}, eq.inters...),
+		predicates:          append([]predicate.Entity{}, eq.predicates...),
+		withOwner:           eq.withOwner.Clone(),
+		withContacts:        eq.withContacts.Clone(),
+		withDocuments:       eq.withDocuments.Clone(),
+		withNotes:           eq.withNotes.Clone(),
+		withPostalAddresses: eq.withPostalAddresses.Clone(),
+		withFiles:           eq.withFiles.Clone(),
+		withEntityType:      eq.withEntityType.Clone(),
 		// clone intermediate query.
 		sql:  eq.sql.Clone(),
 		path: eq.path,
@@ -476,6 +505,17 @@ func (eq *EntityQuery) WithNotes(opts ...func(*NoteQuery)) *EntityQuery {
 		opt(query)
 	}
 	eq.withNotes = query
+	return eq
+}
+
+// WithPostalAddresses tells the query-builder to eager-load the nodes that are connected to
+// the "postal_addresses" edge. The optional arguments are used to configure the query builder of the edge.
+func (eq *EntityQuery) WithPostalAddresses(opts ...func(*PostalAddressQuery)) *EntityQuery {
+	query := (&PostalAddressClient{config: eq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	eq.withPostalAddresses = query
 	return eq
 }
 
@@ -586,11 +626,12 @@ func (eq *EntityQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Entit
 		nodes       = []*Entity{}
 		withFKs     = eq.withFKs
 		_spec       = eq.querySpec()
-		loadedTypes = [6]bool{
+		loadedTypes = [7]bool{
 			eq.withOwner != nil,
 			eq.withContacts != nil,
 			eq.withDocuments != nil,
 			eq.withNotes != nil,
+			eq.withPostalAddresses != nil,
 			eq.withFiles != nil,
 			eq.withEntityType != nil,
 		}
@@ -648,6 +689,13 @@ func (eq *EntityQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Entit
 			return nil, err
 		}
 	}
+	if query := eq.withPostalAddresses; query != nil {
+		if err := eq.loadPostalAddresses(ctx, query, nodes,
+			func(n *Entity) { n.Edges.PostalAddresses = []*PostalAddress{} },
+			func(n *Entity, e *PostalAddress) { n.Edges.PostalAddresses = append(n.Edges.PostalAddresses, e) }); err != nil {
+			return nil, err
+		}
+	}
 	if query := eq.withFiles; query != nil {
 		if err := eq.loadFiles(ctx, query, nodes,
 			func(n *Entity) { n.Edges.Files = []*File{} },
@@ -679,6 +727,13 @@ func (eq *EntityQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Entit
 		if err := eq.loadNotes(ctx, query, nodes,
 			func(n *Entity) { n.appendNamedNotes(name) },
 			func(n *Entity, e *Note) { n.appendNamedNotes(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range eq.withNamedPostalAddresses {
+		if err := eq.loadPostalAddresses(ctx, query, nodes,
+			func(n *Entity) { n.appendNamedPostalAddresses(name) },
+			func(n *Entity, e *PostalAddress) { n.appendNamedPostalAddresses(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -876,6 +931,37 @@ func (eq *EntityQuery) loadNotes(ctx context.Context, query *NoteQuery, nodes []
 		node, ok := nodeids[*fk]
 		if !ok {
 			return fmt.Errorf(`unexpected referenced foreign-key "entity_notes" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (eq *EntityQuery) loadPostalAddresses(ctx context.Context, query *PostalAddressQuery, nodes []*Entity, init func(*Entity), assign func(*Entity, *PostalAddress)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Entity)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.PostalAddress(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(entity.PostalAddressesColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.entity_postal_addresses
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "entity_postal_addresses" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "entity_postal_addresses" returned %v for node %v`, *fk, n.ID)
 		}
 		assign(node, n)
 	}
@@ -1107,6 +1193,20 @@ func (eq *EntityQuery) WithNamedNotes(name string, opts ...func(*NoteQuery)) *En
 		eq.withNamedNotes = make(map[string]*NoteQuery)
 	}
 	eq.withNamedNotes[name] = query
+	return eq
+}
+
+// WithNamedPostalAddresses tells the query-builder to eager-load the nodes that are connected to the "postal_addresses"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (eq *EntityQuery) WithNamedPostalAddresses(name string, opts ...func(*PostalAddressQuery)) *EntityQuery {
+	query := (&PostalAddressClient{config: eq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if eq.withNamedPostalAddresses == nil {
+		eq.withNamedPostalAddresses = make(map[string]*PostalAddressQuery)
+	}
+	eq.withNamedPostalAddresses[name] = query
 	return eq
 }
 

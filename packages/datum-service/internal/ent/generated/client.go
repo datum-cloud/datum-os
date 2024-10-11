@@ -66,6 +66,8 @@ import (
 	"github.com/datum-cloud/datum-os/internal/ent/generated/orgmembershiphistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/passwordresettoken"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/personalaccesstoken"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/postaladdress"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/postaladdresshistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/subscriber"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/template"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/templatehistory"
@@ -74,6 +76,12 @@ import (
 	"github.com/datum-cloud/datum-os/internal/ent/generated/userhistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/usersetting"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/usersettinghistory"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/vendor"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorhistory"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofile"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofilehistory"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofilepostaladdress"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofilepostaladdresshistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/webauthn"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/webhook"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/webhookhistory"
@@ -196,6 +204,10 @@ type Client struct {
 	PasswordResetToken *PasswordResetTokenClient
 	// PersonalAccessToken is the client for interacting with the PersonalAccessToken builders.
 	PersonalAccessToken *PersonalAccessTokenClient
+	// PostalAddress is the client for interacting with the PostalAddress builders.
+	PostalAddress *PostalAddressClient
+	// PostalAddressHistory is the client for interacting with the PostalAddressHistory builders.
+	PostalAddressHistory *PostalAddressHistoryClient
 	// Subscriber is the client for interacting with the Subscriber builders.
 	Subscriber *SubscriberClient
 	// TFASetting is the client for interacting with the TFASetting builders.
@@ -212,6 +224,18 @@ type Client struct {
 	UserSetting *UserSettingClient
 	// UserSettingHistory is the client for interacting with the UserSettingHistory builders.
 	UserSettingHistory *UserSettingHistoryClient
+	// Vendor is the client for interacting with the Vendor builders.
+	Vendor *VendorClient
+	// VendorHistory is the client for interacting with the VendorHistory builders.
+	VendorHistory *VendorHistoryClient
+	// VendorProfile is the client for interacting with the VendorProfile builders.
+	VendorProfile *VendorProfileClient
+	// VendorProfileHistory is the client for interacting with the VendorProfileHistory builders.
+	VendorProfileHistory *VendorProfileHistoryClient
+	// VendorProfilePostalAddress is the client for interacting with the VendorProfilePostalAddress builders.
+	VendorProfilePostalAddress *VendorProfilePostalAddressClient
+	// VendorProfilePostalAddressHistory is the client for interacting with the VendorProfilePostalAddressHistory builders.
+	VendorProfilePostalAddressHistory *VendorProfilePostalAddressHistoryClient
 	// Webauthn is the client for interacting with the Webauthn builders.
 	Webauthn *WebauthnClient
 	// Webhook is the client for interacting with the Webhook builders.
@@ -284,6 +308,8 @@ func (c *Client) init() {
 	c.OrganizationSettingHistory = NewOrganizationSettingHistoryClient(c.config)
 	c.PasswordResetToken = NewPasswordResetTokenClient(c.config)
 	c.PersonalAccessToken = NewPersonalAccessTokenClient(c.config)
+	c.PostalAddress = NewPostalAddressClient(c.config)
+	c.PostalAddressHistory = NewPostalAddressHistoryClient(c.config)
 	c.Subscriber = NewSubscriberClient(c.config)
 	c.TFASetting = NewTFASettingClient(c.config)
 	c.Template = NewTemplateClient(c.config)
@@ -292,6 +318,12 @@ func (c *Client) init() {
 	c.UserHistory = NewUserHistoryClient(c.config)
 	c.UserSetting = NewUserSettingClient(c.config)
 	c.UserSettingHistory = NewUserSettingHistoryClient(c.config)
+	c.Vendor = NewVendorClient(c.config)
+	c.VendorHistory = NewVendorHistoryClient(c.config)
+	c.VendorProfile = NewVendorProfileClient(c.config)
+	c.VendorProfileHistory = NewVendorProfileHistoryClient(c.config)
+	c.VendorProfilePostalAddress = NewVendorProfilePostalAddressClient(c.config)
+	c.VendorProfilePostalAddressHistory = NewVendorProfilePostalAddressHistoryClient(c.config)
 	c.Webauthn = NewWebauthnClient(c.config)
 	c.Webhook = NewWebhookClient(c.config)
 	c.WebhookHistory = NewWebhookHistoryClient(c.config)
@@ -483,69 +515,77 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 	cfg := c.config
 	cfg.driver = tx
 	return &Tx{
-		ctx:                           ctx,
-		config:                        cfg,
-		APIToken:                      NewAPITokenClient(cfg),
-		Contact:                       NewContactClient(cfg),
-		ContactHistory:                NewContactHistoryClient(cfg),
-		ContactList:                   NewContactListClient(cfg),
-		ContactListHistory:            NewContactListHistoryClient(cfg),
-		ContactListMembership:         NewContactListMembershipClient(cfg),
-		ContactListMembershipHistory:  NewContactListMembershipHistoryClient(cfg),
-		DocumentData:                  NewDocumentDataClient(cfg),
-		DocumentDataHistory:           NewDocumentDataHistoryClient(cfg),
-		EmailVerificationToken:        NewEmailVerificationTokenClient(cfg),
-		Entitlement:                   NewEntitlementClient(cfg),
-		EntitlementHistory:            NewEntitlementHistoryClient(cfg),
-		EntitlementPlan:               NewEntitlementPlanClient(cfg),
-		EntitlementPlanFeature:        NewEntitlementPlanFeatureClient(cfg),
-		EntitlementPlanFeatureHistory: NewEntitlementPlanFeatureHistoryClient(cfg),
-		EntitlementPlanHistory:        NewEntitlementPlanHistoryClient(cfg),
-		Entity:                        NewEntityClient(cfg),
-		EntityHistory:                 NewEntityHistoryClient(cfg),
-		EntityType:                    NewEntityTypeClient(cfg),
-		EntityTypeHistory:             NewEntityTypeHistoryClient(cfg),
-		Event:                         NewEventClient(cfg),
-		EventHistory:                  NewEventHistoryClient(cfg),
-		Feature:                       NewFeatureClient(cfg),
-		FeatureHistory:                NewFeatureHistoryClient(cfg),
-		File:                          NewFileClient(cfg),
-		FileHistory:                   NewFileHistoryClient(cfg),
-		Group:                         NewGroupClient(cfg),
-		GroupHistory:                  NewGroupHistoryClient(cfg),
-		GroupMembership:               NewGroupMembershipClient(cfg),
-		GroupMembershipHistory:        NewGroupMembershipHistoryClient(cfg),
-		GroupSetting:                  NewGroupSettingClient(cfg),
-		GroupSettingHistory:           NewGroupSettingHistoryClient(cfg),
-		Hush:                          NewHushClient(cfg),
-		HushHistory:                   NewHushHistoryClient(cfg),
-		Integration:                   NewIntegrationClient(cfg),
-		IntegrationHistory:            NewIntegrationHistoryClient(cfg),
-		Invite:                        NewInviteClient(cfg),
-		Note:                          NewNoteClient(cfg),
-		NoteHistory:                   NewNoteHistoryClient(cfg),
-		OauthProvider:                 NewOauthProviderClient(cfg),
-		OauthProviderHistory:          NewOauthProviderHistoryClient(cfg),
-		OhAuthTooToken:                NewOhAuthTooTokenClient(cfg),
-		OrgMembership:                 NewOrgMembershipClient(cfg),
-		OrgMembershipHistory:          NewOrgMembershipHistoryClient(cfg),
-		Organization:                  NewOrganizationClient(cfg),
-		OrganizationHistory:           NewOrganizationHistoryClient(cfg),
-		OrganizationSetting:           NewOrganizationSettingClient(cfg),
-		OrganizationSettingHistory:    NewOrganizationSettingHistoryClient(cfg),
-		PasswordResetToken:            NewPasswordResetTokenClient(cfg),
-		PersonalAccessToken:           NewPersonalAccessTokenClient(cfg),
-		Subscriber:                    NewSubscriberClient(cfg),
-		TFASetting:                    NewTFASettingClient(cfg),
-		Template:                      NewTemplateClient(cfg),
-		TemplateHistory:               NewTemplateHistoryClient(cfg),
-		User:                          NewUserClient(cfg),
-		UserHistory:                   NewUserHistoryClient(cfg),
-		UserSetting:                   NewUserSettingClient(cfg),
-		UserSettingHistory:            NewUserSettingHistoryClient(cfg),
-		Webauthn:                      NewWebauthnClient(cfg),
-		Webhook:                       NewWebhookClient(cfg),
-		WebhookHistory:                NewWebhookHistoryClient(cfg),
+		ctx:                               ctx,
+		config:                            cfg,
+		APIToken:                          NewAPITokenClient(cfg),
+		Contact:                           NewContactClient(cfg),
+		ContactHistory:                    NewContactHistoryClient(cfg),
+		ContactList:                       NewContactListClient(cfg),
+		ContactListHistory:                NewContactListHistoryClient(cfg),
+		ContactListMembership:             NewContactListMembershipClient(cfg),
+		ContactListMembershipHistory:      NewContactListMembershipHistoryClient(cfg),
+		DocumentData:                      NewDocumentDataClient(cfg),
+		DocumentDataHistory:               NewDocumentDataHistoryClient(cfg),
+		EmailVerificationToken:            NewEmailVerificationTokenClient(cfg),
+		Entitlement:                       NewEntitlementClient(cfg),
+		EntitlementHistory:                NewEntitlementHistoryClient(cfg),
+		EntitlementPlan:                   NewEntitlementPlanClient(cfg),
+		EntitlementPlanFeature:            NewEntitlementPlanFeatureClient(cfg),
+		EntitlementPlanFeatureHistory:     NewEntitlementPlanFeatureHistoryClient(cfg),
+		EntitlementPlanHistory:            NewEntitlementPlanHistoryClient(cfg),
+		Entity:                            NewEntityClient(cfg),
+		EntityHistory:                     NewEntityHistoryClient(cfg),
+		EntityType:                        NewEntityTypeClient(cfg),
+		EntityTypeHistory:                 NewEntityTypeHistoryClient(cfg),
+		Event:                             NewEventClient(cfg),
+		EventHistory:                      NewEventHistoryClient(cfg),
+		Feature:                           NewFeatureClient(cfg),
+		FeatureHistory:                    NewFeatureHistoryClient(cfg),
+		File:                              NewFileClient(cfg),
+		FileHistory:                       NewFileHistoryClient(cfg),
+		Group:                             NewGroupClient(cfg),
+		GroupHistory:                      NewGroupHistoryClient(cfg),
+		GroupMembership:                   NewGroupMembershipClient(cfg),
+		GroupMembershipHistory:            NewGroupMembershipHistoryClient(cfg),
+		GroupSetting:                      NewGroupSettingClient(cfg),
+		GroupSettingHistory:               NewGroupSettingHistoryClient(cfg),
+		Hush:                              NewHushClient(cfg),
+		HushHistory:                       NewHushHistoryClient(cfg),
+		Integration:                       NewIntegrationClient(cfg),
+		IntegrationHistory:                NewIntegrationHistoryClient(cfg),
+		Invite:                            NewInviteClient(cfg),
+		Note:                              NewNoteClient(cfg),
+		NoteHistory:                       NewNoteHistoryClient(cfg),
+		OauthProvider:                     NewOauthProviderClient(cfg),
+		OauthProviderHistory:              NewOauthProviderHistoryClient(cfg),
+		OhAuthTooToken:                    NewOhAuthTooTokenClient(cfg),
+		OrgMembership:                     NewOrgMembershipClient(cfg),
+		OrgMembershipHistory:              NewOrgMembershipHistoryClient(cfg),
+		Organization:                      NewOrganizationClient(cfg),
+		OrganizationHistory:               NewOrganizationHistoryClient(cfg),
+		OrganizationSetting:               NewOrganizationSettingClient(cfg),
+		OrganizationSettingHistory:        NewOrganizationSettingHistoryClient(cfg),
+		PasswordResetToken:                NewPasswordResetTokenClient(cfg),
+		PersonalAccessToken:               NewPersonalAccessTokenClient(cfg),
+		PostalAddress:                     NewPostalAddressClient(cfg),
+		PostalAddressHistory:              NewPostalAddressHistoryClient(cfg),
+		Subscriber:                        NewSubscriberClient(cfg),
+		TFASetting:                        NewTFASettingClient(cfg),
+		Template:                          NewTemplateClient(cfg),
+		TemplateHistory:                   NewTemplateHistoryClient(cfg),
+		User:                              NewUserClient(cfg),
+		UserHistory:                       NewUserHistoryClient(cfg),
+		UserSetting:                       NewUserSettingClient(cfg),
+		UserSettingHistory:                NewUserSettingHistoryClient(cfg),
+		Vendor:                            NewVendorClient(cfg),
+		VendorHistory:                     NewVendorHistoryClient(cfg),
+		VendorProfile:                     NewVendorProfileClient(cfg),
+		VendorProfileHistory:              NewVendorProfileHistoryClient(cfg),
+		VendorProfilePostalAddress:        NewVendorProfilePostalAddressClient(cfg),
+		VendorProfilePostalAddressHistory: NewVendorProfilePostalAddressHistoryClient(cfg),
+		Webauthn:                          NewWebauthnClient(cfg),
+		Webhook:                           NewWebhookClient(cfg),
+		WebhookHistory:                    NewWebhookHistoryClient(cfg),
 	}, nil
 }
 
@@ -563,69 +603,77 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 	cfg := c.config
 	cfg.driver = &txDriver{tx: tx, drv: c.driver}
 	return &Tx{
-		ctx:                           ctx,
-		config:                        cfg,
-		APIToken:                      NewAPITokenClient(cfg),
-		Contact:                       NewContactClient(cfg),
-		ContactHistory:                NewContactHistoryClient(cfg),
-		ContactList:                   NewContactListClient(cfg),
-		ContactListHistory:            NewContactListHistoryClient(cfg),
-		ContactListMembership:         NewContactListMembershipClient(cfg),
-		ContactListMembershipHistory:  NewContactListMembershipHistoryClient(cfg),
-		DocumentData:                  NewDocumentDataClient(cfg),
-		DocumentDataHistory:           NewDocumentDataHistoryClient(cfg),
-		EmailVerificationToken:        NewEmailVerificationTokenClient(cfg),
-		Entitlement:                   NewEntitlementClient(cfg),
-		EntitlementHistory:            NewEntitlementHistoryClient(cfg),
-		EntitlementPlan:               NewEntitlementPlanClient(cfg),
-		EntitlementPlanFeature:        NewEntitlementPlanFeatureClient(cfg),
-		EntitlementPlanFeatureHistory: NewEntitlementPlanFeatureHistoryClient(cfg),
-		EntitlementPlanHistory:        NewEntitlementPlanHistoryClient(cfg),
-		Entity:                        NewEntityClient(cfg),
-		EntityHistory:                 NewEntityHistoryClient(cfg),
-		EntityType:                    NewEntityTypeClient(cfg),
-		EntityTypeHistory:             NewEntityTypeHistoryClient(cfg),
-		Event:                         NewEventClient(cfg),
-		EventHistory:                  NewEventHistoryClient(cfg),
-		Feature:                       NewFeatureClient(cfg),
-		FeatureHistory:                NewFeatureHistoryClient(cfg),
-		File:                          NewFileClient(cfg),
-		FileHistory:                   NewFileHistoryClient(cfg),
-		Group:                         NewGroupClient(cfg),
-		GroupHistory:                  NewGroupHistoryClient(cfg),
-		GroupMembership:               NewGroupMembershipClient(cfg),
-		GroupMembershipHistory:        NewGroupMembershipHistoryClient(cfg),
-		GroupSetting:                  NewGroupSettingClient(cfg),
-		GroupSettingHistory:           NewGroupSettingHistoryClient(cfg),
-		Hush:                          NewHushClient(cfg),
-		HushHistory:                   NewHushHistoryClient(cfg),
-		Integration:                   NewIntegrationClient(cfg),
-		IntegrationHistory:            NewIntegrationHistoryClient(cfg),
-		Invite:                        NewInviteClient(cfg),
-		Note:                          NewNoteClient(cfg),
-		NoteHistory:                   NewNoteHistoryClient(cfg),
-		OauthProvider:                 NewOauthProviderClient(cfg),
-		OauthProviderHistory:          NewOauthProviderHistoryClient(cfg),
-		OhAuthTooToken:                NewOhAuthTooTokenClient(cfg),
-		OrgMembership:                 NewOrgMembershipClient(cfg),
-		OrgMembershipHistory:          NewOrgMembershipHistoryClient(cfg),
-		Organization:                  NewOrganizationClient(cfg),
-		OrganizationHistory:           NewOrganizationHistoryClient(cfg),
-		OrganizationSetting:           NewOrganizationSettingClient(cfg),
-		OrganizationSettingHistory:    NewOrganizationSettingHistoryClient(cfg),
-		PasswordResetToken:            NewPasswordResetTokenClient(cfg),
-		PersonalAccessToken:           NewPersonalAccessTokenClient(cfg),
-		Subscriber:                    NewSubscriberClient(cfg),
-		TFASetting:                    NewTFASettingClient(cfg),
-		Template:                      NewTemplateClient(cfg),
-		TemplateHistory:               NewTemplateHistoryClient(cfg),
-		User:                          NewUserClient(cfg),
-		UserHistory:                   NewUserHistoryClient(cfg),
-		UserSetting:                   NewUserSettingClient(cfg),
-		UserSettingHistory:            NewUserSettingHistoryClient(cfg),
-		Webauthn:                      NewWebauthnClient(cfg),
-		Webhook:                       NewWebhookClient(cfg),
-		WebhookHistory:                NewWebhookHistoryClient(cfg),
+		ctx:                               ctx,
+		config:                            cfg,
+		APIToken:                          NewAPITokenClient(cfg),
+		Contact:                           NewContactClient(cfg),
+		ContactHistory:                    NewContactHistoryClient(cfg),
+		ContactList:                       NewContactListClient(cfg),
+		ContactListHistory:                NewContactListHistoryClient(cfg),
+		ContactListMembership:             NewContactListMembershipClient(cfg),
+		ContactListMembershipHistory:      NewContactListMembershipHistoryClient(cfg),
+		DocumentData:                      NewDocumentDataClient(cfg),
+		DocumentDataHistory:               NewDocumentDataHistoryClient(cfg),
+		EmailVerificationToken:            NewEmailVerificationTokenClient(cfg),
+		Entitlement:                       NewEntitlementClient(cfg),
+		EntitlementHistory:                NewEntitlementHistoryClient(cfg),
+		EntitlementPlan:                   NewEntitlementPlanClient(cfg),
+		EntitlementPlanFeature:            NewEntitlementPlanFeatureClient(cfg),
+		EntitlementPlanFeatureHistory:     NewEntitlementPlanFeatureHistoryClient(cfg),
+		EntitlementPlanHistory:            NewEntitlementPlanHistoryClient(cfg),
+		Entity:                            NewEntityClient(cfg),
+		EntityHistory:                     NewEntityHistoryClient(cfg),
+		EntityType:                        NewEntityTypeClient(cfg),
+		EntityTypeHistory:                 NewEntityTypeHistoryClient(cfg),
+		Event:                             NewEventClient(cfg),
+		EventHistory:                      NewEventHistoryClient(cfg),
+		Feature:                           NewFeatureClient(cfg),
+		FeatureHistory:                    NewFeatureHistoryClient(cfg),
+		File:                              NewFileClient(cfg),
+		FileHistory:                       NewFileHistoryClient(cfg),
+		Group:                             NewGroupClient(cfg),
+		GroupHistory:                      NewGroupHistoryClient(cfg),
+		GroupMembership:                   NewGroupMembershipClient(cfg),
+		GroupMembershipHistory:            NewGroupMembershipHistoryClient(cfg),
+		GroupSetting:                      NewGroupSettingClient(cfg),
+		GroupSettingHistory:               NewGroupSettingHistoryClient(cfg),
+		Hush:                              NewHushClient(cfg),
+		HushHistory:                       NewHushHistoryClient(cfg),
+		Integration:                       NewIntegrationClient(cfg),
+		IntegrationHistory:                NewIntegrationHistoryClient(cfg),
+		Invite:                            NewInviteClient(cfg),
+		Note:                              NewNoteClient(cfg),
+		NoteHistory:                       NewNoteHistoryClient(cfg),
+		OauthProvider:                     NewOauthProviderClient(cfg),
+		OauthProviderHistory:              NewOauthProviderHistoryClient(cfg),
+		OhAuthTooToken:                    NewOhAuthTooTokenClient(cfg),
+		OrgMembership:                     NewOrgMembershipClient(cfg),
+		OrgMembershipHistory:              NewOrgMembershipHistoryClient(cfg),
+		Organization:                      NewOrganizationClient(cfg),
+		OrganizationHistory:               NewOrganizationHistoryClient(cfg),
+		OrganizationSetting:               NewOrganizationSettingClient(cfg),
+		OrganizationSettingHistory:        NewOrganizationSettingHistoryClient(cfg),
+		PasswordResetToken:                NewPasswordResetTokenClient(cfg),
+		PersonalAccessToken:               NewPersonalAccessTokenClient(cfg),
+		PostalAddress:                     NewPostalAddressClient(cfg),
+		PostalAddressHistory:              NewPostalAddressHistoryClient(cfg),
+		Subscriber:                        NewSubscriberClient(cfg),
+		TFASetting:                        NewTFASettingClient(cfg),
+		Template:                          NewTemplateClient(cfg),
+		TemplateHistory:                   NewTemplateHistoryClient(cfg),
+		User:                              NewUserClient(cfg),
+		UserHistory:                       NewUserHistoryClient(cfg),
+		UserSetting:                       NewUserSettingClient(cfg),
+		UserSettingHistory:                NewUserSettingHistoryClient(cfg),
+		Vendor:                            NewVendorClient(cfg),
+		VendorHistory:                     NewVendorHistoryClient(cfg),
+		VendorProfile:                     NewVendorProfileClient(cfg),
+		VendorProfileHistory:              NewVendorProfileHistoryClient(cfg),
+		VendorProfilePostalAddress:        NewVendorProfilePostalAddressClient(cfg),
+		VendorProfilePostalAddressHistory: NewVendorProfilePostalAddressHistoryClient(cfg),
+		Webauthn:                          NewWebauthnClient(cfg),
+		Webhook:                           NewWebhookClient(cfg),
+		WebhookHistory:                    NewWebhookHistoryClient(cfg),
 	}, nil
 }
 
@@ -668,9 +716,11 @@ func (c *Client) Use(hooks ...Hook) {
 		c.OauthProviderHistory, c.OhAuthTooToken, c.OrgMembership,
 		c.OrgMembershipHistory, c.Organization, c.OrganizationHistory,
 		c.OrganizationSetting, c.OrganizationSettingHistory, c.PasswordResetToken,
-		c.PersonalAccessToken, c.Subscriber, c.TFASetting, c.Template,
-		c.TemplateHistory, c.User, c.UserHistory, c.UserSetting, c.UserSettingHistory,
-		c.Webauthn, c.Webhook, c.WebhookHistory,
+		c.PersonalAccessToken, c.PostalAddress, c.PostalAddressHistory, c.Subscriber,
+		c.TFASetting, c.Template, c.TemplateHistory, c.User, c.UserHistory,
+		c.UserSetting, c.UserSettingHistory, c.Vendor, c.VendorHistory,
+		c.VendorProfile, c.VendorProfileHistory, c.VendorProfilePostalAddress,
+		c.VendorProfilePostalAddressHistory, c.Webauthn, c.Webhook, c.WebhookHistory,
 	} {
 		n.Use(hooks...)
 	}
@@ -693,9 +743,11 @@ func (c *Client) Intercept(interceptors ...Interceptor) {
 		c.OauthProviderHistory, c.OhAuthTooToken, c.OrgMembership,
 		c.OrgMembershipHistory, c.Organization, c.OrganizationHistory,
 		c.OrganizationSetting, c.OrganizationSettingHistory, c.PasswordResetToken,
-		c.PersonalAccessToken, c.Subscriber, c.TFASetting, c.Template,
-		c.TemplateHistory, c.User, c.UserHistory, c.UserSetting, c.UserSettingHistory,
-		c.Webauthn, c.Webhook, c.WebhookHistory,
+		c.PersonalAccessToken, c.PostalAddress, c.PostalAddressHistory, c.Subscriber,
+		c.TFASetting, c.Template, c.TemplateHistory, c.User, c.UserHistory,
+		c.UserSetting, c.UserSettingHistory, c.Vendor, c.VendorHistory,
+		c.VendorProfile, c.VendorProfileHistory, c.VendorProfilePostalAddress,
+		c.VendorProfilePostalAddressHistory, c.Webauthn, c.Webhook, c.WebhookHistory,
 	} {
 		n.Intercept(interceptors...)
 	}
@@ -804,6 +856,10 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.PasswordResetToken.mutate(ctx, m)
 	case *PersonalAccessTokenMutation:
 		return c.PersonalAccessToken.mutate(ctx, m)
+	case *PostalAddressMutation:
+		return c.PostalAddress.mutate(ctx, m)
+	case *PostalAddressHistoryMutation:
+		return c.PostalAddressHistory.mutate(ctx, m)
 	case *SubscriberMutation:
 		return c.Subscriber.mutate(ctx, m)
 	case *TFASettingMutation:
@@ -820,6 +876,18 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.UserSetting.mutate(ctx, m)
 	case *UserSettingHistoryMutation:
 		return c.UserSettingHistory.mutate(ctx, m)
+	case *VendorMutation:
+		return c.Vendor.mutate(ctx, m)
+	case *VendorHistoryMutation:
+		return c.VendorHistory.mutate(ctx, m)
+	case *VendorProfileMutation:
+		return c.VendorProfile.mutate(ctx, m)
+	case *VendorProfileHistoryMutation:
+		return c.VendorProfileHistory.mutate(ctx, m)
+	case *VendorProfilePostalAddressMutation:
+		return c.VendorProfilePostalAddress.mutate(ctx, m)
+	case *VendorProfilePostalAddressHistoryMutation:
+		return c.VendorProfilePostalAddressHistory.mutate(ctx, m)
 	case *WebauthnMutation:
 		return c.Webauthn.mutate(ctx, m)
 	case *WebhookMutation:
@@ -3739,6 +3807,25 @@ func (c *EntityClient) QueryNotes(e *Entity) *NoteQuery {
 		schemaConfig := e.schemaConfig
 		step.To.Schema = schemaConfig.Note
 		step.Edge.Schema = schemaConfig.Note
+		fromV = sqlgraph.Neighbors(e.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryPostalAddresses queries the postal_addresses edge of a Entity.
+func (c *EntityClient) QueryPostalAddresses(e *Entity) *PostalAddressQuery {
+	query := (&PostalAddressClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := e.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(entity.Table, entity.FieldID, id),
+			sqlgraph.To(postaladdress.Table, postaladdress.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, entity.PostalAddressesTable, entity.PostalAddressesColumn),
+		)
+		schemaConfig := e.schemaConfig
+		step.To.Schema = schemaConfig.PostalAddress
+		step.Edge.Schema = schemaConfig.PostalAddress
 		fromV = sqlgraph.Neighbors(e.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -9112,6 +9199,63 @@ func (c *OrganizationClient) QueryNotes(o *Organization) *NoteQuery {
 	return query
 }
 
+// QueryVendors queries the vendors edge of a Organization.
+func (c *OrganizationClient) QueryVendors(o *Organization) *VendorQuery {
+	query := (&VendorClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := o.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, id),
+			sqlgraph.To(vendor.Table, vendor.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.VendorsTable, organization.VendorsColumn),
+		)
+		schemaConfig := o.schemaConfig
+		step.To.Schema = schemaConfig.Vendor
+		step.Edge.Schema = schemaConfig.Vendor
+		fromV = sqlgraph.Neighbors(o.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryVendorProfiles queries the vendor_profiles edge of a Organization.
+func (c *OrganizationClient) QueryVendorProfiles(o *Organization) *VendorProfileQuery {
+	query := (&VendorProfileClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := o.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, id),
+			sqlgraph.To(vendorprofile.Table, vendorprofile.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.VendorProfilesTable, organization.VendorProfilesColumn),
+		)
+		schemaConfig := o.schemaConfig
+		step.To.Schema = schemaConfig.VendorProfile
+		step.Edge.Schema = schemaConfig.VendorProfile
+		fromV = sqlgraph.Neighbors(o.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryPostalAddresses queries the postal_addresses edge of a Organization.
+func (c *OrganizationClient) QueryPostalAddresses(o *Organization) *PostalAddressQuery {
+	query := (&PostalAddressClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := o.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, id),
+			sqlgraph.To(postaladdress.Table, postaladdress.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.PostalAddressesTable, organization.PostalAddressesColumn),
+		)
+		schemaConfig := o.schemaConfig
+		step.To.Schema = schemaConfig.PostalAddress
+		step.Edge.Schema = schemaConfig.PostalAddress
+		fromV = sqlgraph.Neighbors(o.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryMembers queries the members edge of a Organization.
 func (c *OrganizationClient) QueryMembers(o *Organization) *OrgMembershipQuery {
 	query := (&OrgMembershipClient{config: c.config}).Query()
@@ -9925,6 +10069,351 @@ func (c *PersonalAccessTokenClient) mutate(ctx context.Context, m *PersonalAcces
 		return (&PersonalAccessTokenDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
 	default:
 		return nil, fmt.Errorf("generated: unknown PersonalAccessToken mutation op: %q", m.Op())
+	}
+}
+
+// PostalAddressClient is a client for the PostalAddress schema.
+type PostalAddressClient struct {
+	config
+}
+
+// NewPostalAddressClient returns a client for the PostalAddress from the given config.
+func NewPostalAddressClient(c config) *PostalAddressClient {
+	return &PostalAddressClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `postaladdress.Hooks(f(g(h())))`.
+func (c *PostalAddressClient) Use(hooks ...Hook) {
+	c.hooks.PostalAddress = append(c.hooks.PostalAddress, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `postaladdress.Intercept(f(g(h())))`.
+func (c *PostalAddressClient) Intercept(interceptors ...Interceptor) {
+	c.inters.PostalAddress = append(c.inters.PostalAddress, interceptors...)
+}
+
+// Create returns a builder for creating a PostalAddress entity.
+func (c *PostalAddressClient) Create() *PostalAddressCreate {
+	mutation := newPostalAddressMutation(c.config, OpCreate)
+	return &PostalAddressCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of PostalAddress entities.
+func (c *PostalAddressClient) CreateBulk(builders ...*PostalAddressCreate) *PostalAddressCreateBulk {
+	return &PostalAddressCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *PostalAddressClient) MapCreateBulk(slice any, setFunc func(*PostalAddressCreate, int)) *PostalAddressCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &PostalAddressCreateBulk{err: fmt.Errorf("calling to PostalAddressClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*PostalAddressCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &PostalAddressCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for PostalAddress.
+func (c *PostalAddressClient) Update() *PostalAddressUpdate {
+	mutation := newPostalAddressMutation(c.config, OpUpdate)
+	return &PostalAddressUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *PostalAddressClient) UpdateOne(pa *PostalAddress) *PostalAddressUpdateOne {
+	mutation := newPostalAddressMutation(c.config, OpUpdateOne, withPostalAddress(pa))
+	return &PostalAddressUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *PostalAddressClient) UpdateOneID(id string) *PostalAddressUpdateOne {
+	mutation := newPostalAddressMutation(c.config, OpUpdateOne, withPostalAddressID(id))
+	return &PostalAddressUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for PostalAddress.
+func (c *PostalAddressClient) Delete() *PostalAddressDelete {
+	mutation := newPostalAddressMutation(c.config, OpDelete)
+	return &PostalAddressDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *PostalAddressClient) DeleteOne(pa *PostalAddress) *PostalAddressDeleteOne {
+	return c.DeleteOneID(pa.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *PostalAddressClient) DeleteOneID(id string) *PostalAddressDeleteOne {
+	builder := c.Delete().Where(postaladdress.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &PostalAddressDeleteOne{builder}
+}
+
+// Query returns a query builder for PostalAddress.
+func (c *PostalAddressClient) Query() *PostalAddressQuery {
+	return &PostalAddressQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypePostalAddress},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a PostalAddress entity by its id.
+func (c *PostalAddressClient) Get(ctx context.Context, id string) (*PostalAddress, error) {
+	return c.Query().Where(postaladdress.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *PostalAddressClient) GetX(ctx context.Context, id string) *PostalAddress {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryOwner queries the owner edge of a PostalAddress.
+func (c *PostalAddressClient) QueryOwner(pa *PostalAddress) *OrganizationQuery {
+	query := (&OrganizationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := pa.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(postaladdress.Table, postaladdress.FieldID, id),
+			sqlgraph.To(organization.Table, organization.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, postaladdress.OwnerTable, postaladdress.OwnerColumn),
+		)
+		schemaConfig := pa.schemaConfig
+		step.To.Schema = schemaConfig.Organization
+		step.Edge.Schema = schemaConfig.PostalAddress
+		fromV = sqlgraph.Neighbors(pa.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryEvents queries the events edge of a PostalAddress.
+func (c *PostalAddressClient) QueryEvents(pa *PostalAddress) *EventQuery {
+	query := (&EventClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := pa.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(postaladdress.Table, postaladdress.FieldID, id),
+			sqlgraph.To(event.Table, event.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, postaladdress.EventsTable, postaladdress.EventsColumn),
+		)
+		schemaConfig := pa.schemaConfig
+		step.To.Schema = schemaConfig.Event
+		step.Edge.Schema = schemaConfig.Event
+		fromV = sqlgraph.Neighbors(pa.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryProfile queries the profile edge of a PostalAddress.
+func (c *PostalAddressClient) QueryProfile(pa *PostalAddress) *VendorProfileQuery {
+	query := (&VendorProfileClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := pa.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(postaladdress.Table, postaladdress.FieldID, id),
+			sqlgraph.To(vendorprofile.Table, vendorprofile.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, postaladdress.ProfileTable, postaladdress.ProfilePrimaryKey...),
+		)
+		schemaConfig := pa.schemaConfig
+		step.To.Schema = schemaConfig.VendorProfile
+		step.Edge.Schema = schemaConfig.VendorProfilePostalAddress
+		fromV = sqlgraph.Neighbors(pa.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryVendorProfilePostalAddresses queries the vendor_profile_postal_addresses edge of a PostalAddress.
+func (c *PostalAddressClient) QueryVendorProfilePostalAddresses(pa *PostalAddress) *VendorProfilePostalAddressQuery {
+	query := (&VendorProfilePostalAddressClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := pa.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(postaladdress.Table, postaladdress.FieldID, id),
+			sqlgraph.To(vendorprofilepostaladdress.Table, vendorprofilepostaladdress.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, true, postaladdress.VendorProfilePostalAddressesTable, postaladdress.VendorProfilePostalAddressesColumn),
+		)
+		schemaConfig := pa.schemaConfig
+		step.To.Schema = schemaConfig.VendorProfilePostalAddress
+		step.Edge.Schema = schemaConfig.VendorProfilePostalAddress
+		fromV = sqlgraph.Neighbors(pa.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *PostalAddressClient) Hooks() []Hook {
+	hooks := c.hooks.PostalAddress
+	return append(hooks[:len(hooks):len(hooks)], postaladdress.Hooks[:]...)
+}
+
+// Interceptors returns the client interceptors.
+func (c *PostalAddressClient) Interceptors() []Interceptor {
+	inters := c.inters.PostalAddress
+	return append(inters[:len(inters):len(inters)], postaladdress.Interceptors[:]...)
+}
+
+func (c *PostalAddressClient) mutate(ctx context.Context, m *PostalAddressMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&PostalAddressCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&PostalAddressUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&PostalAddressUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&PostalAddressDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("generated: unknown PostalAddress mutation op: %q", m.Op())
+	}
+}
+
+// PostalAddressHistoryClient is a client for the PostalAddressHistory schema.
+type PostalAddressHistoryClient struct {
+	config
+}
+
+// NewPostalAddressHistoryClient returns a client for the PostalAddressHistory from the given config.
+func NewPostalAddressHistoryClient(c config) *PostalAddressHistoryClient {
+	return &PostalAddressHistoryClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `postaladdresshistory.Hooks(f(g(h())))`.
+func (c *PostalAddressHistoryClient) Use(hooks ...Hook) {
+	c.hooks.PostalAddressHistory = append(c.hooks.PostalAddressHistory, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `postaladdresshistory.Intercept(f(g(h())))`.
+func (c *PostalAddressHistoryClient) Intercept(interceptors ...Interceptor) {
+	c.inters.PostalAddressHistory = append(c.inters.PostalAddressHistory, interceptors...)
+}
+
+// Create returns a builder for creating a PostalAddressHistory entity.
+func (c *PostalAddressHistoryClient) Create() *PostalAddressHistoryCreate {
+	mutation := newPostalAddressHistoryMutation(c.config, OpCreate)
+	return &PostalAddressHistoryCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of PostalAddressHistory entities.
+func (c *PostalAddressHistoryClient) CreateBulk(builders ...*PostalAddressHistoryCreate) *PostalAddressHistoryCreateBulk {
+	return &PostalAddressHistoryCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *PostalAddressHistoryClient) MapCreateBulk(slice any, setFunc func(*PostalAddressHistoryCreate, int)) *PostalAddressHistoryCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &PostalAddressHistoryCreateBulk{err: fmt.Errorf("calling to PostalAddressHistoryClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*PostalAddressHistoryCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &PostalAddressHistoryCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for PostalAddressHistory.
+func (c *PostalAddressHistoryClient) Update() *PostalAddressHistoryUpdate {
+	mutation := newPostalAddressHistoryMutation(c.config, OpUpdate)
+	return &PostalAddressHistoryUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *PostalAddressHistoryClient) UpdateOne(pah *PostalAddressHistory) *PostalAddressHistoryUpdateOne {
+	mutation := newPostalAddressHistoryMutation(c.config, OpUpdateOne, withPostalAddressHistory(pah))
+	return &PostalAddressHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *PostalAddressHistoryClient) UpdateOneID(id string) *PostalAddressHistoryUpdateOne {
+	mutation := newPostalAddressHistoryMutation(c.config, OpUpdateOne, withPostalAddressHistoryID(id))
+	return &PostalAddressHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for PostalAddressHistory.
+func (c *PostalAddressHistoryClient) Delete() *PostalAddressHistoryDelete {
+	mutation := newPostalAddressHistoryMutation(c.config, OpDelete)
+	return &PostalAddressHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *PostalAddressHistoryClient) DeleteOne(pah *PostalAddressHistory) *PostalAddressHistoryDeleteOne {
+	return c.DeleteOneID(pah.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *PostalAddressHistoryClient) DeleteOneID(id string) *PostalAddressHistoryDeleteOne {
+	builder := c.Delete().Where(postaladdresshistory.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &PostalAddressHistoryDeleteOne{builder}
+}
+
+// Query returns a query builder for PostalAddressHistory.
+func (c *PostalAddressHistoryClient) Query() *PostalAddressHistoryQuery {
+	return &PostalAddressHistoryQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypePostalAddressHistory},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a PostalAddressHistory entity by its id.
+func (c *PostalAddressHistoryClient) Get(ctx context.Context, id string) (*PostalAddressHistory, error) {
+	return c.Query().Where(postaladdresshistory.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *PostalAddressHistoryClient) GetX(ctx context.Context, id string) *PostalAddressHistory {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *PostalAddressHistoryClient) Hooks() []Hook {
+	return c.hooks.PostalAddressHistory
+}
+
+// Interceptors returns the client interceptors.
+func (c *PostalAddressHistoryClient) Interceptors() []Interceptor {
+	inters := c.inters.PostalAddressHistory
+	return append(inters[:len(inters):len(inters)], postaladdresshistory.Interceptors[:]...)
+}
+
+func (c *PostalAddressHistoryClient) mutate(ctx context.Context, m *PostalAddressHistoryMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&PostalAddressHistoryCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&PostalAddressHistoryUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&PostalAddressHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&PostalAddressHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("generated: unknown PostalAddressHistory mutation op: %q", m.Op())
 	}
 }
 
@@ -11367,6 +11856,1003 @@ func (c *UserSettingHistoryClient) mutate(ctx context.Context, m *UserSettingHis
 	}
 }
 
+// VendorClient is a client for the Vendor schema.
+type VendorClient struct {
+	config
+}
+
+// NewVendorClient returns a client for the Vendor from the given config.
+func NewVendorClient(c config) *VendorClient {
+	return &VendorClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `vendor.Hooks(f(g(h())))`.
+func (c *VendorClient) Use(hooks ...Hook) {
+	c.hooks.Vendor = append(c.hooks.Vendor, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `vendor.Intercept(f(g(h())))`.
+func (c *VendorClient) Intercept(interceptors ...Interceptor) {
+	c.inters.Vendor = append(c.inters.Vendor, interceptors...)
+}
+
+// Create returns a builder for creating a Vendor entity.
+func (c *VendorClient) Create() *VendorCreate {
+	mutation := newVendorMutation(c.config, OpCreate)
+	return &VendorCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of Vendor entities.
+func (c *VendorClient) CreateBulk(builders ...*VendorCreate) *VendorCreateBulk {
+	return &VendorCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *VendorClient) MapCreateBulk(slice any, setFunc func(*VendorCreate, int)) *VendorCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &VendorCreateBulk{err: fmt.Errorf("calling to VendorClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*VendorCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &VendorCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for Vendor.
+func (c *VendorClient) Update() *VendorUpdate {
+	mutation := newVendorMutation(c.config, OpUpdate)
+	return &VendorUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *VendorClient) UpdateOne(v *Vendor) *VendorUpdateOne {
+	mutation := newVendorMutation(c.config, OpUpdateOne, withVendor(v))
+	return &VendorUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *VendorClient) UpdateOneID(id string) *VendorUpdateOne {
+	mutation := newVendorMutation(c.config, OpUpdateOne, withVendorID(id))
+	return &VendorUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for Vendor.
+func (c *VendorClient) Delete() *VendorDelete {
+	mutation := newVendorMutation(c.config, OpDelete)
+	return &VendorDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *VendorClient) DeleteOne(v *Vendor) *VendorDeleteOne {
+	return c.DeleteOneID(v.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *VendorClient) DeleteOneID(id string) *VendorDeleteOne {
+	builder := c.Delete().Where(vendor.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &VendorDeleteOne{builder}
+}
+
+// Query returns a query builder for Vendor.
+func (c *VendorClient) Query() *VendorQuery {
+	return &VendorQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeVendor},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a Vendor entity by its id.
+func (c *VendorClient) Get(ctx context.Context, id string) (*Vendor, error) {
+	return c.Query().Where(vendor.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *VendorClient) GetX(ctx context.Context, id string) *Vendor {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryOwner queries the owner edge of a Vendor.
+func (c *VendorClient) QueryOwner(v *Vendor) *OrganizationQuery {
+	query := (&OrganizationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := v.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(vendor.Table, vendor.FieldID, id),
+			sqlgraph.To(organization.Table, organization.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, vendor.OwnerTable, vendor.OwnerColumn),
+		)
+		schemaConfig := v.schemaConfig
+		step.To.Schema = schemaConfig.Organization
+		step.Edge.Schema = schemaConfig.Vendor
+		fromV = sqlgraph.Neighbors(v.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryProfile queries the profile edge of a Vendor.
+func (c *VendorClient) QueryProfile(v *Vendor) *VendorProfileQuery {
+	query := (&VendorProfileClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := v.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(vendor.Table, vendor.FieldID, id),
+			sqlgraph.To(vendorprofile.Table, vendorprofile.FieldID),
+			sqlgraph.Edge(sqlgraph.O2O, false, vendor.ProfileTable, vendor.ProfileColumn),
+		)
+		schemaConfig := v.schemaConfig
+		step.To.Schema = schemaConfig.VendorProfile
+		step.Edge.Schema = schemaConfig.VendorProfile
+		fromV = sqlgraph.Neighbors(v.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryEvents queries the events edge of a Vendor.
+func (c *VendorClient) QueryEvents(v *Vendor) *EventQuery {
+	query := (&EventClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := v.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(vendor.Table, vendor.FieldID, id),
+			sqlgraph.To(event.Table, event.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, vendor.EventsTable, vendor.EventsColumn),
+		)
+		schemaConfig := v.schemaConfig
+		step.To.Schema = schemaConfig.Event
+		step.Edge.Schema = schemaConfig.Event
+		fromV = sqlgraph.Neighbors(v.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *VendorClient) Hooks() []Hook {
+	hooks := c.hooks.Vendor
+	return append(hooks[:len(hooks):len(hooks)], vendor.Hooks[:]...)
+}
+
+// Interceptors returns the client interceptors.
+func (c *VendorClient) Interceptors() []Interceptor {
+	inters := c.inters.Vendor
+	return append(inters[:len(inters):len(inters)], vendor.Interceptors[:]...)
+}
+
+func (c *VendorClient) mutate(ctx context.Context, m *VendorMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&VendorCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&VendorUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&VendorUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&VendorDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("generated: unknown Vendor mutation op: %q", m.Op())
+	}
+}
+
+// VendorHistoryClient is a client for the VendorHistory schema.
+type VendorHistoryClient struct {
+	config
+}
+
+// NewVendorHistoryClient returns a client for the VendorHistory from the given config.
+func NewVendorHistoryClient(c config) *VendorHistoryClient {
+	return &VendorHistoryClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `vendorhistory.Hooks(f(g(h())))`.
+func (c *VendorHistoryClient) Use(hooks ...Hook) {
+	c.hooks.VendorHistory = append(c.hooks.VendorHistory, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `vendorhistory.Intercept(f(g(h())))`.
+func (c *VendorHistoryClient) Intercept(interceptors ...Interceptor) {
+	c.inters.VendorHistory = append(c.inters.VendorHistory, interceptors...)
+}
+
+// Create returns a builder for creating a VendorHistory entity.
+func (c *VendorHistoryClient) Create() *VendorHistoryCreate {
+	mutation := newVendorHistoryMutation(c.config, OpCreate)
+	return &VendorHistoryCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of VendorHistory entities.
+func (c *VendorHistoryClient) CreateBulk(builders ...*VendorHistoryCreate) *VendorHistoryCreateBulk {
+	return &VendorHistoryCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *VendorHistoryClient) MapCreateBulk(slice any, setFunc func(*VendorHistoryCreate, int)) *VendorHistoryCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &VendorHistoryCreateBulk{err: fmt.Errorf("calling to VendorHistoryClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*VendorHistoryCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &VendorHistoryCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for VendorHistory.
+func (c *VendorHistoryClient) Update() *VendorHistoryUpdate {
+	mutation := newVendorHistoryMutation(c.config, OpUpdate)
+	return &VendorHistoryUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *VendorHistoryClient) UpdateOne(vh *VendorHistory) *VendorHistoryUpdateOne {
+	mutation := newVendorHistoryMutation(c.config, OpUpdateOne, withVendorHistory(vh))
+	return &VendorHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *VendorHistoryClient) UpdateOneID(id string) *VendorHistoryUpdateOne {
+	mutation := newVendorHistoryMutation(c.config, OpUpdateOne, withVendorHistoryID(id))
+	return &VendorHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for VendorHistory.
+func (c *VendorHistoryClient) Delete() *VendorHistoryDelete {
+	mutation := newVendorHistoryMutation(c.config, OpDelete)
+	return &VendorHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *VendorHistoryClient) DeleteOne(vh *VendorHistory) *VendorHistoryDeleteOne {
+	return c.DeleteOneID(vh.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *VendorHistoryClient) DeleteOneID(id string) *VendorHistoryDeleteOne {
+	builder := c.Delete().Where(vendorhistory.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &VendorHistoryDeleteOne{builder}
+}
+
+// Query returns a query builder for VendorHistory.
+func (c *VendorHistoryClient) Query() *VendorHistoryQuery {
+	return &VendorHistoryQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeVendorHistory},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a VendorHistory entity by its id.
+func (c *VendorHistoryClient) Get(ctx context.Context, id string) (*VendorHistory, error) {
+	return c.Query().Where(vendorhistory.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *VendorHistoryClient) GetX(ctx context.Context, id string) *VendorHistory {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *VendorHistoryClient) Hooks() []Hook {
+	return c.hooks.VendorHistory
+}
+
+// Interceptors returns the client interceptors.
+func (c *VendorHistoryClient) Interceptors() []Interceptor {
+	inters := c.inters.VendorHistory
+	return append(inters[:len(inters):len(inters)], vendorhistory.Interceptors[:]...)
+}
+
+func (c *VendorHistoryClient) mutate(ctx context.Context, m *VendorHistoryMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&VendorHistoryCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&VendorHistoryUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&VendorHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&VendorHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("generated: unknown VendorHistory mutation op: %q", m.Op())
+	}
+}
+
+// VendorProfileClient is a client for the VendorProfile schema.
+type VendorProfileClient struct {
+	config
+}
+
+// NewVendorProfileClient returns a client for the VendorProfile from the given config.
+func NewVendorProfileClient(c config) *VendorProfileClient {
+	return &VendorProfileClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `vendorprofile.Hooks(f(g(h())))`.
+func (c *VendorProfileClient) Use(hooks ...Hook) {
+	c.hooks.VendorProfile = append(c.hooks.VendorProfile, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `vendorprofile.Intercept(f(g(h())))`.
+func (c *VendorProfileClient) Intercept(interceptors ...Interceptor) {
+	c.inters.VendorProfile = append(c.inters.VendorProfile, interceptors...)
+}
+
+// Create returns a builder for creating a VendorProfile entity.
+func (c *VendorProfileClient) Create() *VendorProfileCreate {
+	mutation := newVendorProfileMutation(c.config, OpCreate)
+	return &VendorProfileCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of VendorProfile entities.
+func (c *VendorProfileClient) CreateBulk(builders ...*VendorProfileCreate) *VendorProfileCreateBulk {
+	return &VendorProfileCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *VendorProfileClient) MapCreateBulk(slice any, setFunc func(*VendorProfileCreate, int)) *VendorProfileCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &VendorProfileCreateBulk{err: fmt.Errorf("calling to VendorProfileClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*VendorProfileCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &VendorProfileCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for VendorProfile.
+func (c *VendorProfileClient) Update() *VendorProfileUpdate {
+	mutation := newVendorProfileMutation(c.config, OpUpdate)
+	return &VendorProfileUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *VendorProfileClient) UpdateOne(vp *VendorProfile) *VendorProfileUpdateOne {
+	mutation := newVendorProfileMutation(c.config, OpUpdateOne, withVendorProfile(vp))
+	return &VendorProfileUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *VendorProfileClient) UpdateOneID(id string) *VendorProfileUpdateOne {
+	mutation := newVendorProfileMutation(c.config, OpUpdateOne, withVendorProfileID(id))
+	return &VendorProfileUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for VendorProfile.
+func (c *VendorProfileClient) Delete() *VendorProfileDelete {
+	mutation := newVendorProfileMutation(c.config, OpDelete)
+	return &VendorProfileDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *VendorProfileClient) DeleteOne(vp *VendorProfile) *VendorProfileDeleteOne {
+	return c.DeleteOneID(vp.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *VendorProfileClient) DeleteOneID(id string) *VendorProfileDeleteOne {
+	builder := c.Delete().Where(vendorprofile.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &VendorProfileDeleteOne{builder}
+}
+
+// Query returns a query builder for VendorProfile.
+func (c *VendorProfileClient) Query() *VendorProfileQuery {
+	return &VendorProfileQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeVendorProfile},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a VendorProfile entity by its id.
+func (c *VendorProfileClient) Get(ctx context.Context, id string) (*VendorProfile, error) {
+	return c.Query().Where(vendorprofile.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *VendorProfileClient) GetX(ctx context.Context, id string) *VendorProfile {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryOwner queries the owner edge of a VendorProfile.
+func (c *VendorProfileClient) QueryOwner(vp *VendorProfile) *OrganizationQuery {
+	query := (&OrganizationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := vp.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(vendorprofile.Table, vendorprofile.FieldID, id),
+			sqlgraph.To(organization.Table, organization.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, vendorprofile.OwnerTable, vendorprofile.OwnerColumn),
+		)
+		schemaConfig := vp.schemaConfig
+		step.To.Schema = schemaConfig.Organization
+		step.Edge.Schema = schemaConfig.VendorProfile
+		fromV = sqlgraph.Neighbors(vp.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryPostalAddresses queries the postal_addresses edge of a VendorProfile.
+func (c *VendorProfileClient) QueryPostalAddresses(vp *VendorProfile) *PostalAddressQuery {
+	query := (&PostalAddressClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := vp.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(vendorprofile.Table, vendorprofile.FieldID, id),
+			sqlgraph.To(postaladdress.Table, postaladdress.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, vendorprofile.PostalAddressesTable, vendorprofile.PostalAddressesPrimaryKey...),
+		)
+		schemaConfig := vp.schemaConfig
+		step.To.Schema = schemaConfig.PostalAddress
+		step.Edge.Schema = schemaConfig.VendorProfilePostalAddress
+		fromV = sqlgraph.Neighbors(vp.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryVendor queries the vendor edge of a VendorProfile.
+func (c *VendorProfileClient) QueryVendor(vp *VendorProfile) *VendorQuery {
+	query := (&VendorClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := vp.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(vendorprofile.Table, vendorprofile.FieldID, id),
+			sqlgraph.To(vendor.Table, vendor.FieldID),
+			sqlgraph.Edge(sqlgraph.O2O, true, vendorprofile.VendorTable, vendorprofile.VendorColumn),
+		)
+		schemaConfig := vp.schemaConfig
+		step.To.Schema = schemaConfig.Vendor
+		step.Edge.Schema = schemaConfig.VendorProfile
+		fromV = sqlgraph.Neighbors(vp.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryVendorProfilePostalAddresses queries the vendor_profile_postal_addresses edge of a VendorProfile.
+func (c *VendorProfileClient) QueryVendorProfilePostalAddresses(vp *VendorProfile) *VendorProfilePostalAddressQuery {
+	query := (&VendorProfilePostalAddressClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := vp.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(vendorprofile.Table, vendorprofile.FieldID, id),
+			sqlgraph.To(vendorprofilepostaladdress.Table, vendorprofilepostaladdress.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, true, vendorprofile.VendorProfilePostalAddressesTable, vendorprofile.VendorProfilePostalAddressesColumn),
+		)
+		schemaConfig := vp.schemaConfig
+		step.To.Schema = schemaConfig.VendorProfilePostalAddress
+		step.Edge.Schema = schemaConfig.VendorProfilePostalAddress
+		fromV = sqlgraph.Neighbors(vp.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *VendorProfileClient) Hooks() []Hook {
+	hooks := c.hooks.VendorProfile
+	return append(hooks[:len(hooks):len(hooks)], vendorprofile.Hooks[:]...)
+}
+
+// Interceptors returns the client interceptors.
+func (c *VendorProfileClient) Interceptors() []Interceptor {
+	inters := c.inters.VendorProfile
+	return append(inters[:len(inters):len(inters)], vendorprofile.Interceptors[:]...)
+}
+
+func (c *VendorProfileClient) mutate(ctx context.Context, m *VendorProfileMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&VendorProfileCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&VendorProfileUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&VendorProfileUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&VendorProfileDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("generated: unknown VendorProfile mutation op: %q", m.Op())
+	}
+}
+
+// VendorProfileHistoryClient is a client for the VendorProfileHistory schema.
+type VendorProfileHistoryClient struct {
+	config
+}
+
+// NewVendorProfileHistoryClient returns a client for the VendorProfileHistory from the given config.
+func NewVendorProfileHistoryClient(c config) *VendorProfileHistoryClient {
+	return &VendorProfileHistoryClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `vendorprofilehistory.Hooks(f(g(h())))`.
+func (c *VendorProfileHistoryClient) Use(hooks ...Hook) {
+	c.hooks.VendorProfileHistory = append(c.hooks.VendorProfileHistory, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `vendorprofilehistory.Intercept(f(g(h())))`.
+func (c *VendorProfileHistoryClient) Intercept(interceptors ...Interceptor) {
+	c.inters.VendorProfileHistory = append(c.inters.VendorProfileHistory, interceptors...)
+}
+
+// Create returns a builder for creating a VendorProfileHistory entity.
+func (c *VendorProfileHistoryClient) Create() *VendorProfileHistoryCreate {
+	mutation := newVendorProfileHistoryMutation(c.config, OpCreate)
+	return &VendorProfileHistoryCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of VendorProfileHistory entities.
+func (c *VendorProfileHistoryClient) CreateBulk(builders ...*VendorProfileHistoryCreate) *VendorProfileHistoryCreateBulk {
+	return &VendorProfileHistoryCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *VendorProfileHistoryClient) MapCreateBulk(slice any, setFunc func(*VendorProfileHistoryCreate, int)) *VendorProfileHistoryCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &VendorProfileHistoryCreateBulk{err: fmt.Errorf("calling to VendorProfileHistoryClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*VendorProfileHistoryCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &VendorProfileHistoryCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for VendorProfileHistory.
+func (c *VendorProfileHistoryClient) Update() *VendorProfileHistoryUpdate {
+	mutation := newVendorProfileHistoryMutation(c.config, OpUpdate)
+	return &VendorProfileHistoryUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *VendorProfileHistoryClient) UpdateOne(vph *VendorProfileHistory) *VendorProfileHistoryUpdateOne {
+	mutation := newVendorProfileHistoryMutation(c.config, OpUpdateOne, withVendorProfileHistory(vph))
+	return &VendorProfileHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *VendorProfileHistoryClient) UpdateOneID(id string) *VendorProfileHistoryUpdateOne {
+	mutation := newVendorProfileHistoryMutation(c.config, OpUpdateOne, withVendorProfileHistoryID(id))
+	return &VendorProfileHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for VendorProfileHistory.
+func (c *VendorProfileHistoryClient) Delete() *VendorProfileHistoryDelete {
+	mutation := newVendorProfileHistoryMutation(c.config, OpDelete)
+	return &VendorProfileHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *VendorProfileHistoryClient) DeleteOne(vph *VendorProfileHistory) *VendorProfileHistoryDeleteOne {
+	return c.DeleteOneID(vph.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *VendorProfileHistoryClient) DeleteOneID(id string) *VendorProfileHistoryDeleteOne {
+	builder := c.Delete().Where(vendorprofilehistory.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &VendorProfileHistoryDeleteOne{builder}
+}
+
+// Query returns a query builder for VendorProfileHistory.
+func (c *VendorProfileHistoryClient) Query() *VendorProfileHistoryQuery {
+	return &VendorProfileHistoryQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeVendorProfileHistory},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a VendorProfileHistory entity by its id.
+func (c *VendorProfileHistoryClient) Get(ctx context.Context, id string) (*VendorProfileHistory, error) {
+	return c.Query().Where(vendorprofilehistory.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *VendorProfileHistoryClient) GetX(ctx context.Context, id string) *VendorProfileHistory {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *VendorProfileHistoryClient) Hooks() []Hook {
+	return c.hooks.VendorProfileHistory
+}
+
+// Interceptors returns the client interceptors.
+func (c *VendorProfileHistoryClient) Interceptors() []Interceptor {
+	inters := c.inters.VendorProfileHistory
+	return append(inters[:len(inters):len(inters)], vendorprofilehistory.Interceptors[:]...)
+}
+
+func (c *VendorProfileHistoryClient) mutate(ctx context.Context, m *VendorProfileHistoryMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&VendorProfileHistoryCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&VendorProfileHistoryUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&VendorProfileHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&VendorProfileHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("generated: unknown VendorProfileHistory mutation op: %q", m.Op())
+	}
+}
+
+// VendorProfilePostalAddressClient is a client for the VendorProfilePostalAddress schema.
+type VendorProfilePostalAddressClient struct {
+	config
+}
+
+// NewVendorProfilePostalAddressClient returns a client for the VendorProfilePostalAddress from the given config.
+func NewVendorProfilePostalAddressClient(c config) *VendorProfilePostalAddressClient {
+	return &VendorProfilePostalAddressClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `vendorprofilepostaladdress.Hooks(f(g(h())))`.
+func (c *VendorProfilePostalAddressClient) Use(hooks ...Hook) {
+	c.hooks.VendorProfilePostalAddress = append(c.hooks.VendorProfilePostalAddress, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `vendorprofilepostaladdress.Intercept(f(g(h())))`.
+func (c *VendorProfilePostalAddressClient) Intercept(interceptors ...Interceptor) {
+	c.inters.VendorProfilePostalAddress = append(c.inters.VendorProfilePostalAddress, interceptors...)
+}
+
+// Create returns a builder for creating a VendorProfilePostalAddress entity.
+func (c *VendorProfilePostalAddressClient) Create() *VendorProfilePostalAddressCreate {
+	mutation := newVendorProfilePostalAddressMutation(c.config, OpCreate)
+	return &VendorProfilePostalAddressCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of VendorProfilePostalAddress entities.
+func (c *VendorProfilePostalAddressClient) CreateBulk(builders ...*VendorProfilePostalAddressCreate) *VendorProfilePostalAddressCreateBulk {
+	return &VendorProfilePostalAddressCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *VendorProfilePostalAddressClient) MapCreateBulk(slice any, setFunc func(*VendorProfilePostalAddressCreate, int)) *VendorProfilePostalAddressCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &VendorProfilePostalAddressCreateBulk{err: fmt.Errorf("calling to VendorProfilePostalAddressClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*VendorProfilePostalAddressCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &VendorProfilePostalAddressCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for VendorProfilePostalAddress.
+func (c *VendorProfilePostalAddressClient) Update() *VendorProfilePostalAddressUpdate {
+	mutation := newVendorProfilePostalAddressMutation(c.config, OpUpdate)
+	return &VendorProfilePostalAddressUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *VendorProfilePostalAddressClient) UpdateOne(vppa *VendorProfilePostalAddress) *VendorProfilePostalAddressUpdateOne {
+	mutation := newVendorProfilePostalAddressMutation(c.config, OpUpdateOne, withVendorProfilePostalAddress(vppa))
+	return &VendorProfilePostalAddressUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *VendorProfilePostalAddressClient) UpdateOneID(id string) *VendorProfilePostalAddressUpdateOne {
+	mutation := newVendorProfilePostalAddressMutation(c.config, OpUpdateOne, withVendorProfilePostalAddressID(id))
+	return &VendorProfilePostalAddressUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for VendorProfilePostalAddress.
+func (c *VendorProfilePostalAddressClient) Delete() *VendorProfilePostalAddressDelete {
+	mutation := newVendorProfilePostalAddressMutation(c.config, OpDelete)
+	return &VendorProfilePostalAddressDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *VendorProfilePostalAddressClient) DeleteOne(vppa *VendorProfilePostalAddress) *VendorProfilePostalAddressDeleteOne {
+	return c.DeleteOneID(vppa.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *VendorProfilePostalAddressClient) DeleteOneID(id string) *VendorProfilePostalAddressDeleteOne {
+	builder := c.Delete().Where(vendorprofilepostaladdress.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &VendorProfilePostalAddressDeleteOne{builder}
+}
+
+// Query returns a query builder for VendorProfilePostalAddress.
+func (c *VendorProfilePostalAddressClient) Query() *VendorProfilePostalAddressQuery {
+	return &VendorProfilePostalAddressQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeVendorProfilePostalAddress},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a VendorProfilePostalAddress entity by its id.
+func (c *VendorProfilePostalAddressClient) Get(ctx context.Context, id string) (*VendorProfilePostalAddress, error) {
+	return c.Query().Where(vendorprofilepostaladdress.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *VendorProfilePostalAddressClient) GetX(ctx context.Context, id string) *VendorProfilePostalAddress {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryPostalAddress queries the postal_address edge of a VendorProfilePostalAddress.
+func (c *VendorProfilePostalAddressClient) QueryPostalAddress(vppa *VendorProfilePostalAddress) *PostalAddressQuery {
+	query := (&PostalAddressClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := vppa.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(vendorprofilepostaladdress.Table, vendorprofilepostaladdress.FieldID, id),
+			sqlgraph.To(postaladdress.Table, postaladdress.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, vendorprofilepostaladdress.PostalAddressTable, vendorprofilepostaladdress.PostalAddressColumn),
+		)
+		schemaConfig := vppa.schemaConfig
+		step.To.Schema = schemaConfig.PostalAddress
+		step.Edge.Schema = schemaConfig.VendorProfilePostalAddress
+		fromV = sqlgraph.Neighbors(vppa.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryProfile queries the profile edge of a VendorProfilePostalAddress.
+func (c *VendorProfilePostalAddressClient) QueryProfile(vppa *VendorProfilePostalAddress) *VendorProfileQuery {
+	query := (&VendorProfileClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := vppa.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(vendorprofilepostaladdress.Table, vendorprofilepostaladdress.FieldID, id),
+			sqlgraph.To(vendorprofile.Table, vendorprofile.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, vendorprofilepostaladdress.ProfileTable, vendorprofilepostaladdress.ProfileColumn),
+		)
+		schemaConfig := vppa.schemaConfig
+		step.To.Schema = schemaConfig.VendorProfile
+		step.Edge.Schema = schemaConfig.VendorProfilePostalAddress
+		fromV = sqlgraph.Neighbors(vppa.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryEvents queries the events edge of a VendorProfilePostalAddress.
+func (c *VendorProfilePostalAddressClient) QueryEvents(vppa *VendorProfilePostalAddress) *EventQuery {
+	query := (&EventClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := vppa.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(vendorprofilepostaladdress.Table, vendorprofilepostaladdress.FieldID, id),
+			sqlgraph.To(event.Table, event.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, vendorprofilepostaladdress.EventsTable, vendorprofilepostaladdress.EventsColumn),
+		)
+		schemaConfig := vppa.schemaConfig
+		step.To.Schema = schemaConfig.Event
+		step.Edge.Schema = schemaConfig.Event
+		fromV = sqlgraph.Neighbors(vppa.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *VendorProfilePostalAddressClient) Hooks() []Hook {
+	hooks := c.hooks.VendorProfilePostalAddress
+	return append(hooks[:len(hooks):len(hooks)], vendorprofilepostaladdress.Hooks[:]...)
+}
+
+// Interceptors returns the client interceptors.
+func (c *VendorProfilePostalAddressClient) Interceptors() []Interceptor {
+	inters := c.inters.VendorProfilePostalAddress
+	return append(inters[:len(inters):len(inters)], vendorprofilepostaladdress.Interceptors[:]...)
+}
+
+func (c *VendorProfilePostalAddressClient) mutate(ctx context.Context, m *VendorProfilePostalAddressMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&VendorProfilePostalAddressCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&VendorProfilePostalAddressUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&VendorProfilePostalAddressUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&VendorProfilePostalAddressDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("generated: unknown VendorProfilePostalAddress mutation op: %q", m.Op())
+	}
+}
+
+// VendorProfilePostalAddressHistoryClient is a client for the VendorProfilePostalAddressHistory schema.
+type VendorProfilePostalAddressHistoryClient struct {
+	config
+}
+
+// NewVendorProfilePostalAddressHistoryClient returns a client for the VendorProfilePostalAddressHistory from the given config.
+func NewVendorProfilePostalAddressHistoryClient(c config) *VendorProfilePostalAddressHistoryClient {
+	return &VendorProfilePostalAddressHistoryClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `vendorprofilepostaladdresshistory.Hooks(f(g(h())))`.
+func (c *VendorProfilePostalAddressHistoryClient) Use(hooks ...Hook) {
+	c.hooks.VendorProfilePostalAddressHistory = append(c.hooks.VendorProfilePostalAddressHistory, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `vendorprofilepostaladdresshistory.Intercept(f(g(h())))`.
+func (c *VendorProfilePostalAddressHistoryClient) Intercept(interceptors ...Interceptor) {
+	c.inters.VendorProfilePostalAddressHistory = append(c.inters.VendorProfilePostalAddressHistory, interceptors...)
+}
+
+// Create returns a builder for creating a VendorProfilePostalAddressHistory entity.
+func (c *VendorProfilePostalAddressHistoryClient) Create() *VendorProfilePostalAddressHistoryCreate {
+	mutation := newVendorProfilePostalAddressHistoryMutation(c.config, OpCreate)
+	return &VendorProfilePostalAddressHistoryCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of VendorProfilePostalAddressHistory entities.
+func (c *VendorProfilePostalAddressHistoryClient) CreateBulk(builders ...*VendorProfilePostalAddressHistoryCreate) *VendorProfilePostalAddressHistoryCreateBulk {
+	return &VendorProfilePostalAddressHistoryCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *VendorProfilePostalAddressHistoryClient) MapCreateBulk(slice any, setFunc func(*VendorProfilePostalAddressHistoryCreate, int)) *VendorProfilePostalAddressHistoryCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &VendorProfilePostalAddressHistoryCreateBulk{err: fmt.Errorf("calling to VendorProfilePostalAddressHistoryClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*VendorProfilePostalAddressHistoryCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &VendorProfilePostalAddressHistoryCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for VendorProfilePostalAddressHistory.
+func (c *VendorProfilePostalAddressHistoryClient) Update() *VendorProfilePostalAddressHistoryUpdate {
+	mutation := newVendorProfilePostalAddressHistoryMutation(c.config, OpUpdate)
+	return &VendorProfilePostalAddressHistoryUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *VendorProfilePostalAddressHistoryClient) UpdateOne(vppah *VendorProfilePostalAddressHistory) *VendorProfilePostalAddressHistoryUpdateOne {
+	mutation := newVendorProfilePostalAddressHistoryMutation(c.config, OpUpdateOne, withVendorProfilePostalAddressHistory(vppah))
+	return &VendorProfilePostalAddressHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *VendorProfilePostalAddressHistoryClient) UpdateOneID(id string) *VendorProfilePostalAddressHistoryUpdateOne {
+	mutation := newVendorProfilePostalAddressHistoryMutation(c.config, OpUpdateOne, withVendorProfilePostalAddressHistoryID(id))
+	return &VendorProfilePostalAddressHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for VendorProfilePostalAddressHistory.
+func (c *VendorProfilePostalAddressHistoryClient) Delete() *VendorProfilePostalAddressHistoryDelete {
+	mutation := newVendorProfilePostalAddressHistoryMutation(c.config, OpDelete)
+	return &VendorProfilePostalAddressHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *VendorProfilePostalAddressHistoryClient) DeleteOne(vppah *VendorProfilePostalAddressHistory) *VendorProfilePostalAddressHistoryDeleteOne {
+	return c.DeleteOneID(vppah.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *VendorProfilePostalAddressHistoryClient) DeleteOneID(id string) *VendorProfilePostalAddressHistoryDeleteOne {
+	builder := c.Delete().Where(vendorprofilepostaladdresshistory.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &VendorProfilePostalAddressHistoryDeleteOne{builder}
+}
+
+// Query returns a query builder for VendorProfilePostalAddressHistory.
+func (c *VendorProfilePostalAddressHistoryClient) Query() *VendorProfilePostalAddressHistoryQuery {
+	return &VendorProfilePostalAddressHistoryQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeVendorProfilePostalAddressHistory},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a VendorProfilePostalAddressHistory entity by its id.
+func (c *VendorProfilePostalAddressHistoryClient) Get(ctx context.Context, id string) (*VendorProfilePostalAddressHistory, error) {
+	return c.Query().Where(vendorprofilepostaladdresshistory.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *VendorProfilePostalAddressHistoryClient) GetX(ctx context.Context, id string) *VendorProfilePostalAddressHistory {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *VendorProfilePostalAddressHistoryClient) Hooks() []Hook {
+	return c.hooks.VendorProfilePostalAddressHistory
+}
+
+// Interceptors returns the client interceptors.
+func (c *VendorProfilePostalAddressHistoryClient) Interceptors() []Interceptor {
+	inters := c.inters.VendorProfilePostalAddressHistory
+	return append(inters[:len(inters):len(inters)], vendorprofilepostaladdresshistory.Interceptors[:]...)
+}
+
+func (c *VendorProfilePostalAddressHistoryClient) mutate(ctx context.Context, m *VendorProfilePostalAddressHistoryMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&VendorProfilePostalAddressHistoryCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&VendorProfilePostalAddressHistoryUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&VendorProfilePostalAddressHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&VendorProfilePostalAddressHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("generated: unknown VendorProfilePostalAddressHistory mutation op: %q", m.Op())
+	}
+}
+
 // WebauthnClient is a client for the Webauthn schema.
 type WebauthnClient struct {
 	config
@@ -11862,9 +13348,11 @@ type (
 		Invite, Note, NoteHistory, OauthProvider, OauthProviderHistory, OhAuthTooToken,
 		OrgMembership, OrgMembershipHistory, Organization, OrganizationHistory,
 		OrganizationSetting, OrganizationSettingHistory, PasswordResetToken,
-		PersonalAccessToken, Subscriber, TFASetting, Template, TemplateHistory, User,
-		UserHistory, UserSetting, UserSettingHistory, Webauthn, Webhook,
-		WebhookHistory []ent.Hook
+		PersonalAccessToken, PostalAddress, PostalAddressHistory, Subscriber,
+		TFASetting, Template, TemplateHistory, User, UserHistory, UserSetting,
+		UserSettingHistory, Vendor, VendorHistory, VendorProfile, VendorProfileHistory,
+		VendorProfilePostalAddress, VendorProfilePostalAddressHistory, Webauthn,
+		Webhook, WebhookHistory []ent.Hook
 	}
 	inters struct {
 		APIToken, Contact, ContactHistory, ContactList, ContactListHistory,
@@ -11878,9 +13366,11 @@ type (
 		Invite, Note, NoteHistory, OauthProvider, OauthProviderHistory, OhAuthTooToken,
 		OrgMembership, OrgMembershipHistory, Organization, OrganizationHistory,
 		OrganizationSetting, OrganizationSettingHistory, PasswordResetToken,
-		PersonalAccessToken, Subscriber, TFASetting, Template, TemplateHistory, User,
-		UserHistory, UserSetting, UserSettingHistory, Webauthn, Webhook,
-		WebhookHistory []ent.Interceptor
+		PersonalAccessToken, PostalAddress, PostalAddressHistory, Subscriber,
+		TFASetting, Template, TemplateHistory, User, UserHistory, UserSetting,
+		UserSettingHistory, Vendor, VendorHistory, VendorProfile, VendorProfileHistory,
+		VendorProfilePostalAddress, VendorProfilePostalAddressHistory, Webauthn,
+		Webhook, WebhookHistory []ent.Interceptor
 	}
 )
 

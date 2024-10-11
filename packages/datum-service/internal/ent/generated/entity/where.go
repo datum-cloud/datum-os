@@ -1158,6 +1158,35 @@ func HasNotesWith(preds ...predicate.Note) predicate.Entity {
 	})
 }
 
+// HasPostalAddresses applies the HasEdge predicate on the "postal_addresses" edge.
+func HasPostalAddresses() predicate.Entity {
+	return predicate.Entity(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, PostalAddressesTable, PostalAddressesColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.PostalAddress
+		step.Edge.Schema = schemaConfig.PostalAddress
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasPostalAddressesWith applies the HasEdge predicate on the "postal_addresses" edge with a given conditions (other predicates).
+func HasPostalAddressesWith(preds ...predicate.PostalAddress) predicate.Entity {
+	return predicate.Entity(func(s *sql.Selector) {
+		step := newPostalAddressesStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.PostalAddress
+		step.Edge.Schema = schemaConfig.PostalAddress
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasFiles applies the HasEdge predicate on the "files" edge.
 func HasFiles() predicate.Entity {
 	return predicate.Entity(func(s *sql.Selector) {

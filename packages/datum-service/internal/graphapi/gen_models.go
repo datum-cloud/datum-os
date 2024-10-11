@@ -668,6 +668,30 @@ type PersonalAccessTokenUpdatePayload struct {
 	PersonalAccessToken *generated.PersonalAccessToken `json:"personalAccessToken"`
 }
 
+// Return response for createBulkPostalAddress mutation
+type PostalAddressBulkCreatePayload struct {
+	// Created postalAddresss
+	PostalAddresses []*generated.PostalAddress `json:"postalAddresses,omitempty"`
+}
+
+// Return response for createPostalAddress mutation
+type PostalAddressCreatePayload struct {
+	// Created postalAddress
+	PostalAddress *generated.PostalAddress `json:"postalAddress"`
+}
+
+// Return response for deletePostalAddress mutation
+type PostalAddressDeletePayload struct {
+	// Deleted postalAddress ID
+	DeletedID string `json:"deletedID"`
+}
+
+// Return response for updatePostalAddress mutation
+type PostalAddressUpdatePayload struct {
+	// Updated postalAddress
+	PostalAddress *generated.PostalAddress `json:"postalAddress"`
+}
+
 // Return response for createBulkSubscriber mutation
 type SubscriberBulkCreatePayload struct {
 	// Created subscribers
@@ -780,6 +804,78 @@ type UserSettingUpdatePayload struct {
 type UserUpdatePayload struct {
 	// Updated user
 	User *generated.User `json:"user"`
+}
+
+// Return response for createBulkVendor mutation
+type VendorBulkCreatePayload struct {
+	// Created vendors
+	Vendors []*generated.Vendor `json:"vendors,omitempty"`
+}
+
+// Return response for createVendor mutation
+type VendorCreatePayload struct {
+	// Created vendor
+	Vendor *generated.Vendor `json:"vendor"`
+}
+
+// Return response for deleteVendor mutation
+type VendorDeletePayload struct {
+	// Deleted vendor ID
+	DeletedID string `json:"deletedID"`
+}
+
+// Return response for createBulkVendorProfile mutation
+type VendorProfileBulkCreatePayload struct {
+	// Created vendorProfiles
+	VendorProfiles []*generated.VendorProfile `json:"vendorProfiles,omitempty"`
+}
+
+// Return response for createVendorProfile mutation
+type VendorProfileCreatePayload struct {
+	// Created vendorProfile
+	VendorProfile *generated.VendorProfile `json:"vendorProfile"`
+}
+
+// Return response for deleteVendorProfile mutation
+type VendorProfileDeletePayload struct {
+	// Deleted vendorProfile ID
+	DeletedID string `json:"deletedID"`
+}
+
+// Return response for createBulkVendorProfilePostalAddress mutation
+type VendorProfilePostalAddressBulkCreatePayload struct {
+	// Created vendorProfilePostalAddresss
+	VendorProfilePostalAddresses []*generated.VendorProfilePostalAddress `json:"vendorProfilePostalAddresses,omitempty"`
+}
+
+// Return response for createVendorProfilePostalAddress mutation
+type VendorProfilePostalAddressCreatePayload struct {
+	// Created vendorProfilePostalAddress
+	VendorProfilePostalAddress *generated.VendorProfilePostalAddress `json:"vendorProfilePostalAddress"`
+}
+
+// Return response for deleteVendorProfilePostalAddress mutation
+type VendorProfilePostalAddressDeletePayload struct {
+	// Deleted vendorProfilePostalAddress ID
+	DeletedID string `json:"deletedID"`
+}
+
+// Return response for updateVendorProfilePostalAddress mutation
+type VendorProfilePostalAddressUpdatePayload struct {
+	// Updated vendorProfilePostalAddress
+	VendorProfilePostalAddress *generated.VendorProfilePostalAddress `json:"vendorProfilePostalAddress"`
+}
+
+// Return response for updateVendorProfile mutation
+type VendorProfileUpdatePayload struct {
+	// Updated vendorProfile
+	VendorProfile *generated.VendorProfile `json:"vendorProfile"`
+}
+
+// Return response for updateVendor mutation
+type VendorUpdatePayload struct {
+	// Updated vendor
+	Vendor *generated.Vendor `json:"vendor"`
 }
 
 // Return response for createBulkWebhook mutation

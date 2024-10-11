@@ -74,6 +74,9 @@ func (c *Client) WithHistory() {
 	for _, hook := range enthistory.HistoryHooks[*OrganizationSettingMutation]() {
 		c.OrganizationSetting.Use(hook)
 	}
+	for _, hook := range enthistory.HistoryHooks[*PostalAddressMutation]() {
+		c.PostalAddress.Use(hook)
+	}
 	for _, hook := range enthistory.HistoryHooks[*TemplateMutation]() {
 		c.Template.Use(hook)
 	}
@@ -82,6 +85,15 @@ func (c *Client) WithHistory() {
 	}
 	for _, hook := range enthistory.HistoryHooks[*UserSettingMutation]() {
 		c.UserSetting.Use(hook)
+	}
+	for _, hook := range enthistory.HistoryHooks[*VendorMutation]() {
+		c.Vendor.Use(hook)
+	}
+	for _, hook := range enthistory.HistoryHooks[*VendorProfileMutation]() {
+		c.VendorProfile.Use(hook)
+	}
+	for _, hook := range enthistory.HistoryHooks[*VendorProfilePostalAddressMutation]() {
+		c.VendorProfilePostalAddress.Use(hook)
 	}
 	for _, hook := range enthistory.HistoryHooks[*WebhookMutation]() {
 		c.Webhook.Use(hook)

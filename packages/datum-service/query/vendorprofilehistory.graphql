@@ -1,0 +1,49 @@
+
+
+query GetAllVendorProfileHistories {
+  vendorProfileHistories {
+    edges {
+      node {
+        createdAt
+        createdBy
+        dbaName
+        description
+        historyTime
+        id
+        name
+        operation
+        ownerID
+        ref
+        tags
+        updatedAt
+        updatedBy
+        vendorID
+        websiteURI
+      }
+    }
+  }
+}
+
+query GetVendorProfileHistories($where: VendorProfileHistoryWhereInput) {
+  vendorProfileHistories(where: $where) {
+    edges {
+      node {
+        createdAt
+        createdBy
+        dbaName
+        description
+        historyTime
+        id
+        name
+        operation
+        ownerID
+        ref
+        tags
+        updatedAt
+        updatedBy
+        vendorID
+        websiteURI
+      }
+    }
+  }
+}

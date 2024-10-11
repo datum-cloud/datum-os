@@ -30,9 +30,13 @@ import (
 	"github.com/datum-cloud/datum-os/internal/ent/generated/organizationhistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/organizationsettinghistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/orgmembershiphistory"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/postaladdresshistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/templatehistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/userhistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/usersettinghistory"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorhistory"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofilehistory"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofilepostaladdresshistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/webhookhistory"
 )
 
@@ -1048,6 +1052,52 @@ func (oshq *OrganizationSettingHistoryQuery) AsOf(ctx context.Context, time time
 		First(ctx)
 }
 
+func (pa *PostalAddress) History() *PostalAddressHistoryQuery {
+	historyClient := NewPostalAddressHistoryClient(pa.config)
+	return historyClient.Query().Where(postaladdresshistory.Ref(pa.ID))
+}
+
+func (pah *PostalAddressHistory) Next(ctx context.Context) (*PostalAddressHistory, error) {
+	client := NewPostalAddressHistoryClient(pah.config)
+	return client.Query().
+		Where(
+			postaladdresshistory.Ref(pah.Ref),
+			postaladdresshistory.HistoryTimeGT(pah.HistoryTime),
+		).
+		Order(postaladdresshistory.ByHistoryTime()).
+		First(ctx)
+}
+
+func (pah *PostalAddressHistory) Prev(ctx context.Context) (*PostalAddressHistory, error) {
+	client := NewPostalAddressHistoryClient(pah.config)
+	return client.Query().
+		Where(
+			postaladdresshistory.Ref(pah.Ref),
+			postaladdresshistory.HistoryTimeLT(pah.HistoryTime),
+		).
+		Order(postaladdresshistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (pahq *PostalAddressHistoryQuery) Earliest(ctx context.Context) (*PostalAddressHistory, error) {
+	return pahq.
+		Order(postaladdresshistory.ByHistoryTime()).
+		First(ctx)
+}
+
+func (pahq *PostalAddressHistoryQuery) Latest(ctx context.Context) (*PostalAddressHistory, error) {
+	return pahq.
+		Order(postaladdresshistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (pahq *PostalAddressHistoryQuery) AsOf(ctx context.Context, time time.Time) (*PostalAddressHistory, error) {
+	return pahq.
+		Where(postaladdresshistory.HistoryTimeLTE(time)).
+		Order(postaladdresshistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
 func (t *Template) History() *TemplateHistoryQuery {
 	historyClient := NewTemplateHistoryClient(t.config)
 	return historyClient.Query().Where(templatehistory.Ref(t.ID))
@@ -1183,6 +1233,144 @@ func (ushq *UserSettingHistoryQuery) AsOf(ctx context.Context, time time.Time) (
 	return ushq.
 		Where(usersettinghistory.HistoryTimeLTE(time)).
 		Order(usersettinghistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (v *Vendor) History() *VendorHistoryQuery {
+	historyClient := NewVendorHistoryClient(v.config)
+	return historyClient.Query().Where(vendorhistory.Ref(v.ID))
+}
+
+func (vh *VendorHistory) Next(ctx context.Context) (*VendorHistory, error) {
+	client := NewVendorHistoryClient(vh.config)
+	return client.Query().
+		Where(
+			vendorhistory.Ref(vh.Ref),
+			vendorhistory.HistoryTimeGT(vh.HistoryTime),
+		).
+		Order(vendorhistory.ByHistoryTime()).
+		First(ctx)
+}
+
+func (vh *VendorHistory) Prev(ctx context.Context) (*VendorHistory, error) {
+	client := NewVendorHistoryClient(vh.config)
+	return client.Query().
+		Where(
+			vendorhistory.Ref(vh.Ref),
+			vendorhistory.HistoryTimeLT(vh.HistoryTime),
+		).
+		Order(vendorhistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (vhq *VendorHistoryQuery) Earliest(ctx context.Context) (*VendorHistory, error) {
+	return vhq.
+		Order(vendorhistory.ByHistoryTime()).
+		First(ctx)
+}
+
+func (vhq *VendorHistoryQuery) Latest(ctx context.Context) (*VendorHistory, error) {
+	return vhq.
+		Order(vendorhistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (vhq *VendorHistoryQuery) AsOf(ctx context.Context, time time.Time) (*VendorHistory, error) {
+	return vhq.
+		Where(vendorhistory.HistoryTimeLTE(time)).
+		Order(vendorhistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (vp *VendorProfile) History() *VendorProfileHistoryQuery {
+	historyClient := NewVendorProfileHistoryClient(vp.config)
+	return historyClient.Query().Where(vendorprofilehistory.Ref(vp.ID))
+}
+
+func (vph *VendorProfileHistory) Next(ctx context.Context) (*VendorProfileHistory, error) {
+	client := NewVendorProfileHistoryClient(vph.config)
+	return client.Query().
+		Where(
+			vendorprofilehistory.Ref(vph.Ref),
+			vendorprofilehistory.HistoryTimeGT(vph.HistoryTime),
+		).
+		Order(vendorprofilehistory.ByHistoryTime()).
+		First(ctx)
+}
+
+func (vph *VendorProfileHistory) Prev(ctx context.Context) (*VendorProfileHistory, error) {
+	client := NewVendorProfileHistoryClient(vph.config)
+	return client.Query().
+		Where(
+			vendorprofilehistory.Ref(vph.Ref),
+			vendorprofilehistory.HistoryTimeLT(vph.HistoryTime),
+		).
+		Order(vendorprofilehistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (vphq *VendorProfileHistoryQuery) Earliest(ctx context.Context) (*VendorProfileHistory, error) {
+	return vphq.
+		Order(vendorprofilehistory.ByHistoryTime()).
+		First(ctx)
+}
+
+func (vphq *VendorProfileHistoryQuery) Latest(ctx context.Context) (*VendorProfileHistory, error) {
+	return vphq.
+		Order(vendorprofilehistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (vphq *VendorProfileHistoryQuery) AsOf(ctx context.Context, time time.Time) (*VendorProfileHistory, error) {
+	return vphq.
+		Where(vendorprofilehistory.HistoryTimeLTE(time)).
+		Order(vendorprofilehistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (vppa *VendorProfilePostalAddress) History() *VendorProfilePostalAddressHistoryQuery {
+	historyClient := NewVendorProfilePostalAddressHistoryClient(vppa.config)
+	return historyClient.Query().Where(vendorprofilepostaladdresshistory.Ref(vppa.ID))
+}
+
+func (vppah *VendorProfilePostalAddressHistory) Next(ctx context.Context) (*VendorProfilePostalAddressHistory, error) {
+	client := NewVendorProfilePostalAddressHistoryClient(vppah.config)
+	return client.Query().
+		Where(
+			vendorprofilepostaladdresshistory.Ref(vppah.Ref),
+			vendorprofilepostaladdresshistory.HistoryTimeGT(vppah.HistoryTime),
+		).
+		Order(vendorprofilepostaladdresshistory.ByHistoryTime()).
+		First(ctx)
+}
+
+func (vppah *VendorProfilePostalAddressHistory) Prev(ctx context.Context) (*VendorProfilePostalAddressHistory, error) {
+	client := NewVendorProfilePostalAddressHistoryClient(vppah.config)
+	return client.Query().
+		Where(
+			vendorprofilepostaladdresshistory.Ref(vppah.Ref),
+			vendorprofilepostaladdresshistory.HistoryTimeLT(vppah.HistoryTime),
+		).
+		Order(vendorprofilepostaladdresshistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (vppahq *VendorProfilePostalAddressHistoryQuery) Earliest(ctx context.Context) (*VendorProfilePostalAddressHistory, error) {
+	return vppahq.
+		Order(vendorprofilepostaladdresshistory.ByHistoryTime()).
+		First(ctx)
+}
+
+func (vppahq *VendorProfilePostalAddressHistoryQuery) Latest(ctx context.Context) (*VendorProfilePostalAddressHistory, error) {
+	return vppahq.
+		Order(vendorprofilepostaladdresshistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (vppahq *VendorProfilePostalAddressHistoryQuery) AsOf(ctx context.Context, time time.Time) (*VendorProfilePostalAddressHistory, error) {
+	return vppahq.
+		Where(vendorprofilepostaladdresshistory.HistoryTimeLTE(time)).
+		Order(vendorprofilepostaladdresshistory.ByHistoryTime(sql.OrderDesc())).
 		First(ctx)
 }
 

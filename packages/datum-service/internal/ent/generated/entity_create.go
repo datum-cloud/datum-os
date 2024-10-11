@@ -17,6 +17,7 @@ import (
 	"github.com/datum-cloud/datum-os/internal/ent/generated/file"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/note"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/organization"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/postaladdress"
 )
 
 // EntityCreate is the builder for creating a Entity entity.
@@ -282,6 +283,21 @@ func (ec *EntityCreate) AddNotes(n ...*Note) *EntityCreate {
 		ids[i] = n[i].ID
 	}
 	return ec.AddNoteIDs(ids...)
+}
+
+// AddPostalAddressIDs adds the "postal_addresses" edge to the PostalAddress entity by IDs.
+func (ec *EntityCreate) AddPostalAddressIDs(ids ...string) *EntityCreate {
+	ec.mutation.AddPostalAddressIDs(ids...)
+	return ec
+}
+
+// AddPostalAddresses adds the "postal_addresses" edges to the PostalAddress entity.
+func (ec *EntityCreate) AddPostalAddresses(p ...*PostalAddress) *EntityCreate {
+	ids := make([]string, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return ec.AddPostalAddressIDs(ids...)
 }
 
 // AddFileIDs adds the "files" edge to the File entity by IDs.
@@ -557,6 +573,23 @@ func (ec *EntityCreate) createSpec() (*Entity, *sqlgraph.CreateSpec) {
 			},
 		}
 		edge.Schema = ec.schemaConfig.Note
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := ec.mutation.PostalAddressesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   entity.PostalAddressesTable,
+			Columns: []string{entity.PostalAddressesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(postaladdress.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ec.schemaConfig.PostalAddress
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

@@ -1,0 +1,103 @@
+extend type Query {
+    """
+    Look up vendor by ID
+    """
+     vendor(
+        """
+        ID of the vendor
+        """
+        id: ID!
+    ):  Vendor!
+}
+
+extend type Mutation{
+    """
+    Create a new vendor
+    """
+    createVendor(
+        """
+        values of the vendor
+        """
+        input: CreateVendorInput!
+    ): VendorCreatePayload!
+    """
+    Create multiple new vendors
+    """
+    createBulkVendor(
+        """
+        values of the vendor
+        """
+        input: [CreateVendorInput!]
+    ): VendorBulkCreatePayload!
+    """
+    Create multiple new vendors via file upload
+    """
+    createBulkCSVVendor(
+        """
+        csv file containing values of the vendor
+        """
+        input: Upload!
+    ): VendorBulkCreatePayload!
+    """
+    Update an existing vendor
+    """
+    updateVendor(
+        """
+        ID of the vendor
+        """
+        id: ID!
+        """
+        New values for the vendor
+        """
+        input: UpdateVendorInput!
+    ): VendorUpdatePayload!
+    """
+    Delete an existing vendor
+    """
+    deleteVendor(
+        """
+        ID of the vendor
+        """
+        id: ID!
+    ): VendorDeletePayload!
+}
+
+"""
+Return response for createVendor mutation
+"""
+type VendorCreatePayload {
+    """
+    Created vendor
+    """
+    vendor: Vendor!
+}
+
+"""
+Return response for updateVendor mutation
+"""
+type VendorUpdatePayload {
+    """
+    Updated vendor
+    """
+    vendor: Vendor!
+}
+
+"""
+Return response for deleteVendor mutation
+"""
+type VendorDeletePayload {
+    """
+    Deleted vendor ID
+    """
+    deletedID: ID!
+}
+
+"""
+Return response for createBulkVendor mutation
+"""
+type VendorBulkCreatePayload {
+    """
+    Created vendors
+    """
+    vendors: [Vendor!]
+}

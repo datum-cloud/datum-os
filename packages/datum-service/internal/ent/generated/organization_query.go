@@ -35,10 +35,13 @@ import (
 	"github.com/datum-cloud/datum-os/internal/ent/generated/organizationsetting"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/orgmembership"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/personalaccesstoken"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/postaladdress"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/predicate"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/subscriber"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/template"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/user"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/vendor"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofile"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/webhook"
 
 	"github.com/datum-cloud/datum-os/internal/ent/generated/internal"
@@ -78,6 +81,9 @@ type OrganizationQuery struct {
 	withContacts                     *ContactQuery
 	withContactLists                 *ContactListQuery
 	withNotes                        *NoteQuery
+	withVendors                      *VendorQuery
+	withVendorProfiles               *VendorProfileQuery
+	withPostalAddresses              *PostalAddressQuery
 	withMembers                      *OrgMembershipQuery
 	modifiers                        []func(*sql.Selector)
 	loadTotal                        []func(context.Context, []*Organization) error
@@ -106,6 +112,9 @@ type OrganizationQuery struct {
 	withNamedContacts                map[string]*ContactQuery
 	withNamedContactLists            map[string]*ContactListQuery
 	withNamedNotes                   map[string]*NoteQuery
+	withNamedVendors                 map[string]*VendorQuery
+	withNamedVendorProfiles          map[string]*VendorProfileQuery
+	withNamedPostalAddresses         map[string]*PostalAddressQuery
 	withNamedMembers                 map[string]*OrgMembershipQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
@@ -818,6 +827,81 @@ func (oq *OrganizationQuery) QueryNotes() *NoteQuery {
 	return query
 }
 
+// QueryVendors chains the current query on the "vendors" edge.
+func (oq *OrganizationQuery) QueryVendors() *VendorQuery {
+	query := (&VendorClient{config: oq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := oq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := oq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, selector),
+			sqlgraph.To(vendor.Table, vendor.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.VendorsTable, organization.VendorsColumn),
+		)
+		schemaConfig := oq.schemaConfig
+		step.To.Schema = schemaConfig.Vendor
+		step.Edge.Schema = schemaConfig.Vendor
+		fromU = sqlgraph.SetNeighbors(oq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryVendorProfiles chains the current query on the "vendor_profiles" edge.
+func (oq *OrganizationQuery) QueryVendorProfiles() *VendorProfileQuery {
+	query := (&VendorProfileClient{config: oq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := oq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := oq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, selector),
+			sqlgraph.To(vendorprofile.Table, vendorprofile.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.VendorProfilesTable, organization.VendorProfilesColumn),
+		)
+		schemaConfig := oq.schemaConfig
+		step.To.Schema = schemaConfig.VendorProfile
+		step.Edge.Schema = schemaConfig.VendorProfile
+		fromU = sqlgraph.SetNeighbors(oq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryPostalAddresses chains the current query on the "postal_addresses" edge.
+func (oq *OrganizationQuery) QueryPostalAddresses() *PostalAddressQuery {
+	query := (&PostalAddressClient{config: oq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := oq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := oq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, selector),
+			sqlgraph.To(postaladdress.Table, postaladdress.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.PostalAddressesTable, organization.PostalAddressesColumn),
+		)
+		schemaConfig := oq.schemaConfig
+		step.To.Schema = schemaConfig.PostalAddress
+		step.Edge.Schema = schemaConfig.PostalAddress
+		fromU = sqlgraph.SetNeighbors(oq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // QueryMembers chains the current query on the "members" edge.
 func (oq *OrganizationQuery) QueryMembers() *OrgMembershipQuery {
 	query := (&OrgMembershipClient{config: oq.config}).Query()
@@ -1062,6 +1146,9 @@ func (oq *OrganizationQuery) Clone() *OrganizationQuery {
 		withContacts:                oq.withContacts.Clone(),
 		withContactLists:            oq.withContactLists.Clone(),
 		withNotes:                   oq.withNotes.Clone(),
+		withVendors:                 oq.withVendors.Clone(),
+		withVendorProfiles:          oq.withVendorProfiles.Clone(),
+		withPostalAddresses:         oq.withPostalAddresses.Clone(),
 		withMembers:                 oq.withMembers.Clone(),
 		// clone intermediate query.
 		sql:  oq.sql.Clone(),
@@ -1366,6 +1453,39 @@ func (oq *OrganizationQuery) WithNotes(opts ...func(*NoteQuery)) *OrganizationQu
 	return oq
 }
 
+// WithVendors tells the query-builder to eager-load the nodes that are connected to
+// the "vendors" edge. The optional arguments are used to configure the query builder of the edge.
+func (oq *OrganizationQuery) WithVendors(opts ...func(*VendorQuery)) *OrganizationQuery {
+	query := (&VendorClient{config: oq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	oq.withVendors = query
+	return oq
+}
+
+// WithVendorProfiles tells the query-builder to eager-load the nodes that are connected to
+// the "vendor_profiles" edge. The optional arguments are used to configure the query builder of the edge.
+func (oq *OrganizationQuery) WithVendorProfiles(opts ...func(*VendorProfileQuery)) *OrganizationQuery {
+	query := (&VendorProfileClient{config: oq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	oq.withVendorProfiles = query
+	return oq
+}
+
+// WithPostalAddresses tells the query-builder to eager-load the nodes that are connected to
+// the "postal_addresses" edge. The optional arguments are used to configure the query builder of the edge.
+func (oq *OrganizationQuery) WithPostalAddresses(opts ...func(*PostalAddressQuery)) *OrganizationQuery {
+	query := (&PostalAddressClient{config: oq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	oq.withPostalAddresses = query
+	return oq
+}
+
 // WithMembers tells the query-builder to eager-load the nodes that are connected to
 // the "members" edge. The optional arguments are used to configure the query builder of the edge.
 func (oq *OrganizationQuery) WithMembers(opts ...func(*OrgMembershipQuery)) *OrganizationQuery {
@@ -1461,7 +1581,7 @@ func (oq *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 	var (
 		nodes       = []*Organization{}
 		_spec       = oq.querySpec()
-		loadedTypes = [28]bool{
+		loadedTypes = [31]bool{
 			oq.withParent != nil,
 			oq.withChildren != nil,
 			oq.withGroups != nil,
@@ -1489,6 +1609,9 @@ func (oq *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			oq.withContacts != nil,
 			oq.withContactLists != nil,
 			oq.withNotes != nil,
+			oq.withVendors != nil,
+			oq.withVendorProfiles != nil,
+			oq.withPostalAddresses != nil,
 			oq.withMembers != nil,
 		}
 	)
@@ -1710,6 +1833,27 @@ func (oq *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			return nil, err
 		}
 	}
+	if query := oq.withVendors; query != nil {
+		if err := oq.loadVendors(ctx, query, nodes,
+			func(n *Organization) { n.Edges.Vendors = []*Vendor{} },
+			func(n *Organization, e *Vendor) { n.Edges.Vendors = append(n.Edges.Vendors, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := oq.withVendorProfiles; query != nil {
+		if err := oq.loadVendorProfiles(ctx, query, nodes,
+			func(n *Organization) { n.Edges.VendorProfiles = []*VendorProfile{} },
+			func(n *Organization, e *VendorProfile) { n.Edges.VendorProfiles = append(n.Edges.VendorProfiles, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := oq.withPostalAddresses; query != nil {
+		if err := oq.loadPostalAddresses(ctx, query, nodes,
+			func(n *Organization) { n.Edges.PostalAddresses = []*PostalAddress{} },
+			func(n *Organization, e *PostalAddress) { n.Edges.PostalAddresses = append(n.Edges.PostalAddresses, e) }); err != nil {
+			return nil, err
+		}
+	}
 	if query := oq.withMembers; query != nil {
 		if err := oq.loadMembers(ctx, query, nodes,
 			func(n *Organization) { n.Edges.Members = []*OrgMembership{} },
@@ -1889,6 +2033,27 @@ func (oq *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 		if err := oq.loadNotes(ctx, query, nodes,
 			func(n *Organization) { n.appendNamedNotes(name) },
 			func(n *Organization, e *Note) { n.appendNamedNotes(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range oq.withNamedVendors {
+		if err := oq.loadVendors(ctx, query, nodes,
+			func(n *Organization) { n.appendNamedVendors(name) },
+			func(n *Organization, e *Vendor) { n.appendNamedVendors(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range oq.withNamedVendorProfiles {
+		if err := oq.loadVendorProfiles(ctx, query, nodes,
+			func(n *Organization) { n.appendNamedVendorProfiles(name) },
+			func(n *Organization, e *VendorProfile) { n.appendNamedVendorProfiles(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range oq.withNamedPostalAddresses {
+		if err := oq.loadPostalAddresses(ctx, query, nodes,
+			func(n *Organization) { n.appendNamedPostalAddresses(name) },
+			func(n *Organization, e *PostalAddress) { n.appendNamedPostalAddresses(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -2876,6 +3041,97 @@ func (oq *OrganizationQuery) loadNotes(ctx context.Context, query *NoteQuery, no
 	}
 	return nil
 }
+func (oq *OrganizationQuery) loadVendors(ctx context.Context, query *VendorQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *Vendor)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Organization)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(vendor.FieldOwnerID)
+	}
+	query.Where(predicate.Vendor(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(organization.VendorsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.OwnerID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "owner_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (oq *OrganizationQuery) loadVendorProfiles(ctx context.Context, query *VendorProfileQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *VendorProfile)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Organization)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(vendorprofile.FieldOwnerID)
+	}
+	query.Where(predicate.VendorProfile(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(organization.VendorProfilesColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.OwnerID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "owner_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (oq *OrganizationQuery) loadPostalAddresses(ctx context.Context, query *PostalAddressQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *PostalAddress)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Organization)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(postaladdress.FieldOwnerID)
+	}
+	query.Where(predicate.PostalAddress(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(organization.PostalAddressesColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.OwnerID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "owner_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
 func (oq *OrganizationQuery) loadMembers(ctx context.Context, query *OrgMembershipQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *OrgMembership)) error {
 	fks := make([]driver.Value, 0, len(nodes))
 	nodeids := make(map[string]*Organization)
@@ -3346,6 +3602,48 @@ func (oq *OrganizationQuery) WithNamedNotes(name string, opts ...func(*NoteQuery
 		oq.withNamedNotes = make(map[string]*NoteQuery)
 	}
 	oq.withNamedNotes[name] = query
+	return oq
+}
+
+// WithNamedVendors tells the query-builder to eager-load the nodes that are connected to the "vendors"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (oq *OrganizationQuery) WithNamedVendors(name string, opts ...func(*VendorQuery)) *OrganizationQuery {
+	query := (&VendorClient{config: oq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if oq.withNamedVendors == nil {
+		oq.withNamedVendors = make(map[string]*VendorQuery)
+	}
+	oq.withNamedVendors[name] = query
+	return oq
+}
+
+// WithNamedVendorProfiles tells the query-builder to eager-load the nodes that are connected to the "vendor_profiles"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (oq *OrganizationQuery) WithNamedVendorProfiles(name string, opts ...func(*VendorProfileQuery)) *OrganizationQuery {
+	query := (&VendorProfileClient{config: oq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if oq.withNamedVendorProfiles == nil {
+		oq.withNamedVendorProfiles = make(map[string]*VendorProfileQuery)
+	}
+	oq.withNamedVendorProfiles[name] = query
+	return oq
+}
+
+// WithNamedPostalAddresses tells the query-builder to eager-load the nodes that are connected to the "postal_addresses"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (oq *OrganizationQuery) WithNamedPostalAddresses(name string, opts ...func(*PostalAddressQuery)) *OrganizationQuery {
+	query := (&PostalAddressClient{config: oq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if oq.withNamedPostalAddresses == nil {
+		oq.withNamedPostalAddresses = make(map[string]*PostalAddressQuery)
+	}
+	oq.withNamedPostalAddresses[name] = query
 	return oq
 }
 

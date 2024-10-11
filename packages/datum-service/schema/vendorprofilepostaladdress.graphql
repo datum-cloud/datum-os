@@ -1,0 +1,103 @@
+extend type Query {
+    """
+    Look up vendorProfilePostalAddress by ID
+    """
+     vendorProfilePostalAddress(
+        """
+        ID of the vendorProfilePostalAddress
+        """
+        id: ID!
+    ):  VendorProfilePostalAddress!
+}
+
+extend type Mutation{
+    """
+    Create a new vendorProfilePostalAddress
+    """
+    createVendorProfilePostalAddress(
+        """
+        values of the vendorProfilePostalAddress
+        """
+        input: CreateVendorProfilePostalAddressInput!
+    ): VendorProfilePostalAddressCreatePayload!
+    """
+    Create multiple new vendorProfilePostalAddresss
+    """
+    createBulkVendorProfilePostalAddress(
+        """
+        values of the vendorProfilePostalAddress
+        """
+        input: [CreateVendorProfilePostalAddressInput!]
+    ): VendorProfilePostalAddressBulkCreatePayload!
+    """
+    Create multiple new vendorProfilePostalAddresss via file upload
+    """
+    createBulkCSVVendorProfilePostalAddress(
+        """
+        csv file containing values of the vendorProfilePostalAddress
+        """
+        input: Upload!
+    ): VendorProfilePostalAddressBulkCreatePayload!
+    """
+    Update an existing vendorProfilePostalAddress
+    """
+    updateVendorProfilePostalAddress(
+        """
+        ID of the vendorProfilePostalAddress
+        """
+        id: ID!
+        """
+        New values for the vendorProfilePostalAddress
+        """
+        input: UpdateVendorProfilePostalAddressInput!
+    ): VendorProfilePostalAddressUpdatePayload!
+    """
+    Delete an existing vendorProfilePostalAddress
+    """
+    deleteVendorProfilePostalAddress(
+        """
+        ID of the vendorProfilePostalAddress
+        """
+        id: ID!
+    ): VendorProfilePostalAddressDeletePayload!
+}
+
+"""
+Return response for createVendorProfilePostalAddress mutation
+"""
+type VendorProfilePostalAddressCreatePayload {
+    """
+    Created vendorProfilePostalAddress
+    """
+    vendorProfilePostalAddress: VendorProfilePostalAddress!
+}
+
+"""
+Return response for updateVendorProfilePostalAddress mutation
+"""
+type VendorProfilePostalAddressUpdatePayload {
+    """
+    Updated vendorProfilePostalAddress
+    """
+    vendorProfilePostalAddress: VendorProfilePostalAddress!
+}
+
+"""
+Return response for deleteVendorProfilePostalAddress mutation
+"""
+type VendorProfilePostalAddressDeletePayload {
+    """
+    Deleted vendorProfilePostalAddress ID
+    """
+    deletedID: ID!
+}
+
+"""
+Return response for createBulkVendorProfilePostalAddress mutation
+"""
+type VendorProfilePostalAddressBulkCreatePayload {
+    """
+    Created vendorProfilePostalAddresss
+    """
+    vendorProfilePostalAddresses: [VendorProfilePostalAddress!]
+}

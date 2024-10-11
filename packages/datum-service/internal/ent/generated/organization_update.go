@@ -34,10 +34,13 @@ import (
 	"github.com/datum-cloud/datum-os/internal/ent/generated/organizationsetting"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/orgmembership"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/personalaccesstoken"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/postaladdress"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/predicate"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/subscriber"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/template"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/user"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/vendor"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofile"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/webhook"
 
 	"github.com/datum-cloud/datum-os/internal/ent/generated/internal"
@@ -622,6 +625,51 @@ func (ou *OrganizationUpdate) AddNotes(n ...*Note) *OrganizationUpdate {
 	return ou.AddNoteIDs(ids...)
 }
 
+// AddVendorIDs adds the "vendors" edge to the Vendor entity by IDs.
+func (ou *OrganizationUpdate) AddVendorIDs(ids ...string) *OrganizationUpdate {
+	ou.mutation.AddVendorIDs(ids...)
+	return ou
+}
+
+// AddVendors adds the "vendors" edges to the Vendor entity.
+func (ou *OrganizationUpdate) AddVendors(v ...*Vendor) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return ou.AddVendorIDs(ids...)
+}
+
+// AddVendorProfileIDs adds the "vendor_profiles" edge to the VendorProfile entity by IDs.
+func (ou *OrganizationUpdate) AddVendorProfileIDs(ids ...string) *OrganizationUpdate {
+	ou.mutation.AddVendorProfileIDs(ids...)
+	return ou
+}
+
+// AddVendorProfiles adds the "vendor_profiles" edges to the VendorProfile entity.
+func (ou *OrganizationUpdate) AddVendorProfiles(v ...*VendorProfile) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return ou.AddVendorProfileIDs(ids...)
+}
+
+// AddPostalAddressIDs adds the "postal_addresses" edge to the PostalAddress entity by IDs.
+func (ou *OrganizationUpdate) AddPostalAddressIDs(ids ...string) *OrganizationUpdate {
+	ou.mutation.AddPostalAddressIDs(ids...)
+	return ou
+}
+
+// AddPostalAddresses adds the "postal_addresses" edges to the PostalAddress entity.
+func (ou *OrganizationUpdate) AddPostalAddresses(p ...*PostalAddress) *OrganizationUpdate {
+	ids := make([]string, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return ou.AddPostalAddressIDs(ids...)
+}
+
 // AddMemberIDs adds the "members" edge to the OrgMembership entity by IDs.
 func (ou *OrganizationUpdate) AddMemberIDs(ids ...string) *OrganizationUpdate {
 	ou.mutation.AddMemberIDs(ids...)
@@ -1171,6 +1219,69 @@ func (ou *OrganizationUpdate) RemoveNotes(n ...*Note) *OrganizationUpdate {
 		ids[i] = n[i].ID
 	}
 	return ou.RemoveNoteIDs(ids...)
+}
+
+// ClearVendors clears all "vendors" edges to the Vendor entity.
+func (ou *OrganizationUpdate) ClearVendors() *OrganizationUpdate {
+	ou.mutation.ClearVendors()
+	return ou
+}
+
+// RemoveVendorIDs removes the "vendors" edge to Vendor entities by IDs.
+func (ou *OrganizationUpdate) RemoveVendorIDs(ids ...string) *OrganizationUpdate {
+	ou.mutation.RemoveVendorIDs(ids...)
+	return ou
+}
+
+// RemoveVendors removes "vendors" edges to Vendor entities.
+func (ou *OrganizationUpdate) RemoveVendors(v ...*Vendor) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return ou.RemoveVendorIDs(ids...)
+}
+
+// ClearVendorProfiles clears all "vendor_profiles" edges to the VendorProfile entity.
+func (ou *OrganizationUpdate) ClearVendorProfiles() *OrganizationUpdate {
+	ou.mutation.ClearVendorProfiles()
+	return ou
+}
+
+// RemoveVendorProfileIDs removes the "vendor_profiles" edge to VendorProfile entities by IDs.
+func (ou *OrganizationUpdate) RemoveVendorProfileIDs(ids ...string) *OrganizationUpdate {
+	ou.mutation.RemoveVendorProfileIDs(ids...)
+	return ou
+}
+
+// RemoveVendorProfiles removes "vendor_profiles" edges to VendorProfile entities.
+func (ou *OrganizationUpdate) RemoveVendorProfiles(v ...*VendorProfile) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return ou.RemoveVendorProfileIDs(ids...)
+}
+
+// ClearPostalAddresses clears all "postal_addresses" edges to the PostalAddress entity.
+func (ou *OrganizationUpdate) ClearPostalAddresses() *OrganizationUpdate {
+	ou.mutation.ClearPostalAddresses()
+	return ou
+}
+
+// RemovePostalAddressIDs removes the "postal_addresses" edge to PostalAddress entities by IDs.
+func (ou *OrganizationUpdate) RemovePostalAddressIDs(ids ...string) *OrganizationUpdate {
+	ou.mutation.RemovePostalAddressIDs(ids...)
+	return ou
+}
+
+// RemovePostalAddresses removes "postal_addresses" edges to PostalAddress entities.
+func (ou *OrganizationUpdate) RemovePostalAddresses(p ...*PostalAddress) *OrganizationUpdate {
+	ids := make([]string, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return ou.RemovePostalAddressIDs(ids...)
 }
 
 // ClearMembers clears all "members" edges to the OrgMembership entity.
@@ -2585,6 +2696,150 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if ou.mutation.VendorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.VendorsTable,
+			Columns: []string{organization.VendorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(vendor.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ou.schemaConfig.Vendor
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ou.mutation.RemovedVendorsIDs(); len(nodes) > 0 && !ou.mutation.VendorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.VendorsTable,
+			Columns: []string{organization.VendorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(vendor.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ou.schemaConfig.Vendor
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ou.mutation.VendorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.VendorsTable,
+			Columns: []string{organization.VendorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(vendor.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ou.schemaConfig.Vendor
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if ou.mutation.VendorProfilesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.VendorProfilesTable,
+			Columns: []string{organization.VendorProfilesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(vendorprofile.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ou.schemaConfig.VendorProfile
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ou.mutation.RemovedVendorProfilesIDs(); len(nodes) > 0 && !ou.mutation.VendorProfilesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.VendorProfilesTable,
+			Columns: []string{organization.VendorProfilesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(vendorprofile.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ou.schemaConfig.VendorProfile
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ou.mutation.VendorProfilesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.VendorProfilesTable,
+			Columns: []string{organization.VendorProfilesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(vendorprofile.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ou.schemaConfig.VendorProfile
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if ou.mutation.PostalAddressesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.PostalAddressesTable,
+			Columns: []string{organization.PostalAddressesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(postaladdress.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ou.schemaConfig.PostalAddress
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ou.mutation.RemovedPostalAddressesIDs(); len(nodes) > 0 && !ou.mutation.PostalAddressesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.PostalAddressesTable,
+			Columns: []string{organization.PostalAddressesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(postaladdress.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ou.schemaConfig.PostalAddress
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ou.mutation.PostalAddressesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.PostalAddressesTable,
+			Columns: []string{organization.PostalAddressesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(postaladdress.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ou.schemaConfig.PostalAddress
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if ou.mutation.MembersCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -3221,6 +3476,51 @@ func (ouo *OrganizationUpdateOne) AddNotes(n ...*Note) *OrganizationUpdateOne {
 	return ouo.AddNoteIDs(ids...)
 }
 
+// AddVendorIDs adds the "vendors" edge to the Vendor entity by IDs.
+func (ouo *OrganizationUpdateOne) AddVendorIDs(ids ...string) *OrganizationUpdateOne {
+	ouo.mutation.AddVendorIDs(ids...)
+	return ouo
+}
+
+// AddVendors adds the "vendors" edges to the Vendor entity.
+func (ouo *OrganizationUpdateOne) AddVendors(v ...*Vendor) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return ouo.AddVendorIDs(ids...)
+}
+
+// AddVendorProfileIDs adds the "vendor_profiles" edge to the VendorProfile entity by IDs.
+func (ouo *OrganizationUpdateOne) AddVendorProfileIDs(ids ...string) *OrganizationUpdateOne {
+	ouo.mutation.AddVendorProfileIDs(ids...)
+	return ouo
+}
+
+// AddVendorProfiles adds the "vendor_profiles" edges to the VendorProfile entity.
+func (ouo *OrganizationUpdateOne) AddVendorProfiles(v ...*VendorProfile) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return ouo.AddVendorProfileIDs(ids...)
+}
+
+// AddPostalAddressIDs adds the "postal_addresses" edge to the PostalAddress entity by IDs.
+func (ouo *OrganizationUpdateOne) AddPostalAddressIDs(ids ...string) *OrganizationUpdateOne {
+	ouo.mutation.AddPostalAddressIDs(ids...)
+	return ouo
+}
+
+// AddPostalAddresses adds the "postal_addresses" edges to the PostalAddress entity.
+func (ouo *OrganizationUpdateOne) AddPostalAddresses(p ...*PostalAddress) *OrganizationUpdateOne {
+	ids := make([]string, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return ouo.AddPostalAddressIDs(ids...)
+}
+
 // AddMemberIDs adds the "members" edge to the OrgMembership entity by IDs.
 func (ouo *OrganizationUpdateOne) AddMemberIDs(ids ...string) *OrganizationUpdateOne {
 	ouo.mutation.AddMemberIDs(ids...)
@@ -3770,6 +4070,69 @@ func (ouo *OrganizationUpdateOne) RemoveNotes(n ...*Note) *OrganizationUpdateOne
 		ids[i] = n[i].ID
 	}
 	return ouo.RemoveNoteIDs(ids...)
+}
+
+// ClearVendors clears all "vendors" edges to the Vendor entity.
+func (ouo *OrganizationUpdateOne) ClearVendors() *OrganizationUpdateOne {
+	ouo.mutation.ClearVendors()
+	return ouo
+}
+
+// RemoveVendorIDs removes the "vendors" edge to Vendor entities by IDs.
+func (ouo *OrganizationUpdateOne) RemoveVendorIDs(ids ...string) *OrganizationUpdateOne {
+	ouo.mutation.RemoveVendorIDs(ids...)
+	return ouo
+}
+
+// RemoveVendors removes "vendors" edges to Vendor entities.
+func (ouo *OrganizationUpdateOne) RemoveVendors(v ...*Vendor) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return ouo.RemoveVendorIDs(ids...)
+}
+
+// ClearVendorProfiles clears all "vendor_profiles" edges to the VendorProfile entity.
+func (ouo *OrganizationUpdateOne) ClearVendorProfiles() *OrganizationUpdateOne {
+	ouo.mutation.ClearVendorProfiles()
+	return ouo
+}
+
+// RemoveVendorProfileIDs removes the "vendor_profiles" edge to VendorProfile entities by IDs.
+func (ouo *OrganizationUpdateOne) RemoveVendorProfileIDs(ids ...string) *OrganizationUpdateOne {
+	ouo.mutation.RemoveVendorProfileIDs(ids...)
+	return ouo
+}
+
+// RemoveVendorProfiles removes "vendor_profiles" edges to VendorProfile entities.
+func (ouo *OrganizationUpdateOne) RemoveVendorProfiles(v ...*VendorProfile) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return ouo.RemoveVendorProfileIDs(ids...)
+}
+
+// ClearPostalAddresses clears all "postal_addresses" edges to the PostalAddress entity.
+func (ouo *OrganizationUpdateOne) ClearPostalAddresses() *OrganizationUpdateOne {
+	ouo.mutation.ClearPostalAddresses()
+	return ouo
+}
+
+// RemovePostalAddressIDs removes the "postal_addresses" edge to PostalAddress entities by IDs.
+func (ouo *OrganizationUpdateOne) RemovePostalAddressIDs(ids ...string) *OrganizationUpdateOne {
+	ouo.mutation.RemovePostalAddressIDs(ids...)
+	return ouo
+}
+
+// RemovePostalAddresses removes "postal_addresses" edges to PostalAddress entities.
+func (ouo *OrganizationUpdateOne) RemovePostalAddresses(p ...*PostalAddress) *OrganizationUpdateOne {
+	ids := make([]string, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return ouo.RemovePostalAddressIDs(ids...)
 }
 
 // ClearMembers clears all "members" edges to the OrgMembership entity.
@@ -5209,6 +5572,150 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 			},
 		}
 		edge.Schema = ouo.schemaConfig.Note
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if ouo.mutation.VendorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.VendorsTable,
+			Columns: []string{organization.VendorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(vendor.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ouo.schemaConfig.Vendor
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ouo.mutation.RemovedVendorsIDs(); len(nodes) > 0 && !ouo.mutation.VendorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.VendorsTable,
+			Columns: []string{organization.VendorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(vendor.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ouo.schemaConfig.Vendor
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ouo.mutation.VendorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.VendorsTable,
+			Columns: []string{organization.VendorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(vendor.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ouo.schemaConfig.Vendor
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if ouo.mutation.VendorProfilesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.VendorProfilesTable,
+			Columns: []string{organization.VendorProfilesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(vendorprofile.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ouo.schemaConfig.VendorProfile
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ouo.mutation.RemovedVendorProfilesIDs(); len(nodes) > 0 && !ouo.mutation.VendorProfilesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.VendorProfilesTable,
+			Columns: []string{organization.VendorProfilesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(vendorprofile.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ouo.schemaConfig.VendorProfile
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ouo.mutation.VendorProfilesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.VendorProfilesTable,
+			Columns: []string{organization.VendorProfilesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(vendorprofile.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ouo.schemaConfig.VendorProfile
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if ouo.mutation.PostalAddressesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.PostalAddressesTable,
+			Columns: []string{organization.PostalAddressesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(postaladdress.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ouo.schemaConfig.PostalAddress
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ouo.mutation.RemovedPostalAddressesIDs(); len(nodes) > 0 && !ouo.mutation.PostalAddressesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.PostalAddressesTable,
+			Columns: []string{organization.PostalAddressesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(postaladdress.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ouo.schemaConfig.PostalAddress
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ouo.mutation.PostalAddressesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.PostalAddressesTable,
+			Columns: []string{organization.PostalAddressesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(postaladdress.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ouo.schemaConfig.PostalAddress
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
