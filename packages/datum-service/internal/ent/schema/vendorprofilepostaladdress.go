@@ -61,6 +61,7 @@ func (VendorProfilePostalAddress) Indexes() []ent.Index {
 
 func (VendorProfilePostalAddress) Annotations() []schema.Annotation {
 	return []schema.Annotation{
+		entgql.Type("VendorProfilePostalAddress"),
 		entgql.QueryField(),
 		entgql.RelayConnection(),
 		entgql.Mutations(entgql.MutationCreate(), (entgql.MutationUpdate())),
