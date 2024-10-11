@@ -27,10 +27,268 @@ type GoogleProtobufAny struct {
 	AdditionalProperties map[string]interface{} `json:"-"`
 }
 
-// ListVendorsResponse defines model for ListVendorsResponse.
+// Invoice Invoice is a resource representing an Invoice from an organization to a
+//
+//	customer account or from a vendor to an organization.
+type Invoice struct {
+	// Annotations Annotations is an unstructured key-value map stored with a Invoice that
+	//  may be set by external tools to store and retrieve arbitrary metadata.
+	//  They are not queryable and should be preserved when modifying objects.
+	Annotations *map[string]string `json:"annotations,omitempty"`
+
+	// CreateTime Output only. The time when the Invoice is created.
+	CreateTime *time.Time `json:"createTime,omitempty"`
+
+	// DeleteTime Output only. For a deleted resource, the deletion time. It is only
+	//  populated as a response to a Delete request.
+	DeleteTime *time.Time `json:"deleteTime,omitempty"`
+
+	// DisplayName Human-readable display name of this Invoice that you can modify.
+	//  The maximum length is 63 characters.
+	DisplayName *string `json:"displayName,omitempty"`
+
+	// Etag This checksum is computed by the server based on the value of
+	//  other fields, and might be sent on update requests to ensure the client has
+	//  an up-to-date value before proceeding.
+	Etag *string `json:"etag,omitempty"`
+
+	// InvoiceId The resource ID of this Invoice within its parent resource.
+	InvoiceId *string `json:"invoiceId,omitempty"`
+
+	// Labels Labels is an unstructured key-value map stored with a Invoice that
+	//  may be set by external tools to enable platform features which identify
+	//  Invoices via label selections.
+	Labels *map[string]string `json:"labels,omitempty"`
+
+	// Name The resource name of this Invoice.
+	Name *string `json:"name,omitempty"`
+
+	// Reconciling Output only. If set, there are currently changes in flight to the Invoice.
+	Reconciling *bool `json:"reconciling,omitempty"`
+
+	// Spec Spec is the specification of the Invoice.
+	Spec InvoiceSpec `json:"spec"`
+
+	// Status Status is the current status of the Invoice.
+	Status *InvoiceStatus `json:"status,omitempty"`
+
+	// Uid Server assigned unique identifier for the Invoice. The value
+	//  is a UUID4 string and guaranteed to remain unchanged until the resource is
+	//  deleted.
+	Uid *string `json:"uid,omitempty"`
+
+	// UpdateTime Output only. The last time that the Invoice is updated.
+	UpdateTime *time.Time `json:"updateTime,omitempty"`
+}
+
+// InvoiceSpec Spec is the specification of the Invoice. TODO!
+type InvoiceSpec = map[string]interface{}
+
+// InvoiceStatus Status is the current status of the Invoice. TODO!
+type InvoiceStatus = map[string]interface{}
+
+// ListInvoicesResponse ListInvoicesResponse is the response for listing Invoices.
+type ListInvoicesResponse struct {
+	// Invoices The list of Invoices.
+	Invoices *[]Invoice `json:"invoices,omitempty"`
+
+	// NextPageToken A token to retrieve the next page of results.
+	//  Pass this value in the ListInvoicesRequest.page_token field in a subsequent call to `ListInvoices` to retrieve the next page of results.
+	//  If the page token is not set, there are no more results.
+	NextPageToken *string `json:"nextPageToken,omitempty"`
+}
+
+// ListOrganizationsResponse ListOrganizationsResponse is the response for listing Organizations.
+type ListOrganizationsResponse struct {
+	// NextPageToken A token to retrieve the next page of results.
+	//  Pass this value in the ListOrganizationsRequest.page_token field in a subsequent call to `ListOrganizations` to retrieve the next page of results.
+	//  If the page token is not set, there are no more results.
+	NextPageToken *string `json:"nextPageToken,omitempty"`
+
+	// Organizations The list of Organizations.
+	Organizations *[]Organization `json:"organizations,omitempty"`
+}
+
+// ListVendorsResponse ListVendorsResponse is the response for listing Vendors.
 type ListVendorsResponse struct {
-	NextPageToken *string   `json:"nextPageToken,omitempty"`
-	Vendors       *[]Vendor `json:"vendors,omitempty"`
+	// NextPageToken A token to retrieve the next page of results.
+	//  Pass this value in the ListVendorsRequest.page_token field in a subsequent call to `ListVendors` to retrieve the next page of results.
+	//  If the page token is not set, there are no more results.
+	NextPageToken *string `json:"nextPageToken,omitempty"`
+
+	// Vendors The list of Vendors.
+	Vendors *[]Vendor `json:"vendors,omitempty"`
+}
+
+// Operation This resource represents a long-running operation that is the result of a
+//
+//	network API call.
+type Operation struct {
+	// Done If the value is `false`, it means the operation is still in progress.
+	//  If `true`, the operation is completed, and either `error` or `response` is
+	//  available.
+	Done *bool `json:"done,omitempty"`
+
+	// Error The error result of the operation in case of failure or cancellation.
+	Error *Status `json:"error,omitempty"`
+
+	// Metadata Service-specific metadata associated with the operation.  It typically
+	//  contains progress information and common metadata such as create time.
+	//  Some services might not provide such metadata.  Any method that returns a
+	//  long-running operation should document the metadata type, if any.
+	Metadata *GoogleProtobufAny `json:"metadata,omitempty"`
+
+	// Name The server-assigned name, which is only unique within the same service that
+	//  originally returns it. If you use the default HTTP mapping, the
+	//  `name` should be a resource name ending with `operations/{unique_id}`.
+	Name *string `json:"name,omitempty"`
+
+	// Response The normal response of the operation in case of success.  If the original
+	//  method returns no data on success, such as `Delete`, the response is
+	//  `google.protobuf.Empty`.  If the original method is standard
+	//  `Get`/`Create`/`Update`, the response should be the resource.  For other
+	//  methods, the response should have the type `XxxResponse`, where `Xxx`
+	//  is the original method name.  For example, if the original method name
+	//  is `TakeSnapshot()`, the inferred response type is
+	//  `TakeSnapshotResponse`.
+	Response *GoogleProtobufAny `json:"response,omitempty"`
+}
+
+// Organization Organization is a resource representing an Organization.
+type Organization struct {
+	// Annotations Annotations is an unstructured key-value map stored with a Organization that
+	//  may be set by external tools to store and retrieve arbitrary metadata.
+	//  They are not queryable and should be preserved when modifying objects.
+	Annotations *map[string]string `json:"annotations,omitempty"`
+
+	// CreateTime Output only. The time when the Organization is created.
+	CreateTime *time.Time `json:"createTime,omitempty"`
+
+	// DeleteTime Output only. For a deleted resource, the deletion time. It is only
+	//  populated as a response to a Delete request.
+	DeleteTime *time.Time `json:"deleteTime,omitempty"`
+
+	// DisplayName Human-readable display name of this Organization that you can modify.
+	//  The maximum length is 63 characters.
+	DisplayName *string `json:"displayName,omitempty"`
+
+	// Etag This checksum is computed by the server based on the value of
+	//  other fields, and might be sent on update requests to ensure the client has
+	//  an up-to-date value before proceeding.
+	Etag *string `json:"etag,omitempty"`
+
+	// Labels Labels is an unstructured key-value map stored with a Organization that
+	//  may be set by external tools to enable platform features which identify
+	//  Organizations via label selections.
+	Labels *map[string]string `json:"labels,omitempty"`
+
+	// Name The resource name of this Organization.
+	Name *string `json:"name,omitempty"`
+
+	// OrganizationId The resource ID of this Organization within its parent resource.
+	OrganizationId *string `json:"organizationId,omitempty"`
+
+	// Reconciling Output only. If set, there are currently changes in flight to the Organization.
+	Reconciling *bool `json:"reconciling,omitempty"`
+
+	// Spec The specifications of the Organization.
+	Spec Spec `json:"spec"`
+
+	// Status The status of the Organization.
+	Status *Status `json:"status,omitempty"`
+
+	// Uid Server assigned unique identifier for the Organization. The value
+	//  is a UUID4 string and guaranteed to remain unchanged until the resource is
+	//  deleted.
+	Uid *string `json:"uid,omitempty"`
+
+	// UpdateTime Output only. The last time that the Organization is updated.
+	UpdateTime *time.Time `json:"updateTime,omitempty"`
+}
+
+// PhoneNumber An object representing a phone number, suitable as an API wire format.
+//
+//	This representation:
+//
+//	 - should not be used for locale-specific formatting of a phone number, such
+//	   as "+1 (650) 253-0000 ext. 123"
+//
+//	 - is not designed for efficient storage
+//	 - may not be suitable for dialing - specialized libraries (see references)
+//	   should be used to parse the number for that purpose
+//
+//	To do something meaningful with this number, such as format it for various
+//	use-cases, convert it to an `i18n.phonenumbers.PhoneNumber` object first.
+//
+//	For instance, in Java this would be:
+//
+//	   com.google.type.PhoneNumber wireProto =
+//	       com.google.type.PhoneNumber.newBuilder().build();
+//	   com.google.i18n.phonenumbers.Phonenumber.PhoneNumber phoneNumber =
+//	       PhoneNumberUtil.getInstance().parse(wireProto.getE164Number(), "ZZ");
+//	   if (!wireProto.getExtension().isEmpty()) {
+//	     phoneNumber.setExtension(wireProto.getExtension());
+//	   }
+//
+//	 Reference(s):
+//	  - https://github.com/google/libphonenumber
+type PhoneNumber struct {
+	// E164Number The phone number, represented as a leading plus sign ('+'), followed by a
+	//  phone number that uses a relaxed ITU E.164 format consisting of the
+	//  country calling code (1 to 3 digits) and the subscriber number, with no
+	//  additional spaces or formatting, e.g.:
+	//   - correct: "+15552220123"
+	//   - incorrect: "+1 (555) 222-01234 x123".
+	//
+	//  The ITU E.164 format limits the latter to 12 digits, but in practice not
+	//  all countries respect that, so we relax that restriction here.
+	//  National-only numbers are not allowed.
+	//
+	//  References:
+	//   - https://www.itu.int/rec/T-REC-E.164-201011-I
+	//   - https://en.wikipedia.org/wiki/E.164.
+	//   - https://en.wikipedia.org/wiki/List_of_country_calling_codes
+	E164Number *string `json:"e164Number,omitempty"`
+
+	// Extension The phone number's extension. The extension is not standardized in ITU
+	//  recommendations, except for being defined as a series of numbers with a
+	//  maximum length of 40 digits. Other than digits, some other dialing
+	//  characters such as ',' (indicating a wait) or '#' may be stored here.
+	//
+	//  Note that no regions currently use extensions with short codes, so this
+	//  field is normally only set in conjunction with an E.164 number. It is held
+	//  separately from the E.164 number to allow for short code extensions in the
+	//  future.
+	Extension *string `json:"extension,omitempty"`
+
+	// ShortCode A short code.
+	//
+	//  Reference(s):
+	//   - https://en.wikipedia.org/wiki/Short_code
+	ShortCode *PhoneNumberShortCode `json:"shortCode,omitempty"`
+}
+
+// PhoneNumberShortCode An object representing a short code, which is a phone number that is
+//
+//	typically much shorter than regular phone numbers and can be used to
+//	address messages in MMS and SMS systems, as well as for abbreviated dialing
+//	(e.g. "Text 611 to see how many minutes you have remaining on your plan.").
+//
+//	Short codes are restricted to a region and are not internationally
+//	dialable, which means the same short code can exist in different regions,
+//	with different usage and pricing, even if those regions share the same
+//	country calling code (e.g. US and CA).
+type PhoneNumberShortCode struct {
+	// Number Required. The short code digits, without a leading plus ('+') or country
+	//  calling code, e.g. "611".
+	Number *string `json:"number,omitempty"`
+
+	// RegionCode Required. The BCP-47 region code of the location where calls to this
+	//  short code can be made, such as "US" and "BB".
+	//
+	//  Reference(s):
+	//   - http://www.unicode.org/reports/tr35/#unicode_region_subtag
+	RegionCode *string `json:"regionCode,omitempty"`
 }
 
 // PostalAddress Represents a postal address, e.g. for postal delivery or payments addresses.
@@ -144,6 +402,9 @@ type PostalAddress struct {
 	Sublocality *string `json:"sublocality,omitempty"`
 }
 
+// Spec OrganizationSpec is the specification of an Organization. TODO!
+type Spec = map[string]interface{}
+
 // Status The `Status` type defines a logical error model that is suitable for different programming environments, including REST APIs and RPC APIs. It is used by [gRPC](https://github.com/grpc). Each `Status` message contains three pieces of data: error code, error message, and error details. You can find out more about this error model and how to work with it in the [API Design Guide](https://cloud.google.com/apis/design/errors).
 type Status struct {
 	// Code The status code, which should be an enum value of [google.rpc.Code][google.rpc.Code].
@@ -185,6 +446,8 @@ type Vendor struct {
 	Labels *map[string]string `json:"labels,omitempty"`
 
 	// Name The resource name of this Vendor.
+	//  Format: vendors/{vendor}
+	//  Format: organizations/{organization}/vendors/{vendor}
 	Name *string `json:"name,omitempty"`
 
 	// Reconciling Output only. If set, there are currently changes in flight to the Vendor.
@@ -205,188 +468,410 @@ type Vendor struct {
 	VendorId *string `json:"vendorId,omitempty"`
 }
 
-// VendorSpec VendorSpec is the specification of a Vendor.
-type VendorSpec struct {
-	// Address The physical address of the corporation.
-	Address *PostalAddress `json:"address,omitempty"`
+// VendorPaymentPreference PaymentPreference is the payment preference of a Vendor.
+type VendorPaymentPreference struct {
+	// Method The payment method of the Vendor.
+	Method int `json:"method"`
 
-	// CompanyName The name of the company.
-	CompanyName string `json:"companyName"`
+	// Preferred Is this the preferred payment method?
+	Preferred bool `json:"preferred"`
+}
+
+// VendorProfile Profile is the profile of a Vendor.
+type VendorProfile struct {
+	// Addresses The physical address of the person or corporation.
+	Addresses *[]PostalAddress `json:"addresses,omitempty"`
+
+	// Corporation The name of the corporation.
+	Corporation *string `json:"corporation,omitempty"`
 
 	// CorporationDba The DBA (Doing Business As) name of the corporation.
-	CorporationDba string `json:"corporationDba"`
+	CorporationDba *string `json:"corporationDba,omitempty"`
 
-	// CorporationType The type of corporation (e.g. LLC, S-Corp, C-Corp).
-	CorporationType string `json:"corporationType"`
+	// CorporationType The type of corporation (e.g. LLC, S-Corp, C-Corp, Other).
+	CorporationType *string `json:"corporationType,omitempty"`
 
-	// Description The description of the corporation and the services it provides.
-	Description string `json:"description"`
+	// Description The description of the corporation or contractor and the services it provides.
+	Description *string `json:"description,omitempty"`
 
-	// TaxIdentifier The tax identifier of the corporation (e.g. 123456789).
-	TaxIdentifier string `json:"taxIdentifier"`
+	// PaymentPreference The payment preference of the Vendor.
+	PaymentPreference *[]VendorPaymentPreference `json:"paymentPreference,omitempty"`
+
+	// Person The name of the person.
+	Person *string `json:"person,omitempty"`
+
+	// PhoneNumbers The phone number of the person or corporation.
+	PhoneNumbers *[]PhoneNumber `json:"phoneNumbers,omitempty"`
+
+	// TaxInfo The tax information of the person or corporation.
+	TaxInfo *VendorTaxInfo `json:"taxInfo,omitempty"`
+
+	// WebsiteUri The URL of the website of the corporation or contractor.
+	WebsiteUri *string `json:"websiteUri,omitempty"`
+}
+
+// VendorSpec Spec is the specification of a Vendor.
+type VendorSpec struct {
+	// Profile The profile of the Vendor.
+	Profile VendorProfile `json:"profile"`
+
+	// State The onboarding state of the Vendor. Defaults to ONBOARDING_STATE_PENDING on creation.
+	//  (-- api-linter: core::0216::state-field-output-only=disabled
+	//      aip.dev/not-precedent: We are modeling our Vendor APIs from Square's Vendor APIs.
+	//      The 'state' of a Vendor is not output only. It is settable by the user. --)
+	State *int `json:"state,omitempty"`
+
+	// Type The type of Vendor as defined by the VendorType enum.
+	Type int `json:"type"`
+}
+
+// VendorTaxInfo TaxInfo is the tax information of a Vendor.
+type VendorTaxInfo struct {
+	// TaxId The tax id of the person or corporation.
+	TaxId string `json:"taxId"`
+
+	// TaxIdType The tax id type of the person or corporation.
+	TaxIdType int `json:"taxIdType"`
+}
+
+// InvoicesCreateInvoiceParams defines parameters for InvoicesCreateInvoice.
+type InvoicesCreateInvoiceParams struct {
+	// InvoiceId The ID to use for the Invoice. If not specified, an ID will be automatically generated.
+	//  If the ID is automatically generated, the Client is responsible for reconciliation.
+	InvoiceId *string `form:"invoiceId,omitempty" json:"invoiceId,omitempty"`
+
+	// ValidateOnly If true, the request is validated and nothing is persisted.
+	ValidateOnly *bool `form:"validateOnly,omitempty" json:"validateOnly,omitempty"`
+}
+
+// InvoicesDeleteInvoiceParams defines parameters for InvoicesDeleteInvoice.
+type InvoicesDeleteInvoiceParams struct {
+	// Etag The etag of the Invoice to delete. If this is not provided, the Invoice will be deleted unconditionally.
+	//  If provided, the Invoice will be deleted only if the etag matches the etag of the currently stored Invoice.
+	//  If the etag is provided and does not match the etag of the currently stored Invoice, the request will be rejected.
+	Etag *string `form:"etag,omitempty" json:"etag,omitempty"`
+
+	// ValidateOnly If true, the request is validated and nothing is persisted.
+	ValidateOnly *bool `form:"validateOnly,omitempty" json:"validateOnly,omitempty"`
+}
+
+// InvoicesListInvoicesParams defines parameters for InvoicesListInvoices.
+type InvoicesListInvoicesParams struct {
+	// PageSize The maximum number of Invoices to return. The service may return fewer than this value.
+	//  If unspecified, at most 50 Invoices will be returned. The maximum value is 1000; values above 1000 will be coerced to 1000.
+	PageSize *int32 `form:"pageSize,omitempty" json:"pageSize,omitempty"`
+
+	// PageToken A page token, received from a previous `ListInvoices` call. Provide this to retrieve the subsequent page.
+	//  When paginating, all other parameters must match the call that provided the page token.
+	PageToken *string `form:"pageToken,omitempty" json:"pageToken,omitempty"`
+
+	// Filter A filter expression that filters the Invoices to be listed.
+	Filter *string `form:"filter,omitempty" json:"filter,omitempty"`
+
+	// OrderBy The order by fields for the Invoices. The default order is ascending. There is no descending order.
+	OrderBy *string `form:"orderBy,omitempty" json:"orderBy,omitempty"`
+}
+
+// InvoicesUpdateInvoiceParams defines parameters for InvoicesUpdateInvoice.
+type InvoicesUpdateInvoiceParams struct {
+	// UpdateMask The update mask for the Invoice.
+	UpdateMask *string `form:"updateMask,omitempty" json:"updateMask,omitempty"`
+
+	// AllowMissing Allow missing Invoice. If true, the Invoice will be created if it does not exist. In this case,
+	//  field_mask is ignored.
+	AllowMissing *bool `form:"allowMissing,omitempty" json:"allowMissing,omitempty"`
+
+	// ValidateOnly If true, the request is validated and nothing is persisted.
+	ValidateOnly *bool `form:"validateOnly,omitempty" json:"validateOnly,omitempty"`
+}
+
+// OrganizationsListOrganizationsParams defines parameters for OrganizationsListOrganizations.
+type OrganizationsListOrganizationsParams struct {
+	// PageSize The maximum number of Organizations to return. The service may return fewer than this value.
+	//  If unspecified, at most 50 Organizations will be returned. The maximum value is 1000; values above 1000 will be coerced to 1000.
+	PageSize *int32 `form:"pageSize,omitempty" json:"pageSize,omitempty"`
+
+	// PageToken A page token, received from a previous `ListOrganizations` call. Provide this to retrieve the subsequent page.
+	//  When paginating, all other parameters must match the call that provided the page token.
+	PageToken *string `form:"pageToken,omitempty" json:"pageToken,omitempty"`
+
+	// Filter A filter expression that filters the Organizations to be listed.
+	Filter *string `form:"filter,omitempty" json:"filter,omitempty"`
+
+	// OrderBy The order by fields for the Organizations. The default order is ascending. There is no descending order.
+	OrderBy *string `form:"orderBy,omitempty" json:"orderBy,omitempty"`
+}
+
+// OrganizationsCreateOrganizationParams defines parameters for OrganizationsCreateOrganization.
+type OrganizationsCreateOrganizationParams struct {
+	// OrganizationId The ID to use for the Organization. If not specified, an ID will be automatically generated.
+	//  If the ID is automatically generated, the Client is responsible for reconciliation.
+	OrganizationId *string `form:"organizationId,omitempty" json:"organizationId,omitempty"`
+
+	// ValidateOnly If true, the request is validated and nothing is persisted.
+	ValidateOnly *bool `form:"validateOnly,omitempty" json:"validateOnly,omitempty"`
+}
+
+// OrganizationsDeleteOrganizationParams defines parameters for OrganizationsDeleteOrganization.
+type OrganizationsDeleteOrganizationParams struct {
+	// Etag The etag of the Organization to delete. If this is not the same etag as the currently stored Organization,
+	//  the request will be rejected. If not provided, the Organization will be deleted unconditionally.
+	Etag *string `form:"etag,omitempty" json:"etag,omitempty"`
+
+	// ValidateOnly If true, the request is validated and nothing is persisted.
+	ValidateOnly *bool `form:"validateOnly,omitempty" json:"validateOnly,omitempty"`
+}
+
+// OrganizationsUpdateOrganizationParams defines parameters for OrganizationsUpdateOrganization.
+type OrganizationsUpdateOrganizationParams struct {
+	// UpdateMask The field mask to update the Organization.
+	UpdateMask *string `form:"updateMask,omitempty" json:"updateMask,omitempty"`
+
+	// AllowMissing Allow missing Organization. If true, the Organization will be created if it does not exist. In this case,
+	//  field_mask is ignored.
+	AllowMissing *bool `form:"allowMissing,omitempty" json:"allowMissing,omitempty"`
+
+	// ValidateOnly If true, the request is validated and nothing is persisted.
+	ValidateOnly *bool `form:"validateOnly,omitempty" json:"validateOnly,omitempty"`
+}
+
+// InvoicesCreateInvoice2Params defines parameters for InvoicesCreateInvoice2.
+type InvoicesCreateInvoice2Params struct {
+	// InvoiceId The ID to use for the Invoice. If not specified, an ID will be automatically generated.
+	//  If the ID is automatically generated, the Client is responsible for reconciliation.
+	InvoiceId *string `form:"invoiceId,omitempty" json:"invoiceId,omitempty"`
+
+	// ValidateOnly If true, the request is validated and nothing is persisted.
+	ValidateOnly *bool `form:"validateOnly,omitempty" json:"validateOnly,omitempty"`
+}
+
+// InvoicesDeleteInvoice2Params defines parameters for InvoicesDeleteInvoice2.
+type InvoicesDeleteInvoice2Params struct {
+	// Etag The etag of the Invoice to delete. If this is not provided, the Invoice will be deleted unconditionally.
+	//  If provided, the Invoice will be deleted only if the etag matches the etag of the currently stored Invoice.
+	//  If the etag is provided and does not match the etag of the currently stored Invoice, the request will be rejected.
+	Etag *string `form:"etag,omitempty" json:"etag,omitempty"`
+
+	// ValidateOnly If true, the request is validated and nothing is persisted.
+	ValidateOnly *bool `form:"validateOnly,omitempty" json:"validateOnly,omitempty"`
+}
+
+// InvoicesListInvoices2Params defines parameters for InvoicesListInvoices2.
+type InvoicesListInvoices2Params struct {
+	// PageSize The maximum number of Invoices to return. The service may return fewer than this value.
+	//  If unspecified, at most 50 Invoices will be returned. The maximum value is 1000; values above 1000 will be coerced to 1000.
+	PageSize *int32 `form:"pageSize,omitempty" json:"pageSize,omitempty"`
+
+	// PageToken A page token, received from a previous `ListInvoices` call. Provide this to retrieve the subsequent page.
+	//  When paginating, all other parameters must match the call that provided the page token.
+	PageToken *string `form:"pageToken,omitempty" json:"pageToken,omitempty"`
+
+	// Filter A filter expression that filters the Invoices to be listed.
+	Filter *string `form:"filter,omitempty" json:"filter,omitempty"`
+
+	// OrderBy The order by fields for the Invoices. The default order is ascending. There is no descending order.
+	OrderBy *string `form:"orderBy,omitempty" json:"orderBy,omitempty"`
+}
+
+// InvoicesUpdateInvoice2Params defines parameters for InvoicesUpdateInvoice2.
+type InvoicesUpdateInvoice2Params struct {
+	// UpdateMask The update mask for the Invoice.
+	UpdateMask *string `form:"updateMask,omitempty" json:"updateMask,omitempty"`
+
+	// AllowMissing Allow missing Invoice. If true, the Invoice will be created if it does not exist. In this case,
+	//  field_mask is ignored.
+	AllowMissing *bool `form:"allowMissing,omitempty" json:"allowMissing,omitempty"`
+
+	// ValidateOnly If true, the request is validated and nothing is persisted.
+	ValidateOnly *bool `form:"validateOnly,omitempty" json:"validateOnly,omitempty"`
 }
 
 // VendorsListVendorsParams defines parameters for VendorsListVendors.
 type VendorsListVendorsParams struct {
-	Parent    *string `form:"parent,omitempty" json:"parent,omitempty"`
-	PageSize  *int32  `form:"pageSize,omitempty" json:"pageSize,omitempty"`
+	// PageSize The maximum number of Vendors to return. The service may return fewer than this value.
+	//  If unspecified, at most 50 Vendors will be returned. The maximum value is 1000; values above 1000 will be coerced to 1000.
+	PageSize *int32 `form:"pageSize,omitempty" json:"pageSize,omitempty"`
+
+	// PageToken A page token, received from a previous `ListVendors` call. Provide this to retrieve the subsequent page.
+	//  When paginating, all other parameters must match the call that provided the page token.
 	PageToken *string `form:"pageToken,omitempty" json:"pageToken,omitempty"`
-	Filter    *string `form:"filter,omitempty" json:"filter,omitempty"`
-	OrderBy   *string `form:"orderBy,omitempty" json:"orderBy,omitempty"`
+
+	// Filter A filter expression that filters the Vendors to be listed.
+	Filter *string `form:"filter,omitempty" json:"filter,omitempty"`
+
+	// OrderBy The order by fields for the Vendors. The default order is ascending. There is no descending order.
+	OrderBy *string `form:"orderBy,omitempty" json:"orderBy,omitempty"`
 }
 
 // VendorsCreateVendorParams defines parameters for VendorsCreateVendor.
 type VendorsCreateVendorParams struct {
-	Parent       *string `form:"parent,omitempty" json:"parent,omitempty"`
-	VendorId     *string `form:"vendorId,omitempty" json:"vendorId,omitempty"`
-	ValidateOnly *bool   `form:"validateOnly,omitempty" json:"validateOnly,omitempty"`
+	// VendorId The ID to use for the Vendor. If not specified, an ID will be automatically generated.
+	//  If the ID is automatically generated, the Client is responsible for reconciliation.
+	VendorId *string `form:"vendorId,omitempty" json:"vendorId,omitempty"`
+
+	// ValidateOnly If true, the request is validated and nothing is persisted.
+	ValidateOnly *bool `form:"validateOnly,omitempty" json:"validateOnly,omitempty"`
+}
+
+// VendorsDeleteVendorParams defines parameters for VendorsDeleteVendor.
+type VendorsDeleteVendorParams struct {
+	// Etag The etag of the Vendor to delete. If this is not the same etag as the currently stored Vendor,
+	//  the request will be rejected. If not provided, the Vendor will be deleted unconditionally.
+	Etag *string `form:"etag,omitempty" json:"etag,omitempty"`
+
+	// ValidateOnly If true, the request is validated and nothing is persisted.
+	ValidateOnly *bool `form:"validateOnly,omitempty" json:"validateOnly,omitempty"`
 }
 
 // VendorsUpdateVendorParams defines parameters for VendorsUpdateVendor.
 type VendorsUpdateVendorParams struct {
-	// VendorName The resource name of this Vendor.
-	VendorName *string `form:"vendor.name,omitempty" json:"vendor.name,omitempty"`
+	// UpdateMask The field mask to update the Vendor.
+	UpdateMask *string `form:"updateMask,omitempty" json:"updateMask,omitempty"`
 
-	// VendorVendorId The resource ID of this Vendor within its parent resource.
-	VendorVendorId *string `form:"vendor.vendorId,omitempty" json:"vendor.vendorId,omitempty"`
+	// AllowMissing Allow missing Vendor. If true, the Vendor will be created if it does not exist. In this case,
+	//  field_mask is ignored.
+	AllowMissing *bool `form:"allowMissing,omitempty" json:"allowMissing,omitempty"`
 
-	// VendorUid Server assigned unique identifier for the Vendor. The value
-	//  is a UUID4 string and guaranteed to remain unchanged until the resource is
-	//  deleted.
-	VendorUid *string `form:"vendor.uid,omitempty" json:"vendor.uid,omitempty"`
-
-	// VendorDisplayName Human-readable display name of this Vendor that you can modify.
-	//  The maximum length is 63 characters.
-	VendorDisplayName *string `form:"vendor.displayName,omitempty" json:"vendor.displayName,omitempty"`
-
-	// VendorCreateTime Output only. The time when the Vendor is created.
-	VendorCreateTime *time.Time `form:"vendor.createTime,omitempty" json:"vendor.createTime,omitempty"`
-
-	// VendorUpdateTime Output only. The last time that the Vendor is updated.
-	VendorUpdateTime *time.Time `form:"vendor.updateTime,omitempty" json:"vendor.updateTime,omitempty"`
-
-	// VendorDeleteTime Output only. For a deleted resource, the deletion time. It is only
-	//  populated as a response to a Delete request.
-	VendorDeleteTime *time.Time `form:"vendor.deleteTime,omitempty" json:"vendor.deleteTime,omitempty"`
-
-	// VendorReconciling Output only. If set, there are currently changes in flight to the Vendor.
-	VendorReconciling *bool `form:"vendor.reconciling,omitempty" json:"vendor.reconciling,omitempty"`
-
-	// VendorEtag This checksum is computed by the server based on the value of
-	//  other fields, and might be sent on update requests to ensure the client has
-	//  an up-to-date value before proceeding.
-	VendorEtag *string `form:"vendor.etag,omitempty" json:"vendor.etag,omitempty"`
-
-	// VendorSpecCompanyName The name of the company.
-	VendorSpecCompanyName *string `form:"vendor.spec.companyName,omitempty" json:"vendor.spec.companyName,omitempty"`
-
-	// VendorSpecCorporationType The type of corporation (e.g. LLC, S-Corp, C-Corp).
-	VendorSpecCorporationType *string `form:"vendor.spec.corporationType,omitempty" json:"vendor.spec.corporationType,omitempty"`
-
-	// VendorSpecCorporationDba The DBA (Doing Business As) name of the corporation.
-	VendorSpecCorporationDba *string `form:"vendor.spec.corporationDba,omitempty" json:"vendor.spec.corporationDba,omitempty"`
-
-	// VendorSpecDescription The description of the corporation and the services it provides.
-	VendorSpecDescription *string `form:"vendor.spec.description,omitempty" json:"vendor.spec.description,omitempty"`
-
-	// VendorSpecTaxIdentifier The tax identifier of the corporation (e.g. 123456789).
-	VendorSpecTaxIdentifier *string `form:"vendor.spec.taxIdentifier,omitempty" json:"vendor.spec.taxIdentifier,omitempty"`
-
-	// VendorSpecAddressRevision The schema revision of the `PostalAddress`. This must be set to 0, which is
-	//  the latest revision.
-	//
-	//  All new revisions **must** be backward compatible with old revisions.
-	VendorSpecAddressRevision *int32 `form:"vendor.spec.address.revision,omitempty" json:"vendor.spec.address.revision,omitempty"`
-
-	// VendorSpecAddressRegionCode Required. CLDR region code of the country/region of the address. This
-	//  is never inferred and it is up to the user to ensure the value is
-	//  correct. See http://cldr.unicode.org/ and
-	//  http://www.unicode.org/cldr/charts/30/supplemental/territory_information.html
-	//  for details. Example: "CH" for Switzerland.
-	VendorSpecAddressRegionCode *string `form:"vendor.spec.address.regionCode,omitempty" json:"vendor.spec.address.regionCode,omitempty"`
-
-	// VendorSpecAddressLanguageCode Optional. BCP-47 language code of the contents of this address (if
-	//  known). This is often the UI language of the input form or is expected
-	//  to match one of the languages used in the address' country/region, or their
-	//  transliterated equivalents.
-	//  This can affect formatting in certain countries, but is not critical
-	//  to the correctness of the data and will never affect any validation or
-	//  other non-formatting related operations.
-	//
-	//  If this value is not known, it should be omitted (rather than specifying a
-	//  possibly incorrect default).
-	//
-	//  Examples: "zh-Hant", "ja", "ja-Latn", "en".
-	VendorSpecAddressLanguageCode *string `form:"vendor.spec.address.languageCode,omitempty" json:"vendor.spec.address.languageCode,omitempty"`
-
-	// VendorSpecAddressPostalCode Optional. Postal code of the address. Not all countries use or require
-	//  postal codes to be present, but where they are used, they may trigger
-	//  additional validation with other parts of the address (e.g. state/zip
-	//  validation in the U.S.A.).
-	VendorSpecAddressPostalCode *string `form:"vendor.spec.address.postalCode,omitempty" json:"vendor.spec.address.postalCode,omitempty"`
-
-	// VendorSpecAddressSortingCode Optional. Additional, country-specific, sorting code. This is not used
-	//  in most regions. Where it is used, the value is either a string like
-	//  "CEDEX", optionally followed by a number (e.g. "CEDEX 7"), or just a number
-	//  alone, representing the "sector code" (Jamaica), "delivery area indicator"
-	//  (Malawi) or "post office indicator" (e.g. Côte d'Ivoire).
-	VendorSpecAddressSortingCode *string `form:"vendor.spec.address.sortingCode,omitempty" json:"vendor.spec.address.sortingCode,omitempty"`
-
-	// VendorSpecAddressAdministrativeArea Optional. Highest administrative subdivision which is used for postal
-	//  addresses of a country or region.
-	//  For example, this can be a state, a province, an oblast, or a prefecture.
-	//  Specifically, for Spain this is the province and not the autonomous
-	//  community (e.g. "Barcelona" and not "Catalonia").
-	//  Many countries don't use an administrative area in postal addresses. E.g.
-	//  in Switzerland this should be left unpopulated.
-	VendorSpecAddressAdministrativeArea *string `form:"vendor.spec.address.administrativeArea,omitempty" json:"vendor.spec.address.administrativeArea,omitempty"`
-
-	// VendorSpecAddressLocality Optional. Generally refers to the city/town portion of the address.
-	//  Examples: US city, IT comune, UK post town.
-	//  In regions of the world where localities are not well defined or do not fit
-	//  into this structure well, leave locality empty and use address_lines.
-	VendorSpecAddressLocality *string `form:"vendor.spec.address.locality,omitempty" json:"vendor.spec.address.locality,omitempty"`
-
-	// VendorSpecAddressSublocality Optional. Sublocality of the address.
-	//  For example, this can be neighborhoods, boroughs, districts.
-	VendorSpecAddressSublocality *string `form:"vendor.spec.address.sublocality,omitempty" json:"vendor.spec.address.sublocality,omitempty"`
-
-	// VendorSpecAddressAddressLines Unstructured address lines describing the lower levels of an address.
-	//
-	//  Because values in address_lines do not have type information and may
-	//  sometimes contain multiple values in a single field (e.g.
-	//  "Austin, TX"), it is important that the line order is clear. The order of
-	//  address lines should be "envelope order" for the country/region of the
-	//  address. In places where this can vary (e.g. Japan), address_language is
-	//  used to make it explicit (e.g. "ja" for large-to-small ordering and
-	//  "ja-Latn" or "en" for small-to-large). This way, the most specific line of
-	//  an address can be selected based on the language.
-	//
-	//  The minimum permitted structural representation of an address consists
-	//  of a region_code with all remaining information placed in the
-	//  address_lines. It would be possible to format such an address very
-	//  approximately without geocoding, but no semantic reasoning could be
-	//  made about any of the address components until it was at least
-	//  partially resolved.
-	//
-	//  Creating an address only containing a region_code and address_lines, and
-	//  then geocoding is the recommended way to handle completely unstructured
-	//  addresses (as opposed to guessing which parts of the address should be
-	//  localities or administrative areas).
-	VendorSpecAddressAddressLines *[]string `form:"vendor.spec.address.addressLines,omitempty" json:"vendor.spec.address.addressLines,omitempty"`
-
-	// VendorSpecAddressRecipients Optional. The recipient at the address.
-	//  This field may, under certain circumstances, contain multiline information.
-	//  For example, it might contain "care of" information.
-	VendorSpecAddressRecipients *[]string `form:"vendor.spec.address.recipients,omitempty" json:"vendor.spec.address.recipients,omitempty"`
-
-	// VendorSpecAddressOrganization Optional. The name of the organization at the address.
-	VendorSpecAddressOrganization *string `form:"vendor.spec.address.organization,omitempty" json:"vendor.spec.address.organization,omitempty"`
-	UpdateMask                    *string `form:"updateMask,omitempty" json:"updateMask,omitempty"`
+	// ValidateOnly If true, the request is validated and nothing is persisted.
+	ValidateOnly *bool `form:"validateOnly,omitempty" json:"validateOnly,omitempty"`
 }
+
+// VendorsListVendors2Params defines parameters for VendorsListVendors2.
+type VendorsListVendors2Params struct {
+	// PageSize The maximum number of Vendors to return. The service may return fewer than this value.
+	//  If unspecified, at most 50 Vendors will be returned. The maximum value is 1000; values above 1000 will be coerced to 1000.
+	PageSize *int32 `form:"pageSize,omitempty" json:"pageSize,omitempty"`
+
+	// PageToken A page token, received from a previous `ListVendors` call. Provide this to retrieve the subsequent page.
+	//  When paginating, all other parameters must match the call that provided the page token.
+	PageToken *string `form:"pageToken,omitempty" json:"pageToken,omitempty"`
+
+	// Filter A filter expression that filters the Vendors to be listed.
+	Filter *string `form:"filter,omitempty" json:"filter,omitempty"`
+
+	// OrderBy The order by fields for the Vendors. The default order is ascending. There is no descending order.
+	OrderBy *string `form:"orderBy,omitempty" json:"orderBy,omitempty"`
+}
+
+// VendorsCreateVendor2Params defines parameters for VendorsCreateVendor2.
+type VendorsCreateVendor2Params struct {
+	// VendorId The ID to use for the Vendor. If not specified, an ID will be automatically generated.
+	//  If the ID is automatically generated, the Client is responsible for reconciliation.
+	VendorId *string `form:"vendorId,omitempty" json:"vendorId,omitempty"`
+
+	// ValidateOnly If true, the request is validated and nothing is persisted.
+	ValidateOnly *bool `form:"validateOnly,omitempty" json:"validateOnly,omitempty"`
+}
+
+// VendorsDeleteVendor2Params defines parameters for VendorsDeleteVendor2.
+type VendorsDeleteVendor2Params struct {
+	// Etag The etag of the Vendor to delete. If this is not the same etag as the currently stored Vendor,
+	//  the request will be rejected. If not provided, the Vendor will be deleted unconditionally.
+	Etag *string `form:"etag,omitempty" json:"etag,omitempty"`
+
+	// ValidateOnly If true, the request is validated and nothing is persisted.
+	ValidateOnly *bool `form:"validateOnly,omitempty" json:"validateOnly,omitempty"`
+}
+
+// VendorsUpdateVendor2Params defines parameters for VendorsUpdateVendor2.
+type VendorsUpdateVendor2Params struct {
+	// UpdateMask The field mask to update the Vendor.
+	UpdateMask *string `form:"updateMask,omitempty" json:"updateMask,omitempty"`
+
+	// AllowMissing Allow missing Vendor. If true, the Vendor will be created if it does not exist. In this case,
+	//  field_mask is ignored.
+	AllowMissing *bool `form:"allowMissing,omitempty" json:"allowMissing,omitempty"`
+
+	// ValidateOnly If true, the request is validated and nothing is persisted.
+	ValidateOnly *bool `form:"validateOnly,omitempty" json:"validateOnly,omitempty"`
+}
+
+// InvoicesCreateInvoice3Params defines parameters for InvoicesCreateInvoice3.
+type InvoicesCreateInvoice3Params struct {
+	// InvoiceId The ID to use for the Invoice. If not specified, an ID will be automatically generated.
+	//  If the ID is automatically generated, the Client is responsible for reconciliation.
+	InvoiceId *string `form:"invoiceId,omitempty" json:"invoiceId,omitempty"`
+
+	// ValidateOnly If true, the request is validated and nothing is persisted.
+	ValidateOnly *bool `form:"validateOnly,omitempty" json:"validateOnly,omitempty"`
+}
+
+// InvoicesDeleteInvoice3Params defines parameters for InvoicesDeleteInvoice3.
+type InvoicesDeleteInvoice3Params struct {
+	// Etag The etag of the Invoice to delete. If this is not provided, the Invoice will be deleted unconditionally.
+	//  If provided, the Invoice will be deleted only if the etag matches the etag of the currently stored Invoice.
+	//  If the etag is provided and does not match the etag of the currently stored Invoice, the request will be rejected.
+	Etag *string `form:"etag,omitempty" json:"etag,omitempty"`
+
+	// ValidateOnly If true, the request is validated and nothing is persisted.
+	ValidateOnly *bool `form:"validateOnly,omitempty" json:"validateOnly,omitempty"`
+}
+
+// InvoicesListInvoices3Params defines parameters for InvoicesListInvoices3.
+type InvoicesListInvoices3Params struct {
+	// PageSize The maximum number of Invoices to return. The service may return fewer than this value.
+	//  If unspecified, at most 50 Invoices will be returned. The maximum value is 1000; values above 1000 will be coerced to 1000.
+	PageSize *int32 `form:"pageSize,omitempty" json:"pageSize,omitempty"`
+
+	// PageToken A page token, received from a previous `ListInvoices` call. Provide this to retrieve the subsequent page.
+	//  When paginating, all other parameters must match the call that provided the page token.
+	PageToken *string `form:"pageToken,omitempty" json:"pageToken,omitempty"`
+
+	// Filter A filter expression that filters the Invoices to be listed.
+	Filter *string `form:"filter,omitempty" json:"filter,omitempty"`
+
+	// OrderBy The order by fields for the Invoices. The default order is ascending. There is no descending order.
+	OrderBy *string `form:"orderBy,omitempty" json:"orderBy,omitempty"`
+}
+
+// InvoicesUpdateInvoice3Params defines parameters for InvoicesUpdateInvoice3.
+type InvoicesUpdateInvoice3Params struct {
+	// UpdateMask The update mask for the Invoice.
+	UpdateMask *string `form:"updateMask,omitempty" json:"updateMask,omitempty"`
+
+	// AllowMissing Allow missing Invoice. If true, the Invoice will be created if it does not exist. In this case,
+	//  field_mask is ignored.
+	AllowMissing *bool `form:"allowMissing,omitempty" json:"allowMissing,omitempty"`
+
+	// ValidateOnly If true, the request is validated and nothing is persisted.
+	ValidateOnly *bool `form:"validateOnly,omitempty" json:"validateOnly,omitempty"`
+}
+
+// InvoicesCreateInvoiceJSONRequestBody defines body for InvoicesCreateInvoice for application/json ContentType.
+type InvoicesCreateInvoiceJSONRequestBody = Invoice
+
+// InvoicesUpdateInvoiceJSONRequestBody defines body for InvoicesUpdateInvoice for application/json ContentType.
+type InvoicesUpdateInvoiceJSONRequestBody = Invoice
+
+// OrganizationsCreateOrganizationJSONRequestBody defines body for OrganizationsCreateOrganization for application/json ContentType.
+type OrganizationsCreateOrganizationJSONRequestBody = Organization
+
+// OrganizationsUpdateOrganizationJSONRequestBody defines body for OrganizationsUpdateOrganization for application/json ContentType.
+type OrganizationsUpdateOrganizationJSONRequestBody = Organization
+
+// InvoicesCreateInvoice2JSONRequestBody defines body for InvoicesCreateInvoice2 for application/json ContentType.
+type InvoicesCreateInvoice2JSONRequestBody = Invoice
+
+// InvoicesUpdateInvoice2JSONRequestBody defines body for InvoicesUpdateInvoice2 for application/json ContentType.
+type InvoicesUpdateInvoice2JSONRequestBody = Invoice
 
 // VendorsCreateVendorJSONRequestBody defines body for VendorsCreateVendor for application/json ContentType.
 type VendorsCreateVendorJSONRequestBody = Vendor
+
+// VendorsUpdateVendorJSONRequestBody defines body for VendorsUpdateVendor for application/json ContentType.
+type VendorsUpdateVendorJSONRequestBody = Vendor
+
+// VendorsCreateVendor2JSONRequestBody defines body for VendorsCreateVendor2 for application/json ContentType.
+type VendorsCreateVendor2JSONRequestBody = Vendor
+
+// VendorsUpdateVendor2JSONRequestBody defines body for VendorsUpdateVendor2 for application/json ContentType.
+type VendorsUpdateVendor2JSONRequestBody = Vendor
+
+// InvoicesCreateInvoice3JSONRequestBody defines body for InvoicesCreateInvoice3 for application/json ContentType.
+type InvoicesCreateInvoice3JSONRequestBody = Invoice
+
+// InvoicesUpdateInvoice3JSONRequestBody defines body for InvoicesUpdateInvoice3 for application/json ContentType.
+type InvoicesUpdateInvoice3JSONRequestBody = Invoice
 
 // Getter for additional properties for GoogleProtobufAny. Returns the specified
 // element and whether it was found
@@ -459,20 +944,86 @@ func (a GoogleProtobufAny) MarshalJSON() ([]byte, error) {
 // ServerInterface represents all server handlers.
 type ServerInterface interface {
 
+	// (POST /v1alpha/invoices)
+	InvoicesCreateInvoice(ctx echox.Context, params InvoicesCreateInvoiceParams) error
+
+	// (DELETE /v1alpha/invoices/{invoice})
+	InvoicesDeleteInvoice(ctx echox.Context, invoice string, params InvoicesDeleteInvoiceParams) error
+
+	// (GET /v1alpha/invoices/{invoice})
+	InvoicesListInvoices(ctx echox.Context, invoice string, params InvoicesListInvoicesParams) error
+
+	// (PATCH /v1alpha/invoices/{invoice})
+	InvoicesUpdateInvoice(ctx echox.Context, invoice string, params InvoicesUpdateInvoiceParams) error
+
+	// (GET /v1alpha/organizations)
+	OrganizationsListOrganizations(ctx echox.Context, params OrganizationsListOrganizationsParams) error
+
+	// (POST /v1alpha/organizations)
+	OrganizationsCreateOrganization(ctx echox.Context, params OrganizationsCreateOrganizationParams) error
+
+	// (DELETE /v1alpha/organizations/{organization})
+	OrganizationsDeleteOrganization(ctx echox.Context, organization string, params OrganizationsDeleteOrganizationParams) error
+
+	// (GET /v1alpha/organizations/{organization})
+	OrganizationsGetOrganization(ctx echox.Context, organization string) error
+
+	// (PATCH /v1alpha/organizations/{organization})
+	OrganizationsUpdateOrganization(ctx echox.Context, organization string, params OrganizationsUpdateOrganizationParams) error
+
+	// (POST /v1alpha/organizations/{organization}/invoices)
+	InvoicesCreateInvoice2(ctx echox.Context, organization string, params InvoicesCreateInvoice2Params) error
+
+	// (DELETE /v1alpha/organizations/{organization}/invoices/{invoice})
+	InvoicesDeleteInvoice2(ctx echox.Context, organization string, invoice string, params InvoicesDeleteInvoice2Params) error
+
+	// (GET /v1alpha/organizations/{organization}/invoices/{invoice})
+	InvoicesListInvoices2(ctx echox.Context, organization string, invoice string, params InvoicesListInvoices2Params) error
+
+	// (PATCH /v1alpha/organizations/{organization}/invoices/{invoice})
+	InvoicesUpdateInvoice2(ctx echox.Context, organization string, invoice string, params InvoicesUpdateInvoice2Params) error
+
+	// (GET /v1alpha/organizations/{organization}/vendors)
+	VendorsListVendors(ctx echox.Context, organization string, params VendorsListVendorsParams) error
+
+	// (POST /v1alpha/organizations/{organization}/vendors)
+	VendorsCreateVendor(ctx echox.Context, organization string, params VendorsCreateVendorParams) error
+
+	// (DELETE /v1alpha/organizations/{organization}/vendors/{vendor})
+	VendorsDeleteVendor(ctx echox.Context, organization string, vendor string, params VendorsDeleteVendorParams) error
+
+	// (GET /v1alpha/organizations/{organization}/vendors/{vendor})
+	VendorsGetVendor(ctx echox.Context, organization string, vendor string) error
+
+	// (PATCH /v1alpha/organizations/{organization}/vendors/{vendor})
+	VendorsUpdateVendor(ctx echox.Context, organization string, vendor string, params VendorsUpdateVendorParams) error
+
 	// (GET /v1alpha/vendors)
-	VendorsListVendors(ctx echox.Context, params VendorsListVendorsParams) error
+	VendorsListVendors2(ctx echox.Context, params VendorsListVendors2Params) error
 
 	// (POST /v1alpha/vendors)
-	VendorsCreateVendor(ctx echox.Context, params VendorsCreateVendorParams) error
+	VendorsCreateVendor2(ctx echox.Context, params VendorsCreateVendor2Params) error
 
 	// (DELETE /v1alpha/vendors/{vendor})
-	VendorsDeleteVendor(ctx echox.Context, vendor string) error
+	VendorsDeleteVendor2(ctx echox.Context, vendor string, params VendorsDeleteVendor2Params) error
 
 	// (GET /v1alpha/vendors/{vendor})
-	VendorsGetVendor(ctx echox.Context, vendor string) error
+	VendorsGetVendor2(ctx echox.Context, vendor string) error
 
 	// (PATCH /v1alpha/vendors/{vendor})
-	VendorsUpdateVendor(ctx echox.Context, vendor string, params VendorsUpdateVendorParams) error
+	VendorsUpdateVendor2(ctx echox.Context, vendor string, params VendorsUpdateVendor2Params) error
+
+	// (POST /v1alpha/vendors/{vendor}/invoices)
+	InvoicesCreateInvoice3(ctx echox.Context, vendor string, params InvoicesCreateInvoice3Params) error
+
+	// (DELETE /v1alpha/vendors/{vendor}/invoices/{invoice})
+	InvoicesDeleteInvoice3(ctx echox.Context, vendor string, invoice string, params InvoicesDeleteInvoice3Params) error
+
+	// (GET /v1alpha/vendors/{vendor}/invoices/{invoice})
+	InvoicesListInvoices3(ctx echox.Context, vendor string, invoice string, params InvoicesListInvoices3Params) error
+
+	// (PATCH /v1alpha/vendors/{vendor}/invoices/{invoice})
+	InvoicesUpdateInvoice3(ctx echox.Context, vendor string, invoice string, params InvoicesUpdateInvoice3Params) error
 }
 
 // ServerInterfaceWrapper converts datum echox contexts to parameters.
@@ -480,19 +1031,76 @@ type ServerInterfaceWrapper struct {
 	Handler ServerInterface
 }
 
-// VendorsListVendors converts echox context to params.
-func (w *ServerInterfaceWrapper) VendorsListVendors(ctx echox.Context) error {
+// InvoicesCreateInvoice converts echox context to params.
+func (w *ServerInterfaceWrapper) InvoicesCreateInvoice(ctx echox.Context) error {
 	var err error
 
 	// Parameter object where we will unmarshal all parameters from the context
-	var params VendorsListVendorsParams
-	// ------------- Optional query parameter "parent" -------------
+	var params InvoicesCreateInvoiceParams
+	// ------------- Optional query parameter "invoiceId" -------------
 
-	err = runtime.BindQueryParameter("form", true, false, "parent", ctx.QueryParams(), &params.Parent)
+	err = runtime.BindQueryParameter("form", true, false, "invoiceId", ctx.QueryParams(), &params.InvoiceId)
 	if err != nil {
-		return echox.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter parent: %s", err))
+		return echox.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter invoiceId: %s", err))
 	}
 
+	// ------------- Optional query parameter "validateOnly" -------------
+
+	err = runtime.BindQueryParameter("form", true, false, "validateOnly", ctx.QueryParams(), &params.ValidateOnly)
+	if err != nil {
+		return echox.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter validateOnly: %s", err))
+	}
+
+	// Invoke the callback with all the unmarshaled arguments
+	err = w.Handler.InvoicesCreateInvoice(ctx, params)
+	return err
+}
+
+// InvoicesDeleteInvoice converts echox context to params.
+func (w *ServerInterfaceWrapper) InvoicesDeleteInvoice(ctx echox.Context) error {
+	var err error
+	// ------------- Path parameter "invoice" -------------
+	var invoice string
+
+	err = runtime.BindStyledParameterWithOptions("simple", "invoice", ctx.Param("invoice"), &invoice, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true})
+	if err != nil {
+		return echox.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter invoice: %s", err))
+	}
+
+	// Parameter object where we will unmarshal all parameters from the context
+	var params InvoicesDeleteInvoiceParams
+	// ------------- Optional query parameter "etag" -------------
+
+	err = runtime.BindQueryParameter("form", true, false, "etag", ctx.QueryParams(), &params.Etag)
+	if err != nil {
+		return echox.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter etag: %s", err))
+	}
+
+	// ------------- Optional query parameter "validateOnly" -------------
+
+	err = runtime.BindQueryParameter("form", true, false, "validateOnly", ctx.QueryParams(), &params.ValidateOnly)
+	if err != nil {
+		return echox.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter validateOnly: %s", err))
+	}
+
+	// Invoke the callback with all the unmarshaled arguments
+	err = w.Handler.InvoicesDeleteInvoice(ctx, invoice, params)
+	return err
+}
+
+// InvoicesListInvoices converts echox context to params.
+func (w *ServerInterfaceWrapper) InvoicesListInvoices(ctx echox.Context) error {
+	var err error
+	// ------------- Path parameter "invoice" -------------
+	var invoice string
+
+	err = runtime.BindStyledParameterWithOptions("simple", "invoice", ctx.Param("invoice"), &invoice, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true})
+	if err != nil {
+		return echox.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter invoice: %s", err))
+	}
+
+	// Parameter object where we will unmarshal all parameters from the context
+	var params InvoicesListInvoicesParams
 	// ------------- Optional query parameter "pageSize" -------------
 
 	err = runtime.BindQueryParameter("form", true, false, "pageSize", ctx.QueryParams(), &params.PageSize)
@@ -522,23 +1130,432 @@ func (w *ServerInterfaceWrapper) VendorsListVendors(ctx echox.Context) error {
 	}
 
 	// Invoke the callback with all the unmarshaled arguments
-	err = w.Handler.VendorsListVendors(ctx, params)
+	err = w.Handler.InvoicesListInvoices(ctx, invoice, params)
+	return err
+}
+
+// InvoicesUpdateInvoice converts echox context to params.
+func (w *ServerInterfaceWrapper) InvoicesUpdateInvoice(ctx echox.Context) error {
+	var err error
+	// ------------- Path parameter "invoice" -------------
+	var invoice string
+
+	err = runtime.BindStyledParameterWithOptions("simple", "invoice", ctx.Param("invoice"), &invoice, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true})
+	if err != nil {
+		return echox.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter invoice: %s", err))
+	}
+
+	// Parameter object where we will unmarshal all parameters from the context
+	var params InvoicesUpdateInvoiceParams
+	// ------------- Optional query parameter "updateMask" -------------
+
+	err = runtime.BindQueryParameter("form", true, false, "updateMask", ctx.QueryParams(), &params.UpdateMask)
+	if err != nil {
+		return echox.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter updateMask: %s", err))
+	}
+
+	// ------------- Optional query parameter "allowMissing" -------------
+
+	err = runtime.BindQueryParameter("form", true, false, "allowMissing", ctx.QueryParams(), &params.AllowMissing)
+	if err != nil {
+		return echox.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter allowMissing: %s", err))
+	}
+
+	// ------------- Optional query parameter "validateOnly" -------------
+
+	err = runtime.BindQueryParameter("form", true, false, "validateOnly", ctx.QueryParams(), &params.ValidateOnly)
+	if err != nil {
+		return echox.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter validateOnly: %s", err))
+	}
+
+	// Invoke the callback with all the unmarshaled arguments
+	err = w.Handler.InvoicesUpdateInvoice(ctx, invoice, params)
+	return err
+}
+
+// OrganizationsListOrganizations converts echox context to params.
+func (w *ServerInterfaceWrapper) OrganizationsListOrganizations(ctx echox.Context) error {
+	var err error
+
+	// Parameter object where we will unmarshal all parameters from the context
+	var params OrganizationsListOrganizationsParams
+	// ------------- Optional query parameter "pageSize" -------------
+
+	err = runtime.BindQueryParameter("form", true, false, "pageSize", ctx.QueryParams(), &params.PageSize)
+	if err != nil {
+		return echox.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter pageSize: %s", err))
+	}
+
+	// ------------- Optional query parameter "pageToken" -------------
+
+	err = runtime.BindQueryParameter("form", true, false, "pageToken", ctx.QueryParams(), &params.PageToken)
+	if err != nil {
+		return echox.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter pageToken: %s", err))
+	}
+
+	// ------------- Optional query parameter "filter" -------------
+
+	err = runtime.BindQueryParameter("form", true, false, "filter", ctx.QueryParams(), &params.Filter)
+	if err != nil {
+		return echox.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter filter: %s", err))
+	}
+
+	// ------------- Optional query parameter "orderBy" -------------
+
+	err = runtime.BindQueryParameter("form", true, false, "orderBy", ctx.QueryParams(), &params.OrderBy)
+	if err != nil {
+		return echox.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter orderBy: %s", err))
+	}
+
+	// Invoke the callback with all the unmarshaled arguments
+	err = w.Handler.OrganizationsListOrganizations(ctx, params)
+	return err
+}
+
+// OrganizationsCreateOrganization converts echox context to params.
+func (w *ServerInterfaceWrapper) OrganizationsCreateOrganization(ctx echox.Context) error {
+	var err error
+
+	// Parameter object where we will unmarshal all parameters from the context
+	var params OrganizationsCreateOrganizationParams
+	// ------------- Optional query parameter "organizationId" -------------
+
+	err = runtime.BindQueryParameter("form", true, false, "organizationId", ctx.QueryParams(), &params.OrganizationId)
+	if err != nil {
+		return echox.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter organizationId: %s", err))
+	}
+
+	// ------------- Optional query parameter "validateOnly" -------------
+
+	err = runtime.BindQueryParameter("form", true, false, "validateOnly", ctx.QueryParams(), &params.ValidateOnly)
+	if err != nil {
+		return echox.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter validateOnly: %s", err))
+	}
+
+	// Invoke the callback with all the unmarshaled arguments
+	err = w.Handler.OrganizationsCreateOrganization(ctx, params)
+	return err
+}
+
+// OrganizationsDeleteOrganization converts echox context to params.
+func (w *ServerInterfaceWrapper) OrganizationsDeleteOrganization(ctx echox.Context) error {
+	var err error
+	// ------------- Path parameter "organization" -------------
+	var organization string
+
+	err = runtime.BindStyledParameterWithOptions("simple", "organization", ctx.Param("organization"), &organization, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true})
+	if err != nil {
+		return echox.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter organization: %s", err))
+	}
+
+	// Parameter object where we will unmarshal all parameters from the context
+	var params OrganizationsDeleteOrganizationParams
+	// ------------- Optional query parameter "etag" -------------
+
+	err = runtime.BindQueryParameter("form", true, false, "etag", ctx.QueryParams(), &params.Etag)
+	if err != nil {
+		return echox.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter etag: %s", err))
+	}
+
+	// ------------- Optional query parameter "validateOnly" -------------
+
+	err = runtime.BindQueryParameter("form", true, false, "validateOnly", ctx.QueryParams(), &params.ValidateOnly)
+	if err != nil {
+		return echox.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter validateOnly: %s", err))
+	}
+
+	// Invoke the callback with all the unmarshaled arguments
+	err = w.Handler.OrganizationsDeleteOrganization(ctx, organization, params)
+	return err
+}
+
+// OrganizationsGetOrganization converts echox context to params.
+func (w *ServerInterfaceWrapper) OrganizationsGetOrganization(ctx echox.Context) error {
+	var err error
+	// ------------- Path parameter "organization" -------------
+	var organization string
+
+	err = runtime.BindStyledParameterWithOptions("simple", "organization", ctx.Param("organization"), &organization, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true})
+	if err != nil {
+		return echox.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter organization: %s", err))
+	}
+
+	// Invoke the callback with all the unmarshaled arguments
+	err = w.Handler.OrganizationsGetOrganization(ctx, organization)
+	return err
+}
+
+// OrganizationsUpdateOrganization converts echox context to params.
+func (w *ServerInterfaceWrapper) OrganizationsUpdateOrganization(ctx echox.Context) error {
+	var err error
+	// ------------- Path parameter "organization" -------------
+	var organization string
+
+	err = runtime.BindStyledParameterWithOptions("simple", "organization", ctx.Param("organization"), &organization, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true})
+	if err != nil {
+		return echox.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter organization: %s", err))
+	}
+
+	// Parameter object where we will unmarshal all parameters from the context
+	var params OrganizationsUpdateOrganizationParams
+	// ------------- Optional query parameter "updateMask" -------------
+
+	err = runtime.BindQueryParameter("form", true, false, "updateMask", ctx.QueryParams(), &params.UpdateMask)
+	if err != nil {
+		return echox.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter updateMask: %s", err))
+	}
+
+	// ------------- Optional query parameter "allowMissing" -------------
+
+	err = runtime.BindQueryParameter("form", true, false, "allowMissing", ctx.QueryParams(), &params.AllowMissing)
+	if err != nil {
+		return echox.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter allowMissing: %s", err))
+	}
+
+	// ------------- Optional query parameter "validateOnly" -------------
+
+	err = runtime.BindQueryParameter("form", true, false, "validateOnly", ctx.QueryParams(), &params.ValidateOnly)
+	if err != nil {
+		return echox.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter validateOnly: %s", err))
+	}
+
+	// Invoke the callback with all the unmarshaled arguments
+	err = w.Handler.OrganizationsUpdateOrganization(ctx, organization, params)
+	return err
+}
+
+// InvoicesCreateInvoice2 converts echox context to params.
+func (w *ServerInterfaceWrapper) InvoicesCreateInvoice2(ctx echox.Context) error {
+	var err error
+	// ------------- Path parameter "organization" -------------
+	var organization string
+
+	err = runtime.BindStyledParameterWithOptions("simple", "organization", ctx.Param("organization"), &organization, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true})
+	if err != nil {
+		return echox.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter organization: %s", err))
+	}
+
+	// Parameter object where we will unmarshal all parameters from the context
+	var params InvoicesCreateInvoice2Params
+	// ------------- Optional query parameter "invoiceId" -------------
+
+	err = runtime.BindQueryParameter("form", true, false, "invoiceId", ctx.QueryParams(), &params.InvoiceId)
+	if err != nil {
+		return echox.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter invoiceId: %s", err))
+	}
+
+	// ------------- Optional query parameter "validateOnly" -------------
+
+	err = runtime.BindQueryParameter("form", true, false, "validateOnly", ctx.QueryParams(), &params.ValidateOnly)
+	if err != nil {
+		return echox.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter validateOnly: %s", err))
+	}
+
+	// Invoke the callback with all the unmarshaled arguments
+	err = w.Handler.InvoicesCreateInvoice2(ctx, organization, params)
+	return err
+}
+
+// InvoicesDeleteInvoice2 converts echox context to params.
+func (w *ServerInterfaceWrapper) InvoicesDeleteInvoice2(ctx echox.Context) error {
+	var err error
+	// ------------- Path parameter "organization" -------------
+	var organization string
+
+	err = runtime.BindStyledParameterWithOptions("simple", "organization", ctx.Param("organization"), &organization, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true})
+	if err != nil {
+		return echox.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter organization: %s", err))
+	}
+
+	// ------------- Path parameter "invoice" -------------
+	var invoice string
+
+	err = runtime.BindStyledParameterWithOptions("simple", "invoice", ctx.Param("invoice"), &invoice, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true})
+	if err != nil {
+		return echox.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter invoice: %s", err))
+	}
+
+	// Parameter object where we will unmarshal all parameters from the context
+	var params InvoicesDeleteInvoice2Params
+	// ------------- Optional query parameter "etag" -------------
+
+	err = runtime.BindQueryParameter("form", true, false, "etag", ctx.QueryParams(), &params.Etag)
+	if err != nil {
+		return echox.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter etag: %s", err))
+	}
+
+	// ------------- Optional query parameter "validateOnly" -------------
+
+	err = runtime.BindQueryParameter("form", true, false, "validateOnly", ctx.QueryParams(), &params.ValidateOnly)
+	if err != nil {
+		return echox.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter validateOnly: %s", err))
+	}
+
+	// Invoke the callback with all the unmarshaled arguments
+	err = w.Handler.InvoicesDeleteInvoice2(ctx, organization, invoice, params)
+	return err
+}
+
+// InvoicesListInvoices2 converts echox context to params.
+func (w *ServerInterfaceWrapper) InvoicesListInvoices2(ctx echox.Context) error {
+	var err error
+	// ------------- Path parameter "organization" -------------
+	var organization string
+
+	err = runtime.BindStyledParameterWithOptions("simple", "organization", ctx.Param("organization"), &organization, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true})
+	if err != nil {
+		return echox.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter organization: %s", err))
+	}
+
+	// ------------- Path parameter "invoice" -------------
+	var invoice string
+
+	err = runtime.BindStyledParameterWithOptions("simple", "invoice", ctx.Param("invoice"), &invoice, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true})
+	if err != nil {
+		return echox.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter invoice: %s", err))
+	}
+
+	// Parameter object where we will unmarshal all parameters from the context
+	var params InvoicesListInvoices2Params
+	// ------------- Optional query parameter "pageSize" -------------
+
+	err = runtime.BindQueryParameter("form", true, false, "pageSize", ctx.QueryParams(), &params.PageSize)
+	if err != nil {
+		return echox.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter pageSize: %s", err))
+	}
+
+	// ------------- Optional query parameter "pageToken" -------------
+
+	err = runtime.BindQueryParameter("form", true, false, "pageToken", ctx.QueryParams(), &params.PageToken)
+	if err != nil {
+		return echox.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter pageToken: %s", err))
+	}
+
+	// ------------- Optional query parameter "filter" -------------
+
+	err = runtime.BindQueryParameter("form", true, false, "filter", ctx.QueryParams(), &params.Filter)
+	if err != nil {
+		return echox.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter filter: %s", err))
+	}
+
+	// ------------- Optional query parameter "orderBy" -------------
+
+	err = runtime.BindQueryParameter("form", true, false, "orderBy", ctx.QueryParams(), &params.OrderBy)
+	if err != nil {
+		return echox.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter orderBy: %s", err))
+	}
+
+	// Invoke the callback with all the unmarshaled arguments
+	err = w.Handler.InvoicesListInvoices2(ctx, organization, invoice, params)
+	return err
+}
+
+// InvoicesUpdateInvoice2 converts echox context to params.
+func (w *ServerInterfaceWrapper) InvoicesUpdateInvoice2(ctx echox.Context) error {
+	var err error
+	// ------------- Path parameter "organization" -------------
+	var organization string
+
+	err = runtime.BindStyledParameterWithOptions("simple", "organization", ctx.Param("organization"), &organization, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true})
+	if err != nil {
+		return echox.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter organization: %s", err))
+	}
+
+	// ------------- Path parameter "invoice" -------------
+	var invoice string
+
+	err = runtime.BindStyledParameterWithOptions("simple", "invoice", ctx.Param("invoice"), &invoice, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true})
+	if err != nil {
+		return echox.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter invoice: %s", err))
+	}
+
+	// Parameter object where we will unmarshal all parameters from the context
+	var params InvoicesUpdateInvoice2Params
+	// ------------- Optional query parameter "updateMask" -------------
+
+	err = runtime.BindQueryParameter("form", true, false, "updateMask", ctx.QueryParams(), &params.UpdateMask)
+	if err != nil {
+		return echox.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter updateMask: %s", err))
+	}
+
+	// ------------- Optional query parameter "allowMissing" -------------
+
+	err = runtime.BindQueryParameter("form", true, false, "allowMissing", ctx.QueryParams(), &params.AllowMissing)
+	if err != nil {
+		return echox.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter allowMissing: %s", err))
+	}
+
+	// ------------- Optional query parameter "validateOnly" -------------
+
+	err = runtime.BindQueryParameter("form", true, false, "validateOnly", ctx.QueryParams(), &params.ValidateOnly)
+	if err != nil {
+		return echox.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter validateOnly: %s", err))
+	}
+
+	// Invoke the callback with all the unmarshaled arguments
+	err = w.Handler.InvoicesUpdateInvoice2(ctx, organization, invoice, params)
+	return err
+}
+
+// VendorsListVendors converts echox context to params.
+func (w *ServerInterfaceWrapper) VendorsListVendors(ctx echox.Context) error {
+	var err error
+	// ------------- Path parameter "organization" -------------
+	var organization string
+
+	err = runtime.BindStyledParameterWithOptions("simple", "organization", ctx.Param("organization"), &organization, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true})
+	if err != nil {
+		return echox.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter organization: %s", err))
+	}
+
+	// Parameter object where we will unmarshal all parameters from the context
+	var params VendorsListVendorsParams
+	// ------------- Optional query parameter "pageSize" -------------
+
+	err = runtime.BindQueryParameter("form", true, false, "pageSize", ctx.QueryParams(), &params.PageSize)
+	if err != nil {
+		return echox.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter pageSize: %s", err))
+	}
+
+	// ------------- Optional query parameter "pageToken" -------------
+
+	err = runtime.BindQueryParameter("form", true, false, "pageToken", ctx.QueryParams(), &params.PageToken)
+	if err != nil {
+		return echox.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter pageToken: %s", err))
+	}
+
+	// ------------- Optional query parameter "filter" -------------
+
+	err = runtime.BindQueryParameter("form", true, false, "filter", ctx.QueryParams(), &params.Filter)
+	if err != nil {
+		return echox.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter filter: %s", err))
+	}
+
+	// ------------- Optional query parameter "orderBy" -------------
+
+	err = runtime.BindQueryParameter("form", true, false, "orderBy", ctx.QueryParams(), &params.OrderBy)
+	if err != nil {
+		return echox.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter orderBy: %s", err))
+	}
+
+	// Invoke the callback with all the unmarshaled arguments
+	err = w.Handler.VendorsListVendors(ctx, organization, params)
 	return err
 }
 
 // VendorsCreateVendor converts echox context to params.
 func (w *ServerInterfaceWrapper) VendorsCreateVendor(ctx echox.Context) error {
 	var err error
+	// ------------- Path parameter "organization" -------------
+	var organization string
+
+	err = runtime.BindStyledParameterWithOptions("simple", "organization", ctx.Param("organization"), &organization, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true})
+	if err != nil {
+		return echox.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter organization: %s", err))
+	}
 
 	// Parameter object where we will unmarshal all parameters from the context
 	var params VendorsCreateVendorParams
-	// ------------- Optional query parameter "parent" -------------
-
-	err = runtime.BindQueryParameter("form", true, false, "parent", ctx.QueryParams(), &params.Parent)
-	if err != nil {
-		return echox.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter parent: %s", err))
-	}
-
 	// ------------- Optional query parameter "vendorId" -------------
 
 	err = runtime.BindQueryParameter("form", true, false, "vendorId", ctx.QueryParams(), &params.VendorId)
@@ -554,13 +1571,21 @@ func (w *ServerInterfaceWrapper) VendorsCreateVendor(ctx echox.Context) error {
 	}
 
 	// Invoke the callback with all the unmarshaled arguments
-	err = w.Handler.VendorsCreateVendor(ctx, params)
+	err = w.Handler.VendorsCreateVendor(ctx, organization, params)
 	return err
 }
 
 // VendorsDeleteVendor converts echox context to params.
 func (w *ServerInterfaceWrapper) VendorsDeleteVendor(ctx echox.Context) error {
 	var err error
+	// ------------- Path parameter "organization" -------------
+	var organization string
+
+	err = runtime.BindStyledParameterWithOptions("simple", "organization", ctx.Param("organization"), &organization, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true})
+	if err != nil {
+		return echox.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter organization: %s", err))
+	}
+
 	// ------------- Path parameter "vendor" -------------
 	var vendor string
 
@@ -569,14 +1594,38 @@ func (w *ServerInterfaceWrapper) VendorsDeleteVendor(ctx echox.Context) error {
 		return echox.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter vendor: %s", err))
 	}
 
+	// Parameter object where we will unmarshal all parameters from the context
+	var params VendorsDeleteVendorParams
+	// ------------- Optional query parameter "etag" -------------
+
+	err = runtime.BindQueryParameter("form", true, false, "etag", ctx.QueryParams(), &params.Etag)
+	if err != nil {
+		return echox.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter etag: %s", err))
+	}
+
+	// ------------- Optional query parameter "validateOnly" -------------
+
+	err = runtime.BindQueryParameter("form", true, false, "validateOnly", ctx.QueryParams(), &params.ValidateOnly)
+	if err != nil {
+		return echox.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter validateOnly: %s", err))
+	}
+
 	// Invoke the callback with all the unmarshaled arguments
-	err = w.Handler.VendorsDeleteVendor(ctx, vendor)
+	err = w.Handler.VendorsDeleteVendor(ctx, organization, vendor, params)
 	return err
 }
 
 // VendorsGetVendor converts echox context to params.
 func (w *ServerInterfaceWrapper) VendorsGetVendor(ctx echox.Context) error {
 	var err error
+	// ------------- Path parameter "organization" -------------
+	var organization string
+
+	err = runtime.BindStyledParameterWithOptions("simple", "organization", ctx.Param("organization"), &organization, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true})
+	if err != nil {
+		return echox.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter organization: %s", err))
+	}
+
 	// ------------- Path parameter "vendor" -------------
 	var vendor string
 
@@ -586,13 +1635,21 @@ func (w *ServerInterfaceWrapper) VendorsGetVendor(ctx echox.Context) error {
 	}
 
 	// Invoke the callback with all the unmarshaled arguments
-	err = w.Handler.VendorsGetVendor(ctx, vendor)
+	err = w.Handler.VendorsGetVendor(ctx, organization, vendor)
 	return err
 }
 
 // VendorsUpdateVendor converts echox context to params.
 func (w *ServerInterfaceWrapper) VendorsUpdateVendor(ctx echox.Context) error {
 	var err error
+	// ------------- Path parameter "organization" -------------
+	var organization string
+
+	err = runtime.BindStyledParameterWithOptions("simple", "organization", ctx.Param("organization"), &organization, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true})
+	if err != nil {
+		return echox.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter organization: %s", err))
+	}
+
 	// ------------- Path parameter "vendor" -------------
 	var vendor string
 
@@ -603,181 +1660,6 @@ func (w *ServerInterfaceWrapper) VendorsUpdateVendor(ctx echox.Context) error {
 
 	// Parameter object where we will unmarshal all parameters from the context
 	var params VendorsUpdateVendorParams
-	// ------------- Optional query parameter "vendor.name" -------------
-
-	err = runtime.BindQueryParameter("form", true, false, "vendor.name", ctx.QueryParams(), &params.VendorName)
-	if err != nil {
-		return echox.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter vendor.name: %s", err))
-	}
-
-	// ------------- Optional query parameter "vendor.vendorId" -------------
-
-	err = runtime.BindQueryParameter("form", true, false, "vendor.vendorId", ctx.QueryParams(), &params.VendorVendorId)
-	if err != nil {
-		return echox.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter vendor.vendorId: %s", err))
-	}
-
-	// ------------- Optional query parameter "vendor.uid" -------------
-
-	err = runtime.BindQueryParameter("form", true, false, "vendor.uid", ctx.QueryParams(), &params.VendorUid)
-	if err != nil {
-		return echox.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter vendor.uid: %s", err))
-	}
-
-	// ------------- Optional query parameter "vendor.displayName" -------------
-
-	err = runtime.BindQueryParameter("form", true, false, "vendor.displayName", ctx.QueryParams(), &params.VendorDisplayName)
-	if err != nil {
-		return echox.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter vendor.displayName: %s", err))
-	}
-
-	// ------------- Optional query parameter "vendor.createTime" -------------
-
-	err = runtime.BindQueryParameter("form", true, false, "vendor.createTime", ctx.QueryParams(), &params.VendorCreateTime)
-	if err != nil {
-		return echox.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter vendor.createTime: %s", err))
-	}
-
-	// ------------- Optional query parameter "vendor.updateTime" -------------
-
-	err = runtime.BindQueryParameter("form", true, false, "vendor.updateTime", ctx.QueryParams(), &params.VendorUpdateTime)
-	if err != nil {
-		return echox.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter vendor.updateTime: %s", err))
-	}
-
-	// ------------- Optional query parameter "vendor.deleteTime" -------------
-
-	err = runtime.BindQueryParameter("form", true, false, "vendor.deleteTime", ctx.QueryParams(), &params.VendorDeleteTime)
-	if err != nil {
-		return echox.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter vendor.deleteTime: %s", err))
-	}
-
-	// ------------- Optional query parameter "vendor.reconciling" -------------
-
-	err = runtime.BindQueryParameter("form", true, false, "vendor.reconciling", ctx.QueryParams(), &params.VendorReconciling)
-	if err != nil {
-		return echox.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter vendor.reconciling: %s", err))
-	}
-
-	// ------------- Optional query parameter "vendor.etag" -------------
-
-	err = runtime.BindQueryParameter("form", true, false, "vendor.etag", ctx.QueryParams(), &params.VendorEtag)
-	if err != nil {
-		return echox.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter vendor.etag: %s", err))
-	}
-
-	// ------------- Optional query parameter "vendor.spec.companyName" -------------
-
-	err = runtime.BindQueryParameter("form", true, false, "vendor.spec.companyName", ctx.QueryParams(), &params.VendorSpecCompanyName)
-	if err != nil {
-		return echox.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter vendor.spec.companyName: %s", err))
-	}
-
-	// ------------- Optional query parameter "vendor.spec.corporationType" -------------
-
-	err = runtime.BindQueryParameter("form", true, false, "vendor.spec.corporationType", ctx.QueryParams(), &params.VendorSpecCorporationType)
-	if err != nil {
-		return echox.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter vendor.spec.corporationType: %s", err))
-	}
-
-	// ------------- Optional query parameter "vendor.spec.corporationDba" -------------
-
-	err = runtime.BindQueryParameter("form", true, false, "vendor.spec.corporationDba", ctx.QueryParams(), &params.VendorSpecCorporationDba)
-	if err != nil {
-		return echox.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter vendor.spec.corporationDba: %s", err))
-	}
-
-	// ------------- Optional query parameter "vendor.spec.description" -------------
-
-	err = runtime.BindQueryParameter("form", true, false, "vendor.spec.description", ctx.QueryParams(), &params.VendorSpecDescription)
-	if err != nil {
-		return echox.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter vendor.spec.description: %s", err))
-	}
-
-	// ------------- Optional query parameter "vendor.spec.taxIdentifier" -------------
-
-	err = runtime.BindQueryParameter("form", true, false, "vendor.spec.taxIdentifier", ctx.QueryParams(), &params.VendorSpecTaxIdentifier)
-	if err != nil {
-		return echox.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter vendor.spec.taxIdentifier: %s", err))
-	}
-
-	// ------------- Optional query parameter "vendor.spec.address.revision" -------------
-
-	err = runtime.BindQueryParameter("form", true, false, "vendor.spec.address.revision", ctx.QueryParams(), &params.VendorSpecAddressRevision)
-	if err != nil {
-		return echox.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter vendor.spec.address.revision: %s", err))
-	}
-
-	// ------------- Optional query parameter "vendor.spec.address.regionCode" -------------
-
-	err = runtime.BindQueryParameter("form", true, false, "vendor.spec.address.regionCode", ctx.QueryParams(), &params.VendorSpecAddressRegionCode)
-	if err != nil {
-		return echox.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter vendor.spec.address.regionCode: %s", err))
-	}
-
-	// ------------- Optional query parameter "vendor.spec.address.languageCode" -------------
-
-	err = runtime.BindQueryParameter("form", true, false, "vendor.spec.address.languageCode", ctx.QueryParams(), &params.VendorSpecAddressLanguageCode)
-	if err != nil {
-		return echox.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter vendor.spec.address.languageCode: %s", err))
-	}
-
-	// ------------- Optional query parameter "vendor.spec.address.postalCode" -------------
-
-	err = runtime.BindQueryParameter("form", true, false, "vendor.spec.address.postalCode", ctx.QueryParams(), &params.VendorSpecAddressPostalCode)
-	if err != nil {
-		return echox.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter vendor.spec.address.postalCode: %s", err))
-	}
-
-	// ------------- Optional query parameter "vendor.spec.address.sortingCode" -------------
-
-	err = runtime.BindQueryParameter("form", true, false, "vendor.spec.address.sortingCode", ctx.QueryParams(), &params.VendorSpecAddressSortingCode)
-	if err != nil {
-		return echox.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter vendor.spec.address.sortingCode: %s", err))
-	}
-
-	// ------------- Optional query parameter "vendor.spec.address.administrativeArea" -------------
-
-	err = runtime.BindQueryParameter("form", true, false, "vendor.spec.address.administrativeArea", ctx.QueryParams(), &params.VendorSpecAddressAdministrativeArea)
-	if err != nil {
-		return echox.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter vendor.spec.address.administrativeArea: %s", err))
-	}
-
-	// ------------- Optional query parameter "vendor.spec.address.locality" -------------
-
-	err = runtime.BindQueryParameter("form", true, false, "vendor.spec.address.locality", ctx.QueryParams(), &params.VendorSpecAddressLocality)
-	if err != nil {
-		return echox.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter vendor.spec.address.locality: %s", err))
-	}
-
-	// ------------- Optional query parameter "vendor.spec.address.sublocality" -------------
-
-	err = runtime.BindQueryParameter("form", true, false, "vendor.spec.address.sublocality", ctx.QueryParams(), &params.VendorSpecAddressSublocality)
-	if err != nil {
-		return echox.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter vendor.spec.address.sublocality: %s", err))
-	}
-
-	// ------------- Optional query parameter "vendor.spec.address.addressLines" -------------
-
-	err = runtime.BindQueryParameter("form", true, false, "vendor.spec.address.addressLines", ctx.QueryParams(), &params.VendorSpecAddressAddressLines)
-	if err != nil {
-		return echox.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter vendor.spec.address.addressLines: %s", err))
-	}
-
-	// ------------- Optional query parameter "vendor.spec.address.recipients" -------------
-
-	err = runtime.BindQueryParameter("form", true, false, "vendor.spec.address.recipients", ctx.QueryParams(), &params.VendorSpecAddressRecipients)
-	if err != nil {
-		return echox.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter vendor.spec.address.recipients: %s", err))
-	}
-
-	// ------------- Optional query parameter "vendor.spec.address.organization" -------------
-
-	err = runtime.BindQueryParameter("form", true, false, "vendor.spec.address.organization", ctx.QueryParams(), &params.VendorSpecAddressOrganization)
-	if err != nil {
-		return echox.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter vendor.spec.address.organization: %s", err))
-	}
-
 	// ------------- Optional query parameter "updateMask" -------------
 
 	err = runtime.BindQueryParameter("form", true, false, "updateMask", ctx.QueryParams(), &params.UpdateMask)
@@ -785,8 +1667,346 @@ func (w *ServerInterfaceWrapper) VendorsUpdateVendor(ctx echox.Context) error {
 		return echox.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter updateMask: %s", err))
 	}
 
+	// ------------- Optional query parameter "allowMissing" -------------
+
+	err = runtime.BindQueryParameter("form", true, false, "allowMissing", ctx.QueryParams(), &params.AllowMissing)
+	if err != nil {
+		return echox.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter allowMissing: %s", err))
+	}
+
+	// ------------- Optional query parameter "validateOnly" -------------
+
+	err = runtime.BindQueryParameter("form", true, false, "validateOnly", ctx.QueryParams(), &params.ValidateOnly)
+	if err != nil {
+		return echox.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter validateOnly: %s", err))
+	}
+
 	// Invoke the callback with all the unmarshaled arguments
-	err = w.Handler.VendorsUpdateVendor(ctx, vendor, params)
+	err = w.Handler.VendorsUpdateVendor(ctx, organization, vendor, params)
+	return err
+}
+
+// VendorsListVendors2 converts echox context to params.
+func (w *ServerInterfaceWrapper) VendorsListVendors2(ctx echox.Context) error {
+	var err error
+
+	// Parameter object where we will unmarshal all parameters from the context
+	var params VendorsListVendors2Params
+	// ------------- Optional query parameter "pageSize" -------------
+
+	err = runtime.BindQueryParameter("form", true, false, "pageSize", ctx.QueryParams(), &params.PageSize)
+	if err != nil {
+		return echox.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter pageSize: %s", err))
+	}
+
+	// ------------- Optional query parameter "pageToken" -------------
+
+	err = runtime.BindQueryParameter("form", true, false, "pageToken", ctx.QueryParams(), &params.PageToken)
+	if err != nil {
+		return echox.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter pageToken: %s", err))
+	}
+
+	// ------------- Optional query parameter "filter" -------------
+
+	err = runtime.BindQueryParameter("form", true, false, "filter", ctx.QueryParams(), &params.Filter)
+	if err != nil {
+		return echox.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter filter: %s", err))
+	}
+
+	// ------------- Optional query parameter "orderBy" -------------
+
+	err = runtime.BindQueryParameter("form", true, false, "orderBy", ctx.QueryParams(), &params.OrderBy)
+	if err != nil {
+		return echox.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter orderBy: %s", err))
+	}
+
+	// Invoke the callback with all the unmarshaled arguments
+	err = w.Handler.VendorsListVendors2(ctx, params)
+	return err
+}
+
+// VendorsCreateVendor2 converts echox context to params.
+func (w *ServerInterfaceWrapper) VendorsCreateVendor2(ctx echox.Context) error {
+	var err error
+
+	// Parameter object where we will unmarshal all parameters from the context
+	var params VendorsCreateVendor2Params
+	// ------------- Optional query parameter "vendorId" -------------
+
+	err = runtime.BindQueryParameter("form", true, false, "vendorId", ctx.QueryParams(), &params.VendorId)
+	if err != nil {
+		return echox.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter vendorId: %s", err))
+	}
+
+	// ------------- Optional query parameter "validateOnly" -------------
+
+	err = runtime.BindQueryParameter("form", true, false, "validateOnly", ctx.QueryParams(), &params.ValidateOnly)
+	if err != nil {
+		return echox.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter validateOnly: %s", err))
+	}
+
+	// Invoke the callback with all the unmarshaled arguments
+	err = w.Handler.VendorsCreateVendor2(ctx, params)
+	return err
+}
+
+// VendorsDeleteVendor2 converts echox context to params.
+func (w *ServerInterfaceWrapper) VendorsDeleteVendor2(ctx echox.Context) error {
+	var err error
+	// ------------- Path parameter "vendor" -------------
+	var vendor string
+
+	err = runtime.BindStyledParameterWithOptions("simple", "vendor", ctx.Param("vendor"), &vendor, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true})
+	if err != nil {
+		return echox.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter vendor: %s", err))
+	}
+
+	// Parameter object where we will unmarshal all parameters from the context
+	var params VendorsDeleteVendor2Params
+	// ------------- Optional query parameter "etag" -------------
+
+	err = runtime.BindQueryParameter("form", true, false, "etag", ctx.QueryParams(), &params.Etag)
+	if err != nil {
+		return echox.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter etag: %s", err))
+	}
+
+	// ------------- Optional query parameter "validateOnly" -------------
+
+	err = runtime.BindQueryParameter("form", true, false, "validateOnly", ctx.QueryParams(), &params.ValidateOnly)
+	if err != nil {
+		return echox.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter validateOnly: %s", err))
+	}
+
+	// Invoke the callback with all the unmarshaled arguments
+	err = w.Handler.VendorsDeleteVendor2(ctx, vendor, params)
+	return err
+}
+
+// VendorsGetVendor2 converts echox context to params.
+func (w *ServerInterfaceWrapper) VendorsGetVendor2(ctx echox.Context) error {
+	var err error
+	// ------------- Path parameter "vendor" -------------
+	var vendor string
+
+	err = runtime.BindStyledParameterWithOptions("simple", "vendor", ctx.Param("vendor"), &vendor, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true})
+	if err != nil {
+		return echox.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter vendor: %s", err))
+	}
+
+	// Invoke the callback with all the unmarshaled arguments
+	err = w.Handler.VendorsGetVendor2(ctx, vendor)
+	return err
+}
+
+// VendorsUpdateVendor2 converts echox context to params.
+func (w *ServerInterfaceWrapper) VendorsUpdateVendor2(ctx echox.Context) error {
+	var err error
+	// ------------- Path parameter "vendor" -------------
+	var vendor string
+
+	err = runtime.BindStyledParameterWithOptions("simple", "vendor", ctx.Param("vendor"), &vendor, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true})
+	if err != nil {
+		return echox.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter vendor: %s", err))
+	}
+
+	// Parameter object where we will unmarshal all parameters from the context
+	var params VendorsUpdateVendor2Params
+	// ------------- Optional query parameter "updateMask" -------------
+
+	err = runtime.BindQueryParameter("form", true, false, "updateMask", ctx.QueryParams(), &params.UpdateMask)
+	if err != nil {
+		return echox.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter updateMask: %s", err))
+	}
+
+	// ------------- Optional query parameter "allowMissing" -------------
+
+	err = runtime.BindQueryParameter("form", true, false, "allowMissing", ctx.QueryParams(), &params.AllowMissing)
+	if err != nil {
+		return echox.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter allowMissing: %s", err))
+	}
+
+	// ------------- Optional query parameter "validateOnly" -------------
+
+	err = runtime.BindQueryParameter("form", true, false, "validateOnly", ctx.QueryParams(), &params.ValidateOnly)
+	if err != nil {
+		return echox.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter validateOnly: %s", err))
+	}
+
+	// Invoke the callback with all the unmarshaled arguments
+	err = w.Handler.VendorsUpdateVendor2(ctx, vendor, params)
+	return err
+}
+
+// InvoicesCreateInvoice3 converts echox context to params.
+func (w *ServerInterfaceWrapper) InvoicesCreateInvoice3(ctx echox.Context) error {
+	var err error
+	// ------------- Path parameter "vendor" -------------
+	var vendor string
+
+	err = runtime.BindStyledParameterWithOptions("simple", "vendor", ctx.Param("vendor"), &vendor, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true})
+	if err != nil {
+		return echox.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter vendor: %s", err))
+	}
+
+	// Parameter object where we will unmarshal all parameters from the context
+	var params InvoicesCreateInvoice3Params
+	// ------------- Optional query parameter "invoiceId" -------------
+
+	err = runtime.BindQueryParameter("form", true, false, "invoiceId", ctx.QueryParams(), &params.InvoiceId)
+	if err != nil {
+		return echox.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter invoiceId: %s", err))
+	}
+
+	// ------------- Optional query parameter "validateOnly" -------------
+
+	err = runtime.BindQueryParameter("form", true, false, "validateOnly", ctx.QueryParams(), &params.ValidateOnly)
+	if err != nil {
+		return echox.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter validateOnly: %s", err))
+	}
+
+	// Invoke the callback with all the unmarshaled arguments
+	err = w.Handler.InvoicesCreateInvoice3(ctx, vendor, params)
+	return err
+}
+
+// InvoicesDeleteInvoice3 converts echox context to params.
+func (w *ServerInterfaceWrapper) InvoicesDeleteInvoice3(ctx echox.Context) error {
+	var err error
+	// ------------- Path parameter "vendor" -------------
+	var vendor string
+
+	err = runtime.BindStyledParameterWithOptions("simple", "vendor", ctx.Param("vendor"), &vendor, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true})
+	if err != nil {
+		return echox.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter vendor: %s", err))
+	}
+
+	// ------------- Path parameter "invoice" -------------
+	var invoice string
+
+	err = runtime.BindStyledParameterWithOptions("simple", "invoice", ctx.Param("invoice"), &invoice, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true})
+	if err != nil {
+		return echox.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter invoice: %s", err))
+	}
+
+	// Parameter object where we will unmarshal all parameters from the context
+	var params InvoicesDeleteInvoice3Params
+	// ------------- Optional query parameter "etag" -------------
+
+	err = runtime.BindQueryParameter("form", true, false, "etag", ctx.QueryParams(), &params.Etag)
+	if err != nil {
+		return echox.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter etag: %s", err))
+	}
+
+	// ------------- Optional query parameter "validateOnly" -------------
+
+	err = runtime.BindQueryParameter("form", true, false, "validateOnly", ctx.QueryParams(), &params.ValidateOnly)
+	if err != nil {
+		return echox.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter validateOnly: %s", err))
+	}
+
+	// Invoke the callback with all the unmarshaled arguments
+	err = w.Handler.InvoicesDeleteInvoice3(ctx, vendor, invoice, params)
+	return err
+}
+
+// InvoicesListInvoices3 converts echox context to params.
+func (w *ServerInterfaceWrapper) InvoicesListInvoices3(ctx echox.Context) error {
+	var err error
+	// ------------- Path parameter "vendor" -------------
+	var vendor string
+
+	err = runtime.BindStyledParameterWithOptions("simple", "vendor", ctx.Param("vendor"), &vendor, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true})
+	if err != nil {
+		return echox.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter vendor: %s", err))
+	}
+
+	// ------------- Path parameter "invoice" -------------
+	var invoice string
+
+	err = runtime.BindStyledParameterWithOptions("simple", "invoice", ctx.Param("invoice"), &invoice, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true})
+	if err != nil {
+		return echox.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter invoice: %s", err))
+	}
+
+	// Parameter object where we will unmarshal all parameters from the context
+	var params InvoicesListInvoices3Params
+	// ------------- Optional query parameter "pageSize" -------------
+
+	err = runtime.BindQueryParameter("form", true, false, "pageSize", ctx.QueryParams(), &params.PageSize)
+	if err != nil {
+		return echox.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter pageSize: %s", err))
+	}
+
+	// ------------- Optional query parameter "pageToken" -------------
+
+	err = runtime.BindQueryParameter("form", true, false, "pageToken", ctx.QueryParams(), &params.PageToken)
+	if err != nil {
+		return echox.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter pageToken: %s", err))
+	}
+
+	// ------------- Optional query parameter "filter" -------------
+
+	err = runtime.BindQueryParameter("form", true, false, "filter", ctx.QueryParams(), &params.Filter)
+	if err != nil {
+		return echox.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter filter: %s", err))
+	}
+
+	// ------------- Optional query parameter "orderBy" -------------
+
+	err = runtime.BindQueryParameter("form", true, false, "orderBy", ctx.QueryParams(), &params.OrderBy)
+	if err != nil {
+		return echox.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter orderBy: %s", err))
+	}
+
+	// Invoke the callback with all the unmarshaled arguments
+	err = w.Handler.InvoicesListInvoices3(ctx, vendor, invoice, params)
+	return err
+}
+
+// InvoicesUpdateInvoice3 converts echox context to params.
+func (w *ServerInterfaceWrapper) InvoicesUpdateInvoice3(ctx echox.Context) error {
+	var err error
+	// ------------- Path parameter "vendor" -------------
+	var vendor string
+
+	err = runtime.BindStyledParameterWithOptions("simple", "vendor", ctx.Param("vendor"), &vendor, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true})
+	if err != nil {
+		return echox.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter vendor: %s", err))
+	}
+
+	// ------------- Path parameter "invoice" -------------
+	var invoice string
+
+	err = runtime.BindStyledParameterWithOptions("simple", "invoice", ctx.Param("invoice"), &invoice, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true})
+	if err != nil {
+		return echox.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter invoice: %s", err))
+	}
+
+	// Parameter object where we will unmarshal all parameters from the context
+	var params InvoicesUpdateInvoice3Params
+	// ------------- Optional query parameter "updateMask" -------------
+
+	err = runtime.BindQueryParameter("form", true, false, "updateMask", ctx.QueryParams(), &params.UpdateMask)
+	if err != nil {
+		return echox.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter updateMask: %s", err))
+	}
+
+	// ------------- Optional query parameter "allowMissing" -------------
+
+	err = runtime.BindQueryParameter("form", true, false, "allowMissing", ctx.QueryParams(), &params.AllowMissing)
+	if err != nil {
+		return echox.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter allowMissing: %s", err))
+	}
+
+	// ------------- Optional query parameter "validateOnly" -------------
+
+	err = runtime.BindQueryParameter("form", true, false, "validateOnly", ctx.QueryParams(), &params.ValidateOnly)
+	if err != nil {
+		return echox.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter validateOnly: %s", err))
+	}
+
+	// Invoke the callback with all the unmarshaled arguments
+	err = w.Handler.InvoicesUpdateInvoice3(ctx, vendor, invoice, params)
 	return err
 }
 
@@ -818,91 +2038,175 @@ func RegisterHandlersWithBaseURL(router EchoxRouter, si ServerInterface, baseURL
 		Handler: si,
 	}
 
-	router.GET(baseURL+"/v1alpha/vendors", wrapper.VendorsListVendors, m...)
-	router.POST(baseURL+"/v1alpha/vendors", wrapper.VendorsCreateVendor, m...)
-	router.DELETE(baseURL+"/v1alpha/vendors/:vendor", wrapper.VendorsDeleteVendor, m...)
-	router.GET(baseURL+"/v1alpha/vendors/:vendor", wrapper.VendorsGetVendor, m...)
-	router.PATCH(baseURL+"/v1alpha/vendors/:vendor", wrapper.VendorsUpdateVendor, m...)
+	router.POST(baseURL+"/v1alpha/invoices", wrapper.InvoicesCreateInvoice, m...)
+	router.DELETE(baseURL+"/v1alpha/invoices/:invoice", wrapper.InvoicesDeleteInvoice, m...)
+	router.GET(baseURL+"/v1alpha/invoices/:invoice", wrapper.InvoicesListInvoices, m...)
+	router.PATCH(baseURL+"/v1alpha/invoices/:invoice", wrapper.InvoicesUpdateInvoice, m...)
+	router.GET(baseURL+"/v1alpha/organizations", wrapper.OrganizationsListOrganizations, m...)
+	router.POST(baseURL+"/v1alpha/organizations", wrapper.OrganizationsCreateOrganization, m...)
+	router.DELETE(baseURL+"/v1alpha/organizations/:organization", wrapper.OrganizationsDeleteOrganization, m...)
+	router.GET(baseURL+"/v1alpha/organizations/:organization", wrapper.OrganizationsGetOrganization, m...)
+	router.PATCH(baseURL+"/v1alpha/organizations/:organization", wrapper.OrganizationsUpdateOrganization, m...)
+	router.POST(baseURL+"/v1alpha/organizations/:organization/invoices", wrapper.InvoicesCreateInvoice2, m...)
+	router.DELETE(baseURL+"/v1alpha/organizations/:organization/invoices/:invoice", wrapper.InvoicesDeleteInvoice2, m...)
+	router.GET(baseURL+"/v1alpha/organizations/:organization/invoices/:invoice", wrapper.InvoicesListInvoices2, m...)
+	router.PATCH(baseURL+"/v1alpha/organizations/:organization/invoices/:invoice", wrapper.InvoicesUpdateInvoice2, m...)
+	router.GET(baseURL+"/v1alpha/organizations/:organization/vendors", wrapper.VendorsListVendors, m...)
+	router.POST(baseURL+"/v1alpha/organizations/:organization/vendors", wrapper.VendorsCreateVendor, m...)
+	router.DELETE(baseURL+"/v1alpha/organizations/:organization/vendors/:vendor", wrapper.VendorsDeleteVendor, m...)
+	router.GET(baseURL+"/v1alpha/organizations/:organization/vendors/:vendor", wrapper.VendorsGetVendor, m...)
+	router.PATCH(baseURL+"/v1alpha/organizations/:organization/vendors/:vendor", wrapper.VendorsUpdateVendor, m...)
+	router.GET(baseURL+"/v1alpha/vendors", wrapper.VendorsListVendors2, m...)
+	router.POST(baseURL+"/v1alpha/vendors", wrapper.VendorsCreateVendor2, m...)
+	router.DELETE(baseURL+"/v1alpha/vendors/:vendor", wrapper.VendorsDeleteVendor2, m...)
+	router.GET(baseURL+"/v1alpha/vendors/:vendor", wrapper.VendorsGetVendor2, m...)
+	router.PATCH(baseURL+"/v1alpha/vendors/:vendor", wrapper.VendorsUpdateVendor2, m...)
+	router.POST(baseURL+"/v1alpha/vendors/:vendor/invoices", wrapper.InvoicesCreateInvoice3, m...)
+	router.DELETE(baseURL+"/v1alpha/vendors/:vendor/invoices/:invoice", wrapper.InvoicesDeleteInvoice3, m...)
+	router.GET(baseURL+"/v1alpha/vendors/:vendor/invoices/:invoice", wrapper.InvoicesListInvoices3, m...)
+	router.PATCH(baseURL+"/v1alpha/vendors/:vendor/invoices/:invoice", wrapper.InvoicesUpdateInvoice3, m...)
 
 }
 
 // Base64 encoded, gzipped, json marshaled Swagger object
 var swaggerSpec = []string{
 
-	"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",
-	"jUnH1hg8GZEdwlERtpd3HNVsfN6V39Jk9uLqrOOKW7YlroZ8MrJq2OQXXz776l++/ubbvxyMJ99DvA8B",
-	"sK3dLbtuKuam1Nt+Q8tJvTAcaaVX2HmLoxorIa+3oemWPJ08nXzB/fYKtahkcpQ8mzydPCOPEX7JHjJd",
-	"fSFUtRTTwf2vAj39053PEIO0iwxum/E0VpRIqRE7maRVOX9O2kiZBAJJ0nihbyRDuE5vG1nghXyHG2Pv",
-	"LHB3zRZuvz1AlIVUHu1DRvIljufNzqFvCEEhY2b9f/n0aegc8AEl81hVqch9019d8KB+vl3cNnY7kEF0",
-	"IzL9Pfgon5B9sMVjN2tkvdOwUiyrbS8ZeUBBaGoBl7yJBzm3QpIvSWCsdz8yJruQ+pCx4WAGOXaOjO/y",
-	"rwAIzuqfm7z5YOZor2xuUhYF8euPiMDhqp8Q6K7TLW6c/h4+XIdoQjnhraAMRe9toNwORauY9nG6x+gh",
-	"ir4JvOSm4R5AK5+U4+8KRd+h/9+o3z+z03BikS1vNdkllzT/o1ZLH1K73x4KJjokeg9d8L7F1w5J9o1N",
-	"n0KZvWObtbznDv+w1uAOoYe9y3sJ/5Am8Q45Bv3o0ax62F+4v2z7tjN2Wbdvn3xgAf+g3vYuEPRt+A+8",
-	"t/dsCO6QediU3Jmzpv9HOuA7dMGd/ntT/S0Nnx3ruAqzyWYf4Z5r3r9fc7c4NxsZ9xTpAb2qe8gUWin3",
-	"FOk9O053ibfZ2LmvBR/UmrpLpM3u0r2F+oSubN2lifZWT3dH7d5NpsdLgx/i0uD+duoubN4vf3r8LcDj",
-	"bwE+zm8B9oXuxo9VHgjeP9Md9X31Orjd/0CtPt7G/WNu4+5r0eEl6gea9PFHfZ/Kj/r2BcXIjzofiI0/",
-	"+++w9g5Y7UX5B+r5o16i35tLBhf+77WPxz+w8PgHFh7/wMLjH1j4E/2Bhb0j8eAP0ww5dd/fXe4KGp/K",
-	"T0z37ld0v6v9GJq6x6+i95V440fZD7jeEprxPwj3dryXxrY7LMP3j2fpd19A6Z/+3uq4/fb6zfV/BwAA",
-	"//+flDhgME8AAA==",
+	"H4sIAAAAAAAC/+x9e3MbOZLnV8FyLsLSLB+S3e7Z08bGnSz7ujXrbiss+WZumw4LrEqSaFcB1QCKEtvh",
+	"b3Xf4L7YRWYC9SCLFO223X7wL1skHolEPn9IgG96ickLo0F71zt503PJHHJJ//3BmFkGF9Z4Mymnp3qJ",
+	"H8o0VV4ZLbMLawqwXoHrnXhbQr+XgkusKvDr3knvzGgvlXZCaiHtRHkr7VI4sEpm6ndIRQ7OyRkImRk9",
+	"EzfKz4UU/9MvCxB+Lr3g4SbghJ+DoM/NlP6/Psiw1+8VDYLe9Ggg/E+bqqudhuK+Peet0rPe27fVJ2by",
+	"KyS+97bfO9cLo5KOGcIXQjkhhQVnSpuAsFBYcKC90jPkSGw1tSbHv42dSa1+lziI8EZIMdYiKZ03OVgh",
+	"k8SU2gtjQwexAJ0aSy3bndc5IbU2nr5zm3fwzeqaV7fztB6FlqZFqZ23ZeJLC6l4DcvBQmYliFwWwnmD",
+	"H4Y9jWvFXR1rkculmCDnvZgsBdx6sFpmwhuTOVwQdRZSp8KCtwoW0JCfHLxMpZfDsRZXc1gKaUFo48Vv",
+	"JdilnGTc081NmaU4DbHdLpCaOWiRm1RNl7gJvJWusd315iYWpIcrlXfs77PSF6UXRmfLoSBxUjnw4ChQ",
+	"je3nUVKcYWpsLn3vpJdKDwPs0ev3LMj0mc6WUX86diCDncj4X8YKKbh5WgldnwiiT0mqVA5Dce6RNOw2",
+	"1qIwRZkhjUIGaS2MdsAC+JiGExZ+K8H5P7AK5YpMLn+WXcv4scylHuAYtHehrdAyDyqqXEt+xNKUIpFx",
+	"I4MYiFzeqrzMRQZ65ue4wu8fiGQurUw8WNeh0/0eeDnrMhC4c3NIXrsyp100eVEiiybLaDEWYMVEOkiF",
+	"4U1nyTfTsRbGz8GKqYIsdX2SxVzN5p4lHlVYi7JA/kXGksyDdqUFGivJFLabSzfWpGbFwJsB9eBpJjBF",
+	"BSmsSQBSpWfDXXZBMRPP026bWBmq88drfEc1Vloo70QhLRIXW+80cyYnkP0R0/OUBvjIVgc0CWCRSY9i",
+	"LqYgcQ4nbuYqmQuVou2eotKEgZ1YKCloccJBBgnZxk5zojtFv8X2LoHfibsWEqMTleGf243E+RRXT0YB",
+	"7asFkZQWtzNboqroGTihtJhmJK/eNM3ZFlImxmQgNdLiCkhon7Ps2bR38sub3n+zMO2d9P4yqqOMUQgx",
+	"RmHoV5fY6+3L1V3Hj3HPSecKSNRUJeweg+uuSMOZvfSle4+5uV/H7PRFnD8wSvA0awSs8uZtv1eqDkW7",
+	"ZNMhnVMzDakotfqthChbCu0G+vTG0GTcSMLHmiOKFy/OH38neP/JvMxKaaX2ACnumYVcKtQS3lGcw6uM",
+	"xqxkTaFlCc5iJxljg7WjO8yk8+wTyV6v+EQe6r19Ign8b6WykPZOfmGBe7k5OmPZWt+HXUVLXD17/Oxf",
+	"etsmqATv/eVn8yxPlfPR3DwPznl9rq5WcebKpaNkZcpR/Bkbr8eKwUu4bmuF/ZH4Zn/lIafmO6hbrw6k",
+	"pbVySbYRbv2FnMGVeQ16fdpT4fELFu0QDeK6sJsoMH0wU1xkmXmHwcCFdI6NKPsFxQ66zSIOaLD3Kx6d",
+	"3DW2lcKVE4cNtBeJzNBBiOtm7+udSTnnXaZveBrlKFRdscLaiBwdeuy6W/6BND1rxP13yEdn061C0uqx",
+	"Limfbt9WSH+fzWsN8WfsYL/XzNHuUK81zu+kY81e64q2SYT+N+WRdwjPSqOtYhPa/pkCU5H7PqISOv85",
+	"QsJZ/R3i0eDwToLB7XcTiWcFWJag7sRoHc/AmCQzejawpdaUV8ch2P/XslJmRL4ca6HB3xj7WpxenBP3",
+	"16UlNboLW5k20i3lxPVUZg6u+0J5kYPUPFdNgXLCeZVluOWFNTMLLu7ZNcYX1/31DshBCo04ewNFCd01",
+	"WGvstTBWXEe5v+ZISi6kyjB5aGxpIyimjrtHphsjUhQBGqvByxXitUikI/mcSpVhQmksJssJZFkAh972",
+	"exFC2Z2mdSSwI2AGu1AJDGI8VSE1GO6aRBHKQKlZi+ihEOde+GWhUA4wvUoibhg3TCjNoSKuEbckMXlu",
+	"dD2BK5O5kBFvYZxjrMWlyTlbp2SNs3DUy8KahUqBu1V4khCnmuCluUlZci340mpHArtBwgPMlJqkzNGS",
+	"4NIqslAU+kJNhdTL4fY0kDGFQZUYYMt+zDwZrYnJQkjGKXSV9QJjmmusmimNrKzoV55yv6UpRekgYEJT",
+	"iSL049XVBabOhdIzUoWxFtc4+XUDQZMrWSroVEXA9rrihRu9YQpfqfTtdad1sw0n8+EED/mnUT6y2iFt",
+	"Uw1XJgmaAREtd2TZWMftj5zTRtBO4k5zr34lbNcMjwULYmvXiCycEd3DIhA+fJIXfnm9PmWckOyU1Km0",
+	"KXb/Afz16PqMxPl6dP2CcqbVmeoNaiZ3Q0FgIKFQ1YJcd9e5DK6NAPHrf97eRg9/jcKHjgs/vObUs4tu",
+	"lIcwI9xKtJsk8Jua8kDXV/I1XGpZuLnxB4dhXUpPwVpGLwMIiVQxP5s9KhqHG1xYMw5aT1ebOPt2iP7Z",
+	"542qt1byTUDrq3u3x9c/DL6+Jkl7kP09QfY/Cep+H1OwO97dSkc/Hui9am7vZHYzo36XY40Wt/7g2cZH",
+	"Rt935Ml7Q/AboPerVVy0gizbBL0H8L41vWnDo9sX/8cx9tb4XwfQvuohPxHafjE3Gn4u8wnYDmBHh3hg",
+	"JcASBfYSmrphXK08xxhk+04vzsWNsoQt5dIPx5qcEEEQYRRa5Ql9IQYxLMF4ZQKY6KQMS5lEZo2slIcj",
+	"Csy0g4hkjsMJpGLc+9djcfD9w6NDcf/hg8HR0dER2tGhOL7/YNyL8wawJ4UgbzgpTKcqUQz4GytnwE3R",
+	"JAf6qtVi81RJNCC4CCQzlKNkamKlVeDEgQMUqilY0Am4Q6awjsNosd6gAQv5Ha8nSLr0oihtYRwwE41I",
+	"jXAG43KcNQeJWe20zGJ6jktqMAR5wWwTytOYC2mVKVG4SwcDTKxcH/P2BVhqw1Up1+r43/SQGMzDuWFD",
+	"UK6jVEyVdWF/McxSGjMhDK6UFn+XC8kE3YTFhv0WGDEMQ5qF8tgcmgSHkkbxH9z4jg5DDTePSpWlYA8O",
+	"hxP838Hhv6/Ns2E9/EeLgKLx/wYJjSYvvMqGM/DnYbkHh0PavoOKdvz2yfH333H7g8O+GPf+67/GvUiY",
+	"moqDf2m3vvWgnTL64HCoHOWcB4eH4k0koEHV0DWbbxolTvWWmf48iuCBOzyhbwZi7n3hTkajmfLzcjJM",
+	"TD5ibo0yNWnwai1/gmpp3Z67rZiV0sdQOgNJKESRlU6g6omDe/9677AvpibLzA1HkhJD8MY4rAylAw7G",
+	"M3kLqTi/eiGeDI+//y4KeWK0C2A2eyICpUrt7ZLASvwiMSmIg2OU9AciVTPl3SE5CQpeywlXrtmKftIs",
+	"bTDYrAJD4QqZgKOirsoq9QUMZ8MTNhiJsRYSf0Km6OHDh/fv3z8KxodMj241EAcPHz48FPfv3x9gq+/E",
+	"LbWNphPWV5qpHAMfT87Ee6B6suP7YUF9MSk9I6cy8SqhZBBXkGWBH2icMKdBNUbW9oUz4gaYtRFEQ2dC",
+	"YaLAyAdziZ8lM2BAuFbQpSrblLx/THYlci6wJMrbzc3NUPlyqLQfWUhGV4PnT84GtLrB/aPjo+PjwXm7",
+	"B+jhjXqtCkiVHBo7G+FfI+ox3KXlU+X8KzN9FUThVRCFVygKrjP1iYp0t4Dfc6Jqzc69+rM6TQj4EPkG",
+	"pXEzx1pg/JnnoFMO0/oCbhMo2EpPACU1hanSUWsc0J6ZacV1ziAoX2gld2YqvjsKgjAUzyjf8nOpK9lA",
+	"BxLysOC/UE2qZLDyHPf698SB0ilFkuT3b6Tyhyj19/5yr0pTOJ8JEoIyYnyIazTGWjMKQuuIuXQNFoVV",
+	"uLmxnjSTyCO/Ma7OfFwACbMlw6mYGClCm38tdVLlAui4WEeCWQ8J/RyydKyFg0Ja6SFbciEmqk6zObk+",
+	"FGDagZqiJrGM3iJlJWZcnWkz9Twz6TtgpQ3n8uqy6r4eaJ82yFpRsmjX71IFGp4EvxuC6yZl98iwJrAB",
+	"gssOU04bXB0eiBxljjpHabUwKzNpW10dHyJI3Yid2DDTaUMoA6Z9+umnS2p8+dOlcEvnIXd9FOobyLIQ",
+	"Fgk5mVhY8PlGrQkHaMbFuHcFt158f0yeAsO4ubkRudRLkStdenAEtRAQywkFeR2Nn1rMzfVw3DvkXbqs",
+	"xZtsZbSsHPvJoCREbjSlSlPWz9aWACkkEOPOyNf60IwPE2qBRf7ArXKkJamakoj4qIr9cVCX+puSi7l1",
+	"KgqrEnZlC9CMBxsHlRa7uQwojGNMuNu5EgNfMP/PTg87DpQ3RA/PQ8rChrSxpGi6kHBT+tUoggIIOjFj",
+	"epCyBkXsmcW49/3x8bi34YADV9gt7G2qHp1dDL77W9wzoi5kvZiwsDUioAApcAwHkLCv7NAERC6Rtmhu",
+	"x70Xl+MeMW3ce/Qouv8NKh4caakVWQNUcAuFsd6NvH3wcPSX8M0rJvSVKydeznYrULkwzsvslLWqix+N",
+	"A+SC2kYVDJxG5QpfpJCpBdgl7k4hlzl349ZAJ7o/KJS19ZGqT+I5GXItDCfo+Jy1p7CQKwd9cTF8huM9",
+	"Mrc4mVO5yqSlM2MfXTGqlU5Z73KTQiZmYGZWFnO0Q9UOOnFgjaTDF3PDKpOjZEmlXdDp88p6VepT2aGY",
+	"8USYm5C30iHZmoCAcBdA5bhhbHVIYcnrSy/7IoUiHNYFCDXefCBYk47Cx1qcpsQYU0/NE4wEYKiqZ0Fg",
+	"XjiiD7MgApSXNakqnYGPMsg5w9bEIHSkeTCdpcExaGgl8XXIT6bmxbmADHjvp6bBhkAmQ8MiwMLClN4p",
+	"VJMqVGWNIsdRBQVo/+vkkwo0ZqVKMSVDjqC59iacmyon2Nn2RZGBdIAWHZkT1+rKAvci5ou45knplAbn",
+	"RlK7G7Cj7x/8979997d/Wz9OYo48xcbryvKiiQRHrmfYNt6SwfWz+bgBKzJYQEZxXi1QvMpHkEhcDUFd",
+	"5OPC16/CcIa4z0eDdAC3cvieSzSMBB+oHFw8rhd5mXlVZK2RhVN6lkHgNln0sRbj3mmJUtoXV/8c9w6p",
+	"eEO5IMdS+xrOQpKEsSnKvBNJBtKy+eTPaL/b3KhBkXEP9AIyU4TW414F/AX7PgrWt0ryIqNQLYuMcrMo",
+	"Mji91GIh7TJ4pr/LQurDfs0+qWclqrAKuAibB/kacH1wW2QqUb6KC36VgaBM2hkMvBk4DE6Z1oA4Eq9+",
+	"lYOn0utxDyUdFxX6UXPsRwMcDhkcu5FLPpXKjfMVhhsYOeWzjsix4D8YxseEuXnYEpdTZ4+50pQgFGBz",
+	"5bFDlEk6eW+Ccm3Biwk18oUwt+BMyIlxzJ1ljfCnKXG0DWkdMreElWLzykwWxjk1yehwLeS3bJBqQtCF",
+	"4CBFYc2tyjmOj9HADExiUopbMO/VGK/lUnuVCAvSGc2BAM9GCVMKQk4okNDL6L7rNccAPQDDyosbzME8",
+	"Bh0O8+hCWq9CpYYz2SIaIjr3D2fQcThKWYKqcYzcZCLFfE3O9IP4+DnoemF1LVZIGtGyyiUybC51mkFV",
+	"+0TlJrXJqRkPThxIJ0xRmCDhs5IM+SwElLgot8qMSiupkiaRmfKKgQ+Zolg5b6VXdBgN0h22KtvWgqzV",
+	"AuL2EKcWZAd2XnAMPBQ/qtkcnF+d2JWTVC2U48ArZBwViMwhRIsLJMgxcKWaLNyOYfAjVTFEZTmojsZ5",
+	"6YFiEmsWikBOiTlQJp3vEzvQ502BuE4lTPEQJsuWfSLlspCkDKqqLY9jkRSg7SbOl95okzNIi7tdauWX",
+	"lfV5JG0CmdEyhIrYbdw7k15mRivJOYf4CeW6dp+p0fcIPWPBXNs4gopa4Req6BM2+kqLyxvlfwebMUym",
+	"msY6g6kXpa6Oyzuj62iSuuPreotDbF0Z5GZ0jSpEShkPA6OIHii0jq+1udHRlips5UPtwYvzesAwFscf",
+	"dHhqyEHBbUGWdKzZ9PtkLoyuI/vQPwhWKOIKBNxb8UokDn4OyuJoVmqXKQ+WAkHMJBYyw3UM46kIypic",
+	"TglQr484lBYJWPLP1T4GWI9D2cQqj+LFJDOHCFLUZHWYcK7i0xiGZZnQQOdrPBdKyEJmKg1231aH89ro",
+	"QYMSC1wHUdeLhQh42iriZapoGyguqEXEBKdzYGUNRrGDo5oTwnrZBSxrZDRWuoV4+wnrpTsR497v88GP",
+	"Uvtxrx/ccb/pbfvB13ZLItuw5TYp/AE02GDdpxjbRv4qvxxhQiAobK/vnNRhWoPMF5fUoS/Or1CNSw19",
+	"8eI/Sc0oqxhyEhFT6zDUjbFZGmKXhr2NsAChFxEXNDbGfFPlSVFDslm5d6AOffRbi2q8pYC88EsSCzIJ",
+	"Lcd8VwH8NsZRPV9VGADtm9EhMIy86pqHTdBdRoKz05ZtqMK/nxmFbpg+XCEZecrhx5WdYzTGm0a2wuoV",
+	"48ZQRYUK3+c/c3S4Vs1mVJ/XOA1oqBEFRaxGnf6UzTh5k9HvqhjrZudgV14ML4enw8MNOEWiChWv/G/b",
+	"iKrlKuej3eHQPsews9QYlFf2RtmkzPlwi08H6zSBwtFGmLfmNpUPBT2x27iXIB/NdNxrdXynSGE3eObs",
+	"6ePnXcBMZ9ZQC80V4zNowchAVvWMqCGc4ZRFNAKUxrcrkqIBJH9NtmsoLgEiTJNkqW3hNCHC24DiYPNR",
+	"MkfhGT04osSUU2eZjTxYq7yxy1dNTs59jl6AzqPBS5Wh7+b9QGt59mPIOxpefINscRi1odCZ8mcRG0Uu",
+	"XrfAouvggPPS+VjD5I04qsHgcUxSPMZycbQAZ5CPuqk+deKvf8WR/vpXHGsik9c30lIReSE9JQysblla",
+	"d2kVTCjtH9yvl6q0hxnQfQrHwMtdtua0UvJ+lKKqIKEvwiCMx1eRBxpktBocOlE2F4z8UPyDjEuQqWhZ",
+	"ag8abizIWLuSqddAqeTZk8dP/omuzRQREm4fl0ZsPYaJ1EH8jZJ0Y8WvuB+xER0EGvRHLfAeKRn3HCSe",
+	"gNQUxj1x8HeZS5VIOsKuoLwQMtLBkLF0pnnwk8zkjTrkVJecnJlO6eZo3S5Qd/b//q8Hkd47XxhlodvO",
+	"uXKyi6u+rJt1OOON8bwGNZtPjJ0bqrCeGGvK2dz1RaoYmd/1Kl/3JdVmLc/WC6urpcqbr5NuuqyKmnnN",
+	"X14z6sPRAd/tmRE+yVdPGO6MF3tWqljiSQBd3JB5jvIAeqGs0YTa9TEuy0pKRZ8/ubwSpxfnfBjz/OKM",
+	"/oinbRQgT5bil9nzi7OXB11Yoi2Sw6F4IpN5TXp8Uaa6QuLnFkAUChJO2TCSPQlLCZg+L4s7hhs/9FFl",
+	"BP9PqIWdKp0KzPYJJOTEn8ShyRnsHzBDuuBEpkX56JR/Ob04F4+pVEj8UKoU6rUlmSnTJnIoC+VGXFY0",
+	"oilcxxlI0ml6GrV0zUO0xpUOLUCXeVVSK34JE9siGaI5e7n2wY4mMbCt635fvL9WHbCRGCXSWq75XeE7",
+	"xh82PKMTbvygI6gHIEllKJgEiXHana/FddwtWQ8ZwlRdy0mB4UU7mMqERL0tSqs8V1o80bNMufmQrhph",
+	"DNDZtZkXk1n6PUQRVNocJamxPyz+w8C5l1u+4nCNjHk9dCi55pLoHU1WuFO4xhb+fOvFinB/8TO8URGI",
+	"/ybuUtQbtb9F8WFuUTSkZ39/4su6P/Fuir/7zYlwU/vj3ZkIppSj1Fz6k/AunBu94f+8bXzVeoFg9Kb5",
+	"59vRar/P4PJD7Sc+9LUHHvnVrrcfYlIQCfrjVw/CSF/HpYPalfzB6wbx/YN3ucwTJv9D13h2veYQxOaC",
+	"C1Auqor8dWrXmlSHNfwFH/PwN3SStCkm4suzGwpIw1jhgu2KkDa2AEP9zmCdqaBlr720EB7X4BOm0Gxl",
+	"yv/R8d7BCi/rGfpxLds4a81UZV385C8aR17051bWVWdQm8pvl44S2+qINbzjAdbRSYZIjC2MXccZtxZh",
+	"toqeOhKKxqDddDWh7xUK1tSl8f3jiewe7/GjU3Hw2KA9eRRqUcSpO3zfea7ufFW10ThANU+fnvXF5eDM",
+	"2KIvzsK/VFLcDdu0xu6aqvFJxxJ477THsAojzliVH1+CUNUTEBsOEO7W76uNqtxWwXd4n6XDrHSID0vn",
+	"3ZLD7bqXVxfnursr0z+QWjQuiHWsysvbcz017+zAr0K/bh/u5W2rlmT7St72ezcwccrDC6u6+fLi+dPq",
+	"hI2b3il975ROv89rdZvtX1Eb03diajTC3UxtmN6VkIiOo7oZZ/TESEu4H7Va6S0e8yEtRdfPfn707PT5",
+	"4/Off3h1eXV69eTVxZOf8S/MSShVDedFB4OBkIUaZFTkfIJbACcnR/ePvz85oUkGlN4MDEUwdNXkP1Ll",
+	"MHRPw4UoqYphCouRNn5QWEgAA7UT8Q+OUAnQowy8tDHMIJyJqi4vfyulhXuu+c1QhIFxzfeIiHvNPYq4",
+	"vmmFxoykgmckNeRvpQM7FIPB4U5+/O6nrgMB0lXnvmEi/gKtOiGCu8QNKy6evu5X4rbFvV/Var5CKX8R",
+	"hbxDcTeLOdqODQESjZPeacHWzw1xyC2OjodtviK+cex35SUtpknBOjvf0mO+zEavPGp4r4ehs+Vjt97R",
+	"8Gh4TCfuBWhZqN5J78HwaPgAWSf9nLg2WhzLrJjLUfPBx8I4v75kfoYmPuHJaJFrPGGOy6yqOnAr4tuY",
+	"rtWTZrcyB09+55cuzp4/jsW2a++gnk/5FhTbP36cC9tTScqEC55QXPgiyIyKLzxV1MU3d84fU4rV3Y5B",
+	"qDNGNfids8Joriec0sl/SHVrv4dEE5rXi3l7443lfnhIvwOyeNvvetUM85KQxxHgIrgmRqWMe3GN1jwU",
+	"8aG4KRcyrS5CYk9KejpoqcP1lyyA4Pwjky75SIFKpMhvFEUWfM3o1xB31GPt9OBnW8LDxf2I4JHU3T86",
+	"+mDT1s/X0cQruex/cnBJvuaDTRkfNFifL3i1+tE2fvyKAgA5Qx2oNKX3Ej9dU8rRm/C/t6yWmNOvKygj",
+	"oFFBudVuCtrquYuCqviQby15aFLWNKC3uunvpA90/9HL2co7uWgbeHXDqmwseNQQzwc1rt8tZ9sQEedS",
+	"J0ZHWDFbBtuwW18qwA1PWxFtVN4XfpuiSWwNbAWMMe5CbYmouXLVzKTeqQFeC9cN7jps22hEqi38SpWI",
+	"m+wD8C2eL8lG7S3GqsXo92bgt78GTWeurvVec7claHb6vAxBPDSp09FqcfxCa2nDlel4wyuX8e1DMYWb",
+	"WCpaV5kGTSx1M5jwXGPz8KgevlYmHCve3Iv0VOU2x0dHR/8eb73IiVkAfVR1TwzYhOFb/HyTOhRyBpfq",
+	"d2ipwp0H7us8O228RNvHuAXUAtL4szGFhYUypVt905oeYRUX4WVMRv5W3r9tPJhb8MUQ8Y85aPxDaclv",
+	"F9ANlli3GCSIy7hqq8av7dKrJNH+td/P3cYhfjz4nYToVExV5sEKuC3o0ll85Iw/dk2zH2s5s62Wizv2",
+	"3lmU+dbSZBlvqK0EuY4FLL7NWd17ki7hW3zDuiRCGwLB4u0+bLqJWvry0XIruR/Twna+Yf8FGtsCJbjj",
+	"ah6decSwgU9Adou+Wj0/L6MbDn9z6V6vpWIbxIy7/CTd624LxmhMzt/frbT0hkKu+GpRMwuso5DVUC3e",
+	"k1VToXwdT9GdWLrTF4r3HPTjsxCvaIUYR840RlWbFkdPOvzE1GyPVfbJ3T5U257crf0QwMYorv3wIody",
+	"6DzXfh+gbV9aX6+Ns4uhWY+52qR8nMCrPcfXH32t/CjFtx6CrYnYJ4/D2nr11QZj3b8a82XY1LYpexmu",
+	"e20CrVvPYVbINd0OWX1cdIsJXR/r/bDsdpH+FwForzyx+62j2u2f2NlHP++iqRtDoJVKxLuR7pZWN+Du",
+	"1ucTrs69Q7XXB9xFtVs3UjcmY6Y96gfEw5+t/FbwBlC8etWL+krXjSM3B+uHe3Ub4eRotdqY+cqD2ttB",
+	"9z0i/ZUr+gZY+gdoBR5iBv59tXZlqM9AZT+qPKw5nS8xStsGnrVEoIGgvUOMtj7Q52rI44V595riQwba",
+	"up67/9Qg21p4WlvXTgO/h9v2UedXE3V+ujqo+5+rYdoXX+3x+T0+v6OZ+KSVWZ+tydiXg+3LwfbJ91de",
+	"Dra3PvsatH0N2r4GbV+D9rXXoO0t/b7wbY/E7RPrPyOxDu/PbK2Hi8/p1JVw4ZN1+xa+aPT6XG3bemwZ",
+	"l/lxQss4+tcfWYaV7gPLhkB98rgyauhXG1aGBX5hUWU0indV0IV3A9q1c/VV/E6j2+z55Rx2xLcovoiz",
+	"juqdrG/9qCNI2T4g21Hb3zUeq98DvPOYI5iK6pQjvjmysaYnUNXs/bmai0V4v2XTbItI/Qc85oiPUv7B",
+	"+j4e5j0r+6rX9fY1fd+owdhczRdkg+v4dlX2qt83pOkfU7Ca/u/LCjq3IZlBmCog866Is9nrW3chG+sL",
+	"G68SfmIUsxFa19Z9xbXsMcx9xPzZR8wfHaS8/363c/eI4R4x3COGe8Twa0AM77/f5do9fLcPRr7JYOQT",
+	"I3Q7qeceLtvDZXu47EPCZX+W2u2xq0+JXX1WxnUPJO2BpH3s9mlit093/fTB52Ri9ldO95Wx+8rYLebg",
+	"k14z/axMw/5q6f5q6T6p/cqvln6jFmd/nXR/nXR/nXR/nfQrv076jVr3/RXSPWq2T5Q/YKJcf7wmH9HF",
+	"xV/HDeESql0uNXrxWSskDVJQjb4ucu1X6LeN234tfqzF1bPHz07EaZoKVxaFsZ7a88/Rj5K5ylJhIeP2",
+	"c1Wws1z7LYdAYvshu3U6Y4XONgobhWdh1IhGvn359v8HAAD//+eSTI750QAA",
 }
 
 // GetSwagger returns the content of the embedded swagger specification file
