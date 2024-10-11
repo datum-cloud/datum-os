@@ -99,6 +99,12 @@ const (
 	EdgeContactLists = "contact_lists"
 	// EdgeNotes holds the string denoting the notes edge name in mutations.
 	EdgeNotes = "notes"
+	// EdgeVendors holds the string denoting the vendors edge name in mutations.
+	EdgeVendors = "vendors"
+	// EdgeVendorProfiles holds the string denoting the vendor_profiles edge name in mutations.
+	EdgeVendorProfiles = "vendor_profiles"
+	// EdgePostalAddresses holds the string denoting the postal_addresses edge name in mutations.
+	EdgePostalAddresses = "postal_addresses"
 	// EdgeMembers holds the string denoting the members edge name in mutations.
 	EdgeMembers = "members"
 	// Table holds the table name of the organization in the database.
@@ -276,6 +282,27 @@ const (
 	NotesInverseTable = "notes"
 	// NotesColumn is the table column denoting the notes relation/edge.
 	NotesColumn = "owner_id"
+	// VendorsTable is the table that holds the vendors relation/edge.
+	VendorsTable = "vendors"
+	// VendorsInverseTable is the table name for the Vendor entity.
+	// It exists in this package in order to avoid circular dependency with the "vendor" package.
+	VendorsInverseTable = "vendors"
+	// VendorsColumn is the table column denoting the vendors relation/edge.
+	VendorsColumn = "owner_id"
+	// VendorProfilesTable is the table that holds the vendor_profiles relation/edge.
+	VendorProfilesTable = "vendor_profiles"
+	// VendorProfilesInverseTable is the table name for the VendorProfile entity.
+	// It exists in this package in order to avoid circular dependency with the "vendorprofile" package.
+	VendorProfilesInverseTable = "vendor_profiles"
+	// VendorProfilesColumn is the table column denoting the vendor_profiles relation/edge.
+	VendorProfilesColumn = "owner_id"
+	// PostalAddressesTable is the table that holds the postal_addresses relation/edge.
+	PostalAddressesTable = "postal_addresses"
+	// PostalAddressesInverseTable is the table name for the PostalAddress entity.
+	// It exists in this package in order to avoid circular dependency with the "postaladdress" package.
+	PostalAddressesInverseTable = "postal_addresses"
+	// PostalAddressesColumn is the table column denoting the postal_addresses relation/edge.
+	PostalAddressesColumn = "owner_id"
 	// MembersTable is the table that holds the members relation/edge.
 	MembersTable = "org_memberships"
 	// MembersInverseTable is the table name for the OrgMembership entity.
@@ -810,6 +837,48 @@ func ByNotes(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
+// ByVendorsCount orders the results by vendors count.
+func ByVendorsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newVendorsStep(), opts...)
+	}
+}
+
+// ByVendors orders the results by vendors terms.
+func ByVendors(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newVendorsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByVendorProfilesCount orders the results by vendor_profiles count.
+func ByVendorProfilesCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newVendorProfilesStep(), opts...)
+	}
+}
+
+// ByVendorProfiles orders the results by vendor_profiles terms.
+func ByVendorProfiles(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newVendorProfilesStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByPostalAddressesCount orders the results by postal_addresses count.
+func ByPostalAddressesCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newPostalAddressesStep(), opts...)
+	}
+}
+
+// ByPostalAddresses orders the results by postal_addresses terms.
+func ByPostalAddresses(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newPostalAddressesStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByMembersCount orders the results by members count.
 func ByMembersCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -1010,6 +1079,27 @@ func newNotesStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(NotesInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, NotesTable, NotesColumn),
+	)
+}
+func newVendorsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(VendorsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, VendorsTable, VendorsColumn),
+	)
+}
+func newVendorProfilesStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(VendorProfilesInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, VendorProfilesTable, VendorProfilesColumn),
+	)
+}
+func newPostalAddressesStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(PostalAddressesInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, PostalAddressesTable, PostalAddressesColumn),
 	)
 }
 func newMembersStep() *sqlgraph.Step {

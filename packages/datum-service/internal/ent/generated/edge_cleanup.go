@@ -27,11 +27,14 @@ import (
 	"github.com/datum-cloud/datum-os/internal/ent/generated/orgmembership"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/passwordresettoken"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/personalaccesstoken"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/postaladdress"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/subscriber"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/template"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/tfasetting"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/user"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/usersetting"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/vendor"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofile"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/webauthn"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/webhook"
 )
@@ -495,6 +498,27 @@ func OrganizationEdgeCleanup(ctx context.Context, id string) error {
 		}
 	}
 
+	if exists, err := FromContext(ctx).Vendor.Query().Where((vendor.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
+		if vendorCount, err := FromContext(ctx).Vendor.Delete().Where(vendor.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
+			FromContext(ctx).Logger.Debugw("deleting vendor", "count", vendorCount, "err", err)
+			return err
+		}
+	}
+
+	if exists, err := FromContext(ctx).VendorProfile.Query().Where((vendorprofile.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
+		if vendorprofileCount, err := FromContext(ctx).VendorProfile.Delete().Where(vendorprofile.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
+			FromContext(ctx).Logger.Debugw("deleting vendorprofile", "count", vendorprofileCount, "err", err)
+			return err
+		}
+	}
+
+	if exists, err := FromContext(ctx).PostalAddress.Query().Where((postaladdress.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
+		if postaladdressCount, err := FromContext(ctx).PostalAddress.Delete().Where(postaladdress.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
+			FromContext(ctx).Logger.Debugw("deleting postaladdress", "count", postaladdressCount, "err", err)
+			return err
+		}
+	}
+
 	if exists, err := FromContext(ctx).OrgMembership.Query().Where((orgmembership.HasOrganizationWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if orgmembershipCount, err := FromContext(ctx).OrgMembership.Delete().Where(orgmembership.HasOrganizationWith(organization.ID(id))).Exec(ctx); err != nil {
 			FromContext(ctx).Logger.Debugw("deleting orgmembership", "count", orgmembershipCount, "err", err)
@@ -536,6 +560,20 @@ func PasswordResetTokenEdgeCleanup(ctx context.Context, id string) error {
 func PersonalAccessTokenEdgeCleanup(ctx context.Context, id string) error {
 	// If a user has access to delete the object, they have access to delete all edges
 	ctx = privacy.DecisionContext(ctx, privacy.Allowf("cleanup personalaccesstoken edge"))
+
+	return nil
+}
+
+func PostalAddressEdgeCleanup(ctx context.Context, id string) error {
+	// If a user has access to delete the object, they have access to delete all edges
+	ctx = privacy.DecisionContext(ctx, privacy.Allowf("cleanup postaladdress edge"))
+
+	return nil
+}
+
+func PostalAddressHistoryEdgeCleanup(ctx context.Context, id string) error {
+	// If a user has access to delete the object, they have access to delete all edges
+	ctx = privacy.DecisionContext(ctx, privacy.Allowf("cleanup postaladdresshistory edge"))
 
 	return nil
 }
@@ -655,6 +693,55 @@ func UserSettingEdgeCleanup(ctx context.Context, id string) error {
 func UserSettingHistoryEdgeCleanup(ctx context.Context, id string) error {
 	// If a user has access to delete the object, they have access to delete all edges
 	ctx = privacy.DecisionContext(ctx, privacy.Allowf("cleanup usersettinghistory edge"))
+
+	return nil
+}
+
+func VendorEdgeCleanup(ctx context.Context, id string) error {
+	// If a user has access to delete the object, they have access to delete all edges
+	ctx = privacy.DecisionContext(ctx, privacy.Allowf("cleanup vendor edge"))
+
+	if exists, err := FromContext(ctx).VendorProfile.Query().Where((vendorprofile.HasVendorWith(vendor.ID(id)))).Exist(ctx); err == nil && exists {
+		if vendorprofileCount, err := FromContext(ctx).VendorProfile.Delete().Where(vendorprofile.HasVendorWith(vendor.ID(id))).Exec(ctx); err != nil {
+			FromContext(ctx).Logger.Debugw("deleting vendorprofile", "count", vendorprofileCount, "err", err)
+			return err
+		}
+	}
+
+	return nil
+}
+
+func VendorHistoryEdgeCleanup(ctx context.Context, id string) error {
+	// If a user has access to delete the object, they have access to delete all edges
+	ctx = privacy.DecisionContext(ctx, privacy.Allowf("cleanup vendorhistory edge"))
+
+	return nil
+}
+
+func VendorProfileEdgeCleanup(ctx context.Context, id string) error {
+	// If a user has access to delete the object, they have access to delete all edges
+	ctx = privacy.DecisionContext(ctx, privacy.Allowf("cleanup vendorprofile edge"))
+
+	return nil
+}
+
+func VendorProfileHistoryEdgeCleanup(ctx context.Context, id string) error {
+	// If a user has access to delete the object, they have access to delete all edges
+	ctx = privacy.DecisionContext(ctx, privacy.Allowf("cleanup vendorprofilehistory edge"))
+
+	return nil
+}
+
+func VendorProfilePostalAddressEdgeCleanup(ctx context.Context, id string) error {
+	// If a user has access to delete the object, they have access to delete all edges
+	ctx = privacy.DecisionContext(ctx, privacy.Allowf("cleanup vendorprofilepostaladdress edge"))
+
+	return nil
+}
+
+func VendorProfilePostalAddressHistoryEdgeCleanup(ctx context.Context, id string) error {
+	// If a user has access to delete the object, they have access to delete all edges
+	ctx = privacy.DecisionContext(ctx, privacy.Allowf("cleanup vendorprofilepostaladdresshistory edge"))
 
 	return nil
 }

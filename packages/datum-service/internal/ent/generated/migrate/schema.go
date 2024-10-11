@@ -797,6 +797,9 @@ var (
 		{Name: "metadata", Type: field.TypeJSON, Nullable: true},
 		{Name: "contact_list_events", Type: field.TypeString, Nullable: true},
 		{Name: "contact_list_membership_events", Type: field.TypeString, Nullable: true},
+		{Name: "postal_address_events", Type: field.TypeString, Nullable: true},
+		{Name: "vendor_events", Type: field.TypeString, Nullable: true},
+		{Name: "vendor_profile_postal_address_events", Type: field.TypeString, Nullable: true},
 	}
 	// EventsTable holds the schema information for the "events" table.
 	EventsTable = &schema.Table{
@@ -814,6 +817,24 @@ var (
 				Symbol:     "events_contact_list_memberships_events",
 				Columns:    []*schema.Column{EventsColumns[12]},
 				RefColumns: []*schema.Column{ContactListMembershipsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "events_postal_addresses_events",
+				Columns:    []*schema.Column{EventsColumns[13]},
+				RefColumns: []*schema.Column{PostalAddressesColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "events_vendors_events",
+				Columns:    []*schema.Column{EventsColumns[14]},
+				RefColumns: []*schema.Column{VendorsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "events_vendor_profile_postal_addresses_events",
+				Columns:    []*schema.Column{EventsColumns[15]},
+				RefColumns: []*schema.Column{VendorProfilePostalAddressesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 		},
@@ -1846,6 +1867,99 @@ var (
 			},
 		},
 	}
+	// PostalAddressesColumns holds the columns for the "postal_addresses" table.
+	PostalAddressesColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "mapping_id", Type: field.TypeString, Unique: true},
+		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+		{Name: "region_code", Type: field.TypeString, Size: 2},
+		{Name: "language_code", Type: field.TypeString, Nullable: true, Size: 10},
+		{Name: "postal_code", Type: field.TypeString, Nullable: true, Size: 12},
+		{Name: "sorting_code", Type: field.TypeString, Nullable: true, Size: 10},
+		{Name: "administrative_area", Type: field.TypeString, Nullable: true, Size: 100},
+		{Name: "locality", Type: field.TypeString, Nullable: true, Size: 100},
+		{Name: "sublocality", Type: field.TypeString, Nullable: true, Size: 100},
+		{Name: "address_lines", Type: field.TypeJSON},
+		{Name: "recipients", Type: field.TypeJSON},
+		{Name: "organization", Type: field.TypeString, Nullable: true, Size: 100},
+		{Name: "entity_postal_addresses", Type: field.TypeString, Nullable: true},
+		{Name: "owner_id", Type: field.TypeString, Nullable: true},
+	}
+	// PostalAddressesTable holds the schema information for the "postal_addresses" table.
+	PostalAddressesTable = &schema.Table{
+		Name:       "postal_addresses",
+		Columns:    PostalAddressesColumns,
+		PrimaryKey: []*schema.Column{PostalAddressesColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "postal_addresses_entities_postal_addresses",
+				Columns:    []*schema.Column{PostalAddressesColumns[19]},
+				RefColumns: []*schema.Column{EntitiesColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "postal_addresses_organizations_postal_addresses",
+				Columns:    []*schema.Column{PostalAddressesColumns[20]},
+				RefColumns: []*schema.Column{OrganizationsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
+		Indexes: []*schema.Index{
+			{
+				Name:    "postaladdress_region_code_locality_sublocality_administrative_area_postal_code_address_lines_owner_id",
+				Unique:  true,
+				Columns: []*schema.Column{PostalAddressesColumns[9], PostalAddressesColumns[14], PostalAddressesColumns[15], PostalAddressesColumns[13], PostalAddressesColumns[11], PostalAddressesColumns[16], PostalAddressesColumns[20]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "deleted_at is NULL",
+				},
+			},
+		},
+	}
+	// PostalAddressHistoryColumns holds the columns for the "postal_address_history" table.
+	PostalAddressHistoryColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "history_time", Type: field.TypeTime},
+		{Name: "ref", Type: field.TypeString, Nullable: true},
+		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "mapping_id", Type: field.TypeString},
+		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+		{Name: "owner_id", Type: field.TypeString, Nullable: true},
+		{Name: "region_code", Type: field.TypeString, Size: 2},
+		{Name: "language_code", Type: field.TypeString, Nullable: true, Size: 10},
+		{Name: "postal_code", Type: field.TypeString, Nullable: true, Size: 12},
+		{Name: "sorting_code", Type: field.TypeString, Nullable: true, Size: 10},
+		{Name: "administrative_area", Type: field.TypeString, Nullable: true, Size: 100},
+		{Name: "locality", Type: field.TypeString, Nullable: true, Size: 100},
+		{Name: "sublocality", Type: field.TypeString, Nullable: true, Size: 100},
+		{Name: "address_lines", Type: field.TypeJSON},
+		{Name: "recipients", Type: field.TypeJSON},
+		{Name: "organization", Type: field.TypeString, Nullable: true, Size: 100},
+	}
+	// PostalAddressHistoryTable holds the schema information for the "postal_address_history" table.
+	PostalAddressHistoryTable = &schema.Table{
+		Name:       "postal_address_history",
+		Columns:    PostalAddressHistoryColumns,
+		PrimaryKey: []*schema.Column{PostalAddressHistoryColumns[0]},
+		Indexes: []*schema.Index{
+			{
+				Name:    "postaladdresshistory_history_time",
+				Unique:  false,
+				Columns: []*schema.Column{PostalAddressHistoryColumns[1]},
+			},
+		},
+	}
 	// SubscribersColumns holds the columns for the "subscribers" table.
 	SubscribersColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeString},
@@ -2171,6 +2285,228 @@ var (
 				Name:    "usersettinghistory_history_time",
 				Unique:  false,
 				Columns: []*schema.Column{UserSettingHistoryColumns[1]},
+			},
+		},
+	}
+	// VendorsColumns holds the columns for the "vendors" table.
+	VendorsColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "mapping_id", Type: field.TypeString, Unique: true},
+		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+		{Name: "display_name", Type: field.TypeString, Size: 64},
+		{Name: "vendor_type", Type: field.TypeEnum, Enums: []string{"UNSPECIFIED", "PERSON", "CORPORATION"}, Default: "UNSPECIFIED"},
+		{Name: "onboarding_state", Type: field.TypeEnum, Enums: []string{"UNSPECIFIED", "PENDING", "ACTIVE", "INACTIVE"}, Default: "PENDING"},
+		{Name: "owner_id", Type: field.TypeString, Nullable: true},
+	}
+	// VendorsTable holds the schema information for the "vendors" table.
+	VendorsTable = &schema.Table{
+		Name:       "vendors",
+		Columns:    VendorsColumns,
+		PrimaryKey: []*schema.Column{VendorsColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "vendors_organizations_vendors",
+				Columns:    []*schema.Column{VendorsColumns[12]},
+				RefColumns: []*schema.Column{OrganizationsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
+		Indexes: []*schema.Index{
+			{
+				Name:    "vendor_display_name_owner_id",
+				Unique:  true,
+				Columns: []*schema.Column{VendorsColumns[9], VendorsColumns[12]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "deleted_at is NULL",
+				},
+			},
+		},
+	}
+	// VendorHistoryColumns holds the columns for the "vendor_history" table.
+	VendorHistoryColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "history_time", Type: field.TypeTime},
+		{Name: "ref", Type: field.TypeString, Nullable: true},
+		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "mapping_id", Type: field.TypeString},
+		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+		{Name: "owner_id", Type: field.TypeString, Nullable: true},
+		{Name: "display_name", Type: field.TypeString, Size: 64},
+		{Name: "vendor_type", Type: field.TypeEnum, Enums: []string{"UNSPECIFIED", "PERSON", "CORPORATION"}, Default: "UNSPECIFIED"},
+		{Name: "onboarding_state", Type: field.TypeEnum, Enums: []string{"UNSPECIFIED", "PENDING", "ACTIVE", "INACTIVE"}, Default: "PENDING"},
+	}
+	// VendorHistoryTable holds the schema information for the "vendor_history" table.
+	VendorHistoryTable = &schema.Table{
+		Name:       "vendor_history",
+		Columns:    VendorHistoryColumns,
+		PrimaryKey: []*schema.Column{VendorHistoryColumns[0]},
+		Indexes: []*schema.Index{
+			{
+				Name:    "vendorhistory_history_time",
+				Unique:  false,
+				Columns: []*schema.Column{VendorHistoryColumns[1]},
+			},
+		},
+	}
+	// VendorProfilesColumns holds the columns for the "vendor_profiles" table.
+	VendorProfilesColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "mapping_id", Type: field.TypeString, Unique: true},
+		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+		{Name: "name", Type: field.TypeString, Size: 255},
+		{Name: "dba_name", Type: field.TypeString, Nullable: true, Size: 255},
+		{Name: "description", Type: field.TypeString, Nullable: true},
+		{Name: "website_uri", Type: field.TypeString, Nullable: true, Size: 2048},
+		{Name: "owner_id", Type: field.TypeString, Nullable: true},
+		{Name: "vendor_id", Type: field.TypeString, Unique: true, Nullable: true},
+	}
+	// VendorProfilesTable holds the schema information for the "vendor_profiles" table.
+	VendorProfilesTable = &schema.Table{
+		Name:       "vendor_profiles",
+		Columns:    VendorProfilesColumns,
+		PrimaryKey: []*schema.Column{VendorProfilesColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "vendor_profiles_organizations_vendor_profiles",
+				Columns:    []*schema.Column{VendorProfilesColumns[13]},
+				RefColumns: []*schema.Column{OrganizationsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "vendor_profiles_vendors_profile",
+				Columns:    []*schema.Column{VendorProfilesColumns[14]},
+				RefColumns: []*schema.Column{VendorsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
+		Indexes: []*schema.Index{
+			{
+				Name:    "vendorprofile_vendor_id",
+				Unique:  true,
+				Columns: []*schema.Column{VendorProfilesColumns[14]},
+			},
+		},
+	}
+	// VendorProfileHistoryColumns holds the columns for the "vendor_profile_history" table.
+	VendorProfileHistoryColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "history_time", Type: field.TypeTime},
+		{Name: "ref", Type: field.TypeString, Nullable: true},
+		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "mapping_id", Type: field.TypeString},
+		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+		{Name: "owner_id", Type: field.TypeString, Nullable: true},
+		{Name: "vendor_id", Type: field.TypeString, Nullable: true},
+		{Name: "name", Type: field.TypeString, Size: 255},
+		{Name: "dba_name", Type: field.TypeString, Nullable: true, Size: 255},
+		{Name: "description", Type: field.TypeString, Nullable: true},
+		{Name: "website_uri", Type: field.TypeString, Nullable: true, Size: 2048},
+	}
+	// VendorProfileHistoryTable holds the schema information for the "vendor_profile_history" table.
+	VendorProfileHistoryTable = &schema.Table{
+		Name:       "vendor_profile_history",
+		Columns:    VendorProfileHistoryColumns,
+		PrimaryKey: []*schema.Column{VendorProfileHistoryColumns[0]},
+		Indexes: []*schema.Index{
+			{
+				Name:    "vendorprofilehistory_history_time",
+				Unique:  false,
+				Columns: []*schema.Column{VendorProfileHistoryColumns[1]},
+			},
+		},
+	}
+	// VendorProfilePostalAddressesColumns holds the columns for the "vendor_profile_postal_addresses" table.
+	VendorProfilePostalAddressesColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "mapping_id", Type: field.TypeString, Unique: true},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "postal_address_type", Type: field.TypeEnum, Enums: []string{"MAILING", "BILLING", "PHYSICAL"}, Default: "MAILING"},
+		{Name: "postal_address_id", Type: field.TypeString},
+		{Name: "vendor_profile_id", Type: field.TypeString},
+	}
+	// VendorProfilePostalAddressesTable holds the schema information for the "vendor_profile_postal_addresses" table.
+	VendorProfilePostalAddressesTable = &schema.Table{
+		Name:       "vendor_profile_postal_addresses",
+		Columns:    VendorProfilePostalAddressesColumns,
+		PrimaryKey: []*schema.Column{VendorProfilePostalAddressesColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "vendor_profile_postal_addresses_postal_addresses_postal_address",
+				Columns:    []*schema.Column{VendorProfilePostalAddressesColumns[9]},
+				RefColumns: []*schema.Column{PostalAddressesColumns[0]},
+				OnDelete:   schema.NoAction,
+			},
+			{
+				Symbol:     "vendor_profile_postal_addresses_vendor_profiles_profile",
+				Columns:    []*schema.Column{VendorProfilePostalAddressesColumns[10]},
+				RefColumns: []*schema.Column{VendorProfilesColumns[0]},
+				OnDelete:   schema.NoAction,
+			},
+		},
+		Indexes: []*schema.Index{
+			{
+				Name:    "vendorprofilepostaladdress_vendor_profile_id_postal_address_id",
+				Unique:  true,
+				Columns: []*schema.Column{VendorProfilePostalAddressesColumns[10], VendorProfilePostalAddressesColumns[9]},
+			},
+		},
+	}
+	// VendorProfilePostalAddressHistoryColumns holds the columns for the "vendor_profile_postal_address_history" table.
+	VendorProfilePostalAddressHistoryColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "history_time", Type: field.TypeTime},
+		{Name: "ref", Type: field.TypeString, Nullable: true},
+		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "mapping_id", Type: field.TypeString},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "postal_address_type", Type: field.TypeEnum, Enums: []string{"MAILING", "BILLING", "PHYSICAL"}, Default: "MAILING"},
+		{Name: "vendor_profile_id", Type: field.TypeString},
+		{Name: "postal_address_id", Type: field.TypeString},
+	}
+	// VendorProfilePostalAddressHistoryTable holds the schema information for the "vendor_profile_postal_address_history" table.
+	VendorProfilePostalAddressHistoryTable = &schema.Table{
+		Name:       "vendor_profile_postal_address_history",
+		Columns:    VendorProfilePostalAddressHistoryColumns,
+		PrimaryKey: []*schema.Column{VendorProfilePostalAddressHistoryColumns[0]},
+		Indexes: []*schema.Index{
+			{
+				Name:    "vendorprofilepostaladdresshistory_history_time",
+				Unique:  false,
+				Columns: []*schema.Column{VendorProfilePostalAddressHistoryColumns[1]},
 			},
 		},
 	}
@@ -2997,6 +3333,8 @@ var (
 		OrganizationSettingHistoryTable,
 		PasswordResetTokensTable,
 		PersonalAccessTokensTable,
+		PostalAddressesTable,
+		PostalAddressHistoryTable,
 		SubscribersTable,
 		TfaSettingsTable,
 		TemplatesTable,
@@ -3005,6 +3343,12 @@ var (
 		UserHistoryTable,
 		UserSettingsTable,
 		UserSettingHistoryTable,
+		VendorsTable,
+		VendorHistoryTable,
+		VendorProfilesTable,
+		VendorProfileHistoryTable,
+		VendorProfilePostalAddressesTable,
+		VendorProfilePostalAddressHistoryTable,
 		WebauthnsTable,
 		WebhooksTable,
 		WebhookHistoryTable,
@@ -3086,6 +3430,9 @@ func init() {
 	}
 	EventsTable.ForeignKeys[0].RefTable = ContactListsTable
 	EventsTable.ForeignKeys[1].RefTable = ContactListMembershipsTable
+	EventsTable.ForeignKeys[2].RefTable = PostalAddressesTable
+	EventsTable.ForeignKeys[3].RefTable = VendorsTable
+	EventsTable.ForeignKeys[4].RefTable = VendorProfilePostalAddressesTable
 	EventHistoryTable.Annotation = &entsql.Annotation{
 		Table: "event_history",
 	}
@@ -3144,6 +3491,11 @@ func init() {
 	}
 	PasswordResetTokensTable.ForeignKeys[0].RefTable = UsersTable
 	PersonalAccessTokensTable.ForeignKeys[0].RefTable = UsersTable
+	PostalAddressesTable.ForeignKeys[0].RefTable = EntitiesTable
+	PostalAddressesTable.ForeignKeys[1].RefTable = OrganizationsTable
+	PostalAddressHistoryTable.Annotation = &entsql.Annotation{
+		Table: "postal_address_history",
+	}
 	SubscribersTable.ForeignKeys[0].RefTable = OrganizationsTable
 	TfaSettingsTable.ForeignKeys[0].RefTable = UsersTable
 	TemplatesTable.ForeignKeys[0].RefTable = OrganizationsTable
@@ -3157,6 +3509,20 @@ func init() {
 	UserSettingsTable.ForeignKeys[1].RefTable = OrganizationsTable
 	UserSettingHistoryTable.Annotation = &entsql.Annotation{
 		Table: "user_setting_history",
+	}
+	VendorsTable.ForeignKeys[0].RefTable = OrganizationsTable
+	VendorHistoryTable.Annotation = &entsql.Annotation{
+		Table: "vendor_history",
+	}
+	VendorProfilesTable.ForeignKeys[0].RefTable = OrganizationsTable
+	VendorProfilesTable.ForeignKeys[1].RefTable = VendorsTable
+	VendorProfileHistoryTable.Annotation = &entsql.Annotation{
+		Table: "vendor_profile_history",
+	}
+	VendorProfilePostalAddressesTable.ForeignKeys[0].RefTable = PostalAddressesTable
+	VendorProfilePostalAddressesTable.ForeignKeys[1].RefTable = VendorProfilesTable
+	VendorProfilePostalAddressHistoryTable.Annotation = &entsql.Annotation{
+		Table: "vendor_profile_postal_address_history",
 	}
 	WebauthnsTable.ForeignKeys[0].RefTable = UsersTable
 	WebhooksTable.ForeignKeys[0].RefTable = OrganizationsTable

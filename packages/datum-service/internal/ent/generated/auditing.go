@@ -34,9 +34,13 @@ import (
 	"github.com/datum-cloud/datum-os/internal/ent/generated/organizationhistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/organizationsettinghistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/orgmembershiphistory"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/postaladdresshistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/templatehistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/userhistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/usersettinghistory"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorhistory"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofilehistory"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofilepostaladdresshistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/webhookhistory"
 	"github.com/datum-cloud/datum-os/pkg/enthistory"
 )
@@ -1515,6 +1519,90 @@ func (osh *OrganizationSettingHistory) Diff(history *OrganizationSettingHistory)
 	return nil, IdenticalHistoryError
 }
 
+func (pah *PostalAddressHistory) changes(new *PostalAddressHistory) []Change {
+	var changes []Change
+	if !reflect.DeepEqual(pah.CreatedAt, new.CreatedAt) {
+		changes = append(changes, NewChange(postaladdresshistory.FieldCreatedAt, pah.CreatedAt, new.CreatedAt))
+	}
+	if !reflect.DeepEqual(pah.UpdatedAt, new.UpdatedAt) {
+		changes = append(changes, NewChange(postaladdresshistory.FieldUpdatedAt, pah.UpdatedAt, new.UpdatedAt))
+	}
+	if !reflect.DeepEqual(pah.CreatedBy, new.CreatedBy) {
+		changes = append(changes, NewChange(postaladdresshistory.FieldCreatedBy, pah.CreatedBy, new.CreatedBy))
+	}
+	if !reflect.DeepEqual(pah.DeletedAt, new.DeletedAt) {
+		changes = append(changes, NewChange(postaladdresshistory.FieldDeletedAt, pah.DeletedAt, new.DeletedAt))
+	}
+	if !reflect.DeepEqual(pah.DeletedBy, new.DeletedBy) {
+		changes = append(changes, NewChange(postaladdresshistory.FieldDeletedBy, pah.DeletedBy, new.DeletedBy))
+	}
+	if !reflect.DeepEqual(pah.MappingID, new.MappingID) {
+		changes = append(changes, NewChange(postaladdresshistory.FieldMappingID, pah.MappingID, new.MappingID))
+	}
+	if !reflect.DeepEqual(pah.Tags, new.Tags) {
+		changes = append(changes, NewChange(postaladdresshistory.FieldTags, pah.Tags, new.Tags))
+	}
+	if !reflect.DeepEqual(pah.OwnerID, new.OwnerID) {
+		changes = append(changes, NewChange(postaladdresshistory.FieldOwnerID, pah.OwnerID, new.OwnerID))
+	}
+	if !reflect.DeepEqual(pah.RegionCode, new.RegionCode) {
+		changes = append(changes, NewChange(postaladdresshistory.FieldRegionCode, pah.RegionCode, new.RegionCode))
+	}
+	if !reflect.DeepEqual(pah.LanguageCode, new.LanguageCode) {
+		changes = append(changes, NewChange(postaladdresshistory.FieldLanguageCode, pah.LanguageCode, new.LanguageCode))
+	}
+	if !reflect.DeepEqual(pah.PostalCode, new.PostalCode) {
+		changes = append(changes, NewChange(postaladdresshistory.FieldPostalCode, pah.PostalCode, new.PostalCode))
+	}
+	if !reflect.DeepEqual(pah.SortingCode, new.SortingCode) {
+		changes = append(changes, NewChange(postaladdresshistory.FieldSortingCode, pah.SortingCode, new.SortingCode))
+	}
+	if !reflect.DeepEqual(pah.AdministrativeArea, new.AdministrativeArea) {
+		changes = append(changes, NewChange(postaladdresshistory.FieldAdministrativeArea, pah.AdministrativeArea, new.AdministrativeArea))
+	}
+	if !reflect.DeepEqual(pah.Locality, new.Locality) {
+		changes = append(changes, NewChange(postaladdresshistory.FieldLocality, pah.Locality, new.Locality))
+	}
+	if !reflect.DeepEqual(pah.Sublocality, new.Sublocality) {
+		changes = append(changes, NewChange(postaladdresshistory.FieldSublocality, pah.Sublocality, new.Sublocality))
+	}
+	if !reflect.DeepEqual(pah.AddressLines, new.AddressLines) {
+		changes = append(changes, NewChange(postaladdresshistory.FieldAddressLines, pah.AddressLines, new.AddressLines))
+	}
+	if !reflect.DeepEqual(pah.Recipients, new.Recipients) {
+		changes = append(changes, NewChange(postaladdresshistory.FieldRecipients, pah.Recipients, new.Recipients))
+	}
+	if !reflect.DeepEqual(pah.Organization, new.Organization) {
+		changes = append(changes, NewChange(postaladdresshistory.FieldOrganization, pah.Organization, new.Organization))
+	}
+	return changes
+}
+
+func (pah *PostalAddressHistory) Diff(history *PostalAddressHistory) (*HistoryDiff[PostalAddressHistory], error) {
+	if pah.Ref != history.Ref {
+		return nil, MismatchedRefError
+	}
+
+	pahUnix, historyUnix := pah.HistoryTime.Unix(), history.HistoryTime.Unix()
+	pahOlder := pahUnix < historyUnix || (pahUnix == historyUnix && pah.ID < history.ID)
+	historyOlder := pahUnix > historyUnix || (pahUnix == historyUnix && pah.ID > history.ID)
+
+	if pahOlder {
+		return &HistoryDiff[PostalAddressHistory]{
+			Old:     pah,
+			New:     history,
+			Changes: pah.changes(history),
+		}, nil
+	} else if historyOlder {
+		return &HistoryDiff[PostalAddressHistory]{
+			Old:     history,
+			New:     pah,
+			Changes: history.changes(pah),
+		}, nil
+	}
+	return nil, IdenticalHistoryError
+}
+
 func (th *TemplateHistory) changes(new *TemplateHistory) []Change {
 	var changes []Change
 	if !reflect.DeepEqual(th.CreatedAt, new.CreatedAt) {
@@ -1744,6 +1832,195 @@ func (ush *UserSettingHistory) Diff(history *UserSettingHistory) (*HistoryDiff[U
 			Old:     history,
 			New:     ush,
 			Changes: history.changes(ush),
+		}, nil
+	}
+	return nil, IdenticalHistoryError
+}
+
+func (vh *VendorHistory) changes(new *VendorHistory) []Change {
+	var changes []Change
+	if !reflect.DeepEqual(vh.CreatedAt, new.CreatedAt) {
+		changes = append(changes, NewChange(vendorhistory.FieldCreatedAt, vh.CreatedAt, new.CreatedAt))
+	}
+	if !reflect.DeepEqual(vh.UpdatedAt, new.UpdatedAt) {
+		changes = append(changes, NewChange(vendorhistory.FieldUpdatedAt, vh.UpdatedAt, new.UpdatedAt))
+	}
+	if !reflect.DeepEqual(vh.CreatedBy, new.CreatedBy) {
+		changes = append(changes, NewChange(vendorhistory.FieldCreatedBy, vh.CreatedBy, new.CreatedBy))
+	}
+	if !reflect.DeepEqual(vh.DeletedAt, new.DeletedAt) {
+		changes = append(changes, NewChange(vendorhistory.FieldDeletedAt, vh.DeletedAt, new.DeletedAt))
+	}
+	if !reflect.DeepEqual(vh.DeletedBy, new.DeletedBy) {
+		changes = append(changes, NewChange(vendorhistory.FieldDeletedBy, vh.DeletedBy, new.DeletedBy))
+	}
+	if !reflect.DeepEqual(vh.MappingID, new.MappingID) {
+		changes = append(changes, NewChange(vendorhistory.FieldMappingID, vh.MappingID, new.MappingID))
+	}
+	if !reflect.DeepEqual(vh.Tags, new.Tags) {
+		changes = append(changes, NewChange(vendorhistory.FieldTags, vh.Tags, new.Tags))
+	}
+	if !reflect.DeepEqual(vh.OwnerID, new.OwnerID) {
+		changes = append(changes, NewChange(vendorhistory.FieldOwnerID, vh.OwnerID, new.OwnerID))
+	}
+	if !reflect.DeepEqual(vh.DisplayName, new.DisplayName) {
+		changes = append(changes, NewChange(vendorhistory.FieldDisplayName, vh.DisplayName, new.DisplayName))
+	}
+	if !reflect.DeepEqual(vh.VendorType, new.VendorType) {
+		changes = append(changes, NewChange(vendorhistory.FieldVendorType, vh.VendorType, new.VendorType))
+	}
+	if !reflect.DeepEqual(vh.OnboardingState, new.OnboardingState) {
+		changes = append(changes, NewChange(vendorhistory.FieldOnboardingState, vh.OnboardingState, new.OnboardingState))
+	}
+	return changes
+}
+
+func (vh *VendorHistory) Diff(history *VendorHistory) (*HistoryDiff[VendorHistory], error) {
+	if vh.Ref != history.Ref {
+		return nil, MismatchedRefError
+	}
+
+	vhUnix, historyUnix := vh.HistoryTime.Unix(), history.HistoryTime.Unix()
+	vhOlder := vhUnix < historyUnix || (vhUnix == historyUnix && vh.ID < history.ID)
+	historyOlder := vhUnix > historyUnix || (vhUnix == historyUnix && vh.ID > history.ID)
+
+	if vhOlder {
+		return &HistoryDiff[VendorHistory]{
+			Old:     vh,
+			New:     history,
+			Changes: vh.changes(history),
+		}, nil
+	} else if historyOlder {
+		return &HistoryDiff[VendorHistory]{
+			Old:     history,
+			New:     vh,
+			Changes: history.changes(vh),
+		}, nil
+	}
+	return nil, IdenticalHistoryError
+}
+
+func (vph *VendorProfileHistory) changes(new *VendorProfileHistory) []Change {
+	var changes []Change
+	if !reflect.DeepEqual(vph.CreatedAt, new.CreatedAt) {
+		changes = append(changes, NewChange(vendorprofilehistory.FieldCreatedAt, vph.CreatedAt, new.CreatedAt))
+	}
+	if !reflect.DeepEqual(vph.UpdatedAt, new.UpdatedAt) {
+		changes = append(changes, NewChange(vendorprofilehistory.FieldUpdatedAt, vph.UpdatedAt, new.UpdatedAt))
+	}
+	if !reflect.DeepEqual(vph.CreatedBy, new.CreatedBy) {
+		changes = append(changes, NewChange(vendorprofilehistory.FieldCreatedBy, vph.CreatedBy, new.CreatedBy))
+	}
+	if !reflect.DeepEqual(vph.DeletedAt, new.DeletedAt) {
+		changes = append(changes, NewChange(vendorprofilehistory.FieldDeletedAt, vph.DeletedAt, new.DeletedAt))
+	}
+	if !reflect.DeepEqual(vph.DeletedBy, new.DeletedBy) {
+		changes = append(changes, NewChange(vendorprofilehistory.FieldDeletedBy, vph.DeletedBy, new.DeletedBy))
+	}
+	if !reflect.DeepEqual(vph.MappingID, new.MappingID) {
+		changes = append(changes, NewChange(vendorprofilehistory.FieldMappingID, vph.MappingID, new.MappingID))
+	}
+	if !reflect.DeepEqual(vph.Tags, new.Tags) {
+		changes = append(changes, NewChange(vendorprofilehistory.FieldTags, vph.Tags, new.Tags))
+	}
+	if !reflect.DeepEqual(vph.OwnerID, new.OwnerID) {
+		changes = append(changes, NewChange(vendorprofilehistory.FieldOwnerID, vph.OwnerID, new.OwnerID))
+	}
+	if !reflect.DeepEqual(vph.VendorID, new.VendorID) {
+		changes = append(changes, NewChange(vendorprofilehistory.FieldVendorID, vph.VendorID, new.VendorID))
+	}
+	if !reflect.DeepEqual(vph.Name, new.Name) {
+		changes = append(changes, NewChange(vendorprofilehistory.FieldName, vph.Name, new.Name))
+	}
+	if !reflect.DeepEqual(vph.DbaName, new.DbaName) {
+		changes = append(changes, NewChange(vendorprofilehistory.FieldDbaName, vph.DbaName, new.DbaName))
+	}
+	if !reflect.DeepEqual(vph.Description, new.Description) {
+		changes = append(changes, NewChange(vendorprofilehistory.FieldDescription, vph.Description, new.Description))
+	}
+	if !reflect.DeepEqual(vph.WebsiteURI, new.WebsiteURI) {
+		changes = append(changes, NewChange(vendorprofilehistory.FieldWebsiteURI, vph.WebsiteURI, new.WebsiteURI))
+	}
+	return changes
+}
+
+func (vph *VendorProfileHistory) Diff(history *VendorProfileHistory) (*HistoryDiff[VendorProfileHistory], error) {
+	if vph.Ref != history.Ref {
+		return nil, MismatchedRefError
+	}
+
+	vphUnix, historyUnix := vph.HistoryTime.Unix(), history.HistoryTime.Unix()
+	vphOlder := vphUnix < historyUnix || (vphUnix == historyUnix && vph.ID < history.ID)
+	historyOlder := vphUnix > historyUnix || (vphUnix == historyUnix && vph.ID > history.ID)
+
+	if vphOlder {
+		return &HistoryDiff[VendorProfileHistory]{
+			Old:     vph,
+			New:     history,
+			Changes: vph.changes(history),
+		}, nil
+	} else if historyOlder {
+		return &HistoryDiff[VendorProfileHistory]{
+			Old:     history,
+			New:     vph,
+			Changes: history.changes(vph),
+		}, nil
+	}
+	return nil, IdenticalHistoryError
+}
+
+func (vppah *VendorProfilePostalAddressHistory) changes(new *VendorProfilePostalAddressHistory) []Change {
+	var changes []Change
+	if !reflect.DeepEqual(vppah.CreatedAt, new.CreatedAt) {
+		changes = append(changes, NewChange(vendorprofilepostaladdresshistory.FieldCreatedAt, vppah.CreatedAt, new.CreatedAt))
+	}
+	if !reflect.DeepEqual(vppah.UpdatedAt, new.UpdatedAt) {
+		changes = append(changes, NewChange(vendorprofilepostaladdresshistory.FieldUpdatedAt, vppah.UpdatedAt, new.UpdatedAt))
+	}
+	if !reflect.DeepEqual(vppah.CreatedBy, new.CreatedBy) {
+		changes = append(changes, NewChange(vendorprofilepostaladdresshistory.FieldCreatedBy, vppah.CreatedBy, new.CreatedBy))
+	}
+	if !reflect.DeepEqual(vppah.MappingID, new.MappingID) {
+		changes = append(changes, NewChange(vendorprofilepostaladdresshistory.FieldMappingID, vppah.MappingID, new.MappingID))
+	}
+	if !reflect.DeepEqual(vppah.DeletedAt, new.DeletedAt) {
+		changes = append(changes, NewChange(vendorprofilepostaladdresshistory.FieldDeletedAt, vppah.DeletedAt, new.DeletedAt))
+	}
+	if !reflect.DeepEqual(vppah.DeletedBy, new.DeletedBy) {
+		changes = append(changes, NewChange(vendorprofilepostaladdresshistory.FieldDeletedBy, vppah.DeletedBy, new.DeletedBy))
+	}
+	if !reflect.DeepEqual(vppah.PostalAddressType, new.PostalAddressType) {
+		changes = append(changes, NewChange(vendorprofilepostaladdresshistory.FieldPostalAddressType, vppah.PostalAddressType, new.PostalAddressType))
+	}
+	if !reflect.DeepEqual(vppah.VendorProfileID, new.VendorProfileID) {
+		changes = append(changes, NewChange(vendorprofilepostaladdresshistory.FieldVendorProfileID, vppah.VendorProfileID, new.VendorProfileID))
+	}
+	if !reflect.DeepEqual(vppah.PostalAddressID, new.PostalAddressID) {
+		changes = append(changes, NewChange(vendorprofilepostaladdresshistory.FieldPostalAddressID, vppah.PostalAddressID, new.PostalAddressID))
+	}
+	return changes
+}
+
+func (vppah *VendorProfilePostalAddressHistory) Diff(history *VendorProfilePostalAddressHistory) (*HistoryDiff[VendorProfilePostalAddressHistory], error) {
+	if vppah.Ref != history.Ref {
+		return nil, MismatchedRefError
+	}
+
+	vppahUnix, historyUnix := vppah.HistoryTime.Unix(), history.HistoryTime.Unix()
+	vppahOlder := vppahUnix < historyUnix || (vppahUnix == historyUnix && vppah.ID < history.ID)
+	historyOlder := vppahUnix > historyUnix || (vppahUnix == historyUnix && vppah.ID > history.ID)
+
+	if vppahOlder {
+		return &HistoryDiff[VendorProfilePostalAddressHistory]{
+			Old:     vppah,
+			New:     history,
+			Changes: vppah.changes(history),
+		}, nil
+	} else if historyOlder {
+		return &HistoryDiff[VendorProfilePostalAddressHistory]{
+			Old:     history,
+			New:     vppah,
+			Changes: history.changes(vppah),
 		}, nil
 	}
 	return nil, IdenticalHistoryError
@@ -1999,6 +2276,12 @@ func (c *Client) Audit(ctx context.Context) ([][]string, error) {
 	}
 	records = append(records, record...)
 
+	record, err = auditPostalAddressHistory(ctx, c.config)
+	if err != nil {
+		return nil, err
+	}
+	records = append(records, record...)
+
 	record, err = auditTemplateHistory(ctx, c.config)
 	if err != nil {
 		return nil, err
@@ -2012,6 +2295,24 @@ func (c *Client) Audit(ctx context.Context) ([][]string, error) {
 	records = append(records, record...)
 
 	record, err = auditUserSettingHistory(ctx, c.config)
+	if err != nil {
+		return nil, err
+	}
+	records = append(records, record...)
+
+	record, err = auditVendorHistory(ctx, c.config)
+	if err != nil {
+		return nil, err
+	}
+	records = append(records, record...)
+
+	record, err = auditVendorProfileHistory(ctx, c.config)
+	if err != nil {
+		return nil, err
+	}
+	records = append(records, record...)
+
+	record, err = auditVendorProfilePostalAddressHistory(ctx, c.config)
 	if err != nil {
 		return nil, err
 	}
@@ -2231,6 +2532,15 @@ func (c *Client) AuditWithFilter(ctx context.Context, tableName string) ([][]str
 		records = append(records, record...)
 	}
 
+	if tableName == "" || tableName == strings.TrimSuffix("PostalAddressHistory", "History") {
+		record, err = auditPostalAddressHistory(ctx, c.config)
+		if err != nil {
+			return nil, err
+		}
+
+		records = append(records, record...)
+	}
+
 	if tableName == "" || tableName == strings.TrimSuffix("TemplateHistory", "History") {
 		record, err = auditTemplateHistory(ctx, c.config)
 		if err != nil {
@@ -2251,6 +2561,33 @@ func (c *Client) AuditWithFilter(ctx context.Context, tableName string) ([][]str
 
 	if tableName == "" || tableName == strings.TrimSuffix("UserSettingHistory", "History") {
 		record, err = auditUserSettingHistory(ctx, c.config)
+		if err != nil {
+			return nil, err
+		}
+
+		records = append(records, record...)
+	}
+
+	if tableName == "" || tableName == strings.TrimSuffix("VendorHistory", "History") {
+		record, err = auditVendorHistory(ctx, c.config)
+		if err != nil {
+			return nil, err
+		}
+
+		records = append(records, record...)
+	}
+
+	if tableName == "" || tableName == strings.TrimSuffix("VendorProfileHistory", "History") {
+		record, err = auditVendorProfileHistory(ctx, c.config)
+		if err != nil {
+			return nil, err
+		}
+
+		records = append(records, record...)
+	}
+
+	if tableName == "" || tableName == strings.TrimSuffix("VendorProfilePostalAddressHistory", "History") {
+		record, err = auditVendorProfilePostalAddressHistory(ctx, c.config)
 		if err != nil {
 			return nil, err
 		}
@@ -3465,6 +3802,59 @@ func auditOrganizationSettingHistory(ctx context.Context, config config) ([][]st
 	return records, nil
 }
 
+type postaladdresshistoryref struct {
+	Ref string
+}
+
+func auditPostalAddressHistory(ctx context.Context, config config) ([][]string, error) {
+	var records = [][]string{}
+	var refs []postaladdresshistoryref
+	client := NewPostalAddressHistoryClient(config)
+	err := client.Query().
+		Unique(true).
+		Order(postaladdresshistory.ByRef()).
+		Select(postaladdresshistory.FieldRef).
+		Scan(ctx, &refs)
+
+	if err != nil {
+		return nil, err
+	}
+	for _, currRef := range refs {
+		histories, err := client.Query().
+			Where(postaladdresshistory.Ref(currRef.Ref)).
+			Order(postaladdresshistory.ByHistoryTime()).
+			All(ctx)
+		if err != nil {
+			return nil, err
+		}
+
+		for i := 0; i < len(histories); i++ {
+			curr := histories[i]
+			record := record{
+				Table:       "PostalAddressHistory",
+				RefId:       curr.Ref,
+				HistoryTime: curr.HistoryTime,
+				Operation:   curr.Operation,
+				UpdatedBy:   curr.UpdatedBy,
+			}
+			switch curr.Operation {
+			case enthistory.OpTypeInsert:
+				record.Changes = (&PostalAddressHistory{}).changes(curr)
+			case enthistory.OpTypeDelete:
+				record.Changes = curr.changes(&PostalAddressHistory{})
+			default:
+				if i == 0 {
+					record.Changes = (&PostalAddressHistory{}).changes(curr)
+				} else {
+					record.Changes = histories[i-1].changes(curr)
+				}
+			}
+			records = append(records, record.toRow())
+		}
+	}
+	return records, nil
+}
+
 type templatehistoryref struct {
 	Ref string
 }
@@ -3614,6 +4004,165 @@ func auditUserSettingHistory(ctx context.Context, config config) ([][]string, er
 			default:
 				if i == 0 {
 					record.Changes = (&UserSettingHistory{}).changes(curr)
+				} else {
+					record.Changes = histories[i-1].changes(curr)
+				}
+			}
+			records = append(records, record.toRow())
+		}
+	}
+	return records, nil
+}
+
+type vendorhistoryref struct {
+	Ref string
+}
+
+func auditVendorHistory(ctx context.Context, config config) ([][]string, error) {
+	var records = [][]string{}
+	var refs []vendorhistoryref
+	client := NewVendorHistoryClient(config)
+	err := client.Query().
+		Unique(true).
+		Order(vendorhistory.ByRef()).
+		Select(vendorhistory.FieldRef).
+		Scan(ctx, &refs)
+
+	if err != nil {
+		return nil, err
+	}
+	for _, currRef := range refs {
+		histories, err := client.Query().
+			Where(vendorhistory.Ref(currRef.Ref)).
+			Order(vendorhistory.ByHistoryTime()).
+			All(ctx)
+		if err != nil {
+			return nil, err
+		}
+
+		for i := 0; i < len(histories); i++ {
+			curr := histories[i]
+			record := record{
+				Table:       "VendorHistory",
+				RefId:       curr.Ref,
+				HistoryTime: curr.HistoryTime,
+				Operation:   curr.Operation,
+				UpdatedBy:   curr.UpdatedBy,
+			}
+			switch curr.Operation {
+			case enthistory.OpTypeInsert:
+				record.Changes = (&VendorHistory{}).changes(curr)
+			case enthistory.OpTypeDelete:
+				record.Changes = curr.changes(&VendorHistory{})
+			default:
+				if i == 0 {
+					record.Changes = (&VendorHistory{}).changes(curr)
+				} else {
+					record.Changes = histories[i-1].changes(curr)
+				}
+			}
+			records = append(records, record.toRow())
+		}
+	}
+	return records, nil
+}
+
+type vendorprofilehistoryref struct {
+	Ref string
+}
+
+func auditVendorProfileHistory(ctx context.Context, config config) ([][]string, error) {
+	var records = [][]string{}
+	var refs []vendorprofilehistoryref
+	client := NewVendorProfileHistoryClient(config)
+	err := client.Query().
+		Unique(true).
+		Order(vendorprofilehistory.ByRef()).
+		Select(vendorprofilehistory.FieldRef).
+		Scan(ctx, &refs)
+
+	if err != nil {
+		return nil, err
+	}
+	for _, currRef := range refs {
+		histories, err := client.Query().
+			Where(vendorprofilehistory.Ref(currRef.Ref)).
+			Order(vendorprofilehistory.ByHistoryTime()).
+			All(ctx)
+		if err != nil {
+			return nil, err
+		}
+
+		for i := 0; i < len(histories); i++ {
+			curr := histories[i]
+			record := record{
+				Table:       "VendorProfileHistory",
+				RefId:       curr.Ref,
+				HistoryTime: curr.HistoryTime,
+				Operation:   curr.Operation,
+				UpdatedBy:   curr.UpdatedBy,
+			}
+			switch curr.Operation {
+			case enthistory.OpTypeInsert:
+				record.Changes = (&VendorProfileHistory{}).changes(curr)
+			case enthistory.OpTypeDelete:
+				record.Changes = curr.changes(&VendorProfileHistory{})
+			default:
+				if i == 0 {
+					record.Changes = (&VendorProfileHistory{}).changes(curr)
+				} else {
+					record.Changes = histories[i-1].changes(curr)
+				}
+			}
+			records = append(records, record.toRow())
+		}
+	}
+	return records, nil
+}
+
+type vendorprofilepostaladdresshistoryref struct {
+	Ref string
+}
+
+func auditVendorProfilePostalAddressHistory(ctx context.Context, config config) ([][]string, error) {
+	var records = [][]string{}
+	var refs []vendorprofilepostaladdresshistoryref
+	client := NewVendorProfilePostalAddressHistoryClient(config)
+	err := client.Query().
+		Unique(true).
+		Order(vendorprofilepostaladdresshistory.ByRef()).
+		Select(vendorprofilepostaladdresshistory.FieldRef).
+		Scan(ctx, &refs)
+
+	if err != nil {
+		return nil, err
+	}
+	for _, currRef := range refs {
+		histories, err := client.Query().
+			Where(vendorprofilepostaladdresshistory.Ref(currRef.Ref)).
+			Order(vendorprofilepostaladdresshistory.ByHistoryTime()).
+			All(ctx)
+		if err != nil {
+			return nil, err
+		}
+
+		for i := 0; i < len(histories); i++ {
+			curr := histories[i]
+			record := record{
+				Table:       "VendorProfilePostalAddressHistory",
+				RefId:       curr.Ref,
+				HistoryTime: curr.HistoryTime,
+				Operation:   curr.Operation,
+				UpdatedBy:   curr.UpdatedBy,
+			}
+			switch curr.Operation {
+			case enthistory.OpTypeInsert:
+				record.Changes = (&VendorProfilePostalAddressHistory{}).changes(curr)
+			case enthistory.OpTypeDelete:
+				record.Changes = curr.changes(&VendorProfilePostalAddressHistory{})
+			default:
+				if i == 0 {
+					record.Changes = (&VendorProfilePostalAddressHistory{}).changes(curr)
 				} else {
 					record.Changes = histories[i-1].changes(curr)
 				}

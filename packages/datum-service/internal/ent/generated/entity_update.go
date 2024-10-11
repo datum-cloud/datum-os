@@ -19,6 +19,7 @@ import (
 	"github.com/datum-cloud/datum-os/internal/ent/generated/file"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/note"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/organization"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/postaladdress"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/predicate"
 
 	"github.com/datum-cloud/datum-os/internal/ent/generated/internal"
@@ -315,6 +316,21 @@ func (eu *EntityUpdate) AddNotes(n ...*Note) *EntityUpdate {
 	return eu.AddNoteIDs(ids...)
 }
 
+// AddPostalAddressIDs adds the "postal_addresses" edge to the PostalAddress entity by IDs.
+func (eu *EntityUpdate) AddPostalAddressIDs(ids ...string) *EntityUpdate {
+	eu.mutation.AddPostalAddressIDs(ids...)
+	return eu
+}
+
+// AddPostalAddresses adds the "postal_addresses" edges to the PostalAddress entity.
+func (eu *EntityUpdate) AddPostalAddresses(p ...*PostalAddress) *EntityUpdate {
+	ids := make([]string, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return eu.AddPostalAddressIDs(ids...)
+}
+
 // AddFileIDs adds the "files" edge to the File entity by IDs.
 func (eu *EntityUpdate) AddFileIDs(ids ...string) *EntityUpdate {
 	eu.mutation.AddFileIDs(ids...)
@@ -407,6 +423,27 @@ func (eu *EntityUpdate) RemoveNotes(n ...*Note) *EntityUpdate {
 		ids[i] = n[i].ID
 	}
 	return eu.RemoveNoteIDs(ids...)
+}
+
+// ClearPostalAddresses clears all "postal_addresses" edges to the PostalAddress entity.
+func (eu *EntityUpdate) ClearPostalAddresses() *EntityUpdate {
+	eu.mutation.ClearPostalAddresses()
+	return eu
+}
+
+// RemovePostalAddressIDs removes the "postal_addresses" edge to PostalAddress entities by IDs.
+func (eu *EntityUpdate) RemovePostalAddressIDs(ids ...string) *EntityUpdate {
+	eu.mutation.RemovePostalAddressIDs(ids...)
+	return eu
+}
+
+// RemovePostalAddresses removes "postal_addresses" edges to PostalAddress entities.
+func (eu *EntityUpdate) RemovePostalAddresses(p ...*PostalAddress) *EntityUpdate {
+	ids := make([]string, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return eu.RemovePostalAddressIDs(ids...)
 }
 
 // ClearFiles clears all "files" edges to the File entity.
@@ -761,6 +798,54 @@ func (eu *EntityUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			},
 		}
 		edge.Schema = eu.schemaConfig.Note
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if eu.mutation.PostalAddressesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   entity.PostalAddressesTable,
+			Columns: []string{entity.PostalAddressesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(postaladdress.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = eu.schemaConfig.PostalAddress
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := eu.mutation.RemovedPostalAddressesIDs(); len(nodes) > 0 && !eu.mutation.PostalAddressesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   entity.PostalAddressesTable,
+			Columns: []string{entity.PostalAddressesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(postaladdress.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = eu.schemaConfig.PostalAddress
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := eu.mutation.PostalAddressesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   entity.PostalAddressesTable,
+			Columns: []string{entity.PostalAddressesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(postaladdress.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = eu.schemaConfig.PostalAddress
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1145,6 +1230,21 @@ func (euo *EntityUpdateOne) AddNotes(n ...*Note) *EntityUpdateOne {
 	return euo.AddNoteIDs(ids...)
 }
 
+// AddPostalAddressIDs adds the "postal_addresses" edge to the PostalAddress entity by IDs.
+func (euo *EntityUpdateOne) AddPostalAddressIDs(ids ...string) *EntityUpdateOne {
+	euo.mutation.AddPostalAddressIDs(ids...)
+	return euo
+}
+
+// AddPostalAddresses adds the "postal_addresses" edges to the PostalAddress entity.
+func (euo *EntityUpdateOne) AddPostalAddresses(p ...*PostalAddress) *EntityUpdateOne {
+	ids := make([]string, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return euo.AddPostalAddressIDs(ids...)
+}
+
 // AddFileIDs adds the "files" edge to the File entity by IDs.
 func (euo *EntityUpdateOne) AddFileIDs(ids ...string) *EntityUpdateOne {
 	euo.mutation.AddFileIDs(ids...)
@@ -1237,6 +1337,27 @@ func (euo *EntityUpdateOne) RemoveNotes(n ...*Note) *EntityUpdateOne {
 		ids[i] = n[i].ID
 	}
 	return euo.RemoveNoteIDs(ids...)
+}
+
+// ClearPostalAddresses clears all "postal_addresses" edges to the PostalAddress entity.
+func (euo *EntityUpdateOne) ClearPostalAddresses() *EntityUpdateOne {
+	euo.mutation.ClearPostalAddresses()
+	return euo
+}
+
+// RemovePostalAddressIDs removes the "postal_addresses" edge to PostalAddress entities by IDs.
+func (euo *EntityUpdateOne) RemovePostalAddressIDs(ids ...string) *EntityUpdateOne {
+	euo.mutation.RemovePostalAddressIDs(ids...)
+	return euo
+}
+
+// RemovePostalAddresses removes "postal_addresses" edges to PostalAddress entities.
+func (euo *EntityUpdateOne) RemovePostalAddresses(p ...*PostalAddress) *EntityUpdateOne {
+	ids := make([]string, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return euo.RemovePostalAddressIDs(ids...)
 }
 
 // ClearFiles clears all "files" edges to the File entity.
@@ -1621,6 +1742,54 @@ func (euo *EntityUpdateOne) sqlSave(ctx context.Context) (_node *Entity, err err
 			},
 		}
 		edge.Schema = euo.schemaConfig.Note
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if euo.mutation.PostalAddressesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   entity.PostalAddressesTable,
+			Columns: []string{entity.PostalAddressesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(postaladdress.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = euo.schemaConfig.PostalAddress
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := euo.mutation.RemovedPostalAddressesIDs(); len(nodes) > 0 && !euo.mutation.PostalAddressesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   entity.PostalAddressesTable,
+			Columns: []string{entity.PostalAddressesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(postaladdress.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = euo.schemaConfig.PostalAddress
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := euo.mutation.PostalAddressesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   entity.PostalAddressesTable,
+			Columns: []string{entity.PostalAddressesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(postaladdress.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = euo.schemaConfig.PostalAddress
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

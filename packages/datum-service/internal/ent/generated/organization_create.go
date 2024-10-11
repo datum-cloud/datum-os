@@ -32,9 +32,12 @@ import (
 	"github.com/datum-cloud/datum-os/internal/ent/generated/organizationsetting"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/orgmembership"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/personalaccesstoken"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/postaladdress"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/subscriber"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/template"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/user"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/vendor"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofile"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/webhook"
 )
 
@@ -664,6 +667,51 @@ func (oc *OrganizationCreate) AddNotes(n ...*Note) *OrganizationCreate {
 		ids[i] = n[i].ID
 	}
 	return oc.AddNoteIDs(ids...)
+}
+
+// AddVendorIDs adds the "vendors" edge to the Vendor entity by IDs.
+func (oc *OrganizationCreate) AddVendorIDs(ids ...string) *OrganizationCreate {
+	oc.mutation.AddVendorIDs(ids...)
+	return oc
+}
+
+// AddVendors adds the "vendors" edges to the Vendor entity.
+func (oc *OrganizationCreate) AddVendors(v ...*Vendor) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return oc.AddVendorIDs(ids...)
+}
+
+// AddVendorProfileIDs adds the "vendor_profiles" edge to the VendorProfile entity by IDs.
+func (oc *OrganizationCreate) AddVendorProfileIDs(ids ...string) *OrganizationCreate {
+	oc.mutation.AddVendorProfileIDs(ids...)
+	return oc
+}
+
+// AddVendorProfiles adds the "vendor_profiles" edges to the VendorProfile entity.
+func (oc *OrganizationCreate) AddVendorProfiles(v ...*VendorProfile) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return oc.AddVendorProfileIDs(ids...)
+}
+
+// AddPostalAddressIDs adds the "postal_addresses" edge to the PostalAddress entity by IDs.
+func (oc *OrganizationCreate) AddPostalAddressIDs(ids ...string) *OrganizationCreate {
+	oc.mutation.AddPostalAddressIDs(ids...)
+	return oc
+}
+
+// AddPostalAddresses adds the "postal_addresses" edges to the PostalAddress entity.
+func (oc *OrganizationCreate) AddPostalAddresses(p ...*PostalAddress) *OrganizationCreate {
+	ids := make([]string, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return oc.AddPostalAddressIDs(ids...)
 }
 
 // AddMemberIDs adds the "members" edge to the OrgMembership entity by IDs.
@@ -1348,6 +1396,57 @@ func (oc *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 			},
 		}
 		edge.Schema = oc.schemaConfig.Note
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := oc.mutation.VendorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.VendorsTable,
+			Columns: []string{organization.VendorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(vendor.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = oc.schemaConfig.Vendor
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := oc.mutation.VendorProfilesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.VendorProfilesTable,
+			Columns: []string{organization.VendorProfilesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(vendorprofile.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = oc.schemaConfig.VendorProfile
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := oc.mutation.PostalAddressesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.PostalAddressesTable,
+			Columns: []string{organization.PostalAddressesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(postaladdress.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = oc.schemaConfig.PostalAddress
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

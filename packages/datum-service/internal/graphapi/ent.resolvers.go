@@ -375,6 +375,30 @@ func (r *queryResolver) PersonalAccessTokens(ctx context.Context, after *entgql.
 	return withTransactionalMutation(ctx).PersonalAccessToken.Query().Paginate(ctx, after, first, before, last, generated.WithPersonalAccessTokenFilter(where.Filter))
 }
 
+// PostalAddresses is the resolver for the postalAddresses field.
+func (r *queryResolver) PostalAddresses(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.PostalAddressOrder, where *generated.PostalAddressWhereInput) (*generated.PostalAddressConnection, error) {
+	return withTransactionalMutation(ctx).PostalAddress.Query().Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithPostalAddressOrder(orderBy),
+		generated.WithPostalAddressFilter(where.Filter))
+}
+
+// PostalAddressHistories is the resolver for the postalAddressHistories field.
+func (r *queryResolver) PostalAddressHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.PostalAddressHistoryOrder, where *generated.PostalAddressHistoryWhereInput) (*generated.PostalAddressHistoryConnection, error) {
+	return withTransactionalMutation(ctx).PostalAddressHistory.Query().Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithPostalAddressHistoryOrder(orderBy),
+		generated.WithPostalAddressHistoryFilter(where.Filter))
+}
+
 // Subscribers is the resolver for the subscribers field.
 func (r *queryResolver) Subscribers(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.SubscriberWhereInput) (*generated.SubscriberConnection, error) {
 	return withTransactionalMutation(ctx).Subscriber.Query().Paginate(ctx, after, first, before, last, generated.WithSubscriberFilter(where.Filter))
@@ -413,6 +437,76 @@ func (r *queryResolver) UserSettings(ctx context.Context, after *entgql.Cursor[s
 // UserSettingHistories is the resolver for the userSettingHistories field.
 func (r *queryResolver) UserSettingHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.UserSettingHistoryWhereInput) (*generated.UserSettingHistoryConnection, error) {
 	return withTransactionalMutation(ctx).UserSettingHistory.Query().Paginate(ctx, after, first, before, last, generated.WithUserSettingHistoryFilter(where.Filter))
+}
+
+// Vendors is the resolver for the vendors field.
+func (r *queryResolver) Vendors(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.VendorOrder, where *generated.VendorWhereInput) (*generated.VendorConnection, error) {
+	return withTransactionalMutation(ctx).Vendor.Query().Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithVendorOrder(orderBy),
+		generated.WithVendorFilter(where.Filter))
+}
+
+// VendorHistories is the resolver for the vendorHistories field.
+func (r *queryResolver) VendorHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.VendorHistoryOrder, where *generated.VendorHistoryWhereInput) (*generated.VendorHistoryConnection, error) {
+	return withTransactionalMutation(ctx).VendorHistory.Query().Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithVendorHistoryOrder(orderBy),
+		generated.WithVendorHistoryFilter(where.Filter))
+}
+
+// VendorProfiles is the resolver for the vendorProfiles field.
+func (r *queryResolver) VendorProfiles(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.VendorProfileOrder, where *generated.VendorProfileWhereInput) (*generated.VendorProfileConnection, error) {
+	return withTransactionalMutation(ctx).VendorProfile.Query().Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithVendorProfileOrder(orderBy),
+		generated.WithVendorProfileFilter(where.Filter))
+}
+
+// VendorProfileHistories is the resolver for the vendorProfileHistories field.
+func (r *queryResolver) VendorProfileHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.VendorProfileHistoryOrder, where *generated.VendorProfileHistoryWhereInput) (*generated.VendorProfileHistoryConnection, error) {
+	return withTransactionalMutation(ctx).VendorProfileHistory.Query().Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithVendorProfileHistoryOrder(orderBy),
+		generated.WithVendorProfileHistoryFilter(where.Filter))
+}
+
+// VendorProfilePostalAddresses is the resolver for the vendorProfilePostalAddresses field.
+func (r *queryResolver) VendorProfilePostalAddresses(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.VendorProfilePostalAddressWhereInput) (*generated.VendorProfilePostalAddressConnection, error) {
+	return withTransactionalMutation(ctx).VendorProfilePostalAddress.Query().Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithVendorProfilePostalAddressFilter(where.Filter))
+}
+
+// VendorProfilePostalAddressHistories is the resolver for the vendorProfilePostalAddressHistories field.
+func (r *queryResolver) VendorProfilePostalAddressHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.VendorProfilePostalAddressHistoryWhereInput) (*generated.VendorProfilePostalAddressHistoryConnection, error) {
+	return withTransactionalMutation(ctx).VendorProfilePostalAddressHistory.Query().Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithVendorProfilePostalAddressHistoryFilter(where.Filter))
 }
 
 // Webhooks is the resolver for the webhooks field.

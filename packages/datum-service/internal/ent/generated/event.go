@@ -40,10 +40,13 @@ type Event struct {
 	Metadata map[string]interface{} `json:"metadata,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the EventQuery when eager-loading is set.
-	Edges                          EventEdges `json:"edges"`
-	contact_list_events            *string
-	contact_list_membership_events *string
-	selectValues                   sql.SelectValues
+	Edges                                EventEdges `json:"edges"`
+	contact_list_events                  *string
+	contact_list_membership_events       *string
+	postal_address_events                *string
+	vendor_events                        *string
+	vendor_profile_postal_address_events *string
+	selectValues                         sql.SelectValues
 }
 
 // EventEdges holds the relations/edges for other nodes in the graph.
@@ -263,6 +266,12 @@ func (*Event) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullString)
 		case event.ForeignKeys[1]: // contact_list_membership_events
 			values[i] = new(sql.NullString)
+		case event.ForeignKeys[2]: // postal_address_events
+			values[i] = new(sql.NullString)
+		case event.ForeignKeys[3]: // vendor_events
+			values[i] = new(sql.NullString)
+		case event.ForeignKeys[4]: // vendor_profile_postal_address_events
+			values[i] = new(sql.NullString)
 		default:
 			values[i] = new(sql.UnknownType)
 		}
@@ -361,6 +370,27 @@ func (e *Event) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				e.contact_list_membership_events = new(string)
 				*e.contact_list_membership_events = value.String
+			}
+		case event.ForeignKeys[2]:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field postal_address_events", values[i])
+			} else if value.Valid {
+				e.postal_address_events = new(string)
+				*e.postal_address_events = value.String
+			}
+		case event.ForeignKeys[3]:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field vendor_events", values[i])
+			} else if value.Valid {
+				e.vendor_events = new(string)
+				*e.vendor_events = value.String
+			}
+		case event.ForeignKeys[4]:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field vendor_profile_postal_address_events", values[i])
+			} else if value.Valid {
+				e.vendor_profile_postal_address_events = new(string)
+				*e.vendor_profile_postal_address_events = value.String
 			}
 		default:
 			e.selectValues.Set(columns[i], values[i])

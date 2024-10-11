@@ -1,0 +1,41 @@
+
+
+query GetAllVendorProfilePostalAddressHistories {
+  vendorProfilePostalAddressHistories {
+    edges {
+      node {
+        createdAt
+        createdBy
+        historyTime
+        id
+        operation
+        postalAddressID
+        postalAddressType
+        ref
+        updatedAt
+        updatedBy
+        vendorProfileID
+      }
+    }
+  }
+}
+
+query GetVendorProfilePostalAddressHistories($where: VendorProfilePostalAddressHistoryWhereInput) {
+  vendorProfilePostalAddressHistories(where: $where) {
+    edges {
+      node {
+        createdAt
+        createdBy
+        historyTime
+        id
+        operation
+        postalAddressID
+        postalAddressType
+        ref
+        updatedAt
+        updatedBy
+        vendorProfileID
+      }
+    }
+  }
+}

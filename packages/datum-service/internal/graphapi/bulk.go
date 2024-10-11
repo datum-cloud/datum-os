@@ -483,6 +483,25 @@ func (r *mutationResolver) bulkCreatePersonalAccessToken(ctx context.Context, in
 	}, nil
 }
 
+// bulkCreatePostalAddress uses the CreateBulk function to create multiple PostalAddress entities
+func (r *mutationResolver) bulkCreatePostalAddress(ctx context.Context, input []*generated.CreatePostalAddressInput) (*PostalAddressBulkCreatePayload, error) {
+	c := withTransactionalMutation(ctx)
+	builders := make([]*generated.PostalAddressCreate, len(input))
+	for i, data := range input {
+		builders[i] = c.PostalAddress.Create().SetInput(*data)
+	}
+
+	res, err := c.PostalAddress.CreateBulk(builders...).Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionCreate, object: "postaladdress"}, r.logger)
+	}
+
+	// return response
+	return &PostalAddressBulkCreatePayload{
+		PostalAddresses: res,
+	}, nil
+}
+
 // bulkCreateSubscriber uses the CreateBulk function to create multiple Subscriber entities
 func (r *mutationResolver) bulkCreateSubscriber(ctx context.Context, input []*generated.CreateSubscriberInput) (*SubscriberBulkCreatePayload, error) {
 	c := withTransactionalMutation(ctx)
@@ -537,6 +556,63 @@ func (r *mutationResolver) bulkCreateUserSetting(ctx context.Context, input []*g
 	// return response
 	return &UserSettingBulkCreatePayload{
 		UserSettings: res,
+	}, nil
+}
+
+// bulkCreateVendor uses the CreateBulk function to create multiple Vendor entities
+func (r *mutationResolver) bulkCreateVendor(ctx context.Context, input []*generated.CreateVendorInput) (*VendorBulkCreatePayload, error) {
+	c := withTransactionalMutation(ctx)
+	builders := make([]*generated.VendorCreate, len(input))
+	for i, data := range input {
+		builders[i] = c.Vendor.Create().SetInput(*data)
+	}
+
+	res, err := c.Vendor.CreateBulk(builders...).Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionCreate, object: "vendor"}, r.logger)
+	}
+
+	// return response
+	return &VendorBulkCreatePayload{
+		Vendors: res,
+	}, nil
+}
+
+// bulkCreateVendorProfile uses the CreateBulk function to create multiple VendorProfile entities
+func (r *mutationResolver) bulkCreateVendorProfile(ctx context.Context, input []*generated.CreateVendorProfileInput) (*VendorProfileBulkCreatePayload, error) {
+	c := withTransactionalMutation(ctx)
+	builders := make([]*generated.VendorProfileCreate, len(input))
+	for i, data := range input {
+		builders[i] = c.VendorProfile.Create().SetInput(*data)
+	}
+
+	res, err := c.VendorProfile.CreateBulk(builders...).Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionCreate, object: "vendorprofile"}, r.logger)
+	}
+
+	// return response
+	return &VendorProfileBulkCreatePayload{
+		VendorProfiles: res,
+	}, nil
+}
+
+// bulkCreateVendorProfilePostalAddress uses the CreateBulk function to create multiple VendorProfilePostalAddress entities
+func (r *mutationResolver) bulkCreateVendorProfilePostalAddress(ctx context.Context, input []*generated.CreateVendorProfilePostalAddressInput) (*VendorProfilePostalAddressBulkCreatePayload, error) {
+	c := withTransactionalMutation(ctx)
+	builders := make([]*generated.VendorProfilePostalAddressCreate, len(input))
+	for i, data := range input {
+		builders[i] = c.VendorProfilePostalAddress.Create().SetInput(*data)
+	}
+
+	res, err := c.VendorProfilePostalAddress.CreateBulk(builders...).Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionCreate, object: "vendorprofilepostaladdress"}, r.logger)
+	}
+
+	// return response
+	return &VendorProfilePostalAddressBulkCreatePayload{
+		VendorProfilePostalAddresses: res,
 	}, nil
 }
 

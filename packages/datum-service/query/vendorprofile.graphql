@@ -1,0 +1,133 @@
+
+mutation CreateBulkCSVVendorProfile($input: Upload!) {
+  createBulkCSVVendorProfile(input: $input) {
+    vendorProfiles {
+      createdAt
+      createdBy
+      dbaName
+      description
+      id
+      name
+      ownerID
+      tags
+      updatedAt
+      updatedBy
+      vendorID
+      websiteURI
+    }
+  }
+}
+
+mutation CreateBulkVendorProfile($input: [CreateVendorProfileInput!]) {
+  createBulkVendorProfile(input: $input) {
+    vendorProfiles {
+      createdAt
+      createdBy
+      dbaName
+      description
+      id
+      name
+      ownerID
+      tags
+      updatedAt
+      updatedBy
+      vendorID
+      websiteURI
+    }
+  }
+}
+
+mutation CreateVendorProfile($input: CreateVendorProfileInput!) {
+  createVendorProfile(input: $input) {
+    vendorProfile {
+      createdAt
+      createdBy
+      dbaName
+      description
+      id
+      name
+      ownerID
+      tags
+      updatedAt
+      updatedBy
+      vendorID
+      websiteURI
+    }
+  }
+}
+
+query GetAllVendorProfiles {
+  vendorProfiles {
+    edges {
+      node {
+        createdAt
+        createdBy
+        dbaName
+        description
+        id
+        name
+        ownerID
+        tags
+        updatedAt
+        updatedBy
+        vendorID
+        websiteURI
+      }
+    }
+  }
+}
+query GetVendorProfileByID($vendorProfileId: ID!) {
+  vendorProfile(id: $vendorProfileId) {
+    createdAt
+    createdBy
+    dbaName
+    description
+    id
+    name
+    ownerID
+    tags
+    updatedAt
+    updatedBy
+    vendorID
+    websiteURI
+  }
+}
+
+query GetVendorProfiles($where: VendorProfileWhereInput) {
+  vendorProfiles(where: $where) {
+    edges {
+      node {
+        createdAt
+        createdBy
+        dbaName
+        description
+        id
+        name
+        ownerID
+        tags
+        updatedAt
+        updatedBy
+        vendorID
+        websiteURI
+      }
+    }
+  }
+}
+mutation UpdateVendorProfile($updateVendorProfileId: ID!, $input: UpdateVendorProfileInput!) {
+  updateVendorProfile(id: $updateVendorProfileId, input: $input) {
+    vendorProfile {
+      createdAt
+      createdBy
+      dbaName
+      description
+      id
+      name
+      ownerID
+      tags
+      updatedAt
+      updatedBy
+      vendorID
+      websiteURI
+    }
+  }
+}

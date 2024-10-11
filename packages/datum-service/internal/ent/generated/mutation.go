@@ -62,6 +62,8 @@ import (
 	"github.com/datum-cloud/datum-os/internal/ent/generated/orgmembershiphistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/passwordresettoken"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/personalaccesstoken"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/postaladdress"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/postaladdresshistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/predicate"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/subscriber"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/template"
@@ -71,6 +73,12 @@ import (
 	"github.com/datum-cloud/datum-os/internal/ent/generated/userhistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/usersetting"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/usersettinghistory"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/vendor"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorhistory"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofile"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofilehistory"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofilepostaladdress"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofilepostaladdresshistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/webauthn"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/webhook"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/webhookhistory"
@@ -87,67 +95,75 @@ const (
 	OpUpdateOne = ent.OpUpdateOne
 
 	// Node types.
-	TypeAPIToken                      = "APIToken"
-	TypeContact                       = "Contact"
-	TypeContactHistory                = "ContactHistory"
-	TypeContactList                   = "ContactList"
-	TypeContactListHistory            = "ContactListHistory"
-	TypeContactListMembership         = "ContactListMembership"
-	TypeContactListMembershipHistory  = "ContactListMembershipHistory"
-	TypeDocumentData                  = "DocumentData"
-	TypeDocumentDataHistory           = "DocumentDataHistory"
-	TypeEmailVerificationToken        = "EmailVerificationToken"
-	TypeEntitlement                   = "Entitlement"
-	TypeEntitlementHistory            = "EntitlementHistory"
-	TypeEntitlementPlan               = "EntitlementPlan"
-	TypeEntitlementPlanFeature        = "EntitlementPlanFeature"
-	TypeEntitlementPlanFeatureHistory = "EntitlementPlanFeatureHistory"
-	TypeEntitlementPlanHistory        = "EntitlementPlanHistory"
-	TypeEntity                        = "Entity"
-	TypeEntityHistory                 = "EntityHistory"
-	TypeEntityType                    = "EntityType"
-	TypeEntityTypeHistory             = "EntityTypeHistory"
-	TypeEvent                         = "Event"
-	TypeEventHistory                  = "EventHistory"
-	TypeFeature                       = "Feature"
-	TypeFeatureHistory                = "FeatureHistory"
-	TypeFile                          = "File"
-	TypeFileHistory                   = "FileHistory"
-	TypeGroup                         = "Group"
-	TypeGroupHistory                  = "GroupHistory"
-	TypeGroupMembership               = "GroupMembership"
-	TypeGroupMembershipHistory        = "GroupMembershipHistory"
-	TypeGroupSetting                  = "GroupSetting"
-	TypeGroupSettingHistory           = "GroupSettingHistory"
-	TypeHush                          = "Hush"
-	TypeHushHistory                   = "HushHistory"
-	TypeIntegration                   = "Integration"
-	TypeIntegrationHistory            = "IntegrationHistory"
-	TypeInvite                        = "Invite"
-	TypeNote                          = "Note"
-	TypeNoteHistory                   = "NoteHistory"
-	TypeOauthProvider                 = "OauthProvider"
-	TypeOauthProviderHistory          = "OauthProviderHistory"
-	TypeOhAuthTooToken                = "OhAuthTooToken"
-	TypeOrgMembership                 = "OrgMembership"
-	TypeOrgMembershipHistory          = "OrgMembershipHistory"
-	TypeOrganization                  = "Organization"
-	TypeOrganizationHistory           = "OrganizationHistory"
-	TypeOrganizationSetting           = "OrganizationSetting"
-	TypeOrganizationSettingHistory    = "OrganizationSettingHistory"
-	TypePasswordResetToken            = "PasswordResetToken"
-	TypePersonalAccessToken           = "PersonalAccessToken"
-	TypeSubscriber                    = "Subscriber"
-	TypeTFASetting                    = "TFASetting"
-	TypeTemplate                      = "Template"
-	TypeTemplateHistory               = "TemplateHistory"
-	TypeUser                          = "User"
-	TypeUserHistory                   = "UserHistory"
-	TypeUserSetting                   = "UserSetting"
-	TypeUserSettingHistory            = "UserSettingHistory"
-	TypeWebauthn                      = "Webauthn"
-	TypeWebhook                       = "Webhook"
-	TypeWebhookHistory                = "WebhookHistory"
+	TypeAPIToken                          = "APIToken"
+	TypeContact                           = "Contact"
+	TypeContactHistory                    = "ContactHistory"
+	TypeContactList                       = "ContactList"
+	TypeContactListHistory                = "ContactListHistory"
+	TypeContactListMembership             = "ContactListMembership"
+	TypeContactListMembershipHistory      = "ContactListMembershipHistory"
+	TypeDocumentData                      = "DocumentData"
+	TypeDocumentDataHistory               = "DocumentDataHistory"
+	TypeEmailVerificationToken            = "EmailVerificationToken"
+	TypeEntitlement                       = "Entitlement"
+	TypeEntitlementHistory                = "EntitlementHistory"
+	TypeEntitlementPlan                   = "EntitlementPlan"
+	TypeEntitlementPlanFeature            = "EntitlementPlanFeature"
+	TypeEntitlementPlanFeatureHistory     = "EntitlementPlanFeatureHistory"
+	TypeEntitlementPlanHistory            = "EntitlementPlanHistory"
+	TypeEntity                            = "Entity"
+	TypeEntityHistory                     = "EntityHistory"
+	TypeEntityType                        = "EntityType"
+	TypeEntityTypeHistory                 = "EntityTypeHistory"
+	TypeEvent                             = "Event"
+	TypeEventHistory                      = "EventHistory"
+	TypeFeature                           = "Feature"
+	TypeFeatureHistory                    = "FeatureHistory"
+	TypeFile                              = "File"
+	TypeFileHistory                       = "FileHistory"
+	TypeGroup                             = "Group"
+	TypeGroupHistory                      = "GroupHistory"
+	TypeGroupMembership                   = "GroupMembership"
+	TypeGroupMembershipHistory            = "GroupMembershipHistory"
+	TypeGroupSetting                      = "GroupSetting"
+	TypeGroupSettingHistory               = "GroupSettingHistory"
+	TypeHush                              = "Hush"
+	TypeHushHistory                       = "HushHistory"
+	TypeIntegration                       = "Integration"
+	TypeIntegrationHistory                = "IntegrationHistory"
+	TypeInvite                            = "Invite"
+	TypeNote                              = "Note"
+	TypeNoteHistory                       = "NoteHistory"
+	TypeOauthProvider                     = "OauthProvider"
+	TypeOauthProviderHistory              = "OauthProviderHistory"
+	TypeOhAuthTooToken                    = "OhAuthTooToken"
+	TypeOrgMembership                     = "OrgMembership"
+	TypeOrgMembershipHistory              = "OrgMembershipHistory"
+	TypeOrganization                      = "Organization"
+	TypeOrganizationHistory               = "OrganizationHistory"
+	TypeOrganizationSetting               = "OrganizationSetting"
+	TypeOrganizationSettingHistory        = "OrganizationSettingHistory"
+	TypePasswordResetToken                = "PasswordResetToken"
+	TypePersonalAccessToken               = "PersonalAccessToken"
+	TypePostalAddress                     = "PostalAddress"
+	TypePostalAddressHistory              = "PostalAddressHistory"
+	TypeSubscriber                        = "Subscriber"
+	TypeTFASetting                        = "TFASetting"
+	TypeTemplate                          = "Template"
+	TypeTemplateHistory                   = "TemplateHistory"
+	TypeUser                              = "User"
+	TypeUserHistory                       = "UserHistory"
+	TypeUserSetting                       = "UserSetting"
+	TypeUserSettingHistory                = "UserSettingHistory"
+	TypeVendor                            = "Vendor"
+	TypeVendorHistory                     = "VendorHistory"
+	TypeVendorProfile                     = "VendorProfile"
+	TypeVendorProfileHistory              = "VendorProfileHistory"
+	TypeVendorProfilePostalAddress        = "VendorProfilePostalAddress"
+	TypeVendorProfilePostalAddressHistory = "VendorProfilePostalAddressHistory"
+	TypeWebauthn                          = "Webauthn"
+	TypeWebhook                           = "Webhook"
+	TypeWebhookHistory                    = "WebhookHistory"
 )
 
 // APITokenMutation represents an operation that mutates the APIToken nodes in the graph.
@@ -22349,44 +22365,47 @@ func (m *EntitlementPlanHistoryMutation) ResetEdge(name string) error {
 // EntityMutation represents an operation that mutates the Entity nodes in the graph.
 type EntityMutation struct {
 	config
-	op                 Op
-	typ                string
-	id                 *string
-	created_at         *time.Time
-	updated_at         *time.Time
-	created_by         *string
-	updated_by         *string
-	mapping_id         *string
-	deleted_at         *time.Time
-	deleted_by         *string
-	tags               *[]string
-	appendtags         []string
-	name               *string
-	display_name       *string
-	description        *string
-	domains            *[]string
-	appenddomains      []string
-	status             *string
-	clearedFields      map[string]struct{}
-	owner              *string
-	clearedowner       bool
-	contacts           map[string]struct{}
-	removedcontacts    map[string]struct{}
-	clearedcontacts    bool
-	documents          map[string]struct{}
-	removeddocuments   map[string]struct{}
-	cleareddocuments   bool
-	notes              map[string]struct{}
-	removednotes       map[string]struct{}
-	clearednotes       bool
-	files              map[string]struct{}
-	removedfiles       map[string]struct{}
-	clearedfiles       bool
-	entity_type        *string
-	clearedentity_type bool
-	done               bool
-	oldValue           func(context.Context) (*Entity, error)
-	predicates         []predicate.Entity
+	op                      Op
+	typ                     string
+	id                      *string
+	created_at              *time.Time
+	updated_at              *time.Time
+	created_by              *string
+	updated_by              *string
+	mapping_id              *string
+	deleted_at              *time.Time
+	deleted_by              *string
+	tags                    *[]string
+	appendtags              []string
+	name                    *string
+	display_name            *string
+	description             *string
+	domains                 *[]string
+	appenddomains           []string
+	status                  *string
+	clearedFields           map[string]struct{}
+	owner                   *string
+	clearedowner            bool
+	contacts                map[string]struct{}
+	removedcontacts         map[string]struct{}
+	clearedcontacts         bool
+	documents               map[string]struct{}
+	removeddocuments        map[string]struct{}
+	cleareddocuments        bool
+	notes                   map[string]struct{}
+	removednotes            map[string]struct{}
+	clearednotes            bool
+	postal_addresses        map[string]struct{}
+	removedpostal_addresses map[string]struct{}
+	clearedpostal_addresses bool
+	files                   map[string]struct{}
+	removedfiles            map[string]struct{}
+	clearedfiles            bool
+	entity_type             *string
+	clearedentity_type      bool
+	done                    bool
+	oldValue                func(context.Context) (*Entity, error)
+	predicates              []predicate.Entity
 }
 
 var _ ent.Mutation = (*EntityMutation)(nil)
@@ -23436,6 +23455,60 @@ func (m *EntityMutation) ResetNotes() {
 	m.removednotes = nil
 }
 
+// AddPostalAddressIDs adds the "postal_addresses" edge to the PostalAddress entity by ids.
+func (m *EntityMutation) AddPostalAddressIDs(ids ...string) {
+	if m.postal_addresses == nil {
+		m.postal_addresses = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.postal_addresses[ids[i]] = struct{}{}
+	}
+}
+
+// ClearPostalAddresses clears the "postal_addresses" edge to the PostalAddress entity.
+func (m *EntityMutation) ClearPostalAddresses() {
+	m.clearedpostal_addresses = true
+}
+
+// PostalAddressesCleared reports if the "postal_addresses" edge to the PostalAddress entity was cleared.
+func (m *EntityMutation) PostalAddressesCleared() bool {
+	return m.clearedpostal_addresses
+}
+
+// RemovePostalAddressIDs removes the "postal_addresses" edge to the PostalAddress entity by IDs.
+func (m *EntityMutation) RemovePostalAddressIDs(ids ...string) {
+	if m.removedpostal_addresses == nil {
+		m.removedpostal_addresses = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.postal_addresses, ids[i])
+		m.removedpostal_addresses[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedPostalAddresses returns the removed IDs of the "postal_addresses" edge to the PostalAddress entity.
+func (m *EntityMutation) RemovedPostalAddressesIDs() (ids []string) {
+	for id := range m.removedpostal_addresses {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// PostalAddressesIDs returns the "postal_addresses" edge IDs in the mutation.
+func (m *EntityMutation) PostalAddressesIDs() (ids []string) {
+	for id := range m.postal_addresses {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetPostalAddresses resets all changes to the "postal_addresses" edge.
+func (m *EntityMutation) ResetPostalAddresses() {
+	m.postal_addresses = nil
+	m.clearedpostal_addresses = false
+	m.removedpostal_addresses = nil
+}
+
 // AddFileIDs adds the "files" edge to the File entity by ids.
 func (m *EntityMutation) AddFileIDs(ids ...string) {
 	if m.files == nil {
@@ -23975,7 +24048,7 @@ func (m *EntityMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *EntityMutation) AddedEdges() []string {
-	edges := make([]string, 0, 6)
+	edges := make([]string, 0, 7)
 	if m.owner != nil {
 		edges = append(edges, entity.EdgeOwner)
 	}
@@ -23987,6 +24060,9 @@ func (m *EntityMutation) AddedEdges() []string {
 	}
 	if m.notes != nil {
 		edges = append(edges, entity.EdgeNotes)
+	}
+	if m.postal_addresses != nil {
+		edges = append(edges, entity.EdgePostalAddresses)
 	}
 	if m.files != nil {
 		edges = append(edges, entity.EdgeFiles)
@@ -24023,6 +24099,12 @@ func (m *EntityMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case entity.EdgePostalAddresses:
+		ids := make([]ent.Value, 0, len(m.postal_addresses))
+		for id := range m.postal_addresses {
+			ids = append(ids, id)
+		}
+		return ids
 	case entity.EdgeFiles:
 		ids := make([]ent.Value, 0, len(m.files))
 		for id := range m.files {
@@ -24039,7 +24121,7 @@ func (m *EntityMutation) AddedIDs(name string) []ent.Value {
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *EntityMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 6)
+	edges := make([]string, 0, 7)
 	if m.removedcontacts != nil {
 		edges = append(edges, entity.EdgeContacts)
 	}
@@ -24048,6 +24130,9 @@ func (m *EntityMutation) RemovedEdges() []string {
 	}
 	if m.removednotes != nil {
 		edges = append(edges, entity.EdgeNotes)
+	}
+	if m.removedpostal_addresses != nil {
+		edges = append(edges, entity.EdgePostalAddresses)
 	}
 	if m.removedfiles != nil {
 		edges = append(edges, entity.EdgeFiles)
@@ -24077,6 +24162,12 @@ func (m *EntityMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case entity.EdgePostalAddresses:
+		ids := make([]ent.Value, 0, len(m.removedpostal_addresses))
+		for id := range m.removedpostal_addresses {
+			ids = append(ids, id)
+		}
+		return ids
 	case entity.EdgeFiles:
 		ids := make([]ent.Value, 0, len(m.removedfiles))
 		for id := range m.removedfiles {
@@ -24089,7 +24180,7 @@ func (m *EntityMutation) RemovedIDs(name string) []ent.Value {
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *EntityMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 6)
+	edges := make([]string, 0, 7)
 	if m.clearedowner {
 		edges = append(edges, entity.EdgeOwner)
 	}
@@ -24101,6 +24192,9 @@ func (m *EntityMutation) ClearedEdges() []string {
 	}
 	if m.clearednotes {
 		edges = append(edges, entity.EdgeNotes)
+	}
+	if m.clearedpostal_addresses {
+		edges = append(edges, entity.EdgePostalAddresses)
 	}
 	if m.clearedfiles {
 		edges = append(edges, entity.EdgeFiles)
@@ -24123,6 +24217,8 @@ func (m *EntityMutation) EdgeCleared(name string) bool {
 		return m.cleareddocuments
 	case entity.EdgeNotes:
 		return m.clearednotes
+	case entity.EdgePostalAddresses:
+		return m.clearedpostal_addresses
 	case entity.EdgeFiles:
 		return m.clearedfiles
 	case entity.EdgeEntityType:
@@ -24160,6 +24256,9 @@ func (m *EntityMutation) ResetEdge(name string) error {
 		return nil
 	case entity.EdgeNotes:
 		m.ResetNotes()
+		return nil
+	case entity.EdgePostalAddresses:
+		m.ResetPostalAddresses()
 		return nil
 	case entity.EdgeFiles:
 		m.ResetFiles()
@@ -61940,6 +62039,15 @@ type OrganizationMutation struct {
 	notes                           map[string]struct{}
 	removednotes                    map[string]struct{}
 	clearednotes                    bool
+	vendors                         map[string]struct{}
+	removedvendors                  map[string]struct{}
+	clearedvendors                  bool
+	vendor_profiles                 map[string]struct{}
+	removedvendor_profiles          map[string]struct{}
+	clearedvendor_profiles          bool
+	postal_addresses                map[string]struct{}
+	removedpostal_addresses         map[string]struct{}
+	clearedpostal_addresses         bool
 	members                         map[string]struct{}
 	removedmembers                  map[string]struct{}
 	clearedmembers                  bool
@@ -64180,6 +64288,168 @@ func (m *OrganizationMutation) ResetNotes() {
 	m.removednotes = nil
 }
 
+// AddVendorIDs adds the "vendors" edge to the Vendor entity by ids.
+func (m *OrganizationMutation) AddVendorIDs(ids ...string) {
+	if m.vendors == nil {
+		m.vendors = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.vendors[ids[i]] = struct{}{}
+	}
+}
+
+// ClearVendors clears the "vendors" edge to the Vendor entity.
+func (m *OrganizationMutation) ClearVendors() {
+	m.clearedvendors = true
+}
+
+// VendorsCleared reports if the "vendors" edge to the Vendor entity was cleared.
+func (m *OrganizationMutation) VendorsCleared() bool {
+	return m.clearedvendors
+}
+
+// RemoveVendorIDs removes the "vendors" edge to the Vendor entity by IDs.
+func (m *OrganizationMutation) RemoveVendorIDs(ids ...string) {
+	if m.removedvendors == nil {
+		m.removedvendors = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.vendors, ids[i])
+		m.removedvendors[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedVendors returns the removed IDs of the "vendors" edge to the Vendor entity.
+func (m *OrganizationMutation) RemovedVendorsIDs() (ids []string) {
+	for id := range m.removedvendors {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// VendorsIDs returns the "vendors" edge IDs in the mutation.
+func (m *OrganizationMutation) VendorsIDs() (ids []string) {
+	for id := range m.vendors {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetVendors resets all changes to the "vendors" edge.
+func (m *OrganizationMutation) ResetVendors() {
+	m.vendors = nil
+	m.clearedvendors = false
+	m.removedvendors = nil
+}
+
+// AddVendorProfileIDs adds the "vendor_profiles" edge to the VendorProfile entity by ids.
+func (m *OrganizationMutation) AddVendorProfileIDs(ids ...string) {
+	if m.vendor_profiles == nil {
+		m.vendor_profiles = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.vendor_profiles[ids[i]] = struct{}{}
+	}
+}
+
+// ClearVendorProfiles clears the "vendor_profiles" edge to the VendorProfile entity.
+func (m *OrganizationMutation) ClearVendorProfiles() {
+	m.clearedvendor_profiles = true
+}
+
+// VendorProfilesCleared reports if the "vendor_profiles" edge to the VendorProfile entity was cleared.
+func (m *OrganizationMutation) VendorProfilesCleared() bool {
+	return m.clearedvendor_profiles
+}
+
+// RemoveVendorProfileIDs removes the "vendor_profiles" edge to the VendorProfile entity by IDs.
+func (m *OrganizationMutation) RemoveVendorProfileIDs(ids ...string) {
+	if m.removedvendor_profiles == nil {
+		m.removedvendor_profiles = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.vendor_profiles, ids[i])
+		m.removedvendor_profiles[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedVendorProfiles returns the removed IDs of the "vendor_profiles" edge to the VendorProfile entity.
+func (m *OrganizationMutation) RemovedVendorProfilesIDs() (ids []string) {
+	for id := range m.removedvendor_profiles {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// VendorProfilesIDs returns the "vendor_profiles" edge IDs in the mutation.
+func (m *OrganizationMutation) VendorProfilesIDs() (ids []string) {
+	for id := range m.vendor_profiles {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetVendorProfiles resets all changes to the "vendor_profiles" edge.
+func (m *OrganizationMutation) ResetVendorProfiles() {
+	m.vendor_profiles = nil
+	m.clearedvendor_profiles = false
+	m.removedvendor_profiles = nil
+}
+
+// AddPostalAddressIDs adds the "postal_addresses" edge to the PostalAddress entity by ids.
+func (m *OrganizationMutation) AddPostalAddressIDs(ids ...string) {
+	if m.postal_addresses == nil {
+		m.postal_addresses = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.postal_addresses[ids[i]] = struct{}{}
+	}
+}
+
+// ClearPostalAddresses clears the "postal_addresses" edge to the PostalAddress entity.
+func (m *OrganizationMutation) ClearPostalAddresses() {
+	m.clearedpostal_addresses = true
+}
+
+// PostalAddressesCleared reports if the "postal_addresses" edge to the PostalAddress entity was cleared.
+func (m *OrganizationMutation) PostalAddressesCleared() bool {
+	return m.clearedpostal_addresses
+}
+
+// RemovePostalAddressIDs removes the "postal_addresses" edge to the PostalAddress entity by IDs.
+func (m *OrganizationMutation) RemovePostalAddressIDs(ids ...string) {
+	if m.removedpostal_addresses == nil {
+		m.removedpostal_addresses = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.postal_addresses, ids[i])
+		m.removedpostal_addresses[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedPostalAddresses returns the removed IDs of the "postal_addresses" edge to the PostalAddress entity.
+func (m *OrganizationMutation) RemovedPostalAddressesIDs() (ids []string) {
+	for id := range m.removedpostal_addresses {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// PostalAddressesIDs returns the "postal_addresses" edge IDs in the mutation.
+func (m *OrganizationMutation) PostalAddressesIDs() (ids []string) {
+	for id := range m.postal_addresses {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetPostalAddresses resets all changes to the "postal_addresses" edge.
+func (m *OrganizationMutation) ResetPostalAddresses() {
+	m.postal_addresses = nil
+	m.clearedpostal_addresses = false
+	m.removedpostal_addresses = nil
+}
+
 // AddMemberIDs adds the "members" edge to the OrgMembership entity by ids.
 func (m *OrganizationMutation) AddMemberIDs(ids ...string) {
 	if m.members == nil {
@@ -64674,7 +64944,7 @@ func (m *OrganizationMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *OrganizationMutation) AddedEdges() []string {
-	edges := make([]string, 0, 28)
+	edges := make([]string, 0, 31)
 	if m.parent != nil {
 		edges = append(edges, organization.EdgeParent)
 	}
@@ -64755,6 +65025,15 @@ func (m *OrganizationMutation) AddedEdges() []string {
 	}
 	if m.notes != nil {
 		edges = append(edges, organization.EdgeNotes)
+	}
+	if m.vendors != nil {
+		edges = append(edges, organization.EdgeVendors)
+	}
+	if m.vendor_profiles != nil {
+		edges = append(edges, organization.EdgeVendorProfiles)
+	}
+	if m.postal_addresses != nil {
+		edges = append(edges, organization.EdgePostalAddresses)
 	}
 	if m.members != nil {
 		edges = append(edges, organization.EdgeMembers)
@@ -64924,6 +65203,24 @@ func (m *OrganizationMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case organization.EdgeVendors:
+		ids := make([]ent.Value, 0, len(m.vendors))
+		for id := range m.vendors {
+			ids = append(ids, id)
+		}
+		return ids
+	case organization.EdgeVendorProfiles:
+		ids := make([]ent.Value, 0, len(m.vendor_profiles))
+		for id := range m.vendor_profiles {
+			ids = append(ids, id)
+		}
+		return ids
+	case organization.EdgePostalAddresses:
+		ids := make([]ent.Value, 0, len(m.postal_addresses))
+		for id := range m.postal_addresses {
+			ids = append(ids, id)
+		}
+		return ids
 	case organization.EdgeMembers:
 		ids := make([]ent.Value, 0, len(m.members))
 		for id := range m.members {
@@ -64936,7 +65233,7 @@ func (m *OrganizationMutation) AddedIDs(name string) []ent.Value {
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *OrganizationMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 28)
+	edges := make([]string, 0, 31)
 	if m.removedchildren != nil {
 		edges = append(edges, organization.EdgeChildren)
 	}
@@ -65011,6 +65308,15 @@ func (m *OrganizationMutation) RemovedEdges() []string {
 	}
 	if m.removednotes != nil {
 		edges = append(edges, organization.EdgeNotes)
+	}
+	if m.removedvendors != nil {
+		edges = append(edges, organization.EdgeVendors)
+	}
+	if m.removedvendor_profiles != nil {
+		edges = append(edges, organization.EdgeVendorProfiles)
+	}
+	if m.removedpostal_addresses != nil {
+		edges = append(edges, organization.EdgePostalAddresses)
 	}
 	if m.removedmembers != nil {
 		edges = append(edges, organization.EdgeMembers)
@@ -65172,6 +65478,24 @@ func (m *OrganizationMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case organization.EdgeVendors:
+		ids := make([]ent.Value, 0, len(m.removedvendors))
+		for id := range m.removedvendors {
+			ids = append(ids, id)
+		}
+		return ids
+	case organization.EdgeVendorProfiles:
+		ids := make([]ent.Value, 0, len(m.removedvendor_profiles))
+		for id := range m.removedvendor_profiles {
+			ids = append(ids, id)
+		}
+		return ids
+	case organization.EdgePostalAddresses:
+		ids := make([]ent.Value, 0, len(m.removedpostal_addresses))
+		for id := range m.removedpostal_addresses {
+			ids = append(ids, id)
+		}
+		return ids
 	case organization.EdgeMembers:
 		ids := make([]ent.Value, 0, len(m.removedmembers))
 		for id := range m.removedmembers {
@@ -65184,7 +65508,7 @@ func (m *OrganizationMutation) RemovedIDs(name string) []ent.Value {
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *OrganizationMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 28)
+	edges := make([]string, 0, 31)
 	if m.clearedparent {
 		edges = append(edges, organization.EdgeParent)
 	}
@@ -65266,6 +65590,15 @@ func (m *OrganizationMutation) ClearedEdges() []string {
 	if m.clearednotes {
 		edges = append(edges, organization.EdgeNotes)
 	}
+	if m.clearedvendors {
+		edges = append(edges, organization.EdgeVendors)
+	}
+	if m.clearedvendor_profiles {
+		edges = append(edges, organization.EdgeVendorProfiles)
+	}
+	if m.clearedpostal_addresses {
+		edges = append(edges, organization.EdgePostalAddresses)
+	}
 	if m.clearedmembers {
 		edges = append(edges, organization.EdgeMembers)
 	}
@@ -65330,6 +65663,12 @@ func (m *OrganizationMutation) EdgeCleared(name string) bool {
 		return m.clearedcontact_lists
 	case organization.EdgeNotes:
 		return m.clearednotes
+	case organization.EdgeVendors:
+		return m.clearedvendors
+	case organization.EdgeVendorProfiles:
+		return m.clearedvendor_profiles
+	case organization.EdgePostalAddresses:
+		return m.clearedpostal_addresses
 	case organization.EdgeMembers:
 		return m.clearedmembers
 	}
@@ -65434,6 +65773,15 @@ func (m *OrganizationMutation) ResetEdge(name string) error {
 		return nil
 	case organization.EdgeNotes:
 		m.ResetNotes()
+		return nil
+	case organization.EdgeVendors:
+		m.ResetVendors()
+		return nil
+	case organization.EdgeVendorProfiles:
+		m.ResetVendorProfiles()
+		return nil
+	case organization.EdgePostalAddresses:
+		m.ResetPostalAddresses()
 		return nil
 	case organization.EdgeMembers:
 		m.ResetMembers()
@@ -72754,6 +73102,3774 @@ func (m *PersonalAccessTokenMutation) ResetEdge(name string) error {
 		return nil
 	}
 	return fmt.Errorf("unknown PersonalAccessToken edge %s", name)
+}
+
+// PostalAddressMutation represents an operation that mutates the PostalAddress nodes in the graph.
+type PostalAddressMutation struct {
+	config
+	op                                     Op
+	typ                                    string
+	id                                     *string
+	created_at                             *time.Time
+	updated_at                             *time.Time
+	created_by                             *string
+	updated_by                             *string
+	deleted_at                             *time.Time
+	deleted_by                             *string
+	mapping_id                             *string
+	tags                                   *[]string
+	appendtags                             []string
+	region_code                            *string
+	language_code                          *string
+	postal_code                            *string
+	sorting_code                           *string
+	administrative_area                    *string
+	locality                               *string
+	sublocality                            *string
+	address_lines                          *[]string
+	appendaddress_lines                    []string
+	recipients                             *[]string
+	appendrecipients                       []string
+	organization                           *string
+	clearedFields                          map[string]struct{}
+	owner                                  *string
+	clearedowner                           bool
+	events                                 map[string]struct{}
+	removedevents                          map[string]struct{}
+	clearedevents                          bool
+	profile                                map[string]struct{}
+	removedprofile                         map[string]struct{}
+	clearedprofile                         bool
+	vendor_profile_postal_addresses        map[string]struct{}
+	removedvendor_profile_postal_addresses map[string]struct{}
+	clearedvendor_profile_postal_addresses bool
+	done                                   bool
+	oldValue                               func(context.Context) (*PostalAddress, error)
+	predicates                             []predicate.PostalAddress
+}
+
+var _ ent.Mutation = (*PostalAddressMutation)(nil)
+
+// postaladdressOption allows management of the mutation configuration using functional options.
+type postaladdressOption func(*PostalAddressMutation)
+
+// newPostalAddressMutation creates new mutation for the PostalAddress entity.
+func newPostalAddressMutation(c config, op Op, opts ...postaladdressOption) *PostalAddressMutation {
+	m := &PostalAddressMutation{
+		config:        c,
+		op:            op,
+		typ:           TypePostalAddress,
+		clearedFields: make(map[string]struct{}),
+	}
+	for _, opt := range opts {
+		opt(m)
+	}
+	return m
+}
+
+// withPostalAddressID sets the ID field of the mutation.
+func withPostalAddressID(id string) postaladdressOption {
+	return func(m *PostalAddressMutation) {
+		var (
+			err   error
+			once  sync.Once
+			value *PostalAddress
+		)
+		m.oldValue = func(ctx context.Context) (*PostalAddress, error) {
+			once.Do(func() {
+				if m.done {
+					err = errors.New("querying old values post mutation is not allowed")
+				} else {
+					value, err = m.Client().PostalAddress.Get(ctx, id)
+				}
+			})
+			return value, err
+		}
+		m.id = &id
+	}
+}
+
+// withPostalAddress sets the old PostalAddress of the mutation.
+func withPostalAddress(node *PostalAddress) postaladdressOption {
+	return func(m *PostalAddressMutation) {
+		m.oldValue = func(context.Context) (*PostalAddress, error) {
+			return node, nil
+		}
+		m.id = &node.ID
+	}
+}
+
+// Client returns a new `ent.Client` from the mutation. If the mutation was
+// executed in a transaction (ent.Tx), a transactional client is returned.
+func (m PostalAddressMutation) Client() *Client {
+	client := &Client{config: m.config}
+	client.init()
+	return client
+}
+
+// Tx returns an `ent.Tx` for mutations that were executed in transactions;
+// it returns an error otherwise.
+func (m PostalAddressMutation) Tx() (*Tx, error) {
+	if _, ok := m.driver.(*txDriver); !ok {
+		return nil, errors.New("generated: mutation is not running in a transaction")
+	}
+	tx := &Tx{config: m.config}
+	tx.init()
+	return tx, nil
+}
+
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of PostalAddress entities.
+func (m *PostalAddressMutation) SetID(id string) {
+	m.id = &id
+}
+
+// ID returns the ID value in the mutation. Note that the ID is only available
+// if it was provided to the builder or after it was returned from the database.
+func (m *PostalAddressMutation) ID() (id string, exists bool) {
+	if m.id == nil {
+		return
+	}
+	return *m.id, true
+}
+
+// IDs queries the database and returns the entity ids that match the mutation's predicate.
+// That means, if the mutation is applied within a transaction with an isolation level such
+// as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
+// or updated by the mutation.
+func (m *PostalAddressMutation) IDs(ctx context.Context) ([]string, error) {
+	switch {
+	case m.op.Is(OpUpdateOne | OpDeleteOne):
+		id, exists := m.ID()
+		if exists {
+			return []string{id}, nil
+		}
+		fallthrough
+	case m.op.Is(OpUpdate | OpDelete):
+		return m.Client().PostalAddress.Query().Where(m.predicates...).IDs(ctx)
+	default:
+		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
+	}
+}
+
+// SetCreatedAt sets the "created_at" field.
+func (m *PostalAddressMutation) SetCreatedAt(t time.Time) {
+	m.created_at = &t
+}
+
+// CreatedAt returns the value of the "created_at" field in the mutation.
+func (m *PostalAddressMutation) CreatedAt() (r time.Time, exists bool) {
+	v := m.created_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedAt returns the old "created_at" field's value of the PostalAddress entity.
+// If the PostalAddress object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PostalAddressMutation) OldCreatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedAt: %w", err)
+	}
+	return oldValue.CreatedAt, nil
+}
+
+// ClearCreatedAt clears the value of the "created_at" field.
+func (m *PostalAddressMutation) ClearCreatedAt() {
+	m.created_at = nil
+	m.clearedFields[postaladdress.FieldCreatedAt] = struct{}{}
+}
+
+// CreatedAtCleared returns if the "created_at" field was cleared in this mutation.
+func (m *PostalAddressMutation) CreatedAtCleared() bool {
+	_, ok := m.clearedFields[postaladdress.FieldCreatedAt]
+	return ok
+}
+
+// ResetCreatedAt resets all changes to the "created_at" field.
+func (m *PostalAddressMutation) ResetCreatedAt() {
+	m.created_at = nil
+	delete(m.clearedFields, postaladdress.FieldCreatedAt)
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (m *PostalAddressMutation) SetUpdatedAt(t time.Time) {
+	m.updated_at = &t
+}
+
+// UpdatedAt returns the value of the "updated_at" field in the mutation.
+func (m *PostalAddressMutation) UpdatedAt() (r time.Time, exists bool) {
+	v := m.updated_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedAt returns the old "updated_at" field's value of the PostalAddress entity.
+// If the PostalAddress object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PostalAddressMutation) OldUpdatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedAt: %w", err)
+	}
+	return oldValue.UpdatedAt, nil
+}
+
+// ClearUpdatedAt clears the value of the "updated_at" field.
+func (m *PostalAddressMutation) ClearUpdatedAt() {
+	m.updated_at = nil
+	m.clearedFields[postaladdress.FieldUpdatedAt] = struct{}{}
+}
+
+// UpdatedAtCleared returns if the "updated_at" field was cleared in this mutation.
+func (m *PostalAddressMutation) UpdatedAtCleared() bool {
+	_, ok := m.clearedFields[postaladdress.FieldUpdatedAt]
+	return ok
+}
+
+// ResetUpdatedAt resets all changes to the "updated_at" field.
+func (m *PostalAddressMutation) ResetUpdatedAt() {
+	m.updated_at = nil
+	delete(m.clearedFields, postaladdress.FieldUpdatedAt)
+}
+
+// SetCreatedBy sets the "created_by" field.
+func (m *PostalAddressMutation) SetCreatedBy(s string) {
+	m.created_by = &s
+}
+
+// CreatedBy returns the value of the "created_by" field in the mutation.
+func (m *PostalAddressMutation) CreatedBy() (r string, exists bool) {
+	v := m.created_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedBy returns the old "created_by" field's value of the PostalAddress entity.
+// If the PostalAddress object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PostalAddressMutation) OldCreatedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedBy: %w", err)
+	}
+	return oldValue.CreatedBy, nil
+}
+
+// ClearCreatedBy clears the value of the "created_by" field.
+func (m *PostalAddressMutation) ClearCreatedBy() {
+	m.created_by = nil
+	m.clearedFields[postaladdress.FieldCreatedBy] = struct{}{}
+}
+
+// CreatedByCleared returns if the "created_by" field was cleared in this mutation.
+func (m *PostalAddressMutation) CreatedByCleared() bool {
+	_, ok := m.clearedFields[postaladdress.FieldCreatedBy]
+	return ok
+}
+
+// ResetCreatedBy resets all changes to the "created_by" field.
+func (m *PostalAddressMutation) ResetCreatedBy() {
+	m.created_by = nil
+	delete(m.clearedFields, postaladdress.FieldCreatedBy)
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (m *PostalAddressMutation) SetUpdatedBy(s string) {
+	m.updated_by = &s
+}
+
+// UpdatedBy returns the value of the "updated_by" field in the mutation.
+func (m *PostalAddressMutation) UpdatedBy() (r string, exists bool) {
+	v := m.updated_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedBy returns the old "updated_by" field's value of the PostalAddress entity.
+// If the PostalAddress object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PostalAddressMutation) OldUpdatedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedBy: %w", err)
+	}
+	return oldValue.UpdatedBy, nil
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (m *PostalAddressMutation) ClearUpdatedBy() {
+	m.updated_by = nil
+	m.clearedFields[postaladdress.FieldUpdatedBy] = struct{}{}
+}
+
+// UpdatedByCleared returns if the "updated_by" field was cleared in this mutation.
+func (m *PostalAddressMutation) UpdatedByCleared() bool {
+	_, ok := m.clearedFields[postaladdress.FieldUpdatedBy]
+	return ok
+}
+
+// ResetUpdatedBy resets all changes to the "updated_by" field.
+func (m *PostalAddressMutation) ResetUpdatedBy() {
+	m.updated_by = nil
+	delete(m.clearedFields, postaladdress.FieldUpdatedBy)
+}
+
+// SetDeletedAt sets the "deleted_at" field.
+func (m *PostalAddressMutation) SetDeletedAt(t time.Time) {
+	m.deleted_at = &t
+}
+
+// DeletedAt returns the value of the "deleted_at" field in the mutation.
+func (m *PostalAddressMutation) DeletedAt() (r time.Time, exists bool) {
+	v := m.deleted_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDeletedAt returns the old "deleted_at" field's value of the PostalAddress entity.
+// If the PostalAddress object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PostalAddressMutation) OldDeletedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDeletedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDeletedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDeletedAt: %w", err)
+	}
+	return oldValue.DeletedAt, nil
+}
+
+// ClearDeletedAt clears the value of the "deleted_at" field.
+func (m *PostalAddressMutation) ClearDeletedAt() {
+	m.deleted_at = nil
+	m.clearedFields[postaladdress.FieldDeletedAt] = struct{}{}
+}
+
+// DeletedAtCleared returns if the "deleted_at" field was cleared in this mutation.
+func (m *PostalAddressMutation) DeletedAtCleared() bool {
+	_, ok := m.clearedFields[postaladdress.FieldDeletedAt]
+	return ok
+}
+
+// ResetDeletedAt resets all changes to the "deleted_at" field.
+func (m *PostalAddressMutation) ResetDeletedAt() {
+	m.deleted_at = nil
+	delete(m.clearedFields, postaladdress.FieldDeletedAt)
+}
+
+// SetDeletedBy sets the "deleted_by" field.
+func (m *PostalAddressMutation) SetDeletedBy(s string) {
+	m.deleted_by = &s
+}
+
+// DeletedBy returns the value of the "deleted_by" field in the mutation.
+func (m *PostalAddressMutation) DeletedBy() (r string, exists bool) {
+	v := m.deleted_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDeletedBy returns the old "deleted_by" field's value of the PostalAddress entity.
+// If the PostalAddress object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PostalAddressMutation) OldDeletedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDeletedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDeletedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDeletedBy: %w", err)
+	}
+	return oldValue.DeletedBy, nil
+}
+
+// ClearDeletedBy clears the value of the "deleted_by" field.
+func (m *PostalAddressMutation) ClearDeletedBy() {
+	m.deleted_by = nil
+	m.clearedFields[postaladdress.FieldDeletedBy] = struct{}{}
+}
+
+// DeletedByCleared returns if the "deleted_by" field was cleared in this mutation.
+func (m *PostalAddressMutation) DeletedByCleared() bool {
+	_, ok := m.clearedFields[postaladdress.FieldDeletedBy]
+	return ok
+}
+
+// ResetDeletedBy resets all changes to the "deleted_by" field.
+func (m *PostalAddressMutation) ResetDeletedBy() {
+	m.deleted_by = nil
+	delete(m.clearedFields, postaladdress.FieldDeletedBy)
+}
+
+// SetMappingID sets the "mapping_id" field.
+func (m *PostalAddressMutation) SetMappingID(s string) {
+	m.mapping_id = &s
+}
+
+// MappingID returns the value of the "mapping_id" field in the mutation.
+func (m *PostalAddressMutation) MappingID() (r string, exists bool) {
+	v := m.mapping_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldMappingID returns the old "mapping_id" field's value of the PostalAddress entity.
+// If the PostalAddress object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PostalAddressMutation) OldMappingID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldMappingID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldMappingID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldMappingID: %w", err)
+	}
+	return oldValue.MappingID, nil
+}
+
+// ResetMappingID resets all changes to the "mapping_id" field.
+func (m *PostalAddressMutation) ResetMappingID() {
+	m.mapping_id = nil
+}
+
+// SetTags sets the "tags" field.
+func (m *PostalAddressMutation) SetTags(s []string) {
+	m.tags = &s
+	m.appendtags = nil
+}
+
+// Tags returns the value of the "tags" field in the mutation.
+func (m *PostalAddressMutation) Tags() (r []string, exists bool) {
+	v := m.tags
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldTags returns the old "tags" field's value of the PostalAddress entity.
+// If the PostalAddress object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PostalAddressMutation) OldTags(ctx context.Context) (v []string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldTags is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldTags requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldTags: %w", err)
+	}
+	return oldValue.Tags, nil
+}
+
+// AppendTags adds s to the "tags" field.
+func (m *PostalAddressMutation) AppendTags(s []string) {
+	m.appendtags = append(m.appendtags, s...)
+}
+
+// AppendedTags returns the list of values that were appended to the "tags" field in this mutation.
+func (m *PostalAddressMutation) AppendedTags() ([]string, bool) {
+	if len(m.appendtags) == 0 {
+		return nil, false
+	}
+	return m.appendtags, true
+}
+
+// ClearTags clears the value of the "tags" field.
+func (m *PostalAddressMutation) ClearTags() {
+	m.tags = nil
+	m.appendtags = nil
+	m.clearedFields[postaladdress.FieldTags] = struct{}{}
+}
+
+// TagsCleared returns if the "tags" field was cleared in this mutation.
+func (m *PostalAddressMutation) TagsCleared() bool {
+	_, ok := m.clearedFields[postaladdress.FieldTags]
+	return ok
+}
+
+// ResetTags resets all changes to the "tags" field.
+func (m *PostalAddressMutation) ResetTags() {
+	m.tags = nil
+	m.appendtags = nil
+	delete(m.clearedFields, postaladdress.FieldTags)
+}
+
+// SetOwnerID sets the "owner_id" field.
+func (m *PostalAddressMutation) SetOwnerID(s string) {
+	m.owner = &s
+}
+
+// OwnerID returns the value of the "owner_id" field in the mutation.
+func (m *PostalAddressMutation) OwnerID() (r string, exists bool) {
+	v := m.owner
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldOwnerID returns the old "owner_id" field's value of the PostalAddress entity.
+// If the PostalAddress object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PostalAddressMutation) OldOwnerID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldOwnerID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldOwnerID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldOwnerID: %w", err)
+	}
+	return oldValue.OwnerID, nil
+}
+
+// ClearOwnerID clears the value of the "owner_id" field.
+func (m *PostalAddressMutation) ClearOwnerID() {
+	m.owner = nil
+	m.clearedFields[postaladdress.FieldOwnerID] = struct{}{}
+}
+
+// OwnerIDCleared returns if the "owner_id" field was cleared in this mutation.
+func (m *PostalAddressMutation) OwnerIDCleared() bool {
+	_, ok := m.clearedFields[postaladdress.FieldOwnerID]
+	return ok
+}
+
+// ResetOwnerID resets all changes to the "owner_id" field.
+func (m *PostalAddressMutation) ResetOwnerID() {
+	m.owner = nil
+	delete(m.clearedFields, postaladdress.FieldOwnerID)
+}
+
+// SetRegionCode sets the "region_code" field.
+func (m *PostalAddressMutation) SetRegionCode(s string) {
+	m.region_code = &s
+}
+
+// RegionCode returns the value of the "region_code" field in the mutation.
+func (m *PostalAddressMutation) RegionCode() (r string, exists bool) {
+	v := m.region_code
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldRegionCode returns the old "region_code" field's value of the PostalAddress entity.
+// If the PostalAddress object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PostalAddressMutation) OldRegionCode(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldRegionCode is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldRegionCode requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldRegionCode: %w", err)
+	}
+	return oldValue.RegionCode, nil
+}
+
+// ResetRegionCode resets all changes to the "region_code" field.
+func (m *PostalAddressMutation) ResetRegionCode() {
+	m.region_code = nil
+}
+
+// SetLanguageCode sets the "language_code" field.
+func (m *PostalAddressMutation) SetLanguageCode(s string) {
+	m.language_code = &s
+}
+
+// LanguageCode returns the value of the "language_code" field in the mutation.
+func (m *PostalAddressMutation) LanguageCode() (r string, exists bool) {
+	v := m.language_code
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldLanguageCode returns the old "language_code" field's value of the PostalAddress entity.
+// If the PostalAddress object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PostalAddressMutation) OldLanguageCode(ctx context.Context) (v *string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldLanguageCode is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldLanguageCode requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldLanguageCode: %w", err)
+	}
+	return oldValue.LanguageCode, nil
+}
+
+// ClearLanguageCode clears the value of the "language_code" field.
+func (m *PostalAddressMutation) ClearLanguageCode() {
+	m.language_code = nil
+	m.clearedFields[postaladdress.FieldLanguageCode] = struct{}{}
+}
+
+// LanguageCodeCleared returns if the "language_code" field was cleared in this mutation.
+func (m *PostalAddressMutation) LanguageCodeCleared() bool {
+	_, ok := m.clearedFields[postaladdress.FieldLanguageCode]
+	return ok
+}
+
+// ResetLanguageCode resets all changes to the "language_code" field.
+func (m *PostalAddressMutation) ResetLanguageCode() {
+	m.language_code = nil
+	delete(m.clearedFields, postaladdress.FieldLanguageCode)
+}
+
+// SetPostalCode sets the "postal_code" field.
+func (m *PostalAddressMutation) SetPostalCode(s string) {
+	m.postal_code = &s
+}
+
+// PostalCode returns the value of the "postal_code" field in the mutation.
+func (m *PostalAddressMutation) PostalCode() (r string, exists bool) {
+	v := m.postal_code
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldPostalCode returns the old "postal_code" field's value of the PostalAddress entity.
+// If the PostalAddress object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PostalAddressMutation) OldPostalCode(ctx context.Context) (v *string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldPostalCode is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldPostalCode requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldPostalCode: %w", err)
+	}
+	return oldValue.PostalCode, nil
+}
+
+// ClearPostalCode clears the value of the "postal_code" field.
+func (m *PostalAddressMutation) ClearPostalCode() {
+	m.postal_code = nil
+	m.clearedFields[postaladdress.FieldPostalCode] = struct{}{}
+}
+
+// PostalCodeCleared returns if the "postal_code" field was cleared in this mutation.
+func (m *PostalAddressMutation) PostalCodeCleared() bool {
+	_, ok := m.clearedFields[postaladdress.FieldPostalCode]
+	return ok
+}
+
+// ResetPostalCode resets all changes to the "postal_code" field.
+func (m *PostalAddressMutation) ResetPostalCode() {
+	m.postal_code = nil
+	delete(m.clearedFields, postaladdress.FieldPostalCode)
+}
+
+// SetSortingCode sets the "sorting_code" field.
+func (m *PostalAddressMutation) SetSortingCode(s string) {
+	m.sorting_code = &s
+}
+
+// SortingCode returns the value of the "sorting_code" field in the mutation.
+func (m *PostalAddressMutation) SortingCode() (r string, exists bool) {
+	v := m.sorting_code
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSortingCode returns the old "sorting_code" field's value of the PostalAddress entity.
+// If the PostalAddress object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PostalAddressMutation) OldSortingCode(ctx context.Context) (v *string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSortingCode is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSortingCode requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSortingCode: %w", err)
+	}
+	return oldValue.SortingCode, nil
+}
+
+// ClearSortingCode clears the value of the "sorting_code" field.
+func (m *PostalAddressMutation) ClearSortingCode() {
+	m.sorting_code = nil
+	m.clearedFields[postaladdress.FieldSortingCode] = struct{}{}
+}
+
+// SortingCodeCleared returns if the "sorting_code" field was cleared in this mutation.
+func (m *PostalAddressMutation) SortingCodeCleared() bool {
+	_, ok := m.clearedFields[postaladdress.FieldSortingCode]
+	return ok
+}
+
+// ResetSortingCode resets all changes to the "sorting_code" field.
+func (m *PostalAddressMutation) ResetSortingCode() {
+	m.sorting_code = nil
+	delete(m.clearedFields, postaladdress.FieldSortingCode)
+}
+
+// SetAdministrativeArea sets the "administrative_area" field.
+func (m *PostalAddressMutation) SetAdministrativeArea(s string) {
+	m.administrative_area = &s
+}
+
+// AdministrativeArea returns the value of the "administrative_area" field in the mutation.
+func (m *PostalAddressMutation) AdministrativeArea() (r string, exists bool) {
+	v := m.administrative_area
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAdministrativeArea returns the old "administrative_area" field's value of the PostalAddress entity.
+// If the PostalAddress object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PostalAddressMutation) OldAdministrativeArea(ctx context.Context) (v *string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAdministrativeArea is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAdministrativeArea requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAdministrativeArea: %w", err)
+	}
+	return oldValue.AdministrativeArea, nil
+}
+
+// ClearAdministrativeArea clears the value of the "administrative_area" field.
+func (m *PostalAddressMutation) ClearAdministrativeArea() {
+	m.administrative_area = nil
+	m.clearedFields[postaladdress.FieldAdministrativeArea] = struct{}{}
+}
+
+// AdministrativeAreaCleared returns if the "administrative_area" field was cleared in this mutation.
+func (m *PostalAddressMutation) AdministrativeAreaCleared() bool {
+	_, ok := m.clearedFields[postaladdress.FieldAdministrativeArea]
+	return ok
+}
+
+// ResetAdministrativeArea resets all changes to the "administrative_area" field.
+func (m *PostalAddressMutation) ResetAdministrativeArea() {
+	m.administrative_area = nil
+	delete(m.clearedFields, postaladdress.FieldAdministrativeArea)
+}
+
+// SetLocality sets the "locality" field.
+func (m *PostalAddressMutation) SetLocality(s string) {
+	m.locality = &s
+}
+
+// Locality returns the value of the "locality" field in the mutation.
+func (m *PostalAddressMutation) Locality() (r string, exists bool) {
+	v := m.locality
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldLocality returns the old "locality" field's value of the PostalAddress entity.
+// If the PostalAddress object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PostalAddressMutation) OldLocality(ctx context.Context) (v *string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldLocality is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldLocality requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldLocality: %w", err)
+	}
+	return oldValue.Locality, nil
+}
+
+// ClearLocality clears the value of the "locality" field.
+func (m *PostalAddressMutation) ClearLocality() {
+	m.locality = nil
+	m.clearedFields[postaladdress.FieldLocality] = struct{}{}
+}
+
+// LocalityCleared returns if the "locality" field was cleared in this mutation.
+func (m *PostalAddressMutation) LocalityCleared() bool {
+	_, ok := m.clearedFields[postaladdress.FieldLocality]
+	return ok
+}
+
+// ResetLocality resets all changes to the "locality" field.
+func (m *PostalAddressMutation) ResetLocality() {
+	m.locality = nil
+	delete(m.clearedFields, postaladdress.FieldLocality)
+}
+
+// SetSublocality sets the "sublocality" field.
+func (m *PostalAddressMutation) SetSublocality(s string) {
+	m.sublocality = &s
+}
+
+// Sublocality returns the value of the "sublocality" field in the mutation.
+func (m *PostalAddressMutation) Sublocality() (r string, exists bool) {
+	v := m.sublocality
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSublocality returns the old "sublocality" field's value of the PostalAddress entity.
+// If the PostalAddress object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PostalAddressMutation) OldSublocality(ctx context.Context) (v *string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSublocality is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSublocality requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSublocality: %w", err)
+	}
+	return oldValue.Sublocality, nil
+}
+
+// ClearSublocality clears the value of the "sublocality" field.
+func (m *PostalAddressMutation) ClearSublocality() {
+	m.sublocality = nil
+	m.clearedFields[postaladdress.FieldSublocality] = struct{}{}
+}
+
+// SublocalityCleared returns if the "sublocality" field was cleared in this mutation.
+func (m *PostalAddressMutation) SublocalityCleared() bool {
+	_, ok := m.clearedFields[postaladdress.FieldSublocality]
+	return ok
+}
+
+// ResetSublocality resets all changes to the "sublocality" field.
+func (m *PostalAddressMutation) ResetSublocality() {
+	m.sublocality = nil
+	delete(m.clearedFields, postaladdress.FieldSublocality)
+}
+
+// SetAddressLines sets the "address_lines" field.
+func (m *PostalAddressMutation) SetAddressLines(s []string) {
+	m.address_lines = &s
+	m.appendaddress_lines = nil
+}
+
+// AddressLines returns the value of the "address_lines" field in the mutation.
+func (m *PostalAddressMutation) AddressLines() (r []string, exists bool) {
+	v := m.address_lines
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAddressLines returns the old "address_lines" field's value of the PostalAddress entity.
+// If the PostalAddress object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PostalAddressMutation) OldAddressLines(ctx context.Context) (v []string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAddressLines is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAddressLines requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAddressLines: %w", err)
+	}
+	return oldValue.AddressLines, nil
+}
+
+// AppendAddressLines adds s to the "address_lines" field.
+func (m *PostalAddressMutation) AppendAddressLines(s []string) {
+	m.appendaddress_lines = append(m.appendaddress_lines, s...)
+}
+
+// AppendedAddressLines returns the list of values that were appended to the "address_lines" field in this mutation.
+func (m *PostalAddressMutation) AppendedAddressLines() ([]string, bool) {
+	if len(m.appendaddress_lines) == 0 {
+		return nil, false
+	}
+	return m.appendaddress_lines, true
+}
+
+// ResetAddressLines resets all changes to the "address_lines" field.
+func (m *PostalAddressMutation) ResetAddressLines() {
+	m.address_lines = nil
+	m.appendaddress_lines = nil
+}
+
+// SetRecipients sets the "recipients" field.
+func (m *PostalAddressMutation) SetRecipients(s []string) {
+	m.recipients = &s
+	m.appendrecipients = nil
+}
+
+// Recipients returns the value of the "recipients" field in the mutation.
+func (m *PostalAddressMutation) Recipients() (r []string, exists bool) {
+	v := m.recipients
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldRecipients returns the old "recipients" field's value of the PostalAddress entity.
+// If the PostalAddress object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PostalAddressMutation) OldRecipients(ctx context.Context) (v []string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldRecipients is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldRecipients requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldRecipients: %w", err)
+	}
+	return oldValue.Recipients, nil
+}
+
+// AppendRecipients adds s to the "recipients" field.
+func (m *PostalAddressMutation) AppendRecipients(s []string) {
+	m.appendrecipients = append(m.appendrecipients, s...)
+}
+
+// AppendedRecipients returns the list of values that were appended to the "recipients" field in this mutation.
+func (m *PostalAddressMutation) AppendedRecipients() ([]string, bool) {
+	if len(m.appendrecipients) == 0 {
+		return nil, false
+	}
+	return m.appendrecipients, true
+}
+
+// ResetRecipients resets all changes to the "recipients" field.
+func (m *PostalAddressMutation) ResetRecipients() {
+	m.recipients = nil
+	m.appendrecipients = nil
+}
+
+// SetOrganization sets the "organization" field.
+func (m *PostalAddressMutation) SetOrganization(s string) {
+	m.organization = &s
+}
+
+// Organization returns the value of the "organization" field in the mutation.
+func (m *PostalAddressMutation) Organization() (r string, exists bool) {
+	v := m.organization
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldOrganization returns the old "organization" field's value of the PostalAddress entity.
+// If the PostalAddress object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PostalAddressMutation) OldOrganization(ctx context.Context) (v *string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldOrganization is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldOrganization requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldOrganization: %w", err)
+	}
+	return oldValue.Organization, nil
+}
+
+// ClearOrganization clears the value of the "organization" field.
+func (m *PostalAddressMutation) ClearOrganization() {
+	m.organization = nil
+	m.clearedFields[postaladdress.FieldOrganization] = struct{}{}
+}
+
+// OrganizationCleared returns if the "organization" field was cleared in this mutation.
+func (m *PostalAddressMutation) OrganizationCleared() bool {
+	_, ok := m.clearedFields[postaladdress.FieldOrganization]
+	return ok
+}
+
+// ResetOrganization resets all changes to the "organization" field.
+func (m *PostalAddressMutation) ResetOrganization() {
+	m.organization = nil
+	delete(m.clearedFields, postaladdress.FieldOrganization)
+}
+
+// ClearOwner clears the "owner" edge to the Organization entity.
+func (m *PostalAddressMutation) ClearOwner() {
+	m.clearedowner = true
+	m.clearedFields[postaladdress.FieldOwnerID] = struct{}{}
+}
+
+// OwnerCleared reports if the "owner" edge to the Organization entity was cleared.
+func (m *PostalAddressMutation) OwnerCleared() bool {
+	return m.OwnerIDCleared() || m.clearedowner
+}
+
+// OwnerIDs returns the "owner" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// OwnerID instead. It exists only for internal usage by the builders.
+func (m *PostalAddressMutation) OwnerIDs() (ids []string) {
+	if id := m.owner; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetOwner resets all changes to the "owner" edge.
+func (m *PostalAddressMutation) ResetOwner() {
+	m.owner = nil
+	m.clearedowner = false
+}
+
+// AddEventIDs adds the "events" edge to the Event entity by ids.
+func (m *PostalAddressMutation) AddEventIDs(ids ...string) {
+	if m.events == nil {
+		m.events = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.events[ids[i]] = struct{}{}
+	}
+}
+
+// ClearEvents clears the "events" edge to the Event entity.
+func (m *PostalAddressMutation) ClearEvents() {
+	m.clearedevents = true
+}
+
+// EventsCleared reports if the "events" edge to the Event entity was cleared.
+func (m *PostalAddressMutation) EventsCleared() bool {
+	return m.clearedevents
+}
+
+// RemoveEventIDs removes the "events" edge to the Event entity by IDs.
+func (m *PostalAddressMutation) RemoveEventIDs(ids ...string) {
+	if m.removedevents == nil {
+		m.removedevents = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.events, ids[i])
+		m.removedevents[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedEvents returns the removed IDs of the "events" edge to the Event entity.
+func (m *PostalAddressMutation) RemovedEventsIDs() (ids []string) {
+	for id := range m.removedevents {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// EventsIDs returns the "events" edge IDs in the mutation.
+func (m *PostalAddressMutation) EventsIDs() (ids []string) {
+	for id := range m.events {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetEvents resets all changes to the "events" edge.
+func (m *PostalAddressMutation) ResetEvents() {
+	m.events = nil
+	m.clearedevents = false
+	m.removedevents = nil
+}
+
+// AddProfileIDs adds the "profile" edge to the VendorProfile entity by ids.
+func (m *PostalAddressMutation) AddProfileIDs(ids ...string) {
+	if m.profile == nil {
+		m.profile = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.profile[ids[i]] = struct{}{}
+	}
+}
+
+// ClearProfile clears the "profile" edge to the VendorProfile entity.
+func (m *PostalAddressMutation) ClearProfile() {
+	m.clearedprofile = true
+}
+
+// ProfileCleared reports if the "profile" edge to the VendorProfile entity was cleared.
+func (m *PostalAddressMutation) ProfileCleared() bool {
+	return m.clearedprofile
+}
+
+// RemoveProfileIDs removes the "profile" edge to the VendorProfile entity by IDs.
+func (m *PostalAddressMutation) RemoveProfileIDs(ids ...string) {
+	if m.removedprofile == nil {
+		m.removedprofile = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.profile, ids[i])
+		m.removedprofile[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedProfile returns the removed IDs of the "profile" edge to the VendorProfile entity.
+func (m *PostalAddressMutation) RemovedProfileIDs() (ids []string) {
+	for id := range m.removedprofile {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ProfileIDs returns the "profile" edge IDs in the mutation.
+func (m *PostalAddressMutation) ProfileIDs() (ids []string) {
+	for id := range m.profile {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetProfile resets all changes to the "profile" edge.
+func (m *PostalAddressMutation) ResetProfile() {
+	m.profile = nil
+	m.clearedprofile = false
+	m.removedprofile = nil
+}
+
+// AddVendorProfilePostalAddressIDs adds the "vendor_profile_postal_addresses" edge to the VendorProfilePostalAddress entity by ids.
+func (m *PostalAddressMutation) AddVendorProfilePostalAddressIDs(ids ...string) {
+	if m.vendor_profile_postal_addresses == nil {
+		m.vendor_profile_postal_addresses = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.vendor_profile_postal_addresses[ids[i]] = struct{}{}
+	}
+}
+
+// ClearVendorProfilePostalAddresses clears the "vendor_profile_postal_addresses" edge to the VendorProfilePostalAddress entity.
+func (m *PostalAddressMutation) ClearVendorProfilePostalAddresses() {
+	m.clearedvendor_profile_postal_addresses = true
+}
+
+// VendorProfilePostalAddressesCleared reports if the "vendor_profile_postal_addresses" edge to the VendorProfilePostalAddress entity was cleared.
+func (m *PostalAddressMutation) VendorProfilePostalAddressesCleared() bool {
+	return m.clearedvendor_profile_postal_addresses
+}
+
+// RemoveVendorProfilePostalAddressIDs removes the "vendor_profile_postal_addresses" edge to the VendorProfilePostalAddress entity by IDs.
+func (m *PostalAddressMutation) RemoveVendorProfilePostalAddressIDs(ids ...string) {
+	if m.removedvendor_profile_postal_addresses == nil {
+		m.removedvendor_profile_postal_addresses = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.vendor_profile_postal_addresses, ids[i])
+		m.removedvendor_profile_postal_addresses[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedVendorProfilePostalAddresses returns the removed IDs of the "vendor_profile_postal_addresses" edge to the VendorProfilePostalAddress entity.
+func (m *PostalAddressMutation) RemovedVendorProfilePostalAddressesIDs() (ids []string) {
+	for id := range m.removedvendor_profile_postal_addresses {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// VendorProfilePostalAddressesIDs returns the "vendor_profile_postal_addresses" edge IDs in the mutation.
+func (m *PostalAddressMutation) VendorProfilePostalAddressesIDs() (ids []string) {
+	for id := range m.vendor_profile_postal_addresses {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetVendorProfilePostalAddresses resets all changes to the "vendor_profile_postal_addresses" edge.
+func (m *PostalAddressMutation) ResetVendorProfilePostalAddresses() {
+	m.vendor_profile_postal_addresses = nil
+	m.clearedvendor_profile_postal_addresses = false
+	m.removedvendor_profile_postal_addresses = nil
+}
+
+// Where appends a list predicates to the PostalAddressMutation builder.
+func (m *PostalAddressMutation) Where(ps ...predicate.PostalAddress) {
+	m.predicates = append(m.predicates, ps...)
+}
+
+// WhereP appends storage-level predicates to the PostalAddressMutation builder. Using this method,
+// users can use type-assertion to append predicates that do not depend on any generated package.
+func (m *PostalAddressMutation) WhereP(ps ...func(*sql.Selector)) {
+	p := make([]predicate.PostalAddress, len(ps))
+	for i := range ps {
+		p[i] = ps[i]
+	}
+	m.Where(p...)
+}
+
+// Op returns the operation name.
+func (m *PostalAddressMutation) Op() Op {
+	return m.op
+}
+
+// SetOp allows setting the mutation operation.
+func (m *PostalAddressMutation) SetOp(op Op) {
+	m.op = op
+}
+
+// Type returns the node type of this mutation (PostalAddress).
+func (m *PostalAddressMutation) Type() string {
+	return m.typ
+}
+
+// Fields returns all fields that were changed during this mutation. Note that in
+// order to get all numeric fields that were incremented/decremented, call
+// AddedFields().
+func (m *PostalAddressMutation) Fields() []string {
+	fields := make([]string, 0, 19)
+	if m.created_at != nil {
+		fields = append(fields, postaladdress.FieldCreatedAt)
+	}
+	if m.updated_at != nil {
+		fields = append(fields, postaladdress.FieldUpdatedAt)
+	}
+	if m.created_by != nil {
+		fields = append(fields, postaladdress.FieldCreatedBy)
+	}
+	if m.updated_by != nil {
+		fields = append(fields, postaladdress.FieldUpdatedBy)
+	}
+	if m.deleted_at != nil {
+		fields = append(fields, postaladdress.FieldDeletedAt)
+	}
+	if m.deleted_by != nil {
+		fields = append(fields, postaladdress.FieldDeletedBy)
+	}
+	if m.mapping_id != nil {
+		fields = append(fields, postaladdress.FieldMappingID)
+	}
+	if m.tags != nil {
+		fields = append(fields, postaladdress.FieldTags)
+	}
+	if m.owner != nil {
+		fields = append(fields, postaladdress.FieldOwnerID)
+	}
+	if m.region_code != nil {
+		fields = append(fields, postaladdress.FieldRegionCode)
+	}
+	if m.language_code != nil {
+		fields = append(fields, postaladdress.FieldLanguageCode)
+	}
+	if m.postal_code != nil {
+		fields = append(fields, postaladdress.FieldPostalCode)
+	}
+	if m.sorting_code != nil {
+		fields = append(fields, postaladdress.FieldSortingCode)
+	}
+	if m.administrative_area != nil {
+		fields = append(fields, postaladdress.FieldAdministrativeArea)
+	}
+	if m.locality != nil {
+		fields = append(fields, postaladdress.FieldLocality)
+	}
+	if m.sublocality != nil {
+		fields = append(fields, postaladdress.FieldSublocality)
+	}
+	if m.address_lines != nil {
+		fields = append(fields, postaladdress.FieldAddressLines)
+	}
+	if m.recipients != nil {
+		fields = append(fields, postaladdress.FieldRecipients)
+	}
+	if m.organization != nil {
+		fields = append(fields, postaladdress.FieldOrganization)
+	}
+	return fields
+}
+
+// Field returns the value of a field with the given name. The second boolean
+// return value indicates that this field was not set, or was not defined in the
+// schema.
+func (m *PostalAddressMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case postaladdress.FieldCreatedAt:
+		return m.CreatedAt()
+	case postaladdress.FieldUpdatedAt:
+		return m.UpdatedAt()
+	case postaladdress.FieldCreatedBy:
+		return m.CreatedBy()
+	case postaladdress.FieldUpdatedBy:
+		return m.UpdatedBy()
+	case postaladdress.FieldDeletedAt:
+		return m.DeletedAt()
+	case postaladdress.FieldDeletedBy:
+		return m.DeletedBy()
+	case postaladdress.FieldMappingID:
+		return m.MappingID()
+	case postaladdress.FieldTags:
+		return m.Tags()
+	case postaladdress.FieldOwnerID:
+		return m.OwnerID()
+	case postaladdress.FieldRegionCode:
+		return m.RegionCode()
+	case postaladdress.FieldLanguageCode:
+		return m.LanguageCode()
+	case postaladdress.FieldPostalCode:
+		return m.PostalCode()
+	case postaladdress.FieldSortingCode:
+		return m.SortingCode()
+	case postaladdress.FieldAdministrativeArea:
+		return m.AdministrativeArea()
+	case postaladdress.FieldLocality:
+		return m.Locality()
+	case postaladdress.FieldSublocality:
+		return m.Sublocality()
+	case postaladdress.FieldAddressLines:
+		return m.AddressLines()
+	case postaladdress.FieldRecipients:
+		return m.Recipients()
+	case postaladdress.FieldOrganization:
+		return m.Organization()
+	}
+	return nil, false
+}
+
+// OldField returns the old value of the field from the database. An error is
+// returned if the mutation operation is not UpdateOne, or the query to the
+// database failed.
+func (m *PostalAddressMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case postaladdress.FieldCreatedAt:
+		return m.OldCreatedAt(ctx)
+	case postaladdress.FieldUpdatedAt:
+		return m.OldUpdatedAt(ctx)
+	case postaladdress.FieldCreatedBy:
+		return m.OldCreatedBy(ctx)
+	case postaladdress.FieldUpdatedBy:
+		return m.OldUpdatedBy(ctx)
+	case postaladdress.FieldDeletedAt:
+		return m.OldDeletedAt(ctx)
+	case postaladdress.FieldDeletedBy:
+		return m.OldDeletedBy(ctx)
+	case postaladdress.FieldMappingID:
+		return m.OldMappingID(ctx)
+	case postaladdress.FieldTags:
+		return m.OldTags(ctx)
+	case postaladdress.FieldOwnerID:
+		return m.OldOwnerID(ctx)
+	case postaladdress.FieldRegionCode:
+		return m.OldRegionCode(ctx)
+	case postaladdress.FieldLanguageCode:
+		return m.OldLanguageCode(ctx)
+	case postaladdress.FieldPostalCode:
+		return m.OldPostalCode(ctx)
+	case postaladdress.FieldSortingCode:
+		return m.OldSortingCode(ctx)
+	case postaladdress.FieldAdministrativeArea:
+		return m.OldAdministrativeArea(ctx)
+	case postaladdress.FieldLocality:
+		return m.OldLocality(ctx)
+	case postaladdress.FieldSublocality:
+		return m.OldSublocality(ctx)
+	case postaladdress.FieldAddressLines:
+		return m.OldAddressLines(ctx)
+	case postaladdress.FieldRecipients:
+		return m.OldRecipients(ctx)
+	case postaladdress.FieldOrganization:
+		return m.OldOrganization(ctx)
+	}
+	return nil, fmt.Errorf("unknown PostalAddress field %s", name)
+}
+
+// SetField sets the value of a field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *PostalAddressMutation) SetField(name string, value ent.Value) error {
+	switch name {
+	case postaladdress.FieldCreatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedAt(v)
+		return nil
+	case postaladdress.FieldUpdatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedAt(v)
+		return nil
+	case postaladdress.FieldCreatedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedBy(v)
+		return nil
+	case postaladdress.FieldUpdatedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedBy(v)
+		return nil
+	case postaladdress.FieldDeletedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDeletedAt(v)
+		return nil
+	case postaladdress.FieldDeletedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDeletedBy(v)
+		return nil
+	case postaladdress.FieldMappingID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetMappingID(v)
+		return nil
+	case postaladdress.FieldTags:
+		v, ok := value.([]string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetTags(v)
+		return nil
+	case postaladdress.FieldOwnerID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetOwnerID(v)
+		return nil
+	case postaladdress.FieldRegionCode:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetRegionCode(v)
+		return nil
+	case postaladdress.FieldLanguageCode:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetLanguageCode(v)
+		return nil
+	case postaladdress.FieldPostalCode:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetPostalCode(v)
+		return nil
+	case postaladdress.FieldSortingCode:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSortingCode(v)
+		return nil
+	case postaladdress.FieldAdministrativeArea:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAdministrativeArea(v)
+		return nil
+	case postaladdress.FieldLocality:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetLocality(v)
+		return nil
+	case postaladdress.FieldSublocality:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSublocality(v)
+		return nil
+	case postaladdress.FieldAddressLines:
+		v, ok := value.([]string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAddressLines(v)
+		return nil
+	case postaladdress.FieldRecipients:
+		v, ok := value.([]string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetRecipients(v)
+		return nil
+	case postaladdress.FieldOrganization:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetOrganization(v)
+		return nil
+	}
+	return fmt.Errorf("unknown PostalAddress field %s", name)
+}
+
+// AddedFields returns all numeric fields that were incremented/decremented during
+// this mutation.
+func (m *PostalAddressMutation) AddedFields() []string {
+	return nil
+}
+
+// AddedField returns the numeric value that was incremented/decremented on a field
+// with the given name. The second boolean return value indicates that this field
+// was not set, or was not defined in the schema.
+func (m *PostalAddressMutation) AddedField(name string) (ent.Value, bool) {
+	return nil, false
+}
+
+// AddField adds the value to the field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *PostalAddressMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	}
+	return fmt.Errorf("unknown PostalAddress numeric field %s", name)
+}
+
+// ClearedFields returns all nullable fields that were cleared during this
+// mutation.
+func (m *PostalAddressMutation) ClearedFields() []string {
+	var fields []string
+	if m.FieldCleared(postaladdress.FieldCreatedAt) {
+		fields = append(fields, postaladdress.FieldCreatedAt)
+	}
+	if m.FieldCleared(postaladdress.FieldUpdatedAt) {
+		fields = append(fields, postaladdress.FieldUpdatedAt)
+	}
+	if m.FieldCleared(postaladdress.FieldCreatedBy) {
+		fields = append(fields, postaladdress.FieldCreatedBy)
+	}
+	if m.FieldCleared(postaladdress.FieldUpdatedBy) {
+		fields = append(fields, postaladdress.FieldUpdatedBy)
+	}
+	if m.FieldCleared(postaladdress.FieldDeletedAt) {
+		fields = append(fields, postaladdress.FieldDeletedAt)
+	}
+	if m.FieldCleared(postaladdress.FieldDeletedBy) {
+		fields = append(fields, postaladdress.FieldDeletedBy)
+	}
+	if m.FieldCleared(postaladdress.FieldTags) {
+		fields = append(fields, postaladdress.FieldTags)
+	}
+	if m.FieldCleared(postaladdress.FieldOwnerID) {
+		fields = append(fields, postaladdress.FieldOwnerID)
+	}
+	if m.FieldCleared(postaladdress.FieldLanguageCode) {
+		fields = append(fields, postaladdress.FieldLanguageCode)
+	}
+	if m.FieldCleared(postaladdress.FieldPostalCode) {
+		fields = append(fields, postaladdress.FieldPostalCode)
+	}
+	if m.FieldCleared(postaladdress.FieldSortingCode) {
+		fields = append(fields, postaladdress.FieldSortingCode)
+	}
+	if m.FieldCleared(postaladdress.FieldAdministrativeArea) {
+		fields = append(fields, postaladdress.FieldAdministrativeArea)
+	}
+	if m.FieldCleared(postaladdress.FieldLocality) {
+		fields = append(fields, postaladdress.FieldLocality)
+	}
+	if m.FieldCleared(postaladdress.FieldSublocality) {
+		fields = append(fields, postaladdress.FieldSublocality)
+	}
+	if m.FieldCleared(postaladdress.FieldOrganization) {
+		fields = append(fields, postaladdress.FieldOrganization)
+	}
+	return fields
+}
+
+// FieldCleared returns a boolean indicating if a field with the given name was
+// cleared in this mutation.
+func (m *PostalAddressMutation) FieldCleared(name string) bool {
+	_, ok := m.clearedFields[name]
+	return ok
+}
+
+// ClearField clears the value of the field with the given name. It returns an
+// error if the field is not defined in the schema.
+func (m *PostalAddressMutation) ClearField(name string) error {
+	switch name {
+	case postaladdress.FieldCreatedAt:
+		m.ClearCreatedAt()
+		return nil
+	case postaladdress.FieldUpdatedAt:
+		m.ClearUpdatedAt()
+		return nil
+	case postaladdress.FieldCreatedBy:
+		m.ClearCreatedBy()
+		return nil
+	case postaladdress.FieldUpdatedBy:
+		m.ClearUpdatedBy()
+		return nil
+	case postaladdress.FieldDeletedAt:
+		m.ClearDeletedAt()
+		return nil
+	case postaladdress.FieldDeletedBy:
+		m.ClearDeletedBy()
+		return nil
+	case postaladdress.FieldTags:
+		m.ClearTags()
+		return nil
+	case postaladdress.FieldOwnerID:
+		m.ClearOwnerID()
+		return nil
+	case postaladdress.FieldLanguageCode:
+		m.ClearLanguageCode()
+		return nil
+	case postaladdress.FieldPostalCode:
+		m.ClearPostalCode()
+		return nil
+	case postaladdress.FieldSortingCode:
+		m.ClearSortingCode()
+		return nil
+	case postaladdress.FieldAdministrativeArea:
+		m.ClearAdministrativeArea()
+		return nil
+	case postaladdress.FieldLocality:
+		m.ClearLocality()
+		return nil
+	case postaladdress.FieldSublocality:
+		m.ClearSublocality()
+		return nil
+	case postaladdress.FieldOrganization:
+		m.ClearOrganization()
+		return nil
+	}
+	return fmt.Errorf("unknown PostalAddress nullable field %s", name)
+}
+
+// ResetField resets all changes in the mutation for the field with the given name.
+// It returns an error if the field is not defined in the schema.
+func (m *PostalAddressMutation) ResetField(name string) error {
+	switch name {
+	case postaladdress.FieldCreatedAt:
+		m.ResetCreatedAt()
+		return nil
+	case postaladdress.FieldUpdatedAt:
+		m.ResetUpdatedAt()
+		return nil
+	case postaladdress.FieldCreatedBy:
+		m.ResetCreatedBy()
+		return nil
+	case postaladdress.FieldUpdatedBy:
+		m.ResetUpdatedBy()
+		return nil
+	case postaladdress.FieldDeletedAt:
+		m.ResetDeletedAt()
+		return nil
+	case postaladdress.FieldDeletedBy:
+		m.ResetDeletedBy()
+		return nil
+	case postaladdress.FieldMappingID:
+		m.ResetMappingID()
+		return nil
+	case postaladdress.FieldTags:
+		m.ResetTags()
+		return nil
+	case postaladdress.FieldOwnerID:
+		m.ResetOwnerID()
+		return nil
+	case postaladdress.FieldRegionCode:
+		m.ResetRegionCode()
+		return nil
+	case postaladdress.FieldLanguageCode:
+		m.ResetLanguageCode()
+		return nil
+	case postaladdress.FieldPostalCode:
+		m.ResetPostalCode()
+		return nil
+	case postaladdress.FieldSortingCode:
+		m.ResetSortingCode()
+		return nil
+	case postaladdress.FieldAdministrativeArea:
+		m.ResetAdministrativeArea()
+		return nil
+	case postaladdress.FieldLocality:
+		m.ResetLocality()
+		return nil
+	case postaladdress.FieldSublocality:
+		m.ResetSublocality()
+		return nil
+	case postaladdress.FieldAddressLines:
+		m.ResetAddressLines()
+		return nil
+	case postaladdress.FieldRecipients:
+		m.ResetRecipients()
+		return nil
+	case postaladdress.FieldOrganization:
+		m.ResetOrganization()
+		return nil
+	}
+	return fmt.Errorf("unknown PostalAddress field %s", name)
+}
+
+// AddedEdges returns all edge names that were set/added in this mutation.
+func (m *PostalAddressMutation) AddedEdges() []string {
+	edges := make([]string, 0, 4)
+	if m.owner != nil {
+		edges = append(edges, postaladdress.EdgeOwner)
+	}
+	if m.events != nil {
+		edges = append(edges, postaladdress.EdgeEvents)
+	}
+	if m.profile != nil {
+		edges = append(edges, postaladdress.EdgeProfile)
+	}
+	if m.vendor_profile_postal_addresses != nil {
+		edges = append(edges, postaladdress.EdgeVendorProfilePostalAddresses)
+	}
+	return edges
+}
+
+// AddedIDs returns all IDs (to other nodes) that were added for the given edge
+// name in this mutation.
+func (m *PostalAddressMutation) AddedIDs(name string) []ent.Value {
+	switch name {
+	case postaladdress.EdgeOwner:
+		if id := m.owner; id != nil {
+			return []ent.Value{*id}
+		}
+	case postaladdress.EdgeEvents:
+		ids := make([]ent.Value, 0, len(m.events))
+		for id := range m.events {
+			ids = append(ids, id)
+		}
+		return ids
+	case postaladdress.EdgeProfile:
+		ids := make([]ent.Value, 0, len(m.profile))
+		for id := range m.profile {
+			ids = append(ids, id)
+		}
+		return ids
+	case postaladdress.EdgeVendorProfilePostalAddresses:
+		ids := make([]ent.Value, 0, len(m.vendor_profile_postal_addresses))
+		for id := range m.vendor_profile_postal_addresses {
+			ids = append(ids, id)
+		}
+		return ids
+	}
+	return nil
+}
+
+// RemovedEdges returns all edge names that were removed in this mutation.
+func (m *PostalAddressMutation) RemovedEdges() []string {
+	edges := make([]string, 0, 4)
+	if m.removedevents != nil {
+		edges = append(edges, postaladdress.EdgeEvents)
+	}
+	if m.removedprofile != nil {
+		edges = append(edges, postaladdress.EdgeProfile)
+	}
+	if m.removedvendor_profile_postal_addresses != nil {
+		edges = append(edges, postaladdress.EdgeVendorProfilePostalAddresses)
+	}
+	return edges
+}
+
+// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
+// the given name in this mutation.
+func (m *PostalAddressMutation) RemovedIDs(name string) []ent.Value {
+	switch name {
+	case postaladdress.EdgeEvents:
+		ids := make([]ent.Value, 0, len(m.removedevents))
+		for id := range m.removedevents {
+			ids = append(ids, id)
+		}
+		return ids
+	case postaladdress.EdgeProfile:
+		ids := make([]ent.Value, 0, len(m.removedprofile))
+		for id := range m.removedprofile {
+			ids = append(ids, id)
+		}
+		return ids
+	case postaladdress.EdgeVendorProfilePostalAddresses:
+		ids := make([]ent.Value, 0, len(m.removedvendor_profile_postal_addresses))
+		for id := range m.removedvendor_profile_postal_addresses {
+			ids = append(ids, id)
+		}
+		return ids
+	}
+	return nil
+}
+
+// ClearedEdges returns all edge names that were cleared in this mutation.
+func (m *PostalAddressMutation) ClearedEdges() []string {
+	edges := make([]string, 0, 4)
+	if m.clearedowner {
+		edges = append(edges, postaladdress.EdgeOwner)
+	}
+	if m.clearedevents {
+		edges = append(edges, postaladdress.EdgeEvents)
+	}
+	if m.clearedprofile {
+		edges = append(edges, postaladdress.EdgeProfile)
+	}
+	if m.clearedvendor_profile_postal_addresses {
+		edges = append(edges, postaladdress.EdgeVendorProfilePostalAddresses)
+	}
+	return edges
+}
+
+// EdgeCleared returns a boolean which indicates if the edge with the given name
+// was cleared in this mutation.
+func (m *PostalAddressMutation) EdgeCleared(name string) bool {
+	switch name {
+	case postaladdress.EdgeOwner:
+		return m.clearedowner
+	case postaladdress.EdgeEvents:
+		return m.clearedevents
+	case postaladdress.EdgeProfile:
+		return m.clearedprofile
+	case postaladdress.EdgeVendorProfilePostalAddresses:
+		return m.clearedvendor_profile_postal_addresses
+	}
+	return false
+}
+
+// ClearEdge clears the value of the edge with the given name. It returns an error
+// if that edge is not defined in the schema.
+func (m *PostalAddressMutation) ClearEdge(name string) error {
+	switch name {
+	case postaladdress.EdgeOwner:
+		m.ClearOwner()
+		return nil
+	}
+	return fmt.Errorf("unknown PostalAddress unique edge %s", name)
+}
+
+// ResetEdge resets all changes to the edge with the given name in this mutation.
+// It returns an error if the edge is not defined in the schema.
+func (m *PostalAddressMutation) ResetEdge(name string) error {
+	switch name {
+	case postaladdress.EdgeOwner:
+		m.ResetOwner()
+		return nil
+	case postaladdress.EdgeEvents:
+		m.ResetEvents()
+		return nil
+	case postaladdress.EdgeProfile:
+		m.ResetProfile()
+		return nil
+	case postaladdress.EdgeVendorProfilePostalAddresses:
+		m.ResetVendorProfilePostalAddresses()
+		return nil
+	}
+	return fmt.Errorf("unknown PostalAddress edge %s", name)
+}
+
+// PostalAddressHistoryMutation represents an operation that mutates the PostalAddressHistory nodes in the graph.
+type PostalAddressHistoryMutation struct {
+	config
+	op                  Op
+	typ                 string
+	id                  *string
+	history_time        *time.Time
+	ref                 *string
+	operation           *enthistory.OpType
+	created_at          *time.Time
+	updated_at          *time.Time
+	created_by          *string
+	updated_by          *string
+	deleted_at          *time.Time
+	deleted_by          *string
+	mapping_id          *string
+	tags                *[]string
+	appendtags          []string
+	owner_id            *string
+	region_code         *string
+	language_code       *string
+	postal_code         *string
+	sorting_code        *string
+	administrative_area *string
+	locality            *string
+	sublocality         *string
+	address_lines       *[]string
+	appendaddress_lines []string
+	recipients          *[]string
+	appendrecipients    []string
+	organization        *string
+	clearedFields       map[string]struct{}
+	done                bool
+	oldValue            func(context.Context) (*PostalAddressHistory, error)
+	predicates          []predicate.PostalAddressHistory
+}
+
+var _ ent.Mutation = (*PostalAddressHistoryMutation)(nil)
+
+// postaladdresshistoryOption allows management of the mutation configuration using functional options.
+type postaladdresshistoryOption func(*PostalAddressHistoryMutation)
+
+// newPostalAddressHistoryMutation creates new mutation for the PostalAddressHistory entity.
+func newPostalAddressHistoryMutation(c config, op Op, opts ...postaladdresshistoryOption) *PostalAddressHistoryMutation {
+	m := &PostalAddressHistoryMutation{
+		config:        c,
+		op:            op,
+		typ:           TypePostalAddressHistory,
+		clearedFields: make(map[string]struct{}),
+	}
+	for _, opt := range opts {
+		opt(m)
+	}
+	return m
+}
+
+// withPostalAddressHistoryID sets the ID field of the mutation.
+func withPostalAddressHistoryID(id string) postaladdresshistoryOption {
+	return func(m *PostalAddressHistoryMutation) {
+		var (
+			err   error
+			once  sync.Once
+			value *PostalAddressHistory
+		)
+		m.oldValue = func(ctx context.Context) (*PostalAddressHistory, error) {
+			once.Do(func() {
+				if m.done {
+					err = errors.New("querying old values post mutation is not allowed")
+				} else {
+					value, err = m.Client().PostalAddressHistory.Get(ctx, id)
+				}
+			})
+			return value, err
+		}
+		m.id = &id
+	}
+}
+
+// withPostalAddressHistory sets the old PostalAddressHistory of the mutation.
+func withPostalAddressHistory(node *PostalAddressHistory) postaladdresshistoryOption {
+	return func(m *PostalAddressHistoryMutation) {
+		m.oldValue = func(context.Context) (*PostalAddressHistory, error) {
+			return node, nil
+		}
+		m.id = &node.ID
+	}
+}
+
+// Client returns a new `ent.Client` from the mutation. If the mutation was
+// executed in a transaction (ent.Tx), a transactional client is returned.
+func (m PostalAddressHistoryMutation) Client() *Client {
+	client := &Client{config: m.config}
+	client.init()
+	return client
+}
+
+// Tx returns an `ent.Tx` for mutations that were executed in transactions;
+// it returns an error otherwise.
+func (m PostalAddressHistoryMutation) Tx() (*Tx, error) {
+	if _, ok := m.driver.(*txDriver); !ok {
+		return nil, errors.New("generated: mutation is not running in a transaction")
+	}
+	tx := &Tx{config: m.config}
+	tx.init()
+	return tx, nil
+}
+
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of PostalAddressHistory entities.
+func (m *PostalAddressHistoryMutation) SetID(id string) {
+	m.id = &id
+}
+
+// ID returns the ID value in the mutation. Note that the ID is only available
+// if it was provided to the builder or after it was returned from the database.
+func (m *PostalAddressHistoryMutation) ID() (id string, exists bool) {
+	if m.id == nil {
+		return
+	}
+	return *m.id, true
+}
+
+// IDs queries the database and returns the entity ids that match the mutation's predicate.
+// That means, if the mutation is applied within a transaction with an isolation level such
+// as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
+// or updated by the mutation.
+func (m *PostalAddressHistoryMutation) IDs(ctx context.Context) ([]string, error) {
+	switch {
+	case m.op.Is(OpUpdateOne | OpDeleteOne):
+		id, exists := m.ID()
+		if exists {
+			return []string{id}, nil
+		}
+		fallthrough
+	case m.op.Is(OpUpdate | OpDelete):
+		return m.Client().PostalAddressHistory.Query().Where(m.predicates...).IDs(ctx)
+	default:
+		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
+	}
+}
+
+// SetHistoryTime sets the "history_time" field.
+func (m *PostalAddressHistoryMutation) SetHistoryTime(t time.Time) {
+	m.history_time = &t
+}
+
+// HistoryTime returns the value of the "history_time" field in the mutation.
+func (m *PostalAddressHistoryMutation) HistoryTime() (r time.Time, exists bool) {
+	v := m.history_time
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldHistoryTime returns the old "history_time" field's value of the PostalAddressHistory entity.
+// If the PostalAddressHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PostalAddressHistoryMutation) OldHistoryTime(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldHistoryTime is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldHistoryTime requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldHistoryTime: %w", err)
+	}
+	return oldValue.HistoryTime, nil
+}
+
+// ResetHistoryTime resets all changes to the "history_time" field.
+func (m *PostalAddressHistoryMutation) ResetHistoryTime() {
+	m.history_time = nil
+}
+
+// SetRef sets the "ref" field.
+func (m *PostalAddressHistoryMutation) SetRef(s string) {
+	m.ref = &s
+}
+
+// Ref returns the value of the "ref" field in the mutation.
+func (m *PostalAddressHistoryMutation) Ref() (r string, exists bool) {
+	v := m.ref
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldRef returns the old "ref" field's value of the PostalAddressHistory entity.
+// If the PostalAddressHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PostalAddressHistoryMutation) OldRef(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldRef is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldRef requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldRef: %w", err)
+	}
+	return oldValue.Ref, nil
+}
+
+// ClearRef clears the value of the "ref" field.
+func (m *PostalAddressHistoryMutation) ClearRef() {
+	m.ref = nil
+	m.clearedFields[postaladdresshistory.FieldRef] = struct{}{}
+}
+
+// RefCleared returns if the "ref" field was cleared in this mutation.
+func (m *PostalAddressHistoryMutation) RefCleared() bool {
+	_, ok := m.clearedFields[postaladdresshistory.FieldRef]
+	return ok
+}
+
+// ResetRef resets all changes to the "ref" field.
+func (m *PostalAddressHistoryMutation) ResetRef() {
+	m.ref = nil
+	delete(m.clearedFields, postaladdresshistory.FieldRef)
+}
+
+// SetOperation sets the "operation" field.
+func (m *PostalAddressHistoryMutation) SetOperation(et enthistory.OpType) {
+	m.operation = &et
+}
+
+// Operation returns the value of the "operation" field in the mutation.
+func (m *PostalAddressHistoryMutation) Operation() (r enthistory.OpType, exists bool) {
+	v := m.operation
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldOperation returns the old "operation" field's value of the PostalAddressHistory entity.
+// If the PostalAddressHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PostalAddressHistoryMutation) OldOperation(ctx context.Context) (v enthistory.OpType, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldOperation is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldOperation requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldOperation: %w", err)
+	}
+	return oldValue.Operation, nil
+}
+
+// ResetOperation resets all changes to the "operation" field.
+func (m *PostalAddressHistoryMutation) ResetOperation() {
+	m.operation = nil
+}
+
+// SetCreatedAt sets the "created_at" field.
+func (m *PostalAddressHistoryMutation) SetCreatedAt(t time.Time) {
+	m.created_at = &t
+}
+
+// CreatedAt returns the value of the "created_at" field in the mutation.
+func (m *PostalAddressHistoryMutation) CreatedAt() (r time.Time, exists bool) {
+	v := m.created_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedAt returns the old "created_at" field's value of the PostalAddressHistory entity.
+// If the PostalAddressHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PostalAddressHistoryMutation) OldCreatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedAt: %w", err)
+	}
+	return oldValue.CreatedAt, nil
+}
+
+// ClearCreatedAt clears the value of the "created_at" field.
+func (m *PostalAddressHistoryMutation) ClearCreatedAt() {
+	m.created_at = nil
+	m.clearedFields[postaladdresshistory.FieldCreatedAt] = struct{}{}
+}
+
+// CreatedAtCleared returns if the "created_at" field was cleared in this mutation.
+func (m *PostalAddressHistoryMutation) CreatedAtCleared() bool {
+	_, ok := m.clearedFields[postaladdresshistory.FieldCreatedAt]
+	return ok
+}
+
+// ResetCreatedAt resets all changes to the "created_at" field.
+func (m *PostalAddressHistoryMutation) ResetCreatedAt() {
+	m.created_at = nil
+	delete(m.clearedFields, postaladdresshistory.FieldCreatedAt)
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (m *PostalAddressHistoryMutation) SetUpdatedAt(t time.Time) {
+	m.updated_at = &t
+}
+
+// UpdatedAt returns the value of the "updated_at" field in the mutation.
+func (m *PostalAddressHistoryMutation) UpdatedAt() (r time.Time, exists bool) {
+	v := m.updated_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedAt returns the old "updated_at" field's value of the PostalAddressHistory entity.
+// If the PostalAddressHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PostalAddressHistoryMutation) OldUpdatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedAt: %w", err)
+	}
+	return oldValue.UpdatedAt, nil
+}
+
+// ClearUpdatedAt clears the value of the "updated_at" field.
+func (m *PostalAddressHistoryMutation) ClearUpdatedAt() {
+	m.updated_at = nil
+	m.clearedFields[postaladdresshistory.FieldUpdatedAt] = struct{}{}
+}
+
+// UpdatedAtCleared returns if the "updated_at" field was cleared in this mutation.
+func (m *PostalAddressHistoryMutation) UpdatedAtCleared() bool {
+	_, ok := m.clearedFields[postaladdresshistory.FieldUpdatedAt]
+	return ok
+}
+
+// ResetUpdatedAt resets all changes to the "updated_at" field.
+func (m *PostalAddressHistoryMutation) ResetUpdatedAt() {
+	m.updated_at = nil
+	delete(m.clearedFields, postaladdresshistory.FieldUpdatedAt)
+}
+
+// SetCreatedBy sets the "created_by" field.
+func (m *PostalAddressHistoryMutation) SetCreatedBy(s string) {
+	m.created_by = &s
+}
+
+// CreatedBy returns the value of the "created_by" field in the mutation.
+func (m *PostalAddressHistoryMutation) CreatedBy() (r string, exists bool) {
+	v := m.created_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedBy returns the old "created_by" field's value of the PostalAddressHistory entity.
+// If the PostalAddressHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PostalAddressHistoryMutation) OldCreatedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedBy: %w", err)
+	}
+	return oldValue.CreatedBy, nil
+}
+
+// ClearCreatedBy clears the value of the "created_by" field.
+func (m *PostalAddressHistoryMutation) ClearCreatedBy() {
+	m.created_by = nil
+	m.clearedFields[postaladdresshistory.FieldCreatedBy] = struct{}{}
+}
+
+// CreatedByCleared returns if the "created_by" field was cleared in this mutation.
+func (m *PostalAddressHistoryMutation) CreatedByCleared() bool {
+	_, ok := m.clearedFields[postaladdresshistory.FieldCreatedBy]
+	return ok
+}
+
+// ResetCreatedBy resets all changes to the "created_by" field.
+func (m *PostalAddressHistoryMutation) ResetCreatedBy() {
+	m.created_by = nil
+	delete(m.clearedFields, postaladdresshistory.FieldCreatedBy)
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (m *PostalAddressHistoryMutation) SetUpdatedBy(s string) {
+	m.updated_by = &s
+}
+
+// UpdatedBy returns the value of the "updated_by" field in the mutation.
+func (m *PostalAddressHistoryMutation) UpdatedBy() (r string, exists bool) {
+	v := m.updated_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedBy returns the old "updated_by" field's value of the PostalAddressHistory entity.
+// If the PostalAddressHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PostalAddressHistoryMutation) OldUpdatedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedBy: %w", err)
+	}
+	return oldValue.UpdatedBy, nil
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (m *PostalAddressHistoryMutation) ClearUpdatedBy() {
+	m.updated_by = nil
+	m.clearedFields[postaladdresshistory.FieldUpdatedBy] = struct{}{}
+}
+
+// UpdatedByCleared returns if the "updated_by" field was cleared in this mutation.
+func (m *PostalAddressHistoryMutation) UpdatedByCleared() bool {
+	_, ok := m.clearedFields[postaladdresshistory.FieldUpdatedBy]
+	return ok
+}
+
+// ResetUpdatedBy resets all changes to the "updated_by" field.
+func (m *PostalAddressHistoryMutation) ResetUpdatedBy() {
+	m.updated_by = nil
+	delete(m.clearedFields, postaladdresshistory.FieldUpdatedBy)
+}
+
+// SetDeletedAt sets the "deleted_at" field.
+func (m *PostalAddressHistoryMutation) SetDeletedAt(t time.Time) {
+	m.deleted_at = &t
+}
+
+// DeletedAt returns the value of the "deleted_at" field in the mutation.
+func (m *PostalAddressHistoryMutation) DeletedAt() (r time.Time, exists bool) {
+	v := m.deleted_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDeletedAt returns the old "deleted_at" field's value of the PostalAddressHistory entity.
+// If the PostalAddressHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PostalAddressHistoryMutation) OldDeletedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDeletedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDeletedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDeletedAt: %w", err)
+	}
+	return oldValue.DeletedAt, nil
+}
+
+// ClearDeletedAt clears the value of the "deleted_at" field.
+func (m *PostalAddressHistoryMutation) ClearDeletedAt() {
+	m.deleted_at = nil
+	m.clearedFields[postaladdresshistory.FieldDeletedAt] = struct{}{}
+}
+
+// DeletedAtCleared returns if the "deleted_at" field was cleared in this mutation.
+func (m *PostalAddressHistoryMutation) DeletedAtCleared() bool {
+	_, ok := m.clearedFields[postaladdresshistory.FieldDeletedAt]
+	return ok
+}
+
+// ResetDeletedAt resets all changes to the "deleted_at" field.
+func (m *PostalAddressHistoryMutation) ResetDeletedAt() {
+	m.deleted_at = nil
+	delete(m.clearedFields, postaladdresshistory.FieldDeletedAt)
+}
+
+// SetDeletedBy sets the "deleted_by" field.
+func (m *PostalAddressHistoryMutation) SetDeletedBy(s string) {
+	m.deleted_by = &s
+}
+
+// DeletedBy returns the value of the "deleted_by" field in the mutation.
+func (m *PostalAddressHistoryMutation) DeletedBy() (r string, exists bool) {
+	v := m.deleted_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDeletedBy returns the old "deleted_by" field's value of the PostalAddressHistory entity.
+// If the PostalAddressHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PostalAddressHistoryMutation) OldDeletedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDeletedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDeletedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDeletedBy: %w", err)
+	}
+	return oldValue.DeletedBy, nil
+}
+
+// ClearDeletedBy clears the value of the "deleted_by" field.
+func (m *PostalAddressHistoryMutation) ClearDeletedBy() {
+	m.deleted_by = nil
+	m.clearedFields[postaladdresshistory.FieldDeletedBy] = struct{}{}
+}
+
+// DeletedByCleared returns if the "deleted_by" field was cleared in this mutation.
+func (m *PostalAddressHistoryMutation) DeletedByCleared() bool {
+	_, ok := m.clearedFields[postaladdresshistory.FieldDeletedBy]
+	return ok
+}
+
+// ResetDeletedBy resets all changes to the "deleted_by" field.
+func (m *PostalAddressHistoryMutation) ResetDeletedBy() {
+	m.deleted_by = nil
+	delete(m.clearedFields, postaladdresshistory.FieldDeletedBy)
+}
+
+// SetMappingID sets the "mapping_id" field.
+func (m *PostalAddressHistoryMutation) SetMappingID(s string) {
+	m.mapping_id = &s
+}
+
+// MappingID returns the value of the "mapping_id" field in the mutation.
+func (m *PostalAddressHistoryMutation) MappingID() (r string, exists bool) {
+	v := m.mapping_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldMappingID returns the old "mapping_id" field's value of the PostalAddressHistory entity.
+// If the PostalAddressHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PostalAddressHistoryMutation) OldMappingID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldMappingID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldMappingID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldMappingID: %w", err)
+	}
+	return oldValue.MappingID, nil
+}
+
+// ResetMappingID resets all changes to the "mapping_id" field.
+func (m *PostalAddressHistoryMutation) ResetMappingID() {
+	m.mapping_id = nil
+}
+
+// SetTags sets the "tags" field.
+func (m *PostalAddressHistoryMutation) SetTags(s []string) {
+	m.tags = &s
+	m.appendtags = nil
+}
+
+// Tags returns the value of the "tags" field in the mutation.
+func (m *PostalAddressHistoryMutation) Tags() (r []string, exists bool) {
+	v := m.tags
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldTags returns the old "tags" field's value of the PostalAddressHistory entity.
+// If the PostalAddressHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PostalAddressHistoryMutation) OldTags(ctx context.Context) (v []string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldTags is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldTags requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldTags: %w", err)
+	}
+	return oldValue.Tags, nil
+}
+
+// AppendTags adds s to the "tags" field.
+func (m *PostalAddressHistoryMutation) AppendTags(s []string) {
+	m.appendtags = append(m.appendtags, s...)
+}
+
+// AppendedTags returns the list of values that were appended to the "tags" field in this mutation.
+func (m *PostalAddressHistoryMutation) AppendedTags() ([]string, bool) {
+	if len(m.appendtags) == 0 {
+		return nil, false
+	}
+	return m.appendtags, true
+}
+
+// ClearTags clears the value of the "tags" field.
+func (m *PostalAddressHistoryMutation) ClearTags() {
+	m.tags = nil
+	m.appendtags = nil
+	m.clearedFields[postaladdresshistory.FieldTags] = struct{}{}
+}
+
+// TagsCleared returns if the "tags" field was cleared in this mutation.
+func (m *PostalAddressHistoryMutation) TagsCleared() bool {
+	_, ok := m.clearedFields[postaladdresshistory.FieldTags]
+	return ok
+}
+
+// ResetTags resets all changes to the "tags" field.
+func (m *PostalAddressHistoryMutation) ResetTags() {
+	m.tags = nil
+	m.appendtags = nil
+	delete(m.clearedFields, postaladdresshistory.FieldTags)
+}
+
+// SetOwnerID sets the "owner_id" field.
+func (m *PostalAddressHistoryMutation) SetOwnerID(s string) {
+	m.owner_id = &s
+}
+
+// OwnerID returns the value of the "owner_id" field in the mutation.
+func (m *PostalAddressHistoryMutation) OwnerID() (r string, exists bool) {
+	v := m.owner_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldOwnerID returns the old "owner_id" field's value of the PostalAddressHistory entity.
+// If the PostalAddressHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PostalAddressHistoryMutation) OldOwnerID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldOwnerID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldOwnerID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldOwnerID: %w", err)
+	}
+	return oldValue.OwnerID, nil
+}
+
+// ClearOwnerID clears the value of the "owner_id" field.
+func (m *PostalAddressHistoryMutation) ClearOwnerID() {
+	m.owner_id = nil
+	m.clearedFields[postaladdresshistory.FieldOwnerID] = struct{}{}
+}
+
+// OwnerIDCleared returns if the "owner_id" field was cleared in this mutation.
+func (m *PostalAddressHistoryMutation) OwnerIDCleared() bool {
+	_, ok := m.clearedFields[postaladdresshistory.FieldOwnerID]
+	return ok
+}
+
+// ResetOwnerID resets all changes to the "owner_id" field.
+func (m *PostalAddressHistoryMutation) ResetOwnerID() {
+	m.owner_id = nil
+	delete(m.clearedFields, postaladdresshistory.FieldOwnerID)
+}
+
+// SetRegionCode sets the "region_code" field.
+func (m *PostalAddressHistoryMutation) SetRegionCode(s string) {
+	m.region_code = &s
+}
+
+// RegionCode returns the value of the "region_code" field in the mutation.
+func (m *PostalAddressHistoryMutation) RegionCode() (r string, exists bool) {
+	v := m.region_code
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldRegionCode returns the old "region_code" field's value of the PostalAddressHistory entity.
+// If the PostalAddressHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PostalAddressHistoryMutation) OldRegionCode(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldRegionCode is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldRegionCode requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldRegionCode: %w", err)
+	}
+	return oldValue.RegionCode, nil
+}
+
+// ResetRegionCode resets all changes to the "region_code" field.
+func (m *PostalAddressHistoryMutation) ResetRegionCode() {
+	m.region_code = nil
+}
+
+// SetLanguageCode sets the "language_code" field.
+func (m *PostalAddressHistoryMutation) SetLanguageCode(s string) {
+	m.language_code = &s
+}
+
+// LanguageCode returns the value of the "language_code" field in the mutation.
+func (m *PostalAddressHistoryMutation) LanguageCode() (r string, exists bool) {
+	v := m.language_code
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldLanguageCode returns the old "language_code" field's value of the PostalAddressHistory entity.
+// If the PostalAddressHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PostalAddressHistoryMutation) OldLanguageCode(ctx context.Context) (v *string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldLanguageCode is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldLanguageCode requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldLanguageCode: %w", err)
+	}
+	return oldValue.LanguageCode, nil
+}
+
+// ClearLanguageCode clears the value of the "language_code" field.
+func (m *PostalAddressHistoryMutation) ClearLanguageCode() {
+	m.language_code = nil
+	m.clearedFields[postaladdresshistory.FieldLanguageCode] = struct{}{}
+}
+
+// LanguageCodeCleared returns if the "language_code" field was cleared in this mutation.
+func (m *PostalAddressHistoryMutation) LanguageCodeCleared() bool {
+	_, ok := m.clearedFields[postaladdresshistory.FieldLanguageCode]
+	return ok
+}
+
+// ResetLanguageCode resets all changes to the "language_code" field.
+func (m *PostalAddressHistoryMutation) ResetLanguageCode() {
+	m.language_code = nil
+	delete(m.clearedFields, postaladdresshistory.FieldLanguageCode)
+}
+
+// SetPostalCode sets the "postal_code" field.
+func (m *PostalAddressHistoryMutation) SetPostalCode(s string) {
+	m.postal_code = &s
+}
+
+// PostalCode returns the value of the "postal_code" field in the mutation.
+func (m *PostalAddressHistoryMutation) PostalCode() (r string, exists bool) {
+	v := m.postal_code
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldPostalCode returns the old "postal_code" field's value of the PostalAddressHistory entity.
+// If the PostalAddressHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PostalAddressHistoryMutation) OldPostalCode(ctx context.Context) (v *string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldPostalCode is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldPostalCode requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldPostalCode: %w", err)
+	}
+	return oldValue.PostalCode, nil
+}
+
+// ClearPostalCode clears the value of the "postal_code" field.
+func (m *PostalAddressHistoryMutation) ClearPostalCode() {
+	m.postal_code = nil
+	m.clearedFields[postaladdresshistory.FieldPostalCode] = struct{}{}
+}
+
+// PostalCodeCleared returns if the "postal_code" field was cleared in this mutation.
+func (m *PostalAddressHistoryMutation) PostalCodeCleared() bool {
+	_, ok := m.clearedFields[postaladdresshistory.FieldPostalCode]
+	return ok
+}
+
+// ResetPostalCode resets all changes to the "postal_code" field.
+func (m *PostalAddressHistoryMutation) ResetPostalCode() {
+	m.postal_code = nil
+	delete(m.clearedFields, postaladdresshistory.FieldPostalCode)
+}
+
+// SetSortingCode sets the "sorting_code" field.
+func (m *PostalAddressHistoryMutation) SetSortingCode(s string) {
+	m.sorting_code = &s
+}
+
+// SortingCode returns the value of the "sorting_code" field in the mutation.
+func (m *PostalAddressHistoryMutation) SortingCode() (r string, exists bool) {
+	v := m.sorting_code
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSortingCode returns the old "sorting_code" field's value of the PostalAddressHistory entity.
+// If the PostalAddressHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PostalAddressHistoryMutation) OldSortingCode(ctx context.Context) (v *string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSortingCode is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSortingCode requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSortingCode: %w", err)
+	}
+	return oldValue.SortingCode, nil
+}
+
+// ClearSortingCode clears the value of the "sorting_code" field.
+func (m *PostalAddressHistoryMutation) ClearSortingCode() {
+	m.sorting_code = nil
+	m.clearedFields[postaladdresshistory.FieldSortingCode] = struct{}{}
+}
+
+// SortingCodeCleared returns if the "sorting_code" field was cleared in this mutation.
+func (m *PostalAddressHistoryMutation) SortingCodeCleared() bool {
+	_, ok := m.clearedFields[postaladdresshistory.FieldSortingCode]
+	return ok
+}
+
+// ResetSortingCode resets all changes to the "sorting_code" field.
+func (m *PostalAddressHistoryMutation) ResetSortingCode() {
+	m.sorting_code = nil
+	delete(m.clearedFields, postaladdresshistory.FieldSortingCode)
+}
+
+// SetAdministrativeArea sets the "administrative_area" field.
+func (m *PostalAddressHistoryMutation) SetAdministrativeArea(s string) {
+	m.administrative_area = &s
+}
+
+// AdministrativeArea returns the value of the "administrative_area" field in the mutation.
+func (m *PostalAddressHistoryMutation) AdministrativeArea() (r string, exists bool) {
+	v := m.administrative_area
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAdministrativeArea returns the old "administrative_area" field's value of the PostalAddressHistory entity.
+// If the PostalAddressHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PostalAddressHistoryMutation) OldAdministrativeArea(ctx context.Context) (v *string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAdministrativeArea is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAdministrativeArea requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAdministrativeArea: %w", err)
+	}
+	return oldValue.AdministrativeArea, nil
+}
+
+// ClearAdministrativeArea clears the value of the "administrative_area" field.
+func (m *PostalAddressHistoryMutation) ClearAdministrativeArea() {
+	m.administrative_area = nil
+	m.clearedFields[postaladdresshistory.FieldAdministrativeArea] = struct{}{}
+}
+
+// AdministrativeAreaCleared returns if the "administrative_area" field was cleared in this mutation.
+func (m *PostalAddressHistoryMutation) AdministrativeAreaCleared() bool {
+	_, ok := m.clearedFields[postaladdresshistory.FieldAdministrativeArea]
+	return ok
+}
+
+// ResetAdministrativeArea resets all changes to the "administrative_area" field.
+func (m *PostalAddressHistoryMutation) ResetAdministrativeArea() {
+	m.administrative_area = nil
+	delete(m.clearedFields, postaladdresshistory.FieldAdministrativeArea)
+}
+
+// SetLocality sets the "locality" field.
+func (m *PostalAddressHistoryMutation) SetLocality(s string) {
+	m.locality = &s
+}
+
+// Locality returns the value of the "locality" field in the mutation.
+func (m *PostalAddressHistoryMutation) Locality() (r string, exists bool) {
+	v := m.locality
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldLocality returns the old "locality" field's value of the PostalAddressHistory entity.
+// If the PostalAddressHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PostalAddressHistoryMutation) OldLocality(ctx context.Context) (v *string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldLocality is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldLocality requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldLocality: %w", err)
+	}
+	return oldValue.Locality, nil
+}
+
+// ClearLocality clears the value of the "locality" field.
+func (m *PostalAddressHistoryMutation) ClearLocality() {
+	m.locality = nil
+	m.clearedFields[postaladdresshistory.FieldLocality] = struct{}{}
+}
+
+// LocalityCleared returns if the "locality" field was cleared in this mutation.
+func (m *PostalAddressHistoryMutation) LocalityCleared() bool {
+	_, ok := m.clearedFields[postaladdresshistory.FieldLocality]
+	return ok
+}
+
+// ResetLocality resets all changes to the "locality" field.
+func (m *PostalAddressHistoryMutation) ResetLocality() {
+	m.locality = nil
+	delete(m.clearedFields, postaladdresshistory.FieldLocality)
+}
+
+// SetSublocality sets the "sublocality" field.
+func (m *PostalAddressHistoryMutation) SetSublocality(s string) {
+	m.sublocality = &s
+}
+
+// Sublocality returns the value of the "sublocality" field in the mutation.
+func (m *PostalAddressHistoryMutation) Sublocality() (r string, exists bool) {
+	v := m.sublocality
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSublocality returns the old "sublocality" field's value of the PostalAddressHistory entity.
+// If the PostalAddressHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PostalAddressHistoryMutation) OldSublocality(ctx context.Context) (v *string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSublocality is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSublocality requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSublocality: %w", err)
+	}
+	return oldValue.Sublocality, nil
+}
+
+// ClearSublocality clears the value of the "sublocality" field.
+func (m *PostalAddressHistoryMutation) ClearSublocality() {
+	m.sublocality = nil
+	m.clearedFields[postaladdresshistory.FieldSublocality] = struct{}{}
+}
+
+// SublocalityCleared returns if the "sublocality" field was cleared in this mutation.
+func (m *PostalAddressHistoryMutation) SublocalityCleared() bool {
+	_, ok := m.clearedFields[postaladdresshistory.FieldSublocality]
+	return ok
+}
+
+// ResetSublocality resets all changes to the "sublocality" field.
+func (m *PostalAddressHistoryMutation) ResetSublocality() {
+	m.sublocality = nil
+	delete(m.clearedFields, postaladdresshistory.FieldSublocality)
+}
+
+// SetAddressLines sets the "address_lines" field.
+func (m *PostalAddressHistoryMutation) SetAddressLines(s []string) {
+	m.address_lines = &s
+	m.appendaddress_lines = nil
+}
+
+// AddressLines returns the value of the "address_lines" field in the mutation.
+func (m *PostalAddressHistoryMutation) AddressLines() (r []string, exists bool) {
+	v := m.address_lines
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAddressLines returns the old "address_lines" field's value of the PostalAddressHistory entity.
+// If the PostalAddressHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PostalAddressHistoryMutation) OldAddressLines(ctx context.Context) (v []string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAddressLines is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAddressLines requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAddressLines: %w", err)
+	}
+	return oldValue.AddressLines, nil
+}
+
+// AppendAddressLines adds s to the "address_lines" field.
+func (m *PostalAddressHistoryMutation) AppendAddressLines(s []string) {
+	m.appendaddress_lines = append(m.appendaddress_lines, s...)
+}
+
+// AppendedAddressLines returns the list of values that were appended to the "address_lines" field in this mutation.
+func (m *PostalAddressHistoryMutation) AppendedAddressLines() ([]string, bool) {
+	if len(m.appendaddress_lines) == 0 {
+		return nil, false
+	}
+	return m.appendaddress_lines, true
+}
+
+// ResetAddressLines resets all changes to the "address_lines" field.
+func (m *PostalAddressHistoryMutation) ResetAddressLines() {
+	m.address_lines = nil
+	m.appendaddress_lines = nil
+}
+
+// SetRecipients sets the "recipients" field.
+func (m *PostalAddressHistoryMutation) SetRecipients(s []string) {
+	m.recipients = &s
+	m.appendrecipients = nil
+}
+
+// Recipients returns the value of the "recipients" field in the mutation.
+func (m *PostalAddressHistoryMutation) Recipients() (r []string, exists bool) {
+	v := m.recipients
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldRecipients returns the old "recipients" field's value of the PostalAddressHistory entity.
+// If the PostalAddressHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PostalAddressHistoryMutation) OldRecipients(ctx context.Context) (v []string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldRecipients is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldRecipients requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldRecipients: %w", err)
+	}
+	return oldValue.Recipients, nil
+}
+
+// AppendRecipients adds s to the "recipients" field.
+func (m *PostalAddressHistoryMutation) AppendRecipients(s []string) {
+	m.appendrecipients = append(m.appendrecipients, s...)
+}
+
+// AppendedRecipients returns the list of values that were appended to the "recipients" field in this mutation.
+func (m *PostalAddressHistoryMutation) AppendedRecipients() ([]string, bool) {
+	if len(m.appendrecipients) == 0 {
+		return nil, false
+	}
+	return m.appendrecipients, true
+}
+
+// ResetRecipients resets all changes to the "recipients" field.
+func (m *PostalAddressHistoryMutation) ResetRecipients() {
+	m.recipients = nil
+	m.appendrecipients = nil
+}
+
+// SetOrganization sets the "organization" field.
+func (m *PostalAddressHistoryMutation) SetOrganization(s string) {
+	m.organization = &s
+}
+
+// Organization returns the value of the "organization" field in the mutation.
+func (m *PostalAddressHistoryMutation) Organization() (r string, exists bool) {
+	v := m.organization
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldOrganization returns the old "organization" field's value of the PostalAddressHistory entity.
+// If the PostalAddressHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PostalAddressHistoryMutation) OldOrganization(ctx context.Context) (v *string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldOrganization is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldOrganization requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldOrganization: %w", err)
+	}
+	return oldValue.Organization, nil
+}
+
+// ClearOrganization clears the value of the "organization" field.
+func (m *PostalAddressHistoryMutation) ClearOrganization() {
+	m.organization = nil
+	m.clearedFields[postaladdresshistory.FieldOrganization] = struct{}{}
+}
+
+// OrganizationCleared returns if the "organization" field was cleared in this mutation.
+func (m *PostalAddressHistoryMutation) OrganizationCleared() bool {
+	_, ok := m.clearedFields[postaladdresshistory.FieldOrganization]
+	return ok
+}
+
+// ResetOrganization resets all changes to the "organization" field.
+func (m *PostalAddressHistoryMutation) ResetOrganization() {
+	m.organization = nil
+	delete(m.clearedFields, postaladdresshistory.FieldOrganization)
+}
+
+// Where appends a list predicates to the PostalAddressHistoryMutation builder.
+func (m *PostalAddressHistoryMutation) Where(ps ...predicate.PostalAddressHistory) {
+	m.predicates = append(m.predicates, ps...)
+}
+
+// WhereP appends storage-level predicates to the PostalAddressHistoryMutation builder. Using this method,
+// users can use type-assertion to append predicates that do not depend on any generated package.
+func (m *PostalAddressHistoryMutation) WhereP(ps ...func(*sql.Selector)) {
+	p := make([]predicate.PostalAddressHistory, len(ps))
+	for i := range ps {
+		p[i] = ps[i]
+	}
+	m.Where(p...)
+}
+
+// Op returns the operation name.
+func (m *PostalAddressHistoryMutation) Op() Op {
+	return m.op
+}
+
+// SetOp allows setting the mutation operation.
+func (m *PostalAddressHistoryMutation) SetOp(op Op) {
+	m.op = op
+}
+
+// Type returns the node type of this mutation (PostalAddressHistory).
+func (m *PostalAddressHistoryMutation) Type() string {
+	return m.typ
+}
+
+// Fields returns all fields that were changed during this mutation. Note that in
+// order to get all numeric fields that were incremented/decremented, call
+// AddedFields().
+func (m *PostalAddressHistoryMutation) Fields() []string {
+	fields := make([]string, 0, 22)
+	if m.history_time != nil {
+		fields = append(fields, postaladdresshistory.FieldHistoryTime)
+	}
+	if m.ref != nil {
+		fields = append(fields, postaladdresshistory.FieldRef)
+	}
+	if m.operation != nil {
+		fields = append(fields, postaladdresshistory.FieldOperation)
+	}
+	if m.created_at != nil {
+		fields = append(fields, postaladdresshistory.FieldCreatedAt)
+	}
+	if m.updated_at != nil {
+		fields = append(fields, postaladdresshistory.FieldUpdatedAt)
+	}
+	if m.created_by != nil {
+		fields = append(fields, postaladdresshistory.FieldCreatedBy)
+	}
+	if m.updated_by != nil {
+		fields = append(fields, postaladdresshistory.FieldUpdatedBy)
+	}
+	if m.deleted_at != nil {
+		fields = append(fields, postaladdresshistory.FieldDeletedAt)
+	}
+	if m.deleted_by != nil {
+		fields = append(fields, postaladdresshistory.FieldDeletedBy)
+	}
+	if m.mapping_id != nil {
+		fields = append(fields, postaladdresshistory.FieldMappingID)
+	}
+	if m.tags != nil {
+		fields = append(fields, postaladdresshistory.FieldTags)
+	}
+	if m.owner_id != nil {
+		fields = append(fields, postaladdresshistory.FieldOwnerID)
+	}
+	if m.region_code != nil {
+		fields = append(fields, postaladdresshistory.FieldRegionCode)
+	}
+	if m.language_code != nil {
+		fields = append(fields, postaladdresshistory.FieldLanguageCode)
+	}
+	if m.postal_code != nil {
+		fields = append(fields, postaladdresshistory.FieldPostalCode)
+	}
+	if m.sorting_code != nil {
+		fields = append(fields, postaladdresshistory.FieldSortingCode)
+	}
+	if m.administrative_area != nil {
+		fields = append(fields, postaladdresshistory.FieldAdministrativeArea)
+	}
+	if m.locality != nil {
+		fields = append(fields, postaladdresshistory.FieldLocality)
+	}
+	if m.sublocality != nil {
+		fields = append(fields, postaladdresshistory.FieldSublocality)
+	}
+	if m.address_lines != nil {
+		fields = append(fields, postaladdresshistory.FieldAddressLines)
+	}
+	if m.recipients != nil {
+		fields = append(fields, postaladdresshistory.FieldRecipients)
+	}
+	if m.organization != nil {
+		fields = append(fields, postaladdresshistory.FieldOrganization)
+	}
+	return fields
+}
+
+// Field returns the value of a field with the given name. The second boolean
+// return value indicates that this field was not set, or was not defined in the
+// schema.
+func (m *PostalAddressHistoryMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case postaladdresshistory.FieldHistoryTime:
+		return m.HistoryTime()
+	case postaladdresshistory.FieldRef:
+		return m.Ref()
+	case postaladdresshistory.FieldOperation:
+		return m.Operation()
+	case postaladdresshistory.FieldCreatedAt:
+		return m.CreatedAt()
+	case postaladdresshistory.FieldUpdatedAt:
+		return m.UpdatedAt()
+	case postaladdresshistory.FieldCreatedBy:
+		return m.CreatedBy()
+	case postaladdresshistory.FieldUpdatedBy:
+		return m.UpdatedBy()
+	case postaladdresshistory.FieldDeletedAt:
+		return m.DeletedAt()
+	case postaladdresshistory.FieldDeletedBy:
+		return m.DeletedBy()
+	case postaladdresshistory.FieldMappingID:
+		return m.MappingID()
+	case postaladdresshistory.FieldTags:
+		return m.Tags()
+	case postaladdresshistory.FieldOwnerID:
+		return m.OwnerID()
+	case postaladdresshistory.FieldRegionCode:
+		return m.RegionCode()
+	case postaladdresshistory.FieldLanguageCode:
+		return m.LanguageCode()
+	case postaladdresshistory.FieldPostalCode:
+		return m.PostalCode()
+	case postaladdresshistory.FieldSortingCode:
+		return m.SortingCode()
+	case postaladdresshistory.FieldAdministrativeArea:
+		return m.AdministrativeArea()
+	case postaladdresshistory.FieldLocality:
+		return m.Locality()
+	case postaladdresshistory.FieldSublocality:
+		return m.Sublocality()
+	case postaladdresshistory.FieldAddressLines:
+		return m.AddressLines()
+	case postaladdresshistory.FieldRecipients:
+		return m.Recipients()
+	case postaladdresshistory.FieldOrganization:
+		return m.Organization()
+	}
+	return nil, false
+}
+
+// OldField returns the old value of the field from the database. An error is
+// returned if the mutation operation is not UpdateOne, or the query to the
+// database failed.
+func (m *PostalAddressHistoryMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case postaladdresshistory.FieldHistoryTime:
+		return m.OldHistoryTime(ctx)
+	case postaladdresshistory.FieldRef:
+		return m.OldRef(ctx)
+	case postaladdresshistory.FieldOperation:
+		return m.OldOperation(ctx)
+	case postaladdresshistory.FieldCreatedAt:
+		return m.OldCreatedAt(ctx)
+	case postaladdresshistory.FieldUpdatedAt:
+		return m.OldUpdatedAt(ctx)
+	case postaladdresshistory.FieldCreatedBy:
+		return m.OldCreatedBy(ctx)
+	case postaladdresshistory.FieldUpdatedBy:
+		return m.OldUpdatedBy(ctx)
+	case postaladdresshistory.FieldDeletedAt:
+		return m.OldDeletedAt(ctx)
+	case postaladdresshistory.FieldDeletedBy:
+		return m.OldDeletedBy(ctx)
+	case postaladdresshistory.FieldMappingID:
+		return m.OldMappingID(ctx)
+	case postaladdresshistory.FieldTags:
+		return m.OldTags(ctx)
+	case postaladdresshistory.FieldOwnerID:
+		return m.OldOwnerID(ctx)
+	case postaladdresshistory.FieldRegionCode:
+		return m.OldRegionCode(ctx)
+	case postaladdresshistory.FieldLanguageCode:
+		return m.OldLanguageCode(ctx)
+	case postaladdresshistory.FieldPostalCode:
+		return m.OldPostalCode(ctx)
+	case postaladdresshistory.FieldSortingCode:
+		return m.OldSortingCode(ctx)
+	case postaladdresshistory.FieldAdministrativeArea:
+		return m.OldAdministrativeArea(ctx)
+	case postaladdresshistory.FieldLocality:
+		return m.OldLocality(ctx)
+	case postaladdresshistory.FieldSublocality:
+		return m.OldSublocality(ctx)
+	case postaladdresshistory.FieldAddressLines:
+		return m.OldAddressLines(ctx)
+	case postaladdresshistory.FieldRecipients:
+		return m.OldRecipients(ctx)
+	case postaladdresshistory.FieldOrganization:
+		return m.OldOrganization(ctx)
+	}
+	return nil, fmt.Errorf("unknown PostalAddressHistory field %s", name)
+}
+
+// SetField sets the value of a field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *PostalAddressHistoryMutation) SetField(name string, value ent.Value) error {
+	switch name {
+	case postaladdresshistory.FieldHistoryTime:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetHistoryTime(v)
+		return nil
+	case postaladdresshistory.FieldRef:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetRef(v)
+		return nil
+	case postaladdresshistory.FieldOperation:
+		v, ok := value.(enthistory.OpType)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetOperation(v)
+		return nil
+	case postaladdresshistory.FieldCreatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedAt(v)
+		return nil
+	case postaladdresshistory.FieldUpdatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedAt(v)
+		return nil
+	case postaladdresshistory.FieldCreatedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedBy(v)
+		return nil
+	case postaladdresshistory.FieldUpdatedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedBy(v)
+		return nil
+	case postaladdresshistory.FieldDeletedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDeletedAt(v)
+		return nil
+	case postaladdresshistory.FieldDeletedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDeletedBy(v)
+		return nil
+	case postaladdresshistory.FieldMappingID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetMappingID(v)
+		return nil
+	case postaladdresshistory.FieldTags:
+		v, ok := value.([]string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetTags(v)
+		return nil
+	case postaladdresshistory.FieldOwnerID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetOwnerID(v)
+		return nil
+	case postaladdresshistory.FieldRegionCode:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetRegionCode(v)
+		return nil
+	case postaladdresshistory.FieldLanguageCode:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetLanguageCode(v)
+		return nil
+	case postaladdresshistory.FieldPostalCode:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetPostalCode(v)
+		return nil
+	case postaladdresshistory.FieldSortingCode:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSortingCode(v)
+		return nil
+	case postaladdresshistory.FieldAdministrativeArea:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAdministrativeArea(v)
+		return nil
+	case postaladdresshistory.FieldLocality:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetLocality(v)
+		return nil
+	case postaladdresshistory.FieldSublocality:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSublocality(v)
+		return nil
+	case postaladdresshistory.FieldAddressLines:
+		v, ok := value.([]string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAddressLines(v)
+		return nil
+	case postaladdresshistory.FieldRecipients:
+		v, ok := value.([]string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetRecipients(v)
+		return nil
+	case postaladdresshistory.FieldOrganization:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetOrganization(v)
+		return nil
+	}
+	return fmt.Errorf("unknown PostalAddressHistory field %s", name)
+}
+
+// AddedFields returns all numeric fields that were incremented/decremented during
+// this mutation.
+func (m *PostalAddressHistoryMutation) AddedFields() []string {
+	return nil
+}
+
+// AddedField returns the numeric value that was incremented/decremented on a field
+// with the given name. The second boolean return value indicates that this field
+// was not set, or was not defined in the schema.
+func (m *PostalAddressHistoryMutation) AddedField(name string) (ent.Value, bool) {
+	return nil, false
+}
+
+// AddField adds the value to the field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *PostalAddressHistoryMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	}
+	return fmt.Errorf("unknown PostalAddressHistory numeric field %s", name)
+}
+
+// ClearedFields returns all nullable fields that were cleared during this
+// mutation.
+func (m *PostalAddressHistoryMutation) ClearedFields() []string {
+	var fields []string
+	if m.FieldCleared(postaladdresshistory.FieldRef) {
+		fields = append(fields, postaladdresshistory.FieldRef)
+	}
+	if m.FieldCleared(postaladdresshistory.FieldCreatedAt) {
+		fields = append(fields, postaladdresshistory.FieldCreatedAt)
+	}
+	if m.FieldCleared(postaladdresshistory.FieldUpdatedAt) {
+		fields = append(fields, postaladdresshistory.FieldUpdatedAt)
+	}
+	if m.FieldCleared(postaladdresshistory.FieldCreatedBy) {
+		fields = append(fields, postaladdresshistory.FieldCreatedBy)
+	}
+	if m.FieldCleared(postaladdresshistory.FieldUpdatedBy) {
+		fields = append(fields, postaladdresshistory.FieldUpdatedBy)
+	}
+	if m.FieldCleared(postaladdresshistory.FieldDeletedAt) {
+		fields = append(fields, postaladdresshistory.FieldDeletedAt)
+	}
+	if m.FieldCleared(postaladdresshistory.FieldDeletedBy) {
+		fields = append(fields, postaladdresshistory.FieldDeletedBy)
+	}
+	if m.FieldCleared(postaladdresshistory.FieldTags) {
+		fields = append(fields, postaladdresshistory.FieldTags)
+	}
+	if m.FieldCleared(postaladdresshistory.FieldOwnerID) {
+		fields = append(fields, postaladdresshistory.FieldOwnerID)
+	}
+	if m.FieldCleared(postaladdresshistory.FieldLanguageCode) {
+		fields = append(fields, postaladdresshistory.FieldLanguageCode)
+	}
+	if m.FieldCleared(postaladdresshistory.FieldPostalCode) {
+		fields = append(fields, postaladdresshistory.FieldPostalCode)
+	}
+	if m.FieldCleared(postaladdresshistory.FieldSortingCode) {
+		fields = append(fields, postaladdresshistory.FieldSortingCode)
+	}
+	if m.FieldCleared(postaladdresshistory.FieldAdministrativeArea) {
+		fields = append(fields, postaladdresshistory.FieldAdministrativeArea)
+	}
+	if m.FieldCleared(postaladdresshistory.FieldLocality) {
+		fields = append(fields, postaladdresshistory.FieldLocality)
+	}
+	if m.FieldCleared(postaladdresshistory.FieldSublocality) {
+		fields = append(fields, postaladdresshistory.FieldSublocality)
+	}
+	if m.FieldCleared(postaladdresshistory.FieldOrganization) {
+		fields = append(fields, postaladdresshistory.FieldOrganization)
+	}
+	return fields
+}
+
+// FieldCleared returns a boolean indicating if a field with the given name was
+// cleared in this mutation.
+func (m *PostalAddressHistoryMutation) FieldCleared(name string) bool {
+	_, ok := m.clearedFields[name]
+	return ok
+}
+
+// ClearField clears the value of the field with the given name. It returns an
+// error if the field is not defined in the schema.
+func (m *PostalAddressHistoryMutation) ClearField(name string) error {
+	switch name {
+	case postaladdresshistory.FieldRef:
+		m.ClearRef()
+		return nil
+	case postaladdresshistory.FieldCreatedAt:
+		m.ClearCreatedAt()
+		return nil
+	case postaladdresshistory.FieldUpdatedAt:
+		m.ClearUpdatedAt()
+		return nil
+	case postaladdresshistory.FieldCreatedBy:
+		m.ClearCreatedBy()
+		return nil
+	case postaladdresshistory.FieldUpdatedBy:
+		m.ClearUpdatedBy()
+		return nil
+	case postaladdresshistory.FieldDeletedAt:
+		m.ClearDeletedAt()
+		return nil
+	case postaladdresshistory.FieldDeletedBy:
+		m.ClearDeletedBy()
+		return nil
+	case postaladdresshistory.FieldTags:
+		m.ClearTags()
+		return nil
+	case postaladdresshistory.FieldOwnerID:
+		m.ClearOwnerID()
+		return nil
+	case postaladdresshistory.FieldLanguageCode:
+		m.ClearLanguageCode()
+		return nil
+	case postaladdresshistory.FieldPostalCode:
+		m.ClearPostalCode()
+		return nil
+	case postaladdresshistory.FieldSortingCode:
+		m.ClearSortingCode()
+		return nil
+	case postaladdresshistory.FieldAdministrativeArea:
+		m.ClearAdministrativeArea()
+		return nil
+	case postaladdresshistory.FieldLocality:
+		m.ClearLocality()
+		return nil
+	case postaladdresshistory.FieldSublocality:
+		m.ClearSublocality()
+		return nil
+	case postaladdresshistory.FieldOrganization:
+		m.ClearOrganization()
+		return nil
+	}
+	return fmt.Errorf("unknown PostalAddressHistory nullable field %s", name)
+}
+
+// ResetField resets all changes in the mutation for the field with the given name.
+// It returns an error if the field is not defined in the schema.
+func (m *PostalAddressHistoryMutation) ResetField(name string) error {
+	switch name {
+	case postaladdresshistory.FieldHistoryTime:
+		m.ResetHistoryTime()
+		return nil
+	case postaladdresshistory.FieldRef:
+		m.ResetRef()
+		return nil
+	case postaladdresshistory.FieldOperation:
+		m.ResetOperation()
+		return nil
+	case postaladdresshistory.FieldCreatedAt:
+		m.ResetCreatedAt()
+		return nil
+	case postaladdresshistory.FieldUpdatedAt:
+		m.ResetUpdatedAt()
+		return nil
+	case postaladdresshistory.FieldCreatedBy:
+		m.ResetCreatedBy()
+		return nil
+	case postaladdresshistory.FieldUpdatedBy:
+		m.ResetUpdatedBy()
+		return nil
+	case postaladdresshistory.FieldDeletedAt:
+		m.ResetDeletedAt()
+		return nil
+	case postaladdresshistory.FieldDeletedBy:
+		m.ResetDeletedBy()
+		return nil
+	case postaladdresshistory.FieldMappingID:
+		m.ResetMappingID()
+		return nil
+	case postaladdresshistory.FieldTags:
+		m.ResetTags()
+		return nil
+	case postaladdresshistory.FieldOwnerID:
+		m.ResetOwnerID()
+		return nil
+	case postaladdresshistory.FieldRegionCode:
+		m.ResetRegionCode()
+		return nil
+	case postaladdresshistory.FieldLanguageCode:
+		m.ResetLanguageCode()
+		return nil
+	case postaladdresshistory.FieldPostalCode:
+		m.ResetPostalCode()
+		return nil
+	case postaladdresshistory.FieldSortingCode:
+		m.ResetSortingCode()
+		return nil
+	case postaladdresshistory.FieldAdministrativeArea:
+		m.ResetAdministrativeArea()
+		return nil
+	case postaladdresshistory.FieldLocality:
+		m.ResetLocality()
+		return nil
+	case postaladdresshistory.FieldSublocality:
+		m.ResetSublocality()
+		return nil
+	case postaladdresshistory.FieldAddressLines:
+		m.ResetAddressLines()
+		return nil
+	case postaladdresshistory.FieldRecipients:
+		m.ResetRecipients()
+		return nil
+	case postaladdresshistory.FieldOrganization:
+		m.ResetOrganization()
+		return nil
+	}
+	return fmt.Errorf("unknown PostalAddressHistory field %s", name)
+}
+
+// AddedEdges returns all edge names that were set/added in this mutation.
+func (m *PostalAddressHistoryMutation) AddedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// AddedIDs returns all IDs (to other nodes) that were added for the given edge
+// name in this mutation.
+func (m *PostalAddressHistoryMutation) AddedIDs(name string) []ent.Value {
+	return nil
+}
+
+// RemovedEdges returns all edge names that were removed in this mutation.
+func (m *PostalAddressHistoryMutation) RemovedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
+// the given name in this mutation.
+func (m *PostalAddressHistoryMutation) RemovedIDs(name string) []ent.Value {
+	return nil
+}
+
+// ClearedEdges returns all edge names that were cleared in this mutation.
+func (m *PostalAddressHistoryMutation) ClearedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// EdgeCleared returns a boolean which indicates if the edge with the given name
+// was cleared in this mutation.
+func (m *PostalAddressHistoryMutation) EdgeCleared(name string) bool {
+	return false
+}
+
+// ClearEdge clears the value of the edge with the given name. It returns an error
+// if that edge is not defined in the schema.
+func (m *PostalAddressHistoryMutation) ClearEdge(name string) error {
+	return fmt.Errorf("unknown PostalAddressHistory unique edge %s", name)
+}
+
+// ResetEdge resets all changes to the edge with the given name in this mutation.
+// It returns an error if the edge is not defined in the schema.
+func (m *PostalAddressHistoryMutation) ResetEdge(name string) error {
+	return fmt.Errorf("unknown PostalAddressHistory edge %s", name)
 }
 
 // SubscriberMutation represents an operation that mutates the Subscriber nodes in the graph.
@@ -86261,6 +90377,7843 @@ func (m *UserSettingHistoryMutation) ClearEdge(name string) error {
 // It returns an error if the edge is not defined in the schema.
 func (m *UserSettingHistoryMutation) ResetEdge(name string) error {
 	return fmt.Errorf("unknown UserSettingHistory edge %s", name)
+}
+
+// VendorMutation represents an operation that mutates the Vendor nodes in the graph.
+type VendorMutation struct {
+	config
+	op               Op
+	typ              string
+	id               *string
+	created_at       *time.Time
+	updated_at       *time.Time
+	created_by       *string
+	updated_by       *string
+	deleted_at       *time.Time
+	deleted_by       *string
+	mapping_id       *string
+	tags             *[]string
+	appendtags       []string
+	display_name     *string
+	vendor_type      *enums.VendorType
+	onboarding_state *enums.OnboardingState
+	clearedFields    map[string]struct{}
+	owner            *string
+	clearedowner     bool
+	profile          *string
+	clearedprofile   bool
+	events           map[string]struct{}
+	removedevents    map[string]struct{}
+	clearedevents    bool
+	done             bool
+	oldValue         func(context.Context) (*Vendor, error)
+	predicates       []predicate.Vendor
+}
+
+var _ ent.Mutation = (*VendorMutation)(nil)
+
+// vendorOption allows management of the mutation configuration using functional options.
+type vendorOption func(*VendorMutation)
+
+// newVendorMutation creates new mutation for the Vendor entity.
+func newVendorMutation(c config, op Op, opts ...vendorOption) *VendorMutation {
+	m := &VendorMutation{
+		config:        c,
+		op:            op,
+		typ:           TypeVendor,
+		clearedFields: make(map[string]struct{}),
+	}
+	for _, opt := range opts {
+		opt(m)
+	}
+	return m
+}
+
+// withVendorID sets the ID field of the mutation.
+func withVendorID(id string) vendorOption {
+	return func(m *VendorMutation) {
+		var (
+			err   error
+			once  sync.Once
+			value *Vendor
+		)
+		m.oldValue = func(ctx context.Context) (*Vendor, error) {
+			once.Do(func() {
+				if m.done {
+					err = errors.New("querying old values post mutation is not allowed")
+				} else {
+					value, err = m.Client().Vendor.Get(ctx, id)
+				}
+			})
+			return value, err
+		}
+		m.id = &id
+	}
+}
+
+// withVendor sets the old Vendor of the mutation.
+func withVendor(node *Vendor) vendorOption {
+	return func(m *VendorMutation) {
+		m.oldValue = func(context.Context) (*Vendor, error) {
+			return node, nil
+		}
+		m.id = &node.ID
+	}
+}
+
+// Client returns a new `ent.Client` from the mutation. If the mutation was
+// executed in a transaction (ent.Tx), a transactional client is returned.
+func (m VendorMutation) Client() *Client {
+	client := &Client{config: m.config}
+	client.init()
+	return client
+}
+
+// Tx returns an `ent.Tx` for mutations that were executed in transactions;
+// it returns an error otherwise.
+func (m VendorMutation) Tx() (*Tx, error) {
+	if _, ok := m.driver.(*txDriver); !ok {
+		return nil, errors.New("generated: mutation is not running in a transaction")
+	}
+	tx := &Tx{config: m.config}
+	tx.init()
+	return tx, nil
+}
+
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of Vendor entities.
+func (m *VendorMutation) SetID(id string) {
+	m.id = &id
+}
+
+// ID returns the ID value in the mutation. Note that the ID is only available
+// if it was provided to the builder or after it was returned from the database.
+func (m *VendorMutation) ID() (id string, exists bool) {
+	if m.id == nil {
+		return
+	}
+	return *m.id, true
+}
+
+// IDs queries the database and returns the entity ids that match the mutation's predicate.
+// That means, if the mutation is applied within a transaction with an isolation level such
+// as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
+// or updated by the mutation.
+func (m *VendorMutation) IDs(ctx context.Context) ([]string, error) {
+	switch {
+	case m.op.Is(OpUpdateOne | OpDeleteOne):
+		id, exists := m.ID()
+		if exists {
+			return []string{id}, nil
+		}
+		fallthrough
+	case m.op.Is(OpUpdate | OpDelete):
+		return m.Client().Vendor.Query().Where(m.predicates...).IDs(ctx)
+	default:
+		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
+	}
+}
+
+// SetCreatedAt sets the "created_at" field.
+func (m *VendorMutation) SetCreatedAt(t time.Time) {
+	m.created_at = &t
+}
+
+// CreatedAt returns the value of the "created_at" field in the mutation.
+func (m *VendorMutation) CreatedAt() (r time.Time, exists bool) {
+	v := m.created_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedAt returns the old "created_at" field's value of the Vendor entity.
+// If the Vendor object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VendorMutation) OldCreatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedAt: %w", err)
+	}
+	return oldValue.CreatedAt, nil
+}
+
+// ClearCreatedAt clears the value of the "created_at" field.
+func (m *VendorMutation) ClearCreatedAt() {
+	m.created_at = nil
+	m.clearedFields[vendor.FieldCreatedAt] = struct{}{}
+}
+
+// CreatedAtCleared returns if the "created_at" field was cleared in this mutation.
+func (m *VendorMutation) CreatedAtCleared() bool {
+	_, ok := m.clearedFields[vendor.FieldCreatedAt]
+	return ok
+}
+
+// ResetCreatedAt resets all changes to the "created_at" field.
+func (m *VendorMutation) ResetCreatedAt() {
+	m.created_at = nil
+	delete(m.clearedFields, vendor.FieldCreatedAt)
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (m *VendorMutation) SetUpdatedAt(t time.Time) {
+	m.updated_at = &t
+}
+
+// UpdatedAt returns the value of the "updated_at" field in the mutation.
+func (m *VendorMutation) UpdatedAt() (r time.Time, exists bool) {
+	v := m.updated_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedAt returns the old "updated_at" field's value of the Vendor entity.
+// If the Vendor object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VendorMutation) OldUpdatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedAt: %w", err)
+	}
+	return oldValue.UpdatedAt, nil
+}
+
+// ClearUpdatedAt clears the value of the "updated_at" field.
+func (m *VendorMutation) ClearUpdatedAt() {
+	m.updated_at = nil
+	m.clearedFields[vendor.FieldUpdatedAt] = struct{}{}
+}
+
+// UpdatedAtCleared returns if the "updated_at" field was cleared in this mutation.
+func (m *VendorMutation) UpdatedAtCleared() bool {
+	_, ok := m.clearedFields[vendor.FieldUpdatedAt]
+	return ok
+}
+
+// ResetUpdatedAt resets all changes to the "updated_at" field.
+func (m *VendorMutation) ResetUpdatedAt() {
+	m.updated_at = nil
+	delete(m.clearedFields, vendor.FieldUpdatedAt)
+}
+
+// SetCreatedBy sets the "created_by" field.
+func (m *VendorMutation) SetCreatedBy(s string) {
+	m.created_by = &s
+}
+
+// CreatedBy returns the value of the "created_by" field in the mutation.
+func (m *VendorMutation) CreatedBy() (r string, exists bool) {
+	v := m.created_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedBy returns the old "created_by" field's value of the Vendor entity.
+// If the Vendor object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VendorMutation) OldCreatedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedBy: %w", err)
+	}
+	return oldValue.CreatedBy, nil
+}
+
+// ClearCreatedBy clears the value of the "created_by" field.
+func (m *VendorMutation) ClearCreatedBy() {
+	m.created_by = nil
+	m.clearedFields[vendor.FieldCreatedBy] = struct{}{}
+}
+
+// CreatedByCleared returns if the "created_by" field was cleared in this mutation.
+func (m *VendorMutation) CreatedByCleared() bool {
+	_, ok := m.clearedFields[vendor.FieldCreatedBy]
+	return ok
+}
+
+// ResetCreatedBy resets all changes to the "created_by" field.
+func (m *VendorMutation) ResetCreatedBy() {
+	m.created_by = nil
+	delete(m.clearedFields, vendor.FieldCreatedBy)
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (m *VendorMutation) SetUpdatedBy(s string) {
+	m.updated_by = &s
+}
+
+// UpdatedBy returns the value of the "updated_by" field in the mutation.
+func (m *VendorMutation) UpdatedBy() (r string, exists bool) {
+	v := m.updated_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedBy returns the old "updated_by" field's value of the Vendor entity.
+// If the Vendor object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VendorMutation) OldUpdatedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedBy: %w", err)
+	}
+	return oldValue.UpdatedBy, nil
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (m *VendorMutation) ClearUpdatedBy() {
+	m.updated_by = nil
+	m.clearedFields[vendor.FieldUpdatedBy] = struct{}{}
+}
+
+// UpdatedByCleared returns if the "updated_by" field was cleared in this mutation.
+func (m *VendorMutation) UpdatedByCleared() bool {
+	_, ok := m.clearedFields[vendor.FieldUpdatedBy]
+	return ok
+}
+
+// ResetUpdatedBy resets all changes to the "updated_by" field.
+func (m *VendorMutation) ResetUpdatedBy() {
+	m.updated_by = nil
+	delete(m.clearedFields, vendor.FieldUpdatedBy)
+}
+
+// SetDeletedAt sets the "deleted_at" field.
+func (m *VendorMutation) SetDeletedAt(t time.Time) {
+	m.deleted_at = &t
+}
+
+// DeletedAt returns the value of the "deleted_at" field in the mutation.
+func (m *VendorMutation) DeletedAt() (r time.Time, exists bool) {
+	v := m.deleted_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDeletedAt returns the old "deleted_at" field's value of the Vendor entity.
+// If the Vendor object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VendorMutation) OldDeletedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDeletedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDeletedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDeletedAt: %w", err)
+	}
+	return oldValue.DeletedAt, nil
+}
+
+// ClearDeletedAt clears the value of the "deleted_at" field.
+func (m *VendorMutation) ClearDeletedAt() {
+	m.deleted_at = nil
+	m.clearedFields[vendor.FieldDeletedAt] = struct{}{}
+}
+
+// DeletedAtCleared returns if the "deleted_at" field was cleared in this mutation.
+func (m *VendorMutation) DeletedAtCleared() bool {
+	_, ok := m.clearedFields[vendor.FieldDeletedAt]
+	return ok
+}
+
+// ResetDeletedAt resets all changes to the "deleted_at" field.
+func (m *VendorMutation) ResetDeletedAt() {
+	m.deleted_at = nil
+	delete(m.clearedFields, vendor.FieldDeletedAt)
+}
+
+// SetDeletedBy sets the "deleted_by" field.
+func (m *VendorMutation) SetDeletedBy(s string) {
+	m.deleted_by = &s
+}
+
+// DeletedBy returns the value of the "deleted_by" field in the mutation.
+func (m *VendorMutation) DeletedBy() (r string, exists bool) {
+	v := m.deleted_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDeletedBy returns the old "deleted_by" field's value of the Vendor entity.
+// If the Vendor object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VendorMutation) OldDeletedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDeletedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDeletedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDeletedBy: %w", err)
+	}
+	return oldValue.DeletedBy, nil
+}
+
+// ClearDeletedBy clears the value of the "deleted_by" field.
+func (m *VendorMutation) ClearDeletedBy() {
+	m.deleted_by = nil
+	m.clearedFields[vendor.FieldDeletedBy] = struct{}{}
+}
+
+// DeletedByCleared returns if the "deleted_by" field was cleared in this mutation.
+func (m *VendorMutation) DeletedByCleared() bool {
+	_, ok := m.clearedFields[vendor.FieldDeletedBy]
+	return ok
+}
+
+// ResetDeletedBy resets all changes to the "deleted_by" field.
+func (m *VendorMutation) ResetDeletedBy() {
+	m.deleted_by = nil
+	delete(m.clearedFields, vendor.FieldDeletedBy)
+}
+
+// SetMappingID sets the "mapping_id" field.
+func (m *VendorMutation) SetMappingID(s string) {
+	m.mapping_id = &s
+}
+
+// MappingID returns the value of the "mapping_id" field in the mutation.
+func (m *VendorMutation) MappingID() (r string, exists bool) {
+	v := m.mapping_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldMappingID returns the old "mapping_id" field's value of the Vendor entity.
+// If the Vendor object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VendorMutation) OldMappingID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldMappingID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldMappingID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldMappingID: %w", err)
+	}
+	return oldValue.MappingID, nil
+}
+
+// ResetMappingID resets all changes to the "mapping_id" field.
+func (m *VendorMutation) ResetMappingID() {
+	m.mapping_id = nil
+}
+
+// SetTags sets the "tags" field.
+func (m *VendorMutation) SetTags(s []string) {
+	m.tags = &s
+	m.appendtags = nil
+}
+
+// Tags returns the value of the "tags" field in the mutation.
+func (m *VendorMutation) Tags() (r []string, exists bool) {
+	v := m.tags
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldTags returns the old "tags" field's value of the Vendor entity.
+// If the Vendor object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VendorMutation) OldTags(ctx context.Context) (v []string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldTags is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldTags requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldTags: %w", err)
+	}
+	return oldValue.Tags, nil
+}
+
+// AppendTags adds s to the "tags" field.
+func (m *VendorMutation) AppendTags(s []string) {
+	m.appendtags = append(m.appendtags, s...)
+}
+
+// AppendedTags returns the list of values that were appended to the "tags" field in this mutation.
+func (m *VendorMutation) AppendedTags() ([]string, bool) {
+	if len(m.appendtags) == 0 {
+		return nil, false
+	}
+	return m.appendtags, true
+}
+
+// ClearTags clears the value of the "tags" field.
+func (m *VendorMutation) ClearTags() {
+	m.tags = nil
+	m.appendtags = nil
+	m.clearedFields[vendor.FieldTags] = struct{}{}
+}
+
+// TagsCleared returns if the "tags" field was cleared in this mutation.
+func (m *VendorMutation) TagsCleared() bool {
+	_, ok := m.clearedFields[vendor.FieldTags]
+	return ok
+}
+
+// ResetTags resets all changes to the "tags" field.
+func (m *VendorMutation) ResetTags() {
+	m.tags = nil
+	m.appendtags = nil
+	delete(m.clearedFields, vendor.FieldTags)
+}
+
+// SetOwnerID sets the "owner_id" field.
+func (m *VendorMutation) SetOwnerID(s string) {
+	m.owner = &s
+}
+
+// OwnerID returns the value of the "owner_id" field in the mutation.
+func (m *VendorMutation) OwnerID() (r string, exists bool) {
+	v := m.owner
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldOwnerID returns the old "owner_id" field's value of the Vendor entity.
+// If the Vendor object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VendorMutation) OldOwnerID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldOwnerID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldOwnerID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldOwnerID: %w", err)
+	}
+	return oldValue.OwnerID, nil
+}
+
+// ClearOwnerID clears the value of the "owner_id" field.
+func (m *VendorMutation) ClearOwnerID() {
+	m.owner = nil
+	m.clearedFields[vendor.FieldOwnerID] = struct{}{}
+}
+
+// OwnerIDCleared returns if the "owner_id" field was cleared in this mutation.
+func (m *VendorMutation) OwnerIDCleared() bool {
+	_, ok := m.clearedFields[vendor.FieldOwnerID]
+	return ok
+}
+
+// ResetOwnerID resets all changes to the "owner_id" field.
+func (m *VendorMutation) ResetOwnerID() {
+	m.owner = nil
+	delete(m.clearedFields, vendor.FieldOwnerID)
+}
+
+// SetDisplayName sets the "display_name" field.
+func (m *VendorMutation) SetDisplayName(s string) {
+	m.display_name = &s
+}
+
+// DisplayName returns the value of the "display_name" field in the mutation.
+func (m *VendorMutation) DisplayName() (r string, exists bool) {
+	v := m.display_name
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDisplayName returns the old "display_name" field's value of the Vendor entity.
+// If the Vendor object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VendorMutation) OldDisplayName(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDisplayName is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDisplayName requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDisplayName: %w", err)
+	}
+	return oldValue.DisplayName, nil
+}
+
+// ResetDisplayName resets all changes to the "display_name" field.
+func (m *VendorMutation) ResetDisplayName() {
+	m.display_name = nil
+}
+
+// SetVendorType sets the "vendor_type" field.
+func (m *VendorMutation) SetVendorType(et enums.VendorType) {
+	m.vendor_type = &et
+}
+
+// VendorType returns the value of the "vendor_type" field in the mutation.
+func (m *VendorMutation) VendorType() (r enums.VendorType, exists bool) {
+	v := m.vendor_type
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldVendorType returns the old "vendor_type" field's value of the Vendor entity.
+// If the Vendor object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VendorMutation) OldVendorType(ctx context.Context) (v enums.VendorType, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldVendorType is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldVendorType requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldVendorType: %w", err)
+	}
+	return oldValue.VendorType, nil
+}
+
+// ResetVendorType resets all changes to the "vendor_type" field.
+func (m *VendorMutation) ResetVendorType() {
+	m.vendor_type = nil
+}
+
+// SetOnboardingState sets the "onboarding_state" field.
+func (m *VendorMutation) SetOnboardingState(es enums.OnboardingState) {
+	m.onboarding_state = &es
+}
+
+// OnboardingState returns the value of the "onboarding_state" field in the mutation.
+func (m *VendorMutation) OnboardingState() (r enums.OnboardingState, exists bool) {
+	v := m.onboarding_state
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldOnboardingState returns the old "onboarding_state" field's value of the Vendor entity.
+// If the Vendor object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VendorMutation) OldOnboardingState(ctx context.Context) (v enums.OnboardingState, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldOnboardingState is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldOnboardingState requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldOnboardingState: %w", err)
+	}
+	return oldValue.OnboardingState, nil
+}
+
+// ResetOnboardingState resets all changes to the "onboarding_state" field.
+func (m *VendorMutation) ResetOnboardingState() {
+	m.onboarding_state = nil
+}
+
+// ClearOwner clears the "owner" edge to the Organization entity.
+func (m *VendorMutation) ClearOwner() {
+	m.clearedowner = true
+	m.clearedFields[vendor.FieldOwnerID] = struct{}{}
+}
+
+// OwnerCleared reports if the "owner" edge to the Organization entity was cleared.
+func (m *VendorMutation) OwnerCleared() bool {
+	return m.OwnerIDCleared() || m.clearedowner
+}
+
+// OwnerIDs returns the "owner" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// OwnerID instead. It exists only for internal usage by the builders.
+func (m *VendorMutation) OwnerIDs() (ids []string) {
+	if id := m.owner; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetOwner resets all changes to the "owner" edge.
+func (m *VendorMutation) ResetOwner() {
+	m.owner = nil
+	m.clearedowner = false
+}
+
+// SetProfileID sets the "profile" edge to the VendorProfile entity by id.
+func (m *VendorMutation) SetProfileID(id string) {
+	m.profile = &id
+}
+
+// ClearProfile clears the "profile" edge to the VendorProfile entity.
+func (m *VendorMutation) ClearProfile() {
+	m.clearedprofile = true
+}
+
+// ProfileCleared reports if the "profile" edge to the VendorProfile entity was cleared.
+func (m *VendorMutation) ProfileCleared() bool {
+	return m.clearedprofile
+}
+
+// ProfileID returns the "profile" edge ID in the mutation.
+func (m *VendorMutation) ProfileID() (id string, exists bool) {
+	if m.profile != nil {
+		return *m.profile, true
+	}
+	return
+}
+
+// ProfileIDs returns the "profile" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// ProfileID instead. It exists only for internal usage by the builders.
+func (m *VendorMutation) ProfileIDs() (ids []string) {
+	if id := m.profile; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetProfile resets all changes to the "profile" edge.
+func (m *VendorMutation) ResetProfile() {
+	m.profile = nil
+	m.clearedprofile = false
+}
+
+// AddEventIDs adds the "events" edge to the Event entity by ids.
+func (m *VendorMutation) AddEventIDs(ids ...string) {
+	if m.events == nil {
+		m.events = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.events[ids[i]] = struct{}{}
+	}
+}
+
+// ClearEvents clears the "events" edge to the Event entity.
+func (m *VendorMutation) ClearEvents() {
+	m.clearedevents = true
+}
+
+// EventsCleared reports if the "events" edge to the Event entity was cleared.
+func (m *VendorMutation) EventsCleared() bool {
+	return m.clearedevents
+}
+
+// RemoveEventIDs removes the "events" edge to the Event entity by IDs.
+func (m *VendorMutation) RemoveEventIDs(ids ...string) {
+	if m.removedevents == nil {
+		m.removedevents = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.events, ids[i])
+		m.removedevents[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedEvents returns the removed IDs of the "events" edge to the Event entity.
+func (m *VendorMutation) RemovedEventsIDs() (ids []string) {
+	for id := range m.removedevents {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// EventsIDs returns the "events" edge IDs in the mutation.
+func (m *VendorMutation) EventsIDs() (ids []string) {
+	for id := range m.events {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetEvents resets all changes to the "events" edge.
+func (m *VendorMutation) ResetEvents() {
+	m.events = nil
+	m.clearedevents = false
+	m.removedevents = nil
+}
+
+// Where appends a list predicates to the VendorMutation builder.
+func (m *VendorMutation) Where(ps ...predicate.Vendor) {
+	m.predicates = append(m.predicates, ps...)
+}
+
+// WhereP appends storage-level predicates to the VendorMutation builder. Using this method,
+// users can use type-assertion to append predicates that do not depend on any generated package.
+func (m *VendorMutation) WhereP(ps ...func(*sql.Selector)) {
+	p := make([]predicate.Vendor, len(ps))
+	for i := range ps {
+		p[i] = ps[i]
+	}
+	m.Where(p...)
+}
+
+// Op returns the operation name.
+func (m *VendorMutation) Op() Op {
+	return m.op
+}
+
+// SetOp allows setting the mutation operation.
+func (m *VendorMutation) SetOp(op Op) {
+	m.op = op
+}
+
+// Type returns the node type of this mutation (Vendor).
+func (m *VendorMutation) Type() string {
+	return m.typ
+}
+
+// Fields returns all fields that were changed during this mutation. Note that in
+// order to get all numeric fields that were incremented/decremented, call
+// AddedFields().
+func (m *VendorMutation) Fields() []string {
+	fields := make([]string, 0, 12)
+	if m.created_at != nil {
+		fields = append(fields, vendor.FieldCreatedAt)
+	}
+	if m.updated_at != nil {
+		fields = append(fields, vendor.FieldUpdatedAt)
+	}
+	if m.created_by != nil {
+		fields = append(fields, vendor.FieldCreatedBy)
+	}
+	if m.updated_by != nil {
+		fields = append(fields, vendor.FieldUpdatedBy)
+	}
+	if m.deleted_at != nil {
+		fields = append(fields, vendor.FieldDeletedAt)
+	}
+	if m.deleted_by != nil {
+		fields = append(fields, vendor.FieldDeletedBy)
+	}
+	if m.mapping_id != nil {
+		fields = append(fields, vendor.FieldMappingID)
+	}
+	if m.tags != nil {
+		fields = append(fields, vendor.FieldTags)
+	}
+	if m.owner != nil {
+		fields = append(fields, vendor.FieldOwnerID)
+	}
+	if m.display_name != nil {
+		fields = append(fields, vendor.FieldDisplayName)
+	}
+	if m.vendor_type != nil {
+		fields = append(fields, vendor.FieldVendorType)
+	}
+	if m.onboarding_state != nil {
+		fields = append(fields, vendor.FieldOnboardingState)
+	}
+	return fields
+}
+
+// Field returns the value of a field with the given name. The second boolean
+// return value indicates that this field was not set, or was not defined in the
+// schema.
+func (m *VendorMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case vendor.FieldCreatedAt:
+		return m.CreatedAt()
+	case vendor.FieldUpdatedAt:
+		return m.UpdatedAt()
+	case vendor.FieldCreatedBy:
+		return m.CreatedBy()
+	case vendor.FieldUpdatedBy:
+		return m.UpdatedBy()
+	case vendor.FieldDeletedAt:
+		return m.DeletedAt()
+	case vendor.FieldDeletedBy:
+		return m.DeletedBy()
+	case vendor.FieldMappingID:
+		return m.MappingID()
+	case vendor.FieldTags:
+		return m.Tags()
+	case vendor.FieldOwnerID:
+		return m.OwnerID()
+	case vendor.FieldDisplayName:
+		return m.DisplayName()
+	case vendor.FieldVendorType:
+		return m.VendorType()
+	case vendor.FieldOnboardingState:
+		return m.OnboardingState()
+	}
+	return nil, false
+}
+
+// OldField returns the old value of the field from the database. An error is
+// returned if the mutation operation is not UpdateOne, or the query to the
+// database failed.
+func (m *VendorMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case vendor.FieldCreatedAt:
+		return m.OldCreatedAt(ctx)
+	case vendor.FieldUpdatedAt:
+		return m.OldUpdatedAt(ctx)
+	case vendor.FieldCreatedBy:
+		return m.OldCreatedBy(ctx)
+	case vendor.FieldUpdatedBy:
+		return m.OldUpdatedBy(ctx)
+	case vendor.FieldDeletedAt:
+		return m.OldDeletedAt(ctx)
+	case vendor.FieldDeletedBy:
+		return m.OldDeletedBy(ctx)
+	case vendor.FieldMappingID:
+		return m.OldMappingID(ctx)
+	case vendor.FieldTags:
+		return m.OldTags(ctx)
+	case vendor.FieldOwnerID:
+		return m.OldOwnerID(ctx)
+	case vendor.FieldDisplayName:
+		return m.OldDisplayName(ctx)
+	case vendor.FieldVendorType:
+		return m.OldVendorType(ctx)
+	case vendor.FieldOnboardingState:
+		return m.OldOnboardingState(ctx)
+	}
+	return nil, fmt.Errorf("unknown Vendor field %s", name)
+}
+
+// SetField sets the value of a field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *VendorMutation) SetField(name string, value ent.Value) error {
+	switch name {
+	case vendor.FieldCreatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedAt(v)
+		return nil
+	case vendor.FieldUpdatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedAt(v)
+		return nil
+	case vendor.FieldCreatedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedBy(v)
+		return nil
+	case vendor.FieldUpdatedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedBy(v)
+		return nil
+	case vendor.FieldDeletedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDeletedAt(v)
+		return nil
+	case vendor.FieldDeletedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDeletedBy(v)
+		return nil
+	case vendor.FieldMappingID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetMappingID(v)
+		return nil
+	case vendor.FieldTags:
+		v, ok := value.([]string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetTags(v)
+		return nil
+	case vendor.FieldOwnerID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetOwnerID(v)
+		return nil
+	case vendor.FieldDisplayName:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDisplayName(v)
+		return nil
+	case vendor.FieldVendorType:
+		v, ok := value.(enums.VendorType)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetVendorType(v)
+		return nil
+	case vendor.FieldOnboardingState:
+		v, ok := value.(enums.OnboardingState)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetOnboardingState(v)
+		return nil
+	}
+	return fmt.Errorf("unknown Vendor field %s", name)
+}
+
+// AddedFields returns all numeric fields that were incremented/decremented during
+// this mutation.
+func (m *VendorMutation) AddedFields() []string {
+	return nil
+}
+
+// AddedField returns the numeric value that was incremented/decremented on a field
+// with the given name. The second boolean return value indicates that this field
+// was not set, or was not defined in the schema.
+func (m *VendorMutation) AddedField(name string) (ent.Value, bool) {
+	return nil, false
+}
+
+// AddField adds the value to the field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *VendorMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	}
+	return fmt.Errorf("unknown Vendor numeric field %s", name)
+}
+
+// ClearedFields returns all nullable fields that were cleared during this
+// mutation.
+func (m *VendorMutation) ClearedFields() []string {
+	var fields []string
+	if m.FieldCleared(vendor.FieldCreatedAt) {
+		fields = append(fields, vendor.FieldCreatedAt)
+	}
+	if m.FieldCleared(vendor.FieldUpdatedAt) {
+		fields = append(fields, vendor.FieldUpdatedAt)
+	}
+	if m.FieldCleared(vendor.FieldCreatedBy) {
+		fields = append(fields, vendor.FieldCreatedBy)
+	}
+	if m.FieldCleared(vendor.FieldUpdatedBy) {
+		fields = append(fields, vendor.FieldUpdatedBy)
+	}
+	if m.FieldCleared(vendor.FieldDeletedAt) {
+		fields = append(fields, vendor.FieldDeletedAt)
+	}
+	if m.FieldCleared(vendor.FieldDeletedBy) {
+		fields = append(fields, vendor.FieldDeletedBy)
+	}
+	if m.FieldCleared(vendor.FieldTags) {
+		fields = append(fields, vendor.FieldTags)
+	}
+	if m.FieldCleared(vendor.FieldOwnerID) {
+		fields = append(fields, vendor.FieldOwnerID)
+	}
+	return fields
+}
+
+// FieldCleared returns a boolean indicating if a field with the given name was
+// cleared in this mutation.
+func (m *VendorMutation) FieldCleared(name string) bool {
+	_, ok := m.clearedFields[name]
+	return ok
+}
+
+// ClearField clears the value of the field with the given name. It returns an
+// error if the field is not defined in the schema.
+func (m *VendorMutation) ClearField(name string) error {
+	switch name {
+	case vendor.FieldCreatedAt:
+		m.ClearCreatedAt()
+		return nil
+	case vendor.FieldUpdatedAt:
+		m.ClearUpdatedAt()
+		return nil
+	case vendor.FieldCreatedBy:
+		m.ClearCreatedBy()
+		return nil
+	case vendor.FieldUpdatedBy:
+		m.ClearUpdatedBy()
+		return nil
+	case vendor.FieldDeletedAt:
+		m.ClearDeletedAt()
+		return nil
+	case vendor.FieldDeletedBy:
+		m.ClearDeletedBy()
+		return nil
+	case vendor.FieldTags:
+		m.ClearTags()
+		return nil
+	case vendor.FieldOwnerID:
+		m.ClearOwnerID()
+		return nil
+	}
+	return fmt.Errorf("unknown Vendor nullable field %s", name)
+}
+
+// ResetField resets all changes in the mutation for the field with the given name.
+// It returns an error if the field is not defined in the schema.
+func (m *VendorMutation) ResetField(name string) error {
+	switch name {
+	case vendor.FieldCreatedAt:
+		m.ResetCreatedAt()
+		return nil
+	case vendor.FieldUpdatedAt:
+		m.ResetUpdatedAt()
+		return nil
+	case vendor.FieldCreatedBy:
+		m.ResetCreatedBy()
+		return nil
+	case vendor.FieldUpdatedBy:
+		m.ResetUpdatedBy()
+		return nil
+	case vendor.FieldDeletedAt:
+		m.ResetDeletedAt()
+		return nil
+	case vendor.FieldDeletedBy:
+		m.ResetDeletedBy()
+		return nil
+	case vendor.FieldMappingID:
+		m.ResetMappingID()
+		return nil
+	case vendor.FieldTags:
+		m.ResetTags()
+		return nil
+	case vendor.FieldOwnerID:
+		m.ResetOwnerID()
+		return nil
+	case vendor.FieldDisplayName:
+		m.ResetDisplayName()
+		return nil
+	case vendor.FieldVendorType:
+		m.ResetVendorType()
+		return nil
+	case vendor.FieldOnboardingState:
+		m.ResetOnboardingState()
+		return nil
+	}
+	return fmt.Errorf("unknown Vendor field %s", name)
+}
+
+// AddedEdges returns all edge names that were set/added in this mutation.
+func (m *VendorMutation) AddedEdges() []string {
+	edges := make([]string, 0, 3)
+	if m.owner != nil {
+		edges = append(edges, vendor.EdgeOwner)
+	}
+	if m.profile != nil {
+		edges = append(edges, vendor.EdgeProfile)
+	}
+	if m.events != nil {
+		edges = append(edges, vendor.EdgeEvents)
+	}
+	return edges
+}
+
+// AddedIDs returns all IDs (to other nodes) that were added for the given edge
+// name in this mutation.
+func (m *VendorMutation) AddedIDs(name string) []ent.Value {
+	switch name {
+	case vendor.EdgeOwner:
+		if id := m.owner; id != nil {
+			return []ent.Value{*id}
+		}
+	case vendor.EdgeProfile:
+		if id := m.profile; id != nil {
+			return []ent.Value{*id}
+		}
+	case vendor.EdgeEvents:
+		ids := make([]ent.Value, 0, len(m.events))
+		for id := range m.events {
+			ids = append(ids, id)
+		}
+		return ids
+	}
+	return nil
+}
+
+// RemovedEdges returns all edge names that were removed in this mutation.
+func (m *VendorMutation) RemovedEdges() []string {
+	edges := make([]string, 0, 3)
+	if m.removedevents != nil {
+		edges = append(edges, vendor.EdgeEvents)
+	}
+	return edges
+}
+
+// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
+// the given name in this mutation.
+func (m *VendorMutation) RemovedIDs(name string) []ent.Value {
+	switch name {
+	case vendor.EdgeEvents:
+		ids := make([]ent.Value, 0, len(m.removedevents))
+		for id := range m.removedevents {
+			ids = append(ids, id)
+		}
+		return ids
+	}
+	return nil
+}
+
+// ClearedEdges returns all edge names that were cleared in this mutation.
+func (m *VendorMutation) ClearedEdges() []string {
+	edges := make([]string, 0, 3)
+	if m.clearedowner {
+		edges = append(edges, vendor.EdgeOwner)
+	}
+	if m.clearedprofile {
+		edges = append(edges, vendor.EdgeProfile)
+	}
+	if m.clearedevents {
+		edges = append(edges, vendor.EdgeEvents)
+	}
+	return edges
+}
+
+// EdgeCleared returns a boolean which indicates if the edge with the given name
+// was cleared in this mutation.
+func (m *VendorMutation) EdgeCleared(name string) bool {
+	switch name {
+	case vendor.EdgeOwner:
+		return m.clearedowner
+	case vendor.EdgeProfile:
+		return m.clearedprofile
+	case vendor.EdgeEvents:
+		return m.clearedevents
+	}
+	return false
+}
+
+// ClearEdge clears the value of the edge with the given name. It returns an error
+// if that edge is not defined in the schema.
+func (m *VendorMutation) ClearEdge(name string) error {
+	switch name {
+	case vendor.EdgeOwner:
+		m.ClearOwner()
+		return nil
+	case vendor.EdgeProfile:
+		m.ClearProfile()
+		return nil
+	}
+	return fmt.Errorf("unknown Vendor unique edge %s", name)
+}
+
+// ResetEdge resets all changes to the edge with the given name in this mutation.
+// It returns an error if the edge is not defined in the schema.
+func (m *VendorMutation) ResetEdge(name string) error {
+	switch name {
+	case vendor.EdgeOwner:
+		m.ResetOwner()
+		return nil
+	case vendor.EdgeProfile:
+		m.ResetProfile()
+		return nil
+	case vendor.EdgeEvents:
+		m.ResetEvents()
+		return nil
+	}
+	return fmt.Errorf("unknown Vendor edge %s", name)
+}
+
+// VendorHistoryMutation represents an operation that mutates the VendorHistory nodes in the graph.
+type VendorHistoryMutation struct {
+	config
+	op               Op
+	typ              string
+	id               *string
+	history_time     *time.Time
+	ref              *string
+	operation        *enthistory.OpType
+	created_at       *time.Time
+	updated_at       *time.Time
+	created_by       *string
+	updated_by       *string
+	deleted_at       *time.Time
+	deleted_by       *string
+	mapping_id       *string
+	tags             *[]string
+	appendtags       []string
+	owner_id         *string
+	display_name     *string
+	vendor_type      *enums.VendorType
+	onboarding_state *enums.OnboardingState
+	clearedFields    map[string]struct{}
+	done             bool
+	oldValue         func(context.Context) (*VendorHistory, error)
+	predicates       []predicate.VendorHistory
+}
+
+var _ ent.Mutation = (*VendorHistoryMutation)(nil)
+
+// vendorhistoryOption allows management of the mutation configuration using functional options.
+type vendorhistoryOption func(*VendorHistoryMutation)
+
+// newVendorHistoryMutation creates new mutation for the VendorHistory entity.
+func newVendorHistoryMutation(c config, op Op, opts ...vendorhistoryOption) *VendorHistoryMutation {
+	m := &VendorHistoryMutation{
+		config:        c,
+		op:            op,
+		typ:           TypeVendorHistory,
+		clearedFields: make(map[string]struct{}),
+	}
+	for _, opt := range opts {
+		opt(m)
+	}
+	return m
+}
+
+// withVendorHistoryID sets the ID field of the mutation.
+func withVendorHistoryID(id string) vendorhistoryOption {
+	return func(m *VendorHistoryMutation) {
+		var (
+			err   error
+			once  sync.Once
+			value *VendorHistory
+		)
+		m.oldValue = func(ctx context.Context) (*VendorHistory, error) {
+			once.Do(func() {
+				if m.done {
+					err = errors.New("querying old values post mutation is not allowed")
+				} else {
+					value, err = m.Client().VendorHistory.Get(ctx, id)
+				}
+			})
+			return value, err
+		}
+		m.id = &id
+	}
+}
+
+// withVendorHistory sets the old VendorHistory of the mutation.
+func withVendorHistory(node *VendorHistory) vendorhistoryOption {
+	return func(m *VendorHistoryMutation) {
+		m.oldValue = func(context.Context) (*VendorHistory, error) {
+			return node, nil
+		}
+		m.id = &node.ID
+	}
+}
+
+// Client returns a new `ent.Client` from the mutation. If the mutation was
+// executed in a transaction (ent.Tx), a transactional client is returned.
+func (m VendorHistoryMutation) Client() *Client {
+	client := &Client{config: m.config}
+	client.init()
+	return client
+}
+
+// Tx returns an `ent.Tx` for mutations that were executed in transactions;
+// it returns an error otherwise.
+func (m VendorHistoryMutation) Tx() (*Tx, error) {
+	if _, ok := m.driver.(*txDriver); !ok {
+		return nil, errors.New("generated: mutation is not running in a transaction")
+	}
+	tx := &Tx{config: m.config}
+	tx.init()
+	return tx, nil
+}
+
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of VendorHistory entities.
+func (m *VendorHistoryMutation) SetID(id string) {
+	m.id = &id
+}
+
+// ID returns the ID value in the mutation. Note that the ID is only available
+// if it was provided to the builder or after it was returned from the database.
+func (m *VendorHistoryMutation) ID() (id string, exists bool) {
+	if m.id == nil {
+		return
+	}
+	return *m.id, true
+}
+
+// IDs queries the database and returns the entity ids that match the mutation's predicate.
+// That means, if the mutation is applied within a transaction with an isolation level such
+// as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
+// or updated by the mutation.
+func (m *VendorHistoryMutation) IDs(ctx context.Context) ([]string, error) {
+	switch {
+	case m.op.Is(OpUpdateOne | OpDeleteOne):
+		id, exists := m.ID()
+		if exists {
+			return []string{id}, nil
+		}
+		fallthrough
+	case m.op.Is(OpUpdate | OpDelete):
+		return m.Client().VendorHistory.Query().Where(m.predicates...).IDs(ctx)
+	default:
+		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
+	}
+}
+
+// SetHistoryTime sets the "history_time" field.
+func (m *VendorHistoryMutation) SetHistoryTime(t time.Time) {
+	m.history_time = &t
+}
+
+// HistoryTime returns the value of the "history_time" field in the mutation.
+func (m *VendorHistoryMutation) HistoryTime() (r time.Time, exists bool) {
+	v := m.history_time
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldHistoryTime returns the old "history_time" field's value of the VendorHistory entity.
+// If the VendorHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VendorHistoryMutation) OldHistoryTime(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldHistoryTime is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldHistoryTime requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldHistoryTime: %w", err)
+	}
+	return oldValue.HistoryTime, nil
+}
+
+// ResetHistoryTime resets all changes to the "history_time" field.
+func (m *VendorHistoryMutation) ResetHistoryTime() {
+	m.history_time = nil
+}
+
+// SetRef sets the "ref" field.
+func (m *VendorHistoryMutation) SetRef(s string) {
+	m.ref = &s
+}
+
+// Ref returns the value of the "ref" field in the mutation.
+func (m *VendorHistoryMutation) Ref() (r string, exists bool) {
+	v := m.ref
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldRef returns the old "ref" field's value of the VendorHistory entity.
+// If the VendorHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VendorHistoryMutation) OldRef(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldRef is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldRef requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldRef: %w", err)
+	}
+	return oldValue.Ref, nil
+}
+
+// ClearRef clears the value of the "ref" field.
+func (m *VendorHistoryMutation) ClearRef() {
+	m.ref = nil
+	m.clearedFields[vendorhistory.FieldRef] = struct{}{}
+}
+
+// RefCleared returns if the "ref" field was cleared in this mutation.
+func (m *VendorHistoryMutation) RefCleared() bool {
+	_, ok := m.clearedFields[vendorhistory.FieldRef]
+	return ok
+}
+
+// ResetRef resets all changes to the "ref" field.
+func (m *VendorHistoryMutation) ResetRef() {
+	m.ref = nil
+	delete(m.clearedFields, vendorhistory.FieldRef)
+}
+
+// SetOperation sets the "operation" field.
+func (m *VendorHistoryMutation) SetOperation(et enthistory.OpType) {
+	m.operation = &et
+}
+
+// Operation returns the value of the "operation" field in the mutation.
+func (m *VendorHistoryMutation) Operation() (r enthistory.OpType, exists bool) {
+	v := m.operation
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldOperation returns the old "operation" field's value of the VendorHistory entity.
+// If the VendorHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VendorHistoryMutation) OldOperation(ctx context.Context) (v enthistory.OpType, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldOperation is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldOperation requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldOperation: %w", err)
+	}
+	return oldValue.Operation, nil
+}
+
+// ResetOperation resets all changes to the "operation" field.
+func (m *VendorHistoryMutation) ResetOperation() {
+	m.operation = nil
+}
+
+// SetCreatedAt sets the "created_at" field.
+func (m *VendorHistoryMutation) SetCreatedAt(t time.Time) {
+	m.created_at = &t
+}
+
+// CreatedAt returns the value of the "created_at" field in the mutation.
+func (m *VendorHistoryMutation) CreatedAt() (r time.Time, exists bool) {
+	v := m.created_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedAt returns the old "created_at" field's value of the VendorHistory entity.
+// If the VendorHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VendorHistoryMutation) OldCreatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedAt: %w", err)
+	}
+	return oldValue.CreatedAt, nil
+}
+
+// ClearCreatedAt clears the value of the "created_at" field.
+func (m *VendorHistoryMutation) ClearCreatedAt() {
+	m.created_at = nil
+	m.clearedFields[vendorhistory.FieldCreatedAt] = struct{}{}
+}
+
+// CreatedAtCleared returns if the "created_at" field was cleared in this mutation.
+func (m *VendorHistoryMutation) CreatedAtCleared() bool {
+	_, ok := m.clearedFields[vendorhistory.FieldCreatedAt]
+	return ok
+}
+
+// ResetCreatedAt resets all changes to the "created_at" field.
+func (m *VendorHistoryMutation) ResetCreatedAt() {
+	m.created_at = nil
+	delete(m.clearedFields, vendorhistory.FieldCreatedAt)
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (m *VendorHistoryMutation) SetUpdatedAt(t time.Time) {
+	m.updated_at = &t
+}
+
+// UpdatedAt returns the value of the "updated_at" field in the mutation.
+func (m *VendorHistoryMutation) UpdatedAt() (r time.Time, exists bool) {
+	v := m.updated_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedAt returns the old "updated_at" field's value of the VendorHistory entity.
+// If the VendorHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VendorHistoryMutation) OldUpdatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedAt: %w", err)
+	}
+	return oldValue.UpdatedAt, nil
+}
+
+// ClearUpdatedAt clears the value of the "updated_at" field.
+func (m *VendorHistoryMutation) ClearUpdatedAt() {
+	m.updated_at = nil
+	m.clearedFields[vendorhistory.FieldUpdatedAt] = struct{}{}
+}
+
+// UpdatedAtCleared returns if the "updated_at" field was cleared in this mutation.
+func (m *VendorHistoryMutation) UpdatedAtCleared() bool {
+	_, ok := m.clearedFields[vendorhistory.FieldUpdatedAt]
+	return ok
+}
+
+// ResetUpdatedAt resets all changes to the "updated_at" field.
+func (m *VendorHistoryMutation) ResetUpdatedAt() {
+	m.updated_at = nil
+	delete(m.clearedFields, vendorhistory.FieldUpdatedAt)
+}
+
+// SetCreatedBy sets the "created_by" field.
+func (m *VendorHistoryMutation) SetCreatedBy(s string) {
+	m.created_by = &s
+}
+
+// CreatedBy returns the value of the "created_by" field in the mutation.
+func (m *VendorHistoryMutation) CreatedBy() (r string, exists bool) {
+	v := m.created_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedBy returns the old "created_by" field's value of the VendorHistory entity.
+// If the VendorHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VendorHistoryMutation) OldCreatedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedBy: %w", err)
+	}
+	return oldValue.CreatedBy, nil
+}
+
+// ClearCreatedBy clears the value of the "created_by" field.
+func (m *VendorHistoryMutation) ClearCreatedBy() {
+	m.created_by = nil
+	m.clearedFields[vendorhistory.FieldCreatedBy] = struct{}{}
+}
+
+// CreatedByCleared returns if the "created_by" field was cleared in this mutation.
+func (m *VendorHistoryMutation) CreatedByCleared() bool {
+	_, ok := m.clearedFields[vendorhistory.FieldCreatedBy]
+	return ok
+}
+
+// ResetCreatedBy resets all changes to the "created_by" field.
+func (m *VendorHistoryMutation) ResetCreatedBy() {
+	m.created_by = nil
+	delete(m.clearedFields, vendorhistory.FieldCreatedBy)
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (m *VendorHistoryMutation) SetUpdatedBy(s string) {
+	m.updated_by = &s
+}
+
+// UpdatedBy returns the value of the "updated_by" field in the mutation.
+func (m *VendorHistoryMutation) UpdatedBy() (r string, exists bool) {
+	v := m.updated_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedBy returns the old "updated_by" field's value of the VendorHistory entity.
+// If the VendorHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VendorHistoryMutation) OldUpdatedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedBy: %w", err)
+	}
+	return oldValue.UpdatedBy, nil
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (m *VendorHistoryMutation) ClearUpdatedBy() {
+	m.updated_by = nil
+	m.clearedFields[vendorhistory.FieldUpdatedBy] = struct{}{}
+}
+
+// UpdatedByCleared returns if the "updated_by" field was cleared in this mutation.
+func (m *VendorHistoryMutation) UpdatedByCleared() bool {
+	_, ok := m.clearedFields[vendorhistory.FieldUpdatedBy]
+	return ok
+}
+
+// ResetUpdatedBy resets all changes to the "updated_by" field.
+func (m *VendorHistoryMutation) ResetUpdatedBy() {
+	m.updated_by = nil
+	delete(m.clearedFields, vendorhistory.FieldUpdatedBy)
+}
+
+// SetDeletedAt sets the "deleted_at" field.
+func (m *VendorHistoryMutation) SetDeletedAt(t time.Time) {
+	m.deleted_at = &t
+}
+
+// DeletedAt returns the value of the "deleted_at" field in the mutation.
+func (m *VendorHistoryMutation) DeletedAt() (r time.Time, exists bool) {
+	v := m.deleted_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDeletedAt returns the old "deleted_at" field's value of the VendorHistory entity.
+// If the VendorHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VendorHistoryMutation) OldDeletedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDeletedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDeletedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDeletedAt: %w", err)
+	}
+	return oldValue.DeletedAt, nil
+}
+
+// ClearDeletedAt clears the value of the "deleted_at" field.
+func (m *VendorHistoryMutation) ClearDeletedAt() {
+	m.deleted_at = nil
+	m.clearedFields[vendorhistory.FieldDeletedAt] = struct{}{}
+}
+
+// DeletedAtCleared returns if the "deleted_at" field was cleared in this mutation.
+func (m *VendorHistoryMutation) DeletedAtCleared() bool {
+	_, ok := m.clearedFields[vendorhistory.FieldDeletedAt]
+	return ok
+}
+
+// ResetDeletedAt resets all changes to the "deleted_at" field.
+func (m *VendorHistoryMutation) ResetDeletedAt() {
+	m.deleted_at = nil
+	delete(m.clearedFields, vendorhistory.FieldDeletedAt)
+}
+
+// SetDeletedBy sets the "deleted_by" field.
+func (m *VendorHistoryMutation) SetDeletedBy(s string) {
+	m.deleted_by = &s
+}
+
+// DeletedBy returns the value of the "deleted_by" field in the mutation.
+func (m *VendorHistoryMutation) DeletedBy() (r string, exists bool) {
+	v := m.deleted_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDeletedBy returns the old "deleted_by" field's value of the VendorHistory entity.
+// If the VendorHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VendorHistoryMutation) OldDeletedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDeletedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDeletedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDeletedBy: %w", err)
+	}
+	return oldValue.DeletedBy, nil
+}
+
+// ClearDeletedBy clears the value of the "deleted_by" field.
+func (m *VendorHistoryMutation) ClearDeletedBy() {
+	m.deleted_by = nil
+	m.clearedFields[vendorhistory.FieldDeletedBy] = struct{}{}
+}
+
+// DeletedByCleared returns if the "deleted_by" field was cleared in this mutation.
+func (m *VendorHistoryMutation) DeletedByCleared() bool {
+	_, ok := m.clearedFields[vendorhistory.FieldDeletedBy]
+	return ok
+}
+
+// ResetDeletedBy resets all changes to the "deleted_by" field.
+func (m *VendorHistoryMutation) ResetDeletedBy() {
+	m.deleted_by = nil
+	delete(m.clearedFields, vendorhistory.FieldDeletedBy)
+}
+
+// SetMappingID sets the "mapping_id" field.
+func (m *VendorHistoryMutation) SetMappingID(s string) {
+	m.mapping_id = &s
+}
+
+// MappingID returns the value of the "mapping_id" field in the mutation.
+func (m *VendorHistoryMutation) MappingID() (r string, exists bool) {
+	v := m.mapping_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldMappingID returns the old "mapping_id" field's value of the VendorHistory entity.
+// If the VendorHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VendorHistoryMutation) OldMappingID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldMappingID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldMappingID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldMappingID: %w", err)
+	}
+	return oldValue.MappingID, nil
+}
+
+// ResetMappingID resets all changes to the "mapping_id" field.
+func (m *VendorHistoryMutation) ResetMappingID() {
+	m.mapping_id = nil
+}
+
+// SetTags sets the "tags" field.
+func (m *VendorHistoryMutation) SetTags(s []string) {
+	m.tags = &s
+	m.appendtags = nil
+}
+
+// Tags returns the value of the "tags" field in the mutation.
+func (m *VendorHistoryMutation) Tags() (r []string, exists bool) {
+	v := m.tags
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldTags returns the old "tags" field's value of the VendorHistory entity.
+// If the VendorHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VendorHistoryMutation) OldTags(ctx context.Context) (v []string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldTags is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldTags requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldTags: %w", err)
+	}
+	return oldValue.Tags, nil
+}
+
+// AppendTags adds s to the "tags" field.
+func (m *VendorHistoryMutation) AppendTags(s []string) {
+	m.appendtags = append(m.appendtags, s...)
+}
+
+// AppendedTags returns the list of values that were appended to the "tags" field in this mutation.
+func (m *VendorHistoryMutation) AppendedTags() ([]string, bool) {
+	if len(m.appendtags) == 0 {
+		return nil, false
+	}
+	return m.appendtags, true
+}
+
+// ClearTags clears the value of the "tags" field.
+func (m *VendorHistoryMutation) ClearTags() {
+	m.tags = nil
+	m.appendtags = nil
+	m.clearedFields[vendorhistory.FieldTags] = struct{}{}
+}
+
+// TagsCleared returns if the "tags" field was cleared in this mutation.
+func (m *VendorHistoryMutation) TagsCleared() bool {
+	_, ok := m.clearedFields[vendorhistory.FieldTags]
+	return ok
+}
+
+// ResetTags resets all changes to the "tags" field.
+func (m *VendorHistoryMutation) ResetTags() {
+	m.tags = nil
+	m.appendtags = nil
+	delete(m.clearedFields, vendorhistory.FieldTags)
+}
+
+// SetOwnerID sets the "owner_id" field.
+func (m *VendorHistoryMutation) SetOwnerID(s string) {
+	m.owner_id = &s
+}
+
+// OwnerID returns the value of the "owner_id" field in the mutation.
+func (m *VendorHistoryMutation) OwnerID() (r string, exists bool) {
+	v := m.owner_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldOwnerID returns the old "owner_id" field's value of the VendorHistory entity.
+// If the VendorHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VendorHistoryMutation) OldOwnerID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldOwnerID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldOwnerID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldOwnerID: %w", err)
+	}
+	return oldValue.OwnerID, nil
+}
+
+// ClearOwnerID clears the value of the "owner_id" field.
+func (m *VendorHistoryMutation) ClearOwnerID() {
+	m.owner_id = nil
+	m.clearedFields[vendorhistory.FieldOwnerID] = struct{}{}
+}
+
+// OwnerIDCleared returns if the "owner_id" field was cleared in this mutation.
+func (m *VendorHistoryMutation) OwnerIDCleared() bool {
+	_, ok := m.clearedFields[vendorhistory.FieldOwnerID]
+	return ok
+}
+
+// ResetOwnerID resets all changes to the "owner_id" field.
+func (m *VendorHistoryMutation) ResetOwnerID() {
+	m.owner_id = nil
+	delete(m.clearedFields, vendorhistory.FieldOwnerID)
+}
+
+// SetDisplayName sets the "display_name" field.
+func (m *VendorHistoryMutation) SetDisplayName(s string) {
+	m.display_name = &s
+}
+
+// DisplayName returns the value of the "display_name" field in the mutation.
+func (m *VendorHistoryMutation) DisplayName() (r string, exists bool) {
+	v := m.display_name
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDisplayName returns the old "display_name" field's value of the VendorHistory entity.
+// If the VendorHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VendorHistoryMutation) OldDisplayName(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDisplayName is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDisplayName requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDisplayName: %w", err)
+	}
+	return oldValue.DisplayName, nil
+}
+
+// ResetDisplayName resets all changes to the "display_name" field.
+func (m *VendorHistoryMutation) ResetDisplayName() {
+	m.display_name = nil
+}
+
+// SetVendorType sets the "vendor_type" field.
+func (m *VendorHistoryMutation) SetVendorType(et enums.VendorType) {
+	m.vendor_type = &et
+}
+
+// VendorType returns the value of the "vendor_type" field in the mutation.
+func (m *VendorHistoryMutation) VendorType() (r enums.VendorType, exists bool) {
+	v := m.vendor_type
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldVendorType returns the old "vendor_type" field's value of the VendorHistory entity.
+// If the VendorHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VendorHistoryMutation) OldVendorType(ctx context.Context) (v enums.VendorType, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldVendorType is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldVendorType requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldVendorType: %w", err)
+	}
+	return oldValue.VendorType, nil
+}
+
+// ResetVendorType resets all changes to the "vendor_type" field.
+func (m *VendorHistoryMutation) ResetVendorType() {
+	m.vendor_type = nil
+}
+
+// SetOnboardingState sets the "onboarding_state" field.
+func (m *VendorHistoryMutation) SetOnboardingState(es enums.OnboardingState) {
+	m.onboarding_state = &es
+}
+
+// OnboardingState returns the value of the "onboarding_state" field in the mutation.
+func (m *VendorHistoryMutation) OnboardingState() (r enums.OnboardingState, exists bool) {
+	v := m.onboarding_state
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldOnboardingState returns the old "onboarding_state" field's value of the VendorHistory entity.
+// If the VendorHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VendorHistoryMutation) OldOnboardingState(ctx context.Context) (v enums.OnboardingState, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldOnboardingState is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldOnboardingState requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldOnboardingState: %w", err)
+	}
+	return oldValue.OnboardingState, nil
+}
+
+// ResetOnboardingState resets all changes to the "onboarding_state" field.
+func (m *VendorHistoryMutation) ResetOnboardingState() {
+	m.onboarding_state = nil
+}
+
+// Where appends a list predicates to the VendorHistoryMutation builder.
+func (m *VendorHistoryMutation) Where(ps ...predicate.VendorHistory) {
+	m.predicates = append(m.predicates, ps...)
+}
+
+// WhereP appends storage-level predicates to the VendorHistoryMutation builder. Using this method,
+// users can use type-assertion to append predicates that do not depend on any generated package.
+func (m *VendorHistoryMutation) WhereP(ps ...func(*sql.Selector)) {
+	p := make([]predicate.VendorHistory, len(ps))
+	for i := range ps {
+		p[i] = ps[i]
+	}
+	m.Where(p...)
+}
+
+// Op returns the operation name.
+func (m *VendorHistoryMutation) Op() Op {
+	return m.op
+}
+
+// SetOp allows setting the mutation operation.
+func (m *VendorHistoryMutation) SetOp(op Op) {
+	m.op = op
+}
+
+// Type returns the node type of this mutation (VendorHistory).
+func (m *VendorHistoryMutation) Type() string {
+	return m.typ
+}
+
+// Fields returns all fields that were changed during this mutation. Note that in
+// order to get all numeric fields that were incremented/decremented, call
+// AddedFields().
+func (m *VendorHistoryMutation) Fields() []string {
+	fields := make([]string, 0, 15)
+	if m.history_time != nil {
+		fields = append(fields, vendorhistory.FieldHistoryTime)
+	}
+	if m.ref != nil {
+		fields = append(fields, vendorhistory.FieldRef)
+	}
+	if m.operation != nil {
+		fields = append(fields, vendorhistory.FieldOperation)
+	}
+	if m.created_at != nil {
+		fields = append(fields, vendorhistory.FieldCreatedAt)
+	}
+	if m.updated_at != nil {
+		fields = append(fields, vendorhistory.FieldUpdatedAt)
+	}
+	if m.created_by != nil {
+		fields = append(fields, vendorhistory.FieldCreatedBy)
+	}
+	if m.updated_by != nil {
+		fields = append(fields, vendorhistory.FieldUpdatedBy)
+	}
+	if m.deleted_at != nil {
+		fields = append(fields, vendorhistory.FieldDeletedAt)
+	}
+	if m.deleted_by != nil {
+		fields = append(fields, vendorhistory.FieldDeletedBy)
+	}
+	if m.mapping_id != nil {
+		fields = append(fields, vendorhistory.FieldMappingID)
+	}
+	if m.tags != nil {
+		fields = append(fields, vendorhistory.FieldTags)
+	}
+	if m.owner_id != nil {
+		fields = append(fields, vendorhistory.FieldOwnerID)
+	}
+	if m.display_name != nil {
+		fields = append(fields, vendorhistory.FieldDisplayName)
+	}
+	if m.vendor_type != nil {
+		fields = append(fields, vendorhistory.FieldVendorType)
+	}
+	if m.onboarding_state != nil {
+		fields = append(fields, vendorhistory.FieldOnboardingState)
+	}
+	return fields
+}
+
+// Field returns the value of a field with the given name. The second boolean
+// return value indicates that this field was not set, or was not defined in the
+// schema.
+func (m *VendorHistoryMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case vendorhistory.FieldHistoryTime:
+		return m.HistoryTime()
+	case vendorhistory.FieldRef:
+		return m.Ref()
+	case vendorhistory.FieldOperation:
+		return m.Operation()
+	case vendorhistory.FieldCreatedAt:
+		return m.CreatedAt()
+	case vendorhistory.FieldUpdatedAt:
+		return m.UpdatedAt()
+	case vendorhistory.FieldCreatedBy:
+		return m.CreatedBy()
+	case vendorhistory.FieldUpdatedBy:
+		return m.UpdatedBy()
+	case vendorhistory.FieldDeletedAt:
+		return m.DeletedAt()
+	case vendorhistory.FieldDeletedBy:
+		return m.DeletedBy()
+	case vendorhistory.FieldMappingID:
+		return m.MappingID()
+	case vendorhistory.FieldTags:
+		return m.Tags()
+	case vendorhistory.FieldOwnerID:
+		return m.OwnerID()
+	case vendorhistory.FieldDisplayName:
+		return m.DisplayName()
+	case vendorhistory.FieldVendorType:
+		return m.VendorType()
+	case vendorhistory.FieldOnboardingState:
+		return m.OnboardingState()
+	}
+	return nil, false
+}
+
+// OldField returns the old value of the field from the database. An error is
+// returned if the mutation operation is not UpdateOne, or the query to the
+// database failed.
+func (m *VendorHistoryMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case vendorhistory.FieldHistoryTime:
+		return m.OldHistoryTime(ctx)
+	case vendorhistory.FieldRef:
+		return m.OldRef(ctx)
+	case vendorhistory.FieldOperation:
+		return m.OldOperation(ctx)
+	case vendorhistory.FieldCreatedAt:
+		return m.OldCreatedAt(ctx)
+	case vendorhistory.FieldUpdatedAt:
+		return m.OldUpdatedAt(ctx)
+	case vendorhistory.FieldCreatedBy:
+		return m.OldCreatedBy(ctx)
+	case vendorhistory.FieldUpdatedBy:
+		return m.OldUpdatedBy(ctx)
+	case vendorhistory.FieldDeletedAt:
+		return m.OldDeletedAt(ctx)
+	case vendorhistory.FieldDeletedBy:
+		return m.OldDeletedBy(ctx)
+	case vendorhistory.FieldMappingID:
+		return m.OldMappingID(ctx)
+	case vendorhistory.FieldTags:
+		return m.OldTags(ctx)
+	case vendorhistory.FieldOwnerID:
+		return m.OldOwnerID(ctx)
+	case vendorhistory.FieldDisplayName:
+		return m.OldDisplayName(ctx)
+	case vendorhistory.FieldVendorType:
+		return m.OldVendorType(ctx)
+	case vendorhistory.FieldOnboardingState:
+		return m.OldOnboardingState(ctx)
+	}
+	return nil, fmt.Errorf("unknown VendorHistory field %s", name)
+}
+
+// SetField sets the value of a field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *VendorHistoryMutation) SetField(name string, value ent.Value) error {
+	switch name {
+	case vendorhistory.FieldHistoryTime:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetHistoryTime(v)
+		return nil
+	case vendorhistory.FieldRef:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetRef(v)
+		return nil
+	case vendorhistory.FieldOperation:
+		v, ok := value.(enthistory.OpType)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetOperation(v)
+		return nil
+	case vendorhistory.FieldCreatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedAt(v)
+		return nil
+	case vendorhistory.FieldUpdatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedAt(v)
+		return nil
+	case vendorhistory.FieldCreatedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedBy(v)
+		return nil
+	case vendorhistory.FieldUpdatedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedBy(v)
+		return nil
+	case vendorhistory.FieldDeletedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDeletedAt(v)
+		return nil
+	case vendorhistory.FieldDeletedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDeletedBy(v)
+		return nil
+	case vendorhistory.FieldMappingID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetMappingID(v)
+		return nil
+	case vendorhistory.FieldTags:
+		v, ok := value.([]string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetTags(v)
+		return nil
+	case vendorhistory.FieldOwnerID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetOwnerID(v)
+		return nil
+	case vendorhistory.FieldDisplayName:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDisplayName(v)
+		return nil
+	case vendorhistory.FieldVendorType:
+		v, ok := value.(enums.VendorType)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetVendorType(v)
+		return nil
+	case vendorhistory.FieldOnboardingState:
+		v, ok := value.(enums.OnboardingState)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetOnboardingState(v)
+		return nil
+	}
+	return fmt.Errorf("unknown VendorHistory field %s", name)
+}
+
+// AddedFields returns all numeric fields that were incremented/decremented during
+// this mutation.
+func (m *VendorHistoryMutation) AddedFields() []string {
+	return nil
+}
+
+// AddedField returns the numeric value that was incremented/decremented on a field
+// with the given name. The second boolean return value indicates that this field
+// was not set, or was not defined in the schema.
+func (m *VendorHistoryMutation) AddedField(name string) (ent.Value, bool) {
+	return nil, false
+}
+
+// AddField adds the value to the field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *VendorHistoryMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	}
+	return fmt.Errorf("unknown VendorHistory numeric field %s", name)
+}
+
+// ClearedFields returns all nullable fields that were cleared during this
+// mutation.
+func (m *VendorHistoryMutation) ClearedFields() []string {
+	var fields []string
+	if m.FieldCleared(vendorhistory.FieldRef) {
+		fields = append(fields, vendorhistory.FieldRef)
+	}
+	if m.FieldCleared(vendorhistory.FieldCreatedAt) {
+		fields = append(fields, vendorhistory.FieldCreatedAt)
+	}
+	if m.FieldCleared(vendorhistory.FieldUpdatedAt) {
+		fields = append(fields, vendorhistory.FieldUpdatedAt)
+	}
+	if m.FieldCleared(vendorhistory.FieldCreatedBy) {
+		fields = append(fields, vendorhistory.FieldCreatedBy)
+	}
+	if m.FieldCleared(vendorhistory.FieldUpdatedBy) {
+		fields = append(fields, vendorhistory.FieldUpdatedBy)
+	}
+	if m.FieldCleared(vendorhistory.FieldDeletedAt) {
+		fields = append(fields, vendorhistory.FieldDeletedAt)
+	}
+	if m.FieldCleared(vendorhistory.FieldDeletedBy) {
+		fields = append(fields, vendorhistory.FieldDeletedBy)
+	}
+	if m.FieldCleared(vendorhistory.FieldTags) {
+		fields = append(fields, vendorhistory.FieldTags)
+	}
+	if m.FieldCleared(vendorhistory.FieldOwnerID) {
+		fields = append(fields, vendorhistory.FieldOwnerID)
+	}
+	return fields
+}
+
+// FieldCleared returns a boolean indicating if a field with the given name was
+// cleared in this mutation.
+func (m *VendorHistoryMutation) FieldCleared(name string) bool {
+	_, ok := m.clearedFields[name]
+	return ok
+}
+
+// ClearField clears the value of the field with the given name. It returns an
+// error if the field is not defined in the schema.
+func (m *VendorHistoryMutation) ClearField(name string) error {
+	switch name {
+	case vendorhistory.FieldRef:
+		m.ClearRef()
+		return nil
+	case vendorhistory.FieldCreatedAt:
+		m.ClearCreatedAt()
+		return nil
+	case vendorhistory.FieldUpdatedAt:
+		m.ClearUpdatedAt()
+		return nil
+	case vendorhistory.FieldCreatedBy:
+		m.ClearCreatedBy()
+		return nil
+	case vendorhistory.FieldUpdatedBy:
+		m.ClearUpdatedBy()
+		return nil
+	case vendorhistory.FieldDeletedAt:
+		m.ClearDeletedAt()
+		return nil
+	case vendorhistory.FieldDeletedBy:
+		m.ClearDeletedBy()
+		return nil
+	case vendorhistory.FieldTags:
+		m.ClearTags()
+		return nil
+	case vendorhistory.FieldOwnerID:
+		m.ClearOwnerID()
+		return nil
+	}
+	return fmt.Errorf("unknown VendorHistory nullable field %s", name)
+}
+
+// ResetField resets all changes in the mutation for the field with the given name.
+// It returns an error if the field is not defined in the schema.
+func (m *VendorHistoryMutation) ResetField(name string) error {
+	switch name {
+	case vendorhistory.FieldHistoryTime:
+		m.ResetHistoryTime()
+		return nil
+	case vendorhistory.FieldRef:
+		m.ResetRef()
+		return nil
+	case vendorhistory.FieldOperation:
+		m.ResetOperation()
+		return nil
+	case vendorhistory.FieldCreatedAt:
+		m.ResetCreatedAt()
+		return nil
+	case vendorhistory.FieldUpdatedAt:
+		m.ResetUpdatedAt()
+		return nil
+	case vendorhistory.FieldCreatedBy:
+		m.ResetCreatedBy()
+		return nil
+	case vendorhistory.FieldUpdatedBy:
+		m.ResetUpdatedBy()
+		return nil
+	case vendorhistory.FieldDeletedAt:
+		m.ResetDeletedAt()
+		return nil
+	case vendorhistory.FieldDeletedBy:
+		m.ResetDeletedBy()
+		return nil
+	case vendorhistory.FieldMappingID:
+		m.ResetMappingID()
+		return nil
+	case vendorhistory.FieldTags:
+		m.ResetTags()
+		return nil
+	case vendorhistory.FieldOwnerID:
+		m.ResetOwnerID()
+		return nil
+	case vendorhistory.FieldDisplayName:
+		m.ResetDisplayName()
+		return nil
+	case vendorhistory.FieldVendorType:
+		m.ResetVendorType()
+		return nil
+	case vendorhistory.FieldOnboardingState:
+		m.ResetOnboardingState()
+		return nil
+	}
+	return fmt.Errorf("unknown VendorHistory field %s", name)
+}
+
+// AddedEdges returns all edge names that were set/added in this mutation.
+func (m *VendorHistoryMutation) AddedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// AddedIDs returns all IDs (to other nodes) that were added for the given edge
+// name in this mutation.
+func (m *VendorHistoryMutation) AddedIDs(name string) []ent.Value {
+	return nil
+}
+
+// RemovedEdges returns all edge names that were removed in this mutation.
+func (m *VendorHistoryMutation) RemovedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
+// the given name in this mutation.
+func (m *VendorHistoryMutation) RemovedIDs(name string) []ent.Value {
+	return nil
+}
+
+// ClearedEdges returns all edge names that were cleared in this mutation.
+func (m *VendorHistoryMutation) ClearedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// EdgeCleared returns a boolean which indicates if the edge with the given name
+// was cleared in this mutation.
+func (m *VendorHistoryMutation) EdgeCleared(name string) bool {
+	return false
+}
+
+// ClearEdge clears the value of the edge with the given name. It returns an error
+// if that edge is not defined in the schema.
+func (m *VendorHistoryMutation) ClearEdge(name string) error {
+	return fmt.Errorf("unknown VendorHistory unique edge %s", name)
+}
+
+// ResetEdge resets all changes to the edge with the given name in this mutation.
+// It returns an error if the edge is not defined in the schema.
+func (m *VendorHistoryMutation) ResetEdge(name string) error {
+	return fmt.Errorf("unknown VendorHistory edge %s", name)
+}
+
+// VendorProfileMutation represents an operation that mutates the VendorProfile nodes in the graph.
+type VendorProfileMutation struct {
+	config
+	op                                     Op
+	typ                                    string
+	id                                     *string
+	created_at                             *time.Time
+	updated_at                             *time.Time
+	created_by                             *string
+	updated_by                             *string
+	deleted_at                             *time.Time
+	deleted_by                             *string
+	mapping_id                             *string
+	tags                                   *[]string
+	appendtags                             []string
+	name                                   *string
+	dba_name                               *string
+	description                            *string
+	website_uri                            *string
+	clearedFields                          map[string]struct{}
+	owner                                  *string
+	clearedowner                           bool
+	postal_addresses                       map[string]struct{}
+	removedpostal_addresses                map[string]struct{}
+	clearedpostal_addresses                bool
+	vendor                                 *string
+	clearedvendor                          bool
+	vendor_profile_postal_addresses        map[string]struct{}
+	removedvendor_profile_postal_addresses map[string]struct{}
+	clearedvendor_profile_postal_addresses bool
+	done                                   bool
+	oldValue                               func(context.Context) (*VendorProfile, error)
+	predicates                             []predicate.VendorProfile
+}
+
+var _ ent.Mutation = (*VendorProfileMutation)(nil)
+
+// vendorprofileOption allows management of the mutation configuration using functional options.
+type vendorprofileOption func(*VendorProfileMutation)
+
+// newVendorProfileMutation creates new mutation for the VendorProfile entity.
+func newVendorProfileMutation(c config, op Op, opts ...vendorprofileOption) *VendorProfileMutation {
+	m := &VendorProfileMutation{
+		config:        c,
+		op:            op,
+		typ:           TypeVendorProfile,
+		clearedFields: make(map[string]struct{}),
+	}
+	for _, opt := range opts {
+		opt(m)
+	}
+	return m
+}
+
+// withVendorProfileID sets the ID field of the mutation.
+func withVendorProfileID(id string) vendorprofileOption {
+	return func(m *VendorProfileMutation) {
+		var (
+			err   error
+			once  sync.Once
+			value *VendorProfile
+		)
+		m.oldValue = func(ctx context.Context) (*VendorProfile, error) {
+			once.Do(func() {
+				if m.done {
+					err = errors.New("querying old values post mutation is not allowed")
+				} else {
+					value, err = m.Client().VendorProfile.Get(ctx, id)
+				}
+			})
+			return value, err
+		}
+		m.id = &id
+	}
+}
+
+// withVendorProfile sets the old VendorProfile of the mutation.
+func withVendorProfile(node *VendorProfile) vendorprofileOption {
+	return func(m *VendorProfileMutation) {
+		m.oldValue = func(context.Context) (*VendorProfile, error) {
+			return node, nil
+		}
+		m.id = &node.ID
+	}
+}
+
+// Client returns a new `ent.Client` from the mutation. If the mutation was
+// executed in a transaction (ent.Tx), a transactional client is returned.
+func (m VendorProfileMutation) Client() *Client {
+	client := &Client{config: m.config}
+	client.init()
+	return client
+}
+
+// Tx returns an `ent.Tx` for mutations that were executed in transactions;
+// it returns an error otherwise.
+func (m VendorProfileMutation) Tx() (*Tx, error) {
+	if _, ok := m.driver.(*txDriver); !ok {
+		return nil, errors.New("generated: mutation is not running in a transaction")
+	}
+	tx := &Tx{config: m.config}
+	tx.init()
+	return tx, nil
+}
+
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of VendorProfile entities.
+func (m *VendorProfileMutation) SetID(id string) {
+	m.id = &id
+}
+
+// ID returns the ID value in the mutation. Note that the ID is only available
+// if it was provided to the builder or after it was returned from the database.
+func (m *VendorProfileMutation) ID() (id string, exists bool) {
+	if m.id == nil {
+		return
+	}
+	return *m.id, true
+}
+
+// IDs queries the database and returns the entity ids that match the mutation's predicate.
+// That means, if the mutation is applied within a transaction with an isolation level such
+// as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
+// or updated by the mutation.
+func (m *VendorProfileMutation) IDs(ctx context.Context) ([]string, error) {
+	switch {
+	case m.op.Is(OpUpdateOne | OpDeleteOne):
+		id, exists := m.ID()
+		if exists {
+			return []string{id}, nil
+		}
+		fallthrough
+	case m.op.Is(OpUpdate | OpDelete):
+		return m.Client().VendorProfile.Query().Where(m.predicates...).IDs(ctx)
+	default:
+		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
+	}
+}
+
+// SetCreatedAt sets the "created_at" field.
+func (m *VendorProfileMutation) SetCreatedAt(t time.Time) {
+	m.created_at = &t
+}
+
+// CreatedAt returns the value of the "created_at" field in the mutation.
+func (m *VendorProfileMutation) CreatedAt() (r time.Time, exists bool) {
+	v := m.created_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedAt returns the old "created_at" field's value of the VendorProfile entity.
+// If the VendorProfile object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VendorProfileMutation) OldCreatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedAt: %w", err)
+	}
+	return oldValue.CreatedAt, nil
+}
+
+// ClearCreatedAt clears the value of the "created_at" field.
+func (m *VendorProfileMutation) ClearCreatedAt() {
+	m.created_at = nil
+	m.clearedFields[vendorprofile.FieldCreatedAt] = struct{}{}
+}
+
+// CreatedAtCleared returns if the "created_at" field was cleared in this mutation.
+func (m *VendorProfileMutation) CreatedAtCleared() bool {
+	_, ok := m.clearedFields[vendorprofile.FieldCreatedAt]
+	return ok
+}
+
+// ResetCreatedAt resets all changes to the "created_at" field.
+func (m *VendorProfileMutation) ResetCreatedAt() {
+	m.created_at = nil
+	delete(m.clearedFields, vendorprofile.FieldCreatedAt)
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (m *VendorProfileMutation) SetUpdatedAt(t time.Time) {
+	m.updated_at = &t
+}
+
+// UpdatedAt returns the value of the "updated_at" field in the mutation.
+func (m *VendorProfileMutation) UpdatedAt() (r time.Time, exists bool) {
+	v := m.updated_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedAt returns the old "updated_at" field's value of the VendorProfile entity.
+// If the VendorProfile object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VendorProfileMutation) OldUpdatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedAt: %w", err)
+	}
+	return oldValue.UpdatedAt, nil
+}
+
+// ClearUpdatedAt clears the value of the "updated_at" field.
+func (m *VendorProfileMutation) ClearUpdatedAt() {
+	m.updated_at = nil
+	m.clearedFields[vendorprofile.FieldUpdatedAt] = struct{}{}
+}
+
+// UpdatedAtCleared returns if the "updated_at" field was cleared in this mutation.
+func (m *VendorProfileMutation) UpdatedAtCleared() bool {
+	_, ok := m.clearedFields[vendorprofile.FieldUpdatedAt]
+	return ok
+}
+
+// ResetUpdatedAt resets all changes to the "updated_at" field.
+func (m *VendorProfileMutation) ResetUpdatedAt() {
+	m.updated_at = nil
+	delete(m.clearedFields, vendorprofile.FieldUpdatedAt)
+}
+
+// SetCreatedBy sets the "created_by" field.
+func (m *VendorProfileMutation) SetCreatedBy(s string) {
+	m.created_by = &s
+}
+
+// CreatedBy returns the value of the "created_by" field in the mutation.
+func (m *VendorProfileMutation) CreatedBy() (r string, exists bool) {
+	v := m.created_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedBy returns the old "created_by" field's value of the VendorProfile entity.
+// If the VendorProfile object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VendorProfileMutation) OldCreatedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedBy: %w", err)
+	}
+	return oldValue.CreatedBy, nil
+}
+
+// ClearCreatedBy clears the value of the "created_by" field.
+func (m *VendorProfileMutation) ClearCreatedBy() {
+	m.created_by = nil
+	m.clearedFields[vendorprofile.FieldCreatedBy] = struct{}{}
+}
+
+// CreatedByCleared returns if the "created_by" field was cleared in this mutation.
+func (m *VendorProfileMutation) CreatedByCleared() bool {
+	_, ok := m.clearedFields[vendorprofile.FieldCreatedBy]
+	return ok
+}
+
+// ResetCreatedBy resets all changes to the "created_by" field.
+func (m *VendorProfileMutation) ResetCreatedBy() {
+	m.created_by = nil
+	delete(m.clearedFields, vendorprofile.FieldCreatedBy)
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (m *VendorProfileMutation) SetUpdatedBy(s string) {
+	m.updated_by = &s
+}
+
+// UpdatedBy returns the value of the "updated_by" field in the mutation.
+func (m *VendorProfileMutation) UpdatedBy() (r string, exists bool) {
+	v := m.updated_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedBy returns the old "updated_by" field's value of the VendorProfile entity.
+// If the VendorProfile object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VendorProfileMutation) OldUpdatedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedBy: %w", err)
+	}
+	return oldValue.UpdatedBy, nil
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (m *VendorProfileMutation) ClearUpdatedBy() {
+	m.updated_by = nil
+	m.clearedFields[vendorprofile.FieldUpdatedBy] = struct{}{}
+}
+
+// UpdatedByCleared returns if the "updated_by" field was cleared in this mutation.
+func (m *VendorProfileMutation) UpdatedByCleared() bool {
+	_, ok := m.clearedFields[vendorprofile.FieldUpdatedBy]
+	return ok
+}
+
+// ResetUpdatedBy resets all changes to the "updated_by" field.
+func (m *VendorProfileMutation) ResetUpdatedBy() {
+	m.updated_by = nil
+	delete(m.clearedFields, vendorprofile.FieldUpdatedBy)
+}
+
+// SetDeletedAt sets the "deleted_at" field.
+func (m *VendorProfileMutation) SetDeletedAt(t time.Time) {
+	m.deleted_at = &t
+}
+
+// DeletedAt returns the value of the "deleted_at" field in the mutation.
+func (m *VendorProfileMutation) DeletedAt() (r time.Time, exists bool) {
+	v := m.deleted_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDeletedAt returns the old "deleted_at" field's value of the VendorProfile entity.
+// If the VendorProfile object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VendorProfileMutation) OldDeletedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDeletedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDeletedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDeletedAt: %w", err)
+	}
+	return oldValue.DeletedAt, nil
+}
+
+// ClearDeletedAt clears the value of the "deleted_at" field.
+func (m *VendorProfileMutation) ClearDeletedAt() {
+	m.deleted_at = nil
+	m.clearedFields[vendorprofile.FieldDeletedAt] = struct{}{}
+}
+
+// DeletedAtCleared returns if the "deleted_at" field was cleared in this mutation.
+func (m *VendorProfileMutation) DeletedAtCleared() bool {
+	_, ok := m.clearedFields[vendorprofile.FieldDeletedAt]
+	return ok
+}
+
+// ResetDeletedAt resets all changes to the "deleted_at" field.
+func (m *VendorProfileMutation) ResetDeletedAt() {
+	m.deleted_at = nil
+	delete(m.clearedFields, vendorprofile.FieldDeletedAt)
+}
+
+// SetDeletedBy sets the "deleted_by" field.
+func (m *VendorProfileMutation) SetDeletedBy(s string) {
+	m.deleted_by = &s
+}
+
+// DeletedBy returns the value of the "deleted_by" field in the mutation.
+func (m *VendorProfileMutation) DeletedBy() (r string, exists bool) {
+	v := m.deleted_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDeletedBy returns the old "deleted_by" field's value of the VendorProfile entity.
+// If the VendorProfile object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VendorProfileMutation) OldDeletedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDeletedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDeletedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDeletedBy: %w", err)
+	}
+	return oldValue.DeletedBy, nil
+}
+
+// ClearDeletedBy clears the value of the "deleted_by" field.
+func (m *VendorProfileMutation) ClearDeletedBy() {
+	m.deleted_by = nil
+	m.clearedFields[vendorprofile.FieldDeletedBy] = struct{}{}
+}
+
+// DeletedByCleared returns if the "deleted_by" field was cleared in this mutation.
+func (m *VendorProfileMutation) DeletedByCleared() bool {
+	_, ok := m.clearedFields[vendorprofile.FieldDeletedBy]
+	return ok
+}
+
+// ResetDeletedBy resets all changes to the "deleted_by" field.
+func (m *VendorProfileMutation) ResetDeletedBy() {
+	m.deleted_by = nil
+	delete(m.clearedFields, vendorprofile.FieldDeletedBy)
+}
+
+// SetMappingID sets the "mapping_id" field.
+func (m *VendorProfileMutation) SetMappingID(s string) {
+	m.mapping_id = &s
+}
+
+// MappingID returns the value of the "mapping_id" field in the mutation.
+func (m *VendorProfileMutation) MappingID() (r string, exists bool) {
+	v := m.mapping_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldMappingID returns the old "mapping_id" field's value of the VendorProfile entity.
+// If the VendorProfile object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VendorProfileMutation) OldMappingID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldMappingID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldMappingID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldMappingID: %w", err)
+	}
+	return oldValue.MappingID, nil
+}
+
+// ResetMappingID resets all changes to the "mapping_id" field.
+func (m *VendorProfileMutation) ResetMappingID() {
+	m.mapping_id = nil
+}
+
+// SetTags sets the "tags" field.
+func (m *VendorProfileMutation) SetTags(s []string) {
+	m.tags = &s
+	m.appendtags = nil
+}
+
+// Tags returns the value of the "tags" field in the mutation.
+func (m *VendorProfileMutation) Tags() (r []string, exists bool) {
+	v := m.tags
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldTags returns the old "tags" field's value of the VendorProfile entity.
+// If the VendorProfile object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VendorProfileMutation) OldTags(ctx context.Context) (v []string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldTags is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldTags requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldTags: %w", err)
+	}
+	return oldValue.Tags, nil
+}
+
+// AppendTags adds s to the "tags" field.
+func (m *VendorProfileMutation) AppendTags(s []string) {
+	m.appendtags = append(m.appendtags, s...)
+}
+
+// AppendedTags returns the list of values that were appended to the "tags" field in this mutation.
+func (m *VendorProfileMutation) AppendedTags() ([]string, bool) {
+	if len(m.appendtags) == 0 {
+		return nil, false
+	}
+	return m.appendtags, true
+}
+
+// ClearTags clears the value of the "tags" field.
+func (m *VendorProfileMutation) ClearTags() {
+	m.tags = nil
+	m.appendtags = nil
+	m.clearedFields[vendorprofile.FieldTags] = struct{}{}
+}
+
+// TagsCleared returns if the "tags" field was cleared in this mutation.
+func (m *VendorProfileMutation) TagsCleared() bool {
+	_, ok := m.clearedFields[vendorprofile.FieldTags]
+	return ok
+}
+
+// ResetTags resets all changes to the "tags" field.
+func (m *VendorProfileMutation) ResetTags() {
+	m.tags = nil
+	m.appendtags = nil
+	delete(m.clearedFields, vendorprofile.FieldTags)
+}
+
+// SetOwnerID sets the "owner_id" field.
+func (m *VendorProfileMutation) SetOwnerID(s string) {
+	m.owner = &s
+}
+
+// OwnerID returns the value of the "owner_id" field in the mutation.
+func (m *VendorProfileMutation) OwnerID() (r string, exists bool) {
+	v := m.owner
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldOwnerID returns the old "owner_id" field's value of the VendorProfile entity.
+// If the VendorProfile object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VendorProfileMutation) OldOwnerID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldOwnerID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldOwnerID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldOwnerID: %w", err)
+	}
+	return oldValue.OwnerID, nil
+}
+
+// ClearOwnerID clears the value of the "owner_id" field.
+func (m *VendorProfileMutation) ClearOwnerID() {
+	m.owner = nil
+	m.clearedFields[vendorprofile.FieldOwnerID] = struct{}{}
+}
+
+// OwnerIDCleared returns if the "owner_id" field was cleared in this mutation.
+func (m *VendorProfileMutation) OwnerIDCleared() bool {
+	_, ok := m.clearedFields[vendorprofile.FieldOwnerID]
+	return ok
+}
+
+// ResetOwnerID resets all changes to the "owner_id" field.
+func (m *VendorProfileMutation) ResetOwnerID() {
+	m.owner = nil
+	delete(m.clearedFields, vendorprofile.FieldOwnerID)
+}
+
+// SetVendorID sets the "vendor_id" field.
+func (m *VendorProfileMutation) SetVendorID(s string) {
+	m.vendor = &s
+}
+
+// VendorID returns the value of the "vendor_id" field in the mutation.
+func (m *VendorProfileMutation) VendorID() (r string, exists bool) {
+	v := m.vendor
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldVendorID returns the old "vendor_id" field's value of the VendorProfile entity.
+// If the VendorProfile object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VendorProfileMutation) OldVendorID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldVendorID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldVendorID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldVendorID: %w", err)
+	}
+	return oldValue.VendorID, nil
+}
+
+// ClearVendorID clears the value of the "vendor_id" field.
+func (m *VendorProfileMutation) ClearVendorID() {
+	m.vendor = nil
+	m.clearedFields[vendorprofile.FieldVendorID] = struct{}{}
+}
+
+// VendorIDCleared returns if the "vendor_id" field was cleared in this mutation.
+func (m *VendorProfileMutation) VendorIDCleared() bool {
+	_, ok := m.clearedFields[vendorprofile.FieldVendorID]
+	return ok
+}
+
+// ResetVendorID resets all changes to the "vendor_id" field.
+func (m *VendorProfileMutation) ResetVendorID() {
+	m.vendor = nil
+	delete(m.clearedFields, vendorprofile.FieldVendorID)
+}
+
+// SetName sets the "name" field.
+func (m *VendorProfileMutation) SetName(s string) {
+	m.name = &s
+}
+
+// Name returns the value of the "name" field in the mutation.
+func (m *VendorProfileMutation) Name() (r string, exists bool) {
+	v := m.name
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldName returns the old "name" field's value of the VendorProfile entity.
+// If the VendorProfile object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VendorProfileMutation) OldName(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldName is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldName requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldName: %w", err)
+	}
+	return oldValue.Name, nil
+}
+
+// ResetName resets all changes to the "name" field.
+func (m *VendorProfileMutation) ResetName() {
+	m.name = nil
+}
+
+// SetDbaName sets the "dba_name" field.
+func (m *VendorProfileMutation) SetDbaName(s string) {
+	m.dba_name = &s
+}
+
+// DbaName returns the value of the "dba_name" field in the mutation.
+func (m *VendorProfileMutation) DbaName() (r string, exists bool) {
+	v := m.dba_name
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDbaName returns the old "dba_name" field's value of the VendorProfile entity.
+// If the VendorProfile object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VendorProfileMutation) OldDbaName(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDbaName is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDbaName requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDbaName: %w", err)
+	}
+	return oldValue.DbaName, nil
+}
+
+// ClearDbaName clears the value of the "dba_name" field.
+func (m *VendorProfileMutation) ClearDbaName() {
+	m.dba_name = nil
+	m.clearedFields[vendorprofile.FieldDbaName] = struct{}{}
+}
+
+// DbaNameCleared returns if the "dba_name" field was cleared in this mutation.
+func (m *VendorProfileMutation) DbaNameCleared() bool {
+	_, ok := m.clearedFields[vendorprofile.FieldDbaName]
+	return ok
+}
+
+// ResetDbaName resets all changes to the "dba_name" field.
+func (m *VendorProfileMutation) ResetDbaName() {
+	m.dba_name = nil
+	delete(m.clearedFields, vendorprofile.FieldDbaName)
+}
+
+// SetDescription sets the "description" field.
+func (m *VendorProfileMutation) SetDescription(s string) {
+	m.description = &s
+}
+
+// Description returns the value of the "description" field in the mutation.
+func (m *VendorProfileMutation) Description() (r string, exists bool) {
+	v := m.description
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDescription returns the old "description" field's value of the VendorProfile entity.
+// If the VendorProfile object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VendorProfileMutation) OldDescription(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDescription is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDescription requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDescription: %w", err)
+	}
+	return oldValue.Description, nil
+}
+
+// ClearDescription clears the value of the "description" field.
+func (m *VendorProfileMutation) ClearDescription() {
+	m.description = nil
+	m.clearedFields[vendorprofile.FieldDescription] = struct{}{}
+}
+
+// DescriptionCleared returns if the "description" field was cleared in this mutation.
+func (m *VendorProfileMutation) DescriptionCleared() bool {
+	_, ok := m.clearedFields[vendorprofile.FieldDescription]
+	return ok
+}
+
+// ResetDescription resets all changes to the "description" field.
+func (m *VendorProfileMutation) ResetDescription() {
+	m.description = nil
+	delete(m.clearedFields, vendorprofile.FieldDescription)
+}
+
+// SetWebsiteURI sets the "website_uri" field.
+func (m *VendorProfileMutation) SetWebsiteURI(s string) {
+	m.website_uri = &s
+}
+
+// WebsiteURI returns the value of the "website_uri" field in the mutation.
+func (m *VendorProfileMutation) WebsiteURI() (r string, exists bool) {
+	v := m.website_uri
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldWebsiteURI returns the old "website_uri" field's value of the VendorProfile entity.
+// If the VendorProfile object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VendorProfileMutation) OldWebsiteURI(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldWebsiteURI is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldWebsiteURI requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldWebsiteURI: %w", err)
+	}
+	return oldValue.WebsiteURI, nil
+}
+
+// ClearWebsiteURI clears the value of the "website_uri" field.
+func (m *VendorProfileMutation) ClearWebsiteURI() {
+	m.website_uri = nil
+	m.clearedFields[vendorprofile.FieldWebsiteURI] = struct{}{}
+}
+
+// WebsiteURICleared returns if the "website_uri" field was cleared in this mutation.
+func (m *VendorProfileMutation) WebsiteURICleared() bool {
+	_, ok := m.clearedFields[vendorprofile.FieldWebsiteURI]
+	return ok
+}
+
+// ResetWebsiteURI resets all changes to the "website_uri" field.
+func (m *VendorProfileMutation) ResetWebsiteURI() {
+	m.website_uri = nil
+	delete(m.clearedFields, vendorprofile.FieldWebsiteURI)
+}
+
+// ClearOwner clears the "owner" edge to the Organization entity.
+func (m *VendorProfileMutation) ClearOwner() {
+	m.clearedowner = true
+	m.clearedFields[vendorprofile.FieldOwnerID] = struct{}{}
+}
+
+// OwnerCleared reports if the "owner" edge to the Organization entity was cleared.
+func (m *VendorProfileMutation) OwnerCleared() bool {
+	return m.OwnerIDCleared() || m.clearedowner
+}
+
+// OwnerIDs returns the "owner" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// OwnerID instead. It exists only for internal usage by the builders.
+func (m *VendorProfileMutation) OwnerIDs() (ids []string) {
+	if id := m.owner; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetOwner resets all changes to the "owner" edge.
+func (m *VendorProfileMutation) ResetOwner() {
+	m.owner = nil
+	m.clearedowner = false
+}
+
+// AddPostalAddressIDs adds the "postal_addresses" edge to the PostalAddress entity by ids.
+func (m *VendorProfileMutation) AddPostalAddressIDs(ids ...string) {
+	if m.postal_addresses == nil {
+		m.postal_addresses = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.postal_addresses[ids[i]] = struct{}{}
+	}
+}
+
+// ClearPostalAddresses clears the "postal_addresses" edge to the PostalAddress entity.
+func (m *VendorProfileMutation) ClearPostalAddresses() {
+	m.clearedpostal_addresses = true
+}
+
+// PostalAddressesCleared reports if the "postal_addresses" edge to the PostalAddress entity was cleared.
+func (m *VendorProfileMutation) PostalAddressesCleared() bool {
+	return m.clearedpostal_addresses
+}
+
+// RemovePostalAddressIDs removes the "postal_addresses" edge to the PostalAddress entity by IDs.
+func (m *VendorProfileMutation) RemovePostalAddressIDs(ids ...string) {
+	if m.removedpostal_addresses == nil {
+		m.removedpostal_addresses = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.postal_addresses, ids[i])
+		m.removedpostal_addresses[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedPostalAddresses returns the removed IDs of the "postal_addresses" edge to the PostalAddress entity.
+func (m *VendorProfileMutation) RemovedPostalAddressesIDs() (ids []string) {
+	for id := range m.removedpostal_addresses {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// PostalAddressesIDs returns the "postal_addresses" edge IDs in the mutation.
+func (m *VendorProfileMutation) PostalAddressesIDs() (ids []string) {
+	for id := range m.postal_addresses {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetPostalAddresses resets all changes to the "postal_addresses" edge.
+func (m *VendorProfileMutation) ResetPostalAddresses() {
+	m.postal_addresses = nil
+	m.clearedpostal_addresses = false
+	m.removedpostal_addresses = nil
+}
+
+// ClearVendor clears the "vendor" edge to the Vendor entity.
+func (m *VendorProfileMutation) ClearVendor() {
+	m.clearedvendor = true
+	m.clearedFields[vendorprofile.FieldVendorID] = struct{}{}
+}
+
+// VendorCleared reports if the "vendor" edge to the Vendor entity was cleared.
+func (m *VendorProfileMutation) VendorCleared() bool {
+	return m.VendorIDCleared() || m.clearedvendor
+}
+
+// VendorIDs returns the "vendor" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// VendorID instead. It exists only for internal usage by the builders.
+func (m *VendorProfileMutation) VendorIDs() (ids []string) {
+	if id := m.vendor; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetVendor resets all changes to the "vendor" edge.
+func (m *VendorProfileMutation) ResetVendor() {
+	m.vendor = nil
+	m.clearedvendor = false
+}
+
+// AddVendorProfilePostalAddressIDs adds the "vendor_profile_postal_addresses" edge to the VendorProfilePostalAddress entity by ids.
+func (m *VendorProfileMutation) AddVendorProfilePostalAddressIDs(ids ...string) {
+	if m.vendor_profile_postal_addresses == nil {
+		m.vendor_profile_postal_addresses = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.vendor_profile_postal_addresses[ids[i]] = struct{}{}
+	}
+}
+
+// ClearVendorProfilePostalAddresses clears the "vendor_profile_postal_addresses" edge to the VendorProfilePostalAddress entity.
+func (m *VendorProfileMutation) ClearVendorProfilePostalAddresses() {
+	m.clearedvendor_profile_postal_addresses = true
+}
+
+// VendorProfilePostalAddressesCleared reports if the "vendor_profile_postal_addresses" edge to the VendorProfilePostalAddress entity was cleared.
+func (m *VendorProfileMutation) VendorProfilePostalAddressesCleared() bool {
+	return m.clearedvendor_profile_postal_addresses
+}
+
+// RemoveVendorProfilePostalAddressIDs removes the "vendor_profile_postal_addresses" edge to the VendorProfilePostalAddress entity by IDs.
+func (m *VendorProfileMutation) RemoveVendorProfilePostalAddressIDs(ids ...string) {
+	if m.removedvendor_profile_postal_addresses == nil {
+		m.removedvendor_profile_postal_addresses = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.vendor_profile_postal_addresses, ids[i])
+		m.removedvendor_profile_postal_addresses[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedVendorProfilePostalAddresses returns the removed IDs of the "vendor_profile_postal_addresses" edge to the VendorProfilePostalAddress entity.
+func (m *VendorProfileMutation) RemovedVendorProfilePostalAddressesIDs() (ids []string) {
+	for id := range m.removedvendor_profile_postal_addresses {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// VendorProfilePostalAddressesIDs returns the "vendor_profile_postal_addresses" edge IDs in the mutation.
+func (m *VendorProfileMutation) VendorProfilePostalAddressesIDs() (ids []string) {
+	for id := range m.vendor_profile_postal_addresses {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetVendorProfilePostalAddresses resets all changes to the "vendor_profile_postal_addresses" edge.
+func (m *VendorProfileMutation) ResetVendorProfilePostalAddresses() {
+	m.vendor_profile_postal_addresses = nil
+	m.clearedvendor_profile_postal_addresses = false
+	m.removedvendor_profile_postal_addresses = nil
+}
+
+// Where appends a list predicates to the VendorProfileMutation builder.
+func (m *VendorProfileMutation) Where(ps ...predicate.VendorProfile) {
+	m.predicates = append(m.predicates, ps...)
+}
+
+// WhereP appends storage-level predicates to the VendorProfileMutation builder. Using this method,
+// users can use type-assertion to append predicates that do not depend on any generated package.
+func (m *VendorProfileMutation) WhereP(ps ...func(*sql.Selector)) {
+	p := make([]predicate.VendorProfile, len(ps))
+	for i := range ps {
+		p[i] = ps[i]
+	}
+	m.Where(p...)
+}
+
+// Op returns the operation name.
+func (m *VendorProfileMutation) Op() Op {
+	return m.op
+}
+
+// SetOp allows setting the mutation operation.
+func (m *VendorProfileMutation) SetOp(op Op) {
+	m.op = op
+}
+
+// Type returns the node type of this mutation (VendorProfile).
+func (m *VendorProfileMutation) Type() string {
+	return m.typ
+}
+
+// Fields returns all fields that were changed during this mutation. Note that in
+// order to get all numeric fields that were incremented/decremented, call
+// AddedFields().
+func (m *VendorProfileMutation) Fields() []string {
+	fields := make([]string, 0, 14)
+	if m.created_at != nil {
+		fields = append(fields, vendorprofile.FieldCreatedAt)
+	}
+	if m.updated_at != nil {
+		fields = append(fields, vendorprofile.FieldUpdatedAt)
+	}
+	if m.created_by != nil {
+		fields = append(fields, vendorprofile.FieldCreatedBy)
+	}
+	if m.updated_by != nil {
+		fields = append(fields, vendorprofile.FieldUpdatedBy)
+	}
+	if m.deleted_at != nil {
+		fields = append(fields, vendorprofile.FieldDeletedAt)
+	}
+	if m.deleted_by != nil {
+		fields = append(fields, vendorprofile.FieldDeletedBy)
+	}
+	if m.mapping_id != nil {
+		fields = append(fields, vendorprofile.FieldMappingID)
+	}
+	if m.tags != nil {
+		fields = append(fields, vendorprofile.FieldTags)
+	}
+	if m.owner != nil {
+		fields = append(fields, vendorprofile.FieldOwnerID)
+	}
+	if m.vendor != nil {
+		fields = append(fields, vendorprofile.FieldVendorID)
+	}
+	if m.name != nil {
+		fields = append(fields, vendorprofile.FieldName)
+	}
+	if m.dba_name != nil {
+		fields = append(fields, vendorprofile.FieldDbaName)
+	}
+	if m.description != nil {
+		fields = append(fields, vendorprofile.FieldDescription)
+	}
+	if m.website_uri != nil {
+		fields = append(fields, vendorprofile.FieldWebsiteURI)
+	}
+	return fields
+}
+
+// Field returns the value of a field with the given name. The second boolean
+// return value indicates that this field was not set, or was not defined in the
+// schema.
+func (m *VendorProfileMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case vendorprofile.FieldCreatedAt:
+		return m.CreatedAt()
+	case vendorprofile.FieldUpdatedAt:
+		return m.UpdatedAt()
+	case vendorprofile.FieldCreatedBy:
+		return m.CreatedBy()
+	case vendorprofile.FieldUpdatedBy:
+		return m.UpdatedBy()
+	case vendorprofile.FieldDeletedAt:
+		return m.DeletedAt()
+	case vendorprofile.FieldDeletedBy:
+		return m.DeletedBy()
+	case vendorprofile.FieldMappingID:
+		return m.MappingID()
+	case vendorprofile.FieldTags:
+		return m.Tags()
+	case vendorprofile.FieldOwnerID:
+		return m.OwnerID()
+	case vendorprofile.FieldVendorID:
+		return m.VendorID()
+	case vendorprofile.FieldName:
+		return m.Name()
+	case vendorprofile.FieldDbaName:
+		return m.DbaName()
+	case vendorprofile.FieldDescription:
+		return m.Description()
+	case vendorprofile.FieldWebsiteURI:
+		return m.WebsiteURI()
+	}
+	return nil, false
+}
+
+// OldField returns the old value of the field from the database. An error is
+// returned if the mutation operation is not UpdateOne, or the query to the
+// database failed.
+func (m *VendorProfileMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case vendorprofile.FieldCreatedAt:
+		return m.OldCreatedAt(ctx)
+	case vendorprofile.FieldUpdatedAt:
+		return m.OldUpdatedAt(ctx)
+	case vendorprofile.FieldCreatedBy:
+		return m.OldCreatedBy(ctx)
+	case vendorprofile.FieldUpdatedBy:
+		return m.OldUpdatedBy(ctx)
+	case vendorprofile.FieldDeletedAt:
+		return m.OldDeletedAt(ctx)
+	case vendorprofile.FieldDeletedBy:
+		return m.OldDeletedBy(ctx)
+	case vendorprofile.FieldMappingID:
+		return m.OldMappingID(ctx)
+	case vendorprofile.FieldTags:
+		return m.OldTags(ctx)
+	case vendorprofile.FieldOwnerID:
+		return m.OldOwnerID(ctx)
+	case vendorprofile.FieldVendorID:
+		return m.OldVendorID(ctx)
+	case vendorprofile.FieldName:
+		return m.OldName(ctx)
+	case vendorprofile.FieldDbaName:
+		return m.OldDbaName(ctx)
+	case vendorprofile.FieldDescription:
+		return m.OldDescription(ctx)
+	case vendorprofile.FieldWebsiteURI:
+		return m.OldWebsiteURI(ctx)
+	}
+	return nil, fmt.Errorf("unknown VendorProfile field %s", name)
+}
+
+// SetField sets the value of a field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *VendorProfileMutation) SetField(name string, value ent.Value) error {
+	switch name {
+	case vendorprofile.FieldCreatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedAt(v)
+		return nil
+	case vendorprofile.FieldUpdatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedAt(v)
+		return nil
+	case vendorprofile.FieldCreatedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedBy(v)
+		return nil
+	case vendorprofile.FieldUpdatedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedBy(v)
+		return nil
+	case vendorprofile.FieldDeletedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDeletedAt(v)
+		return nil
+	case vendorprofile.FieldDeletedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDeletedBy(v)
+		return nil
+	case vendorprofile.FieldMappingID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetMappingID(v)
+		return nil
+	case vendorprofile.FieldTags:
+		v, ok := value.([]string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetTags(v)
+		return nil
+	case vendorprofile.FieldOwnerID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetOwnerID(v)
+		return nil
+	case vendorprofile.FieldVendorID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetVendorID(v)
+		return nil
+	case vendorprofile.FieldName:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetName(v)
+		return nil
+	case vendorprofile.FieldDbaName:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDbaName(v)
+		return nil
+	case vendorprofile.FieldDescription:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDescription(v)
+		return nil
+	case vendorprofile.FieldWebsiteURI:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetWebsiteURI(v)
+		return nil
+	}
+	return fmt.Errorf("unknown VendorProfile field %s", name)
+}
+
+// AddedFields returns all numeric fields that were incremented/decremented during
+// this mutation.
+func (m *VendorProfileMutation) AddedFields() []string {
+	return nil
+}
+
+// AddedField returns the numeric value that was incremented/decremented on a field
+// with the given name. The second boolean return value indicates that this field
+// was not set, or was not defined in the schema.
+func (m *VendorProfileMutation) AddedField(name string) (ent.Value, bool) {
+	return nil, false
+}
+
+// AddField adds the value to the field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *VendorProfileMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	}
+	return fmt.Errorf("unknown VendorProfile numeric field %s", name)
+}
+
+// ClearedFields returns all nullable fields that were cleared during this
+// mutation.
+func (m *VendorProfileMutation) ClearedFields() []string {
+	var fields []string
+	if m.FieldCleared(vendorprofile.FieldCreatedAt) {
+		fields = append(fields, vendorprofile.FieldCreatedAt)
+	}
+	if m.FieldCleared(vendorprofile.FieldUpdatedAt) {
+		fields = append(fields, vendorprofile.FieldUpdatedAt)
+	}
+	if m.FieldCleared(vendorprofile.FieldCreatedBy) {
+		fields = append(fields, vendorprofile.FieldCreatedBy)
+	}
+	if m.FieldCleared(vendorprofile.FieldUpdatedBy) {
+		fields = append(fields, vendorprofile.FieldUpdatedBy)
+	}
+	if m.FieldCleared(vendorprofile.FieldDeletedAt) {
+		fields = append(fields, vendorprofile.FieldDeletedAt)
+	}
+	if m.FieldCleared(vendorprofile.FieldDeletedBy) {
+		fields = append(fields, vendorprofile.FieldDeletedBy)
+	}
+	if m.FieldCleared(vendorprofile.FieldTags) {
+		fields = append(fields, vendorprofile.FieldTags)
+	}
+	if m.FieldCleared(vendorprofile.FieldOwnerID) {
+		fields = append(fields, vendorprofile.FieldOwnerID)
+	}
+	if m.FieldCleared(vendorprofile.FieldVendorID) {
+		fields = append(fields, vendorprofile.FieldVendorID)
+	}
+	if m.FieldCleared(vendorprofile.FieldDbaName) {
+		fields = append(fields, vendorprofile.FieldDbaName)
+	}
+	if m.FieldCleared(vendorprofile.FieldDescription) {
+		fields = append(fields, vendorprofile.FieldDescription)
+	}
+	if m.FieldCleared(vendorprofile.FieldWebsiteURI) {
+		fields = append(fields, vendorprofile.FieldWebsiteURI)
+	}
+	return fields
+}
+
+// FieldCleared returns a boolean indicating if a field with the given name was
+// cleared in this mutation.
+func (m *VendorProfileMutation) FieldCleared(name string) bool {
+	_, ok := m.clearedFields[name]
+	return ok
+}
+
+// ClearField clears the value of the field with the given name. It returns an
+// error if the field is not defined in the schema.
+func (m *VendorProfileMutation) ClearField(name string) error {
+	switch name {
+	case vendorprofile.FieldCreatedAt:
+		m.ClearCreatedAt()
+		return nil
+	case vendorprofile.FieldUpdatedAt:
+		m.ClearUpdatedAt()
+		return nil
+	case vendorprofile.FieldCreatedBy:
+		m.ClearCreatedBy()
+		return nil
+	case vendorprofile.FieldUpdatedBy:
+		m.ClearUpdatedBy()
+		return nil
+	case vendorprofile.FieldDeletedAt:
+		m.ClearDeletedAt()
+		return nil
+	case vendorprofile.FieldDeletedBy:
+		m.ClearDeletedBy()
+		return nil
+	case vendorprofile.FieldTags:
+		m.ClearTags()
+		return nil
+	case vendorprofile.FieldOwnerID:
+		m.ClearOwnerID()
+		return nil
+	case vendorprofile.FieldVendorID:
+		m.ClearVendorID()
+		return nil
+	case vendorprofile.FieldDbaName:
+		m.ClearDbaName()
+		return nil
+	case vendorprofile.FieldDescription:
+		m.ClearDescription()
+		return nil
+	case vendorprofile.FieldWebsiteURI:
+		m.ClearWebsiteURI()
+		return nil
+	}
+	return fmt.Errorf("unknown VendorProfile nullable field %s", name)
+}
+
+// ResetField resets all changes in the mutation for the field with the given name.
+// It returns an error if the field is not defined in the schema.
+func (m *VendorProfileMutation) ResetField(name string) error {
+	switch name {
+	case vendorprofile.FieldCreatedAt:
+		m.ResetCreatedAt()
+		return nil
+	case vendorprofile.FieldUpdatedAt:
+		m.ResetUpdatedAt()
+		return nil
+	case vendorprofile.FieldCreatedBy:
+		m.ResetCreatedBy()
+		return nil
+	case vendorprofile.FieldUpdatedBy:
+		m.ResetUpdatedBy()
+		return nil
+	case vendorprofile.FieldDeletedAt:
+		m.ResetDeletedAt()
+		return nil
+	case vendorprofile.FieldDeletedBy:
+		m.ResetDeletedBy()
+		return nil
+	case vendorprofile.FieldMappingID:
+		m.ResetMappingID()
+		return nil
+	case vendorprofile.FieldTags:
+		m.ResetTags()
+		return nil
+	case vendorprofile.FieldOwnerID:
+		m.ResetOwnerID()
+		return nil
+	case vendorprofile.FieldVendorID:
+		m.ResetVendorID()
+		return nil
+	case vendorprofile.FieldName:
+		m.ResetName()
+		return nil
+	case vendorprofile.FieldDbaName:
+		m.ResetDbaName()
+		return nil
+	case vendorprofile.FieldDescription:
+		m.ResetDescription()
+		return nil
+	case vendorprofile.FieldWebsiteURI:
+		m.ResetWebsiteURI()
+		return nil
+	}
+	return fmt.Errorf("unknown VendorProfile field %s", name)
+}
+
+// AddedEdges returns all edge names that were set/added in this mutation.
+func (m *VendorProfileMutation) AddedEdges() []string {
+	edges := make([]string, 0, 4)
+	if m.owner != nil {
+		edges = append(edges, vendorprofile.EdgeOwner)
+	}
+	if m.postal_addresses != nil {
+		edges = append(edges, vendorprofile.EdgePostalAddresses)
+	}
+	if m.vendor != nil {
+		edges = append(edges, vendorprofile.EdgeVendor)
+	}
+	if m.vendor_profile_postal_addresses != nil {
+		edges = append(edges, vendorprofile.EdgeVendorProfilePostalAddresses)
+	}
+	return edges
+}
+
+// AddedIDs returns all IDs (to other nodes) that were added for the given edge
+// name in this mutation.
+func (m *VendorProfileMutation) AddedIDs(name string) []ent.Value {
+	switch name {
+	case vendorprofile.EdgeOwner:
+		if id := m.owner; id != nil {
+			return []ent.Value{*id}
+		}
+	case vendorprofile.EdgePostalAddresses:
+		ids := make([]ent.Value, 0, len(m.postal_addresses))
+		for id := range m.postal_addresses {
+			ids = append(ids, id)
+		}
+		return ids
+	case vendorprofile.EdgeVendor:
+		if id := m.vendor; id != nil {
+			return []ent.Value{*id}
+		}
+	case vendorprofile.EdgeVendorProfilePostalAddresses:
+		ids := make([]ent.Value, 0, len(m.vendor_profile_postal_addresses))
+		for id := range m.vendor_profile_postal_addresses {
+			ids = append(ids, id)
+		}
+		return ids
+	}
+	return nil
+}
+
+// RemovedEdges returns all edge names that were removed in this mutation.
+func (m *VendorProfileMutation) RemovedEdges() []string {
+	edges := make([]string, 0, 4)
+	if m.removedpostal_addresses != nil {
+		edges = append(edges, vendorprofile.EdgePostalAddresses)
+	}
+	if m.removedvendor_profile_postal_addresses != nil {
+		edges = append(edges, vendorprofile.EdgeVendorProfilePostalAddresses)
+	}
+	return edges
+}
+
+// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
+// the given name in this mutation.
+func (m *VendorProfileMutation) RemovedIDs(name string) []ent.Value {
+	switch name {
+	case vendorprofile.EdgePostalAddresses:
+		ids := make([]ent.Value, 0, len(m.removedpostal_addresses))
+		for id := range m.removedpostal_addresses {
+			ids = append(ids, id)
+		}
+		return ids
+	case vendorprofile.EdgeVendorProfilePostalAddresses:
+		ids := make([]ent.Value, 0, len(m.removedvendor_profile_postal_addresses))
+		for id := range m.removedvendor_profile_postal_addresses {
+			ids = append(ids, id)
+		}
+		return ids
+	}
+	return nil
+}
+
+// ClearedEdges returns all edge names that were cleared in this mutation.
+func (m *VendorProfileMutation) ClearedEdges() []string {
+	edges := make([]string, 0, 4)
+	if m.clearedowner {
+		edges = append(edges, vendorprofile.EdgeOwner)
+	}
+	if m.clearedpostal_addresses {
+		edges = append(edges, vendorprofile.EdgePostalAddresses)
+	}
+	if m.clearedvendor {
+		edges = append(edges, vendorprofile.EdgeVendor)
+	}
+	if m.clearedvendor_profile_postal_addresses {
+		edges = append(edges, vendorprofile.EdgeVendorProfilePostalAddresses)
+	}
+	return edges
+}
+
+// EdgeCleared returns a boolean which indicates if the edge with the given name
+// was cleared in this mutation.
+func (m *VendorProfileMutation) EdgeCleared(name string) bool {
+	switch name {
+	case vendorprofile.EdgeOwner:
+		return m.clearedowner
+	case vendorprofile.EdgePostalAddresses:
+		return m.clearedpostal_addresses
+	case vendorprofile.EdgeVendor:
+		return m.clearedvendor
+	case vendorprofile.EdgeVendorProfilePostalAddresses:
+		return m.clearedvendor_profile_postal_addresses
+	}
+	return false
+}
+
+// ClearEdge clears the value of the edge with the given name. It returns an error
+// if that edge is not defined in the schema.
+func (m *VendorProfileMutation) ClearEdge(name string) error {
+	switch name {
+	case vendorprofile.EdgeOwner:
+		m.ClearOwner()
+		return nil
+	case vendorprofile.EdgeVendor:
+		m.ClearVendor()
+		return nil
+	}
+	return fmt.Errorf("unknown VendorProfile unique edge %s", name)
+}
+
+// ResetEdge resets all changes to the edge with the given name in this mutation.
+// It returns an error if the edge is not defined in the schema.
+func (m *VendorProfileMutation) ResetEdge(name string) error {
+	switch name {
+	case vendorprofile.EdgeOwner:
+		m.ResetOwner()
+		return nil
+	case vendorprofile.EdgePostalAddresses:
+		m.ResetPostalAddresses()
+		return nil
+	case vendorprofile.EdgeVendor:
+		m.ResetVendor()
+		return nil
+	case vendorprofile.EdgeVendorProfilePostalAddresses:
+		m.ResetVendorProfilePostalAddresses()
+		return nil
+	}
+	return fmt.Errorf("unknown VendorProfile edge %s", name)
+}
+
+// VendorProfileHistoryMutation represents an operation that mutates the VendorProfileHistory nodes in the graph.
+type VendorProfileHistoryMutation struct {
+	config
+	op            Op
+	typ           string
+	id            *string
+	history_time  *time.Time
+	ref           *string
+	operation     *enthistory.OpType
+	created_at    *time.Time
+	updated_at    *time.Time
+	created_by    *string
+	updated_by    *string
+	deleted_at    *time.Time
+	deleted_by    *string
+	mapping_id    *string
+	tags          *[]string
+	appendtags    []string
+	owner_id      *string
+	vendor_id     *string
+	name          *string
+	dba_name      *string
+	description   *string
+	website_uri   *string
+	clearedFields map[string]struct{}
+	done          bool
+	oldValue      func(context.Context) (*VendorProfileHistory, error)
+	predicates    []predicate.VendorProfileHistory
+}
+
+var _ ent.Mutation = (*VendorProfileHistoryMutation)(nil)
+
+// vendorprofilehistoryOption allows management of the mutation configuration using functional options.
+type vendorprofilehistoryOption func(*VendorProfileHistoryMutation)
+
+// newVendorProfileHistoryMutation creates new mutation for the VendorProfileHistory entity.
+func newVendorProfileHistoryMutation(c config, op Op, opts ...vendorprofilehistoryOption) *VendorProfileHistoryMutation {
+	m := &VendorProfileHistoryMutation{
+		config:        c,
+		op:            op,
+		typ:           TypeVendorProfileHistory,
+		clearedFields: make(map[string]struct{}),
+	}
+	for _, opt := range opts {
+		opt(m)
+	}
+	return m
+}
+
+// withVendorProfileHistoryID sets the ID field of the mutation.
+func withVendorProfileHistoryID(id string) vendorprofilehistoryOption {
+	return func(m *VendorProfileHistoryMutation) {
+		var (
+			err   error
+			once  sync.Once
+			value *VendorProfileHistory
+		)
+		m.oldValue = func(ctx context.Context) (*VendorProfileHistory, error) {
+			once.Do(func() {
+				if m.done {
+					err = errors.New("querying old values post mutation is not allowed")
+				} else {
+					value, err = m.Client().VendorProfileHistory.Get(ctx, id)
+				}
+			})
+			return value, err
+		}
+		m.id = &id
+	}
+}
+
+// withVendorProfileHistory sets the old VendorProfileHistory of the mutation.
+func withVendorProfileHistory(node *VendorProfileHistory) vendorprofilehistoryOption {
+	return func(m *VendorProfileHistoryMutation) {
+		m.oldValue = func(context.Context) (*VendorProfileHistory, error) {
+			return node, nil
+		}
+		m.id = &node.ID
+	}
+}
+
+// Client returns a new `ent.Client` from the mutation. If the mutation was
+// executed in a transaction (ent.Tx), a transactional client is returned.
+func (m VendorProfileHistoryMutation) Client() *Client {
+	client := &Client{config: m.config}
+	client.init()
+	return client
+}
+
+// Tx returns an `ent.Tx` for mutations that were executed in transactions;
+// it returns an error otherwise.
+func (m VendorProfileHistoryMutation) Tx() (*Tx, error) {
+	if _, ok := m.driver.(*txDriver); !ok {
+		return nil, errors.New("generated: mutation is not running in a transaction")
+	}
+	tx := &Tx{config: m.config}
+	tx.init()
+	return tx, nil
+}
+
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of VendorProfileHistory entities.
+func (m *VendorProfileHistoryMutation) SetID(id string) {
+	m.id = &id
+}
+
+// ID returns the ID value in the mutation. Note that the ID is only available
+// if it was provided to the builder or after it was returned from the database.
+func (m *VendorProfileHistoryMutation) ID() (id string, exists bool) {
+	if m.id == nil {
+		return
+	}
+	return *m.id, true
+}
+
+// IDs queries the database and returns the entity ids that match the mutation's predicate.
+// That means, if the mutation is applied within a transaction with an isolation level such
+// as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
+// or updated by the mutation.
+func (m *VendorProfileHistoryMutation) IDs(ctx context.Context) ([]string, error) {
+	switch {
+	case m.op.Is(OpUpdateOne | OpDeleteOne):
+		id, exists := m.ID()
+		if exists {
+			return []string{id}, nil
+		}
+		fallthrough
+	case m.op.Is(OpUpdate | OpDelete):
+		return m.Client().VendorProfileHistory.Query().Where(m.predicates...).IDs(ctx)
+	default:
+		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
+	}
+}
+
+// SetHistoryTime sets the "history_time" field.
+func (m *VendorProfileHistoryMutation) SetHistoryTime(t time.Time) {
+	m.history_time = &t
+}
+
+// HistoryTime returns the value of the "history_time" field in the mutation.
+func (m *VendorProfileHistoryMutation) HistoryTime() (r time.Time, exists bool) {
+	v := m.history_time
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldHistoryTime returns the old "history_time" field's value of the VendorProfileHistory entity.
+// If the VendorProfileHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VendorProfileHistoryMutation) OldHistoryTime(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldHistoryTime is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldHistoryTime requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldHistoryTime: %w", err)
+	}
+	return oldValue.HistoryTime, nil
+}
+
+// ResetHistoryTime resets all changes to the "history_time" field.
+func (m *VendorProfileHistoryMutation) ResetHistoryTime() {
+	m.history_time = nil
+}
+
+// SetRef sets the "ref" field.
+func (m *VendorProfileHistoryMutation) SetRef(s string) {
+	m.ref = &s
+}
+
+// Ref returns the value of the "ref" field in the mutation.
+func (m *VendorProfileHistoryMutation) Ref() (r string, exists bool) {
+	v := m.ref
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldRef returns the old "ref" field's value of the VendorProfileHistory entity.
+// If the VendorProfileHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VendorProfileHistoryMutation) OldRef(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldRef is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldRef requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldRef: %w", err)
+	}
+	return oldValue.Ref, nil
+}
+
+// ClearRef clears the value of the "ref" field.
+func (m *VendorProfileHistoryMutation) ClearRef() {
+	m.ref = nil
+	m.clearedFields[vendorprofilehistory.FieldRef] = struct{}{}
+}
+
+// RefCleared returns if the "ref" field was cleared in this mutation.
+func (m *VendorProfileHistoryMutation) RefCleared() bool {
+	_, ok := m.clearedFields[vendorprofilehistory.FieldRef]
+	return ok
+}
+
+// ResetRef resets all changes to the "ref" field.
+func (m *VendorProfileHistoryMutation) ResetRef() {
+	m.ref = nil
+	delete(m.clearedFields, vendorprofilehistory.FieldRef)
+}
+
+// SetOperation sets the "operation" field.
+func (m *VendorProfileHistoryMutation) SetOperation(et enthistory.OpType) {
+	m.operation = &et
+}
+
+// Operation returns the value of the "operation" field in the mutation.
+func (m *VendorProfileHistoryMutation) Operation() (r enthistory.OpType, exists bool) {
+	v := m.operation
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldOperation returns the old "operation" field's value of the VendorProfileHistory entity.
+// If the VendorProfileHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VendorProfileHistoryMutation) OldOperation(ctx context.Context) (v enthistory.OpType, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldOperation is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldOperation requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldOperation: %w", err)
+	}
+	return oldValue.Operation, nil
+}
+
+// ResetOperation resets all changes to the "operation" field.
+func (m *VendorProfileHistoryMutation) ResetOperation() {
+	m.operation = nil
+}
+
+// SetCreatedAt sets the "created_at" field.
+func (m *VendorProfileHistoryMutation) SetCreatedAt(t time.Time) {
+	m.created_at = &t
+}
+
+// CreatedAt returns the value of the "created_at" field in the mutation.
+func (m *VendorProfileHistoryMutation) CreatedAt() (r time.Time, exists bool) {
+	v := m.created_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedAt returns the old "created_at" field's value of the VendorProfileHistory entity.
+// If the VendorProfileHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VendorProfileHistoryMutation) OldCreatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedAt: %w", err)
+	}
+	return oldValue.CreatedAt, nil
+}
+
+// ClearCreatedAt clears the value of the "created_at" field.
+func (m *VendorProfileHistoryMutation) ClearCreatedAt() {
+	m.created_at = nil
+	m.clearedFields[vendorprofilehistory.FieldCreatedAt] = struct{}{}
+}
+
+// CreatedAtCleared returns if the "created_at" field was cleared in this mutation.
+func (m *VendorProfileHistoryMutation) CreatedAtCleared() bool {
+	_, ok := m.clearedFields[vendorprofilehistory.FieldCreatedAt]
+	return ok
+}
+
+// ResetCreatedAt resets all changes to the "created_at" field.
+func (m *VendorProfileHistoryMutation) ResetCreatedAt() {
+	m.created_at = nil
+	delete(m.clearedFields, vendorprofilehistory.FieldCreatedAt)
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (m *VendorProfileHistoryMutation) SetUpdatedAt(t time.Time) {
+	m.updated_at = &t
+}
+
+// UpdatedAt returns the value of the "updated_at" field in the mutation.
+func (m *VendorProfileHistoryMutation) UpdatedAt() (r time.Time, exists bool) {
+	v := m.updated_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedAt returns the old "updated_at" field's value of the VendorProfileHistory entity.
+// If the VendorProfileHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VendorProfileHistoryMutation) OldUpdatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedAt: %w", err)
+	}
+	return oldValue.UpdatedAt, nil
+}
+
+// ClearUpdatedAt clears the value of the "updated_at" field.
+func (m *VendorProfileHistoryMutation) ClearUpdatedAt() {
+	m.updated_at = nil
+	m.clearedFields[vendorprofilehistory.FieldUpdatedAt] = struct{}{}
+}
+
+// UpdatedAtCleared returns if the "updated_at" field was cleared in this mutation.
+func (m *VendorProfileHistoryMutation) UpdatedAtCleared() bool {
+	_, ok := m.clearedFields[vendorprofilehistory.FieldUpdatedAt]
+	return ok
+}
+
+// ResetUpdatedAt resets all changes to the "updated_at" field.
+func (m *VendorProfileHistoryMutation) ResetUpdatedAt() {
+	m.updated_at = nil
+	delete(m.clearedFields, vendorprofilehistory.FieldUpdatedAt)
+}
+
+// SetCreatedBy sets the "created_by" field.
+func (m *VendorProfileHistoryMutation) SetCreatedBy(s string) {
+	m.created_by = &s
+}
+
+// CreatedBy returns the value of the "created_by" field in the mutation.
+func (m *VendorProfileHistoryMutation) CreatedBy() (r string, exists bool) {
+	v := m.created_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedBy returns the old "created_by" field's value of the VendorProfileHistory entity.
+// If the VendorProfileHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VendorProfileHistoryMutation) OldCreatedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedBy: %w", err)
+	}
+	return oldValue.CreatedBy, nil
+}
+
+// ClearCreatedBy clears the value of the "created_by" field.
+func (m *VendorProfileHistoryMutation) ClearCreatedBy() {
+	m.created_by = nil
+	m.clearedFields[vendorprofilehistory.FieldCreatedBy] = struct{}{}
+}
+
+// CreatedByCleared returns if the "created_by" field was cleared in this mutation.
+func (m *VendorProfileHistoryMutation) CreatedByCleared() bool {
+	_, ok := m.clearedFields[vendorprofilehistory.FieldCreatedBy]
+	return ok
+}
+
+// ResetCreatedBy resets all changes to the "created_by" field.
+func (m *VendorProfileHistoryMutation) ResetCreatedBy() {
+	m.created_by = nil
+	delete(m.clearedFields, vendorprofilehistory.FieldCreatedBy)
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (m *VendorProfileHistoryMutation) SetUpdatedBy(s string) {
+	m.updated_by = &s
+}
+
+// UpdatedBy returns the value of the "updated_by" field in the mutation.
+func (m *VendorProfileHistoryMutation) UpdatedBy() (r string, exists bool) {
+	v := m.updated_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedBy returns the old "updated_by" field's value of the VendorProfileHistory entity.
+// If the VendorProfileHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VendorProfileHistoryMutation) OldUpdatedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedBy: %w", err)
+	}
+	return oldValue.UpdatedBy, nil
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (m *VendorProfileHistoryMutation) ClearUpdatedBy() {
+	m.updated_by = nil
+	m.clearedFields[vendorprofilehistory.FieldUpdatedBy] = struct{}{}
+}
+
+// UpdatedByCleared returns if the "updated_by" field was cleared in this mutation.
+func (m *VendorProfileHistoryMutation) UpdatedByCleared() bool {
+	_, ok := m.clearedFields[vendorprofilehistory.FieldUpdatedBy]
+	return ok
+}
+
+// ResetUpdatedBy resets all changes to the "updated_by" field.
+func (m *VendorProfileHistoryMutation) ResetUpdatedBy() {
+	m.updated_by = nil
+	delete(m.clearedFields, vendorprofilehistory.FieldUpdatedBy)
+}
+
+// SetDeletedAt sets the "deleted_at" field.
+func (m *VendorProfileHistoryMutation) SetDeletedAt(t time.Time) {
+	m.deleted_at = &t
+}
+
+// DeletedAt returns the value of the "deleted_at" field in the mutation.
+func (m *VendorProfileHistoryMutation) DeletedAt() (r time.Time, exists bool) {
+	v := m.deleted_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDeletedAt returns the old "deleted_at" field's value of the VendorProfileHistory entity.
+// If the VendorProfileHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VendorProfileHistoryMutation) OldDeletedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDeletedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDeletedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDeletedAt: %w", err)
+	}
+	return oldValue.DeletedAt, nil
+}
+
+// ClearDeletedAt clears the value of the "deleted_at" field.
+func (m *VendorProfileHistoryMutation) ClearDeletedAt() {
+	m.deleted_at = nil
+	m.clearedFields[vendorprofilehistory.FieldDeletedAt] = struct{}{}
+}
+
+// DeletedAtCleared returns if the "deleted_at" field was cleared in this mutation.
+func (m *VendorProfileHistoryMutation) DeletedAtCleared() bool {
+	_, ok := m.clearedFields[vendorprofilehistory.FieldDeletedAt]
+	return ok
+}
+
+// ResetDeletedAt resets all changes to the "deleted_at" field.
+func (m *VendorProfileHistoryMutation) ResetDeletedAt() {
+	m.deleted_at = nil
+	delete(m.clearedFields, vendorprofilehistory.FieldDeletedAt)
+}
+
+// SetDeletedBy sets the "deleted_by" field.
+func (m *VendorProfileHistoryMutation) SetDeletedBy(s string) {
+	m.deleted_by = &s
+}
+
+// DeletedBy returns the value of the "deleted_by" field in the mutation.
+func (m *VendorProfileHistoryMutation) DeletedBy() (r string, exists bool) {
+	v := m.deleted_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDeletedBy returns the old "deleted_by" field's value of the VendorProfileHistory entity.
+// If the VendorProfileHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VendorProfileHistoryMutation) OldDeletedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDeletedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDeletedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDeletedBy: %w", err)
+	}
+	return oldValue.DeletedBy, nil
+}
+
+// ClearDeletedBy clears the value of the "deleted_by" field.
+func (m *VendorProfileHistoryMutation) ClearDeletedBy() {
+	m.deleted_by = nil
+	m.clearedFields[vendorprofilehistory.FieldDeletedBy] = struct{}{}
+}
+
+// DeletedByCleared returns if the "deleted_by" field was cleared in this mutation.
+func (m *VendorProfileHistoryMutation) DeletedByCleared() bool {
+	_, ok := m.clearedFields[vendorprofilehistory.FieldDeletedBy]
+	return ok
+}
+
+// ResetDeletedBy resets all changes to the "deleted_by" field.
+func (m *VendorProfileHistoryMutation) ResetDeletedBy() {
+	m.deleted_by = nil
+	delete(m.clearedFields, vendorprofilehistory.FieldDeletedBy)
+}
+
+// SetMappingID sets the "mapping_id" field.
+func (m *VendorProfileHistoryMutation) SetMappingID(s string) {
+	m.mapping_id = &s
+}
+
+// MappingID returns the value of the "mapping_id" field in the mutation.
+func (m *VendorProfileHistoryMutation) MappingID() (r string, exists bool) {
+	v := m.mapping_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldMappingID returns the old "mapping_id" field's value of the VendorProfileHistory entity.
+// If the VendorProfileHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VendorProfileHistoryMutation) OldMappingID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldMappingID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldMappingID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldMappingID: %w", err)
+	}
+	return oldValue.MappingID, nil
+}
+
+// ResetMappingID resets all changes to the "mapping_id" field.
+func (m *VendorProfileHistoryMutation) ResetMappingID() {
+	m.mapping_id = nil
+}
+
+// SetTags sets the "tags" field.
+func (m *VendorProfileHistoryMutation) SetTags(s []string) {
+	m.tags = &s
+	m.appendtags = nil
+}
+
+// Tags returns the value of the "tags" field in the mutation.
+func (m *VendorProfileHistoryMutation) Tags() (r []string, exists bool) {
+	v := m.tags
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldTags returns the old "tags" field's value of the VendorProfileHistory entity.
+// If the VendorProfileHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VendorProfileHistoryMutation) OldTags(ctx context.Context) (v []string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldTags is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldTags requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldTags: %w", err)
+	}
+	return oldValue.Tags, nil
+}
+
+// AppendTags adds s to the "tags" field.
+func (m *VendorProfileHistoryMutation) AppendTags(s []string) {
+	m.appendtags = append(m.appendtags, s...)
+}
+
+// AppendedTags returns the list of values that were appended to the "tags" field in this mutation.
+func (m *VendorProfileHistoryMutation) AppendedTags() ([]string, bool) {
+	if len(m.appendtags) == 0 {
+		return nil, false
+	}
+	return m.appendtags, true
+}
+
+// ClearTags clears the value of the "tags" field.
+func (m *VendorProfileHistoryMutation) ClearTags() {
+	m.tags = nil
+	m.appendtags = nil
+	m.clearedFields[vendorprofilehistory.FieldTags] = struct{}{}
+}
+
+// TagsCleared returns if the "tags" field was cleared in this mutation.
+func (m *VendorProfileHistoryMutation) TagsCleared() bool {
+	_, ok := m.clearedFields[vendorprofilehistory.FieldTags]
+	return ok
+}
+
+// ResetTags resets all changes to the "tags" field.
+func (m *VendorProfileHistoryMutation) ResetTags() {
+	m.tags = nil
+	m.appendtags = nil
+	delete(m.clearedFields, vendorprofilehistory.FieldTags)
+}
+
+// SetOwnerID sets the "owner_id" field.
+func (m *VendorProfileHistoryMutation) SetOwnerID(s string) {
+	m.owner_id = &s
+}
+
+// OwnerID returns the value of the "owner_id" field in the mutation.
+func (m *VendorProfileHistoryMutation) OwnerID() (r string, exists bool) {
+	v := m.owner_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldOwnerID returns the old "owner_id" field's value of the VendorProfileHistory entity.
+// If the VendorProfileHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VendorProfileHistoryMutation) OldOwnerID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldOwnerID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldOwnerID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldOwnerID: %w", err)
+	}
+	return oldValue.OwnerID, nil
+}
+
+// ClearOwnerID clears the value of the "owner_id" field.
+func (m *VendorProfileHistoryMutation) ClearOwnerID() {
+	m.owner_id = nil
+	m.clearedFields[vendorprofilehistory.FieldOwnerID] = struct{}{}
+}
+
+// OwnerIDCleared returns if the "owner_id" field was cleared in this mutation.
+func (m *VendorProfileHistoryMutation) OwnerIDCleared() bool {
+	_, ok := m.clearedFields[vendorprofilehistory.FieldOwnerID]
+	return ok
+}
+
+// ResetOwnerID resets all changes to the "owner_id" field.
+func (m *VendorProfileHistoryMutation) ResetOwnerID() {
+	m.owner_id = nil
+	delete(m.clearedFields, vendorprofilehistory.FieldOwnerID)
+}
+
+// SetVendorID sets the "vendor_id" field.
+func (m *VendorProfileHistoryMutation) SetVendorID(s string) {
+	m.vendor_id = &s
+}
+
+// VendorID returns the value of the "vendor_id" field in the mutation.
+func (m *VendorProfileHistoryMutation) VendorID() (r string, exists bool) {
+	v := m.vendor_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldVendorID returns the old "vendor_id" field's value of the VendorProfileHistory entity.
+// If the VendorProfileHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VendorProfileHistoryMutation) OldVendorID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldVendorID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldVendorID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldVendorID: %w", err)
+	}
+	return oldValue.VendorID, nil
+}
+
+// ClearVendorID clears the value of the "vendor_id" field.
+func (m *VendorProfileHistoryMutation) ClearVendorID() {
+	m.vendor_id = nil
+	m.clearedFields[vendorprofilehistory.FieldVendorID] = struct{}{}
+}
+
+// VendorIDCleared returns if the "vendor_id" field was cleared in this mutation.
+func (m *VendorProfileHistoryMutation) VendorIDCleared() bool {
+	_, ok := m.clearedFields[vendorprofilehistory.FieldVendorID]
+	return ok
+}
+
+// ResetVendorID resets all changes to the "vendor_id" field.
+func (m *VendorProfileHistoryMutation) ResetVendorID() {
+	m.vendor_id = nil
+	delete(m.clearedFields, vendorprofilehistory.FieldVendorID)
+}
+
+// SetName sets the "name" field.
+func (m *VendorProfileHistoryMutation) SetName(s string) {
+	m.name = &s
+}
+
+// Name returns the value of the "name" field in the mutation.
+func (m *VendorProfileHistoryMutation) Name() (r string, exists bool) {
+	v := m.name
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldName returns the old "name" field's value of the VendorProfileHistory entity.
+// If the VendorProfileHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VendorProfileHistoryMutation) OldName(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldName is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldName requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldName: %w", err)
+	}
+	return oldValue.Name, nil
+}
+
+// ResetName resets all changes to the "name" field.
+func (m *VendorProfileHistoryMutation) ResetName() {
+	m.name = nil
+}
+
+// SetDbaName sets the "dba_name" field.
+func (m *VendorProfileHistoryMutation) SetDbaName(s string) {
+	m.dba_name = &s
+}
+
+// DbaName returns the value of the "dba_name" field in the mutation.
+func (m *VendorProfileHistoryMutation) DbaName() (r string, exists bool) {
+	v := m.dba_name
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDbaName returns the old "dba_name" field's value of the VendorProfileHistory entity.
+// If the VendorProfileHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VendorProfileHistoryMutation) OldDbaName(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDbaName is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDbaName requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDbaName: %w", err)
+	}
+	return oldValue.DbaName, nil
+}
+
+// ClearDbaName clears the value of the "dba_name" field.
+func (m *VendorProfileHistoryMutation) ClearDbaName() {
+	m.dba_name = nil
+	m.clearedFields[vendorprofilehistory.FieldDbaName] = struct{}{}
+}
+
+// DbaNameCleared returns if the "dba_name" field was cleared in this mutation.
+func (m *VendorProfileHistoryMutation) DbaNameCleared() bool {
+	_, ok := m.clearedFields[vendorprofilehistory.FieldDbaName]
+	return ok
+}
+
+// ResetDbaName resets all changes to the "dba_name" field.
+func (m *VendorProfileHistoryMutation) ResetDbaName() {
+	m.dba_name = nil
+	delete(m.clearedFields, vendorprofilehistory.FieldDbaName)
+}
+
+// SetDescription sets the "description" field.
+func (m *VendorProfileHistoryMutation) SetDescription(s string) {
+	m.description = &s
+}
+
+// Description returns the value of the "description" field in the mutation.
+func (m *VendorProfileHistoryMutation) Description() (r string, exists bool) {
+	v := m.description
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDescription returns the old "description" field's value of the VendorProfileHistory entity.
+// If the VendorProfileHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VendorProfileHistoryMutation) OldDescription(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDescription is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDescription requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDescription: %w", err)
+	}
+	return oldValue.Description, nil
+}
+
+// ClearDescription clears the value of the "description" field.
+func (m *VendorProfileHistoryMutation) ClearDescription() {
+	m.description = nil
+	m.clearedFields[vendorprofilehistory.FieldDescription] = struct{}{}
+}
+
+// DescriptionCleared returns if the "description" field was cleared in this mutation.
+func (m *VendorProfileHistoryMutation) DescriptionCleared() bool {
+	_, ok := m.clearedFields[vendorprofilehistory.FieldDescription]
+	return ok
+}
+
+// ResetDescription resets all changes to the "description" field.
+func (m *VendorProfileHistoryMutation) ResetDescription() {
+	m.description = nil
+	delete(m.clearedFields, vendorprofilehistory.FieldDescription)
+}
+
+// SetWebsiteURI sets the "website_uri" field.
+func (m *VendorProfileHistoryMutation) SetWebsiteURI(s string) {
+	m.website_uri = &s
+}
+
+// WebsiteURI returns the value of the "website_uri" field in the mutation.
+func (m *VendorProfileHistoryMutation) WebsiteURI() (r string, exists bool) {
+	v := m.website_uri
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldWebsiteURI returns the old "website_uri" field's value of the VendorProfileHistory entity.
+// If the VendorProfileHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VendorProfileHistoryMutation) OldWebsiteURI(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldWebsiteURI is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldWebsiteURI requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldWebsiteURI: %w", err)
+	}
+	return oldValue.WebsiteURI, nil
+}
+
+// ClearWebsiteURI clears the value of the "website_uri" field.
+func (m *VendorProfileHistoryMutation) ClearWebsiteURI() {
+	m.website_uri = nil
+	m.clearedFields[vendorprofilehistory.FieldWebsiteURI] = struct{}{}
+}
+
+// WebsiteURICleared returns if the "website_uri" field was cleared in this mutation.
+func (m *VendorProfileHistoryMutation) WebsiteURICleared() bool {
+	_, ok := m.clearedFields[vendorprofilehistory.FieldWebsiteURI]
+	return ok
+}
+
+// ResetWebsiteURI resets all changes to the "website_uri" field.
+func (m *VendorProfileHistoryMutation) ResetWebsiteURI() {
+	m.website_uri = nil
+	delete(m.clearedFields, vendorprofilehistory.FieldWebsiteURI)
+}
+
+// Where appends a list predicates to the VendorProfileHistoryMutation builder.
+func (m *VendorProfileHistoryMutation) Where(ps ...predicate.VendorProfileHistory) {
+	m.predicates = append(m.predicates, ps...)
+}
+
+// WhereP appends storage-level predicates to the VendorProfileHistoryMutation builder. Using this method,
+// users can use type-assertion to append predicates that do not depend on any generated package.
+func (m *VendorProfileHistoryMutation) WhereP(ps ...func(*sql.Selector)) {
+	p := make([]predicate.VendorProfileHistory, len(ps))
+	for i := range ps {
+		p[i] = ps[i]
+	}
+	m.Where(p...)
+}
+
+// Op returns the operation name.
+func (m *VendorProfileHistoryMutation) Op() Op {
+	return m.op
+}
+
+// SetOp allows setting the mutation operation.
+func (m *VendorProfileHistoryMutation) SetOp(op Op) {
+	m.op = op
+}
+
+// Type returns the node type of this mutation (VendorProfileHistory).
+func (m *VendorProfileHistoryMutation) Type() string {
+	return m.typ
+}
+
+// Fields returns all fields that were changed during this mutation. Note that in
+// order to get all numeric fields that were incremented/decremented, call
+// AddedFields().
+func (m *VendorProfileHistoryMutation) Fields() []string {
+	fields := make([]string, 0, 17)
+	if m.history_time != nil {
+		fields = append(fields, vendorprofilehistory.FieldHistoryTime)
+	}
+	if m.ref != nil {
+		fields = append(fields, vendorprofilehistory.FieldRef)
+	}
+	if m.operation != nil {
+		fields = append(fields, vendorprofilehistory.FieldOperation)
+	}
+	if m.created_at != nil {
+		fields = append(fields, vendorprofilehistory.FieldCreatedAt)
+	}
+	if m.updated_at != nil {
+		fields = append(fields, vendorprofilehistory.FieldUpdatedAt)
+	}
+	if m.created_by != nil {
+		fields = append(fields, vendorprofilehistory.FieldCreatedBy)
+	}
+	if m.updated_by != nil {
+		fields = append(fields, vendorprofilehistory.FieldUpdatedBy)
+	}
+	if m.deleted_at != nil {
+		fields = append(fields, vendorprofilehistory.FieldDeletedAt)
+	}
+	if m.deleted_by != nil {
+		fields = append(fields, vendorprofilehistory.FieldDeletedBy)
+	}
+	if m.mapping_id != nil {
+		fields = append(fields, vendorprofilehistory.FieldMappingID)
+	}
+	if m.tags != nil {
+		fields = append(fields, vendorprofilehistory.FieldTags)
+	}
+	if m.owner_id != nil {
+		fields = append(fields, vendorprofilehistory.FieldOwnerID)
+	}
+	if m.vendor_id != nil {
+		fields = append(fields, vendorprofilehistory.FieldVendorID)
+	}
+	if m.name != nil {
+		fields = append(fields, vendorprofilehistory.FieldName)
+	}
+	if m.dba_name != nil {
+		fields = append(fields, vendorprofilehistory.FieldDbaName)
+	}
+	if m.description != nil {
+		fields = append(fields, vendorprofilehistory.FieldDescription)
+	}
+	if m.website_uri != nil {
+		fields = append(fields, vendorprofilehistory.FieldWebsiteURI)
+	}
+	return fields
+}
+
+// Field returns the value of a field with the given name. The second boolean
+// return value indicates that this field was not set, or was not defined in the
+// schema.
+func (m *VendorProfileHistoryMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case vendorprofilehistory.FieldHistoryTime:
+		return m.HistoryTime()
+	case vendorprofilehistory.FieldRef:
+		return m.Ref()
+	case vendorprofilehistory.FieldOperation:
+		return m.Operation()
+	case vendorprofilehistory.FieldCreatedAt:
+		return m.CreatedAt()
+	case vendorprofilehistory.FieldUpdatedAt:
+		return m.UpdatedAt()
+	case vendorprofilehistory.FieldCreatedBy:
+		return m.CreatedBy()
+	case vendorprofilehistory.FieldUpdatedBy:
+		return m.UpdatedBy()
+	case vendorprofilehistory.FieldDeletedAt:
+		return m.DeletedAt()
+	case vendorprofilehistory.FieldDeletedBy:
+		return m.DeletedBy()
+	case vendorprofilehistory.FieldMappingID:
+		return m.MappingID()
+	case vendorprofilehistory.FieldTags:
+		return m.Tags()
+	case vendorprofilehistory.FieldOwnerID:
+		return m.OwnerID()
+	case vendorprofilehistory.FieldVendorID:
+		return m.VendorID()
+	case vendorprofilehistory.FieldName:
+		return m.Name()
+	case vendorprofilehistory.FieldDbaName:
+		return m.DbaName()
+	case vendorprofilehistory.FieldDescription:
+		return m.Description()
+	case vendorprofilehistory.FieldWebsiteURI:
+		return m.WebsiteURI()
+	}
+	return nil, false
+}
+
+// OldField returns the old value of the field from the database. An error is
+// returned if the mutation operation is not UpdateOne, or the query to the
+// database failed.
+func (m *VendorProfileHistoryMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case vendorprofilehistory.FieldHistoryTime:
+		return m.OldHistoryTime(ctx)
+	case vendorprofilehistory.FieldRef:
+		return m.OldRef(ctx)
+	case vendorprofilehistory.FieldOperation:
+		return m.OldOperation(ctx)
+	case vendorprofilehistory.FieldCreatedAt:
+		return m.OldCreatedAt(ctx)
+	case vendorprofilehistory.FieldUpdatedAt:
+		return m.OldUpdatedAt(ctx)
+	case vendorprofilehistory.FieldCreatedBy:
+		return m.OldCreatedBy(ctx)
+	case vendorprofilehistory.FieldUpdatedBy:
+		return m.OldUpdatedBy(ctx)
+	case vendorprofilehistory.FieldDeletedAt:
+		return m.OldDeletedAt(ctx)
+	case vendorprofilehistory.FieldDeletedBy:
+		return m.OldDeletedBy(ctx)
+	case vendorprofilehistory.FieldMappingID:
+		return m.OldMappingID(ctx)
+	case vendorprofilehistory.FieldTags:
+		return m.OldTags(ctx)
+	case vendorprofilehistory.FieldOwnerID:
+		return m.OldOwnerID(ctx)
+	case vendorprofilehistory.FieldVendorID:
+		return m.OldVendorID(ctx)
+	case vendorprofilehistory.FieldName:
+		return m.OldName(ctx)
+	case vendorprofilehistory.FieldDbaName:
+		return m.OldDbaName(ctx)
+	case vendorprofilehistory.FieldDescription:
+		return m.OldDescription(ctx)
+	case vendorprofilehistory.FieldWebsiteURI:
+		return m.OldWebsiteURI(ctx)
+	}
+	return nil, fmt.Errorf("unknown VendorProfileHistory field %s", name)
+}
+
+// SetField sets the value of a field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *VendorProfileHistoryMutation) SetField(name string, value ent.Value) error {
+	switch name {
+	case vendorprofilehistory.FieldHistoryTime:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetHistoryTime(v)
+		return nil
+	case vendorprofilehistory.FieldRef:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetRef(v)
+		return nil
+	case vendorprofilehistory.FieldOperation:
+		v, ok := value.(enthistory.OpType)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetOperation(v)
+		return nil
+	case vendorprofilehistory.FieldCreatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedAt(v)
+		return nil
+	case vendorprofilehistory.FieldUpdatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedAt(v)
+		return nil
+	case vendorprofilehistory.FieldCreatedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedBy(v)
+		return nil
+	case vendorprofilehistory.FieldUpdatedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedBy(v)
+		return nil
+	case vendorprofilehistory.FieldDeletedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDeletedAt(v)
+		return nil
+	case vendorprofilehistory.FieldDeletedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDeletedBy(v)
+		return nil
+	case vendorprofilehistory.FieldMappingID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetMappingID(v)
+		return nil
+	case vendorprofilehistory.FieldTags:
+		v, ok := value.([]string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetTags(v)
+		return nil
+	case vendorprofilehistory.FieldOwnerID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetOwnerID(v)
+		return nil
+	case vendorprofilehistory.FieldVendorID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetVendorID(v)
+		return nil
+	case vendorprofilehistory.FieldName:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetName(v)
+		return nil
+	case vendorprofilehistory.FieldDbaName:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDbaName(v)
+		return nil
+	case vendorprofilehistory.FieldDescription:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDescription(v)
+		return nil
+	case vendorprofilehistory.FieldWebsiteURI:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetWebsiteURI(v)
+		return nil
+	}
+	return fmt.Errorf("unknown VendorProfileHistory field %s", name)
+}
+
+// AddedFields returns all numeric fields that were incremented/decremented during
+// this mutation.
+func (m *VendorProfileHistoryMutation) AddedFields() []string {
+	return nil
+}
+
+// AddedField returns the numeric value that was incremented/decremented on a field
+// with the given name. The second boolean return value indicates that this field
+// was not set, or was not defined in the schema.
+func (m *VendorProfileHistoryMutation) AddedField(name string) (ent.Value, bool) {
+	return nil, false
+}
+
+// AddField adds the value to the field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *VendorProfileHistoryMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	}
+	return fmt.Errorf("unknown VendorProfileHistory numeric field %s", name)
+}
+
+// ClearedFields returns all nullable fields that were cleared during this
+// mutation.
+func (m *VendorProfileHistoryMutation) ClearedFields() []string {
+	var fields []string
+	if m.FieldCleared(vendorprofilehistory.FieldRef) {
+		fields = append(fields, vendorprofilehistory.FieldRef)
+	}
+	if m.FieldCleared(vendorprofilehistory.FieldCreatedAt) {
+		fields = append(fields, vendorprofilehistory.FieldCreatedAt)
+	}
+	if m.FieldCleared(vendorprofilehistory.FieldUpdatedAt) {
+		fields = append(fields, vendorprofilehistory.FieldUpdatedAt)
+	}
+	if m.FieldCleared(vendorprofilehistory.FieldCreatedBy) {
+		fields = append(fields, vendorprofilehistory.FieldCreatedBy)
+	}
+	if m.FieldCleared(vendorprofilehistory.FieldUpdatedBy) {
+		fields = append(fields, vendorprofilehistory.FieldUpdatedBy)
+	}
+	if m.FieldCleared(vendorprofilehistory.FieldDeletedAt) {
+		fields = append(fields, vendorprofilehistory.FieldDeletedAt)
+	}
+	if m.FieldCleared(vendorprofilehistory.FieldDeletedBy) {
+		fields = append(fields, vendorprofilehistory.FieldDeletedBy)
+	}
+	if m.FieldCleared(vendorprofilehistory.FieldTags) {
+		fields = append(fields, vendorprofilehistory.FieldTags)
+	}
+	if m.FieldCleared(vendorprofilehistory.FieldOwnerID) {
+		fields = append(fields, vendorprofilehistory.FieldOwnerID)
+	}
+	if m.FieldCleared(vendorprofilehistory.FieldVendorID) {
+		fields = append(fields, vendorprofilehistory.FieldVendorID)
+	}
+	if m.FieldCleared(vendorprofilehistory.FieldDbaName) {
+		fields = append(fields, vendorprofilehistory.FieldDbaName)
+	}
+	if m.FieldCleared(vendorprofilehistory.FieldDescription) {
+		fields = append(fields, vendorprofilehistory.FieldDescription)
+	}
+	if m.FieldCleared(vendorprofilehistory.FieldWebsiteURI) {
+		fields = append(fields, vendorprofilehistory.FieldWebsiteURI)
+	}
+	return fields
+}
+
+// FieldCleared returns a boolean indicating if a field with the given name was
+// cleared in this mutation.
+func (m *VendorProfileHistoryMutation) FieldCleared(name string) bool {
+	_, ok := m.clearedFields[name]
+	return ok
+}
+
+// ClearField clears the value of the field with the given name. It returns an
+// error if the field is not defined in the schema.
+func (m *VendorProfileHistoryMutation) ClearField(name string) error {
+	switch name {
+	case vendorprofilehistory.FieldRef:
+		m.ClearRef()
+		return nil
+	case vendorprofilehistory.FieldCreatedAt:
+		m.ClearCreatedAt()
+		return nil
+	case vendorprofilehistory.FieldUpdatedAt:
+		m.ClearUpdatedAt()
+		return nil
+	case vendorprofilehistory.FieldCreatedBy:
+		m.ClearCreatedBy()
+		return nil
+	case vendorprofilehistory.FieldUpdatedBy:
+		m.ClearUpdatedBy()
+		return nil
+	case vendorprofilehistory.FieldDeletedAt:
+		m.ClearDeletedAt()
+		return nil
+	case vendorprofilehistory.FieldDeletedBy:
+		m.ClearDeletedBy()
+		return nil
+	case vendorprofilehistory.FieldTags:
+		m.ClearTags()
+		return nil
+	case vendorprofilehistory.FieldOwnerID:
+		m.ClearOwnerID()
+		return nil
+	case vendorprofilehistory.FieldVendorID:
+		m.ClearVendorID()
+		return nil
+	case vendorprofilehistory.FieldDbaName:
+		m.ClearDbaName()
+		return nil
+	case vendorprofilehistory.FieldDescription:
+		m.ClearDescription()
+		return nil
+	case vendorprofilehistory.FieldWebsiteURI:
+		m.ClearWebsiteURI()
+		return nil
+	}
+	return fmt.Errorf("unknown VendorProfileHistory nullable field %s", name)
+}
+
+// ResetField resets all changes in the mutation for the field with the given name.
+// It returns an error if the field is not defined in the schema.
+func (m *VendorProfileHistoryMutation) ResetField(name string) error {
+	switch name {
+	case vendorprofilehistory.FieldHistoryTime:
+		m.ResetHistoryTime()
+		return nil
+	case vendorprofilehistory.FieldRef:
+		m.ResetRef()
+		return nil
+	case vendorprofilehistory.FieldOperation:
+		m.ResetOperation()
+		return nil
+	case vendorprofilehistory.FieldCreatedAt:
+		m.ResetCreatedAt()
+		return nil
+	case vendorprofilehistory.FieldUpdatedAt:
+		m.ResetUpdatedAt()
+		return nil
+	case vendorprofilehistory.FieldCreatedBy:
+		m.ResetCreatedBy()
+		return nil
+	case vendorprofilehistory.FieldUpdatedBy:
+		m.ResetUpdatedBy()
+		return nil
+	case vendorprofilehistory.FieldDeletedAt:
+		m.ResetDeletedAt()
+		return nil
+	case vendorprofilehistory.FieldDeletedBy:
+		m.ResetDeletedBy()
+		return nil
+	case vendorprofilehistory.FieldMappingID:
+		m.ResetMappingID()
+		return nil
+	case vendorprofilehistory.FieldTags:
+		m.ResetTags()
+		return nil
+	case vendorprofilehistory.FieldOwnerID:
+		m.ResetOwnerID()
+		return nil
+	case vendorprofilehistory.FieldVendorID:
+		m.ResetVendorID()
+		return nil
+	case vendorprofilehistory.FieldName:
+		m.ResetName()
+		return nil
+	case vendorprofilehistory.FieldDbaName:
+		m.ResetDbaName()
+		return nil
+	case vendorprofilehistory.FieldDescription:
+		m.ResetDescription()
+		return nil
+	case vendorprofilehistory.FieldWebsiteURI:
+		m.ResetWebsiteURI()
+		return nil
+	}
+	return fmt.Errorf("unknown VendorProfileHistory field %s", name)
+}
+
+// AddedEdges returns all edge names that were set/added in this mutation.
+func (m *VendorProfileHistoryMutation) AddedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// AddedIDs returns all IDs (to other nodes) that were added for the given edge
+// name in this mutation.
+func (m *VendorProfileHistoryMutation) AddedIDs(name string) []ent.Value {
+	return nil
+}
+
+// RemovedEdges returns all edge names that were removed in this mutation.
+func (m *VendorProfileHistoryMutation) RemovedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
+// the given name in this mutation.
+func (m *VendorProfileHistoryMutation) RemovedIDs(name string) []ent.Value {
+	return nil
+}
+
+// ClearedEdges returns all edge names that were cleared in this mutation.
+func (m *VendorProfileHistoryMutation) ClearedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// EdgeCleared returns a boolean which indicates if the edge with the given name
+// was cleared in this mutation.
+func (m *VendorProfileHistoryMutation) EdgeCleared(name string) bool {
+	return false
+}
+
+// ClearEdge clears the value of the edge with the given name. It returns an error
+// if that edge is not defined in the schema.
+func (m *VendorProfileHistoryMutation) ClearEdge(name string) error {
+	return fmt.Errorf("unknown VendorProfileHistory unique edge %s", name)
+}
+
+// ResetEdge resets all changes to the edge with the given name in this mutation.
+// It returns an error if the edge is not defined in the schema.
+func (m *VendorProfileHistoryMutation) ResetEdge(name string) error {
+	return fmt.Errorf("unknown VendorProfileHistory edge %s", name)
+}
+
+// VendorProfilePostalAddressMutation represents an operation that mutates the VendorProfilePostalAddress nodes in the graph.
+type VendorProfilePostalAddressMutation struct {
+	config
+	op                    Op
+	typ                   string
+	id                    *string
+	created_at            *time.Time
+	updated_at            *time.Time
+	created_by            *string
+	updated_by            *string
+	mapping_id            *string
+	deleted_at            *time.Time
+	deleted_by            *string
+	postal_address_type   *enums.PostalAddressType
+	clearedFields         map[string]struct{}
+	postal_address        *string
+	clearedpostal_address bool
+	profile               *string
+	clearedprofile        bool
+	events                map[string]struct{}
+	removedevents         map[string]struct{}
+	clearedevents         bool
+	done                  bool
+	oldValue              func(context.Context) (*VendorProfilePostalAddress, error)
+	predicates            []predicate.VendorProfilePostalAddress
+}
+
+var _ ent.Mutation = (*VendorProfilePostalAddressMutation)(nil)
+
+// vendorprofilepostaladdressOption allows management of the mutation configuration using functional options.
+type vendorprofilepostaladdressOption func(*VendorProfilePostalAddressMutation)
+
+// newVendorProfilePostalAddressMutation creates new mutation for the VendorProfilePostalAddress entity.
+func newVendorProfilePostalAddressMutation(c config, op Op, opts ...vendorprofilepostaladdressOption) *VendorProfilePostalAddressMutation {
+	m := &VendorProfilePostalAddressMutation{
+		config:        c,
+		op:            op,
+		typ:           TypeVendorProfilePostalAddress,
+		clearedFields: make(map[string]struct{}),
+	}
+	for _, opt := range opts {
+		opt(m)
+	}
+	return m
+}
+
+// withVendorProfilePostalAddressID sets the ID field of the mutation.
+func withVendorProfilePostalAddressID(id string) vendorprofilepostaladdressOption {
+	return func(m *VendorProfilePostalAddressMutation) {
+		var (
+			err   error
+			once  sync.Once
+			value *VendorProfilePostalAddress
+		)
+		m.oldValue = func(ctx context.Context) (*VendorProfilePostalAddress, error) {
+			once.Do(func() {
+				if m.done {
+					err = errors.New("querying old values post mutation is not allowed")
+				} else {
+					value, err = m.Client().VendorProfilePostalAddress.Get(ctx, id)
+				}
+			})
+			return value, err
+		}
+		m.id = &id
+	}
+}
+
+// withVendorProfilePostalAddress sets the old VendorProfilePostalAddress of the mutation.
+func withVendorProfilePostalAddress(node *VendorProfilePostalAddress) vendorprofilepostaladdressOption {
+	return func(m *VendorProfilePostalAddressMutation) {
+		m.oldValue = func(context.Context) (*VendorProfilePostalAddress, error) {
+			return node, nil
+		}
+		m.id = &node.ID
+	}
+}
+
+// Client returns a new `ent.Client` from the mutation. If the mutation was
+// executed in a transaction (ent.Tx), a transactional client is returned.
+func (m VendorProfilePostalAddressMutation) Client() *Client {
+	client := &Client{config: m.config}
+	client.init()
+	return client
+}
+
+// Tx returns an `ent.Tx` for mutations that were executed in transactions;
+// it returns an error otherwise.
+func (m VendorProfilePostalAddressMutation) Tx() (*Tx, error) {
+	if _, ok := m.driver.(*txDriver); !ok {
+		return nil, errors.New("generated: mutation is not running in a transaction")
+	}
+	tx := &Tx{config: m.config}
+	tx.init()
+	return tx, nil
+}
+
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of VendorProfilePostalAddress entities.
+func (m *VendorProfilePostalAddressMutation) SetID(id string) {
+	m.id = &id
+}
+
+// ID returns the ID value in the mutation. Note that the ID is only available
+// if it was provided to the builder or after it was returned from the database.
+func (m *VendorProfilePostalAddressMutation) ID() (id string, exists bool) {
+	if m.id == nil {
+		return
+	}
+	return *m.id, true
+}
+
+// IDs queries the database and returns the entity ids that match the mutation's predicate.
+// That means, if the mutation is applied within a transaction with an isolation level such
+// as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
+// or updated by the mutation.
+func (m *VendorProfilePostalAddressMutation) IDs(ctx context.Context) ([]string, error) {
+	switch {
+	case m.op.Is(OpUpdateOne | OpDeleteOne):
+		id, exists := m.ID()
+		if exists {
+			return []string{id}, nil
+		}
+		fallthrough
+	case m.op.Is(OpUpdate | OpDelete):
+		return m.Client().VendorProfilePostalAddress.Query().Where(m.predicates...).IDs(ctx)
+	default:
+		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
+	}
+}
+
+// SetCreatedAt sets the "created_at" field.
+func (m *VendorProfilePostalAddressMutation) SetCreatedAt(t time.Time) {
+	m.created_at = &t
+}
+
+// CreatedAt returns the value of the "created_at" field in the mutation.
+func (m *VendorProfilePostalAddressMutation) CreatedAt() (r time.Time, exists bool) {
+	v := m.created_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedAt returns the old "created_at" field's value of the VendorProfilePostalAddress entity.
+// If the VendorProfilePostalAddress object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VendorProfilePostalAddressMutation) OldCreatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedAt: %w", err)
+	}
+	return oldValue.CreatedAt, nil
+}
+
+// ClearCreatedAt clears the value of the "created_at" field.
+func (m *VendorProfilePostalAddressMutation) ClearCreatedAt() {
+	m.created_at = nil
+	m.clearedFields[vendorprofilepostaladdress.FieldCreatedAt] = struct{}{}
+}
+
+// CreatedAtCleared returns if the "created_at" field was cleared in this mutation.
+func (m *VendorProfilePostalAddressMutation) CreatedAtCleared() bool {
+	_, ok := m.clearedFields[vendorprofilepostaladdress.FieldCreatedAt]
+	return ok
+}
+
+// ResetCreatedAt resets all changes to the "created_at" field.
+func (m *VendorProfilePostalAddressMutation) ResetCreatedAt() {
+	m.created_at = nil
+	delete(m.clearedFields, vendorprofilepostaladdress.FieldCreatedAt)
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (m *VendorProfilePostalAddressMutation) SetUpdatedAt(t time.Time) {
+	m.updated_at = &t
+}
+
+// UpdatedAt returns the value of the "updated_at" field in the mutation.
+func (m *VendorProfilePostalAddressMutation) UpdatedAt() (r time.Time, exists bool) {
+	v := m.updated_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedAt returns the old "updated_at" field's value of the VendorProfilePostalAddress entity.
+// If the VendorProfilePostalAddress object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VendorProfilePostalAddressMutation) OldUpdatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedAt: %w", err)
+	}
+	return oldValue.UpdatedAt, nil
+}
+
+// ClearUpdatedAt clears the value of the "updated_at" field.
+func (m *VendorProfilePostalAddressMutation) ClearUpdatedAt() {
+	m.updated_at = nil
+	m.clearedFields[vendorprofilepostaladdress.FieldUpdatedAt] = struct{}{}
+}
+
+// UpdatedAtCleared returns if the "updated_at" field was cleared in this mutation.
+func (m *VendorProfilePostalAddressMutation) UpdatedAtCleared() bool {
+	_, ok := m.clearedFields[vendorprofilepostaladdress.FieldUpdatedAt]
+	return ok
+}
+
+// ResetUpdatedAt resets all changes to the "updated_at" field.
+func (m *VendorProfilePostalAddressMutation) ResetUpdatedAt() {
+	m.updated_at = nil
+	delete(m.clearedFields, vendorprofilepostaladdress.FieldUpdatedAt)
+}
+
+// SetCreatedBy sets the "created_by" field.
+func (m *VendorProfilePostalAddressMutation) SetCreatedBy(s string) {
+	m.created_by = &s
+}
+
+// CreatedBy returns the value of the "created_by" field in the mutation.
+func (m *VendorProfilePostalAddressMutation) CreatedBy() (r string, exists bool) {
+	v := m.created_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedBy returns the old "created_by" field's value of the VendorProfilePostalAddress entity.
+// If the VendorProfilePostalAddress object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VendorProfilePostalAddressMutation) OldCreatedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedBy: %w", err)
+	}
+	return oldValue.CreatedBy, nil
+}
+
+// ClearCreatedBy clears the value of the "created_by" field.
+func (m *VendorProfilePostalAddressMutation) ClearCreatedBy() {
+	m.created_by = nil
+	m.clearedFields[vendorprofilepostaladdress.FieldCreatedBy] = struct{}{}
+}
+
+// CreatedByCleared returns if the "created_by" field was cleared in this mutation.
+func (m *VendorProfilePostalAddressMutation) CreatedByCleared() bool {
+	_, ok := m.clearedFields[vendorprofilepostaladdress.FieldCreatedBy]
+	return ok
+}
+
+// ResetCreatedBy resets all changes to the "created_by" field.
+func (m *VendorProfilePostalAddressMutation) ResetCreatedBy() {
+	m.created_by = nil
+	delete(m.clearedFields, vendorprofilepostaladdress.FieldCreatedBy)
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (m *VendorProfilePostalAddressMutation) SetUpdatedBy(s string) {
+	m.updated_by = &s
+}
+
+// UpdatedBy returns the value of the "updated_by" field in the mutation.
+func (m *VendorProfilePostalAddressMutation) UpdatedBy() (r string, exists bool) {
+	v := m.updated_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedBy returns the old "updated_by" field's value of the VendorProfilePostalAddress entity.
+// If the VendorProfilePostalAddress object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VendorProfilePostalAddressMutation) OldUpdatedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedBy: %w", err)
+	}
+	return oldValue.UpdatedBy, nil
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (m *VendorProfilePostalAddressMutation) ClearUpdatedBy() {
+	m.updated_by = nil
+	m.clearedFields[vendorprofilepostaladdress.FieldUpdatedBy] = struct{}{}
+}
+
+// UpdatedByCleared returns if the "updated_by" field was cleared in this mutation.
+func (m *VendorProfilePostalAddressMutation) UpdatedByCleared() bool {
+	_, ok := m.clearedFields[vendorprofilepostaladdress.FieldUpdatedBy]
+	return ok
+}
+
+// ResetUpdatedBy resets all changes to the "updated_by" field.
+func (m *VendorProfilePostalAddressMutation) ResetUpdatedBy() {
+	m.updated_by = nil
+	delete(m.clearedFields, vendorprofilepostaladdress.FieldUpdatedBy)
+}
+
+// SetMappingID sets the "mapping_id" field.
+func (m *VendorProfilePostalAddressMutation) SetMappingID(s string) {
+	m.mapping_id = &s
+}
+
+// MappingID returns the value of the "mapping_id" field in the mutation.
+func (m *VendorProfilePostalAddressMutation) MappingID() (r string, exists bool) {
+	v := m.mapping_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldMappingID returns the old "mapping_id" field's value of the VendorProfilePostalAddress entity.
+// If the VendorProfilePostalAddress object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VendorProfilePostalAddressMutation) OldMappingID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldMappingID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldMappingID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldMappingID: %w", err)
+	}
+	return oldValue.MappingID, nil
+}
+
+// ResetMappingID resets all changes to the "mapping_id" field.
+func (m *VendorProfilePostalAddressMutation) ResetMappingID() {
+	m.mapping_id = nil
+}
+
+// SetDeletedAt sets the "deleted_at" field.
+func (m *VendorProfilePostalAddressMutation) SetDeletedAt(t time.Time) {
+	m.deleted_at = &t
+}
+
+// DeletedAt returns the value of the "deleted_at" field in the mutation.
+func (m *VendorProfilePostalAddressMutation) DeletedAt() (r time.Time, exists bool) {
+	v := m.deleted_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDeletedAt returns the old "deleted_at" field's value of the VendorProfilePostalAddress entity.
+// If the VendorProfilePostalAddress object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VendorProfilePostalAddressMutation) OldDeletedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDeletedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDeletedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDeletedAt: %w", err)
+	}
+	return oldValue.DeletedAt, nil
+}
+
+// ClearDeletedAt clears the value of the "deleted_at" field.
+func (m *VendorProfilePostalAddressMutation) ClearDeletedAt() {
+	m.deleted_at = nil
+	m.clearedFields[vendorprofilepostaladdress.FieldDeletedAt] = struct{}{}
+}
+
+// DeletedAtCleared returns if the "deleted_at" field was cleared in this mutation.
+func (m *VendorProfilePostalAddressMutation) DeletedAtCleared() bool {
+	_, ok := m.clearedFields[vendorprofilepostaladdress.FieldDeletedAt]
+	return ok
+}
+
+// ResetDeletedAt resets all changes to the "deleted_at" field.
+func (m *VendorProfilePostalAddressMutation) ResetDeletedAt() {
+	m.deleted_at = nil
+	delete(m.clearedFields, vendorprofilepostaladdress.FieldDeletedAt)
+}
+
+// SetDeletedBy sets the "deleted_by" field.
+func (m *VendorProfilePostalAddressMutation) SetDeletedBy(s string) {
+	m.deleted_by = &s
+}
+
+// DeletedBy returns the value of the "deleted_by" field in the mutation.
+func (m *VendorProfilePostalAddressMutation) DeletedBy() (r string, exists bool) {
+	v := m.deleted_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDeletedBy returns the old "deleted_by" field's value of the VendorProfilePostalAddress entity.
+// If the VendorProfilePostalAddress object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VendorProfilePostalAddressMutation) OldDeletedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDeletedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDeletedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDeletedBy: %w", err)
+	}
+	return oldValue.DeletedBy, nil
+}
+
+// ClearDeletedBy clears the value of the "deleted_by" field.
+func (m *VendorProfilePostalAddressMutation) ClearDeletedBy() {
+	m.deleted_by = nil
+	m.clearedFields[vendorprofilepostaladdress.FieldDeletedBy] = struct{}{}
+}
+
+// DeletedByCleared returns if the "deleted_by" field was cleared in this mutation.
+func (m *VendorProfilePostalAddressMutation) DeletedByCleared() bool {
+	_, ok := m.clearedFields[vendorprofilepostaladdress.FieldDeletedBy]
+	return ok
+}
+
+// ResetDeletedBy resets all changes to the "deleted_by" field.
+func (m *VendorProfilePostalAddressMutation) ResetDeletedBy() {
+	m.deleted_by = nil
+	delete(m.clearedFields, vendorprofilepostaladdress.FieldDeletedBy)
+}
+
+// SetPostalAddressType sets the "postal_address_type" field.
+func (m *VendorProfilePostalAddressMutation) SetPostalAddressType(eat enums.PostalAddressType) {
+	m.postal_address_type = &eat
+}
+
+// PostalAddressType returns the value of the "postal_address_type" field in the mutation.
+func (m *VendorProfilePostalAddressMutation) PostalAddressType() (r enums.PostalAddressType, exists bool) {
+	v := m.postal_address_type
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldPostalAddressType returns the old "postal_address_type" field's value of the VendorProfilePostalAddress entity.
+// If the VendorProfilePostalAddress object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VendorProfilePostalAddressMutation) OldPostalAddressType(ctx context.Context) (v enums.PostalAddressType, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldPostalAddressType is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldPostalAddressType requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldPostalAddressType: %w", err)
+	}
+	return oldValue.PostalAddressType, nil
+}
+
+// ResetPostalAddressType resets all changes to the "postal_address_type" field.
+func (m *VendorProfilePostalAddressMutation) ResetPostalAddressType() {
+	m.postal_address_type = nil
+}
+
+// SetVendorProfileID sets the "vendor_profile_id" field.
+func (m *VendorProfilePostalAddressMutation) SetVendorProfileID(s string) {
+	m.profile = &s
+}
+
+// VendorProfileID returns the value of the "vendor_profile_id" field in the mutation.
+func (m *VendorProfilePostalAddressMutation) VendorProfileID() (r string, exists bool) {
+	v := m.profile
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldVendorProfileID returns the old "vendor_profile_id" field's value of the VendorProfilePostalAddress entity.
+// If the VendorProfilePostalAddress object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VendorProfilePostalAddressMutation) OldVendorProfileID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldVendorProfileID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldVendorProfileID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldVendorProfileID: %w", err)
+	}
+	return oldValue.VendorProfileID, nil
+}
+
+// ResetVendorProfileID resets all changes to the "vendor_profile_id" field.
+func (m *VendorProfilePostalAddressMutation) ResetVendorProfileID() {
+	m.profile = nil
+}
+
+// SetPostalAddressID sets the "postal_address_id" field.
+func (m *VendorProfilePostalAddressMutation) SetPostalAddressID(s string) {
+	m.postal_address = &s
+}
+
+// PostalAddressID returns the value of the "postal_address_id" field in the mutation.
+func (m *VendorProfilePostalAddressMutation) PostalAddressID() (r string, exists bool) {
+	v := m.postal_address
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldPostalAddressID returns the old "postal_address_id" field's value of the VendorProfilePostalAddress entity.
+// If the VendorProfilePostalAddress object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VendorProfilePostalAddressMutation) OldPostalAddressID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldPostalAddressID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldPostalAddressID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldPostalAddressID: %w", err)
+	}
+	return oldValue.PostalAddressID, nil
+}
+
+// ResetPostalAddressID resets all changes to the "postal_address_id" field.
+func (m *VendorProfilePostalAddressMutation) ResetPostalAddressID() {
+	m.postal_address = nil
+}
+
+// ClearPostalAddress clears the "postal_address" edge to the PostalAddress entity.
+func (m *VendorProfilePostalAddressMutation) ClearPostalAddress() {
+	m.clearedpostal_address = true
+	m.clearedFields[vendorprofilepostaladdress.FieldPostalAddressID] = struct{}{}
+}
+
+// PostalAddressCleared reports if the "postal_address" edge to the PostalAddress entity was cleared.
+func (m *VendorProfilePostalAddressMutation) PostalAddressCleared() bool {
+	return m.clearedpostal_address
+}
+
+// PostalAddressIDs returns the "postal_address" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// PostalAddressID instead. It exists only for internal usage by the builders.
+func (m *VendorProfilePostalAddressMutation) PostalAddressIDs() (ids []string) {
+	if id := m.postal_address; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetPostalAddress resets all changes to the "postal_address" edge.
+func (m *VendorProfilePostalAddressMutation) ResetPostalAddress() {
+	m.postal_address = nil
+	m.clearedpostal_address = false
+}
+
+// SetProfileID sets the "profile" edge to the VendorProfile entity by id.
+func (m *VendorProfilePostalAddressMutation) SetProfileID(id string) {
+	m.profile = &id
+}
+
+// ClearProfile clears the "profile" edge to the VendorProfile entity.
+func (m *VendorProfilePostalAddressMutation) ClearProfile() {
+	m.clearedprofile = true
+	m.clearedFields[vendorprofilepostaladdress.FieldVendorProfileID] = struct{}{}
+}
+
+// ProfileCleared reports if the "profile" edge to the VendorProfile entity was cleared.
+func (m *VendorProfilePostalAddressMutation) ProfileCleared() bool {
+	return m.clearedprofile
+}
+
+// ProfileID returns the "profile" edge ID in the mutation.
+func (m *VendorProfilePostalAddressMutation) ProfileID() (id string, exists bool) {
+	if m.profile != nil {
+		return *m.profile, true
+	}
+	return
+}
+
+// ProfileIDs returns the "profile" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// ProfileID instead. It exists only for internal usage by the builders.
+func (m *VendorProfilePostalAddressMutation) ProfileIDs() (ids []string) {
+	if id := m.profile; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetProfile resets all changes to the "profile" edge.
+func (m *VendorProfilePostalAddressMutation) ResetProfile() {
+	m.profile = nil
+	m.clearedprofile = false
+}
+
+// AddEventIDs adds the "events" edge to the Event entity by ids.
+func (m *VendorProfilePostalAddressMutation) AddEventIDs(ids ...string) {
+	if m.events == nil {
+		m.events = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.events[ids[i]] = struct{}{}
+	}
+}
+
+// ClearEvents clears the "events" edge to the Event entity.
+func (m *VendorProfilePostalAddressMutation) ClearEvents() {
+	m.clearedevents = true
+}
+
+// EventsCleared reports if the "events" edge to the Event entity was cleared.
+func (m *VendorProfilePostalAddressMutation) EventsCleared() bool {
+	return m.clearedevents
+}
+
+// RemoveEventIDs removes the "events" edge to the Event entity by IDs.
+func (m *VendorProfilePostalAddressMutation) RemoveEventIDs(ids ...string) {
+	if m.removedevents == nil {
+		m.removedevents = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.events, ids[i])
+		m.removedevents[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedEvents returns the removed IDs of the "events" edge to the Event entity.
+func (m *VendorProfilePostalAddressMutation) RemovedEventsIDs() (ids []string) {
+	for id := range m.removedevents {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// EventsIDs returns the "events" edge IDs in the mutation.
+func (m *VendorProfilePostalAddressMutation) EventsIDs() (ids []string) {
+	for id := range m.events {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetEvents resets all changes to the "events" edge.
+func (m *VendorProfilePostalAddressMutation) ResetEvents() {
+	m.events = nil
+	m.clearedevents = false
+	m.removedevents = nil
+}
+
+// Where appends a list predicates to the VendorProfilePostalAddressMutation builder.
+func (m *VendorProfilePostalAddressMutation) Where(ps ...predicate.VendorProfilePostalAddress) {
+	m.predicates = append(m.predicates, ps...)
+}
+
+// WhereP appends storage-level predicates to the VendorProfilePostalAddressMutation builder. Using this method,
+// users can use type-assertion to append predicates that do not depend on any generated package.
+func (m *VendorProfilePostalAddressMutation) WhereP(ps ...func(*sql.Selector)) {
+	p := make([]predicate.VendorProfilePostalAddress, len(ps))
+	for i := range ps {
+		p[i] = ps[i]
+	}
+	m.Where(p...)
+}
+
+// Op returns the operation name.
+func (m *VendorProfilePostalAddressMutation) Op() Op {
+	return m.op
+}
+
+// SetOp allows setting the mutation operation.
+func (m *VendorProfilePostalAddressMutation) SetOp(op Op) {
+	m.op = op
+}
+
+// Type returns the node type of this mutation (VendorProfilePostalAddress).
+func (m *VendorProfilePostalAddressMutation) Type() string {
+	return m.typ
+}
+
+// Fields returns all fields that were changed during this mutation. Note that in
+// order to get all numeric fields that were incremented/decremented, call
+// AddedFields().
+func (m *VendorProfilePostalAddressMutation) Fields() []string {
+	fields := make([]string, 0, 10)
+	if m.created_at != nil {
+		fields = append(fields, vendorprofilepostaladdress.FieldCreatedAt)
+	}
+	if m.updated_at != nil {
+		fields = append(fields, vendorprofilepostaladdress.FieldUpdatedAt)
+	}
+	if m.created_by != nil {
+		fields = append(fields, vendorprofilepostaladdress.FieldCreatedBy)
+	}
+	if m.updated_by != nil {
+		fields = append(fields, vendorprofilepostaladdress.FieldUpdatedBy)
+	}
+	if m.mapping_id != nil {
+		fields = append(fields, vendorprofilepostaladdress.FieldMappingID)
+	}
+	if m.deleted_at != nil {
+		fields = append(fields, vendorprofilepostaladdress.FieldDeletedAt)
+	}
+	if m.deleted_by != nil {
+		fields = append(fields, vendorprofilepostaladdress.FieldDeletedBy)
+	}
+	if m.postal_address_type != nil {
+		fields = append(fields, vendorprofilepostaladdress.FieldPostalAddressType)
+	}
+	if m.profile != nil {
+		fields = append(fields, vendorprofilepostaladdress.FieldVendorProfileID)
+	}
+	if m.postal_address != nil {
+		fields = append(fields, vendorprofilepostaladdress.FieldPostalAddressID)
+	}
+	return fields
+}
+
+// Field returns the value of a field with the given name. The second boolean
+// return value indicates that this field was not set, or was not defined in the
+// schema.
+func (m *VendorProfilePostalAddressMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case vendorprofilepostaladdress.FieldCreatedAt:
+		return m.CreatedAt()
+	case vendorprofilepostaladdress.FieldUpdatedAt:
+		return m.UpdatedAt()
+	case vendorprofilepostaladdress.FieldCreatedBy:
+		return m.CreatedBy()
+	case vendorprofilepostaladdress.FieldUpdatedBy:
+		return m.UpdatedBy()
+	case vendorprofilepostaladdress.FieldMappingID:
+		return m.MappingID()
+	case vendorprofilepostaladdress.FieldDeletedAt:
+		return m.DeletedAt()
+	case vendorprofilepostaladdress.FieldDeletedBy:
+		return m.DeletedBy()
+	case vendorprofilepostaladdress.FieldPostalAddressType:
+		return m.PostalAddressType()
+	case vendorprofilepostaladdress.FieldVendorProfileID:
+		return m.VendorProfileID()
+	case vendorprofilepostaladdress.FieldPostalAddressID:
+		return m.PostalAddressID()
+	}
+	return nil, false
+}
+
+// OldField returns the old value of the field from the database. An error is
+// returned if the mutation operation is not UpdateOne, or the query to the
+// database failed.
+func (m *VendorProfilePostalAddressMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case vendorprofilepostaladdress.FieldCreatedAt:
+		return m.OldCreatedAt(ctx)
+	case vendorprofilepostaladdress.FieldUpdatedAt:
+		return m.OldUpdatedAt(ctx)
+	case vendorprofilepostaladdress.FieldCreatedBy:
+		return m.OldCreatedBy(ctx)
+	case vendorprofilepostaladdress.FieldUpdatedBy:
+		return m.OldUpdatedBy(ctx)
+	case vendorprofilepostaladdress.FieldMappingID:
+		return m.OldMappingID(ctx)
+	case vendorprofilepostaladdress.FieldDeletedAt:
+		return m.OldDeletedAt(ctx)
+	case vendorprofilepostaladdress.FieldDeletedBy:
+		return m.OldDeletedBy(ctx)
+	case vendorprofilepostaladdress.FieldPostalAddressType:
+		return m.OldPostalAddressType(ctx)
+	case vendorprofilepostaladdress.FieldVendorProfileID:
+		return m.OldVendorProfileID(ctx)
+	case vendorprofilepostaladdress.FieldPostalAddressID:
+		return m.OldPostalAddressID(ctx)
+	}
+	return nil, fmt.Errorf("unknown VendorProfilePostalAddress field %s", name)
+}
+
+// SetField sets the value of a field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *VendorProfilePostalAddressMutation) SetField(name string, value ent.Value) error {
+	switch name {
+	case vendorprofilepostaladdress.FieldCreatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedAt(v)
+		return nil
+	case vendorprofilepostaladdress.FieldUpdatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedAt(v)
+		return nil
+	case vendorprofilepostaladdress.FieldCreatedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedBy(v)
+		return nil
+	case vendorprofilepostaladdress.FieldUpdatedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedBy(v)
+		return nil
+	case vendorprofilepostaladdress.FieldMappingID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetMappingID(v)
+		return nil
+	case vendorprofilepostaladdress.FieldDeletedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDeletedAt(v)
+		return nil
+	case vendorprofilepostaladdress.FieldDeletedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDeletedBy(v)
+		return nil
+	case vendorprofilepostaladdress.FieldPostalAddressType:
+		v, ok := value.(enums.PostalAddressType)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetPostalAddressType(v)
+		return nil
+	case vendorprofilepostaladdress.FieldVendorProfileID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetVendorProfileID(v)
+		return nil
+	case vendorprofilepostaladdress.FieldPostalAddressID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetPostalAddressID(v)
+		return nil
+	}
+	return fmt.Errorf("unknown VendorProfilePostalAddress field %s", name)
+}
+
+// AddedFields returns all numeric fields that were incremented/decremented during
+// this mutation.
+func (m *VendorProfilePostalAddressMutation) AddedFields() []string {
+	return nil
+}
+
+// AddedField returns the numeric value that was incremented/decremented on a field
+// with the given name. The second boolean return value indicates that this field
+// was not set, or was not defined in the schema.
+func (m *VendorProfilePostalAddressMutation) AddedField(name string) (ent.Value, bool) {
+	return nil, false
+}
+
+// AddField adds the value to the field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *VendorProfilePostalAddressMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	}
+	return fmt.Errorf("unknown VendorProfilePostalAddress numeric field %s", name)
+}
+
+// ClearedFields returns all nullable fields that were cleared during this
+// mutation.
+func (m *VendorProfilePostalAddressMutation) ClearedFields() []string {
+	var fields []string
+	if m.FieldCleared(vendorprofilepostaladdress.FieldCreatedAt) {
+		fields = append(fields, vendorprofilepostaladdress.FieldCreatedAt)
+	}
+	if m.FieldCleared(vendorprofilepostaladdress.FieldUpdatedAt) {
+		fields = append(fields, vendorprofilepostaladdress.FieldUpdatedAt)
+	}
+	if m.FieldCleared(vendorprofilepostaladdress.FieldCreatedBy) {
+		fields = append(fields, vendorprofilepostaladdress.FieldCreatedBy)
+	}
+	if m.FieldCleared(vendorprofilepostaladdress.FieldUpdatedBy) {
+		fields = append(fields, vendorprofilepostaladdress.FieldUpdatedBy)
+	}
+	if m.FieldCleared(vendorprofilepostaladdress.FieldDeletedAt) {
+		fields = append(fields, vendorprofilepostaladdress.FieldDeletedAt)
+	}
+	if m.FieldCleared(vendorprofilepostaladdress.FieldDeletedBy) {
+		fields = append(fields, vendorprofilepostaladdress.FieldDeletedBy)
+	}
+	return fields
+}
+
+// FieldCleared returns a boolean indicating if a field with the given name was
+// cleared in this mutation.
+func (m *VendorProfilePostalAddressMutation) FieldCleared(name string) bool {
+	_, ok := m.clearedFields[name]
+	return ok
+}
+
+// ClearField clears the value of the field with the given name. It returns an
+// error if the field is not defined in the schema.
+func (m *VendorProfilePostalAddressMutation) ClearField(name string) error {
+	switch name {
+	case vendorprofilepostaladdress.FieldCreatedAt:
+		m.ClearCreatedAt()
+		return nil
+	case vendorprofilepostaladdress.FieldUpdatedAt:
+		m.ClearUpdatedAt()
+		return nil
+	case vendorprofilepostaladdress.FieldCreatedBy:
+		m.ClearCreatedBy()
+		return nil
+	case vendorprofilepostaladdress.FieldUpdatedBy:
+		m.ClearUpdatedBy()
+		return nil
+	case vendorprofilepostaladdress.FieldDeletedAt:
+		m.ClearDeletedAt()
+		return nil
+	case vendorprofilepostaladdress.FieldDeletedBy:
+		m.ClearDeletedBy()
+		return nil
+	}
+	return fmt.Errorf("unknown VendorProfilePostalAddress nullable field %s", name)
+}
+
+// ResetField resets all changes in the mutation for the field with the given name.
+// It returns an error if the field is not defined in the schema.
+func (m *VendorProfilePostalAddressMutation) ResetField(name string) error {
+	switch name {
+	case vendorprofilepostaladdress.FieldCreatedAt:
+		m.ResetCreatedAt()
+		return nil
+	case vendorprofilepostaladdress.FieldUpdatedAt:
+		m.ResetUpdatedAt()
+		return nil
+	case vendorprofilepostaladdress.FieldCreatedBy:
+		m.ResetCreatedBy()
+		return nil
+	case vendorprofilepostaladdress.FieldUpdatedBy:
+		m.ResetUpdatedBy()
+		return nil
+	case vendorprofilepostaladdress.FieldMappingID:
+		m.ResetMappingID()
+		return nil
+	case vendorprofilepostaladdress.FieldDeletedAt:
+		m.ResetDeletedAt()
+		return nil
+	case vendorprofilepostaladdress.FieldDeletedBy:
+		m.ResetDeletedBy()
+		return nil
+	case vendorprofilepostaladdress.FieldPostalAddressType:
+		m.ResetPostalAddressType()
+		return nil
+	case vendorprofilepostaladdress.FieldVendorProfileID:
+		m.ResetVendorProfileID()
+		return nil
+	case vendorprofilepostaladdress.FieldPostalAddressID:
+		m.ResetPostalAddressID()
+		return nil
+	}
+	return fmt.Errorf("unknown VendorProfilePostalAddress field %s", name)
+}
+
+// AddedEdges returns all edge names that were set/added in this mutation.
+func (m *VendorProfilePostalAddressMutation) AddedEdges() []string {
+	edges := make([]string, 0, 3)
+	if m.postal_address != nil {
+		edges = append(edges, vendorprofilepostaladdress.EdgePostalAddress)
+	}
+	if m.profile != nil {
+		edges = append(edges, vendorprofilepostaladdress.EdgeProfile)
+	}
+	if m.events != nil {
+		edges = append(edges, vendorprofilepostaladdress.EdgeEvents)
+	}
+	return edges
+}
+
+// AddedIDs returns all IDs (to other nodes) that were added for the given edge
+// name in this mutation.
+func (m *VendorProfilePostalAddressMutation) AddedIDs(name string) []ent.Value {
+	switch name {
+	case vendorprofilepostaladdress.EdgePostalAddress:
+		if id := m.postal_address; id != nil {
+			return []ent.Value{*id}
+		}
+	case vendorprofilepostaladdress.EdgeProfile:
+		if id := m.profile; id != nil {
+			return []ent.Value{*id}
+		}
+	case vendorprofilepostaladdress.EdgeEvents:
+		ids := make([]ent.Value, 0, len(m.events))
+		for id := range m.events {
+			ids = append(ids, id)
+		}
+		return ids
+	}
+	return nil
+}
+
+// RemovedEdges returns all edge names that were removed in this mutation.
+func (m *VendorProfilePostalAddressMutation) RemovedEdges() []string {
+	edges := make([]string, 0, 3)
+	if m.removedevents != nil {
+		edges = append(edges, vendorprofilepostaladdress.EdgeEvents)
+	}
+	return edges
+}
+
+// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
+// the given name in this mutation.
+func (m *VendorProfilePostalAddressMutation) RemovedIDs(name string) []ent.Value {
+	switch name {
+	case vendorprofilepostaladdress.EdgeEvents:
+		ids := make([]ent.Value, 0, len(m.removedevents))
+		for id := range m.removedevents {
+			ids = append(ids, id)
+		}
+		return ids
+	}
+	return nil
+}
+
+// ClearedEdges returns all edge names that were cleared in this mutation.
+func (m *VendorProfilePostalAddressMutation) ClearedEdges() []string {
+	edges := make([]string, 0, 3)
+	if m.clearedpostal_address {
+		edges = append(edges, vendorprofilepostaladdress.EdgePostalAddress)
+	}
+	if m.clearedprofile {
+		edges = append(edges, vendorprofilepostaladdress.EdgeProfile)
+	}
+	if m.clearedevents {
+		edges = append(edges, vendorprofilepostaladdress.EdgeEvents)
+	}
+	return edges
+}
+
+// EdgeCleared returns a boolean which indicates if the edge with the given name
+// was cleared in this mutation.
+func (m *VendorProfilePostalAddressMutation) EdgeCleared(name string) bool {
+	switch name {
+	case vendorprofilepostaladdress.EdgePostalAddress:
+		return m.clearedpostal_address
+	case vendorprofilepostaladdress.EdgeProfile:
+		return m.clearedprofile
+	case vendorprofilepostaladdress.EdgeEvents:
+		return m.clearedevents
+	}
+	return false
+}
+
+// ClearEdge clears the value of the edge with the given name. It returns an error
+// if that edge is not defined in the schema.
+func (m *VendorProfilePostalAddressMutation) ClearEdge(name string) error {
+	switch name {
+	case vendorprofilepostaladdress.EdgePostalAddress:
+		m.ClearPostalAddress()
+		return nil
+	case vendorprofilepostaladdress.EdgeProfile:
+		m.ClearProfile()
+		return nil
+	}
+	return fmt.Errorf("unknown VendorProfilePostalAddress unique edge %s", name)
+}
+
+// ResetEdge resets all changes to the edge with the given name in this mutation.
+// It returns an error if the edge is not defined in the schema.
+func (m *VendorProfilePostalAddressMutation) ResetEdge(name string) error {
+	switch name {
+	case vendorprofilepostaladdress.EdgePostalAddress:
+		m.ResetPostalAddress()
+		return nil
+	case vendorprofilepostaladdress.EdgeProfile:
+		m.ResetProfile()
+		return nil
+	case vendorprofilepostaladdress.EdgeEvents:
+		m.ResetEvents()
+		return nil
+	}
+	return fmt.Errorf("unknown VendorProfilePostalAddress edge %s", name)
+}
+
+// VendorProfilePostalAddressHistoryMutation represents an operation that mutates the VendorProfilePostalAddressHistory nodes in the graph.
+type VendorProfilePostalAddressHistoryMutation struct {
+	config
+	op                  Op
+	typ                 string
+	id                  *string
+	history_time        *time.Time
+	ref                 *string
+	operation           *enthistory.OpType
+	created_at          *time.Time
+	updated_at          *time.Time
+	created_by          *string
+	updated_by          *string
+	mapping_id          *string
+	deleted_at          *time.Time
+	deleted_by          *string
+	postal_address_type *enums.PostalAddressType
+	vendor_profile_id   *string
+	postal_address_id   *string
+	clearedFields       map[string]struct{}
+	done                bool
+	oldValue            func(context.Context) (*VendorProfilePostalAddressHistory, error)
+	predicates          []predicate.VendorProfilePostalAddressHistory
+}
+
+var _ ent.Mutation = (*VendorProfilePostalAddressHistoryMutation)(nil)
+
+// vendorprofilepostaladdresshistoryOption allows management of the mutation configuration using functional options.
+type vendorprofilepostaladdresshistoryOption func(*VendorProfilePostalAddressHistoryMutation)
+
+// newVendorProfilePostalAddressHistoryMutation creates new mutation for the VendorProfilePostalAddressHistory entity.
+func newVendorProfilePostalAddressHistoryMutation(c config, op Op, opts ...vendorprofilepostaladdresshistoryOption) *VendorProfilePostalAddressHistoryMutation {
+	m := &VendorProfilePostalAddressHistoryMutation{
+		config:        c,
+		op:            op,
+		typ:           TypeVendorProfilePostalAddressHistory,
+		clearedFields: make(map[string]struct{}),
+	}
+	for _, opt := range opts {
+		opt(m)
+	}
+	return m
+}
+
+// withVendorProfilePostalAddressHistoryID sets the ID field of the mutation.
+func withVendorProfilePostalAddressHistoryID(id string) vendorprofilepostaladdresshistoryOption {
+	return func(m *VendorProfilePostalAddressHistoryMutation) {
+		var (
+			err   error
+			once  sync.Once
+			value *VendorProfilePostalAddressHistory
+		)
+		m.oldValue = func(ctx context.Context) (*VendorProfilePostalAddressHistory, error) {
+			once.Do(func() {
+				if m.done {
+					err = errors.New("querying old values post mutation is not allowed")
+				} else {
+					value, err = m.Client().VendorProfilePostalAddressHistory.Get(ctx, id)
+				}
+			})
+			return value, err
+		}
+		m.id = &id
+	}
+}
+
+// withVendorProfilePostalAddressHistory sets the old VendorProfilePostalAddressHistory of the mutation.
+func withVendorProfilePostalAddressHistory(node *VendorProfilePostalAddressHistory) vendorprofilepostaladdresshistoryOption {
+	return func(m *VendorProfilePostalAddressHistoryMutation) {
+		m.oldValue = func(context.Context) (*VendorProfilePostalAddressHistory, error) {
+			return node, nil
+		}
+		m.id = &node.ID
+	}
+}
+
+// Client returns a new `ent.Client` from the mutation. If the mutation was
+// executed in a transaction (ent.Tx), a transactional client is returned.
+func (m VendorProfilePostalAddressHistoryMutation) Client() *Client {
+	client := &Client{config: m.config}
+	client.init()
+	return client
+}
+
+// Tx returns an `ent.Tx` for mutations that were executed in transactions;
+// it returns an error otherwise.
+func (m VendorProfilePostalAddressHistoryMutation) Tx() (*Tx, error) {
+	if _, ok := m.driver.(*txDriver); !ok {
+		return nil, errors.New("generated: mutation is not running in a transaction")
+	}
+	tx := &Tx{config: m.config}
+	tx.init()
+	return tx, nil
+}
+
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of VendorProfilePostalAddressHistory entities.
+func (m *VendorProfilePostalAddressHistoryMutation) SetID(id string) {
+	m.id = &id
+}
+
+// ID returns the ID value in the mutation. Note that the ID is only available
+// if it was provided to the builder or after it was returned from the database.
+func (m *VendorProfilePostalAddressHistoryMutation) ID() (id string, exists bool) {
+	if m.id == nil {
+		return
+	}
+	return *m.id, true
+}
+
+// IDs queries the database and returns the entity ids that match the mutation's predicate.
+// That means, if the mutation is applied within a transaction with an isolation level such
+// as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
+// or updated by the mutation.
+func (m *VendorProfilePostalAddressHistoryMutation) IDs(ctx context.Context) ([]string, error) {
+	switch {
+	case m.op.Is(OpUpdateOne | OpDeleteOne):
+		id, exists := m.ID()
+		if exists {
+			return []string{id}, nil
+		}
+		fallthrough
+	case m.op.Is(OpUpdate | OpDelete):
+		return m.Client().VendorProfilePostalAddressHistory.Query().Where(m.predicates...).IDs(ctx)
+	default:
+		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
+	}
+}
+
+// SetHistoryTime sets the "history_time" field.
+func (m *VendorProfilePostalAddressHistoryMutation) SetHistoryTime(t time.Time) {
+	m.history_time = &t
+}
+
+// HistoryTime returns the value of the "history_time" field in the mutation.
+func (m *VendorProfilePostalAddressHistoryMutation) HistoryTime() (r time.Time, exists bool) {
+	v := m.history_time
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldHistoryTime returns the old "history_time" field's value of the VendorProfilePostalAddressHistory entity.
+// If the VendorProfilePostalAddressHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VendorProfilePostalAddressHistoryMutation) OldHistoryTime(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldHistoryTime is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldHistoryTime requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldHistoryTime: %w", err)
+	}
+	return oldValue.HistoryTime, nil
+}
+
+// ResetHistoryTime resets all changes to the "history_time" field.
+func (m *VendorProfilePostalAddressHistoryMutation) ResetHistoryTime() {
+	m.history_time = nil
+}
+
+// SetRef sets the "ref" field.
+func (m *VendorProfilePostalAddressHistoryMutation) SetRef(s string) {
+	m.ref = &s
+}
+
+// Ref returns the value of the "ref" field in the mutation.
+func (m *VendorProfilePostalAddressHistoryMutation) Ref() (r string, exists bool) {
+	v := m.ref
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldRef returns the old "ref" field's value of the VendorProfilePostalAddressHistory entity.
+// If the VendorProfilePostalAddressHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VendorProfilePostalAddressHistoryMutation) OldRef(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldRef is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldRef requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldRef: %w", err)
+	}
+	return oldValue.Ref, nil
+}
+
+// ClearRef clears the value of the "ref" field.
+func (m *VendorProfilePostalAddressHistoryMutation) ClearRef() {
+	m.ref = nil
+	m.clearedFields[vendorprofilepostaladdresshistory.FieldRef] = struct{}{}
+}
+
+// RefCleared returns if the "ref" field was cleared in this mutation.
+func (m *VendorProfilePostalAddressHistoryMutation) RefCleared() bool {
+	_, ok := m.clearedFields[vendorprofilepostaladdresshistory.FieldRef]
+	return ok
+}
+
+// ResetRef resets all changes to the "ref" field.
+func (m *VendorProfilePostalAddressHistoryMutation) ResetRef() {
+	m.ref = nil
+	delete(m.clearedFields, vendorprofilepostaladdresshistory.FieldRef)
+}
+
+// SetOperation sets the "operation" field.
+func (m *VendorProfilePostalAddressHistoryMutation) SetOperation(et enthistory.OpType) {
+	m.operation = &et
+}
+
+// Operation returns the value of the "operation" field in the mutation.
+func (m *VendorProfilePostalAddressHistoryMutation) Operation() (r enthistory.OpType, exists bool) {
+	v := m.operation
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldOperation returns the old "operation" field's value of the VendorProfilePostalAddressHistory entity.
+// If the VendorProfilePostalAddressHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VendorProfilePostalAddressHistoryMutation) OldOperation(ctx context.Context) (v enthistory.OpType, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldOperation is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldOperation requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldOperation: %w", err)
+	}
+	return oldValue.Operation, nil
+}
+
+// ResetOperation resets all changes to the "operation" field.
+func (m *VendorProfilePostalAddressHistoryMutation) ResetOperation() {
+	m.operation = nil
+}
+
+// SetCreatedAt sets the "created_at" field.
+func (m *VendorProfilePostalAddressHistoryMutation) SetCreatedAt(t time.Time) {
+	m.created_at = &t
+}
+
+// CreatedAt returns the value of the "created_at" field in the mutation.
+func (m *VendorProfilePostalAddressHistoryMutation) CreatedAt() (r time.Time, exists bool) {
+	v := m.created_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedAt returns the old "created_at" field's value of the VendorProfilePostalAddressHistory entity.
+// If the VendorProfilePostalAddressHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VendorProfilePostalAddressHistoryMutation) OldCreatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedAt: %w", err)
+	}
+	return oldValue.CreatedAt, nil
+}
+
+// ClearCreatedAt clears the value of the "created_at" field.
+func (m *VendorProfilePostalAddressHistoryMutation) ClearCreatedAt() {
+	m.created_at = nil
+	m.clearedFields[vendorprofilepostaladdresshistory.FieldCreatedAt] = struct{}{}
+}
+
+// CreatedAtCleared returns if the "created_at" field was cleared in this mutation.
+func (m *VendorProfilePostalAddressHistoryMutation) CreatedAtCleared() bool {
+	_, ok := m.clearedFields[vendorprofilepostaladdresshistory.FieldCreatedAt]
+	return ok
+}
+
+// ResetCreatedAt resets all changes to the "created_at" field.
+func (m *VendorProfilePostalAddressHistoryMutation) ResetCreatedAt() {
+	m.created_at = nil
+	delete(m.clearedFields, vendorprofilepostaladdresshistory.FieldCreatedAt)
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (m *VendorProfilePostalAddressHistoryMutation) SetUpdatedAt(t time.Time) {
+	m.updated_at = &t
+}
+
+// UpdatedAt returns the value of the "updated_at" field in the mutation.
+func (m *VendorProfilePostalAddressHistoryMutation) UpdatedAt() (r time.Time, exists bool) {
+	v := m.updated_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedAt returns the old "updated_at" field's value of the VendorProfilePostalAddressHistory entity.
+// If the VendorProfilePostalAddressHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VendorProfilePostalAddressHistoryMutation) OldUpdatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedAt: %w", err)
+	}
+	return oldValue.UpdatedAt, nil
+}
+
+// ClearUpdatedAt clears the value of the "updated_at" field.
+func (m *VendorProfilePostalAddressHistoryMutation) ClearUpdatedAt() {
+	m.updated_at = nil
+	m.clearedFields[vendorprofilepostaladdresshistory.FieldUpdatedAt] = struct{}{}
+}
+
+// UpdatedAtCleared returns if the "updated_at" field was cleared in this mutation.
+func (m *VendorProfilePostalAddressHistoryMutation) UpdatedAtCleared() bool {
+	_, ok := m.clearedFields[vendorprofilepostaladdresshistory.FieldUpdatedAt]
+	return ok
+}
+
+// ResetUpdatedAt resets all changes to the "updated_at" field.
+func (m *VendorProfilePostalAddressHistoryMutation) ResetUpdatedAt() {
+	m.updated_at = nil
+	delete(m.clearedFields, vendorprofilepostaladdresshistory.FieldUpdatedAt)
+}
+
+// SetCreatedBy sets the "created_by" field.
+func (m *VendorProfilePostalAddressHistoryMutation) SetCreatedBy(s string) {
+	m.created_by = &s
+}
+
+// CreatedBy returns the value of the "created_by" field in the mutation.
+func (m *VendorProfilePostalAddressHistoryMutation) CreatedBy() (r string, exists bool) {
+	v := m.created_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedBy returns the old "created_by" field's value of the VendorProfilePostalAddressHistory entity.
+// If the VendorProfilePostalAddressHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VendorProfilePostalAddressHistoryMutation) OldCreatedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedBy: %w", err)
+	}
+	return oldValue.CreatedBy, nil
+}
+
+// ClearCreatedBy clears the value of the "created_by" field.
+func (m *VendorProfilePostalAddressHistoryMutation) ClearCreatedBy() {
+	m.created_by = nil
+	m.clearedFields[vendorprofilepostaladdresshistory.FieldCreatedBy] = struct{}{}
+}
+
+// CreatedByCleared returns if the "created_by" field was cleared in this mutation.
+func (m *VendorProfilePostalAddressHistoryMutation) CreatedByCleared() bool {
+	_, ok := m.clearedFields[vendorprofilepostaladdresshistory.FieldCreatedBy]
+	return ok
+}
+
+// ResetCreatedBy resets all changes to the "created_by" field.
+func (m *VendorProfilePostalAddressHistoryMutation) ResetCreatedBy() {
+	m.created_by = nil
+	delete(m.clearedFields, vendorprofilepostaladdresshistory.FieldCreatedBy)
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (m *VendorProfilePostalAddressHistoryMutation) SetUpdatedBy(s string) {
+	m.updated_by = &s
+}
+
+// UpdatedBy returns the value of the "updated_by" field in the mutation.
+func (m *VendorProfilePostalAddressHistoryMutation) UpdatedBy() (r string, exists bool) {
+	v := m.updated_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedBy returns the old "updated_by" field's value of the VendorProfilePostalAddressHistory entity.
+// If the VendorProfilePostalAddressHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VendorProfilePostalAddressHistoryMutation) OldUpdatedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedBy: %w", err)
+	}
+	return oldValue.UpdatedBy, nil
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (m *VendorProfilePostalAddressHistoryMutation) ClearUpdatedBy() {
+	m.updated_by = nil
+	m.clearedFields[vendorprofilepostaladdresshistory.FieldUpdatedBy] = struct{}{}
+}
+
+// UpdatedByCleared returns if the "updated_by" field was cleared in this mutation.
+func (m *VendorProfilePostalAddressHistoryMutation) UpdatedByCleared() bool {
+	_, ok := m.clearedFields[vendorprofilepostaladdresshistory.FieldUpdatedBy]
+	return ok
+}
+
+// ResetUpdatedBy resets all changes to the "updated_by" field.
+func (m *VendorProfilePostalAddressHistoryMutation) ResetUpdatedBy() {
+	m.updated_by = nil
+	delete(m.clearedFields, vendorprofilepostaladdresshistory.FieldUpdatedBy)
+}
+
+// SetMappingID sets the "mapping_id" field.
+func (m *VendorProfilePostalAddressHistoryMutation) SetMappingID(s string) {
+	m.mapping_id = &s
+}
+
+// MappingID returns the value of the "mapping_id" field in the mutation.
+func (m *VendorProfilePostalAddressHistoryMutation) MappingID() (r string, exists bool) {
+	v := m.mapping_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldMappingID returns the old "mapping_id" field's value of the VendorProfilePostalAddressHistory entity.
+// If the VendorProfilePostalAddressHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VendorProfilePostalAddressHistoryMutation) OldMappingID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldMappingID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldMappingID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldMappingID: %w", err)
+	}
+	return oldValue.MappingID, nil
+}
+
+// ResetMappingID resets all changes to the "mapping_id" field.
+func (m *VendorProfilePostalAddressHistoryMutation) ResetMappingID() {
+	m.mapping_id = nil
+}
+
+// SetDeletedAt sets the "deleted_at" field.
+func (m *VendorProfilePostalAddressHistoryMutation) SetDeletedAt(t time.Time) {
+	m.deleted_at = &t
+}
+
+// DeletedAt returns the value of the "deleted_at" field in the mutation.
+func (m *VendorProfilePostalAddressHistoryMutation) DeletedAt() (r time.Time, exists bool) {
+	v := m.deleted_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDeletedAt returns the old "deleted_at" field's value of the VendorProfilePostalAddressHistory entity.
+// If the VendorProfilePostalAddressHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VendorProfilePostalAddressHistoryMutation) OldDeletedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDeletedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDeletedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDeletedAt: %w", err)
+	}
+	return oldValue.DeletedAt, nil
+}
+
+// ClearDeletedAt clears the value of the "deleted_at" field.
+func (m *VendorProfilePostalAddressHistoryMutation) ClearDeletedAt() {
+	m.deleted_at = nil
+	m.clearedFields[vendorprofilepostaladdresshistory.FieldDeletedAt] = struct{}{}
+}
+
+// DeletedAtCleared returns if the "deleted_at" field was cleared in this mutation.
+func (m *VendorProfilePostalAddressHistoryMutation) DeletedAtCleared() bool {
+	_, ok := m.clearedFields[vendorprofilepostaladdresshistory.FieldDeletedAt]
+	return ok
+}
+
+// ResetDeletedAt resets all changes to the "deleted_at" field.
+func (m *VendorProfilePostalAddressHistoryMutation) ResetDeletedAt() {
+	m.deleted_at = nil
+	delete(m.clearedFields, vendorprofilepostaladdresshistory.FieldDeletedAt)
+}
+
+// SetDeletedBy sets the "deleted_by" field.
+func (m *VendorProfilePostalAddressHistoryMutation) SetDeletedBy(s string) {
+	m.deleted_by = &s
+}
+
+// DeletedBy returns the value of the "deleted_by" field in the mutation.
+func (m *VendorProfilePostalAddressHistoryMutation) DeletedBy() (r string, exists bool) {
+	v := m.deleted_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDeletedBy returns the old "deleted_by" field's value of the VendorProfilePostalAddressHistory entity.
+// If the VendorProfilePostalAddressHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VendorProfilePostalAddressHistoryMutation) OldDeletedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDeletedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDeletedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDeletedBy: %w", err)
+	}
+	return oldValue.DeletedBy, nil
+}
+
+// ClearDeletedBy clears the value of the "deleted_by" field.
+func (m *VendorProfilePostalAddressHistoryMutation) ClearDeletedBy() {
+	m.deleted_by = nil
+	m.clearedFields[vendorprofilepostaladdresshistory.FieldDeletedBy] = struct{}{}
+}
+
+// DeletedByCleared returns if the "deleted_by" field was cleared in this mutation.
+func (m *VendorProfilePostalAddressHistoryMutation) DeletedByCleared() bool {
+	_, ok := m.clearedFields[vendorprofilepostaladdresshistory.FieldDeletedBy]
+	return ok
+}
+
+// ResetDeletedBy resets all changes to the "deleted_by" field.
+func (m *VendorProfilePostalAddressHistoryMutation) ResetDeletedBy() {
+	m.deleted_by = nil
+	delete(m.clearedFields, vendorprofilepostaladdresshistory.FieldDeletedBy)
+}
+
+// SetPostalAddressType sets the "postal_address_type" field.
+func (m *VendorProfilePostalAddressHistoryMutation) SetPostalAddressType(eat enums.PostalAddressType) {
+	m.postal_address_type = &eat
+}
+
+// PostalAddressType returns the value of the "postal_address_type" field in the mutation.
+func (m *VendorProfilePostalAddressHistoryMutation) PostalAddressType() (r enums.PostalAddressType, exists bool) {
+	v := m.postal_address_type
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldPostalAddressType returns the old "postal_address_type" field's value of the VendorProfilePostalAddressHistory entity.
+// If the VendorProfilePostalAddressHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VendorProfilePostalAddressHistoryMutation) OldPostalAddressType(ctx context.Context) (v enums.PostalAddressType, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldPostalAddressType is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldPostalAddressType requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldPostalAddressType: %w", err)
+	}
+	return oldValue.PostalAddressType, nil
+}
+
+// ResetPostalAddressType resets all changes to the "postal_address_type" field.
+func (m *VendorProfilePostalAddressHistoryMutation) ResetPostalAddressType() {
+	m.postal_address_type = nil
+}
+
+// SetVendorProfileID sets the "vendor_profile_id" field.
+func (m *VendorProfilePostalAddressHistoryMutation) SetVendorProfileID(s string) {
+	m.vendor_profile_id = &s
+}
+
+// VendorProfileID returns the value of the "vendor_profile_id" field in the mutation.
+func (m *VendorProfilePostalAddressHistoryMutation) VendorProfileID() (r string, exists bool) {
+	v := m.vendor_profile_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldVendorProfileID returns the old "vendor_profile_id" field's value of the VendorProfilePostalAddressHistory entity.
+// If the VendorProfilePostalAddressHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VendorProfilePostalAddressHistoryMutation) OldVendorProfileID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldVendorProfileID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldVendorProfileID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldVendorProfileID: %w", err)
+	}
+	return oldValue.VendorProfileID, nil
+}
+
+// ResetVendorProfileID resets all changes to the "vendor_profile_id" field.
+func (m *VendorProfilePostalAddressHistoryMutation) ResetVendorProfileID() {
+	m.vendor_profile_id = nil
+}
+
+// SetPostalAddressID sets the "postal_address_id" field.
+func (m *VendorProfilePostalAddressHistoryMutation) SetPostalAddressID(s string) {
+	m.postal_address_id = &s
+}
+
+// PostalAddressID returns the value of the "postal_address_id" field in the mutation.
+func (m *VendorProfilePostalAddressHistoryMutation) PostalAddressID() (r string, exists bool) {
+	v := m.postal_address_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldPostalAddressID returns the old "postal_address_id" field's value of the VendorProfilePostalAddressHistory entity.
+// If the VendorProfilePostalAddressHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VendorProfilePostalAddressHistoryMutation) OldPostalAddressID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldPostalAddressID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldPostalAddressID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldPostalAddressID: %w", err)
+	}
+	return oldValue.PostalAddressID, nil
+}
+
+// ResetPostalAddressID resets all changes to the "postal_address_id" field.
+func (m *VendorProfilePostalAddressHistoryMutation) ResetPostalAddressID() {
+	m.postal_address_id = nil
+}
+
+// Where appends a list predicates to the VendorProfilePostalAddressHistoryMutation builder.
+func (m *VendorProfilePostalAddressHistoryMutation) Where(ps ...predicate.VendorProfilePostalAddressHistory) {
+	m.predicates = append(m.predicates, ps...)
+}
+
+// WhereP appends storage-level predicates to the VendorProfilePostalAddressHistoryMutation builder. Using this method,
+// users can use type-assertion to append predicates that do not depend on any generated package.
+func (m *VendorProfilePostalAddressHistoryMutation) WhereP(ps ...func(*sql.Selector)) {
+	p := make([]predicate.VendorProfilePostalAddressHistory, len(ps))
+	for i := range ps {
+		p[i] = ps[i]
+	}
+	m.Where(p...)
+}
+
+// Op returns the operation name.
+func (m *VendorProfilePostalAddressHistoryMutation) Op() Op {
+	return m.op
+}
+
+// SetOp allows setting the mutation operation.
+func (m *VendorProfilePostalAddressHistoryMutation) SetOp(op Op) {
+	m.op = op
+}
+
+// Type returns the node type of this mutation (VendorProfilePostalAddressHistory).
+func (m *VendorProfilePostalAddressHistoryMutation) Type() string {
+	return m.typ
+}
+
+// Fields returns all fields that were changed during this mutation. Note that in
+// order to get all numeric fields that were incremented/decremented, call
+// AddedFields().
+func (m *VendorProfilePostalAddressHistoryMutation) Fields() []string {
+	fields := make([]string, 0, 13)
+	if m.history_time != nil {
+		fields = append(fields, vendorprofilepostaladdresshistory.FieldHistoryTime)
+	}
+	if m.ref != nil {
+		fields = append(fields, vendorprofilepostaladdresshistory.FieldRef)
+	}
+	if m.operation != nil {
+		fields = append(fields, vendorprofilepostaladdresshistory.FieldOperation)
+	}
+	if m.created_at != nil {
+		fields = append(fields, vendorprofilepostaladdresshistory.FieldCreatedAt)
+	}
+	if m.updated_at != nil {
+		fields = append(fields, vendorprofilepostaladdresshistory.FieldUpdatedAt)
+	}
+	if m.created_by != nil {
+		fields = append(fields, vendorprofilepostaladdresshistory.FieldCreatedBy)
+	}
+	if m.updated_by != nil {
+		fields = append(fields, vendorprofilepostaladdresshistory.FieldUpdatedBy)
+	}
+	if m.mapping_id != nil {
+		fields = append(fields, vendorprofilepostaladdresshistory.FieldMappingID)
+	}
+	if m.deleted_at != nil {
+		fields = append(fields, vendorprofilepostaladdresshistory.FieldDeletedAt)
+	}
+	if m.deleted_by != nil {
+		fields = append(fields, vendorprofilepostaladdresshistory.FieldDeletedBy)
+	}
+	if m.postal_address_type != nil {
+		fields = append(fields, vendorprofilepostaladdresshistory.FieldPostalAddressType)
+	}
+	if m.vendor_profile_id != nil {
+		fields = append(fields, vendorprofilepostaladdresshistory.FieldVendorProfileID)
+	}
+	if m.postal_address_id != nil {
+		fields = append(fields, vendorprofilepostaladdresshistory.FieldPostalAddressID)
+	}
+	return fields
+}
+
+// Field returns the value of a field with the given name. The second boolean
+// return value indicates that this field was not set, or was not defined in the
+// schema.
+func (m *VendorProfilePostalAddressHistoryMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case vendorprofilepostaladdresshistory.FieldHistoryTime:
+		return m.HistoryTime()
+	case vendorprofilepostaladdresshistory.FieldRef:
+		return m.Ref()
+	case vendorprofilepostaladdresshistory.FieldOperation:
+		return m.Operation()
+	case vendorprofilepostaladdresshistory.FieldCreatedAt:
+		return m.CreatedAt()
+	case vendorprofilepostaladdresshistory.FieldUpdatedAt:
+		return m.UpdatedAt()
+	case vendorprofilepostaladdresshistory.FieldCreatedBy:
+		return m.CreatedBy()
+	case vendorprofilepostaladdresshistory.FieldUpdatedBy:
+		return m.UpdatedBy()
+	case vendorprofilepostaladdresshistory.FieldMappingID:
+		return m.MappingID()
+	case vendorprofilepostaladdresshistory.FieldDeletedAt:
+		return m.DeletedAt()
+	case vendorprofilepostaladdresshistory.FieldDeletedBy:
+		return m.DeletedBy()
+	case vendorprofilepostaladdresshistory.FieldPostalAddressType:
+		return m.PostalAddressType()
+	case vendorprofilepostaladdresshistory.FieldVendorProfileID:
+		return m.VendorProfileID()
+	case vendorprofilepostaladdresshistory.FieldPostalAddressID:
+		return m.PostalAddressID()
+	}
+	return nil, false
+}
+
+// OldField returns the old value of the field from the database. An error is
+// returned if the mutation operation is not UpdateOne, or the query to the
+// database failed.
+func (m *VendorProfilePostalAddressHistoryMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case vendorprofilepostaladdresshistory.FieldHistoryTime:
+		return m.OldHistoryTime(ctx)
+	case vendorprofilepostaladdresshistory.FieldRef:
+		return m.OldRef(ctx)
+	case vendorprofilepostaladdresshistory.FieldOperation:
+		return m.OldOperation(ctx)
+	case vendorprofilepostaladdresshistory.FieldCreatedAt:
+		return m.OldCreatedAt(ctx)
+	case vendorprofilepostaladdresshistory.FieldUpdatedAt:
+		return m.OldUpdatedAt(ctx)
+	case vendorprofilepostaladdresshistory.FieldCreatedBy:
+		return m.OldCreatedBy(ctx)
+	case vendorprofilepostaladdresshistory.FieldUpdatedBy:
+		return m.OldUpdatedBy(ctx)
+	case vendorprofilepostaladdresshistory.FieldMappingID:
+		return m.OldMappingID(ctx)
+	case vendorprofilepostaladdresshistory.FieldDeletedAt:
+		return m.OldDeletedAt(ctx)
+	case vendorprofilepostaladdresshistory.FieldDeletedBy:
+		return m.OldDeletedBy(ctx)
+	case vendorprofilepostaladdresshistory.FieldPostalAddressType:
+		return m.OldPostalAddressType(ctx)
+	case vendorprofilepostaladdresshistory.FieldVendorProfileID:
+		return m.OldVendorProfileID(ctx)
+	case vendorprofilepostaladdresshistory.FieldPostalAddressID:
+		return m.OldPostalAddressID(ctx)
+	}
+	return nil, fmt.Errorf("unknown VendorProfilePostalAddressHistory field %s", name)
+}
+
+// SetField sets the value of a field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *VendorProfilePostalAddressHistoryMutation) SetField(name string, value ent.Value) error {
+	switch name {
+	case vendorprofilepostaladdresshistory.FieldHistoryTime:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetHistoryTime(v)
+		return nil
+	case vendorprofilepostaladdresshistory.FieldRef:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetRef(v)
+		return nil
+	case vendorprofilepostaladdresshistory.FieldOperation:
+		v, ok := value.(enthistory.OpType)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetOperation(v)
+		return nil
+	case vendorprofilepostaladdresshistory.FieldCreatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedAt(v)
+		return nil
+	case vendorprofilepostaladdresshistory.FieldUpdatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedAt(v)
+		return nil
+	case vendorprofilepostaladdresshistory.FieldCreatedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedBy(v)
+		return nil
+	case vendorprofilepostaladdresshistory.FieldUpdatedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedBy(v)
+		return nil
+	case vendorprofilepostaladdresshistory.FieldMappingID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetMappingID(v)
+		return nil
+	case vendorprofilepostaladdresshistory.FieldDeletedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDeletedAt(v)
+		return nil
+	case vendorprofilepostaladdresshistory.FieldDeletedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDeletedBy(v)
+		return nil
+	case vendorprofilepostaladdresshistory.FieldPostalAddressType:
+		v, ok := value.(enums.PostalAddressType)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetPostalAddressType(v)
+		return nil
+	case vendorprofilepostaladdresshistory.FieldVendorProfileID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetVendorProfileID(v)
+		return nil
+	case vendorprofilepostaladdresshistory.FieldPostalAddressID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetPostalAddressID(v)
+		return nil
+	}
+	return fmt.Errorf("unknown VendorProfilePostalAddressHistory field %s", name)
+}
+
+// AddedFields returns all numeric fields that were incremented/decremented during
+// this mutation.
+func (m *VendorProfilePostalAddressHistoryMutation) AddedFields() []string {
+	return nil
+}
+
+// AddedField returns the numeric value that was incremented/decremented on a field
+// with the given name. The second boolean return value indicates that this field
+// was not set, or was not defined in the schema.
+func (m *VendorProfilePostalAddressHistoryMutation) AddedField(name string) (ent.Value, bool) {
+	return nil, false
+}
+
+// AddField adds the value to the field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *VendorProfilePostalAddressHistoryMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	}
+	return fmt.Errorf("unknown VendorProfilePostalAddressHistory numeric field %s", name)
+}
+
+// ClearedFields returns all nullable fields that were cleared during this
+// mutation.
+func (m *VendorProfilePostalAddressHistoryMutation) ClearedFields() []string {
+	var fields []string
+	if m.FieldCleared(vendorprofilepostaladdresshistory.FieldRef) {
+		fields = append(fields, vendorprofilepostaladdresshistory.FieldRef)
+	}
+	if m.FieldCleared(vendorprofilepostaladdresshistory.FieldCreatedAt) {
+		fields = append(fields, vendorprofilepostaladdresshistory.FieldCreatedAt)
+	}
+	if m.FieldCleared(vendorprofilepostaladdresshistory.FieldUpdatedAt) {
+		fields = append(fields, vendorprofilepostaladdresshistory.FieldUpdatedAt)
+	}
+	if m.FieldCleared(vendorprofilepostaladdresshistory.FieldCreatedBy) {
+		fields = append(fields, vendorprofilepostaladdresshistory.FieldCreatedBy)
+	}
+	if m.FieldCleared(vendorprofilepostaladdresshistory.FieldUpdatedBy) {
+		fields = append(fields, vendorprofilepostaladdresshistory.FieldUpdatedBy)
+	}
+	if m.FieldCleared(vendorprofilepostaladdresshistory.FieldDeletedAt) {
+		fields = append(fields, vendorprofilepostaladdresshistory.FieldDeletedAt)
+	}
+	if m.FieldCleared(vendorprofilepostaladdresshistory.FieldDeletedBy) {
+		fields = append(fields, vendorprofilepostaladdresshistory.FieldDeletedBy)
+	}
+	return fields
+}
+
+// FieldCleared returns a boolean indicating if a field with the given name was
+// cleared in this mutation.
+func (m *VendorProfilePostalAddressHistoryMutation) FieldCleared(name string) bool {
+	_, ok := m.clearedFields[name]
+	return ok
+}
+
+// ClearField clears the value of the field with the given name. It returns an
+// error if the field is not defined in the schema.
+func (m *VendorProfilePostalAddressHistoryMutation) ClearField(name string) error {
+	switch name {
+	case vendorprofilepostaladdresshistory.FieldRef:
+		m.ClearRef()
+		return nil
+	case vendorprofilepostaladdresshistory.FieldCreatedAt:
+		m.ClearCreatedAt()
+		return nil
+	case vendorprofilepostaladdresshistory.FieldUpdatedAt:
+		m.ClearUpdatedAt()
+		return nil
+	case vendorprofilepostaladdresshistory.FieldCreatedBy:
+		m.ClearCreatedBy()
+		return nil
+	case vendorprofilepostaladdresshistory.FieldUpdatedBy:
+		m.ClearUpdatedBy()
+		return nil
+	case vendorprofilepostaladdresshistory.FieldDeletedAt:
+		m.ClearDeletedAt()
+		return nil
+	case vendorprofilepostaladdresshistory.FieldDeletedBy:
+		m.ClearDeletedBy()
+		return nil
+	}
+	return fmt.Errorf("unknown VendorProfilePostalAddressHistory nullable field %s", name)
+}
+
+// ResetField resets all changes in the mutation for the field with the given name.
+// It returns an error if the field is not defined in the schema.
+func (m *VendorProfilePostalAddressHistoryMutation) ResetField(name string) error {
+	switch name {
+	case vendorprofilepostaladdresshistory.FieldHistoryTime:
+		m.ResetHistoryTime()
+		return nil
+	case vendorprofilepostaladdresshistory.FieldRef:
+		m.ResetRef()
+		return nil
+	case vendorprofilepostaladdresshistory.FieldOperation:
+		m.ResetOperation()
+		return nil
+	case vendorprofilepostaladdresshistory.FieldCreatedAt:
+		m.ResetCreatedAt()
+		return nil
+	case vendorprofilepostaladdresshistory.FieldUpdatedAt:
+		m.ResetUpdatedAt()
+		return nil
+	case vendorprofilepostaladdresshistory.FieldCreatedBy:
+		m.ResetCreatedBy()
+		return nil
+	case vendorprofilepostaladdresshistory.FieldUpdatedBy:
+		m.ResetUpdatedBy()
+		return nil
+	case vendorprofilepostaladdresshistory.FieldMappingID:
+		m.ResetMappingID()
+		return nil
+	case vendorprofilepostaladdresshistory.FieldDeletedAt:
+		m.ResetDeletedAt()
+		return nil
+	case vendorprofilepostaladdresshistory.FieldDeletedBy:
+		m.ResetDeletedBy()
+		return nil
+	case vendorprofilepostaladdresshistory.FieldPostalAddressType:
+		m.ResetPostalAddressType()
+		return nil
+	case vendorprofilepostaladdresshistory.FieldVendorProfileID:
+		m.ResetVendorProfileID()
+		return nil
+	case vendorprofilepostaladdresshistory.FieldPostalAddressID:
+		m.ResetPostalAddressID()
+		return nil
+	}
+	return fmt.Errorf("unknown VendorProfilePostalAddressHistory field %s", name)
+}
+
+// AddedEdges returns all edge names that were set/added in this mutation.
+func (m *VendorProfilePostalAddressHistoryMutation) AddedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// AddedIDs returns all IDs (to other nodes) that were added for the given edge
+// name in this mutation.
+func (m *VendorProfilePostalAddressHistoryMutation) AddedIDs(name string) []ent.Value {
+	return nil
+}
+
+// RemovedEdges returns all edge names that were removed in this mutation.
+func (m *VendorProfilePostalAddressHistoryMutation) RemovedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
+// the given name in this mutation.
+func (m *VendorProfilePostalAddressHistoryMutation) RemovedIDs(name string) []ent.Value {
+	return nil
+}
+
+// ClearedEdges returns all edge names that were cleared in this mutation.
+func (m *VendorProfilePostalAddressHistoryMutation) ClearedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// EdgeCleared returns a boolean which indicates if the edge with the given name
+// was cleared in this mutation.
+func (m *VendorProfilePostalAddressHistoryMutation) EdgeCleared(name string) bool {
+	return false
+}
+
+// ClearEdge clears the value of the edge with the given name. It returns an error
+// if that edge is not defined in the schema.
+func (m *VendorProfilePostalAddressHistoryMutation) ClearEdge(name string) error {
+	return fmt.Errorf("unknown VendorProfilePostalAddressHistory unique edge %s", name)
+}
+
+// ResetEdge resets all changes to the edge with the given name in this mutation.
+// It returns an error if the edge is not defined in the schema.
+func (m *VendorProfilePostalAddressHistoryMutation) ResetEdge(name string) error {
+	return fmt.Errorf("unknown VendorProfilePostalAddressHistory edge %s", name)
 }
 
 // WebauthnMutation represents an operation that mutates the Webauthn nodes in the graph.

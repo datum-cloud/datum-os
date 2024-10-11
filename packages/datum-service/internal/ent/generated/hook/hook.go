@@ -609,6 +609,30 @@ func (f PersonalAccessTokenFunc) Mutate(ctx context.Context, m generated.Mutatio
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.PersonalAccessTokenMutation", m)
 }
 
+// The PostalAddressFunc type is an adapter to allow the use of ordinary
+// function as PostalAddress mutator.
+type PostalAddressFunc func(context.Context, *generated.PostalAddressMutation) (generated.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f PostalAddressFunc) Mutate(ctx context.Context, m generated.Mutation) (generated.Value, error) {
+	if mv, ok := m.(*generated.PostalAddressMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.PostalAddressMutation", m)
+}
+
+// The PostalAddressHistoryFunc type is an adapter to allow the use of ordinary
+// function as PostalAddressHistory mutator.
+type PostalAddressHistoryFunc func(context.Context, *generated.PostalAddressHistoryMutation) (generated.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f PostalAddressHistoryFunc) Mutate(ctx context.Context, m generated.Mutation) (generated.Value, error) {
+	if mv, ok := m.(*generated.PostalAddressHistoryMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.PostalAddressHistoryMutation", m)
+}
+
 // The SubscriberFunc type is an adapter to allow the use of ordinary
 // function as Subscriber mutator.
 type SubscriberFunc func(context.Context, *generated.SubscriberMutation) (generated.Value, error)
@@ -703,6 +727,78 @@ func (f UserSettingHistoryFunc) Mutate(ctx context.Context, m generated.Mutation
 		return f(ctx, mv)
 	}
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.UserSettingHistoryMutation", m)
+}
+
+// The VendorFunc type is an adapter to allow the use of ordinary
+// function as Vendor mutator.
+type VendorFunc func(context.Context, *generated.VendorMutation) (generated.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f VendorFunc) Mutate(ctx context.Context, m generated.Mutation) (generated.Value, error) {
+	if mv, ok := m.(*generated.VendorMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.VendorMutation", m)
+}
+
+// The VendorHistoryFunc type is an adapter to allow the use of ordinary
+// function as VendorHistory mutator.
+type VendorHistoryFunc func(context.Context, *generated.VendorHistoryMutation) (generated.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f VendorHistoryFunc) Mutate(ctx context.Context, m generated.Mutation) (generated.Value, error) {
+	if mv, ok := m.(*generated.VendorHistoryMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.VendorHistoryMutation", m)
+}
+
+// The VendorProfileFunc type is an adapter to allow the use of ordinary
+// function as VendorProfile mutator.
+type VendorProfileFunc func(context.Context, *generated.VendorProfileMutation) (generated.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f VendorProfileFunc) Mutate(ctx context.Context, m generated.Mutation) (generated.Value, error) {
+	if mv, ok := m.(*generated.VendorProfileMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.VendorProfileMutation", m)
+}
+
+// The VendorProfileHistoryFunc type is an adapter to allow the use of ordinary
+// function as VendorProfileHistory mutator.
+type VendorProfileHistoryFunc func(context.Context, *generated.VendorProfileHistoryMutation) (generated.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f VendorProfileHistoryFunc) Mutate(ctx context.Context, m generated.Mutation) (generated.Value, error) {
+	if mv, ok := m.(*generated.VendorProfileHistoryMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.VendorProfileHistoryMutation", m)
+}
+
+// The VendorProfilePostalAddressFunc type is an adapter to allow the use of ordinary
+// function as VendorProfilePostalAddress mutator.
+type VendorProfilePostalAddressFunc func(context.Context, *generated.VendorProfilePostalAddressMutation) (generated.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f VendorProfilePostalAddressFunc) Mutate(ctx context.Context, m generated.Mutation) (generated.Value, error) {
+	if mv, ok := m.(*generated.VendorProfilePostalAddressMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.VendorProfilePostalAddressMutation", m)
+}
+
+// The VendorProfilePostalAddressHistoryFunc type is an adapter to allow the use of ordinary
+// function as VendorProfilePostalAddressHistory mutator.
+type VendorProfilePostalAddressHistoryFunc func(context.Context, *generated.VendorProfilePostalAddressHistoryMutation) (generated.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f VendorProfilePostalAddressHistoryFunc) Mutate(ctx context.Context, m generated.Mutation) (generated.Value, error) {
+	if mv, ok := m.(*generated.VendorProfilePostalAddressHistoryMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.VendorProfilePostalAddressHistoryMutation", m)
 }
 
 // The WebauthnFunc type is an adapter to allow the use of ordinary

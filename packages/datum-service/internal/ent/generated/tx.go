@@ -112,6 +112,10 @@ type Tx struct {
 	PasswordResetToken *PasswordResetTokenClient
 	// PersonalAccessToken is the client for interacting with the PersonalAccessToken builders.
 	PersonalAccessToken *PersonalAccessTokenClient
+	// PostalAddress is the client for interacting with the PostalAddress builders.
+	PostalAddress *PostalAddressClient
+	// PostalAddressHistory is the client for interacting with the PostalAddressHistory builders.
+	PostalAddressHistory *PostalAddressHistoryClient
 	// Subscriber is the client for interacting with the Subscriber builders.
 	Subscriber *SubscriberClient
 	// TFASetting is the client for interacting with the TFASetting builders.
@@ -128,6 +132,18 @@ type Tx struct {
 	UserSetting *UserSettingClient
 	// UserSettingHistory is the client for interacting with the UserSettingHistory builders.
 	UserSettingHistory *UserSettingHistoryClient
+	// Vendor is the client for interacting with the Vendor builders.
+	Vendor *VendorClient
+	// VendorHistory is the client for interacting with the VendorHistory builders.
+	VendorHistory *VendorHistoryClient
+	// VendorProfile is the client for interacting with the VendorProfile builders.
+	VendorProfile *VendorProfileClient
+	// VendorProfileHistory is the client for interacting with the VendorProfileHistory builders.
+	VendorProfileHistory *VendorProfileHistoryClient
+	// VendorProfilePostalAddress is the client for interacting with the VendorProfilePostalAddress builders.
+	VendorProfilePostalAddress *VendorProfilePostalAddressClient
+	// VendorProfilePostalAddressHistory is the client for interacting with the VendorProfilePostalAddressHistory builders.
+	VendorProfilePostalAddressHistory *VendorProfilePostalAddressHistoryClient
 	// Webauthn is the client for interacting with the Webauthn builders.
 	Webauthn *WebauthnClient
 	// Webhook is the client for interacting with the Webhook builders.
@@ -315,6 +331,8 @@ func (tx *Tx) init() {
 	tx.OrganizationSettingHistory = NewOrganizationSettingHistoryClient(tx.config)
 	tx.PasswordResetToken = NewPasswordResetTokenClient(tx.config)
 	tx.PersonalAccessToken = NewPersonalAccessTokenClient(tx.config)
+	tx.PostalAddress = NewPostalAddressClient(tx.config)
+	tx.PostalAddressHistory = NewPostalAddressHistoryClient(tx.config)
 	tx.Subscriber = NewSubscriberClient(tx.config)
 	tx.TFASetting = NewTFASettingClient(tx.config)
 	tx.Template = NewTemplateClient(tx.config)
@@ -323,6 +341,12 @@ func (tx *Tx) init() {
 	tx.UserHistory = NewUserHistoryClient(tx.config)
 	tx.UserSetting = NewUserSettingClient(tx.config)
 	tx.UserSettingHistory = NewUserSettingHistoryClient(tx.config)
+	tx.Vendor = NewVendorClient(tx.config)
+	tx.VendorHistory = NewVendorHistoryClient(tx.config)
+	tx.VendorProfile = NewVendorProfileClient(tx.config)
+	tx.VendorProfileHistory = NewVendorProfileHistoryClient(tx.config)
+	tx.VendorProfilePostalAddress = NewVendorProfilePostalAddressClient(tx.config)
+	tx.VendorProfilePostalAddressHistory = NewVendorProfilePostalAddressHistoryClient(tx.config)
 	tx.Webauthn = NewWebauthnClient(tx.config)
 	tx.Webhook = NewWebhookClient(tx.config)
 	tx.WebhookHistory = NewWebhookHistoryClient(tx.config)

@@ -58,6 +58,8 @@ import (
 	"github.com/datum-cloud/datum-os/internal/ent/generated/orgmembership"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/orgmembershiphistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/personalaccesstoken"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/postaladdress"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/postaladdresshistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/subscriber"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/template"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/templatehistory"
@@ -66,6 +68,12 @@ import (
 	"github.com/datum-cloud/datum-os/internal/ent/generated/userhistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/usersetting"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/usersettinghistory"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/vendor"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorhistory"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofile"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofilehistory"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofilepostaladdress"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofilepostaladdresshistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/webhook"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/webhookhistory"
 )
@@ -2537,6 +2545,19 @@ func (e *EntityQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 				return err
 			}
 			e.WithNamedNotes(alias, func(wq *NoteQuery) {
+				*wq = *query
+			})
+
+		case "postalAddresses":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&PostalAddressClient{config: e.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, postaladdressImplementors)...); err != nil {
+				return err
+			}
+			e.WithNamedPostalAddresses(alias, func(wq *PostalAddressQuery) {
 				*wq = *query
 			})
 
@@ -7499,6 +7520,45 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 				*wq = *query
 			})
 
+		case "vendors":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&VendorClient{config: o.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, vendorImplementors)...); err != nil {
+				return err
+			}
+			o.WithNamedVendors(alias, func(wq *VendorQuery) {
+				*wq = *query
+			})
+
+		case "vendorProfiles":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&VendorProfileClient{config: o.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, vendorprofileImplementors)...); err != nil {
+				return err
+			}
+			o.WithNamedVendorProfiles(alias, func(wq *VendorProfileQuery) {
+				*wq = *query
+			})
+
+		case "postalAddresses":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&PostalAddressClient{config: o.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, postaladdressImplementors)...); err != nil {
+				return err
+			}
+			o.WithNamedPostalAddresses(alias, func(wq *PostalAddressQuery) {
+				*wq = *query
+			})
+
 		case "members":
 			var (
 				alias = field.Alias
@@ -8271,6 +8331,423 @@ func newPersonalAccessTokenPaginateArgs(rv map[string]any) *personalaccesstokenP
 	}
 	if v, ok := rv[whereField].(*PersonalAccessTokenWhereInput); ok {
 		args.opts = append(args.opts, WithPersonalAccessTokenFilter(v.Filter))
+	}
+	return args
+}
+
+// CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
+func (pa *PostalAddressQuery) CollectFields(ctx context.Context, satisfies ...string) (*PostalAddressQuery, error) {
+	fc := graphql.GetFieldContext(ctx)
+	if fc == nil {
+		return pa, nil
+	}
+	if err := pa.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+		return nil, err
+	}
+	return pa, nil
+}
+
+func (pa *PostalAddressQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+	path = append([]string(nil), path...)
+	var (
+		unknownSeen    bool
+		fieldSeen      = make(map[string]struct{}, len(postaladdress.Columns))
+		selectedFields = []string{postaladdress.FieldID}
+	)
+	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
+		switch field.Name {
+
+		case "owner":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&OrganizationClient{config: pa.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, organizationImplementors)...); err != nil {
+				return err
+			}
+			pa.withOwner = query
+			if _, ok := fieldSeen[postaladdress.FieldOwnerID]; !ok {
+				selectedFields = append(selectedFields, postaladdress.FieldOwnerID)
+				fieldSeen[postaladdress.FieldOwnerID] = struct{}{}
+			}
+
+		case "events":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&EventClient{config: pa.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, eventImplementors)...); err != nil {
+				return err
+			}
+			pa.WithNamedEvents(alias, func(wq *EventQuery) {
+				*wq = *query
+			})
+
+		case "profile":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&VendorProfileClient{config: pa.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, vendorprofileImplementors)...); err != nil {
+				return err
+			}
+			pa.WithNamedProfile(alias, func(wq *VendorProfileQuery) {
+				*wq = *query
+			})
+
+		case "vendorProfilePostalAddresses":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&VendorProfilePostalAddressClient{config: pa.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, vendorprofilepostaladdressImplementors)...); err != nil {
+				return err
+			}
+			pa.WithNamedVendorProfilePostalAddresses(alias, func(wq *VendorProfilePostalAddressQuery) {
+				*wq = *query
+			})
+		case "createdAt":
+			if _, ok := fieldSeen[postaladdress.FieldCreatedAt]; !ok {
+				selectedFields = append(selectedFields, postaladdress.FieldCreatedAt)
+				fieldSeen[postaladdress.FieldCreatedAt] = struct{}{}
+			}
+		case "updatedAt":
+			if _, ok := fieldSeen[postaladdress.FieldUpdatedAt]; !ok {
+				selectedFields = append(selectedFields, postaladdress.FieldUpdatedAt)
+				fieldSeen[postaladdress.FieldUpdatedAt] = struct{}{}
+			}
+		case "createdBy":
+			if _, ok := fieldSeen[postaladdress.FieldCreatedBy]; !ok {
+				selectedFields = append(selectedFields, postaladdress.FieldCreatedBy)
+				fieldSeen[postaladdress.FieldCreatedBy] = struct{}{}
+			}
+		case "updatedBy":
+			if _, ok := fieldSeen[postaladdress.FieldUpdatedBy]; !ok {
+				selectedFields = append(selectedFields, postaladdress.FieldUpdatedBy)
+				fieldSeen[postaladdress.FieldUpdatedBy] = struct{}{}
+			}
+		case "deletedAt":
+			if _, ok := fieldSeen[postaladdress.FieldDeletedAt]; !ok {
+				selectedFields = append(selectedFields, postaladdress.FieldDeletedAt)
+				fieldSeen[postaladdress.FieldDeletedAt] = struct{}{}
+			}
+		case "deletedBy":
+			if _, ok := fieldSeen[postaladdress.FieldDeletedBy]; !ok {
+				selectedFields = append(selectedFields, postaladdress.FieldDeletedBy)
+				fieldSeen[postaladdress.FieldDeletedBy] = struct{}{}
+			}
+		case "tags":
+			if _, ok := fieldSeen[postaladdress.FieldTags]; !ok {
+				selectedFields = append(selectedFields, postaladdress.FieldTags)
+				fieldSeen[postaladdress.FieldTags] = struct{}{}
+			}
+		case "ownerID":
+			if _, ok := fieldSeen[postaladdress.FieldOwnerID]; !ok {
+				selectedFields = append(selectedFields, postaladdress.FieldOwnerID)
+				fieldSeen[postaladdress.FieldOwnerID] = struct{}{}
+			}
+		case "regionCode":
+			if _, ok := fieldSeen[postaladdress.FieldRegionCode]; !ok {
+				selectedFields = append(selectedFields, postaladdress.FieldRegionCode)
+				fieldSeen[postaladdress.FieldRegionCode] = struct{}{}
+			}
+		case "languageCode":
+			if _, ok := fieldSeen[postaladdress.FieldLanguageCode]; !ok {
+				selectedFields = append(selectedFields, postaladdress.FieldLanguageCode)
+				fieldSeen[postaladdress.FieldLanguageCode] = struct{}{}
+			}
+		case "postalCode":
+			if _, ok := fieldSeen[postaladdress.FieldPostalCode]; !ok {
+				selectedFields = append(selectedFields, postaladdress.FieldPostalCode)
+				fieldSeen[postaladdress.FieldPostalCode] = struct{}{}
+			}
+		case "sortingCode":
+			if _, ok := fieldSeen[postaladdress.FieldSortingCode]; !ok {
+				selectedFields = append(selectedFields, postaladdress.FieldSortingCode)
+				fieldSeen[postaladdress.FieldSortingCode] = struct{}{}
+			}
+		case "administrativeArea":
+			if _, ok := fieldSeen[postaladdress.FieldAdministrativeArea]; !ok {
+				selectedFields = append(selectedFields, postaladdress.FieldAdministrativeArea)
+				fieldSeen[postaladdress.FieldAdministrativeArea] = struct{}{}
+			}
+		case "locality":
+			if _, ok := fieldSeen[postaladdress.FieldLocality]; !ok {
+				selectedFields = append(selectedFields, postaladdress.FieldLocality)
+				fieldSeen[postaladdress.FieldLocality] = struct{}{}
+			}
+		case "sublocality":
+			if _, ok := fieldSeen[postaladdress.FieldSublocality]; !ok {
+				selectedFields = append(selectedFields, postaladdress.FieldSublocality)
+				fieldSeen[postaladdress.FieldSublocality] = struct{}{}
+			}
+		case "addressLines":
+			if _, ok := fieldSeen[postaladdress.FieldAddressLines]; !ok {
+				selectedFields = append(selectedFields, postaladdress.FieldAddressLines)
+				fieldSeen[postaladdress.FieldAddressLines] = struct{}{}
+			}
+		case "recipients":
+			if _, ok := fieldSeen[postaladdress.FieldRecipients]; !ok {
+				selectedFields = append(selectedFields, postaladdress.FieldRecipients)
+				fieldSeen[postaladdress.FieldRecipients] = struct{}{}
+			}
+		case "organization":
+			if _, ok := fieldSeen[postaladdress.FieldOrganization]; !ok {
+				selectedFields = append(selectedFields, postaladdress.FieldOrganization)
+				fieldSeen[postaladdress.FieldOrganization] = struct{}{}
+			}
+		case "id":
+		case "__typename":
+		default:
+			unknownSeen = true
+		}
+	}
+	if !unknownSeen {
+		pa.Select(selectedFields...)
+	}
+	return nil
+}
+
+type postaladdressPaginateArgs struct {
+	first, last   *int
+	after, before *Cursor
+	opts          []PostalAddressPaginateOption
+}
+
+func newPostalAddressPaginateArgs(rv map[string]any) *postaladdressPaginateArgs {
+	args := &postaladdressPaginateArgs{}
+	if rv == nil {
+		return args
+	}
+	if v := rv[firstField]; v != nil {
+		args.first = v.(*int)
+	}
+	if v := rv[lastField]; v != nil {
+		args.last = v.(*int)
+	}
+	if v := rv[afterField]; v != nil {
+		args.after = v.(*Cursor)
+	}
+	if v := rv[beforeField]; v != nil {
+		args.before = v.(*Cursor)
+	}
+	if v, ok := rv[orderByField]; ok {
+		switch v := v.(type) {
+		case map[string]any:
+			var (
+				err1, err2 error
+				order      = &PostalAddressOrder{Field: &PostalAddressOrderField{}, Direction: entgql.OrderDirectionAsc}
+			)
+			if d, ok := v[directionField]; ok {
+				err1 = order.Direction.UnmarshalGQL(d)
+			}
+			if f, ok := v[fieldField]; ok {
+				err2 = order.Field.UnmarshalGQL(f)
+			}
+			if err1 == nil && err2 == nil {
+				args.opts = append(args.opts, WithPostalAddressOrder(order))
+			}
+		case *PostalAddressOrder:
+			if v != nil {
+				args.opts = append(args.opts, WithPostalAddressOrder(v))
+			}
+		}
+	}
+	if v, ok := rv[whereField].(*PostalAddressWhereInput); ok {
+		args.opts = append(args.opts, WithPostalAddressFilter(v.Filter))
+	}
+	return args
+}
+
+// CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
+func (pah *PostalAddressHistoryQuery) CollectFields(ctx context.Context, satisfies ...string) (*PostalAddressHistoryQuery, error) {
+	fc := graphql.GetFieldContext(ctx)
+	if fc == nil {
+		return pah, nil
+	}
+	if err := pah.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+		return nil, err
+	}
+	return pah, nil
+}
+
+func (pah *PostalAddressHistoryQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+	path = append([]string(nil), path...)
+	var (
+		unknownSeen    bool
+		fieldSeen      = make(map[string]struct{}, len(postaladdresshistory.Columns))
+		selectedFields = []string{postaladdresshistory.FieldID}
+	)
+	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
+		switch field.Name {
+		case "historyTime":
+			if _, ok := fieldSeen[postaladdresshistory.FieldHistoryTime]; !ok {
+				selectedFields = append(selectedFields, postaladdresshistory.FieldHistoryTime)
+				fieldSeen[postaladdresshistory.FieldHistoryTime] = struct{}{}
+			}
+		case "ref":
+			if _, ok := fieldSeen[postaladdresshistory.FieldRef]; !ok {
+				selectedFields = append(selectedFields, postaladdresshistory.FieldRef)
+				fieldSeen[postaladdresshistory.FieldRef] = struct{}{}
+			}
+		case "operation":
+			if _, ok := fieldSeen[postaladdresshistory.FieldOperation]; !ok {
+				selectedFields = append(selectedFields, postaladdresshistory.FieldOperation)
+				fieldSeen[postaladdresshistory.FieldOperation] = struct{}{}
+			}
+		case "createdAt":
+			if _, ok := fieldSeen[postaladdresshistory.FieldCreatedAt]; !ok {
+				selectedFields = append(selectedFields, postaladdresshistory.FieldCreatedAt)
+				fieldSeen[postaladdresshistory.FieldCreatedAt] = struct{}{}
+			}
+		case "updatedAt":
+			if _, ok := fieldSeen[postaladdresshistory.FieldUpdatedAt]; !ok {
+				selectedFields = append(selectedFields, postaladdresshistory.FieldUpdatedAt)
+				fieldSeen[postaladdresshistory.FieldUpdatedAt] = struct{}{}
+			}
+		case "createdBy":
+			if _, ok := fieldSeen[postaladdresshistory.FieldCreatedBy]; !ok {
+				selectedFields = append(selectedFields, postaladdresshistory.FieldCreatedBy)
+				fieldSeen[postaladdresshistory.FieldCreatedBy] = struct{}{}
+			}
+		case "updatedBy":
+			if _, ok := fieldSeen[postaladdresshistory.FieldUpdatedBy]; !ok {
+				selectedFields = append(selectedFields, postaladdresshistory.FieldUpdatedBy)
+				fieldSeen[postaladdresshistory.FieldUpdatedBy] = struct{}{}
+			}
+		case "deletedAt":
+			if _, ok := fieldSeen[postaladdresshistory.FieldDeletedAt]; !ok {
+				selectedFields = append(selectedFields, postaladdresshistory.FieldDeletedAt)
+				fieldSeen[postaladdresshistory.FieldDeletedAt] = struct{}{}
+			}
+		case "deletedBy":
+			if _, ok := fieldSeen[postaladdresshistory.FieldDeletedBy]; !ok {
+				selectedFields = append(selectedFields, postaladdresshistory.FieldDeletedBy)
+				fieldSeen[postaladdresshistory.FieldDeletedBy] = struct{}{}
+			}
+		case "tags":
+			if _, ok := fieldSeen[postaladdresshistory.FieldTags]; !ok {
+				selectedFields = append(selectedFields, postaladdresshistory.FieldTags)
+				fieldSeen[postaladdresshistory.FieldTags] = struct{}{}
+			}
+		case "ownerID":
+			if _, ok := fieldSeen[postaladdresshistory.FieldOwnerID]; !ok {
+				selectedFields = append(selectedFields, postaladdresshistory.FieldOwnerID)
+				fieldSeen[postaladdresshistory.FieldOwnerID] = struct{}{}
+			}
+		case "regionCode":
+			if _, ok := fieldSeen[postaladdresshistory.FieldRegionCode]; !ok {
+				selectedFields = append(selectedFields, postaladdresshistory.FieldRegionCode)
+				fieldSeen[postaladdresshistory.FieldRegionCode] = struct{}{}
+			}
+		case "languageCode":
+			if _, ok := fieldSeen[postaladdresshistory.FieldLanguageCode]; !ok {
+				selectedFields = append(selectedFields, postaladdresshistory.FieldLanguageCode)
+				fieldSeen[postaladdresshistory.FieldLanguageCode] = struct{}{}
+			}
+		case "postalCode":
+			if _, ok := fieldSeen[postaladdresshistory.FieldPostalCode]; !ok {
+				selectedFields = append(selectedFields, postaladdresshistory.FieldPostalCode)
+				fieldSeen[postaladdresshistory.FieldPostalCode] = struct{}{}
+			}
+		case "sortingCode":
+			if _, ok := fieldSeen[postaladdresshistory.FieldSortingCode]; !ok {
+				selectedFields = append(selectedFields, postaladdresshistory.FieldSortingCode)
+				fieldSeen[postaladdresshistory.FieldSortingCode] = struct{}{}
+			}
+		case "administrativeArea":
+			if _, ok := fieldSeen[postaladdresshistory.FieldAdministrativeArea]; !ok {
+				selectedFields = append(selectedFields, postaladdresshistory.FieldAdministrativeArea)
+				fieldSeen[postaladdresshistory.FieldAdministrativeArea] = struct{}{}
+			}
+		case "locality":
+			if _, ok := fieldSeen[postaladdresshistory.FieldLocality]; !ok {
+				selectedFields = append(selectedFields, postaladdresshistory.FieldLocality)
+				fieldSeen[postaladdresshistory.FieldLocality] = struct{}{}
+			}
+		case "sublocality":
+			if _, ok := fieldSeen[postaladdresshistory.FieldSublocality]; !ok {
+				selectedFields = append(selectedFields, postaladdresshistory.FieldSublocality)
+				fieldSeen[postaladdresshistory.FieldSublocality] = struct{}{}
+			}
+		case "addressLines":
+			if _, ok := fieldSeen[postaladdresshistory.FieldAddressLines]; !ok {
+				selectedFields = append(selectedFields, postaladdresshistory.FieldAddressLines)
+				fieldSeen[postaladdresshistory.FieldAddressLines] = struct{}{}
+			}
+		case "recipients":
+			if _, ok := fieldSeen[postaladdresshistory.FieldRecipients]; !ok {
+				selectedFields = append(selectedFields, postaladdresshistory.FieldRecipients)
+				fieldSeen[postaladdresshistory.FieldRecipients] = struct{}{}
+			}
+		case "organization":
+			if _, ok := fieldSeen[postaladdresshistory.FieldOrganization]; !ok {
+				selectedFields = append(selectedFields, postaladdresshistory.FieldOrganization)
+				fieldSeen[postaladdresshistory.FieldOrganization] = struct{}{}
+			}
+		case "id":
+		case "__typename":
+		default:
+			unknownSeen = true
+		}
+	}
+	if !unknownSeen {
+		pah.Select(selectedFields...)
+	}
+	return nil
+}
+
+type postaladdresshistoryPaginateArgs struct {
+	first, last   *int
+	after, before *Cursor
+	opts          []PostalAddressHistoryPaginateOption
+}
+
+func newPostalAddressHistoryPaginateArgs(rv map[string]any) *postaladdresshistoryPaginateArgs {
+	args := &postaladdresshistoryPaginateArgs{}
+	if rv == nil {
+		return args
+	}
+	if v := rv[firstField]; v != nil {
+		args.first = v.(*int)
+	}
+	if v := rv[lastField]; v != nil {
+		args.last = v.(*int)
+	}
+	if v := rv[afterField]; v != nil {
+		args.after = v.(*Cursor)
+	}
+	if v := rv[beforeField]; v != nil {
+		args.before = v.(*Cursor)
+	}
+	if v, ok := rv[orderByField]; ok {
+		switch v := v.(type) {
+		case map[string]any:
+			var (
+				err1, err2 error
+				order      = &PostalAddressHistoryOrder{Field: &PostalAddressHistoryOrderField{}, Direction: entgql.OrderDirectionAsc}
+			)
+			if d, ok := v[directionField]; ok {
+				err1 = order.Direction.UnmarshalGQL(d)
+			}
+			if f, ok := v[fieldField]; ok {
+				err2 = order.Field.UnmarshalGQL(f)
+			}
+			if err1 == nil && err2 == nil {
+				args.opts = append(args.opts, WithPostalAddressHistoryOrder(order))
+			}
+		case *PostalAddressHistoryOrder:
+			if v != nil {
+				args.opts = append(args.opts, WithPostalAddressHistoryOrder(v))
+			}
+		}
+	}
+	if v, ok := rv[whereField].(*PostalAddressHistoryWhereInput); ok {
+		args.opts = append(args.opts, WithPostalAddressHistoryFilter(v.Filter))
 	}
 	return args
 }
@@ -9692,6 +10169,979 @@ func newUserSettingHistoryPaginateArgs(rv map[string]any) *usersettinghistoryPag
 	}
 	if v, ok := rv[whereField].(*UserSettingHistoryWhereInput); ok {
 		args.opts = append(args.opts, WithUserSettingHistoryFilter(v.Filter))
+	}
+	return args
+}
+
+// CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
+func (v *VendorQuery) CollectFields(ctx context.Context, satisfies ...string) (*VendorQuery, error) {
+	fc := graphql.GetFieldContext(ctx)
+	if fc == nil {
+		return v, nil
+	}
+	if err := v.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+		return nil, err
+	}
+	return v, nil
+}
+
+func (v *VendorQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+	path = append([]string(nil), path...)
+	var (
+		unknownSeen    bool
+		fieldSeen      = make(map[string]struct{}, len(vendor.Columns))
+		selectedFields = []string{vendor.FieldID}
+	)
+	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
+		switch field.Name {
+
+		case "owner":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&OrganizationClient{config: v.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, organizationImplementors)...); err != nil {
+				return err
+			}
+			v.withOwner = query
+			if _, ok := fieldSeen[vendor.FieldOwnerID]; !ok {
+				selectedFields = append(selectedFields, vendor.FieldOwnerID)
+				fieldSeen[vendor.FieldOwnerID] = struct{}{}
+			}
+
+		case "profile":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&VendorProfileClient{config: v.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, vendorprofileImplementors)...); err != nil {
+				return err
+			}
+			v.withProfile = query
+
+		case "events":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&EventClient{config: v.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, eventImplementors)...); err != nil {
+				return err
+			}
+			v.WithNamedEvents(alias, func(wq *EventQuery) {
+				*wq = *query
+			})
+		case "createdAt":
+			if _, ok := fieldSeen[vendor.FieldCreatedAt]; !ok {
+				selectedFields = append(selectedFields, vendor.FieldCreatedAt)
+				fieldSeen[vendor.FieldCreatedAt] = struct{}{}
+			}
+		case "updatedAt":
+			if _, ok := fieldSeen[vendor.FieldUpdatedAt]; !ok {
+				selectedFields = append(selectedFields, vendor.FieldUpdatedAt)
+				fieldSeen[vendor.FieldUpdatedAt] = struct{}{}
+			}
+		case "createdBy":
+			if _, ok := fieldSeen[vendor.FieldCreatedBy]; !ok {
+				selectedFields = append(selectedFields, vendor.FieldCreatedBy)
+				fieldSeen[vendor.FieldCreatedBy] = struct{}{}
+			}
+		case "updatedBy":
+			if _, ok := fieldSeen[vendor.FieldUpdatedBy]; !ok {
+				selectedFields = append(selectedFields, vendor.FieldUpdatedBy)
+				fieldSeen[vendor.FieldUpdatedBy] = struct{}{}
+			}
+		case "deletedAt":
+			if _, ok := fieldSeen[vendor.FieldDeletedAt]; !ok {
+				selectedFields = append(selectedFields, vendor.FieldDeletedAt)
+				fieldSeen[vendor.FieldDeletedAt] = struct{}{}
+			}
+		case "deletedBy":
+			if _, ok := fieldSeen[vendor.FieldDeletedBy]; !ok {
+				selectedFields = append(selectedFields, vendor.FieldDeletedBy)
+				fieldSeen[vendor.FieldDeletedBy] = struct{}{}
+			}
+		case "tags":
+			if _, ok := fieldSeen[vendor.FieldTags]; !ok {
+				selectedFields = append(selectedFields, vendor.FieldTags)
+				fieldSeen[vendor.FieldTags] = struct{}{}
+			}
+		case "ownerID":
+			if _, ok := fieldSeen[vendor.FieldOwnerID]; !ok {
+				selectedFields = append(selectedFields, vendor.FieldOwnerID)
+				fieldSeen[vendor.FieldOwnerID] = struct{}{}
+			}
+		case "displayName":
+			if _, ok := fieldSeen[vendor.FieldDisplayName]; !ok {
+				selectedFields = append(selectedFields, vendor.FieldDisplayName)
+				fieldSeen[vendor.FieldDisplayName] = struct{}{}
+			}
+		case "vendorType":
+			if _, ok := fieldSeen[vendor.FieldVendorType]; !ok {
+				selectedFields = append(selectedFields, vendor.FieldVendorType)
+				fieldSeen[vendor.FieldVendorType] = struct{}{}
+			}
+		case "onboardingState":
+			if _, ok := fieldSeen[vendor.FieldOnboardingState]; !ok {
+				selectedFields = append(selectedFields, vendor.FieldOnboardingState)
+				fieldSeen[vendor.FieldOnboardingState] = struct{}{}
+			}
+		case "id":
+		case "__typename":
+		default:
+			unknownSeen = true
+		}
+	}
+	if !unknownSeen {
+		v.Select(selectedFields...)
+	}
+	return nil
+}
+
+type vendorPaginateArgs struct {
+	first, last   *int
+	after, before *Cursor
+	opts          []VendorPaginateOption
+}
+
+func newVendorPaginateArgs(rv map[string]any) *vendorPaginateArgs {
+	args := &vendorPaginateArgs{}
+	if rv == nil {
+		return args
+	}
+	if v := rv[firstField]; v != nil {
+		args.first = v.(*int)
+	}
+	if v := rv[lastField]; v != nil {
+		args.last = v.(*int)
+	}
+	if v := rv[afterField]; v != nil {
+		args.after = v.(*Cursor)
+	}
+	if v := rv[beforeField]; v != nil {
+		args.before = v.(*Cursor)
+	}
+	if v, ok := rv[orderByField]; ok {
+		switch v := v.(type) {
+		case map[string]any:
+			var (
+				err1, err2 error
+				order      = &VendorOrder{Field: &VendorOrderField{}, Direction: entgql.OrderDirectionAsc}
+			)
+			if d, ok := v[directionField]; ok {
+				err1 = order.Direction.UnmarshalGQL(d)
+			}
+			if f, ok := v[fieldField]; ok {
+				err2 = order.Field.UnmarshalGQL(f)
+			}
+			if err1 == nil && err2 == nil {
+				args.opts = append(args.opts, WithVendorOrder(order))
+			}
+		case *VendorOrder:
+			if v != nil {
+				args.opts = append(args.opts, WithVendorOrder(v))
+			}
+		}
+	}
+	if v, ok := rv[whereField].(*VendorWhereInput); ok {
+		args.opts = append(args.opts, WithVendorFilter(v.Filter))
+	}
+	return args
+}
+
+// CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
+func (vh *VendorHistoryQuery) CollectFields(ctx context.Context, satisfies ...string) (*VendorHistoryQuery, error) {
+	fc := graphql.GetFieldContext(ctx)
+	if fc == nil {
+		return vh, nil
+	}
+	if err := vh.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+		return nil, err
+	}
+	return vh, nil
+}
+
+func (vh *VendorHistoryQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+	path = append([]string(nil), path...)
+	var (
+		unknownSeen    bool
+		fieldSeen      = make(map[string]struct{}, len(vendorhistory.Columns))
+		selectedFields = []string{vendorhistory.FieldID}
+	)
+	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
+		switch field.Name {
+		case "historyTime":
+			if _, ok := fieldSeen[vendorhistory.FieldHistoryTime]; !ok {
+				selectedFields = append(selectedFields, vendorhistory.FieldHistoryTime)
+				fieldSeen[vendorhistory.FieldHistoryTime] = struct{}{}
+			}
+		case "ref":
+			if _, ok := fieldSeen[vendorhistory.FieldRef]; !ok {
+				selectedFields = append(selectedFields, vendorhistory.FieldRef)
+				fieldSeen[vendorhistory.FieldRef] = struct{}{}
+			}
+		case "operation":
+			if _, ok := fieldSeen[vendorhistory.FieldOperation]; !ok {
+				selectedFields = append(selectedFields, vendorhistory.FieldOperation)
+				fieldSeen[vendorhistory.FieldOperation] = struct{}{}
+			}
+		case "createdAt":
+			if _, ok := fieldSeen[vendorhistory.FieldCreatedAt]; !ok {
+				selectedFields = append(selectedFields, vendorhistory.FieldCreatedAt)
+				fieldSeen[vendorhistory.FieldCreatedAt] = struct{}{}
+			}
+		case "updatedAt":
+			if _, ok := fieldSeen[vendorhistory.FieldUpdatedAt]; !ok {
+				selectedFields = append(selectedFields, vendorhistory.FieldUpdatedAt)
+				fieldSeen[vendorhistory.FieldUpdatedAt] = struct{}{}
+			}
+		case "createdBy":
+			if _, ok := fieldSeen[vendorhistory.FieldCreatedBy]; !ok {
+				selectedFields = append(selectedFields, vendorhistory.FieldCreatedBy)
+				fieldSeen[vendorhistory.FieldCreatedBy] = struct{}{}
+			}
+		case "updatedBy":
+			if _, ok := fieldSeen[vendorhistory.FieldUpdatedBy]; !ok {
+				selectedFields = append(selectedFields, vendorhistory.FieldUpdatedBy)
+				fieldSeen[vendorhistory.FieldUpdatedBy] = struct{}{}
+			}
+		case "deletedAt":
+			if _, ok := fieldSeen[vendorhistory.FieldDeletedAt]; !ok {
+				selectedFields = append(selectedFields, vendorhistory.FieldDeletedAt)
+				fieldSeen[vendorhistory.FieldDeletedAt] = struct{}{}
+			}
+		case "deletedBy":
+			if _, ok := fieldSeen[vendorhistory.FieldDeletedBy]; !ok {
+				selectedFields = append(selectedFields, vendorhistory.FieldDeletedBy)
+				fieldSeen[vendorhistory.FieldDeletedBy] = struct{}{}
+			}
+		case "tags":
+			if _, ok := fieldSeen[vendorhistory.FieldTags]; !ok {
+				selectedFields = append(selectedFields, vendorhistory.FieldTags)
+				fieldSeen[vendorhistory.FieldTags] = struct{}{}
+			}
+		case "ownerID":
+			if _, ok := fieldSeen[vendorhistory.FieldOwnerID]; !ok {
+				selectedFields = append(selectedFields, vendorhistory.FieldOwnerID)
+				fieldSeen[vendorhistory.FieldOwnerID] = struct{}{}
+			}
+		case "displayName":
+			if _, ok := fieldSeen[vendorhistory.FieldDisplayName]; !ok {
+				selectedFields = append(selectedFields, vendorhistory.FieldDisplayName)
+				fieldSeen[vendorhistory.FieldDisplayName] = struct{}{}
+			}
+		case "vendorType":
+			if _, ok := fieldSeen[vendorhistory.FieldVendorType]; !ok {
+				selectedFields = append(selectedFields, vendorhistory.FieldVendorType)
+				fieldSeen[vendorhistory.FieldVendorType] = struct{}{}
+			}
+		case "onboardingState":
+			if _, ok := fieldSeen[vendorhistory.FieldOnboardingState]; !ok {
+				selectedFields = append(selectedFields, vendorhistory.FieldOnboardingState)
+				fieldSeen[vendorhistory.FieldOnboardingState] = struct{}{}
+			}
+		case "id":
+		case "__typename":
+		default:
+			unknownSeen = true
+		}
+	}
+	if !unknownSeen {
+		vh.Select(selectedFields...)
+	}
+	return nil
+}
+
+type vendorhistoryPaginateArgs struct {
+	first, last   *int
+	after, before *Cursor
+	opts          []VendorHistoryPaginateOption
+}
+
+func newVendorHistoryPaginateArgs(rv map[string]any) *vendorhistoryPaginateArgs {
+	args := &vendorhistoryPaginateArgs{}
+	if rv == nil {
+		return args
+	}
+	if v := rv[firstField]; v != nil {
+		args.first = v.(*int)
+	}
+	if v := rv[lastField]; v != nil {
+		args.last = v.(*int)
+	}
+	if v := rv[afterField]; v != nil {
+		args.after = v.(*Cursor)
+	}
+	if v := rv[beforeField]; v != nil {
+		args.before = v.(*Cursor)
+	}
+	if v, ok := rv[orderByField]; ok {
+		switch v := v.(type) {
+		case map[string]any:
+			var (
+				err1, err2 error
+				order      = &VendorHistoryOrder{Field: &VendorHistoryOrderField{}, Direction: entgql.OrderDirectionAsc}
+			)
+			if d, ok := v[directionField]; ok {
+				err1 = order.Direction.UnmarshalGQL(d)
+			}
+			if f, ok := v[fieldField]; ok {
+				err2 = order.Field.UnmarshalGQL(f)
+			}
+			if err1 == nil && err2 == nil {
+				args.opts = append(args.opts, WithVendorHistoryOrder(order))
+			}
+		case *VendorHistoryOrder:
+			if v != nil {
+				args.opts = append(args.opts, WithVendorHistoryOrder(v))
+			}
+		}
+	}
+	if v, ok := rv[whereField].(*VendorHistoryWhereInput); ok {
+		args.opts = append(args.opts, WithVendorHistoryFilter(v.Filter))
+	}
+	return args
+}
+
+// CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
+func (vp *VendorProfileQuery) CollectFields(ctx context.Context, satisfies ...string) (*VendorProfileQuery, error) {
+	fc := graphql.GetFieldContext(ctx)
+	if fc == nil {
+		return vp, nil
+	}
+	if err := vp.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+		return nil, err
+	}
+	return vp, nil
+}
+
+func (vp *VendorProfileQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+	path = append([]string(nil), path...)
+	var (
+		unknownSeen    bool
+		fieldSeen      = make(map[string]struct{}, len(vendorprofile.Columns))
+		selectedFields = []string{vendorprofile.FieldID}
+	)
+	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
+		switch field.Name {
+
+		case "owner":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&OrganizationClient{config: vp.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, organizationImplementors)...); err != nil {
+				return err
+			}
+			vp.withOwner = query
+			if _, ok := fieldSeen[vendorprofile.FieldOwnerID]; !ok {
+				selectedFields = append(selectedFields, vendorprofile.FieldOwnerID)
+				fieldSeen[vendorprofile.FieldOwnerID] = struct{}{}
+			}
+
+		case "postalAddresses":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&PostalAddressClient{config: vp.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, postaladdressImplementors)...); err != nil {
+				return err
+			}
+			vp.WithNamedPostalAddresses(alias, func(wq *PostalAddressQuery) {
+				*wq = *query
+			})
+
+		case "vendor":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&VendorClient{config: vp.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, vendorImplementors)...); err != nil {
+				return err
+			}
+			vp.withVendor = query
+			if _, ok := fieldSeen[vendorprofile.FieldVendorID]; !ok {
+				selectedFields = append(selectedFields, vendorprofile.FieldVendorID)
+				fieldSeen[vendorprofile.FieldVendorID] = struct{}{}
+			}
+
+		case "vendorProfilePostalAddresses":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&VendorProfilePostalAddressClient{config: vp.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, vendorprofilepostaladdressImplementors)...); err != nil {
+				return err
+			}
+			vp.WithNamedVendorProfilePostalAddresses(alias, func(wq *VendorProfilePostalAddressQuery) {
+				*wq = *query
+			})
+		case "createdAt":
+			if _, ok := fieldSeen[vendorprofile.FieldCreatedAt]; !ok {
+				selectedFields = append(selectedFields, vendorprofile.FieldCreatedAt)
+				fieldSeen[vendorprofile.FieldCreatedAt] = struct{}{}
+			}
+		case "updatedAt":
+			if _, ok := fieldSeen[vendorprofile.FieldUpdatedAt]; !ok {
+				selectedFields = append(selectedFields, vendorprofile.FieldUpdatedAt)
+				fieldSeen[vendorprofile.FieldUpdatedAt] = struct{}{}
+			}
+		case "createdBy":
+			if _, ok := fieldSeen[vendorprofile.FieldCreatedBy]; !ok {
+				selectedFields = append(selectedFields, vendorprofile.FieldCreatedBy)
+				fieldSeen[vendorprofile.FieldCreatedBy] = struct{}{}
+			}
+		case "updatedBy":
+			if _, ok := fieldSeen[vendorprofile.FieldUpdatedBy]; !ok {
+				selectedFields = append(selectedFields, vendorprofile.FieldUpdatedBy)
+				fieldSeen[vendorprofile.FieldUpdatedBy] = struct{}{}
+			}
+		case "deletedAt":
+			if _, ok := fieldSeen[vendorprofile.FieldDeletedAt]; !ok {
+				selectedFields = append(selectedFields, vendorprofile.FieldDeletedAt)
+				fieldSeen[vendorprofile.FieldDeletedAt] = struct{}{}
+			}
+		case "deletedBy":
+			if _, ok := fieldSeen[vendorprofile.FieldDeletedBy]; !ok {
+				selectedFields = append(selectedFields, vendorprofile.FieldDeletedBy)
+				fieldSeen[vendorprofile.FieldDeletedBy] = struct{}{}
+			}
+		case "tags":
+			if _, ok := fieldSeen[vendorprofile.FieldTags]; !ok {
+				selectedFields = append(selectedFields, vendorprofile.FieldTags)
+				fieldSeen[vendorprofile.FieldTags] = struct{}{}
+			}
+		case "ownerID":
+			if _, ok := fieldSeen[vendorprofile.FieldOwnerID]; !ok {
+				selectedFields = append(selectedFields, vendorprofile.FieldOwnerID)
+				fieldSeen[vendorprofile.FieldOwnerID] = struct{}{}
+			}
+		case "vendorID":
+			if _, ok := fieldSeen[vendorprofile.FieldVendorID]; !ok {
+				selectedFields = append(selectedFields, vendorprofile.FieldVendorID)
+				fieldSeen[vendorprofile.FieldVendorID] = struct{}{}
+			}
+		case "name":
+			if _, ok := fieldSeen[vendorprofile.FieldName]; !ok {
+				selectedFields = append(selectedFields, vendorprofile.FieldName)
+				fieldSeen[vendorprofile.FieldName] = struct{}{}
+			}
+		case "dbaName":
+			if _, ok := fieldSeen[vendorprofile.FieldDbaName]; !ok {
+				selectedFields = append(selectedFields, vendorprofile.FieldDbaName)
+				fieldSeen[vendorprofile.FieldDbaName] = struct{}{}
+			}
+		case "description":
+			if _, ok := fieldSeen[vendorprofile.FieldDescription]; !ok {
+				selectedFields = append(selectedFields, vendorprofile.FieldDescription)
+				fieldSeen[vendorprofile.FieldDescription] = struct{}{}
+			}
+		case "websiteURI":
+			if _, ok := fieldSeen[vendorprofile.FieldWebsiteURI]; !ok {
+				selectedFields = append(selectedFields, vendorprofile.FieldWebsiteURI)
+				fieldSeen[vendorprofile.FieldWebsiteURI] = struct{}{}
+			}
+		case "id":
+		case "__typename":
+		default:
+			unknownSeen = true
+		}
+	}
+	if !unknownSeen {
+		vp.Select(selectedFields...)
+	}
+	return nil
+}
+
+type vendorprofilePaginateArgs struct {
+	first, last   *int
+	after, before *Cursor
+	opts          []VendorProfilePaginateOption
+}
+
+func newVendorProfilePaginateArgs(rv map[string]any) *vendorprofilePaginateArgs {
+	args := &vendorprofilePaginateArgs{}
+	if rv == nil {
+		return args
+	}
+	if v := rv[firstField]; v != nil {
+		args.first = v.(*int)
+	}
+	if v := rv[lastField]; v != nil {
+		args.last = v.(*int)
+	}
+	if v := rv[afterField]; v != nil {
+		args.after = v.(*Cursor)
+	}
+	if v := rv[beforeField]; v != nil {
+		args.before = v.(*Cursor)
+	}
+	if v, ok := rv[orderByField]; ok {
+		switch v := v.(type) {
+		case map[string]any:
+			var (
+				err1, err2 error
+				order      = &VendorProfileOrder{Field: &VendorProfileOrderField{}, Direction: entgql.OrderDirectionAsc}
+			)
+			if d, ok := v[directionField]; ok {
+				err1 = order.Direction.UnmarshalGQL(d)
+			}
+			if f, ok := v[fieldField]; ok {
+				err2 = order.Field.UnmarshalGQL(f)
+			}
+			if err1 == nil && err2 == nil {
+				args.opts = append(args.opts, WithVendorProfileOrder(order))
+			}
+		case *VendorProfileOrder:
+			if v != nil {
+				args.opts = append(args.opts, WithVendorProfileOrder(v))
+			}
+		}
+	}
+	if v, ok := rv[whereField].(*VendorProfileWhereInput); ok {
+		args.opts = append(args.opts, WithVendorProfileFilter(v.Filter))
+	}
+	return args
+}
+
+// CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
+func (vph *VendorProfileHistoryQuery) CollectFields(ctx context.Context, satisfies ...string) (*VendorProfileHistoryQuery, error) {
+	fc := graphql.GetFieldContext(ctx)
+	if fc == nil {
+		return vph, nil
+	}
+	if err := vph.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+		return nil, err
+	}
+	return vph, nil
+}
+
+func (vph *VendorProfileHistoryQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+	path = append([]string(nil), path...)
+	var (
+		unknownSeen    bool
+		fieldSeen      = make(map[string]struct{}, len(vendorprofilehistory.Columns))
+		selectedFields = []string{vendorprofilehistory.FieldID}
+	)
+	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
+		switch field.Name {
+		case "historyTime":
+			if _, ok := fieldSeen[vendorprofilehistory.FieldHistoryTime]; !ok {
+				selectedFields = append(selectedFields, vendorprofilehistory.FieldHistoryTime)
+				fieldSeen[vendorprofilehistory.FieldHistoryTime] = struct{}{}
+			}
+		case "ref":
+			if _, ok := fieldSeen[vendorprofilehistory.FieldRef]; !ok {
+				selectedFields = append(selectedFields, vendorprofilehistory.FieldRef)
+				fieldSeen[vendorprofilehistory.FieldRef] = struct{}{}
+			}
+		case "operation":
+			if _, ok := fieldSeen[vendorprofilehistory.FieldOperation]; !ok {
+				selectedFields = append(selectedFields, vendorprofilehistory.FieldOperation)
+				fieldSeen[vendorprofilehistory.FieldOperation] = struct{}{}
+			}
+		case "createdAt":
+			if _, ok := fieldSeen[vendorprofilehistory.FieldCreatedAt]; !ok {
+				selectedFields = append(selectedFields, vendorprofilehistory.FieldCreatedAt)
+				fieldSeen[vendorprofilehistory.FieldCreatedAt] = struct{}{}
+			}
+		case "updatedAt":
+			if _, ok := fieldSeen[vendorprofilehistory.FieldUpdatedAt]; !ok {
+				selectedFields = append(selectedFields, vendorprofilehistory.FieldUpdatedAt)
+				fieldSeen[vendorprofilehistory.FieldUpdatedAt] = struct{}{}
+			}
+		case "createdBy":
+			if _, ok := fieldSeen[vendorprofilehistory.FieldCreatedBy]; !ok {
+				selectedFields = append(selectedFields, vendorprofilehistory.FieldCreatedBy)
+				fieldSeen[vendorprofilehistory.FieldCreatedBy] = struct{}{}
+			}
+		case "updatedBy":
+			if _, ok := fieldSeen[vendorprofilehistory.FieldUpdatedBy]; !ok {
+				selectedFields = append(selectedFields, vendorprofilehistory.FieldUpdatedBy)
+				fieldSeen[vendorprofilehistory.FieldUpdatedBy] = struct{}{}
+			}
+		case "deletedAt":
+			if _, ok := fieldSeen[vendorprofilehistory.FieldDeletedAt]; !ok {
+				selectedFields = append(selectedFields, vendorprofilehistory.FieldDeletedAt)
+				fieldSeen[vendorprofilehistory.FieldDeletedAt] = struct{}{}
+			}
+		case "deletedBy":
+			if _, ok := fieldSeen[vendorprofilehistory.FieldDeletedBy]; !ok {
+				selectedFields = append(selectedFields, vendorprofilehistory.FieldDeletedBy)
+				fieldSeen[vendorprofilehistory.FieldDeletedBy] = struct{}{}
+			}
+		case "tags":
+			if _, ok := fieldSeen[vendorprofilehistory.FieldTags]; !ok {
+				selectedFields = append(selectedFields, vendorprofilehistory.FieldTags)
+				fieldSeen[vendorprofilehistory.FieldTags] = struct{}{}
+			}
+		case "ownerID":
+			if _, ok := fieldSeen[vendorprofilehistory.FieldOwnerID]; !ok {
+				selectedFields = append(selectedFields, vendorprofilehistory.FieldOwnerID)
+				fieldSeen[vendorprofilehistory.FieldOwnerID] = struct{}{}
+			}
+		case "vendorID":
+			if _, ok := fieldSeen[vendorprofilehistory.FieldVendorID]; !ok {
+				selectedFields = append(selectedFields, vendorprofilehistory.FieldVendorID)
+				fieldSeen[vendorprofilehistory.FieldVendorID] = struct{}{}
+			}
+		case "name":
+			if _, ok := fieldSeen[vendorprofilehistory.FieldName]; !ok {
+				selectedFields = append(selectedFields, vendorprofilehistory.FieldName)
+				fieldSeen[vendorprofilehistory.FieldName] = struct{}{}
+			}
+		case "dbaName":
+			if _, ok := fieldSeen[vendorprofilehistory.FieldDbaName]; !ok {
+				selectedFields = append(selectedFields, vendorprofilehistory.FieldDbaName)
+				fieldSeen[vendorprofilehistory.FieldDbaName] = struct{}{}
+			}
+		case "description":
+			if _, ok := fieldSeen[vendorprofilehistory.FieldDescription]; !ok {
+				selectedFields = append(selectedFields, vendorprofilehistory.FieldDescription)
+				fieldSeen[vendorprofilehistory.FieldDescription] = struct{}{}
+			}
+		case "websiteURI":
+			if _, ok := fieldSeen[vendorprofilehistory.FieldWebsiteURI]; !ok {
+				selectedFields = append(selectedFields, vendorprofilehistory.FieldWebsiteURI)
+				fieldSeen[vendorprofilehistory.FieldWebsiteURI] = struct{}{}
+			}
+		case "id":
+		case "__typename":
+		default:
+			unknownSeen = true
+		}
+	}
+	if !unknownSeen {
+		vph.Select(selectedFields...)
+	}
+	return nil
+}
+
+type vendorprofilehistoryPaginateArgs struct {
+	first, last   *int
+	after, before *Cursor
+	opts          []VendorProfileHistoryPaginateOption
+}
+
+func newVendorProfileHistoryPaginateArgs(rv map[string]any) *vendorprofilehistoryPaginateArgs {
+	args := &vendorprofilehistoryPaginateArgs{}
+	if rv == nil {
+		return args
+	}
+	if v := rv[firstField]; v != nil {
+		args.first = v.(*int)
+	}
+	if v := rv[lastField]; v != nil {
+		args.last = v.(*int)
+	}
+	if v := rv[afterField]; v != nil {
+		args.after = v.(*Cursor)
+	}
+	if v := rv[beforeField]; v != nil {
+		args.before = v.(*Cursor)
+	}
+	if v, ok := rv[orderByField]; ok {
+		switch v := v.(type) {
+		case map[string]any:
+			var (
+				err1, err2 error
+				order      = &VendorProfileHistoryOrder{Field: &VendorProfileHistoryOrderField{}, Direction: entgql.OrderDirectionAsc}
+			)
+			if d, ok := v[directionField]; ok {
+				err1 = order.Direction.UnmarshalGQL(d)
+			}
+			if f, ok := v[fieldField]; ok {
+				err2 = order.Field.UnmarshalGQL(f)
+			}
+			if err1 == nil && err2 == nil {
+				args.opts = append(args.opts, WithVendorProfileHistoryOrder(order))
+			}
+		case *VendorProfileHistoryOrder:
+			if v != nil {
+				args.opts = append(args.opts, WithVendorProfileHistoryOrder(v))
+			}
+		}
+	}
+	if v, ok := rv[whereField].(*VendorProfileHistoryWhereInput); ok {
+		args.opts = append(args.opts, WithVendorProfileHistoryFilter(v.Filter))
+	}
+	return args
+}
+
+// CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
+func (vppa *VendorProfilePostalAddressQuery) CollectFields(ctx context.Context, satisfies ...string) (*VendorProfilePostalAddressQuery, error) {
+	fc := graphql.GetFieldContext(ctx)
+	if fc == nil {
+		return vppa, nil
+	}
+	if err := vppa.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+		return nil, err
+	}
+	return vppa, nil
+}
+
+func (vppa *VendorProfilePostalAddressQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+	path = append([]string(nil), path...)
+	var (
+		unknownSeen    bool
+		fieldSeen      = make(map[string]struct{}, len(vendorprofilepostaladdress.Columns))
+		selectedFields = []string{vendorprofilepostaladdress.FieldID}
+	)
+	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
+		switch field.Name {
+
+		case "postalAddress":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&PostalAddressClient{config: vppa.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, postaladdressImplementors)...); err != nil {
+				return err
+			}
+			vppa.withPostalAddress = query
+			if _, ok := fieldSeen[vendorprofilepostaladdress.FieldPostalAddressID]; !ok {
+				selectedFields = append(selectedFields, vendorprofilepostaladdress.FieldPostalAddressID)
+				fieldSeen[vendorprofilepostaladdress.FieldPostalAddressID] = struct{}{}
+			}
+
+		case "profile":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&VendorProfileClient{config: vppa.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, vendorprofileImplementors)...); err != nil {
+				return err
+			}
+			vppa.withProfile = query
+			if _, ok := fieldSeen[vendorprofilepostaladdress.FieldVendorProfileID]; !ok {
+				selectedFields = append(selectedFields, vendorprofilepostaladdress.FieldVendorProfileID)
+				fieldSeen[vendorprofilepostaladdress.FieldVendorProfileID] = struct{}{}
+			}
+
+		case "events":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&EventClient{config: vppa.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, eventImplementors)...); err != nil {
+				return err
+			}
+			vppa.WithNamedEvents(alias, func(wq *EventQuery) {
+				*wq = *query
+			})
+		case "createdAt":
+			if _, ok := fieldSeen[vendorprofilepostaladdress.FieldCreatedAt]; !ok {
+				selectedFields = append(selectedFields, vendorprofilepostaladdress.FieldCreatedAt)
+				fieldSeen[vendorprofilepostaladdress.FieldCreatedAt] = struct{}{}
+			}
+		case "updatedAt":
+			if _, ok := fieldSeen[vendorprofilepostaladdress.FieldUpdatedAt]; !ok {
+				selectedFields = append(selectedFields, vendorprofilepostaladdress.FieldUpdatedAt)
+				fieldSeen[vendorprofilepostaladdress.FieldUpdatedAt] = struct{}{}
+			}
+		case "createdBy":
+			if _, ok := fieldSeen[vendorprofilepostaladdress.FieldCreatedBy]; !ok {
+				selectedFields = append(selectedFields, vendorprofilepostaladdress.FieldCreatedBy)
+				fieldSeen[vendorprofilepostaladdress.FieldCreatedBy] = struct{}{}
+			}
+		case "updatedBy":
+			if _, ok := fieldSeen[vendorprofilepostaladdress.FieldUpdatedBy]; !ok {
+				selectedFields = append(selectedFields, vendorprofilepostaladdress.FieldUpdatedBy)
+				fieldSeen[vendorprofilepostaladdress.FieldUpdatedBy] = struct{}{}
+			}
+		case "deletedAt":
+			if _, ok := fieldSeen[vendorprofilepostaladdress.FieldDeletedAt]; !ok {
+				selectedFields = append(selectedFields, vendorprofilepostaladdress.FieldDeletedAt)
+				fieldSeen[vendorprofilepostaladdress.FieldDeletedAt] = struct{}{}
+			}
+		case "deletedBy":
+			if _, ok := fieldSeen[vendorprofilepostaladdress.FieldDeletedBy]; !ok {
+				selectedFields = append(selectedFields, vendorprofilepostaladdress.FieldDeletedBy)
+				fieldSeen[vendorprofilepostaladdress.FieldDeletedBy] = struct{}{}
+			}
+		case "postalAddressType":
+			if _, ok := fieldSeen[vendorprofilepostaladdress.FieldPostalAddressType]; !ok {
+				selectedFields = append(selectedFields, vendorprofilepostaladdress.FieldPostalAddressType)
+				fieldSeen[vendorprofilepostaladdress.FieldPostalAddressType] = struct{}{}
+			}
+		case "vendorProfileID":
+			if _, ok := fieldSeen[vendorprofilepostaladdress.FieldVendorProfileID]; !ok {
+				selectedFields = append(selectedFields, vendorprofilepostaladdress.FieldVendorProfileID)
+				fieldSeen[vendorprofilepostaladdress.FieldVendorProfileID] = struct{}{}
+			}
+		case "postalAddressID":
+			if _, ok := fieldSeen[vendorprofilepostaladdress.FieldPostalAddressID]; !ok {
+				selectedFields = append(selectedFields, vendorprofilepostaladdress.FieldPostalAddressID)
+				fieldSeen[vendorprofilepostaladdress.FieldPostalAddressID] = struct{}{}
+			}
+		case "id":
+		case "__typename":
+		default:
+			unknownSeen = true
+		}
+	}
+	if !unknownSeen {
+		vppa.Select(selectedFields...)
+	}
+	return nil
+}
+
+type vendorprofilepostaladdressPaginateArgs struct {
+	first, last   *int
+	after, before *Cursor
+	opts          []VendorProfilePostalAddressPaginateOption
+}
+
+func newVendorProfilePostalAddressPaginateArgs(rv map[string]any) *vendorprofilepostaladdressPaginateArgs {
+	args := &vendorprofilepostaladdressPaginateArgs{}
+	if rv == nil {
+		return args
+	}
+	if v := rv[firstField]; v != nil {
+		args.first = v.(*int)
+	}
+	if v := rv[lastField]; v != nil {
+		args.last = v.(*int)
+	}
+	if v := rv[afterField]; v != nil {
+		args.after = v.(*Cursor)
+	}
+	if v := rv[beforeField]; v != nil {
+		args.before = v.(*Cursor)
+	}
+	if v, ok := rv[whereField].(*VendorProfilePostalAddressWhereInput); ok {
+		args.opts = append(args.opts, WithVendorProfilePostalAddressFilter(v.Filter))
+	}
+	return args
+}
+
+// CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
+func (vppah *VendorProfilePostalAddressHistoryQuery) CollectFields(ctx context.Context, satisfies ...string) (*VendorProfilePostalAddressHistoryQuery, error) {
+	fc := graphql.GetFieldContext(ctx)
+	if fc == nil {
+		return vppah, nil
+	}
+	if err := vppah.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+		return nil, err
+	}
+	return vppah, nil
+}
+
+func (vppah *VendorProfilePostalAddressHistoryQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+	path = append([]string(nil), path...)
+	var (
+		unknownSeen    bool
+		fieldSeen      = make(map[string]struct{}, len(vendorprofilepostaladdresshistory.Columns))
+		selectedFields = []string{vendorprofilepostaladdresshistory.FieldID}
+	)
+	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
+		switch field.Name {
+		case "historyTime":
+			if _, ok := fieldSeen[vendorprofilepostaladdresshistory.FieldHistoryTime]; !ok {
+				selectedFields = append(selectedFields, vendorprofilepostaladdresshistory.FieldHistoryTime)
+				fieldSeen[vendorprofilepostaladdresshistory.FieldHistoryTime] = struct{}{}
+			}
+		case "ref":
+			if _, ok := fieldSeen[vendorprofilepostaladdresshistory.FieldRef]; !ok {
+				selectedFields = append(selectedFields, vendorprofilepostaladdresshistory.FieldRef)
+				fieldSeen[vendorprofilepostaladdresshistory.FieldRef] = struct{}{}
+			}
+		case "operation":
+			if _, ok := fieldSeen[vendorprofilepostaladdresshistory.FieldOperation]; !ok {
+				selectedFields = append(selectedFields, vendorprofilepostaladdresshistory.FieldOperation)
+				fieldSeen[vendorprofilepostaladdresshistory.FieldOperation] = struct{}{}
+			}
+		case "createdAt":
+			if _, ok := fieldSeen[vendorprofilepostaladdresshistory.FieldCreatedAt]; !ok {
+				selectedFields = append(selectedFields, vendorprofilepostaladdresshistory.FieldCreatedAt)
+				fieldSeen[vendorprofilepostaladdresshistory.FieldCreatedAt] = struct{}{}
+			}
+		case "updatedAt":
+			if _, ok := fieldSeen[vendorprofilepostaladdresshistory.FieldUpdatedAt]; !ok {
+				selectedFields = append(selectedFields, vendorprofilepostaladdresshistory.FieldUpdatedAt)
+				fieldSeen[vendorprofilepostaladdresshistory.FieldUpdatedAt] = struct{}{}
+			}
+		case "createdBy":
+			if _, ok := fieldSeen[vendorprofilepostaladdresshistory.FieldCreatedBy]; !ok {
+				selectedFields = append(selectedFields, vendorprofilepostaladdresshistory.FieldCreatedBy)
+				fieldSeen[vendorprofilepostaladdresshistory.FieldCreatedBy] = struct{}{}
+			}
+		case "updatedBy":
+			if _, ok := fieldSeen[vendorprofilepostaladdresshistory.FieldUpdatedBy]; !ok {
+				selectedFields = append(selectedFields, vendorprofilepostaladdresshistory.FieldUpdatedBy)
+				fieldSeen[vendorprofilepostaladdresshistory.FieldUpdatedBy] = struct{}{}
+			}
+		case "deletedAt":
+			if _, ok := fieldSeen[vendorprofilepostaladdresshistory.FieldDeletedAt]; !ok {
+				selectedFields = append(selectedFields, vendorprofilepostaladdresshistory.FieldDeletedAt)
+				fieldSeen[vendorprofilepostaladdresshistory.FieldDeletedAt] = struct{}{}
+			}
+		case "deletedBy":
+			if _, ok := fieldSeen[vendorprofilepostaladdresshistory.FieldDeletedBy]; !ok {
+				selectedFields = append(selectedFields, vendorprofilepostaladdresshistory.FieldDeletedBy)
+				fieldSeen[vendorprofilepostaladdresshistory.FieldDeletedBy] = struct{}{}
+			}
+		case "postalAddressType":
+			if _, ok := fieldSeen[vendorprofilepostaladdresshistory.FieldPostalAddressType]; !ok {
+				selectedFields = append(selectedFields, vendorprofilepostaladdresshistory.FieldPostalAddressType)
+				fieldSeen[vendorprofilepostaladdresshistory.FieldPostalAddressType] = struct{}{}
+			}
+		case "vendorProfileID":
+			if _, ok := fieldSeen[vendorprofilepostaladdresshistory.FieldVendorProfileID]; !ok {
+				selectedFields = append(selectedFields, vendorprofilepostaladdresshistory.FieldVendorProfileID)
+				fieldSeen[vendorprofilepostaladdresshistory.FieldVendorProfileID] = struct{}{}
+			}
+		case "postalAddressID":
+			if _, ok := fieldSeen[vendorprofilepostaladdresshistory.FieldPostalAddressID]; !ok {
+				selectedFields = append(selectedFields, vendorprofilepostaladdresshistory.FieldPostalAddressID)
+				fieldSeen[vendorprofilepostaladdresshistory.FieldPostalAddressID] = struct{}{}
+			}
+		case "id":
+		case "__typename":
+		default:
+			unknownSeen = true
+		}
+	}
+	if !unknownSeen {
+		vppah.Select(selectedFields...)
+	}
+	return nil
+}
+
+type vendorprofilepostaladdresshistoryPaginateArgs struct {
+	first, last   *int
+	after, before *Cursor
+	opts          []VendorProfilePostalAddressHistoryPaginateOption
+}
+
+func newVendorProfilePostalAddressHistoryPaginateArgs(rv map[string]any) *vendorprofilepostaladdresshistoryPaginateArgs {
+	args := &vendorprofilepostaladdresshistoryPaginateArgs{}
+	if rv == nil {
+		return args
+	}
+	if v := rv[firstField]; v != nil {
+		args.first = v.(*int)
+	}
+	if v := rv[lastField]; v != nil {
+		args.last = v.(*int)
+	}
+	if v := rv[afterField]; v != nil {
+		args.after = v.(*Cursor)
+	}
+	if v := rv[beforeField]; v != nil {
+		args.before = v.(*Cursor)
+	}
+	if v, ok := rv[whereField].(*VendorProfilePostalAddressHistoryWhereInput); ok {
+		args.opts = append(args.opts, WithVendorProfilePostalAddressHistoryFilter(v.Filter))
 	}
 	return args
 }

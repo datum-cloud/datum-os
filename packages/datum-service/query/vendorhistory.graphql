@@ -1,0 +1,45 @@
+
+
+query GetAllVendorHistories {
+  vendorHistories {
+    edges {
+      node {
+        createdAt
+        createdBy
+        displayName
+        historyTime
+        id
+        onboardingState
+        operation
+        ownerID
+        ref
+        tags
+        updatedAt
+        updatedBy
+        vendorType
+      }
+    }
+  }
+}
+
+query GetVendorHistories($where: VendorHistoryWhereInput) {
+  vendorHistories(where: $where) {
+    edges {
+      node {
+        createdAt
+        createdBy
+        displayName
+        historyTime
+        id
+        onboardingState
+        operation
+        ownerID
+        ref
+        tags
+        updatedAt
+        updatedBy
+        vendorType
+      }
+    }
+  }
+}
