@@ -225,6 +225,20 @@ func (oc *OrganizationCreate) SetNillableAvatarRemoteURL(s *string) *Organizatio
 	return oc
 }
 
+// SetAvatarLocalFile sets the "avatar_local_file" field.
+func (oc *OrganizationCreate) SetAvatarLocalFile(s string) *OrganizationCreate {
+	oc.mutation.SetAvatarLocalFile(s)
+	return oc
+}
+
+// SetNillableAvatarLocalFile sets the "avatar_local_file" field if the given value is not nil.
+func (oc *OrganizationCreate) SetNillableAvatarLocalFile(s *string) *OrganizationCreate {
+	if s != nil {
+		oc.SetAvatarLocalFile(*s)
+	}
+	return oc
+}
+
 // SetDedicatedDb sets the "dedicated_db" field.
 func (oc *OrganizationCreate) SetDedicatedDb(b bool) *OrganizationCreate {
 	oc.mutation.SetDedicatedDb(b)
@@ -791,6 +805,11 @@ func (oc *OrganizationCreate) check() error {
 			return &ValidationError{Name: "avatar_remote_url", err: fmt.Errorf(`generated: validator failed for field "Organization.avatar_remote_url": %w`, err)}
 		}
 	}
+	if v, ok := oc.mutation.AvatarLocalFile(); ok {
+		if err := organization.AvatarLocalFileValidator(v); err != nil {
+			return &ValidationError{Name: "avatar_local_file", err: fmt.Errorf(`generated: validator failed for field "Organization.avatar_local_file": %w`, err)}
+		}
+	}
 	if _, ok := oc.mutation.DedicatedDb(); !ok {
 		return &ValidationError{Name: "dedicated_db", err: errors.New(`generated: missing required field "Organization.dedicated_db"`)}
 	}
@@ -881,6 +900,10 @@ func (oc *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 	if value, ok := oc.mutation.AvatarRemoteURL(); ok {
 		_spec.SetField(organization.FieldAvatarRemoteURL, field.TypeString, value)
 		_node.AvatarRemoteURL = &value
+	}
+	if value, ok := oc.mutation.AvatarLocalFile(); ok {
+		_spec.SetField(organization.FieldAvatarLocalFile, field.TypeString, value)
+		_node.AvatarLocalFile = &value
 	}
 	if value, ok := oc.mutation.DedicatedDb(); ok {
 		_spec.SetField(organization.FieldDedicatedDb, field.TypeBool, value)

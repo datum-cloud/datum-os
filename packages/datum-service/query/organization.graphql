@@ -83,6 +83,8 @@ query GetAllOrganizations {
         displayName
         description
         personalOrg
+        avatarRemoteUrl
+        avatarLocalFile
         tags
         parent {
           id
@@ -244,6 +246,8 @@ mutation UpdateOrganization($updateOrganizationId: ID!, $input: UpdateOrganizati
       name
       displayName
       description
+      avatarRemoteUrl
+      avatarLocalFile
       personalOrg
       tags
       members {

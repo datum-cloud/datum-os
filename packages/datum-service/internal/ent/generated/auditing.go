@@ -1409,6 +1409,9 @@ func (oh *OrganizationHistory) changes(new *OrganizationHistory) []Change {
 	if !reflect.DeepEqual(oh.AvatarRemoteURL, new.AvatarRemoteURL) {
 		changes = append(changes, NewChange(organizationhistory.FieldAvatarRemoteURL, oh.AvatarRemoteURL, new.AvatarRemoteURL))
 	}
+	if !reflect.DeepEqual(oh.AvatarLocalFile, new.AvatarLocalFile) {
+		changes = append(changes, NewChange(organizationhistory.FieldAvatarLocalFile, oh.AvatarLocalFile, new.AvatarLocalFile))
+	}
 	if !reflect.DeepEqual(oh.DedicatedDb, new.DedicatedDb) {
 		changes = append(changes, NewChange(organizationhistory.FieldDedicatedDb, oh.DedicatedDb, new.DedicatedDb))
 	}

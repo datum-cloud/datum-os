@@ -26,19 +26,19 @@ import {
 import { NavHeading, type NavItem, type Separator } from '@/types'
 
 export const NavItems: (NavItem | Separator | NavHeading)[] = [
-  // {
-  //   title: 'Dashboard',
-  //   href: '/dashboard',
-  //   icon: CircleGaugeIcon,
-  // },
+  {
+    title: 'Dashboard',
+    href: '/dashboard',
+    icon: CircleGaugeIcon,
+  },
   // {
   //   title: 'Activity Log',
   //   href: '/logs',
   //   icon: ScrollText,
   // },
-  // {
-  //   type: 'separator',
-  // },
+  {
+    type: 'separator',
+  },
   {
     title: 'Customers',
     href: '/workspace/customers',

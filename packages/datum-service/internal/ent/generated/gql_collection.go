@@ -7571,6 +7571,11 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 				selectedFields = append(selectedFields, organization.FieldAvatarRemoteURL)
 				fieldSeen[organization.FieldAvatarRemoteURL] = struct{}{}
 			}
+		case "avatarLocalFile":
+			if _, ok := fieldSeen[organization.FieldAvatarLocalFile]; !ok {
+				selectedFields = append(selectedFields, organization.FieldAvatarLocalFile)
+				fieldSeen[organization.FieldAvatarLocalFile] = struct{}{}
+			}
 		case "dedicatedDb":
 			if _, ok := fieldSeen[organization.FieldDedicatedDb]; !ok {
 				selectedFields = append(selectedFields, organization.FieldDedicatedDb)
@@ -7734,6 +7739,11 @@ func (oh *OrganizationHistoryQuery) collectField(ctx context.Context, oneNode bo
 			if _, ok := fieldSeen[organizationhistory.FieldAvatarRemoteURL]; !ok {
 				selectedFields = append(selectedFields, organizationhistory.FieldAvatarRemoteURL)
 				fieldSeen[organizationhistory.FieldAvatarRemoteURL] = struct{}{}
+			}
+		case "avatarLocalFile":
+			if _, ok := fieldSeen[organizationhistory.FieldAvatarLocalFile]; !ok {
+				selectedFields = append(selectedFields, organizationhistory.FieldAvatarLocalFile)
+				fieldSeen[organizationhistory.FieldAvatarLocalFile] = struct{}{}
 			}
 		case "dedicatedDb":
 			if _, ok := fieldSeen[organizationhistory.FieldDedicatedDb]; !ok {

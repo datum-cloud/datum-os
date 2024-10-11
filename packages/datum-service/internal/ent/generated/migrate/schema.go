@@ -1634,6 +1634,7 @@ var (
 		{Name: "description", Type: field.TypeString, Nullable: true},
 		{Name: "personal_org", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "avatar_remote_url", Type: field.TypeString, Nullable: true, Size: 2048},
+		{Name: "avatar_local_file", Type: field.TypeString, Nullable: true, Size: 61440},
 		{Name: "dedicated_db", Type: field.TypeBool, Default: false},
 		{Name: "parent_organization_id", Type: field.TypeString, Nullable: true},
 	}
@@ -1645,7 +1646,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "organizations_organizations_children",
-				Columns:    []*schema.Column{OrganizationsColumns[15]},
+				Columns:    []*schema.Column{OrganizationsColumns[16]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -1681,6 +1682,7 @@ var (
 		{Name: "parent_organization_id", Type: field.TypeString, Nullable: true},
 		{Name: "personal_org", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "avatar_remote_url", Type: field.TypeString, Nullable: true, Size: 2048},
+		{Name: "avatar_local_file", Type: field.TypeString, Nullable: true, Size: 61440},
 		{Name: "dedicated_db", Type: field.TypeBool, Default: false},
 	}
 	// OrganizationHistoryTable holds the schema information for the "organization_history" table.

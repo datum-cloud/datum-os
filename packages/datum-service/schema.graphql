@@ -2782,9 +2782,13 @@ input CreateOrganizationInput {
 	"""
 	personalOrg: Boolean
 	"""
-	URL of the user's remote avatar
+	URL of the organization's remote avatar
 	"""
 	avatarRemoteURL: String
+	"""
+	The organization's local avatar file
+	"""
+	avatarLocalFile: String
 	"""
 	Whether the organization has a dedicated database
 	"""
@@ -15225,9 +15229,13 @@ type Organization implements Node {
 	"""
 	personalOrg: Boolean
 	"""
-	URL of the user's remote avatar
+	URL of the organization's remote avatar
 	"""
 	avatarRemoteURL: String
+	"""
+	The organization's local avatar file
+	"""
+	avatarLocalFile: String
 	"""
 	Whether the organization has a dedicated database
 	"""
@@ -15380,9 +15388,13 @@ type OrganizationHistory implements Node {
 	"""
 	personalOrg: Boolean
 	"""
-	URL of the user's remote avatar
+	URL of the organization's remote avatar
 	"""
 	avatarRemoteURL: String
+	"""
+	The organization's local avatar file
+	"""
+	avatarLocalFile: String
 	"""
 	Whether the organization has a dedicated database
 	"""
@@ -15655,6 +15667,24 @@ input OrganizationHistoryWhereInput {
 	avatarRemoteURLNotNil: Boolean
 	avatarRemoteURLEqualFold: String
 	avatarRemoteURLContainsFold: String
+	"""
+	avatar_local_file field predicates
+	"""
+	avatarLocalFile: String
+	avatarLocalFileNEQ: String
+	avatarLocalFileIn: [String!]
+	avatarLocalFileNotIn: [String!]
+	avatarLocalFileGT: String
+	avatarLocalFileGTE: String
+	avatarLocalFileLT: String
+	avatarLocalFileLTE: String
+	avatarLocalFileContains: String
+	avatarLocalFileHasPrefix: String
+	avatarLocalFileHasSuffix: String
+	avatarLocalFileIsNil: Boolean
+	avatarLocalFileNotNil: Boolean
+	avatarLocalFileEqualFold: String
+	avatarLocalFileContainsFold: String
 }
 """
 Ordering options for Organization connections
@@ -16580,6 +16610,24 @@ input OrganizationWhereInput {
 	avatarRemoteURLNotNil: Boolean
 	avatarRemoteURLEqualFold: String
 	avatarRemoteURLContainsFold: String
+	"""
+	avatar_local_file field predicates
+	"""
+	avatarLocalFile: String
+	avatarLocalFileNEQ: String
+	avatarLocalFileIn: [String!]
+	avatarLocalFileNotIn: [String!]
+	avatarLocalFileGT: String
+	avatarLocalFileGTE: String
+	avatarLocalFileLT: String
+	avatarLocalFileLTE: String
+	avatarLocalFileContains: String
+	avatarLocalFileHasPrefix: String
+	avatarLocalFileHasSuffix: String
+	avatarLocalFileIsNil: Boolean
+	avatarLocalFileNotNil: Boolean
+	avatarLocalFileEqualFold: String
+	avatarLocalFileContainsFold: String
 	"""
 	parent edge predicates
 	"""
@@ -20902,10 +20950,15 @@ input UpdateOrganizationInput {
 	description: String
 	clearDescription: Boolean
 	"""
-	URL of the user's remote avatar
+	URL of the organization's remote avatar
 	"""
 	avatarRemoteURL: String
 	clearAvatarRemoteURL: Boolean
+	"""
+	The organization's local avatar file
+	"""
+	avatarLocalFile: String
+	clearAvatarLocalFile: Boolean
 	addGroupIDs: [ID!]
 	removeGroupIDs: [ID!]
 	clearGroups: Boolean

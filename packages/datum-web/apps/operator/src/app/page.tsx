@@ -21,7 +21,7 @@ const Landing = () => {
     if (!fetching && session) {
       if (orgs.length > 0) {
         // NOTE: Change this to the dashboard when the dashboard functionality is complete
-        router.push(OPERATOR_APP_ROUTES.users)
+        router.push(OPERATOR_APP_ROUTES.dashboard)
       } else {
         router.push(OPERATOR_APP_ROUTES.workspace)
       }

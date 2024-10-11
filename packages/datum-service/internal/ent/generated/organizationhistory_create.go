@@ -235,6 +235,20 @@ func (ohc *OrganizationHistoryCreate) SetNillableAvatarRemoteURL(s *string) *Org
 	return ohc
 }
 
+// SetAvatarLocalFile sets the "avatar_local_file" field.
+func (ohc *OrganizationHistoryCreate) SetAvatarLocalFile(s string) *OrganizationHistoryCreate {
+	ohc.mutation.SetAvatarLocalFile(s)
+	return ohc
+}
+
+// SetNillableAvatarLocalFile sets the "avatar_local_file" field if the given value is not nil.
+func (ohc *OrganizationHistoryCreate) SetNillableAvatarLocalFile(s *string) *OrganizationHistoryCreate {
+	if s != nil {
+		ohc.SetAvatarLocalFile(*s)
+	}
+	return ohc
+}
+
 // SetDedicatedDb sets the "dedicated_db" field.
 func (ohc *OrganizationHistoryCreate) SetDedicatedDb(b bool) *OrganizationHistoryCreate {
 	ohc.mutation.SetDedicatedDb(b)
@@ -482,6 +496,10 @@ func (ohc *OrganizationHistoryCreate) createSpec() (*OrganizationHistory, *sqlgr
 	if value, ok := ohc.mutation.AvatarRemoteURL(); ok {
 		_spec.SetField(organizationhistory.FieldAvatarRemoteURL, field.TypeString, value)
 		_node.AvatarRemoteURL = &value
+	}
+	if value, ok := ohc.mutation.AvatarLocalFile(); ok {
+		_spec.SetField(organizationhistory.FieldAvatarLocalFile, field.TypeString, value)
+		_node.AvatarLocalFile = &value
 	}
 	if value, ok := ohc.mutation.DedicatedDb(); ok {
 		_spec.SetField(organizationhistory.FieldDedicatedDb, field.TypeBool, value)

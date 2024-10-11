@@ -214,6 +214,26 @@ func (ou *OrganizationUpdate) ClearAvatarRemoteURL() *OrganizationUpdate {
 	return ou
 }
 
+// SetAvatarLocalFile sets the "avatar_local_file" field.
+func (ou *OrganizationUpdate) SetAvatarLocalFile(s string) *OrganizationUpdate {
+	ou.mutation.SetAvatarLocalFile(s)
+	return ou
+}
+
+// SetNillableAvatarLocalFile sets the "avatar_local_file" field if the given value is not nil.
+func (ou *OrganizationUpdate) SetNillableAvatarLocalFile(s *string) *OrganizationUpdate {
+	if s != nil {
+		ou.SetAvatarLocalFile(*s)
+	}
+	return ou
+}
+
+// ClearAvatarLocalFile clears the value of the "avatar_local_file" field.
+func (ou *OrganizationUpdate) ClearAvatarLocalFile() *OrganizationUpdate {
+	ou.mutation.ClearAvatarLocalFile()
+	return ou
+}
+
 // SetDedicatedDb sets the "dedicated_db" field.
 func (ou *OrganizationUpdate) SetDedicatedDb(b bool) *OrganizationUpdate {
 	ou.mutation.SetDedicatedDb(b)
@@ -1253,6 +1273,11 @@ func (ou *OrganizationUpdate) check() error {
 			return &ValidationError{Name: "avatar_remote_url", err: fmt.Errorf(`generated: validator failed for field "Organization.avatar_remote_url": %w`, err)}
 		}
 	}
+	if v, ok := ou.mutation.AvatarLocalFile(); ok {
+		if err := organization.AvatarLocalFileValidator(v); err != nil {
+			return &ValidationError{Name: "avatar_local_file", err: fmt.Errorf(`generated: validator failed for field "Organization.avatar_local_file": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -1329,6 +1354,12 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if ou.mutation.AvatarRemoteURLCleared() {
 		_spec.ClearField(organization.FieldAvatarRemoteURL, field.TypeString)
+	}
+	if value, ok := ou.mutation.AvatarLocalFile(); ok {
+		_spec.SetField(organization.FieldAvatarLocalFile, field.TypeString, value)
+	}
+	if ou.mutation.AvatarLocalFileCleared() {
+		_spec.ClearField(organization.FieldAvatarLocalFile, field.TypeString)
 	}
 	if value, ok := ou.mutation.DedicatedDb(); ok {
 		_spec.SetField(organization.FieldDedicatedDb, field.TypeBool, value)
@@ -2813,6 +2844,26 @@ func (ouo *OrganizationUpdateOne) ClearAvatarRemoteURL() *OrganizationUpdateOne 
 	return ouo
 }
 
+// SetAvatarLocalFile sets the "avatar_local_file" field.
+func (ouo *OrganizationUpdateOne) SetAvatarLocalFile(s string) *OrganizationUpdateOne {
+	ouo.mutation.SetAvatarLocalFile(s)
+	return ouo
+}
+
+// SetNillableAvatarLocalFile sets the "avatar_local_file" field if the given value is not nil.
+func (ouo *OrganizationUpdateOne) SetNillableAvatarLocalFile(s *string) *OrganizationUpdateOne {
+	if s != nil {
+		ouo.SetAvatarLocalFile(*s)
+	}
+	return ouo
+}
+
+// ClearAvatarLocalFile clears the value of the "avatar_local_file" field.
+func (ouo *OrganizationUpdateOne) ClearAvatarLocalFile() *OrganizationUpdateOne {
+	ouo.mutation.ClearAvatarLocalFile()
+	return ouo
+}
+
 // SetDedicatedDb sets the "dedicated_db" field.
 func (ouo *OrganizationUpdateOne) SetDedicatedDb(b bool) *OrganizationUpdateOne {
 	ouo.mutation.SetDedicatedDb(b)
@@ -3865,6 +3916,11 @@ func (ouo *OrganizationUpdateOne) check() error {
 			return &ValidationError{Name: "avatar_remote_url", err: fmt.Errorf(`generated: validator failed for field "Organization.avatar_remote_url": %w`, err)}
 		}
 	}
+	if v, ok := ouo.mutation.AvatarLocalFile(); ok {
+		if err := organization.AvatarLocalFileValidator(v); err != nil {
+			return &ValidationError{Name: "avatar_local_file", err: fmt.Errorf(`generated: validator failed for field "Organization.avatar_local_file": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -3958,6 +4014,12 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 	}
 	if ouo.mutation.AvatarRemoteURLCleared() {
 		_spec.ClearField(organization.FieldAvatarRemoteURL, field.TypeString)
+	}
+	if value, ok := ouo.mutation.AvatarLocalFile(); ok {
+		_spec.SetField(organization.FieldAvatarLocalFile, field.TypeString, value)
+	}
+	if ouo.mutation.AvatarLocalFileCleared() {
+		_spec.ClearField(organization.FieldAvatarLocalFile, field.TypeString)
 	}
 	if value, ok := ouo.mutation.DedicatedDb(); ok {
 		_spec.SetField(organization.FieldDedicatedDb, field.TypeBool, value)

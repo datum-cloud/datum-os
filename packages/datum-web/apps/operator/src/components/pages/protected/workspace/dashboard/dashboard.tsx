@@ -1,98 +1,101 @@
 'use client'
 
-import { useRouter } from 'next/navigation'
-import { ArrowUpRight } from 'lucide-react'
-import React from 'react'
-import { Grid, GridRow, GridCell } from '@repo/ui/grid'
-import { Panel } from '@repo/ui/panel'
-import { Button } from '@repo/ui/button'
-import PageTitle from '@/components/page-title'
+import { AtSign, Settings } from 'lucide-react'
+import { useSession } from 'next-auth/react'
+import Link from 'next/link'
+import React, { useMemo } from 'react'
+
+import { useGetOrgMembersByOrgIdQuery } from '@repo/codegen/src/schema'
 import { OPERATOR_APP_ROUTES } from '@repo/constants'
+import { Datum } from '@repo/types'
+import { Card, CardContent, CardHeader, CardTitle } from '@repo/ui/chart-card'
+
+import PageTitle from '@/components/page-title'
+import UsersStatistics from '@/components/pages/protected/workspace/customer/users/users-statistics'
+import {
+  getMonthlyUsers,
+  getWeeklyUsers,
+} from '@/components/pages/protected/workspace/customer/users/users-utils'
+
+import { pageStyles } from './page.styles'
 
 const DashboardPage = () => {
-  const { push } = useRouter()
+  const { data: session } = useSession()
+  const [{ data }] = useGetOrgMembersByOrgIdQuery({
+    variables: {
+      where: { organizationID: session?.user.organization ?? '' },
+    },
+    pause: !session,
+  })
 
+  const users = useMemo(() => {
+    return (data?.orgMemberships?.edges
+      ?.map(
+        (edge) =>
+          edge?.node?.user && {
+            ...edge?.node?.user,
+            orgRole: edge?.node?.role,
+            joinedAt: edge?.node?.createdAt,
+          },
+      )
+      .filter(Boolean) || []) as Datum.OrgUser[]
+  }, [data])
+  // TODO: Add this logic correctly, when we have access to active users by month in the future
+  // const activeUsers = users.filter((user) => user.setting.status === 'ACTIVE')
+  // const activeUsersMonthly =
+  //   users.length > 0 ? getMonthlyUsers(activeUsers) : []
+  const newUsersMonthly = users.length > 0 ? getMonthlyUsers(users) : []
+  const newUsersWeekly = users.length > 0 ? getWeeklyUsers(users) : []
+  const { card, cardContent, link, row } = pageStyles()
   return (
-    <section>
+    <section className="flex flex-col gap-6">
       <PageTitle title="Dashboard" className="mb-10" />
-      <Grid rows={2}>
-        <GridRow columns={2}>
-          <GridCell>
-            <Panel
-              align="center"
-              justify="center"
-              textAlign="center"
-              className="min-h-[400px]"
+      <div className={row()}>
+        <UsersStatistics
+          newUsersWeekly={newUsersWeekly}
+          newUsersMonthly={newUsersMonthly}
+          onDashboard
+        />
+      </div>
+      <div className={row()}>
+        <Card className={card()}>
+          <CardHeader className="pb-3">
+            <CardTitle className="flex items-center gap-2">
+              <Settings className="text-blackberry-400" /> Workspace
+            </CardTitle>
+          </CardHeader>
+          <CardContent className={cardContent()}>
+            <Link
+              href={OPERATOR_APP_ROUTES.workspaceSettings}
+              className={link()}
             >
-              <h5 className="text-xl font-mono">Set up your integrations</h5>
-              <p className="max-w-[340px]">
-                Maximize the efficiency of your workspace by setting up your
-                Slack and GitHub integrations.
-              </p>
-              <Button
-                onClick={() => {
-                  alert('Coming soon')
-                }}
-                icon={<ArrowUpRight />}
-                size="md"
-                iconAnimated
-              >
-                Integrations
-              </Button>
-            </Panel>
-          </GridCell>
-          <GridCell>
-            <Panel
-              align="center"
-              justify="center"
-              textAlign="center"
-              className="min-h-[400px]"
+              Change workspace settings
+            </Link>
+            <Link
+              href={OPERATOR_APP_ROUTES.workspaceMembers}
+              className={link()}
             >
-              <h5 className="text-xl font-mono">Configure your workspace</h5>
-              <p className="max-w-[340px]">
-                Define everything from your workspace slug to advanced
-                authentication settings.
-              </p>
-              <Button
-                onClick={() => {
-                  push(OPERATOR_APP_ROUTES.workspaceSettings)
-                }}
-                icon={<ArrowUpRight />}
-                size="md"
-                iconAnimated
-              >
-                Workspace Settings
-              </Button>
-            </Panel>
-          </GridCell>
-        </GridRow>
-        <GridRow columns={1}>
-          <GridCell>
-            <Panel
-              align="center"
-              justify="center"
-              textAlign="center"
-              className="min-h-[400px]"
-            >
-              <h5 className="text-xl font-mono">Add team members</h5>
-              <p className="max-w-[340px]">
-                Get your team rocking and rolling by inviting your colleagues to
-                join the party.
-              </p>
-              <Button
-                onClick={() => {
-                  push(OPERATOR_APP_ROUTES.workspaceMembers)
-                }}
-                icon={<ArrowUpRight />}
-                size="md"
-                iconAnimated
-              >
-                Team Management
-              </Button>
-            </Panel>
-          </GridCell>
-        </GridRow>
-      </Grid>
+              Manage team members
+            </Link>
+          </CardContent>
+        </Card>
+        <Card className={card()}>
+          <CardHeader className="pb-3">
+            <CardTitle className="flex items-center gap-2">
+              <AtSign className="text-blackberry-400" />
+              Marketing
+            </CardTitle>
+          </CardHeader>
+          <CardContent className={cardContent()}>
+            <Link href={OPERATOR_APP_ROUTES.contactLists} className={link()}>
+              Manage lists
+            </Link>
+            <Link href={OPERATOR_APP_ROUTES.contacts} className={link()}>
+              Manage contacts
+            </Link>
+          </CardContent>
+        </Card>
+      </div>
     </section>
   )
 }

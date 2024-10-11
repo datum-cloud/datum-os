@@ -20,7 +20,6 @@ import { toast } from '@repo/ui/use-toast'
 import { OPERATOR_APP_ROUTES } from '@repo/constants'
 import { useRouter } from 'next/navigation'
 import { canDeleteRelation, useCheckPermissions } from '@/lib/authz/utils'
-import { PageHeading } from '@repo/ui/page-heading'
 
 const WorkspaceSettingsPage = () => {
   const { push } = useRouter()
@@ -63,7 +62,7 @@ const WorkspaceSettingsPage = () => {
 
   async function updateWorkspaceAvatar(url: string) {
     await updateWorkspace({
-      avatarRemoteURL: url,
+      avatarLocalFile: url,
     })
   }
 
@@ -100,6 +99,8 @@ const WorkspaceSettingsPage = () => {
     }
   }
 
+  const avatar = currentWorkspace?.avatarLocalFile || currentWorkspace?.avatarRemoteURL || ''
+
   return (
     <>
       <PageTitle title="General Settings" className="mb-10" />
@@ -109,7 +110,7 @@ const WorkspaceSettingsPage = () => {
           setName={updateWorkspace}
         />
         <AvatarUpload
-          avatar={currentWorkspace?.avatarRemoteURL || ''}
+          avatar={avatar}
           setAvatar={updateWorkspaceAvatar}
           title="Workspace logo"
           imageType="logo"
