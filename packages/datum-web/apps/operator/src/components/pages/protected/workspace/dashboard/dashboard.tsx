@@ -17,12 +17,14 @@ import {
   getMonthlyUsers,
   getWeeklyUsers,
 } from '@/components/pages/protected/workspace/customer/users/users-utils'
+import { Error } from '@/components/shared/error/error'
+import { Loading } from '@/components/shared/loading/loading'
 
 import { pageStyles } from './page.styles'
 
 const DashboardPage = () => {
   const { data: session } = useSession()
-  const [{ data }] = useGetOrgMembersByOrgIdQuery({
+  const [{ data, fetching, error, stale }] = useGetOrgMembersByOrgIdQuery({
     variables: {
       where: { organizationID: session?.user.organization ?? '' },
     },
@@ -48,6 +50,11 @@ const DashboardPage = () => {
   const newUsersMonthly = users.length > 0 ? getMonthlyUsers(users) : []
   const newUsersWeekly = users.length > 0 ? getWeeklyUsers(users) : []
   const { card, cardContent, link, row } = pageStyles()
+
+  if (error) {
+    return <Error />
+  }
+
   return (
     <section className="flex flex-col gap-6">
       <PageTitle

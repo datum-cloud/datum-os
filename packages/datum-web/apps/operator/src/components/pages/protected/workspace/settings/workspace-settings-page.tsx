@@ -1,6 +1,7 @@
 'use client'
 
 import { useSession } from 'next-auth/react'
+import { useRouter } from 'next/navigation'
 
 import {
   UpdateOrganizationInput,
@@ -8,18 +9,19 @@ import {
   useGetAllOrganizationsQuery,
   useUpdateOrganizationMutation,
 } from '@repo/codegen/src/schema'
+import { OPERATOR_APP_ROUTES } from '@repo/constants'
+import { toast } from '@repo/ui/use-toast'
 
 import PageTitle from '@/components/page-title'
 import { AvatarUpload } from '@/components/shared/avatar-upload/avatar-upload'
-
-import { WorkspaceNameForm } from './workspace-name-form'
-import { WorkspaceEmailForm } from './workspace-email-form'
-import { WorkspaceDelete } from './workspace-delete'
-import { pageStyles } from './page.styles'
-import { toast } from '@repo/ui/use-toast'
-import { OPERATOR_APP_ROUTES } from '@repo/constants'
-import { useRouter } from 'next/navigation'
+import { Error } from '@/components/shared/error/error'
+import { Loading } from '@/components/shared/loading/loading'
 import { canDeleteRelation, useCheckPermissions } from '@/lib/authz/utils'
+
+import { pageStyles } from './page.styles'
+import { WorkspaceDelete } from './workspace-delete'
+import { WorkspaceEmailForm } from './workspace-email-form'
+import { WorkspaceNameForm } from './workspace-name-form'
 
 const WorkspaceSettingsPage = () => {
   const { push } = useRouter()
@@ -30,7 +32,7 @@ const WorkspaceSettingsPage = () => {
   const currentWorkspace = allOrgs.data?.organizations.edges?.filter(
     (org) => org?.node?.id === currentOrgId,
   )[0]?.node
-  const [{ fetching, error }, updateOrganization] =
+  const [{ fetching, error, stale }, updateOrganization] =
     useUpdateOrganizationMutation()
   const [{ fetching: isDeleting, error: deleteError }, deleteOrganization] =
     useDeleteOrganizationMutation()
@@ -99,7 +101,8 @@ const WorkspaceSettingsPage = () => {
     }
   }
 
-  const avatar = currentWorkspace?.avatarLocalFile || currentWorkspace?.avatarRemoteURL || ''
+  const avatar =
+    currentWorkspace?.avatarLocalFile || currentWorkspace?.avatarRemoteURL || ''
 
   return (
     <>

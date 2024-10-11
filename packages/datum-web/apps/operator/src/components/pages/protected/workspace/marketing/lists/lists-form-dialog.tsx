@@ -1,7 +1,13 @@
 'use client'
 
 import { useSession } from 'next-auth/react'
+import { useRouter } from 'next/navigation'
+import { useEffect } from 'react'
 
+import { getPathWithParams } from '@repo/common/routes'
+import { OPERATOR_APP_ROUTES } from '@repo/constants'
+import { Datum } from '@repo/types'
+import { Button } from '@repo/ui/button'
 import {
   Dialog,
   DialogClose,
@@ -10,8 +16,6 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@repo/ui/dialog'
-import { Input } from '@repo/ui/input'
-import { Button } from '@repo/ui/button'
 import {
   Form,
   FormControl,
@@ -21,16 +25,7 @@ import {
   useForm,
   zodResolver,
 } from '@repo/ui/form'
-import { ListInput, ListSchema } from '@/utils/schemas'
-import { Datum } from '@repo/types'
-import { createLists, editLists } from '@/query/lists'
-
-import { formStyles } from './page.styles'
-import { useRouter } from 'next/navigation'
-import { getPathWithParams } from '@repo/common/routes'
-import { OPERATOR_APP_ROUTES } from '@repo/constants'
-import { useAsyncFn } from '@/hooks/useAsyncFn'
-import { Loading } from '@/components/shared/loading/loading'
+import { Input } from '@repo/ui/input'
 import {
   Select,
   SelectContent,
@@ -38,8 +33,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@repo/ui/select'
+
 import { Error } from '@/components/shared/error/error'
-import { useEffect } from 'react'
+import { Loading } from '@/components/shared/loading/loading'
+import { useAsyncFn } from '@/hooks/useAsyncFn'
+import { createLists, editLists } from '@/query/lists'
+import { ListInput, ListSchema } from '@/utils/schemas'
+
+import { formStyles } from './page.styles'
 
 type ListDialogFormProps = {
   open: boolean
@@ -101,8 +102,9 @@ const ListsFormDialog = ({ list, open, setOpen }: ListDialogFormProps) => {
       await router.push(
         getPathWithParams(OPERATOR_APP_ROUTES.contactList, { id }),
       )
-      // NOTE: Needed to prevent the dialog closing prematurely
-      handleCancel()
+
+      // NOTE: This is needed to navigate pages without removing pointer events per https://github.com/shadcn-ui/ui/issues/468
+      setTimeout(() => (document.body.style.pointerEvents = ''), 500)
     } else {
       await edit(organizationId, [{ ...list, ...data }])
       id = list.id

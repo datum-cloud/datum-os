@@ -1,8 +1,13 @@
 'use client'
 
 import { useSession } from 'next-auth/react'
+import { useRouter } from 'next/navigation'
 import { useEffect, useMemo } from 'react'
 
+import { getPathWithParams } from '@repo/common/routes'
+import { OPERATOR_APP_ROUTES } from '@repo/constants'
+import { Datum } from '@repo/types'
+import { Button } from '@repo/ui/button'
 import {
   Dialog,
   DialogClose,
@@ -11,8 +16,6 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@repo/ui/dialog'
-import { Input } from '@repo/ui/input'
-import { Button } from '@repo/ui/button'
 import {
   Form,
   FormControl,
@@ -22,16 +25,14 @@ import {
   useForm,
   zodResolver,
 } from '@repo/ui/form'
-import { ContactFormInput, ContactFormSchema } from '@/utils/schemas'
-import { Datum } from '@repo/types'
+import { Input } from '@repo/ui/input'
+
+import { Loading } from '@/components/shared/loading/loading'
+import { useAsyncFn } from '@/hooks/useAsyncFn'
 import { createContacts, editContacts } from '@/query/contacts'
+import { ContactFormInput, ContactFormSchema } from '@/utils/schemas'
 
 import { formStyles } from './page.styles'
-import { useRouter } from 'next/navigation'
-import { getPathWithParams } from '@repo/common/routes'
-import { OPERATOR_APP_ROUTES } from '@repo/constants'
-import { useAsyncFn } from '@/hooks/useAsyncFn'
-import { Loading } from '@/components/shared/loading/loading'
 
 type ContactDialogFormProps = {
   open: boolean
@@ -103,7 +104,9 @@ const ContactFormDialog = ({
       const contacts = await create(organizationId, [data])
       id = contacts[0].id
       await router.push(getPathWithParams(OPERATOR_APP_ROUTES.contact, { id }))
-      await handleCancel()
+
+      // NOTE: This is needed to navigate pages without removing pointer events per https://github.com/shadcn-ui/ui/issues/468
+      setTimeout(() => (document.body.style.pointerEvents = ''), 500)
     } else {
       const contacts = await edit(organizationId, [data])
       id = contacts[0].id
