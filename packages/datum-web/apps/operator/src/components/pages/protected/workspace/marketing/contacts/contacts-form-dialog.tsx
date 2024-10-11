@@ -27,6 +27,7 @@ import {
 } from '@repo/ui/form'
 import { Input } from '@repo/ui/input'
 
+import { Error } from '@/components/shared/error/error'
 import { Loading } from '@/components/shared/loading/loading'
 import { useAsyncFn } from '@/hooks/useAsyncFn'
 import { createContacts, editContacts } from '@/query/contacts'
@@ -53,15 +54,12 @@ const ContactFormDialog = ({
     labelContainer,
     requiredText,
   } = formStyles()
-  const [{ loading: loadingCreate, error: errorCreate }, create] =
-    useAsyncFn(createContacts)
-  const [{ loading: loadingEdit, error: errorEdit }, edit] =
-    useAsyncFn(editContacts)
+  const [{ error: errorCreate }, create] = useAsyncFn(createContacts)
+  const [{ error: errorEdit }, edit] = useAsyncFn(editContacts)
   const { data: session } = useSession()
   const organizationId =
     session?.user.organization ?? ('' as Datum.OrganisationId)
 
-  const loading = loadingEdit || loadingCreate
   const error = errorEdit || errorCreate
   const names = contact?.fullName?.split(' ')
   const [name, ...otherNames] = names || []
@@ -88,7 +86,7 @@ const ContactFormDialog = ({
     watch,
     setValue,
     reset,
-    formState: { errors },
+    formState: { errors, isSubmitted, isSubmitting },
   } = form
   const isValid = Object.keys(errors).length === 0
   const { firstName, lastName } = watch()
@@ -128,9 +126,11 @@ const ContactFormDialog = ({
           </DialogTitle>
           <DialogClose onClick={handleCancel} />
         </DialogHeader>
-        {loading && <Loading className="min-h-96" />}
-        {error && <p>Whoops... something went wrong</p>}
-        {!loading && (
+        {isSubmitting || isSubmitted ? (
+          <Loading className="min-h-96" />
+        ) : error ? (
+          <Error />
+        ) : (
           <Form {...form}>
             <form onSubmit={handleSubmit(onSubmit)} className={formStyle()}>
               <div className={fieldsContainer()}>

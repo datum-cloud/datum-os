@@ -1,24 +1,24 @@
 'use client'
 
-import { useState } from 'react'
 import { ChevronDown, Import, Trash } from 'lucide-react'
+import { useState } from 'react'
 
+import type { Datum } from '@repo/types'
 import { Button } from '@repo/ui/button'
+import type { ColumnFiltersState } from '@repo/ui/data-table'
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@repo/ui/dropdown-menu'
-import type { ColumnFiltersState } from '@repo/ui/data-table'
-import type { Datum } from '@repo/types'
 
-import Search from '@/components/shared/table-search/table-search'
 import FilterDialog from '@/components/shared/filter-dialog/filter-dialog'
+import Search from '@/components/shared/table-search/table-search'
 import { USER_FILTERS } from '@/utils/filters'
 
-import UsersFormDialog from './users-form-dialog'
 import { pageStyles } from './page.styles'
+import UsersFormDialog from './users-form-dialog'
 
 type UsersControlsProps = {
   search(query: string): void
@@ -61,9 +61,10 @@ const UsersControls = ({
           search={search}
         />
         <div className={controlsButtons()}>
-          <Button variant="outline" onClick={() => setOpenUserDialog(true)}>
+          {/* TODO: Reinstate this later */}
+          {/* <Button variant="outline" onClick={() => setOpenUserDialog(true)}>
             Create New
-          </Button>
+          </Button> */}
           <DropdownMenu
             open={openActionsMenu}
             onOpenChange={setOpenActionsMenu}
