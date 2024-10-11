@@ -325,7 +325,7 @@ export function DataTable<TData, TValue>({
                           style={{ width: minWidth || columnWidth }}
                           className={cn(
                             minWidth && '2xl:!w-auto',
-                            pinLeft && 'sticky z-10 left-0 border-r-0',
+                            pinLeft && 'sticky z-10 bg-white left-0 border-r-0',
                             pinRight && 'sticky z-10 bg-white right-0',
                             hasPinnedRightCell &&
                               secondLastCell &&

@@ -41,7 +41,7 @@ const UsersPage: React.FC = () => {
   )
 
   const [_, deleteUser] = useDeleteUserMutation()
-  const [{ data, fetching, error }] = useGetOrgMembersByOrgIdQuery({
+  const [{ data, fetching, error, stale }] = useGetOrgMembersByOrgIdQuery({
     variables: {
       where: { organizationID: session?.user.organization ?? '' },
     },
@@ -82,10 +82,6 @@ const UsersPage: React.FC = () => {
     _setOpenDeleteDialog(input)
     // NOTE: This is needed to close the dialog without removing pointer events per https://github.com/shadcn-ui/ui/issues/468
     setTimeout(() => (document.body.style.pointerEvents = ''), 500)
-  }
-
-  if (fetching) {
-    return <Loading />
   }
 
   if (error) {
