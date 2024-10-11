@@ -1,51 +1,53 @@
 package services
 
-import (
-	"net/http"
+import "github.com/datum-cloud/datum-os/pkg/echox"
 
-	"github.com/datum-cloud/datum-os/internal/ent/generated"
-	"github.com/datum-cloud/datum-os/internal/ent/generated/contactlist"
-	"github.com/datum-cloud/datum-os/internal/ent/generated/contactlistmembership"
-	echo "github.com/datum-cloud/datum-os/pkg/echox"
-	"github.com/datum-cloud/datum-os/pkg/middleware/transaction"
-)
-
-// (GET /v1/vendors)
-func (Server) VendorsListVendors(ctx echo.Context, params VendorsListVendorsParams) error {
-	contacts, err := transaction.FromContext(ctx.Request().Context()).
-		Contact.Query().
-		WithContactListMembers(func(q *generated.ContactListMembershipQuery) {
-			q.Where(contactlistmembership.DeletedAtIsNil())
-			q.WithContactList(func(q *generated.ContactListQuery) {
-				q.Where(contactlist.DeletedAtIsNil())
-			})
-		}).
-		All(ctx.Request().Context())
-	if err != nil {
-		return err
-	}
-
-	ctx.JSON(http.StatusOK, contacts)
-
+// (GET /v1alpha/organizations/{organization}/vendors)
+func (s Server) VendorsListVendors(ctx echox.Context, organization string, params VendorsListVendorsParams) error {
 	return nil
 }
 
-// (POST /v1/vendors)
-func (Server) VendorsCreateVendor(ctx echo.Context, params VendorsCreateVendorParams) error {
+// (POST /v1alpha/organizations/{organization}/vendors)
+func (s Server) VendorsCreateVendor(ctx echox.Context, organization string, params VendorsCreateVendorParams) error {
 	return nil
 }
 
-// (DELETE /v1/vendors/{vendor})
-func (Server) VendorsDeleteVendor(ctx echo.Context, vendor string) error {
+// (DELETE /v1alpha/organizations/{organization}/vendors/{vendor})
+func (s Server) VendorsDeleteVendor(ctx echox.Context, organization string, vendor string, params VendorsDeleteVendorParams) error {
 	return nil
 }
 
-// (GET /v1/vendors/{vendor})
-func (Server) VendorsGetVendor(ctx echo.Context, vendor string) error {
+// (GET /v1alpha/organizations/{organization}/vendors/{vendor})
+func (s Server) VendorsGetVendor(ctx echox.Context, organization string, vendor string) error {
 	return nil
 }
 
-// (PATCH /v1/vendors/{vendor})
-func (Server) VendorsUpdateVendor(ctx echo.Context, vendor string, params VendorsUpdateVendorParams) error {
+// (PATCH /v1alpha/organizations/{organization}/vendors/{vendor})
+func (s Server) VendorsUpdateVendor(ctx echox.Context, organization string, vendor string, params VendorsUpdateVendorParams) error {
+	return nil
+}
+
+// (GET /v1alpha/vendors)
+func (s Server) VendorsListVendors2(ctx echox.Context, params VendorsListVendors2Params) error {
+	return nil
+}
+
+// (POST /v1alpha/vendors)
+func (s Server) VendorsCreateVendor2(ctx echox.Context, params VendorsCreateVendor2Params) error {
+	return nil
+}
+
+// (DELETE /v1alpha/vendors/{vendor})
+func (s Server) VendorsDeleteVendor2(ctx echox.Context, vendor string, params VendorsDeleteVendor2Params) error {
+	return nil
+}
+
+// (GET /v1alpha/vendors/{vendor})
+func (s Server) VendorsGetVendor2(ctx echox.Context, vendor string) error {
+	return nil
+}
+
+// (PATCH /v1alpha/vendors/{vendor})
+func (s Server) VendorsUpdateVendor2(ctx echox.Context, vendor string, params VendorsUpdateVendor2Params) error {
 	return nil
 }

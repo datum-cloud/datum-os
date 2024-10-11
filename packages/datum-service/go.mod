@@ -60,14 +60,15 @@ require (
 	go.opentelemetry.io/otel/sdk v1.28.0
 	go.uber.org/zap v1.27.0
 	golang.org/x/oauth2 v0.22.0
-	golang.org/x/term v0.23.0
+	golang.org/x/term v0.25.0
 	google.golang.org/api v0.192.0
 	google.golang.org/protobuf v1.34.2
 	modernc.org/sqlite v1.32.0
 )
 
 // We must use our fork because our echo server is not compatible with the original oapi-codegen generator. :(
-replace github.com/oapi-codegen/oapi-codegen/v2 => github.com/datum-cloud/oapi-codegen/v2 v2.4.1
+//replace github.com/oapi-codegen/oapi-codegen/v2 => github.com/datum-cloud/oapi-codegen/v2 v2.4.1
+replace github.com/oapi-codegen/oapi-codegen/v2 => /Users/aus/Code/oapi-codegen
 
 require (
 	cloud.google.com/go/auth v0.8.1 // indirect
@@ -243,7 +244,7 @@ require (
 	github.com/dlclark/regexp2 v1.11.0 // indirect
 	github.com/fatih/color v1.17.0 // indirect
 	github.com/fsnotify/fsnotify v1.7.0 // indirect
-	github.com/getkin/kin-openapi v0.127.0
+	github.com/getkin/kin-openapi v0.128.0
 	github.com/ghodss/yaml v1.0.0 // indirect
 	github.com/go-faster/yaml v0.4.6 // indirect
 	github.com/go-openapi/inflect v0.21.0 // indirect
@@ -289,13 +290,13 @@ require (
 	go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracehttp v1.28.0
 	go.opentelemetry.io/otel/exporters/stdout/stdouttrace v1.28.0
 	gocloud.dev v0.37.0
-	golang.org/x/crypto v0.26.0
+	golang.org/x/crypto v0.28.0
 	golang.org/x/exp v0.0.0-20240808152545-0cdaa3abc0fa
-	golang.org/x/mod v0.20.0 // indirect
-	golang.org/x/net v0.28.0
-	golang.org/x/sys v0.24.0 // indirect
-	golang.org/x/text v0.18.0
+	golang.org/x/mod v0.21.0 // indirect
+	golang.org/x/net v0.30.0
+	golang.org/x/sys v0.26.0 // indirect
+	golang.org/x/text v0.19.0
 	golang.org/x/time v0.6.0
-	golang.org/x/tools v0.24.0
+	golang.org/x/tools v0.26.0
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
