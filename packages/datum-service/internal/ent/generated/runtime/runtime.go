@@ -56,6 +56,8 @@ import (
 	"github.com/datum-cloud/datum-os/internal/ent/generated/orgmembershiphistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/passwordresettoken"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/personalaccesstoken"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/postaladdress"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/postaladdresshistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/subscriber"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/template"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/templatehistory"
@@ -64,6 +66,12 @@ import (
 	"github.com/datum-cloud/datum-os/internal/ent/generated/userhistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/usersetting"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/usersettinghistory"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/vendor"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorhistory"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofile"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofilehistory"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofilepostaladdress"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofilepostaladdresshistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/webauthn"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/webhook"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/webhookhistory"
@@ -2790,6 +2798,141 @@ func init() {
 	personalaccesstokenDescID := personalaccesstokenMixinFields2[0].Descriptor()
 	// personalaccesstoken.DefaultID holds the default value on creation for the id field.
 	personalaccesstoken.DefaultID = personalaccesstokenDescID.Default.(func() string)
+	postaladdressMixin := schema.PostalAddress{}.Mixin()
+	postaladdress.Policy = privacy.NewPolicies(schema.PostalAddress{})
+	postaladdress.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := postaladdress.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+	postaladdressMixinHooks0 := postaladdressMixin[0].Hooks()
+	postaladdressMixinHooks1 := postaladdressMixin[1].Hooks()
+	postaladdressMixinHooks4 := postaladdressMixin[4].Hooks()
+
+	postaladdress.Hooks[1] = postaladdressMixinHooks0[0]
+
+	postaladdress.Hooks[2] = postaladdressMixinHooks1[0]
+
+	postaladdress.Hooks[3] = postaladdressMixinHooks4[0]
+	postaladdressMixinInters1 := postaladdressMixin[1].Interceptors()
+	postaladdressMixinInters4 := postaladdressMixin[4].Interceptors()
+	postaladdress.Interceptors[0] = postaladdressMixinInters1[0]
+	postaladdress.Interceptors[1] = postaladdressMixinInters4[0]
+	postaladdressMixinFields0 := postaladdressMixin[0].Fields()
+	_ = postaladdressMixinFields0
+	postaladdressMixinFields2 := postaladdressMixin[2].Fields()
+	_ = postaladdressMixinFields2
+	postaladdressMixinFields3 := postaladdressMixin[3].Fields()
+	_ = postaladdressMixinFields3
+	postaladdressMixinFields4 := postaladdressMixin[4].Fields()
+	_ = postaladdressMixinFields4
+	postaladdressFields := schema.PostalAddress{}.Fields()
+	_ = postaladdressFields
+	// postaladdressDescCreatedAt is the schema descriptor for created_at field.
+	postaladdressDescCreatedAt := postaladdressMixinFields0[0].Descriptor()
+	// postaladdress.DefaultCreatedAt holds the default value on creation for the created_at field.
+	postaladdress.DefaultCreatedAt = postaladdressDescCreatedAt.Default.(func() time.Time)
+	// postaladdressDescUpdatedAt is the schema descriptor for updated_at field.
+	postaladdressDescUpdatedAt := postaladdressMixinFields0[1].Descriptor()
+	// postaladdress.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	postaladdress.DefaultUpdatedAt = postaladdressDescUpdatedAt.Default.(func() time.Time)
+	// postaladdress.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	postaladdress.UpdateDefaultUpdatedAt = postaladdressDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// postaladdressDescMappingID is the schema descriptor for mapping_id field.
+	postaladdressDescMappingID := postaladdressMixinFields2[1].Descriptor()
+	// postaladdress.DefaultMappingID holds the default value on creation for the mapping_id field.
+	postaladdress.DefaultMappingID = postaladdressDescMappingID.Default.(func() string)
+	// postaladdressDescTags is the schema descriptor for tags field.
+	postaladdressDescTags := postaladdressMixinFields3[0].Descriptor()
+	// postaladdress.DefaultTags holds the default value on creation for the tags field.
+	postaladdress.DefaultTags = postaladdressDescTags.Default.([]string)
+	// postaladdressDescOwnerID is the schema descriptor for owner_id field.
+	postaladdressDescOwnerID := postaladdressMixinFields4[0].Descriptor()
+	// postaladdress.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
+	postaladdress.OwnerIDValidator = postaladdressDescOwnerID.Validators[0].(func(string) error)
+	// postaladdressDescRegionCode is the schema descriptor for region_code field.
+	postaladdressDescRegionCode := postaladdressFields[0].Descriptor()
+	// postaladdress.RegionCodeValidator is a validator for the "region_code" field. It is called by the builders before save.
+	postaladdress.RegionCodeValidator = func() func(string) error {
+		validators := postaladdressDescRegionCode.Validators
+		fns := [...]func(string) error{
+			validators[0].(func(string) error),
+			validators[1].(func(string) error),
+		}
+		return func(region_code string) error {
+			for _, fn := range fns {
+				if err := fn(region_code); err != nil {
+					return err
+				}
+			}
+			return nil
+		}
+	}()
+	// postaladdressDescLanguageCode is the schema descriptor for language_code field.
+	postaladdressDescLanguageCode := postaladdressFields[1].Descriptor()
+	// postaladdress.LanguageCodeValidator is a validator for the "language_code" field. It is called by the builders before save.
+	postaladdress.LanguageCodeValidator = postaladdressDescLanguageCode.Validators[0].(func(string) error)
+	// postaladdressDescPostalCode is the schema descriptor for postal_code field.
+	postaladdressDescPostalCode := postaladdressFields[2].Descriptor()
+	// postaladdress.PostalCodeValidator is a validator for the "postal_code" field. It is called by the builders before save.
+	postaladdress.PostalCodeValidator = postaladdressDescPostalCode.Validators[0].(func(string) error)
+	// postaladdressDescSortingCode is the schema descriptor for sorting_code field.
+	postaladdressDescSortingCode := postaladdressFields[3].Descriptor()
+	// postaladdress.SortingCodeValidator is a validator for the "sorting_code" field. It is called by the builders before save.
+	postaladdress.SortingCodeValidator = postaladdressDescSortingCode.Validators[0].(func(string) error)
+	// postaladdressDescAdministrativeArea is the schema descriptor for administrative_area field.
+	postaladdressDescAdministrativeArea := postaladdressFields[4].Descriptor()
+	// postaladdress.AdministrativeAreaValidator is a validator for the "administrative_area" field. It is called by the builders before save.
+	postaladdress.AdministrativeAreaValidator = postaladdressDescAdministrativeArea.Validators[0].(func(string) error)
+	// postaladdressDescLocality is the schema descriptor for locality field.
+	postaladdressDescLocality := postaladdressFields[5].Descriptor()
+	// postaladdress.LocalityValidator is a validator for the "locality" field. It is called by the builders before save.
+	postaladdress.LocalityValidator = postaladdressDescLocality.Validators[0].(func(string) error)
+	// postaladdressDescSublocality is the schema descriptor for sublocality field.
+	postaladdressDescSublocality := postaladdressFields[6].Descriptor()
+	// postaladdress.SublocalityValidator is a validator for the "sublocality" field. It is called by the builders before save.
+	postaladdress.SublocalityValidator = postaladdressDescSublocality.Validators[0].(func(string) error)
+	// postaladdressDescOrganization is the schema descriptor for organization field.
+	postaladdressDescOrganization := postaladdressFields[9].Descriptor()
+	// postaladdress.OrganizationValidator is a validator for the "organization" field. It is called by the builders before save.
+	postaladdress.OrganizationValidator = postaladdressDescOrganization.Validators[0].(func(string) error)
+	// postaladdressDescID is the schema descriptor for id field.
+	postaladdressDescID := postaladdressMixinFields2[0].Descriptor()
+	// postaladdress.DefaultID holds the default value on creation for the id field.
+	postaladdress.DefaultID = postaladdressDescID.Default.(func() string)
+	postaladdresshistoryInters := schema.PostalAddressHistory{}.Interceptors()
+	postaladdresshistory.Interceptors[0] = postaladdresshistoryInters[0]
+	postaladdresshistoryFields := schema.PostalAddressHistory{}.Fields()
+	_ = postaladdresshistoryFields
+	// postaladdresshistoryDescHistoryTime is the schema descriptor for history_time field.
+	postaladdresshistoryDescHistoryTime := postaladdresshistoryFields[0].Descriptor()
+	// postaladdresshistory.DefaultHistoryTime holds the default value on creation for the history_time field.
+	postaladdresshistory.DefaultHistoryTime = postaladdresshistoryDescHistoryTime.Default.(func() time.Time)
+	// postaladdresshistoryDescCreatedAt is the schema descriptor for created_at field.
+	postaladdresshistoryDescCreatedAt := postaladdresshistoryFields[3].Descriptor()
+	// postaladdresshistory.DefaultCreatedAt holds the default value on creation for the created_at field.
+	postaladdresshistory.DefaultCreatedAt = postaladdresshistoryDescCreatedAt.Default.(func() time.Time)
+	// postaladdresshistoryDescUpdatedAt is the schema descriptor for updated_at field.
+	postaladdresshistoryDescUpdatedAt := postaladdresshistoryFields[4].Descriptor()
+	// postaladdresshistory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	postaladdresshistory.DefaultUpdatedAt = postaladdresshistoryDescUpdatedAt.Default.(func() time.Time)
+	// postaladdresshistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	postaladdresshistory.UpdateDefaultUpdatedAt = postaladdresshistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// postaladdresshistoryDescMappingID is the schema descriptor for mapping_id field.
+	postaladdresshistoryDescMappingID := postaladdresshistoryFields[10].Descriptor()
+	// postaladdresshistory.DefaultMappingID holds the default value on creation for the mapping_id field.
+	postaladdresshistory.DefaultMappingID = postaladdresshistoryDescMappingID.Default.(func() string)
+	// postaladdresshistoryDescTags is the schema descriptor for tags field.
+	postaladdresshistoryDescTags := postaladdresshistoryFields[11].Descriptor()
+	// postaladdresshistory.DefaultTags holds the default value on creation for the tags field.
+	postaladdresshistory.DefaultTags = postaladdresshistoryDescTags.Default.([]string)
+	// postaladdresshistoryDescID is the schema descriptor for id field.
+	postaladdresshistoryDescID := postaladdresshistoryFields[9].Descriptor()
+	// postaladdresshistory.DefaultID holds the default value on creation for the id field.
+	postaladdresshistory.DefaultID = postaladdresshistoryDescID.Default.(func() string)
 	subscriberMixin := schema.Subscriber{}.Mixin()
 	subscriber.Policy = privacy.NewPolicies(schema.Subscriber{})
 	subscriber.Hooks[0] = func(next ent.Mutator) ent.Mutator {
@@ -3308,6 +3451,322 @@ func init() {
 	usersettinghistoryDescID := usersettinghistoryFields[7].Descriptor()
 	// usersettinghistory.DefaultID holds the default value on creation for the id field.
 	usersettinghistory.DefaultID = usersettinghistoryDescID.Default.(func() string)
+	vendorMixin := schema.Vendor{}.Mixin()
+	vendor.Policy = privacy.NewPolicies(schema.Vendor{})
+	vendor.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := vendor.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+	vendorMixinHooks0 := vendorMixin[0].Hooks()
+	vendorMixinHooks1 := vendorMixin[1].Hooks()
+	vendorMixinHooks4 := vendorMixin[4].Hooks()
+
+	vendor.Hooks[1] = vendorMixinHooks0[0]
+
+	vendor.Hooks[2] = vendorMixinHooks1[0]
+
+	vendor.Hooks[3] = vendorMixinHooks4[0]
+	vendorMixinInters1 := vendorMixin[1].Interceptors()
+	vendorMixinInters4 := vendorMixin[4].Interceptors()
+	vendor.Interceptors[0] = vendorMixinInters1[0]
+	vendor.Interceptors[1] = vendorMixinInters4[0]
+	vendorMixinFields0 := vendorMixin[0].Fields()
+	_ = vendorMixinFields0
+	vendorMixinFields2 := vendorMixin[2].Fields()
+	_ = vendorMixinFields2
+	vendorMixinFields3 := vendorMixin[3].Fields()
+	_ = vendorMixinFields3
+	vendorMixinFields4 := vendorMixin[4].Fields()
+	_ = vendorMixinFields4
+	vendorFields := schema.Vendor{}.Fields()
+	_ = vendorFields
+	// vendorDescCreatedAt is the schema descriptor for created_at field.
+	vendorDescCreatedAt := vendorMixinFields0[0].Descriptor()
+	// vendor.DefaultCreatedAt holds the default value on creation for the created_at field.
+	vendor.DefaultCreatedAt = vendorDescCreatedAt.Default.(func() time.Time)
+	// vendorDescUpdatedAt is the schema descriptor for updated_at field.
+	vendorDescUpdatedAt := vendorMixinFields0[1].Descriptor()
+	// vendor.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	vendor.DefaultUpdatedAt = vendorDescUpdatedAt.Default.(func() time.Time)
+	// vendor.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	vendor.UpdateDefaultUpdatedAt = vendorDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// vendorDescMappingID is the schema descriptor for mapping_id field.
+	vendorDescMappingID := vendorMixinFields2[1].Descriptor()
+	// vendor.DefaultMappingID holds the default value on creation for the mapping_id field.
+	vendor.DefaultMappingID = vendorDescMappingID.Default.(func() string)
+	// vendorDescTags is the schema descriptor for tags field.
+	vendorDescTags := vendorMixinFields3[0].Descriptor()
+	// vendor.DefaultTags holds the default value on creation for the tags field.
+	vendor.DefaultTags = vendorDescTags.Default.([]string)
+	// vendorDescOwnerID is the schema descriptor for owner_id field.
+	vendorDescOwnerID := vendorMixinFields4[0].Descriptor()
+	// vendor.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
+	vendor.OwnerIDValidator = vendorDescOwnerID.Validators[0].(func(string) error)
+	// vendorDescDisplayName is the schema descriptor for display_name field.
+	vendorDescDisplayName := vendorFields[0].Descriptor()
+	// vendor.DisplayNameValidator is a validator for the "display_name" field. It is called by the builders before save.
+	vendor.DisplayNameValidator = func() func(string) error {
+		validators := vendorDescDisplayName.Validators
+		fns := [...]func(string) error{
+			validators[0].(func(string) error),
+			validators[1].(func(string) error),
+		}
+		return func(display_name string) error {
+			for _, fn := range fns {
+				if err := fn(display_name); err != nil {
+					return err
+				}
+			}
+			return nil
+		}
+	}()
+	// vendorDescID is the schema descriptor for id field.
+	vendorDescID := vendorMixinFields2[0].Descriptor()
+	// vendor.DefaultID holds the default value on creation for the id field.
+	vendor.DefaultID = vendorDescID.Default.(func() string)
+	vendorhistoryInters := schema.VendorHistory{}.Interceptors()
+	vendorhistory.Interceptors[0] = vendorhistoryInters[0]
+	vendorhistoryFields := schema.VendorHistory{}.Fields()
+	_ = vendorhistoryFields
+	// vendorhistoryDescHistoryTime is the schema descriptor for history_time field.
+	vendorhistoryDescHistoryTime := vendorhistoryFields[0].Descriptor()
+	// vendorhistory.DefaultHistoryTime holds the default value on creation for the history_time field.
+	vendorhistory.DefaultHistoryTime = vendorhistoryDescHistoryTime.Default.(func() time.Time)
+	// vendorhistoryDescCreatedAt is the schema descriptor for created_at field.
+	vendorhistoryDescCreatedAt := vendorhistoryFields[3].Descriptor()
+	// vendorhistory.DefaultCreatedAt holds the default value on creation for the created_at field.
+	vendorhistory.DefaultCreatedAt = vendorhistoryDescCreatedAt.Default.(func() time.Time)
+	// vendorhistoryDescUpdatedAt is the schema descriptor for updated_at field.
+	vendorhistoryDescUpdatedAt := vendorhistoryFields[4].Descriptor()
+	// vendorhistory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	vendorhistory.DefaultUpdatedAt = vendorhistoryDescUpdatedAt.Default.(func() time.Time)
+	// vendorhistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	vendorhistory.UpdateDefaultUpdatedAt = vendorhistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// vendorhistoryDescMappingID is the schema descriptor for mapping_id field.
+	vendorhistoryDescMappingID := vendorhistoryFields[10].Descriptor()
+	// vendorhistory.DefaultMappingID holds the default value on creation for the mapping_id field.
+	vendorhistory.DefaultMappingID = vendorhistoryDescMappingID.Default.(func() string)
+	// vendorhistoryDescTags is the schema descriptor for tags field.
+	vendorhistoryDescTags := vendorhistoryFields[11].Descriptor()
+	// vendorhistory.DefaultTags holds the default value on creation for the tags field.
+	vendorhistory.DefaultTags = vendorhistoryDescTags.Default.([]string)
+	// vendorhistoryDescID is the schema descriptor for id field.
+	vendorhistoryDescID := vendorhistoryFields[9].Descriptor()
+	// vendorhistory.DefaultID holds the default value on creation for the id field.
+	vendorhistory.DefaultID = vendorhistoryDescID.Default.(func() string)
+	vendorprofileMixin := schema.VendorProfile{}.Mixin()
+	vendorprofile.Policy = privacy.NewPolicies(schema.VendorProfile{})
+	vendorprofile.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := vendorprofile.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+	vendorprofileMixinHooks0 := vendorprofileMixin[0].Hooks()
+	vendorprofileMixinHooks1 := vendorprofileMixin[1].Hooks()
+	vendorprofileMixinHooks4 := vendorprofileMixin[4].Hooks()
+
+	vendorprofile.Hooks[1] = vendorprofileMixinHooks0[0]
+
+	vendorprofile.Hooks[2] = vendorprofileMixinHooks1[0]
+
+	vendorprofile.Hooks[3] = vendorprofileMixinHooks4[0]
+	vendorprofileMixinInters1 := vendorprofileMixin[1].Interceptors()
+	vendorprofileMixinInters4 := vendorprofileMixin[4].Interceptors()
+	vendorprofile.Interceptors[0] = vendorprofileMixinInters1[0]
+	vendorprofile.Interceptors[1] = vendorprofileMixinInters4[0]
+	vendorprofileMixinFields0 := vendorprofileMixin[0].Fields()
+	_ = vendorprofileMixinFields0
+	vendorprofileMixinFields2 := vendorprofileMixin[2].Fields()
+	_ = vendorprofileMixinFields2
+	vendorprofileMixinFields3 := vendorprofileMixin[3].Fields()
+	_ = vendorprofileMixinFields3
+	vendorprofileMixinFields4 := vendorprofileMixin[4].Fields()
+	_ = vendorprofileMixinFields4
+	vendorprofileFields := schema.VendorProfile{}.Fields()
+	_ = vendorprofileFields
+	// vendorprofileDescCreatedAt is the schema descriptor for created_at field.
+	vendorprofileDescCreatedAt := vendorprofileMixinFields0[0].Descriptor()
+	// vendorprofile.DefaultCreatedAt holds the default value on creation for the created_at field.
+	vendorprofile.DefaultCreatedAt = vendorprofileDescCreatedAt.Default.(func() time.Time)
+	// vendorprofileDescUpdatedAt is the schema descriptor for updated_at field.
+	vendorprofileDescUpdatedAt := vendorprofileMixinFields0[1].Descriptor()
+	// vendorprofile.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	vendorprofile.DefaultUpdatedAt = vendorprofileDescUpdatedAt.Default.(func() time.Time)
+	// vendorprofile.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	vendorprofile.UpdateDefaultUpdatedAt = vendorprofileDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// vendorprofileDescMappingID is the schema descriptor for mapping_id field.
+	vendorprofileDescMappingID := vendorprofileMixinFields2[1].Descriptor()
+	// vendorprofile.DefaultMappingID holds the default value on creation for the mapping_id field.
+	vendorprofile.DefaultMappingID = vendorprofileDescMappingID.Default.(func() string)
+	// vendorprofileDescTags is the schema descriptor for tags field.
+	vendorprofileDescTags := vendorprofileMixinFields3[0].Descriptor()
+	// vendorprofile.DefaultTags holds the default value on creation for the tags field.
+	vendorprofile.DefaultTags = vendorprofileDescTags.Default.([]string)
+	// vendorprofileDescOwnerID is the schema descriptor for owner_id field.
+	vendorprofileDescOwnerID := vendorprofileMixinFields4[0].Descriptor()
+	// vendorprofile.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
+	vendorprofile.OwnerIDValidator = vendorprofileDescOwnerID.Validators[0].(func(string) error)
+	// vendorprofileDescVendorID is the schema descriptor for vendor_id field.
+	vendorprofileDescVendorID := vendorprofileFields[0].Descriptor()
+	// vendorprofile.VendorIDValidator is a validator for the "vendor_id" field. It is called by the builders before save.
+	vendorprofile.VendorIDValidator = vendorprofileDescVendorID.Validators[0].(func(string) error)
+	// vendorprofileDescName is the schema descriptor for name field.
+	vendorprofileDescName := vendorprofileFields[1].Descriptor()
+	// vendorprofile.NameValidator is a validator for the "name" field. It is called by the builders before save.
+	vendorprofile.NameValidator = func() func(string) error {
+		validators := vendorprofileDescName.Validators
+		fns := [...]func(string) error{
+			validators[0].(func(string) error),
+			validators[1].(func(string) error),
+		}
+		return func(name string) error {
+			for _, fn := range fns {
+				if err := fn(name); err != nil {
+					return err
+				}
+			}
+			return nil
+		}
+	}()
+	// vendorprofileDescDbaName is the schema descriptor for dba_name field.
+	vendorprofileDescDbaName := vendorprofileFields[2].Descriptor()
+	// vendorprofile.DbaNameValidator is a validator for the "dba_name" field. It is called by the builders before save.
+	vendorprofile.DbaNameValidator = vendorprofileDescDbaName.Validators[0].(func(string) error)
+	// vendorprofileDescWebsiteURI is the schema descriptor for website_uri field.
+	vendorprofileDescWebsiteURI := vendorprofileFields[4].Descriptor()
+	// vendorprofile.WebsiteURIValidator is a validator for the "website_uri" field. It is called by the builders before save.
+	vendorprofile.WebsiteURIValidator = func() func(string) error {
+		validators := vendorprofileDescWebsiteURI.Validators
+		fns := [...]func(string) error{
+			validators[0].(func(string) error),
+			validators[1].(func(string) error),
+		}
+		return func(website_uri string) error {
+			for _, fn := range fns {
+				if err := fn(website_uri); err != nil {
+					return err
+				}
+			}
+			return nil
+		}
+	}()
+	// vendorprofileDescID is the schema descriptor for id field.
+	vendorprofileDescID := vendorprofileMixinFields2[0].Descriptor()
+	// vendorprofile.DefaultID holds the default value on creation for the id field.
+	vendorprofile.DefaultID = vendorprofileDescID.Default.(func() string)
+	vendorprofilehistoryInters := schema.VendorProfileHistory{}.Interceptors()
+	vendorprofilehistory.Interceptors[0] = vendorprofilehistoryInters[0]
+	vendorprofilehistoryFields := schema.VendorProfileHistory{}.Fields()
+	_ = vendorprofilehistoryFields
+	// vendorprofilehistoryDescHistoryTime is the schema descriptor for history_time field.
+	vendorprofilehistoryDescHistoryTime := vendorprofilehistoryFields[0].Descriptor()
+	// vendorprofilehistory.DefaultHistoryTime holds the default value on creation for the history_time field.
+	vendorprofilehistory.DefaultHistoryTime = vendorprofilehistoryDescHistoryTime.Default.(func() time.Time)
+	// vendorprofilehistoryDescCreatedAt is the schema descriptor for created_at field.
+	vendorprofilehistoryDescCreatedAt := vendorprofilehistoryFields[3].Descriptor()
+	// vendorprofilehistory.DefaultCreatedAt holds the default value on creation for the created_at field.
+	vendorprofilehistory.DefaultCreatedAt = vendorprofilehistoryDescCreatedAt.Default.(func() time.Time)
+	// vendorprofilehistoryDescUpdatedAt is the schema descriptor for updated_at field.
+	vendorprofilehistoryDescUpdatedAt := vendorprofilehistoryFields[4].Descriptor()
+	// vendorprofilehistory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	vendorprofilehistory.DefaultUpdatedAt = vendorprofilehistoryDescUpdatedAt.Default.(func() time.Time)
+	// vendorprofilehistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	vendorprofilehistory.UpdateDefaultUpdatedAt = vendorprofilehistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// vendorprofilehistoryDescMappingID is the schema descriptor for mapping_id field.
+	vendorprofilehistoryDescMappingID := vendorprofilehistoryFields[10].Descriptor()
+	// vendorprofilehistory.DefaultMappingID holds the default value on creation for the mapping_id field.
+	vendorprofilehistory.DefaultMappingID = vendorprofilehistoryDescMappingID.Default.(func() string)
+	// vendorprofilehistoryDescTags is the schema descriptor for tags field.
+	vendorprofilehistoryDescTags := vendorprofilehistoryFields[11].Descriptor()
+	// vendorprofilehistory.DefaultTags holds the default value on creation for the tags field.
+	vendorprofilehistory.DefaultTags = vendorprofilehistoryDescTags.Default.([]string)
+	// vendorprofilehistoryDescID is the schema descriptor for id field.
+	vendorprofilehistoryDescID := vendorprofilehistoryFields[9].Descriptor()
+	// vendorprofilehistory.DefaultID holds the default value on creation for the id field.
+	vendorprofilehistory.DefaultID = vendorprofilehistoryDescID.Default.(func() string)
+	vendorprofilepostaladdressMixin := schema.VendorProfilePostalAddress{}.Mixin()
+	vendorprofilepostaladdress.Policy = privacy.NewPolicies(schema.VendorProfilePostalAddress{})
+	vendorprofilepostaladdress.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := vendorprofilepostaladdress.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+	vendorprofilepostaladdressMixinHooks0 := vendorprofilepostaladdressMixin[0].Hooks()
+	vendorprofilepostaladdressMixinHooks2 := vendorprofilepostaladdressMixin[2].Hooks()
+
+	vendorprofilepostaladdress.Hooks[1] = vendorprofilepostaladdressMixinHooks0[0]
+
+	vendorprofilepostaladdress.Hooks[2] = vendorprofilepostaladdressMixinHooks2[0]
+	vendorprofilepostaladdressMixinInters2 := vendorprofilepostaladdressMixin[2].Interceptors()
+	vendorprofilepostaladdress.Interceptors[0] = vendorprofilepostaladdressMixinInters2[0]
+	vendorprofilepostaladdressMixinFields0 := vendorprofilepostaladdressMixin[0].Fields()
+	_ = vendorprofilepostaladdressMixinFields0
+	vendorprofilepostaladdressMixinFields1 := vendorprofilepostaladdressMixin[1].Fields()
+	_ = vendorprofilepostaladdressMixinFields1
+	vendorprofilepostaladdressFields := schema.VendorProfilePostalAddress{}.Fields()
+	_ = vendorprofilepostaladdressFields
+	// vendorprofilepostaladdressDescCreatedAt is the schema descriptor for created_at field.
+	vendorprofilepostaladdressDescCreatedAt := vendorprofilepostaladdressMixinFields0[0].Descriptor()
+	// vendorprofilepostaladdress.DefaultCreatedAt holds the default value on creation for the created_at field.
+	vendorprofilepostaladdress.DefaultCreatedAt = vendorprofilepostaladdressDescCreatedAt.Default.(func() time.Time)
+	// vendorprofilepostaladdressDescUpdatedAt is the schema descriptor for updated_at field.
+	vendorprofilepostaladdressDescUpdatedAt := vendorprofilepostaladdressMixinFields0[1].Descriptor()
+	// vendorprofilepostaladdress.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	vendorprofilepostaladdress.DefaultUpdatedAt = vendorprofilepostaladdressDescUpdatedAt.Default.(func() time.Time)
+	// vendorprofilepostaladdress.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	vendorprofilepostaladdress.UpdateDefaultUpdatedAt = vendorprofilepostaladdressDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// vendorprofilepostaladdressDescMappingID is the schema descriptor for mapping_id field.
+	vendorprofilepostaladdressDescMappingID := vendorprofilepostaladdressMixinFields1[1].Descriptor()
+	// vendorprofilepostaladdress.DefaultMappingID holds the default value on creation for the mapping_id field.
+	vendorprofilepostaladdress.DefaultMappingID = vendorprofilepostaladdressDescMappingID.Default.(func() string)
+	// vendorprofilepostaladdressDescVendorProfileID is the schema descriptor for vendor_profile_id field.
+	vendorprofilepostaladdressDescVendorProfileID := vendorprofilepostaladdressFields[1].Descriptor()
+	// vendorprofilepostaladdress.VendorProfileIDValidator is a validator for the "vendor_profile_id" field. It is called by the builders before save.
+	vendorprofilepostaladdress.VendorProfileIDValidator = vendorprofilepostaladdressDescVendorProfileID.Validators[0].(func(string) error)
+	// vendorprofilepostaladdressDescPostalAddressID is the schema descriptor for postal_address_id field.
+	vendorprofilepostaladdressDescPostalAddressID := vendorprofilepostaladdressFields[2].Descriptor()
+	// vendorprofilepostaladdress.PostalAddressIDValidator is a validator for the "postal_address_id" field. It is called by the builders before save.
+	vendorprofilepostaladdress.PostalAddressIDValidator = vendorprofilepostaladdressDescPostalAddressID.Validators[0].(func(string) error)
+	// vendorprofilepostaladdressDescID is the schema descriptor for id field.
+	vendorprofilepostaladdressDescID := vendorprofilepostaladdressMixinFields1[0].Descriptor()
+	// vendorprofilepostaladdress.DefaultID holds the default value on creation for the id field.
+	vendorprofilepostaladdress.DefaultID = vendorprofilepostaladdressDescID.Default.(func() string)
+	vendorprofilepostaladdresshistoryInters := schema.VendorProfilePostalAddressHistory{}.Interceptors()
+	vendorprofilepostaladdresshistory.Interceptors[0] = vendorprofilepostaladdresshistoryInters[0]
+	vendorprofilepostaladdresshistoryFields := schema.VendorProfilePostalAddressHistory{}.Fields()
+	_ = vendorprofilepostaladdresshistoryFields
+	// vendorprofilepostaladdresshistoryDescHistoryTime is the schema descriptor for history_time field.
+	vendorprofilepostaladdresshistoryDescHistoryTime := vendorprofilepostaladdresshistoryFields[0].Descriptor()
+	// vendorprofilepostaladdresshistory.DefaultHistoryTime holds the default value on creation for the history_time field.
+	vendorprofilepostaladdresshistory.DefaultHistoryTime = vendorprofilepostaladdresshistoryDescHistoryTime.Default.(func() time.Time)
+	// vendorprofilepostaladdresshistoryDescCreatedAt is the schema descriptor for created_at field.
+	vendorprofilepostaladdresshistoryDescCreatedAt := vendorprofilepostaladdresshistoryFields[3].Descriptor()
+	// vendorprofilepostaladdresshistory.DefaultCreatedAt holds the default value on creation for the created_at field.
+	vendorprofilepostaladdresshistory.DefaultCreatedAt = vendorprofilepostaladdresshistoryDescCreatedAt.Default.(func() time.Time)
+	// vendorprofilepostaladdresshistoryDescUpdatedAt is the schema descriptor for updated_at field.
+	vendorprofilepostaladdresshistoryDescUpdatedAt := vendorprofilepostaladdresshistoryFields[4].Descriptor()
+	// vendorprofilepostaladdresshistory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	vendorprofilepostaladdresshistory.DefaultUpdatedAt = vendorprofilepostaladdresshistoryDescUpdatedAt.Default.(func() time.Time)
+	// vendorprofilepostaladdresshistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	vendorprofilepostaladdresshistory.UpdateDefaultUpdatedAt = vendorprofilepostaladdresshistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// vendorprofilepostaladdresshistoryDescMappingID is the schema descriptor for mapping_id field.
+	vendorprofilepostaladdresshistoryDescMappingID := vendorprofilepostaladdresshistoryFields[8].Descriptor()
+	// vendorprofilepostaladdresshistory.DefaultMappingID holds the default value on creation for the mapping_id field.
+	vendorprofilepostaladdresshistory.DefaultMappingID = vendorprofilepostaladdresshistoryDescMappingID.Default.(func() string)
+	// vendorprofilepostaladdresshistoryDescID is the schema descriptor for id field.
+	vendorprofilepostaladdresshistoryDescID := vendorprofilepostaladdresshistoryFields[7].Descriptor()
+	// vendorprofilepostaladdresshistory.DefaultID holds the default value on creation for the id field.
+	vendorprofilepostaladdresshistory.DefaultID = vendorprofilepostaladdresshistoryDescID.Default.(func() string)
 	webauthnMixin := schema.Webauthn{}.Mixin()
 	webauthnMixinHooks0 := webauthnMixin[0].Hooks()
 	webauthnMixinHooks3 := webauthnMixin[3].Hooks()

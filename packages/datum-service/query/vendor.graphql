@@ -1,0 +1,119 @@
+
+mutation CreateBulkCSVVendor($input: Upload!) {
+  createBulkCSVVendor(input: $input) {
+    vendors {
+      createdAt
+      createdBy
+      displayName
+      id
+      onboardingState
+      ownerID
+      tags
+      updatedAt
+      updatedBy
+      vendorType
+    }
+  }
+}
+
+mutation CreateBulkVendor($input: [CreateVendorInput!]) {
+  createBulkVendor(input: $input) {
+    vendors {
+      createdAt
+      createdBy
+      displayName
+      id
+      onboardingState
+      ownerID
+      tags
+      updatedAt
+      updatedBy
+      vendorType
+    }
+  }
+}
+
+mutation CreateVendor($input: CreateVendorInput!) {
+  createVendor(input: $input) {
+    vendor {
+      createdAt
+      createdBy
+      displayName
+      id
+      onboardingState
+      ownerID
+      tags
+      updatedAt
+      updatedBy
+      vendorType
+    }
+  }
+}
+
+query GetAllVendors {
+  vendors {
+    edges {
+      node {
+        createdAt
+        createdBy
+        displayName
+        id
+        onboardingState
+        ownerID
+        tags
+        updatedAt
+        updatedBy
+        vendorType
+      }
+    }
+  }
+}
+query GetVendorByID($vendorId: ID!) {
+  vendor(id: $vendorId) {
+    createdAt
+    createdBy
+    displayName
+    id
+    onboardingState
+    ownerID
+    tags
+    updatedAt
+    updatedBy
+    vendorType
+  }
+}
+
+query GetVendors($where: VendorWhereInput) {
+  vendors(where: $where) {
+    edges {
+      node {
+        createdAt
+        createdBy
+        displayName
+        id
+        onboardingState
+        ownerID
+        tags
+        updatedAt
+        updatedBy
+        vendorType
+      }
+    }
+  }
+}
+mutation UpdateVendor($updateVendorId: ID!, $input: UpdateVendorInput!) {
+  updateVendor(id: $updateVendorId, input: $input) {
+    vendor {
+      createdAt
+      createdBy
+      displayName
+      id
+      onboardingState
+      ownerID
+      tags
+      updatedAt
+      updatedBy
+      vendorType
+    }
+  }
+}

@@ -1,0 +1,103 @@
+extend type Query {
+    """
+    Look up postalAddress by ID
+    """
+     postalAddress(
+        """
+        ID of the postalAddress
+        """
+        id: ID!
+    ):  PostalAddress!
+}
+
+extend type Mutation{
+    """
+    Create a new postalAddress
+    """
+    createPostalAddress(
+        """
+        values of the postalAddress
+        """
+        input: CreatePostalAddressInput!
+    ): PostalAddressCreatePayload!
+    """
+    Create multiple new postalAddresss
+    """
+    createBulkPostalAddress(
+        """
+        values of the postalAddress
+        """
+        input: [CreatePostalAddressInput!]
+    ): PostalAddressBulkCreatePayload!
+    """
+    Create multiple new postalAddresss via file upload
+    """
+    createBulkCSVPostalAddress(
+        """
+        csv file containing values of the postalAddress
+        """
+        input: Upload!
+    ): PostalAddressBulkCreatePayload!
+    """
+    Update an existing postalAddress
+    """
+    updatePostalAddress(
+        """
+        ID of the postalAddress
+        """
+        id: ID!
+        """
+        New values for the postalAddress
+        """
+        input: UpdatePostalAddressInput!
+    ): PostalAddressUpdatePayload!
+    """
+    Delete an existing postalAddress
+    """
+    deletePostalAddress(
+        """
+        ID of the postalAddress
+        """
+        id: ID!
+    ): PostalAddressDeletePayload!
+}
+
+"""
+Return response for createPostalAddress mutation
+"""
+type PostalAddressCreatePayload {
+    """
+    Created postalAddress
+    """
+    postalAddress: PostalAddress!
+}
+
+"""
+Return response for updatePostalAddress mutation
+"""
+type PostalAddressUpdatePayload {
+    """
+    Updated postalAddress
+    """
+    postalAddress: PostalAddress!
+}
+
+"""
+Return response for deletePostalAddress mutation
+"""
+type PostalAddressDeletePayload {
+    """
+    Deleted postalAddress ID
+    """
+    deletedID: ID!
+}
+
+"""
+Return response for createBulkPostalAddress mutation
+"""
+type PostalAddressBulkCreatePayload {
+    """
+    Created postalAddresss
+    """
+    postalAddresses: [PostalAddress!]
+}

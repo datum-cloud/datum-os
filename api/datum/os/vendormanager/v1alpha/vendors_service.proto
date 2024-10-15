@@ -1,0 +1,181 @@
+syntax = "proto3";
+
+option go_package = "go.datumapis.com/os/genproto/os/vendormanager/v1alpha";
+
+package datum.os.vendormanager.v1alpha;
+
+import "google/api/annotations.proto";
+import "google/api/client.proto";
+import "google/api/field_behavior.proto";
+import "google/api/resource.proto";
+import "google/longrunning/operations.proto";
+import "google/protobuf/field_mask.proto";
+import "datum/os/vendormanager/v1alpha/vendors_resources.proto";
+
+// Vendors is the service for managing Vendors.
+service Vendors {
+    // CreateVendor creates a new Vendor.
+    rpc CreateVendor(CreateVendorRequest) returns (google.longrunning.Operation) {
+        option (google.api.method_signature) = "parent,vendor,vendor_id";
+        option (google.api.http) = {
+            post: "/v1alpha/{parent=vendors}"
+            body: "vendor"
+            additional_bindings {
+                post: "/v1alpha/{parent=organizations/*/vendors}"
+                body: "vendor"
+            }
+        };
+        option (google.longrunning.operation_info) = {
+            response_type: "Vendor"
+            metadata_type: "google.cloud.common.OperationMetadata"
+        };
+    }
+    // GetVendor gets a Vendor by name.
+    rpc GetVendor(GetVendorRequest) returns (Vendor) {
+        option (google.api.method_signature) = "name";
+        option (google.api.http) = {
+            get: "/v1alpha/{name=vendors/*}"
+            additional_bindings {
+                get: "/v1alpha/{name=organizations/*/vendors/*}"
+            }
+        };
+    }
+
+    // ListVendors lists all Vendors.
+    rpc ListVendors(ListVendorsRequest) returns (ListVendorsResponse) {
+        option (google.api.method_signature) = "parent";
+        option (google.api.http) = {
+            get: "/v1alpha/{parent=vendors}"
+            additional_bindings {
+                get: "/v1alpha/{parent=organizations/*/vendors}"
+            }
+        };
+    }
+
+    // UpdateVendor updates a Vendor.
+    rpc UpdateVendor(UpdateVendorRequest) returns (google.longrunning.Operation) {
+        option (google.api.method_signature) = "vendor,update_mask";
+        option (google.api.http) = {
+            patch: "/v1alpha/{vendor.name=vendors/*}"
+            body: "vendor"
+            additional_bindings {
+                patch: "/v1alpha/{vendor.name=organizations/*/vendors/*}"
+                body: "vendor"
+            }
+        };
+        option (google.longrunning.operation_info) = {
+            response_type: "Vendor"
+            metadata_type: "google.cloud.common.OperationMetadata"
+        };
+    }
+
+    // DeleteVendor deletes a Vendor by name.
+    rpc DeleteVendor(DeleteVendorRequest) returns (google.longrunning.Operation) {
+        option (google.api.method_signature) = "name";
+        option (google.api.http) = {
+            delete: "/v1alpha/{name=vendors/*}"
+            additional_bindings {
+                delete: "/v1alpha/{name=organizations/*/vendors/*}"
+            }
+        };
+        option (google.longrunning.operation_info) = {
+            response_type: "google.protobuf.Empty"
+            metadata_type: "google.cloud.common.OperationMetadata"
+        };
+    }
+}
+
+// CreateVendorRequest is the request for creating a Vendor.
+message CreateVendorRequest {
+    // The parent resource where the Vendor will be created. Defaults to the current user's organization.
+    // Format: vendors
+    // Additional format: organizations/{organization}/vendors
+    string parent = 1 [
+        (google.api.field_behavior) = REQUIRED,
+        (google.api.resource_reference) = {
+            type: "*"
+            child_type: "api.datum.net/Vendor"
+        }
+    ];
+    // The ID to use for the Vendor. If not specified, an ID will be automatically generated.
+    // If the ID is automatically generated, the Client is responsible for reconciliation.
+    string vendor_id = 2 [(google.api.field_behavior) = OPTIONAL];
+    // The Vendor to create.
+    Vendor vendor = 3 [(google.api.field_behavior) = REQUIRED];
+    // If true, the request is validated and nothing is persisted.
+    bool validate_only = 4 [(google.api.field_behavior) = OPTIONAL];
+}
+
+// GetVendorRequest is the request for getting a Vendor by name.
+message GetVendorRequest {
+    // The name of the Vendor to get.
+    // Format: vendors/{vendor}
+    // Additional format: organizations/{organization}/vendors/{vendor}
+    string name = 1 [
+        (google.api.field_behavior) = REQUIRED,
+        (google.api.resource_reference) = {
+            type: "api.datum.net/Vendor"
+        }
+    ];
+}
+
+// ListVendorsRequest is the request for listing Vendors.
+message ListVendorsRequest {
+    // The parent organization where the Vendors will be listed.
+    // If not specified, the current user's organization will be used.
+    string parent = 1 [
+        (google.api.field_behavior) = REQUIRED,
+        (google.api.resource_reference) = {
+            child_type: "api.datum.net/Vendor"
+        }
+    ];
+    // The maximum number of Vendors to return. The service may return fewer than this value.
+    // If unspecified, at most 50 Vendors will be returned. The maximum value is 1000; values above 1000 will be coerced to 1000.
+    int32 page_size = 2 [(google.api.field_behavior) = OPTIONAL];
+    // A page token, received from a previous `ListVendors` call. Provide this to retrieve the subsequent page.
+    // When paginating, all other parameters must match the call that provided the page token.
+    string page_token = 3 [(google.api.field_behavior) = OPTIONAL];
+    // A filter expression that filters the Vendors to be listed.
+    string filter = 4 [(google.api.field_behavior) = OPTIONAL];
+    // The order by fields for the Vendors. The default order is ascending. There is no descending order.
+    string order_by = 5 [(google.api.field_behavior) = OPTIONAL];
+}
+
+// ListVendorsResponse is the response for listing Vendors.
+message ListVendorsResponse {
+    // The list of Vendors.
+    repeated Vendor vendors = 1;
+    // A token to retrieve the next page of results.
+    // Pass this value in the ListVendorsRequest.page_token field in a subsequent call to `ListVendors` to retrieve the next page of results.
+    // If the page token is not set, there are no more results.
+    string next_page_token = 2;
+}
+
+// UpdateVendorRequest is the request for updating a Vendor.
+message UpdateVendorRequest {
+    // The Vendor to update.
+    Vendor vendor = 1 [(google.api.field_behavior) = REQUIRED];
+    // The field mask to update the Vendor.
+    google.protobuf.FieldMask update_mask = 2 [(google.api.field_behavior) = OPTIONAL];
+    // Allow missing Vendor. If true, the Vendor will be created if it does not exist. In this case,
+    // field_mask is ignored.
+    bool allow_missing = 3 [(google.api.field_behavior) = OPTIONAL];
+    // If true, the request is validated and nothing is persisted.
+    bool validate_only = 4 [(google.api.field_behavior) = OPTIONAL];
+}
+
+// DeleteVendorRequest is the request for deleting a Vendor by name.
+message DeleteVendorRequest {
+    // The name of the Vendor to delete.
+    string name = 1 [
+        (google.api.field_behavior) = REQUIRED,
+        (google.api.resource_reference) = {
+            type: "api.datum.net/Vendor"
+        }
+    ];
+    // The etag of the Vendor to delete. If this is not the same etag as the currently stored Vendor,
+    // the request will be rejected. If not provided, the Vendor will be deleted unconditionally.
+    string etag = 2 [(google.api.field_behavior) = OPTIONAL];
+    // If true, the request is validated and nothing is persisted.
+    bool validate_only = 3 [(google.api.field_behavior) = OPTIONAL];
+}

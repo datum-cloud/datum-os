@@ -53,6 +53,8 @@ const (
 	EdgeDocuments = "documents"
 	// EdgeNotes holds the string denoting the notes edge name in mutations.
 	EdgeNotes = "notes"
+	// EdgePostalAddresses holds the string denoting the postal_addresses edge name in mutations.
+	EdgePostalAddresses = "postal_addresses"
 	// EdgeFiles holds the string denoting the files edge name in mutations.
 	EdgeFiles = "files"
 	// EdgeEntityType holds the string denoting the entity_type edge name in mutations.
@@ -83,6 +85,13 @@ const (
 	NotesInverseTable = "notes"
 	// NotesColumn is the table column denoting the notes relation/edge.
 	NotesColumn = "entity_notes"
+	// PostalAddressesTable is the table that holds the postal_addresses relation/edge.
+	PostalAddressesTable = "postal_addresses"
+	// PostalAddressesInverseTable is the table name for the PostalAddress entity.
+	// It exists in this package in order to avoid circular dependency with the "postaladdress" package.
+	PostalAddressesInverseTable = "postal_addresses"
+	// PostalAddressesColumn is the table column denoting the postal_addresses relation/edge.
+	PostalAddressesColumn = "entity_postal_addresses"
 	// FilesTable is the table that holds the files relation/edge. The primary key declared below.
 	FilesTable = "entity_files"
 	// FilesInverseTable is the table name for the File entity.
@@ -305,6 +314,20 @@ func ByNotes(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
+// ByPostalAddressesCount orders the results by postal_addresses count.
+func ByPostalAddressesCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newPostalAddressesStep(), opts...)
+	}
+}
+
+// ByPostalAddresses orders the results by postal_addresses terms.
+func ByPostalAddresses(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newPostalAddressesStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByFilesCount orders the results by files count.
 func ByFilesCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -351,6 +374,13 @@ func newNotesStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(NotesInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, NotesTable, NotesColumn),
+	)
+}
+func newPostalAddressesStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(PostalAddressesInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, PostalAddressesTable, PostalAddressesColumn),
 	)
 }
 func newFilesStep() *sqlgraph.Step {

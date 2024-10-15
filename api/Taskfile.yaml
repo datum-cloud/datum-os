@@ -1,9 +1,18 @@
 version: '3'
 
+shopt: [globstar]
+
+includes:
+  # Include any operating system specific task files so commands can be changed
+  # based on the developer's operating system.
+  build:
+    taskfile: ./Taskfile_{{OS}}.yaml
+    flatten: true
+
 tasks:
   default:
     cmds:
-      - task -l
+      - task --list-all
 
   install-tools:
     desc: Install/update protoc and plugins.
@@ -12,24 +21,27 @@ tasks:
       - api-linter-install
 
   grpc-install:
+    run: once
+    deps: [protobuf-install]
     desc: Install/update protoc and plugins.
     cmds:
-      - brew install protobuf
-      - go install github.com/google/gnostic@latest
+      - go install github.com/google/gnostic/cmd/protoc-gen-openapi@latest
       - go install github.com/googleapis/gnostic-grpc@latest
       - go install github.com/golang/protobuf/protoc-gen-go@latest
-      - go install github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-openapiv2@latest
       - go install github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-grpc-gateway@latest
       - go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
       - go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
 
   api-linter-install:
     desc: Install/update api-linter.
+    run: once
     cmds:
       - go install github.com/googleapis/api-linter/cmd/api-linter@v1.67.3
 
   lint:
     desc: Run the AIP linter against protobuf definitions.
+    deps:
+      - api-linter-install
     cmds:
       - api-linter -I ../third_party/protos
         --config api-linter.yaml
@@ -41,37 +53,7 @@ tasks:
     desc: Generate protobuf definitions.
     deps:
       - generate-grpc
-      - generate-http-api-docs
-
-  generate-grpc:
-    desc: Generate grpc definitions.
-    cmds:
-      - protoc 
-          -I . -I ../third_party/protos
-          --go_out=../lib/api-go
-          --go_opt=module=go.datumapis.com/genproto
-          --go-grpc_out=../lib/api-go
-          --go-grpc_opt=module=go.datumapis.com/genproto
-          --grpc-gateway_out=../lib/api-go
-          --grpc-gateway_opt=module=go.datumapis.com/genproto
-          ./datum/**/*.proto
-
-  generate-gnostic:
-    desc: Generate openapi definitions.
-    cmds:
-      - protoc
-          -I . -I ../third_party/protos
-          --openapi_out=./openapi
-          ./datum/**/*.proto
-
-  generate-http-api-docs:
-    desc: Generate http api docs.
-    cmds:
-      - protoc
-          -I . -I ../third_party/protos
-          --openapiv2_out=./openapi
-          --openapiv2_opt=allow_merge=true,merge_file_name=openapiv2,simple_operation_ids=true
-          datum/**/*.proto
+      - generate-openapi
 
   generate-type:
     desc: Generate a declarative type.
@@ -104,8 +86,8 @@ tasks:
             type: \"{{ .SERVICE_NAME }}/{{.SINGULAR_TYPE_NAME}}\"
             pattern: \"TODO\"
             style: DECLARATIVE_FRIENDLY
-            singular: \"{{.SINGULAR_TYPE_NAME}}\"
-            plural: \"{{.PLURAL_TYPE_NAME}}\"
+            singular: \"{{substr 0 1 .SINGULAR_TYPE_NAME | lower}}{{substr 1 -1 .SINGULAR_TYPE_NAME}}\"
+            plural: \"{{substr 0 1 .PLURAL_TYPE_NAME | lower}}{{substr 1 -1 .PLURAL_TYPE_NAME}}\"
           };
 
           // The resource name of this {{.SINGULAR_TYPE_NAME}}.

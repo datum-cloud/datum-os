@@ -1,33 +1,39 @@
 syntax = "proto3";
 
-package datum.os.vendormanager.v1;
+option go_package = "go.datumapis.com/os/genproto/os/invoicesmanager/v1alpha";
 
-import "google/api/resource.proto";
+package datum.os.invoicesmanager.v1alpha;
+
 import "google/api/field_behavior.proto";
 import "google/api/field_info.proto";
+import "google/api/resource.proto";
 import "google/protobuf/timestamp.proto";
 
-message Vendor {
+// Invoice is a resource representing an Invoice from an organization to a 
+// customer account or from a vendor to an organization.
+message Invoice {
   option (google.api.resource) = {
-    type: "api.datum.net/Vendor"
-    pattern: "vendors/{vendor}"
+    type: "api.datum.net/Invoice"
+    pattern: "invoices/{invoice}"
+    pattern: "organizations/{organization}/invoices/{invoice}"
+    pattern: "vendors/{vendor}/invoices/{invoice}"
     style: DECLARATIVE_FRIENDLY
-    singular: "Vendor"
-    plural: "Vendors"
+    singular: "invoice"
+    plural: "invoices"
   };
 
-  // The resource name of this Vendor.
+  // The resource name of this Invoice.
   string name = 1 [
     (google.api.field_behavior) = IDENTIFIER,
     (google.api.field_behavior) = OUTPUT_ONLY
   ];
 
-  // The resource ID of this Vendor within its parent resource.
-  string vendor_id = 2 [
+  // The resource ID of this Invoice within its parent resource.
+  string invoice_id = 2 [
     (google.api.field_behavior) = OUTPUT_ONLY
   ];
 
-  // Server assigned unique identifier for the Vendor. The value
+  // Server assigned unique identifier for the Invoice. The value
   // is a UUID4 string and guaranteed to remain unchanged until the resource is
   // deleted.
   string uid = 3 [
@@ -35,25 +41,25 @@ message Vendor {
     (google.api.field_info).format = UUID4
   ];
 
-  // Human-readable display name of this Vendor that you can modify.
+  // Human-readable display name of this Invoice that you can modify.
   // The maximum length is 63 characters.
   string display_name = 4 [(google.api.field_behavior) = OPTIONAL];
 
-  // Annotations is an unstructured key-value map stored with a Vendor that
+  // Annotations is an unstructured key-value map stored with a Invoice that
   // may be set by external tools to store and retrieve arbitrary metadata.
   // They are not queryable and should be preserved when modifying objects.
   map<string, string> annotations = 5 [(google.api.field_behavior) = OPTIONAL];
 
-  // Labels is an unstructured key-value map stored with a Vendor that
+  // Labels is an unstructured key-value map stored with a Invoice that
   // may be set by external tools to enable platform features which identify
-  // Vendors via label selections.
+  // Invoices via label selections.
   map<string, string> labels = 6 [(google.api.field_behavior) = OPTIONAL];
 
-  // Output only. The time when the Vendor is created.
+  // Output only. The time when the Invoice is created.
   google.protobuf.Timestamp create_time = 7
       [(google.api.field_behavior) = OUTPUT_ONLY];
 
-  // Output only. The last time that the Vendor is updated.
+  // Output only. The last time that the Invoice is updated.
   google.protobuf.Timestamp update_time = 8
       [(google.api.field_behavior) = OUTPUT_ONLY];
 
@@ -62,7 +68,7 @@ message Vendor {
   google.protobuf.Timestamp delete_time = 9
       [(google.api.field_behavior) = OUTPUT_ONLY];
 
-  // Output only. If set, there are currently changes in flight to the Vendor.
+  // Output only. If set, there are currently changes in flight to the Invoice.
   bool reconciling = 10 [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // This checksum is computed by the server based on the value of
@@ -70,9 +76,17 @@ message Vendor {
   // an up-to-date value before proceeding.
   string etag = 11 [(google.api.field_behavior) = OUTPUT_ONLY];
 
-  VendorSpec spec = 12 [(google.api.field_behavior) = REQUIRED];
-}
+  // Spec is the specification of the Invoice.
+  Spec spec = 12 [(google.api.field_behavior) = REQUIRED];
 
-message VendorSpec {
-    
+  // Status is the current status of the Invoice.
+  Status status = 13 [(google.api.field_behavior) = OUTPUT_ONLY];
+  
+  // Spec is the specification of the Invoice. TODO!
+  message Spec {
+  }
+  
+  // Status is the current status of the Invoice. TODO!
+  message Status {
+  }  
 }

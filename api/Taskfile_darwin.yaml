@@ -1,0 +1,34 @@
+# This task file can hold any tasks that can only run on macOS. This will be
+# included in the main taskfile.
+version: '3'
+tasks:
+  protobuf-install:
+    run: once
+    desc: Install the protobuf libraries
+    cmds:
+    - brew install protobuf
+
+  generate-grpc:
+    desc: Generate grpc definitions.
+    deps:
+      - grpc-install
+    cmds:
+      - protoc
+          -I . -I ../third_party/protos
+          --go_out=../lib/api-go
+          --go_opt=module=go.datumapis.com/os/genproto
+          --go-grpc_out=../lib/api-go
+          --go-grpc_opt=module=go.datumapis.com/os/genproto
+          --grpc-gateway_out=../lib/api-go
+          --grpc-gateway_opt=module=go.datumapis.com/os/genproto
+          ./datum/**/*.proto
+
+  generate-openapi:
+    desc: Generate openapi definitions.
+    deps:
+      - grpc-install
+    cmds:
+      - protoc
+          -I . -I ../third_party/protos
+          --openapi_out=./openapi
+          ./datum/**/*.proto

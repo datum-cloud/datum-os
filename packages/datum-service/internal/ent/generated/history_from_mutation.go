@@ -5057,6 +5057,301 @@ func (m *OrganizationSettingMutation) CreateHistoryFromDelete(ctx context.Contex
 	return nil
 }
 
+func (m *PostalAddressMutation) CreateHistoryFromCreate(ctx context.Context) error {
+	client := m.Client()
+
+	id, ok := m.ID()
+	if !ok {
+		return idNotFoundError
+	}
+
+	create := client.PostalAddressHistory.Create()
+
+	create = create.
+		SetOperation(EntOpToHistoryOp(m.Op())).
+		SetHistoryTime(time.Now()).
+		SetRef(id)
+
+	if createdAt, exists := m.CreatedAt(); exists {
+		create = create.SetCreatedAt(createdAt)
+	}
+
+	if updatedAt, exists := m.UpdatedAt(); exists {
+		create = create.SetUpdatedAt(updatedAt)
+	}
+
+	if createdBy, exists := m.CreatedBy(); exists {
+		create = create.SetCreatedBy(createdBy)
+	}
+
+	if updatedBy, exists := m.UpdatedBy(); exists {
+		create = create.SetUpdatedBy(updatedBy)
+	}
+
+	if deletedAt, exists := m.DeletedAt(); exists {
+		create = create.SetDeletedAt(deletedAt)
+	}
+
+	if deletedBy, exists := m.DeletedBy(); exists {
+		create = create.SetDeletedBy(deletedBy)
+	}
+
+	if mappingID, exists := m.MappingID(); exists {
+		create = create.SetMappingID(mappingID)
+	}
+
+	if tags, exists := m.Tags(); exists {
+		create = create.SetTags(tags)
+	}
+
+	if ownerID, exists := m.OwnerID(); exists {
+		create = create.SetOwnerID(ownerID)
+	}
+
+	if regionCode, exists := m.RegionCode(); exists {
+		create = create.SetRegionCode(regionCode)
+	}
+
+	if languageCode, exists := m.LanguageCode(); exists {
+		create = create.SetNillableLanguageCode(&languageCode)
+	}
+
+	if postalCode, exists := m.PostalCode(); exists {
+		create = create.SetNillablePostalCode(&postalCode)
+	}
+
+	if sortingCode, exists := m.SortingCode(); exists {
+		create = create.SetNillableSortingCode(&sortingCode)
+	}
+
+	if administrativeArea, exists := m.AdministrativeArea(); exists {
+		create = create.SetNillableAdministrativeArea(&administrativeArea)
+	}
+
+	if locality, exists := m.Locality(); exists {
+		create = create.SetNillableLocality(&locality)
+	}
+
+	if sublocality, exists := m.Sublocality(); exists {
+		create = create.SetNillableSublocality(&sublocality)
+	}
+
+	if addressLines, exists := m.AddressLines(); exists {
+		create = create.SetAddressLines(addressLines)
+	}
+
+	if recipients, exists := m.Recipients(); exists {
+		create = create.SetRecipients(recipients)
+	}
+
+	if organization, exists := m.Organization(); exists {
+		create = create.SetNillableOrganization(&organization)
+	}
+
+	_, err := create.Save(ctx)
+
+	return err
+}
+
+func (m *PostalAddressMutation) CreateHistoryFromUpdate(ctx context.Context) error {
+	// check for soft delete operation and delete instead
+	if entx.CheckIsSoftDelete(ctx) {
+		return m.CreateHistoryFromDelete(ctx)
+	}
+	client := m.Client()
+
+	ids, err := m.IDs(ctx)
+	if err != nil {
+		return fmt.Errorf("getting ids: %w", err)
+	}
+
+	for _, id := range ids {
+		postaladdress, err := client.PostalAddress.Get(ctx, id)
+		if err != nil {
+			return err
+		}
+
+		create := client.PostalAddressHistory.Create()
+
+		create = create.
+			SetOperation(EntOpToHistoryOp(m.Op())).
+			SetHistoryTime(time.Now()).
+			SetRef(id)
+
+		if createdAt, exists := m.CreatedAt(); exists {
+			create = create.SetCreatedAt(createdAt)
+		} else {
+			create = create.SetCreatedAt(postaladdress.CreatedAt)
+		}
+
+		if updatedAt, exists := m.UpdatedAt(); exists {
+			create = create.SetUpdatedAt(updatedAt)
+		} else {
+			create = create.SetUpdatedAt(postaladdress.UpdatedAt)
+		}
+
+		if createdBy, exists := m.CreatedBy(); exists {
+			create = create.SetCreatedBy(createdBy)
+		} else {
+			create = create.SetCreatedBy(postaladdress.CreatedBy)
+		}
+
+		if updatedBy, exists := m.UpdatedBy(); exists {
+			create = create.SetUpdatedBy(updatedBy)
+		} else {
+			create = create.SetUpdatedBy(postaladdress.UpdatedBy)
+		}
+
+		if deletedAt, exists := m.DeletedAt(); exists {
+			create = create.SetDeletedAt(deletedAt)
+		} else {
+			create = create.SetDeletedAt(postaladdress.DeletedAt)
+		}
+
+		if deletedBy, exists := m.DeletedBy(); exists {
+			create = create.SetDeletedBy(deletedBy)
+		} else {
+			create = create.SetDeletedBy(postaladdress.DeletedBy)
+		}
+
+		if mappingID, exists := m.MappingID(); exists {
+			create = create.SetMappingID(mappingID)
+		} else {
+			create = create.SetMappingID(postaladdress.MappingID)
+		}
+
+		if tags, exists := m.Tags(); exists {
+			create = create.SetTags(tags)
+		} else {
+			create = create.SetTags(postaladdress.Tags)
+		}
+
+		if ownerID, exists := m.OwnerID(); exists {
+			create = create.SetOwnerID(ownerID)
+		} else {
+			create = create.SetOwnerID(postaladdress.OwnerID)
+		}
+
+		if regionCode, exists := m.RegionCode(); exists {
+			create = create.SetRegionCode(regionCode)
+		} else {
+			create = create.SetRegionCode(postaladdress.RegionCode)
+		}
+
+		if languageCode, exists := m.LanguageCode(); exists {
+			create = create.SetNillableLanguageCode(&languageCode)
+		} else {
+			create = create.SetNillableLanguageCode(postaladdress.LanguageCode)
+		}
+
+		if postalCode, exists := m.PostalCode(); exists {
+			create = create.SetNillablePostalCode(&postalCode)
+		} else {
+			create = create.SetNillablePostalCode(postaladdress.PostalCode)
+		}
+
+		if sortingCode, exists := m.SortingCode(); exists {
+			create = create.SetNillableSortingCode(&sortingCode)
+		} else {
+			create = create.SetNillableSortingCode(postaladdress.SortingCode)
+		}
+
+		if administrativeArea, exists := m.AdministrativeArea(); exists {
+			create = create.SetNillableAdministrativeArea(&administrativeArea)
+		} else {
+			create = create.SetNillableAdministrativeArea(postaladdress.AdministrativeArea)
+		}
+
+		if locality, exists := m.Locality(); exists {
+			create = create.SetNillableLocality(&locality)
+		} else {
+			create = create.SetNillableLocality(postaladdress.Locality)
+		}
+
+		if sublocality, exists := m.Sublocality(); exists {
+			create = create.SetNillableSublocality(&sublocality)
+		} else {
+			create = create.SetNillableSublocality(postaladdress.Sublocality)
+		}
+
+		if addressLines, exists := m.AddressLines(); exists {
+			create = create.SetAddressLines(addressLines)
+		} else {
+			create = create.SetAddressLines(postaladdress.AddressLines)
+		}
+
+		if recipients, exists := m.Recipients(); exists {
+			create = create.SetRecipients(recipients)
+		} else {
+			create = create.SetRecipients(postaladdress.Recipients)
+		}
+
+		if organization, exists := m.Organization(); exists {
+			create = create.SetNillableOrganization(&organization)
+		} else {
+			create = create.SetNillableOrganization(postaladdress.Organization)
+		}
+
+		if _, err := create.Save(ctx); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *PostalAddressMutation) CreateHistoryFromDelete(ctx context.Context) error {
+	// check for soft delete operation and skip so it happens on update
+	if entx.CheckIsSoftDelete(ctx) {
+		return nil
+	}
+	client := m.Client()
+
+	ids, err := m.IDs(ctx)
+	if err != nil {
+		return fmt.Errorf("getting ids: %w", err)
+	}
+
+	for _, id := range ids {
+		postaladdress, err := client.PostalAddress.Get(ctx, id)
+		if err != nil {
+			return err
+		}
+
+		create := client.PostalAddressHistory.Create()
+
+		_, err = create.
+			SetOperation(EntOpToHistoryOp(m.Op())).
+			SetHistoryTime(time.Now()).
+			SetRef(id).
+			SetCreatedAt(postaladdress.CreatedAt).
+			SetUpdatedAt(postaladdress.UpdatedAt).
+			SetCreatedBy(postaladdress.CreatedBy).
+			SetUpdatedBy(postaladdress.UpdatedBy).
+			SetDeletedAt(postaladdress.DeletedAt).
+			SetDeletedBy(postaladdress.DeletedBy).
+			SetMappingID(postaladdress.MappingID).
+			SetTags(postaladdress.Tags).
+			SetOwnerID(postaladdress.OwnerID).
+			SetRegionCode(postaladdress.RegionCode).
+			SetNillableLanguageCode(postaladdress.LanguageCode).
+			SetNillablePostalCode(postaladdress.PostalCode).
+			SetNillableSortingCode(postaladdress.SortingCode).
+			SetNillableAdministrativeArea(postaladdress.AdministrativeArea).
+			SetNillableLocality(postaladdress.Locality).
+			SetNillableSublocality(postaladdress.Sublocality).
+			SetAddressLines(postaladdress.AddressLines).
+			SetRecipients(postaladdress.Recipients).
+			SetNillableOrganization(postaladdress.Organization).
+			Save(ctx)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *TemplateMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	client := m.Client()
 
@@ -5867,6 +6162,660 @@ func (m *UserSettingMutation) CreateHistoryFromDelete(ctx context.Context) error
 			SetIsWebauthnAllowed(usersetting.IsWebauthnAllowed).
 			SetIsTfaEnabled(usersetting.IsTfaEnabled).
 			SetNillablePhoneNumber(usersetting.PhoneNumber).
+			Save(ctx)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *VendorMutation) CreateHistoryFromCreate(ctx context.Context) error {
+	client := m.Client()
+
+	id, ok := m.ID()
+	if !ok {
+		return idNotFoundError
+	}
+
+	create := client.VendorHistory.Create()
+
+	create = create.
+		SetOperation(EntOpToHistoryOp(m.Op())).
+		SetHistoryTime(time.Now()).
+		SetRef(id)
+
+	if createdAt, exists := m.CreatedAt(); exists {
+		create = create.SetCreatedAt(createdAt)
+	}
+
+	if updatedAt, exists := m.UpdatedAt(); exists {
+		create = create.SetUpdatedAt(updatedAt)
+	}
+
+	if createdBy, exists := m.CreatedBy(); exists {
+		create = create.SetCreatedBy(createdBy)
+	}
+
+	if updatedBy, exists := m.UpdatedBy(); exists {
+		create = create.SetUpdatedBy(updatedBy)
+	}
+
+	if deletedAt, exists := m.DeletedAt(); exists {
+		create = create.SetDeletedAt(deletedAt)
+	}
+
+	if deletedBy, exists := m.DeletedBy(); exists {
+		create = create.SetDeletedBy(deletedBy)
+	}
+
+	if mappingID, exists := m.MappingID(); exists {
+		create = create.SetMappingID(mappingID)
+	}
+
+	if tags, exists := m.Tags(); exists {
+		create = create.SetTags(tags)
+	}
+
+	if ownerID, exists := m.OwnerID(); exists {
+		create = create.SetOwnerID(ownerID)
+	}
+
+	if displayName, exists := m.DisplayName(); exists {
+		create = create.SetDisplayName(displayName)
+	}
+
+	if vendorType, exists := m.VendorType(); exists {
+		create = create.SetVendorType(vendorType)
+	}
+
+	if onboardingState, exists := m.OnboardingState(); exists {
+		create = create.SetOnboardingState(onboardingState)
+	}
+
+	_, err := create.Save(ctx)
+
+	return err
+}
+
+func (m *VendorMutation) CreateHistoryFromUpdate(ctx context.Context) error {
+	// check for soft delete operation and delete instead
+	if entx.CheckIsSoftDelete(ctx) {
+		return m.CreateHistoryFromDelete(ctx)
+	}
+	client := m.Client()
+
+	ids, err := m.IDs(ctx)
+	if err != nil {
+		return fmt.Errorf("getting ids: %w", err)
+	}
+
+	for _, id := range ids {
+		vendor, err := client.Vendor.Get(ctx, id)
+		if err != nil {
+			return err
+		}
+
+		create := client.VendorHistory.Create()
+
+		create = create.
+			SetOperation(EntOpToHistoryOp(m.Op())).
+			SetHistoryTime(time.Now()).
+			SetRef(id)
+
+		if createdAt, exists := m.CreatedAt(); exists {
+			create = create.SetCreatedAt(createdAt)
+		} else {
+			create = create.SetCreatedAt(vendor.CreatedAt)
+		}
+
+		if updatedAt, exists := m.UpdatedAt(); exists {
+			create = create.SetUpdatedAt(updatedAt)
+		} else {
+			create = create.SetUpdatedAt(vendor.UpdatedAt)
+		}
+
+		if createdBy, exists := m.CreatedBy(); exists {
+			create = create.SetCreatedBy(createdBy)
+		} else {
+			create = create.SetCreatedBy(vendor.CreatedBy)
+		}
+
+		if updatedBy, exists := m.UpdatedBy(); exists {
+			create = create.SetUpdatedBy(updatedBy)
+		} else {
+			create = create.SetUpdatedBy(vendor.UpdatedBy)
+		}
+
+		if deletedAt, exists := m.DeletedAt(); exists {
+			create = create.SetDeletedAt(deletedAt)
+		} else {
+			create = create.SetDeletedAt(vendor.DeletedAt)
+		}
+
+		if deletedBy, exists := m.DeletedBy(); exists {
+			create = create.SetDeletedBy(deletedBy)
+		} else {
+			create = create.SetDeletedBy(vendor.DeletedBy)
+		}
+
+		if mappingID, exists := m.MappingID(); exists {
+			create = create.SetMappingID(mappingID)
+		} else {
+			create = create.SetMappingID(vendor.MappingID)
+		}
+
+		if tags, exists := m.Tags(); exists {
+			create = create.SetTags(tags)
+		} else {
+			create = create.SetTags(vendor.Tags)
+		}
+
+		if ownerID, exists := m.OwnerID(); exists {
+			create = create.SetOwnerID(ownerID)
+		} else {
+			create = create.SetOwnerID(vendor.OwnerID)
+		}
+
+		if displayName, exists := m.DisplayName(); exists {
+			create = create.SetDisplayName(displayName)
+		} else {
+			create = create.SetDisplayName(vendor.DisplayName)
+		}
+
+		if vendorType, exists := m.VendorType(); exists {
+			create = create.SetVendorType(vendorType)
+		} else {
+			create = create.SetVendorType(vendor.VendorType)
+		}
+
+		if onboardingState, exists := m.OnboardingState(); exists {
+			create = create.SetOnboardingState(onboardingState)
+		} else {
+			create = create.SetOnboardingState(vendor.OnboardingState)
+		}
+
+		if _, err := create.Save(ctx); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *VendorMutation) CreateHistoryFromDelete(ctx context.Context) error {
+	// check for soft delete operation and skip so it happens on update
+	if entx.CheckIsSoftDelete(ctx) {
+		return nil
+	}
+	client := m.Client()
+
+	ids, err := m.IDs(ctx)
+	if err != nil {
+		return fmt.Errorf("getting ids: %w", err)
+	}
+
+	for _, id := range ids {
+		vendor, err := client.Vendor.Get(ctx, id)
+		if err != nil {
+			return err
+		}
+
+		create := client.VendorHistory.Create()
+
+		_, err = create.
+			SetOperation(EntOpToHistoryOp(m.Op())).
+			SetHistoryTime(time.Now()).
+			SetRef(id).
+			SetCreatedAt(vendor.CreatedAt).
+			SetUpdatedAt(vendor.UpdatedAt).
+			SetCreatedBy(vendor.CreatedBy).
+			SetUpdatedBy(vendor.UpdatedBy).
+			SetDeletedAt(vendor.DeletedAt).
+			SetDeletedBy(vendor.DeletedBy).
+			SetMappingID(vendor.MappingID).
+			SetTags(vendor.Tags).
+			SetOwnerID(vendor.OwnerID).
+			SetDisplayName(vendor.DisplayName).
+			SetVendorType(vendor.VendorType).
+			SetOnboardingState(vendor.OnboardingState).
+			Save(ctx)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *VendorProfileMutation) CreateHistoryFromCreate(ctx context.Context) error {
+	client := m.Client()
+
+	id, ok := m.ID()
+	if !ok {
+		return idNotFoundError
+	}
+
+	create := client.VendorProfileHistory.Create()
+
+	create = create.
+		SetOperation(EntOpToHistoryOp(m.Op())).
+		SetHistoryTime(time.Now()).
+		SetRef(id)
+
+	if createdAt, exists := m.CreatedAt(); exists {
+		create = create.SetCreatedAt(createdAt)
+	}
+
+	if updatedAt, exists := m.UpdatedAt(); exists {
+		create = create.SetUpdatedAt(updatedAt)
+	}
+
+	if createdBy, exists := m.CreatedBy(); exists {
+		create = create.SetCreatedBy(createdBy)
+	}
+
+	if updatedBy, exists := m.UpdatedBy(); exists {
+		create = create.SetUpdatedBy(updatedBy)
+	}
+
+	if deletedAt, exists := m.DeletedAt(); exists {
+		create = create.SetDeletedAt(deletedAt)
+	}
+
+	if deletedBy, exists := m.DeletedBy(); exists {
+		create = create.SetDeletedBy(deletedBy)
+	}
+
+	if mappingID, exists := m.MappingID(); exists {
+		create = create.SetMappingID(mappingID)
+	}
+
+	if tags, exists := m.Tags(); exists {
+		create = create.SetTags(tags)
+	}
+
+	if ownerID, exists := m.OwnerID(); exists {
+		create = create.SetOwnerID(ownerID)
+	}
+
+	if vendorID, exists := m.VendorID(); exists {
+		create = create.SetVendorID(vendorID)
+	}
+
+	if name, exists := m.Name(); exists {
+		create = create.SetName(name)
+	}
+
+	if dbaName, exists := m.DbaName(); exists {
+		create = create.SetDbaName(dbaName)
+	}
+
+	if description, exists := m.Description(); exists {
+		create = create.SetDescription(description)
+	}
+
+	if websiteURI, exists := m.WebsiteURI(); exists {
+		create = create.SetWebsiteURI(websiteURI)
+	}
+
+	_, err := create.Save(ctx)
+
+	return err
+}
+
+func (m *VendorProfileMutation) CreateHistoryFromUpdate(ctx context.Context) error {
+	// check for soft delete operation and delete instead
+	if entx.CheckIsSoftDelete(ctx) {
+		return m.CreateHistoryFromDelete(ctx)
+	}
+	client := m.Client()
+
+	ids, err := m.IDs(ctx)
+	if err != nil {
+		return fmt.Errorf("getting ids: %w", err)
+	}
+
+	for _, id := range ids {
+		vendorprofile, err := client.VendorProfile.Get(ctx, id)
+		if err != nil {
+			return err
+		}
+
+		create := client.VendorProfileHistory.Create()
+
+		create = create.
+			SetOperation(EntOpToHistoryOp(m.Op())).
+			SetHistoryTime(time.Now()).
+			SetRef(id)
+
+		if createdAt, exists := m.CreatedAt(); exists {
+			create = create.SetCreatedAt(createdAt)
+		} else {
+			create = create.SetCreatedAt(vendorprofile.CreatedAt)
+		}
+
+		if updatedAt, exists := m.UpdatedAt(); exists {
+			create = create.SetUpdatedAt(updatedAt)
+		} else {
+			create = create.SetUpdatedAt(vendorprofile.UpdatedAt)
+		}
+
+		if createdBy, exists := m.CreatedBy(); exists {
+			create = create.SetCreatedBy(createdBy)
+		} else {
+			create = create.SetCreatedBy(vendorprofile.CreatedBy)
+		}
+
+		if updatedBy, exists := m.UpdatedBy(); exists {
+			create = create.SetUpdatedBy(updatedBy)
+		} else {
+			create = create.SetUpdatedBy(vendorprofile.UpdatedBy)
+		}
+
+		if deletedAt, exists := m.DeletedAt(); exists {
+			create = create.SetDeletedAt(deletedAt)
+		} else {
+			create = create.SetDeletedAt(vendorprofile.DeletedAt)
+		}
+
+		if deletedBy, exists := m.DeletedBy(); exists {
+			create = create.SetDeletedBy(deletedBy)
+		} else {
+			create = create.SetDeletedBy(vendorprofile.DeletedBy)
+		}
+
+		if mappingID, exists := m.MappingID(); exists {
+			create = create.SetMappingID(mappingID)
+		} else {
+			create = create.SetMappingID(vendorprofile.MappingID)
+		}
+
+		if tags, exists := m.Tags(); exists {
+			create = create.SetTags(tags)
+		} else {
+			create = create.SetTags(vendorprofile.Tags)
+		}
+
+		if ownerID, exists := m.OwnerID(); exists {
+			create = create.SetOwnerID(ownerID)
+		} else {
+			create = create.SetOwnerID(vendorprofile.OwnerID)
+		}
+
+		if vendorID, exists := m.VendorID(); exists {
+			create = create.SetVendorID(vendorID)
+		} else {
+			create = create.SetVendorID(vendorprofile.VendorID)
+		}
+
+		if name, exists := m.Name(); exists {
+			create = create.SetName(name)
+		} else {
+			create = create.SetName(vendorprofile.Name)
+		}
+
+		if dbaName, exists := m.DbaName(); exists {
+			create = create.SetDbaName(dbaName)
+		} else {
+			create = create.SetDbaName(vendorprofile.DbaName)
+		}
+
+		if description, exists := m.Description(); exists {
+			create = create.SetDescription(description)
+		} else {
+			create = create.SetDescription(vendorprofile.Description)
+		}
+
+		if websiteURI, exists := m.WebsiteURI(); exists {
+			create = create.SetWebsiteURI(websiteURI)
+		} else {
+			create = create.SetWebsiteURI(vendorprofile.WebsiteURI)
+		}
+
+		if _, err := create.Save(ctx); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *VendorProfileMutation) CreateHistoryFromDelete(ctx context.Context) error {
+	// check for soft delete operation and skip so it happens on update
+	if entx.CheckIsSoftDelete(ctx) {
+		return nil
+	}
+	client := m.Client()
+
+	ids, err := m.IDs(ctx)
+	if err != nil {
+		return fmt.Errorf("getting ids: %w", err)
+	}
+
+	for _, id := range ids {
+		vendorprofile, err := client.VendorProfile.Get(ctx, id)
+		if err != nil {
+			return err
+		}
+
+		create := client.VendorProfileHistory.Create()
+
+		_, err = create.
+			SetOperation(EntOpToHistoryOp(m.Op())).
+			SetHistoryTime(time.Now()).
+			SetRef(id).
+			SetCreatedAt(vendorprofile.CreatedAt).
+			SetUpdatedAt(vendorprofile.UpdatedAt).
+			SetCreatedBy(vendorprofile.CreatedBy).
+			SetUpdatedBy(vendorprofile.UpdatedBy).
+			SetDeletedAt(vendorprofile.DeletedAt).
+			SetDeletedBy(vendorprofile.DeletedBy).
+			SetMappingID(vendorprofile.MappingID).
+			SetTags(vendorprofile.Tags).
+			SetOwnerID(vendorprofile.OwnerID).
+			SetVendorID(vendorprofile.VendorID).
+			SetName(vendorprofile.Name).
+			SetDbaName(vendorprofile.DbaName).
+			SetDescription(vendorprofile.Description).
+			SetWebsiteURI(vendorprofile.WebsiteURI).
+			Save(ctx)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *VendorProfilePostalAddressMutation) CreateHistoryFromCreate(ctx context.Context) error {
+	client := m.Client()
+
+	id, ok := m.ID()
+	if !ok {
+		return idNotFoundError
+	}
+
+	create := client.VendorProfilePostalAddressHistory.Create()
+
+	create = create.
+		SetOperation(EntOpToHistoryOp(m.Op())).
+		SetHistoryTime(time.Now()).
+		SetRef(id)
+
+	if createdAt, exists := m.CreatedAt(); exists {
+		create = create.SetCreatedAt(createdAt)
+	}
+
+	if updatedAt, exists := m.UpdatedAt(); exists {
+		create = create.SetUpdatedAt(updatedAt)
+	}
+
+	if createdBy, exists := m.CreatedBy(); exists {
+		create = create.SetCreatedBy(createdBy)
+	}
+
+	if updatedBy, exists := m.UpdatedBy(); exists {
+		create = create.SetUpdatedBy(updatedBy)
+	}
+
+	if mappingID, exists := m.MappingID(); exists {
+		create = create.SetMappingID(mappingID)
+	}
+
+	if deletedAt, exists := m.DeletedAt(); exists {
+		create = create.SetDeletedAt(deletedAt)
+	}
+
+	if deletedBy, exists := m.DeletedBy(); exists {
+		create = create.SetDeletedBy(deletedBy)
+	}
+
+	if postalAddressType, exists := m.PostalAddressType(); exists {
+		create = create.SetPostalAddressType(postalAddressType)
+	}
+
+	if vendorProfileID, exists := m.VendorProfileID(); exists {
+		create = create.SetVendorProfileID(vendorProfileID)
+	}
+
+	if postalAddressID, exists := m.PostalAddressID(); exists {
+		create = create.SetPostalAddressID(postalAddressID)
+	}
+
+	_, err := create.Save(ctx)
+
+	return err
+}
+
+func (m *VendorProfilePostalAddressMutation) CreateHistoryFromUpdate(ctx context.Context) error {
+	// check for soft delete operation and delete instead
+	if entx.CheckIsSoftDelete(ctx) {
+		return m.CreateHistoryFromDelete(ctx)
+	}
+	client := m.Client()
+
+	ids, err := m.IDs(ctx)
+	if err != nil {
+		return fmt.Errorf("getting ids: %w", err)
+	}
+
+	for _, id := range ids {
+		vendorprofilepostaladdress, err := client.VendorProfilePostalAddress.Get(ctx, id)
+		if err != nil {
+			return err
+		}
+
+		create := client.VendorProfilePostalAddressHistory.Create()
+
+		create = create.
+			SetOperation(EntOpToHistoryOp(m.Op())).
+			SetHistoryTime(time.Now()).
+			SetRef(id)
+
+		if createdAt, exists := m.CreatedAt(); exists {
+			create = create.SetCreatedAt(createdAt)
+		} else {
+			create = create.SetCreatedAt(vendorprofilepostaladdress.CreatedAt)
+		}
+
+		if updatedAt, exists := m.UpdatedAt(); exists {
+			create = create.SetUpdatedAt(updatedAt)
+		} else {
+			create = create.SetUpdatedAt(vendorprofilepostaladdress.UpdatedAt)
+		}
+
+		if createdBy, exists := m.CreatedBy(); exists {
+			create = create.SetCreatedBy(createdBy)
+		} else {
+			create = create.SetCreatedBy(vendorprofilepostaladdress.CreatedBy)
+		}
+
+		if updatedBy, exists := m.UpdatedBy(); exists {
+			create = create.SetUpdatedBy(updatedBy)
+		} else {
+			create = create.SetUpdatedBy(vendorprofilepostaladdress.UpdatedBy)
+		}
+
+		if mappingID, exists := m.MappingID(); exists {
+			create = create.SetMappingID(mappingID)
+		} else {
+			create = create.SetMappingID(vendorprofilepostaladdress.MappingID)
+		}
+
+		if deletedAt, exists := m.DeletedAt(); exists {
+			create = create.SetDeletedAt(deletedAt)
+		} else {
+			create = create.SetDeletedAt(vendorprofilepostaladdress.DeletedAt)
+		}
+
+		if deletedBy, exists := m.DeletedBy(); exists {
+			create = create.SetDeletedBy(deletedBy)
+		} else {
+			create = create.SetDeletedBy(vendorprofilepostaladdress.DeletedBy)
+		}
+
+		if postalAddressType, exists := m.PostalAddressType(); exists {
+			create = create.SetPostalAddressType(postalAddressType)
+		} else {
+			create = create.SetPostalAddressType(vendorprofilepostaladdress.PostalAddressType)
+		}
+
+		if vendorProfileID, exists := m.VendorProfileID(); exists {
+			create = create.SetVendorProfileID(vendorProfileID)
+		} else {
+			create = create.SetVendorProfileID(vendorprofilepostaladdress.VendorProfileID)
+		}
+
+		if postalAddressID, exists := m.PostalAddressID(); exists {
+			create = create.SetPostalAddressID(postalAddressID)
+		} else {
+			create = create.SetPostalAddressID(vendorprofilepostaladdress.PostalAddressID)
+		}
+
+		if _, err := create.Save(ctx); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *VendorProfilePostalAddressMutation) CreateHistoryFromDelete(ctx context.Context) error {
+	// check for soft delete operation and skip so it happens on update
+	if entx.CheckIsSoftDelete(ctx) {
+		return nil
+	}
+	client := m.Client()
+
+	ids, err := m.IDs(ctx)
+	if err != nil {
+		return fmt.Errorf("getting ids: %w", err)
+	}
+
+	for _, id := range ids {
+		vendorprofilepostaladdress, err := client.VendorProfilePostalAddress.Get(ctx, id)
+		if err != nil {
+			return err
+		}
+
+		create := client.VendorProfilePostalAddressHistory.Create()
+
+		_, err = create.
+			SetOperation(EntOpToHistoryOp(m.Op())).
+			SetHistoryTime(time.Now()).
+			SetRef(id).
+			SetCreatedAt(vendorprofilepostaladdress.CreatedAt).
+			SetUpdatedAt(vendorprofilepostaladdress.UpdatedAt).
+			SetCreatedBy(vendorprofilepostaladdress.CreatedBy).
+			SetUpdatedBy(vendorprofilepostaladdress.UpdatedBy).
+			SetMappingID(vendorprofilepostaladdress.MappingID).
+			SetDeletedAt(vendorprofilepostaladdress.DeletedAt).
+			SetDeletedBy(vendorprofilepostaladdress.DeletedBy).
+			SetPostalAddressType(vendorprofilepostaladdress.PostalAddressType).
+			SetVendorProfileID(vendorprofilepostaladdress.VendorProfileID).
+			SetPostalAddressID(vendorprofilepostaladdress.PostalAddressID).
 			Save(ctx)
 		if err != nil {
 			return err

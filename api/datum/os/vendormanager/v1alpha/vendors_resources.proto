@@ -1,0 +1,209 @@
+syntax = "proto3";
+
+option go_package = "go.datumapis.com/os/genproto/os/vendormanager/v1alpha";
+
+package datum.os.vendormanager.v1alpha;
+
+import "google/api/field_behavior.proto";
+import "google/api/field_info.proto";
+import "google/api/resource.proto";
+import "google/protobuf/descriptor.proto";
+import "google/protobuf/timestamp.proto";
+import "google/type/postal_address.proto";
+import "google/type/phone_number.proto";
+
+// Extend the google.protobuf.OneofOptions to add the oneof_behavior to allow for
+// oneof fields to be required.
+extend .google.protobuf.OneofOptions {
+  repeated .google.api.FieldBehavior oneof_behavior = 1053;
+}
+
+// Vendor is a resource representing a Vendor.
+message Vendor {
+  option (google.api.resource) = {
+    type: "api.datum.net/Vendor"
+    pattern: "vendors/{vendor}"
+    pattern: "organizations/{organization}/vendors/{vendor}"
+    style: DECLARATIVE_FRIENDLY
+    singular: "vendor"
+    plural: "vendors"
+  };
+
+  // The resource name of this Vendor.
+  // Format: vendors/{vendor}
+  // Format: organizations/{organization}/vendors/{vendor}
+  string name = 1 [
+    (google.api.field_behavior) = IDENTIFIER,
+    (google.api.field_behavior) = OUTPUT_ONLY
+  ];
+
+  // The resource ID of this Vendor within its parent resource.
+  string vendor_id = 2 [
+    (google.api.field_behavior) = OUTPUT_ONLY
+  ];
+
+  // Server assigned unique identifier for the Vendor. The value
+  // is a UUID4 string and guaranteed to remain unchanged until the resource is
+  // deleted.
+  string uid = 3 [
+    (google.api.field_behavior) = OUTPUT_ONLY,
+    (google.api.field_info).format = UUID4
+  ];
+
+  // Human-readable display name of this Vendor that you can modify.
+  // The maximum length is 63 characters.
+  string display_name = 4 [(google.api.field_behavior) = OPTIONAL];
+
+  // Annotations is an unstructured key-value map stored with a Vendor that
+  // may be set by external tools to store and retrieve arbitrary metadata.
+  // They are not queryable and should be preserved when modifying objects.
+  map<string, string> annotations = 5 [(google.api.field_behavior) = OPTIONAL];
+
+  // Labels is an unstructured key-value map stored with a Vendor that
+  // may be set by external tools to enable platform features which identify
+  // Vendors via label selections.
+  map<string, string> labels = 6 [(google.api.field_behavior) = OPTIONAL];
+
+  // Output only. The time when the Vendor is created.
+  google.protobuf.Timestamp create_time = 7
+      [(google.api.field_behavior) = OUTPUT_ONLY];
+
+  // Output only. The last time that the Vendor is updated.
+  google.protobuf.Timestamp update_time = 8
+      [(google.api.field_behavior) = OUTPUT_ONLY];
+
+  // Output only. For a deleted resource, the deletion time. It is only
+  // populated as a response to a Delete request.
+  google.protobuf.Timestamp delete_time = 9
+      [(google.api.field_behavior) = OUTPUT_ONLY];
+
+  // Output only. If set, there are currently changes in flight to the Vendor.
+  bool reconciling = 10 [(google.api.field_behavior) = OUTPUT_ONLY];
+
+  // This checksum is computed by the server based on the value of
+  // other fields, and might be sent on update requests to ensure the client has
+  // an up-to-date value before proceeding.
+  string etag = 11 [(google.api.field_behavior) = OUTPUT_ONLY];
+
+  // The specification of the Vendor.
+  Spec spec = 12 [(google.api.field_behavior) = REQUIRED];
+
+  // Spec is the specification of a Vendor.
+  message Spec {
+    // The type of Vendor as defined by the VendorType enum.
+    VendorType type = 1 [(google.api.field_behavior) = REQUIRED];
+
+    // The profile of the Vendor.
+    Profile profile = 2 [(google.api.field_behavior) = REQUIRED];
+
+    // The onboarding state of the Vendor. Defaults to ONBOARDING_STATE_PENDING on creation.
+    // (-- api-linter: core::0216::state-field-output-only=disabled
+    //     aip.dev/not-precedent: We are modeling our Vendor APIs from Square's Vendor APIs. 
+    //     The 'state' of a Vendor is not output only. It is settable by the user. --)
+    OnboardingState state = 3 [(google.api.field_behavior) = OPTIONAL];
+  }
+
+  // Profile is the profile of a Vendor.
+  message Profile {
+    // The name of the Vendor.
+    oneof name {
+      option (oneof_behavior) = REQUIRED;
+      // The name of the person.
+      string person = 2;
+      // The name of the corporation.
+      string corporation = 3;
+    }
+
+    // The type of corporation (e.g. LLC, S-Corp, C-Corp, Other).
+    string corporation_type = 4 [(google.api.field_behavior) = OPTIONAL];
+
+    // The DBA (Doing Business As) name of the corporation.
+    string corporation_dba = 5 [(google.api.field_behavior) = OPTIONAL];
+
+    // The description of the corporation or contractor and the services it provides.
+    string description = 6 [(google.api.field_behavior) = OPTIONAL];
+
+    // The URL of the website of the corporation or contractor.
+    string website_uri = 8 [(google.api.field_behavior) = OPTIONAL];
+
+    // The physical address of the person or corporation.
+    repeated google.type.PostalAddress addresses = 9
+      [(google.api.field_behavior) = OPTIONAL];
+
+    // The phone number of the person or corporation.
+    repeated google.type.PhoneNumber phone_numbers = 10
+        [(google.api.field_behavior) = OPTIONAL];
+
+    // The payment preference of the Vendor.
+    repeated PaymentPreference payment_preference = 11 [(google.api.field_behavior) = OPTIONAL];
+
+    // The tax information of the person or corporation.
+    TaxInfo tax_info = 12 [(google.api.field_behavior) = OPTIONAL]; 
+  }
+
+  // PaymentPreference is the payment preference of a Vendor.
+  message PaymentPreference {
+    // Is this the preferred payment method?
+    bool preferred = 1 [(google.api.field_behavior) = REQUIRED];
+    // The payment method of the Vendor.
+    PaymentMethod method = 2 [(google.api.field_behavior) = REQUIRED];
+  }
+
+  // TaxInfo is the tax information of a Vendor.
+  message TaxInfo {
+    // The tax id of the person or corporation.
+    string tax_id = 1 [(google.api.field_behavior) = REQUIRED]; 
+    // The tax id type of the person or corporation.
+    TaxIDType tax_id_type = 2 [(google.api.field_behavior) = REQUIRED];
+  }
+}
+
+// VendorType is the type of Vendor.
+enum VendorType {
+  // VendorType is not specified. 
+  VENDOR_TYPE_UNSPECIFIED = 0;
+  // Vendor is a person.
+  VENDOR_TYPE_PERSON = 1;
+  // Vendor is a corporation.
+  VENDOR_TYPE_CORPORATION = 2;
+}
+
+// OnboardingState is the state of a Vendor's onboarding process.
+enum OnboardingState {
+  // OnboardingState is not specified.
+  ONBOARDING_STATE_UNSPECIFIED = 0;
+  // OnboardingState is pending. The vendor is pending approval. No invoices can be created until the vendor is approved.
+  ONBOARDING_STATE_PENDING = 1;
+  // OnboardingState is active. The vendor is active and can have invoices created. Invoices will be paid out to the vendor.
+  ONBOARDING_STATE_ACTIVE = 2;
+  // OnboardingState is inactive. The vendor is inactive and cannot have invoices created. Existing invoices will be allowed to be paid out.
+  ONBOARDING_STATE_INACTIVE = 3;
+}
+
+// PaymentMethod is the payment method of a Vendor.
+enum PaymentMethod {
+  // PaymentMethod is not specified.
+  PAYMENT_METHOD_UNSPECIFIED = 0;
+  // PaymentMethod is domestic wire transfer.
+  PAYMENT_METHOD_DOMESTIC_WIRE_TRANSFER = 1;
+  // PaymentMethod is international wire transfer.
+  PAYMENT_METHOD_INTERNATIONAL_WIRE_TRANSFER = 2;
+  // PaymentMethod is Automated Clearing House (ACH) transfer.
+  PAYMENT_METHOD_ACH = 3;
+  // PaymentMethod is a credit card.
+  PAYMENT_METHOD_CREDIT_CARD = 4;
+}
+
+  // TaxIDType is the type of tax id of a Vendor.
+enum TaxIDType {
+  // TaxIDType is not specified.
+  TAX_ID_TYPE_UNSPECIFIED = 0;
+  // TaxIDType is a SSN.
+  TAX_ID_TYPE_SSN = 1;
+  // TaxIDType is a EIN.
+  TAX_ID_TYPE_EIN = 2;
+  // TaxIDType is an ATIN.
+  TAX_ID_TYPE_ATIN = 3;
+  // TaxIDType is an ITIN.
+  TAX_ID_TYPE_ITIN = 4;
+}

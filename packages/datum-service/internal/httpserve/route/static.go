@@ -4,6 +4,7 @@ import (
 	"embed"
 	"net/http"
 
+	"github.com/datum-cloud/datum-os/internal/httpserve/mw"
 	echo "github.com/datum-cloud/datum-os/pkg/echox"
 )
 
@@ -17,7 +18,7 @@ func registerJwksWellKnownHandler(router *Router) (err error) {
 		Name:        name,
 		Method:      method,
 		Path:        path,
-		Middlewares: mw,
+		Middlewares: mw.GetMiddleware(),
 		Handler: func(c echo.Context) error {
 			return c.JSON(http.StatusOK, router.Handler.JWTKeys)
 		},
@@ -40,7 +41,7 @@ func registerOpenAPIHandler(router *Router) (err error) {
 		Name:        name,
 		Method:      method,
 		Path:        path,
-		Middlewares: mw,
+		Middlewares: mw.GetMiddleware(),
 		Handler: echo.HandlerFunc(func(c echo.Context) error {
 			return c.JSON(http.StatusOK, router.OAS)
 		}),
@@ -66,7 +67,7 @@ func registerSecurityTxtHandler(router *Router) (err error) {
 		Name:        name,
 		Method:      method,
 		Path:        path,
-		Middlewares: mw,
+		Middlewares: mw.GetMiddleware(),
 		Handler:     echo.StaticFileHandler("security.txt", securityTxt),
 	}
 
@@ -90,7 +91,7 @@ func registerRobotsHandler(router *Router) (err error) {
 		Name:        name,
 		Method:      method,
 		Path:        path,
-		Middlewares: mw,
+		Middlewares: mw.GetMiddleware(),
 		Handler:     echo.StaticFileHandler("robots.txt", robotsTxt),
 	}
 
@@ -114,7 +115,7 @@ func registerFaviconHandler(router *Router) (err error) {
 		Name:        name,
 		Method:      method,
 		Path:        path,
-		Middlewares: mw,
+		Middlewares: mw.GetMiddleware(),
 		Handler:     echo.StaticFileHandler("assets/favicon.ico", assets),
 	}
 

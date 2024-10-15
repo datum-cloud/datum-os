@@ -951,18 +951,19 @@ func (c *EntitlementPlanFeatureUpdateOne) SetInput(i UpdateEntitlementPlanFeatur
 
 // CreateEntityInput represents a mutation input for creating entities.
 type CreateEntityInput struct {
-	Tags         []string
-	Name         *string
-	DisplayName  *string
-	Description  *string
-	Domains      []string
-	Status       *string
-	OwnerID      *string
-	ContactIDs   []string
-	DocumentIDs  []string
-	NoteIDs      []string
-	FileIDs      []string
-	EntityTypeID *string
+	Tags             []string
+	Name             *string
+	DisplayName      *string
+	Description      *string
+	Domains          []string
+	Status           *string
+	OwnerID          *string
+	ContactIDs       []string
+	DocumentIDs      []string
+	NoteIDs          []string
+	PostalAddressIDs []string
+	FileIDs          []string
+	EntityTypeID     *string
 }
 
 // Mutate applies the CreateEntityInput on the EntityMutation builder.
@@ -997,6 +998,9 @@ func (i *CreateEntityInput) Mutate(m *EntityMutation) {
 	if v := i.NoteIDs; len(v) > 0 {
 		m.AddNoteIDs(v...)
 	}
+	if v := i.PostalAddressIDs; len(v) > 0 {
+		m.AddPostalAddressIDs(v...)
+	}
 	if v := i.FileIDs; len(v) > 0 {
 		m.AddFileIDs(v...)
 	}
@@ -1013,36 +1017,39 @@ func (c *EntityCreate) SetInput(i CreateEntityInput) *EntityCreate {
 
 // UpdateEntityInput represents a mutation input for updating entities.
 type UpdateEntityInput struct {
-	ClearTags         bool
-	Tags              []string
-	AppendTags        []string
-	ClearName         bool
-	Name              *string
-	ClearDisplayName  bool
-	DisplayName       *string
-	ClearDescription  bool
-	Description       *string
-	ClearDomains      bool
-	Domains           []string
-	AppendDomains     []string
-	ClearStatus       bool
-	Status            *string
-	ClearOwner        bool
-	OwnerID           *string
-	ClearContacts     bool
-	AddContactIDs     []string
-	RemoveContactIDs  []string
-	ClearDocuments    bool
-	AddDocumentIDs    []string
-	RemoveDocumentIDs []string
-	ClearNotes        bool
-	AddNoteIDs        []string
-	RemoveNoteIDs     []string
-	ClearFiles        bool
-	AddFileIDs        []string
-	RemoveFileIDs     []string
-	ClearEntityType   bool
-	EntityTypeID      *string
+	ClearTags              bool
+	Tags                   []string
+	AppendTags             []string
+	ClearName              bool
+	Name                   *string
+	ClearDisplayName       bool
+	DisplayName            *string
+	ClearDescription       bool
+	Description            *string
+	ClearDomains           bool
+	Domains                []string
+	AppendDomains          []string
+	ClearStatus            bool
+	Status                 *string
+	ClearOwner             bool
+	OwnerID                *string
+	ClearContacts          bool
+	AddContactIDs          []string
+	RemoveContactIDs       []string
+	ClearDocuments         bool
+	AddDocumentIDs         []string
+	RemoveDocumentIDs      []string
+	ClearNotes             bool
+	AddNoteIDs             []string
+	RemoveNoteIDs          []string
+	ClearPostalAddresses   bool
+	AddPostalAddressIDs    []string
+	RemovePostalAddressIDs []string
+	ClearFiles             bool
+	AddFileIDs             []string
+	RemoveFileIDs          []string
+	ClearEntityType        bool
+	EntityTypeID           *string
 }
 
 // Mutate applies the UpdateEntityInput on the EntityMutation builder.
@@ -1121,6 +1128,15 @@ func (i *UpdateEntityInput) Mutate(m *EntityMutation) {
 	}
 	if v := i.RemoveNoteIDs; len(v) > 0 {
 		m.RemoveNoteIDs(v...)
+	}
+	if i.ClearPostalAddresses {
+		m.ClearPostalAddresses()
+	}
+	if v := i.AddPostalAddressIDs; len(v) > 0 {
+		m.AddPostalAddressIDs(v...)
+	}
+	if v := i.RemovePostalAddressIDs; len(v) > 0 {
+		m.RemovePostalAddressIDs(v...)
 	}
 	if i.ClearFiles {
 		m.ClearFiles()
@@ -3049,6 +3065,9 @@ type CreateOrganizationInput struct {
 	ContactIDs                 []string
 	ContactListIDs             []string
 	NoteIDs                    []string
+	VendorIDs                  []string
+	VendorProfileIDs           []string
+	PostalAddressIDs           []string
 }
 
 // Mutate applies the CreateOrganizationInput on the OrganizationMutation builder.
@@ -3147,6 +3166,15 @@ func (i *CreateOrganizationInput) Mutate(m *OrganizationMutation) {
 	if v := i.NoteIDs; len(v) > 0 {
 		m.AddNoteIDs(v...)
 	}
+	if v := i.VendorIDs; len(v) > 0 {
+		m.AddVendorIDs(v...)
+	}
+	if v := i.VendorProfileIDs; len(v) > 0 {
+		m.AddVendorProfileIDs(v...)
+	}
+	if v := i.PostalAddressIDs; len(v) > 0 {
+		m.AddPostalAddressIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the CreateOrganizationInput on the OrganizationCreate builder.
@@ -3237,6 +3265,15 @@ type UpdateOrganizationInput struct {
 	ClearNotes                       bool
 	AddNoteIDs                       []string
 	RemoveNoteIDs                    []string
+	ClearVendors                     bool
+	AddVendorIDs                     []string
+	RemoveVendorIDs                  []string
+	ClearVendorProfiles              bool
+	AddVendorProfileIDs              []string
+	RemoveVendorProfileIDs           []string
+	ClearPostalAddresses             bool
+	AddPostalAddressIDs              []string
+	RemovePostalAddressIDs           []string
 }
 
 // Mutate applies the UpdateOrganizationInput on the OrganizationMutation builder.
@@ -3480,6 +3517,33 @@ func (i *UpdateOrganizationInput) Mutate(m *OrganizationMutation) {
 	}
 	if v := i.RemoveNoteIDs; len(v) > 0 {
 		m.RemoveNoteIDs(v...)
+	}
+	if i.ClearVendors {
+		m.ClearVendors()
+	}
+	if v := i.AddVendorIDs; len(v) > 0 {
+		m.AddVendorIDs(v...)
+	}
+	if v := i.RemoveVendorIDs; len(v) > 0 {
+		m.RemoveVendorIDs(v...)
+	}
+	if i.ClearVendorProfiles {
+		m.ClearVendorProfiles()
+	}
+	if v := i.AddVendorProfileIDs; len(v) > 0 {
+		m.AddVendorProfileIDs(v...)
+	}
+	if v := i.RemoveVendorProfileIDs; len(v) > 0 {
+		m.RemoveVendorProfileIDs(v...)
+	}
+	if i.ClearPostalAddresses {
+		m.ClearPostalAddresses()
+	}
+	if v := i.AddPostalAddressIDs; len(v) > 0 {
+		m.AddPostalAddressIDs(v...)
+	}
+	if v := i.RemovePostalAddressIDs; len(v) > 0 {
+		m.RemovePostalAddressIDs(v...)
 	}
 }
 
@@ -3775,6 +3839,214 @@ func (c *PersonalAccessTokenUpdate) SetInput(i UpdatePersonalAccessTokenInput) *
 
 // SetInput applies the change-set in the UpdatePersonalAccessTokenInput on the PersonalAccessTokenUpdateOne builder.
 func (c *PersonalAccessTokenUpdateOne) SetInput(i UpdatePersonalAccessTokenInput) *PersonalAccessTokenUpdateOne {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// CreatePostalAddressInput represents a mutation input for creating postaladdresses.
+type CreatePostalAddressInput struct {
+	Tags               []string
+	RegionCode         string
+	LanguageCode       *string
+	PostalCode         *string
+	SortingCode        *string
+	AdministrativeArea *string
+	Locality           *string
+	Sublocality        *string
+	AddressLines       []string
+	Recipients         []string
+	Organization       *string
+	OwnerID            *string
+	EventIDs           []string
+	ProfileIDs         []string
+}
+
+// Mutate applies the CreatePostalAddressInput on the PostalAddressMutation builder.
+func (i *CreatePostalAddressInput) Mutate(m *PostalAddressMutation) {
+	if v := i.Tags; v != nil {
+		m.SetTags(v)
+	}
+	m.SetRegionCode(i.RegionCode)
+	if v := i.LanguageCode; v != nil {
+		m.SetLanguageCode(*v)
+	}
+	if v := i.PostalCode; v != nil {
+		m.SetPostalCode(*v)
+	}
+	if v := i.SortingCode; v != nil {
+		m.SetSortingCode(*v)
+	}
+	if v := i.AdministrativeArea; v != nil {
+		m.SetAdministrativeArea(*v)
+	}
+	if v := i.Locality; v != nil {
+		m.SetLocality(*v)
+	}
+	if v := i.Sublocality; v != nil {
+		m.SetSublocality(*v)
+	}
+	if v := i.AddressLines; v != nil {
+		m.SetAddressLines(v)
+	}
+	if v := i.Recipients; v != nil {
+		m.SetRecipients(v)
+	}
+	if v := i.Organization; v != nil {
+		m.SetOrganization(*v)
+	}
+	if v := i.OwnerID; v != nil {
+		m.SetOwnerID(*v)
+	}
+	if v := i.EventIDs; len(v) > 0 {
+		m.AddEventIDs(v...)
+	}
+	if v := i.ProfileIDs; len(v) > 0 {
+		m.AddProfileIDs(v...)
+	}
+}
+
+// SetInput applies the change-set in the CreatePostalAddressInput on the PostalAddressCreate builder.
+func (c *PostalAddressCreate) SetInput(i CreatePostalAddressInput) *PostalAddressCreate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// UpdatePostalAddressInput represents a mutation input for updating postaladdresses.
+type UpdatePostalAddressInput struct {
+	ClearTags               bool
+	Tags                    []string
+	AppendTags              []string
+	RegionCode              *string
+	ClearLanguageCode       bool
+	LanguageCode            *string
+	ClearPostalCode         bool
+	PostalCode              *string
+	ClearSortingCode        bool
+	SortingCode             *string
+	ClearAdministrativeArea bool
+	AdministrativeArea      *string
+	ClearLocality           bool
+	Locality                *string
+	ClearSublocality        bool
+	Sublocality             *string
+	AddressLines            []string
+	AppendAddressLines      []string
+	Recipients              []string
+	AppendRecipients        []string
+	ClearOrganization       bool
+	Organization            *string
+	ClearOwner              bool
+	OwnerID                 *string
+	ClearEvents             bool
+	AddEventIDs             []string
+	RemoveEventIDs          []string
+	ClearProfile            bool
+	AddProfileIDs           []string
+	RemoveProfileIDs        []string
+}
+
+// Mutate applies the UpdatePostalAddressInput on the PostalAddressMutation builder.
+func (i *UpdatePostalAddressInput) Mutate(m *PostalAddressMutation) {
+	if i.ClearTags {
+		m.ClearTags()
+	}
+	if v := i.Tags; v != nil {
+		m.SetTags(v)
+	}
+	if i.AppendTags != nil {
+		m.AppendTags(i.Tags)
+	}
+	if v := i.RegionCode; v != nil {
+		m.SetRegionCode(*v)
+	}
+	if i.ClearLanguageCode {
+		m.ClearLanguageCode()
+	}
+	if v := i.LanguageCode; v != nil {
+		m.SetLanguageCode(*v)
+	}
+	if i.ClearPostalCode {
+		m.ClearPostalCode()
+	}
+	if v := i.PostalCode; v != nil {
+		m.SetPostalCode(*v)
+	}
+	if i.ClearSortingCode {
+		m.ClearSortingCode()
+	}
+	if v := i.SortingCode; v != nil {
+		m.SetSortingCode(*v)
+	}
+	if i.ClearAdministrativeArea {
+		m.ClearAdministrativeArea()
+	}
+	if v := i.AdministrativeArea; v != nil {
+		m.SetAdministrativeArea(*v)
+	}
+	if i.ClearLocality {
+		m.ClearLocality()
+	}
+	if v := i.Locality; v != nil {
+		m.SetLocality(*v)
+	}
+	if i.ClearSublocality {
+		m.ClearSublocality()
+	}
+	if v := i.Sublocality; v != nil {
+		m.SetSublocality(*v)
+	}
+	if v := i.AddressLines; v != nil {
+		m.SetAddressLines(v)
+	}
+	if i.AppendAddressLines != nil {
+		m.AppendAddressLines(i.AddressLines)
+	}
+	if v := i.Recipients; v != nil {
+		m.SetRecipients(v)
+	}
+	if i.AppendRecipients != nil {
+		m.AppendRecipients(i.Recipients)
+	}
+	if i.ClearOrganization {
+		m.ClearOrganization()
+	}
+	if v := i.Organization; v != nil {
+		m.SetOrganization(*v)
+	}
+	if i.ClearOwner {
+		m.ClearOwner()
+	}
+	if v := i.OwnerID; v != nil {
+		m.SetOwnerID(*v)
+	}
+	if i.ClearEvents {
+		m.ClearEvents()
+	}
+	if v := i.AddEventIDs; len(v) > 0 {
+		m.AddEventIDs(v...)
+	}
+	if v := i.RemoveEventIDs; len(v) > 0 {
+		m.RemoveEventIDs(v...)
+	}
+	if i.ClearProfile {
+		m.ClearProfile()
+	}
+	if v := i.AddProfileIDs; len(v) > 0 {
+		m.AddProfileIDs(v...)
+	}
+	if v := i.RemoveProfileIDs; len(v) > 0 {
+		m.RemoveProfileIDs(v...)
+	}
+}
+
+// SetInput applies the change-set in the UpdatePostalAddressInput on the PostalAddressUpdate builder.
+func (c *PostalAddressUpdate) SetInput(i UpdatePostalAddressInput) *PostalAddressUpdate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// SetInput applies the change-set in the UpdatePostalAddressInput on the PostalAddressUpdateOne builder.
+func (c *PostalAddressUpdateOne) SetInput(i UpdatePostalAddressInput) *PostalAddressUpdateOne {
 	i.Mutate(c.Mutation())
 	return c
 }
@@ -4539,6 +4811,298 @@ func (c *UserSettingUpdate) SetInput(i UpdateUserSettingInput) *UserSettingUpdat
 
 // SetInput applies the change-set in the UpdateUserSettingInput on the UserSettingUpdateOne builder.
 func (c *UserSettingUpdateOne) SetInput(i UpdateUserSettingInput) *UserSettingUpdateOne {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// CreateVendorInput represents a mutation input for creating vendors.
+type CreateVendorInput struct {
+	Tags            []string
+	DisplayName     string
+	VendorType      *enums.VendorType
+	OnboardingState *enums.OnboardingState
+	OwnerID         *string
+	ProfileID       string
+	EventIDs        []string
+}
+
+// Mutate applies the CreateVendorInput on the VendorMutation builder.
+func (i *CreateVendorInput) Mutate(m *VendorMutation) {
+	if v := i.Tags; v != nil {
+		m.SetTags(v)
+	}
+	m.SetDisplayName(i.DisplayName)
+	if v := i.VendorType; v != nil {
+		m.SetVendorType(*v)
+	}
+	if v := i.OnboardingState; v != nil {
+		m.SetOnboardingState(*v)
+	}
+	if v := i.OwnerID; v != nil {
+		m.SetOwnerID(*v)
+	}
+	m.SetProfileID(i.ProfileID)
+	if v := i.EventIDs; len(v) > 0 {
+		m.AddEventIDs(v...)
+	}
+}
+
+// SetInput applies the change-set in the CreateVendorInput on the VendorCreate builder.
+func (c *VendorCreate) SetInput(i CreateVendorInput) *VendorCreate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// UpdateVendorInput represents a mutation input for updating vendors.
+type UpdateVendorInput struct {
+	ClearTags       bool
+	Tags            []string
+	AppendTags      []string
+	DisplayName     *string
+	VendorType      *enums.VendorType
+	OnboardingState *enums.OnboardingState
+	ClearOwner      bool
+	OwnerID         *string
+	ProfileID       *string
+	ClearEvents     bool
+	AddEventIDs     []string
+	RemoveEventIDs  []string
+}
+
+// Mutate applies the UpdateVendorInput on the VendorMutation builder.
+func (i *UpdateVendorInput) Mutate(m *VendorMutation) {
+	if i.ClearTags {
+		m.ClearTags()
+	}
+	if v := i.Tags; v != nil {
+		m.SetTags(v)
+	}
+	if i.AppendTags != nil {
+		m.AppendTags(i.Tags)
+	}
+	if v := i.DisplayName; v != nil {
+		m.SetDisplayName(*v)
+	}
+	if v := i.VendorType; v != nil {
+		m.SetVendorType(*v)
+	}
+	if v := i.OnboardingState; v != nil {
+		m.SetOnboardingState(*v)
+	}
+	if i.ClearOwner {
+		m.ClearOwner()
+	}
+	if v := i.OwnerID; v != nil {
+		m.SetOwnerID(*v)
+	}
+	if v := i.ProfileID; v != nil {
+		m.SetProfileID(*v)
+	}
+	if i.ClearEvents {
+		m.ClearEvents()
+	}
+	if v := i.AddEventIDs; len(v) > 0 {
+		m.AddEventIDs(v...)
+	}
+	if v := i.RemoveEventIDs; len(v) > 0 {
+		m.RemoveEventIDs(v...)
+	}
+}
+
+// SetInput applies the change-set in the UpdateVendorInput on the VendorUpdate builder.
+func (c *VendorUpdate) SetInput(i UpdateVendorInput) *VendorUpdate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// SetInput applies the change-set in the UpdateVendorInput on the VendorUpdateOne builder.
+func (c *VendorUpdateOne) SetInput(i UpdateVendorInput) *VendorUpdateOne {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// CreateVendorProfileInput represents a mutation input for creating vendorprofiles.
+type CreateVendorProfileInput struct {
+	Tags             []string
+	Name             string
+	DbaName          *string
+	Description      *string
+	WebsiteURI       *string
+	OwnerID          *string
+	PostalAddressIDs []string
+	VendorID         *string
+}
+
+// Mutate applies the CreateVendorProfileInput on the VendorProfileMutation builder.
+func (i *CreateVendorProfileInput) Mutate(m *VendorProfileMutation) {
+	if v := i.Tags; v != nil {
+		m.SetTags(v)
+	}
+	m.SetName(i.Name)
+	if v := i.DbaName; v != nil {
+		m.SetDbaName(*v)
+	}
+	if v := i.Description; v != nil {
+		m.SetDescription(*v)
+	}
+	if v := i.WebsiteURI; v != nil {
+		m.SetWebsiteURI(*v)
+	}
+	if v := i.OwnerID; v != nil {
+		m.SetOwnerID(*v)
+	}
+	if v := i.PostalAddressIDs; len(v) > 0 {
+		m.AddPostalAddressIDs(v...)
+	}
+	if v := i.VendorID; v != nil {
+		m.SetVendorID(*v)
+	}
+}
+
+// SetInput applies the change-set in the CreateVendorProfileInput on the VendorProfileCreate builder.
+func (c *VendorProfileCreate) SetInput(i CreateVendorProfileInput) *VendorProfileCreate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// UpdateVendorProfileInput represents a mutation input for updating vendorprofiles.
+type UpdateVendorProfileInput struct {
+	ClearTags              bool
+	Tags                   []string
+	AppendTags             []string
+	Name                   *string
+	ClearDbaName           bool
+	DbaName                *string
+	ClearDescription       bool
+	Description            *string
+	ClearWebsiteURI        bool
+	WebsiteURI             *string
+	ClearOwner             bool
+	OwnerID                *string
+	ClearPostalAddresses   bool
+	AddPostalAddressIDs    []string
+	RemovePostalAddressIDs []string
+}
+
+// Mutate applies the UpdateVendorProfileInput on the VendorProfileMutation builder.
+func (i *UpdateVendorProfileInput) Mutate(m *VendorProfileMutation) {
+	if i.ClearTags {
+		m.ClearTags()
+	}
+	if v := i.Tags; v != nil {
+		m.SetTags(v)
+	}
+	if i.AppendTags != nil {
+		m.AppendTags(i.Tags)
+	}
+	if v := i.Name; v != nil {
+		m.SetName(*v)
+	}
+	if i.ClearDbaName {
+		m.ClearDbaName()
+	}
+	if v := i.DbaName; v != nil {
+		m.SetDbaName(*v)
+	}
+	if i.ClearDescription {
+		m.ClearDescription()
+	}
+	if v := i.Description; v != nil {
+		m.SetDescription(*v)
+	}
+	if i.ClearWebsiteURI {
+		m.ClearWebsiteURI()
+	}
+	if v := i.WebsiteURI; v != nil {
+		m.SetWebsiteURI(*v)
+	}
+	if i.ClearOwner {
+		m.ClearOwner()
+	}
+	if v := i.OwnerID; v != nil {
+		m.SetOwnerID(*v)
+	}
+	if i.ClearPostalAddresses {
+		m.ClearPostalAddresses()
+	}
+	if v := i.AddPostalAddressIDs; len(v) > 0 {
+		m.AddPostalAddressIDs(v...)
+	}
+	if v := i.RemovePostalAddressIDs; len(v) > 0 {
+		m.RemovePostalAddressIDs(v...)
+	}
+}
+
+// SetInput applies the change-set in the UpdateVendorProfileInput on the VendorProfileUpdate builder.
+func (c *VendorProfileUpdate) SetInput(i UpdateVendorProfileInput) *VendorProfileUpdate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// SetInput applies the change-set in the UpdateVendorProfileInput on the VendorProfileUpdateOne builder.
+func (c *VendorProfileUpdateOne) SetInput(i UpdateVendorProfileInput) *VendorProfileUpdateOne {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// CreateVendorProfilePostalAddressInput represents a mutation input for creating vendorprofilepostaladdresses.
+type CreateVendorProfilePostalAddressInput struct {
+	PostalAddressType *enums.PostalAddressType
+	PostalAddressID   string
+	ProfileID         string
+	EventIDs          []string
+}
+
+// Mutate applies the CreateVendorProfilePostalAddressInput on the VendorProfilePostalAddressMutation builder.
+func (i *CreateVendorProfilePostalAddressInput) Mutate(m *VendorProfilePostalAddressMutation) {
+	if v := i.PostalAddressType; v != nil {
+		m.SetPostalAddressType(*v)
+	}
+	m.SetPostalAddressID(i.PostalAddressID)
+	m.SetProfileID(i.ProfileID)
+	if v := i.EventIDs; len(v) > 0 {
+		m.AddEventIDs(v...)
+	}
+}
+
+// SetInput applies the change-set in the CreateVendorProfilePostalAddressInput on the VendorProfilePostalAddressCreate builder.
+func (c *VendorProfilePostalAddressCreate) SetInput(i CreateVendorProfilePostalAddressInput) *VendorProfilePostalAddressCreate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// UpdateVendorProfilePostalAddressInput represents a mutation input for updating vendorprofilepostaladdresses.
+type UpdateVendorProfilePostalAddressInput struct {
+	PostalAddressType *enums.PostalAddressType
+	ClearEvents       bool
+	AddEventIDs       []string
+	RemoveEventIDs    []string
+}
+
+// Mutate applies the UpdateVendorProfilePostalAddressInput on the VendorProfilePostalAddressMutation builder.
+func (i *UpdateVendorProfilePostalAddressInput) Mutate(m *VendorProfilePostalAddressMutation) {
+	if v := i.PostalAddressType; v != nil {
+		m.SetPostalAddressType(*v)
+	}
+	if i.ClearEvents {
+		m.ClearEvents()
+	}
+	if v := i.AddEventIDs; len(v) > 0 {
+		m.AddEventIDs(v...)
+	}
+	if v := i.RemoveEventIDs; len(v) > 0 {
+		m.RemoveEventIDs(v...)
+	}
+}
+
+// SetInput applies the change-set in the UpdateVendorProfilePostalAddressInput on the VendorProfilePostalAddressUpdate builder.
+func (c *VendorProfilePostalAddressUpdate) SetInput(i UpdateVendorProfilePostalAddressInput) *VendorProfilePostalAddressUpdate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// SetInput applies the change-set in the UpdateVendorProfilePostalAddressInput on the VendorProfilePostalAddressUpdateOne builder.
+func (c *VendorProfilePostalAddressUpdateOne) SetInput(i UpdateVendorProfilePostalAddressInput) *VendorProfilePostalAddressUpdateOne {
 	i.Mutate(c.Mutation())
 	return c
 }

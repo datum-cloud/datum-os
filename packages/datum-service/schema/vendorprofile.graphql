@@ -1,0 +1,103 @@
+extend type Query {
+    """
+    Look up vendorProfile by ID
+    """
+     vendorProfile(
+        """
+        ID of the vendorProfile
+        """
+        id: ID!
+    ):  VendorProfile!
+}
+
+extend type Mutation{
+    """
+    Create a new vendorProfile
+    """
+    createVendorProfile(
+        """
+        values of the vendorProfile
+        """
+        input: CreateVendorProfileInput!
+    ): VendorProfileCreatePayload!
+    """
+    Create multiple new vendorProfiles
+    """
+    createBulkVendorProfile(
+        """
+        values of the vendorProfile
+        """
+        input: [CreateVendorProfileInput!]
+    ): VendorProfileBulkCreatePayload!
+    """
+    Create multiple new vendorProfiles via file upload
+    """
+    createBulkCSVVendorProfile(
+        """
+        csv file containing values of the vendorProfile
+        """
+        input: Upload!
+    ): VendorProfileBulkCreatePayload!
+    """
+    Update an existing vendorProfile
+    """
+    updateVendorProfile(
+        """
+        ID of the vendorProfile
+        """
+        id: ID!
+        """
+        New values for the vendorProfile
+        """
+        input: UpdateVendorProfileInput!
+    ): VendorProfileUpdatePayload!
+    """
+    Delete an existing vendorProfile
+    """
+    deleteVendorProfile(
+        """
+        ID of the vendorProfile
+        """
+        id: ID!
+    ): VendorProfileDeletePayload!
+}
+
+"""
+Return response for createVendorProfile mutation
+"""
+type VendorProfileCreatePayload {
+    """
+    Created vendorProfile
+    """
+    vendorProfile: VendorProfile!
+}
+
+"""
+Return response for updateVendorProfile mutation
+"""
+type VendorProfileUpdatePayload {
+    """
+    Updated vendorProfile
+    """
+    vendorProfile: VendorProfile!
+}
+
+"""
+Return response for deleteVendorProfile mutation
+"""
+type VendorProfileDeletePayload {
+    """
+    Deleted vendorProfile ID
+    """
+    deletedID: ID!
+}
+
+"""
+Return response for createBulkVendorProfile mutation
+"""
+type VendorProfileBulkCreatePayload {
+    """
+    Created vendorProfiles
+    """
+    vendorProfiles: [VendorProfile!]
+}

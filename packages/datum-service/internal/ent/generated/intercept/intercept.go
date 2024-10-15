@@ -58,6 +58,8 @@ import (
 	"github.com/datum-cloud/datum-os/internal/ent/generated/orgmembershiphistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/passwordresettoken"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/personalaccesstoken"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/postaladdress"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/postaladdresshistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/predicate"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/subscriber"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/template"
@@ -67,6 +69,12 @@ import (
 	"github.com/datum-cloud/datum-os/internal/ent/generated/userhistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/usersetting"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/usersettinghistory"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/vendor"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorhistory"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofile"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofilehistory"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofilepostaladdress"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofilepostaladdresshistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/webauthn"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/webhook"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/webhookhistory"
@@ -1478,6 +1486,60 @@ func (f TraversePersonalAccessToken) Traverse(ctx context.Context, q generated.Q
 	return fmt.Errorf("unexpected query type %T. expect *generated.PersonalAccessTokenQuery", q)
 }
 
+// The PostalAddressFunc type is an adapter to allow the use of ordinary function as a Querier.
+type PostalAddressFunc func(context.Context, *generated.PostalAddressQuery) (generated.Value, error)
+
+// Query calls f(ctx, q).
+func (f PostalAddressFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
+	if q, ok := q.(*generated.PostalAddressQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *generated.PostalAddressQuery", q)
+}
+
+// The TraversePostalAddress type is an adapter to allow the use of ordinary function as Traverser.
+type TraversePostalAddress func(context.Context, *generated.PostalAddressQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraversePostalAddress) Intercept(next generated.Querier) generated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraversePostalAddress) Traverse(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.PostalAddressQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *generated.PostalAddressQuery", q)
+}
+
+// The PostalAddressHistoryFunc type is an adapter to allow the use of ordinary function as a Querier.
+type PostalAddressHistoryFunc func(context.Context, *generated.PostalAddressHistoryQuery) (generated.Value, error)
+
+// Query calls f(ctx, q).
+func (f PostalAddressHistoryFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
+	if q, ok := q.(*generated.PostalAddressHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *generated.PostalAddressHistoryQuery", q)
+}
+
+// The TraversePostalAddressHistory type is an adapter to allow the use of ordinary function as Traverser.
+type TraversePostalAddressHistory func(context.Context, *generated.PostalAddressHistoryQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraversePostalAddressHistory) Intercept(next generated.Querier) generated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraversePostalAddressHistory) Traverse(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.PostalAddressHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *generated.PostalAddressHistoryQuery", q)
+}
+
 // The SubscriberFunc type is an adapter to allow the use of ordinary function as a Querier.
 type SubscriberFunc func(context.Context, *generated.SubscriberQuery) (generated.Value, error)
 
@@ -1694,6 +1756,168 @@ func (f TraverseUserSettingHistory) Traverse(ctx context.Context, q generated.Qu
 	return fmt.Errorf("unexpected query type %T. expect *generated.UserSettingHistoryQuery", q)
 }
 
+// The VendorFunc type is an adapter to allow the use of ordinary function as a Querier.
+type VendorFunc func(context.Context, *generated.VendorQuery) (generated.Value, error)
+
+// Query calls f(ctx, q).
+func (f VendorFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
+	if q, ok := q.(*generated.VendorQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *generated.VendorQuery", q)
+}
+
+// The TraverseVendor type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseVendor func(context.Context, *generated.VendorQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseVendor) Intercept(next generated.Querier) generated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseVendor) Traverse(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.VendorQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *generated.VendorQuery", q)
+}
+
+// The VendorHistoryFunc type is an adapter to allow the use of ordinary function as a Querier.
+type VendorHistoryFunc func(context.Context, *generated.VendorHistoryQuery) (generated.Value, error)
+
+// Query calls f(ctx, q).
+func (f VendorHistoryFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
+	if q, ok := q.(*generated.VendorHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *generated.VendorHistoryQuery", q)
+}
+
+// The TraverseVendorHistory type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseVendorHistory func(context.Context, *generated.VendorHistoryQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseVendorHistory) Intercept(next generated.Querier) generated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseVendorHistory) Traverse(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.VendorHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *generated.VendorHistoryQuery", q)
+}
+
+// The VendorProfileFunc type is an adapter to allow the use of ordinary function as a Querier.
+type VendorProfileFunc func(context.Context, *generated.VendorProfileQuery) (generated.Value, error)
+
+// Query calls f(ctx, q).
+func (f VendorProfileFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
+	if q, ok := q.(*generated.VendorProfileQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *generated.VendorProfileQuery", q)
+}
+
+// The TraverseVendorProfile type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseVendorProfile func(context.Context, *generated.VendorProfileQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseVendorProfile) Intercept(next generated.Querier) generated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseVendorProfile) Traverse(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.VendorProfileQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *generated.VendorProfileQuery", q)
+}
+
+// The VendorProfileHistoryFunc type is an adapter to allow the use of ordinary function as a Querier.
+type VendorProfileHistoryFunc func(context.Context, *generated.VendorProfileHistoryQuery) (generated.Value, error)
+
+// Query calls f(ctx, q).
+func (f VendorProfileHistoryFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
+	if q, ok := q.(*generated.VendorProfileHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *generated.VendorProfileHistoryQuery", q)
+}
+
+// The TraverseVendorProfileHistory type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseVendorProfileHistory func(context.Context, *generated.VendorProfileHistoryQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseVendorProfileHistory) Intercept(next generated.Querier) generated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseVendorProfileHistory) Traverse(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.VendorProfileHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *generated.VendorProfileHistoryQuery", q)
+}
+
+// The VendorProfilePostalAddressFunc type is an adapter to allow the use of ordinary function as a Querier.
+type VendorProfilePostalAddressFunc func(context.Context, *generated.VendorProfilePostalAddressQuery) (generated.Value, error)
+
+// Query calls f(ctx, q).
+func (f VendorProfilePostalAddressFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
+	if q, ok := q.(*generated.VendorProfilePostalAddressQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *generated.VendorProfilePostalAddressQuery", q)
+}
+
+// The TraverseVendorProfilePostalAddress type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseVendorProfilePostalAddress func(context.Context, *generated.VendorProfilePostalAddressQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseVendorProfilePostalAddress) Intercept(next generated.Querier) generated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseVendorProfilePostalAddress) Traverse(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.VendorProfilePostalAddressQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *generated.VendorProfilePostalAddressQuery", q)
+}
+
+// The VendorProfilePostalAddressHistoryFunc type is an adapter to allow the use of ordinary function as a Querier.
+type VendorProfilePostalAddressHistoryFunc func(context.Context, *generated.VendorProfilePostalAddressHistoryQuery) (generated.Value, error)
+
+// Query calls f(ctx, q).
+func (f VendorProfilePostalAddressHistoryFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
+	if q, ok := q.(*generated.VendorProfilePostalAddressHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *generated.VendorProfilePostalAddressHistoryQuery", q)
+}
+
+// The TraverseVendorProfilePostalAddressHistory type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseVendorProfilePostalAddressHistory func(context.Context, *generated.VendorProfilePostalAddressHistoryQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseVendorProfilePostalAddressHistory) Intercept(next generated.Querier) generated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseVendorProfilePostalAddressHistory) Traverse(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.VendorProfilePostalAddressHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *generated.VendorProfilePostalAddressHistoryQuery", q)
+}
+
 // The WebauthnFunc type is an adapter to allow the use of ordinary function as a Querier.
 type WebauthnFunc func(context.Context, *generated.WebauthnQuery) (generated.Value, error)
 
@@ -1878,6 +2102,10 @@ func NewQuery(q generated.Query) (Query, error) {
 		return &query[*generated.PasswordResetTokenQuery, predicate.PasswordResetToken, passwordresettoken.OrderOption]{typ: generated.TypePasswordResetToken, tq: q}, nil
 	case *generated.PersonalAccessTokenQuery:
 		return &query[*generated.PersonalAccessTokenQuery, predicate.PersonalAccessToken, personalaccesstoken.OrderOption]{typ: generated.TypePersonalAccessToken, tq: q}, nil
+	case *generated.PostalAddressQuery:
+		return &query[*generated.PostalAddressQuery, predicate.PostalAddress, postaladdress.OrderOption]{typ: generated.TypePostalAddress, tq: q}, nil
+	case *generated.PostalAddressHistoryQuery:
+		return &query[*generated.PostalAddressHistoryQuery, predicate.PostalAddressHistory, postaladdresshistory.OrderOption]{typ: generated.TypePostalAddressHistory, tq: q}, nil
 	case *generated.SubscriberQuery:
 		return &query[*generated.SubscriberQuery, predicate.Subscriber, subscriber.OrderOption]{typ: generated.TypeSubscriber, tq: q}, nil
 	case *generated.TFASettingQuery:
@@ -1894,6 +2122,18 @@ func NewQuery(q generated.Query) (Query, error) {
 		return &query[*generated.UserSettingQuery, predicate.UserSetting, usersetting.OrderOption]{typ: generated.TypeUserSetting, tq: q}, nil
 	case *generated.UserSettingHistoryQuery:
 		return &query[*generated.UserSettingHistoryQuery, predicate.UserSettingHistory, usersettinghistory.OrderOption]{typ: generated.TypeUserSettingHistory, tq: q}, nil
+	case *generated.VendorQuery:
+		return &query[*generated.VendorQuery, predicate.Vendor, vendor.OrderOption]{typ: generated.TypeVendor, tq: q}, nil
+	case *generated.VendorHistoryQuery:
+		return &query[*generated.VendorHistoryQuery, predicate.VendorHistory, vendorhistory.OrderOption]{typ: generated.TypeVendorHistory, tq: q}, nil
+	case *generated.VendorProfileQuery:
+		return &query[*generated.VendorProfileQuery, predicate.VendorProfile, vendorprofile.OrderOption]{typ: generated.TypeVendorProfile, tq: q}, nil
+	case *generated.VendorProfileHistoryQuery:
+		return &query[*generated.VendorProfileHistoryQuery, predicate.VendorProfileHistory, vendorprofilehistory.OrderOption]{typ: generated.TypeVendorProfileHistory, tq: q}, nil
+	case *generated.VendorProfilePostalAddressQuery:
+		return &query[*generated.VendorProfilePostalAddressQuery, predicate.VendorProfilePostalAddress, vendorprofilepostaladdress.OrderOption]{typ: generated.TypeVendorProfilePostalAddress, tq: q}, nil
+	case *generated.VendorProfilePostalAddressHistoryQuery:
+		return &query[*generated.VendorProfilePostalAddressHistoryQuery, predicate.VendorProfilePostalAddressHistory, vendorprofilepostaladdresshistory.OrderOption]{typ: generated.TypeVendorProfilePostalAddressHistory, tq: q}, nil
 	case *generated.WebauthnQuery:
 		return &query[*generated.WebauthnQuery, predicate.Webauthn, webauthn.OrderOption]{typ: generated.TypeWebauthn, tq: q}, nil
 	case *generated.WebhookQuery:

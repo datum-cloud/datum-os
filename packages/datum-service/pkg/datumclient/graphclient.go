@@ -224,6 +224,15 @@ type DatumGraphClient interface {
 	GetAllPersonalAccessTokens(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllPersonalAccessTokens, error)
 	GetPersonalAccessTokenByID(ctx context.Context, personalAccessTokenID string, interceptors ...clientv2.RequestInterceptor) (*GetPersonalAccessTokenByID, error)
 	UpdatePersonalAccessToken(ctx context.Context, updatePersonalAccessTokenID string, input UpdatePersonalAccessTokenInput, interceptors ...clientv2.RequestInterceptor) (*UpdatePersonalAccessToken, error)
+	CreateBulkCSVPostalAddress(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVPostalAddress, error)
+	CreateBulkPostalAddress(ctx context.Context, input []*CreatePostalAddressInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkPostalAddress, error)
+	CreatePostalAddress(ctx context.Context, input CreatePostalAddressInput, interceptors ...clientv2.RequestInterceptor) (*CreatePostalAddress, error)
+	GetAllPostalAddresses(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllPostalAddresses, error)
+	GetPostalAddressByID(ctx context.Context, postalAddressID string, interceptors ...clientv2.RequestInterceptor) (*GetPostalAddressByID, error)
+	GetPostalAddresses(ctx context.Context, where *PostalAddressWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetPostalAddresses, error)
+	UpdatePostalAddress(ctx context.Context, updatePostalAddressID string, input UpdatePostalAddressInput, interceptors ...clientv2.RequestInterceptor) (*UpdatePostalAddress, error)
+	GetAllPostalAddressHistories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllPostalAddressHistories, error)
+	GetPostalAddressHistories(ctx context.Context, where *PostalAddressHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetPostalAddressHistories, error)
 	Search(ctx context.Context, query string, interceptors ...clientv2.RequestInterceptor) (*Search, error)
 	CreateBulkCSVSubscriber(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVSubscriber, error)
 	CreateBulkSubscriber(ctx context.Context, input []*CreateSubscriberInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkSubscriber, error)
@@ -259,6 +268,33 @@ type DatumGraphClient interface {
 	UpdateUserSetting(ctx context.Context, updateUserSettingID string, input UpdateUserSettingInput, interceptors ...clientv2.RequestInterceptor) (*UpdateUserSetting, error)
 	GetAllUserSettingHistories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllUserSettingHistories, error)
 	GetUserSettingHistories(ctx context.Context, where *UserSettingHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetUserSettingHistories, error)
+	CreateBulkCSVVendor(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVVendor, error)
+	CreateBulkVendor(ctx context.Context, input []*CreateVendorInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkVendor, error)
+	CreateVendor(ctx context.Context, input CreateVendorInput, interceptors ...clientv2.RequestInterceptor) (*CreateVendor, error)
+	GetAllVendors(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllVendors, error)
+	GetVendorByID(ctx context.Context, vendorID string, interceptors ...clientv2.RequestInterceptor) (*GetVendorByID, error)
+	GetVendors(ctx context.Context, where *VendorWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetVendors, error)
+	UpdateVendor(ctx context.Context, updateVendorID string, input UpdateVendorInput, interceptors ...clientv2.RequestInterceptor) (*UpdateVendor, error)
+	GetAllVendorHistories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllVendorHistories, error)
+	GetVendorHistories(ctx context.Context, where *VendorHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetVendorHistories, error)
+	CreateBulkCSVVendorProfile(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVVendorProfile, error)
+	CreateBulkVendorProfile(ctx context.Context, input []*CreateVendorProfileInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkVendorProfile, error)
+	CreateVendorProfile(ctx context.Context, input CreateVendorProfileInput, interceptors ...clientv2.RequestInterceptor) (*CreateVendorProfile, error)
+	GetAllVendorProfiles(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllVendorProfiles, error)
+	GetVendorProfileByID(ctx context.Context, vendorProfileID string, interceptors ...clientv2.RequestInterceptor) (*GetVendorProfileByID, error)
+	GetVendorProfiles(ctx context.Context, where *VendorProfileWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetVendorProfiles, error)
+	UpdateVendorProfile(ctx context.Context, updateVendorProfileID string, input UpdateVendorProfileInput, interceptors ...clientv2.RequestInterceptor) (*UpdateVendorProfile, error)
+	GetAllVendorProfileHistories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllVendorProfileHistories, error)
+	GetVendorProfileHistories(ctx context.Context, where *VendorProfileHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetVendorProfileHistories, error)
+	CreateBulkCSVVendorProfilePostalAddress(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVVendorProfilePostalAddress, error)
+	CreateBulkVendorProfilePostalAddress(ctx context.Context, input []*CreateVendorProfilePostalAddressInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkVendorProfilePostalAddress, error)
+	CreateVendorProfilePostalAddress(ctx context.Context, input CreateVendorProfilePostalAddressInput, interceptors ...clientv2.RequestInterceptor) (*CreateVendorProfilePostalAddress, error)
+	GetAllVendorProfilePostalAddresses(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllVendorProfilePostalAddresses, error)
+	GetVendorProfilePostalAddressByID(ctx context.Context, vendorProfilePostalAddressID string, interceptors ...clientv2.RequestInterceptor) (*GetVendorProfilePostalAddressByID, error)
+	GetVendorProfilePostalAddresses(ctx context.Context, where *VendorProfilePostalAddressWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetVendorProfilePostalAddresses, error)
+	UpdateVendorProfilePostalAddress(ctx context.Context, updateVendorProfilePostalAddressID string, input UpdateVendorProfilePostalAddressInput, interceptors ...clientv2.RequestInterceptor) (*UpdateVendorProfilePostalAddress, error)
+	GetAllVendorProfilePostalAddressHistories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllVendorProfilePostalAddressHistories, error)
+	GetVendorProfilePostalAddressHistories(ctx context.Context, where *VendorProfilePostalAddressHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetVendorProfilePostalAddressHistories, error)
 	GetWebhookByID(ctx context.Context, webhookID string, interceptors ...clientv2.RequestInterceptor) (*GetWebhookByID, error)
 	GetAllWebhooks(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllWebhooks, error)
 	CreateWebhook(ctx context.Context, input CreateWebhookInput, interceptors ...clientv2.RequestInterceptor) (*CreateWebhook, error)
@@ -23998,6 +24034,1287 @@ func (t *UpdatePersonalAccessToken_UpdatePersonalAccessToken) GetPersonalAccessT
 	return &t.PersonalAccessToken
 }
 
+type CreateBulkCSVPostalAddress_CreateBulkCSVPostalAddress_PostalAddresses struct {
+	AddressLines       []string   "json:\"addressLines\" graphql:\"addressLines\""
+	AdministrativeArea *string    "json:\"administrativeArea,omitempty\" graphql:\"administrativeArea\""
+	CreatedAt          *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy          *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID                 string     "json:\"id\" graphql:\"id\""
+	LanguageCode       *string    "json:\"languageCode,omitempty\" graphql:\"languageCode\""
+	Locality           *string    "json:\"locality,omitempty\" graphql:\"locality\""
+	Organization       *string    "json:\"organization,omitempty\" graphql:\"organization\""
+	OwnerID            *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	PostalCode         *string    "json:\"postalCode,omitempty\" graphql:\"postalCode\""
+	Recipients         []string   "json:\"recipients\" graphql:\"recipients\""
+	RegionCode         string     "json:\"regionCode\" graphql:\"regionCode\""
+	SortingCode        *string    "json:\"sortingCode,omitempty\" graphql:\"sortingCode\""
+	Sublocality        *string    "json:\"sublocality,omitempty\" graphql:\"sublocality\""
+	Tags               []string   "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt          *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy          *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *CreateBulkCSVPostalAddress_CreateBulkCSVPostalAddress_PostalAddresses) GetAddressLines() []string {
+	if t == nil {
+		t = &CreateBulkCSVPostalAddress_CreateBulkCSVPostalAddress_PostalAddresses{}
+	}
+	return t.AddressLines
+}
+func (t *CreateBulkCSVPostalAddress_CreateBulkCSVPostalAddress_PostalAddresses) GetAdministrativeArea() *string {
+	if t == nil {
+		t = &CreateBulkCSVPostalAddress_CreateBulkCSVPostalAddress_PostalAddresses{}
+	}
+	return t.AdministrativeArea
+}
+func (t *CreateBulkCSVPostalAddress_CreateBulkCSVPostalAddress_PostalAddresses) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkCSVPostalAddress_CreateBulkCSVPostalAddress_PostalAddresses{}
+	}
+	return t.CreatedAt
+}
+func (t *CreateBulkCSVPostalAddress_CreateBulkCSVPostalAddress_PostalAddresses) GetCreatedBy() *string {
+	if t == nil {
+		t = &CreateBulkCSVPostalAddress_CreateBulkCSVPostalAddress_PostalAddresses{}
+	}
+	return t.CreatedBy
+}
+func (t *CreateBulkCSVPostalAddress_CreateBulkCSVPostalAddress_PostalAddresses) GetID() string {
+	if t == nil {
+		t = &CreateBulkCSVPostalAddress_CreateBulkCSVPostalAddress_PostalAddresses{}
+	}
+	return t.ID
+}
+func (t *CreateBulkCSVPostalAddress_CreateBulkCSVPostalAddress_PostalAddresses) GetLanguageCode() *string {
+	if t == nil {
+		t = &CreateBulkCSVPostalAddress_CreateBulkCSVPostalAddress_PostalAddresses{}
+	}
+	return t.LanguageCode
+}
+func (t *CreateBulkCSVPostalAddress_CreateBulkCSVPostalAddress_PostalAddresses) GetLocality() *string {
+	if t == nil {
+		t = &CreateBulkCSVPostalAddress_CreateBulkCSVPostalAddress_PostalAddresses{}
+	}
+	return t.Locality
+}
+func (t *CreateBulkCSVPostalAddress_CreateBulkCSVPostalAddress_PostalAddresses) GetOrganization() *string {
+	if t == nil {
+		t = &CreateBulkCSVPostalAddress_CreateBulkCSVPostalAddress_PostalAddresses{}
+	}
+	return t.Organization
+}
+func (t *CreateBulkCSVPostalAddress_CreateBulkCSVPostalAddress_PostalAddresses) GetOwnerID() *string {
+	if t == nil {
+		t = &CreateBulkCSVPostalAddress_CreateBulkCSVPostalAddress_PostalAddresses{}
+	}
+	return t.OwnerID
+}
+func (t *CreateBulkCSVPostalAddress_CreateBulkCSVPostalAddress_PostalAddresses) GetPostalCode() *string {
+	if t == nil {
+		t = &CreateBulkCSVPostalAddress_CreateBulkCSVPostalAddress_PostalAddresses{}
+	}
+	return t.PostalCode
+}
+func (t *CreateBulkCSVPostalAddress_CreateBulkCSVPostalAddress_PostalAddresses) GetRecipients() []string {
+	if t == nil {
+		t = &CreateBulkCSVPostalAddress_CreateBulkCSVPostalAddress_PostalAddresses{}
+	}
+	return t.Recipients
+}
+func (t *CreateBulkCSVPostalAddress_CreateBulkCSVPostalAddress_PostalAddresses) GetRegionCode() string {
+	if t == nil {
+		t = &CreateBulkCSVPostalAddress_CreateBulkCSVPostalAddress_PostalAddresses{}
+	}
+	return t.RegionCode
+}
+func (t *CreateBulkCSVPostalAddress_CreateBulkCSVPostalAddress_PostalAddresses) GetSortingCode() *string {
+	if t == nil {
+		t = &CreateBulkCSVPostalAddress_CreateBulkCSVPostalAddress_PostalAddresses{}
+	}
+	return t.SortingCode
+}
+func (t *CreateBulkCSVPostalAddress_CreateBulkCSVPostalAddress_PostalAddresses) GetSublocality() *string {
+	if t == nil {
+		t = &CreateBulkCSVPostalAddress_CreateBulkCSVPostalAddress_PostalAddresses{}
+	}
+	return t.Sublocality
+}
+func (t *CreateBulkCSVPostalAddress_CreateBulkCSVPostalAddress_PostalAddresses) GetTags() []string {
+	if t == nil {
+		t = &CreateBulkCSVPostalAddress_CreateBulkCSVPostalAddress_PostalAddresses{}
+	}
+	return t.Tags
+}
+func (t *CreateBulkCSVPostalAddress_CreateBulkCSVPostalAddress_PostalAddresses) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkCSVPostalAddress_CreateBulkCSVPostalAddress_PostalAddresses{}
+	}
+	return t.UpdatedAt
+}
+func (t *CreateBulkCSVPostalAddress_CreateBulkCSVPostalAddress_PostalAddresses) GetUpdatedBy() *string {
+	if t == nil {
+		t = &CreateBulkCSVPostalAddress_CreateBulkCSVPostalAddress_PostalAddresses{}
+	}
+	return t.UpdatedBy
+}
+
+type CreateBulkCSVPostalAddress_CreateBulkCSVPostalAddress struct {
+	PostalAddresses []*CreateBulkCSVPostalAddress_CreateBulkCSVPostalAddress_PostalAddresses "json:\"postalAddresses,omitempty\" graphql:\"postalAddresses\""
+}
+
+func (t *CreateBulkCSVPostalAddress_CreateBulkCSVPostalAddress) GetPostalAddresses() []*CreateBulkCSVPostalAddress_CreateBulkCSVPostalAddress_PostalAddresses {
+	if t == nil {
+		t = &CreateBulkCSVPostalAddress_CreateBulkCSVPostalAddress{}
+	}
+	return t.PostalAddresses
+}
+
+type CreateBulkPostalAddress_CreateBulkPostalAddress_PostalAddresses struct {
+	AddressLines       []string   "json:\"addressLines\" graphql:\"addressLines\""
+	AdministrativeArea *string    "json:\"administrativeArea,omitempty\" graphql:\"administrativeArea\""
+	CreatedAt          *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy          *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID                 string     "json:\"id\" graphql:\"id\""
+	LanguageCode       *string    "json:\"languageCode,omitempty\" graphql:\"languageCode\""
+	Locality           *string    "json:\"locality,omitempty\" graphql:\"locality\""
+	Organization       *string    "json:\"organization,omitempty\" graphql:\"organization\""
+	OwnerID            *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	PostalCode         *string    "json:\"postalCode,omitempty\" graphql:\"postalCode\""
+	Recipients         []string   "json:\"recipients\" graphql:\"recipients\""
+	RegionCode         string     "json:\"regionCode\" graphql:\"regionCode\""
+	SortingCode        *string    "json:\"sortingCode,omitempty\" graphql:\"sortingCode\""
+	Sublocality        *string    "json:\"sublocality,omitempty\" graphql:\"sublocality\""
+	Tags               []string   "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt          *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy          *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *CreateBulkPostalAddress_CreateBulkPostalAddress_PostalAddresses) GetAddressLines() []string {
+	if t == nil {
+		t = &CreateBulkPostalAddress_CreateBulkPostalAddress_PostalAddresses{}
+	}
+	return t.AddressLines
+}
+func (t *CreateBulkPostalAddress_CreateBulkPostalAddress_PostalAddresses) GetAdministrativeArea() *string {
+	if t == nil {
+		t = &CreateBulkPostalAddress_CreateBulkPostalAddress_PostalAddresses{}
+	}
+	return t.AdministrativeArea
+}
+func (t *CreateBulkPostalAddress_CreateBulkPostalAddress_PostalAddresses) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkPostalAddress_CreateBulkPostalAddress_PostalAddresses{}
+	}
+	return t.CreatedAt
+}
+func (t *CreateBulkPostalAddress_CreateBulkPostalAddress_PostalAddresses) GetCreatedBy() *string {
+	if t == nil {
+		t = &CreateBulkPostalAddress_CreateBulkPostalAddress_PostalAddresses{}
+	}
+	return t.CreatedBy
+}
+func (t *CreateBulkPostalAddress_CreateBulkPostalAddress_PostalAddresses) GetID() string {
+	if t == nil {
+		t = &CreateBulkPostalAddress_CreateBulkPostalAddress_PostalAddresses{}
+	}
+	return t.ID
+}
+func (t *CreateBulkPostalAddress_CreateBulkPostalAddress_PostalAddresses) GetLanguageCode() *string {
+	if t == nil {
+		t = &CreateBulkPostalAddress_CreateBulkPostalAddress_PostalAddresses{}
+	}
+	return t.LanguageCode
+}
+func (t *CreateBulkPostalAddress_CreateBulkPostalAddress_PostalAddresses) GetLocality() *string {
+	if t == nil {
+		t = &CreateBulkPostalAddress_CreateBulkPostalAddress_PostalAddresses{}
+	}
+	return t.Locality
+}
+func (t *CreateBulkPostalAddress_CreateBulkPostalAddress_PostalAddresses) GetOrganization() *string {
+	if t == nil {
+		t = &CreateBulkPostalAddress_CreateBulkPostalAddress_PostalAddresses{}
+	}
+	return t.Organization
+}
+func (t *CreateBulkPostalAddress_CreateBulkPostalAddress_PostalAddresses) GetOwnerID() *string {
+	if t == nil {
+		t = &CreateBulkPostalAddress_CreateBulkPostalAddress_PostalAddresses{}
+	}
+	return t.OwnerID
+}
+func (t *CreateBulkPostalAddress_CreateBulkPostalAddress_PostalAddresses) GetPostalCode() *string {
+	if t == nil {
+		t = &CreateBulkPostalAddress_CreateBulkPostalAddress_PostalAddresses{}
+	}
+	return t.PostalCode
+}
+func (t *CreateBulkPostalAddress_CreateBulkPostalAddress_PostalAddresses) GetRecipients() []string {
+	if t == nil {
+		t = &CreateBulkPostalAddress_CreateBulkPostalAddress_PostalAddresses{}
+	}
+	return t.Recipients
+}
+func (t *CreateBulkPostalAddress_CreateBulkPostalAddress_PostalAddresses) GetRegionCode() string {
+	if t == nil {
+		t = &CreateBulkPostalAddress_CreateBulkPostalAddress_PostalAddresses{}
+	}
+	return t.RegionCode
+}
+func (t *CreateBulkPostalAddress_CreateBulkPostalAddress_PostalAddresses) GetSortingCode() *string {
+	if t == nil {
+		t = &CreateBulkPostalAddress_CreateBulkPostalAddress_PostalAddresses{}
+	}
+	return t.SortingCode
+}
+func (t *CreateBulkPostalAddress_CreateBulkPostalAddress_PostalAddresses) GetSublocality() *string {
+	if t == nil {
+		t = &CreateBulkPostalAddress_CreateBulkPostalAddress_PostalAddresses{}
+	}
+	return t.Sublocality
+}
+func (t *CreateBulkPostalAddress_CreateBulkPostalAddress_PostalAddresses) GetTags() []string {
+	if t == nil {
+		t = &CreateBulkPostalAddress_CreateBulkPostalAddress_PostalAddresses{}
+	}
+	return t.Tags
+}
+func (t *CreateBulkPostalAddress_CreateBulkPostalAddress_PostalAddresses) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkPostalAddress_CreateBulkPostalAddress_PostalAddresses{}
+	}
+	return t.UpdatedAt
+}
+func (t *CreateBulkPostalAddress_CreateBulkPostalAddress_PostalAddresses) GetUpdatedBy() *string {
+	if t == nil {
+		t = &CreateBulkPostalAddress_CreateBulkPostalAddress_PostalAddresses{}
+	}
+	return t.UpdatedBy
+}
+
+type CreateBulkPostalAddress_CreateBulkPostalAddress struct {
+	PostalAddresses []*CreateBulkPostalAddress_CreateBulkPostalAddress_PostalAddresses "json:\"postalAddresses,omitempty\" graphql:\"postalAddresses\""
+}
+
+func (t *CreateBulkPostalAddress_CreateBulkPostalAddress) GetPostalAddresses() []*CreateBulkPostalAddress_CreateBulkPostalAddress_PostalAddresses {
+	if t == nil {
+		t = &CreateBulkPostalAddress_CreateBulkPostalAddress{}
+	}
+	return t.PostalAddresses
+}
+
+type CreatePostalAddress_CreatePostalAddress_PostalAddress struct {
+	AddressLines       []string   "json:\"addressLines\" graphql:\"addressLines\""
+	AdministrativeArea *string    "json:\"administrativeArea,omitempty\" graphql:\"administrativeArea\""
+	CreatedAt          *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy          *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID                 string     "json:\"id\" graphql:\"id\""
+	LanguageCode       *string    "json:\"languageCode,omitempty\" graphql:\"languageCode\""
+	Locality           *string    "json:\"locality,omitempty\" graphql:\"locality\""
+	Organization       *string    "json:\"organization,omitempty\" graphql:\"organization\""
+	OwnerID            *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	PostalCode         *string    "json:\"postalCode,omitempty\" graphql:\"postalCode\""
+	Recipients         []string   "json:\"recipients\" graphql:\"recipients\""
+	RegionCode         string     "json:\"regionCode\" graphql:\"regionCode\""
+	SortingCode        *string    "json:\"sortingCode,omitempty\" graphql:\"sortingCode\""
+	Sublocality        *string    "json:\"sublocality,omitempty\" graphql:\"sublocality\""
+	Tags               []string   "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt          *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy          *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *CreatePostalAddress_CreatePostalAddress_PostalAddress) GetAddressLines() []string {
+	if t == nil {
+		t = &CreatePostalAddress_CreatePostalAddress_PostalAddress{}
+	}
+	return t.AddressLines
+}
+func (t *CreatePostalAddress_CreatePostalAddress_PostalAddress) GetAdministrativeArea() *string {
+	if t == nil {
+		t = &CreatePostalAddress_CreatePostalAddress_PostalAddress{}
+	}
+	return t.AdministrativeArea
+}
+func (t *CreatePostalAddress_CreatePostalAddress_PostalAddress) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &CreatePostalAddress_CreatePostalAddress_PostalAddress{}
+	}
+	return t.CreatedAt
+}
+func (t *CreatePostalAddress_CreatePostalAddress_PostalAddress) GetCreatedBy() *string {
+	if t == nil {
+		t = &CreatePostalAddress_CreatePostalAddress_PostalAddress{}
+	}
+	return t.CreatedBy
+}
+func (t *CreatePostalAddress_CreatePostalAddress_PostalAddress) GetID() string {
+	if t == nil {
+		t = &CreatePostalAddress_CreatePostalAddress_PostalAddress{}
+	}
+	return t.ID
+}
+func (t *CreatePostalAddress_CreatePostalAddress_PostalAddress) GetLanguageCode() *string {
+	if t == nil {
+		t = &CreatePostalAddress_CreatePostalAddress_PostalAddress{}
+	}
+	return t.LanguageCode
+}
+func (t *CreatePostalAddress_CreatePostalAddress_PostalAddress) GetLocality() *string {
+	if t == nil {
+		t = &CreatePostalAddress_CreatePostalAddress_PostalAddress{}
+	}
+	return t.Locality
+}
+func (t *CreatePostalAddress_CreatePostalAddress_PostalAddress) GetOrganization() *string {
+	if t == nil {
+		t = &CreatePostalAddress_CreatePostalAddress_PostalAddress{}
+	}
+	return t.Organization
+}
+func (t *CreatePostalAddress_CreatePostalAddress_PostalAddress) GetOwnerID() *string {
+	if t == nil {
+		t = &CreatePostalAddress_CreatePostalAddress_PostalAddress{}
+	}
+	return t.OwnerID
+}
+func (t *CreatePostalAddress_CreatePostalAddress_PostalAddress) GetPostalCode() *string {
+	if t == nil {
+		t = &CreatePostalAddress_CreatePostalAddress_PostalAddress{}
+	}
+	return t.PostalCode
+}
+func (t *CreatePostalAddress_CreatePostalAddress_PostalAddress) GetRecipients() []string {
+	if t == nil {
+		t = &CreatePostalAddress_CreatePostalAddress_PostalAddress{}
+	}
+	return t.Recipients
+}
+func (t *CreatePostalAddress_CreatePostalAddress_PostalAddress) GetRegionCode() string {
+	if t == nil {
+		t = &CreatePostalAddress_CreatePostalAddress_PostalAddress{}
+	}
+	return t.RegionCode
+}
+func (t *CreatePostalAddress_CreatePostalAddress_PostalAddress) GetSortingCode() *string {
+	if t == nil {
+		t = &CreatePostalAddress_CreatePostalAddress_PostalAddress{}
+	}
+	return t.SortingCode
+}
+func (t *CreatePostalAddress_CreatePostalAddress_PostalAddress) GetSublocality() *string {
+	if t == nil {
+		t = &CreatePostalAddress_CreatePostalAddress_PostalAddress{}
+	}
+	return t.Sublocality
+}
+func (t *CreatePostalAddress_CreatePostalAddress_PostalAddress) GetTags() []string {
+	if t == nil {
+		t = &CreatePostalAddress_CreatePostalAddress_PostalAddress{}
+	}
+	return t.Tags
+}
+func (t *CreatePostalAddress_CreatePostalAddress_PostalAddress) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &CreatePostalAddress_CreatePostalAddress_PostalAddress{}
+	}
+	return t.UpdatedAt
+}
+func (t *CreatePostalAddress_CreatePostalAddress_PostalAddress) GetUpdatedBy() *string {
+	if t == nil {
+		t = &CreatePostalAddress_CreatePostalAddress_PostalAddress{}
+	}
+	return t.UpdatedBy
+}
+
+type CreatePostalAddress_CreatePostalAddress struct {
+	PostalAddress CreatePostalAddress_CreatePostalAddress_PostalAddress "json:\"postalAddress\" graphql:\"postalAddress\""
+}
+
+func (t *CreatePostalAddress_CreatePostalAddress) GetPostalAddress() *CreatePostalAddress_CreatePostalAddress_PostalAddress {
+	if t == nil {
+		t = &CreatePostalAddress_CreatePostalAddress{}
+	}
+	return &t.PostalAddress
+}
+
+type GetAllPostalAddresses_PostalAddresses_Edges_Node struct {
+	AddressLines       []string   "json:\"addressLines\" graphql:\"addressLines\""
+	AdministrativeArea *string    "json:\"administrativeArea,omitempty\" graphql:\"administrativeArea\""
+	CreatedAt          *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy          *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID                 string     "json:\"id\" graphql:\"id\""
+	LanguageCode       *string    "json:\"languageCode,omitempty\" graphql:\"languageCode\""
+	Locality           *string    "json:\"locality,omitempty\" graphql:\"locality\""
+	Organization       *string    "json:\"organization,omitempty\" graphql:\"organization\""
+	OwnerID            *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	PostalCode         *string    "json:\"postalCode,omitempty\" graphql:\"postalCode\""
+	Recipients         []string   "json:\"recipients\" graphql:\"recipients\""
+	RegionCode         string     "json:\"regionCode\" graphql:\"regionCode\""
+	SortingCode        *string    "json:\"sortingCode,omitempty\" graphql:\"sortingCode\""
+	Sublocality        *string    "json:\"sublocality,omitempty\" graphql:\"sublocality\""
+	Tags               []string   "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt          *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy          *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetAllPostalAddresses_PostalAddresses_Edges_Node) GetAddressLines() []string {
+	if t == nil {
+		t = &GetAllPostalAddresses_PostalAddresses_Edges_Node{}
+	}
+	return t.AddressLines
+}
+func (t *GetAllPostalAddresses_PostalAddresses_Edges_Node) GetAdministrativeArea() *string {
+	if t == nil {
+		t = &GetAllPostalAddresses_PostalAddresses_Edges_Node{}
+	}
+	return t.AdministrativeArea
+}
+func (t *GetAllPostalAddresses_PostalAddresses_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllPostalAddresses_PostalAddresses_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetAllPostalAddresses_PostalAddresses_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetAllPostalAddresses_PostalAddresses_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetAllPostalAddresses_PostalAddresses_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetAllPostalAddresses_PostalAddresses_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetAllPostalAddresses_PostalAddresses_Edges_Node) GetLanguageCode() *string {
+	if t == nil {
+		t = &GetAllPostalAddresses_PostalAddresses_Edges_Node{}
+	}
+	return t.LanguageCode
+}
+func (t *GetAllPostalAddresses_PostalAddresses_Edges_Node) GetLocality() *string {
+	if t == nil {
+		t = &GetAllPostalAddresses_PostalAddresses_Edges_Node{}
+	}
+	return t.Locality
+}
+func (t *GetAllPostalAddresses_PostalAddresses_Edges_Node) GetOrganization() *string {
+	if t == nil {
+		t = &GetAllPostalAddresses_PostalAddresses_Edges_Node{}
+	}
+	return t.Organization
+}
+func (t *GetAllPostalAddresses_PostalAddresses_Edges_Node) GetOwnerID() *string {
+	if t == nil {
+		t = &GetAllPostalAddresses_PostalAddresses_Edges_Node{}
+	}
+	return t.OwnerID
+}
+func (t *GetAllPostalAddresses_PostalAddresses_Edges_Node) GetPostalCode() *string {
+	if t == nil {
+		t = &GetAllPostalAddresses_PostalAddresses_Edges_Node{}
+	}
+	return t.PostalCode
+}
+func (t *GetAllPostalAddresses_PostalAddresses_Edges_Node) GetRecipients() []string {
+	if t == nil {
+		t = &GetAllPostalAddresses_PostalAddresses_Edges_Node{}
+	}
+	return t.Recipients
+}
+func (t *GetAllPostalAddresses_PostalAddresses_Edges_Node) GetRegionCode() string {
+	if t == nil {
+		t = &GetAllPostalAddresses_PostalAddresses_Edges_Node{}
+	}
+	return t.RegionCode
+}
+func (t *GetAllPostalAddresses_PostalAddresses_Edges_Node) GetSortingCode() *string {
+	if t == nil {
+		t = &GetAllPostalAddresses_PostalAddresses_Edges_Node{}
+	}
+	return t.SortingCode
+}
+func (t *GetAllPostalAddresses_PostalAddresses_Edges_Node) GetSublocality() *string {
+	if t == nil {
+		t = &GetAllPostalAddresses_PostalAddresses_Edges_Node{}
+	}
+	return t.Sublocality
+}
+func (t *GetAllPostalAddresses_PostalAddresses_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &GetAllPostalAddresses_PostalAddresses_Edges_Node{}
+	}
+	return t.Tags
+}
+func (t *GetAllPostalAddresses_PostalAddresses_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllPostalAddresses_PostalAddresses_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetAllPostalAddresses_PostalAddresses_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetAllPostalAddresses_PostalAddresses_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+
+type GetAllPostalAddresses_PostalAddresses_Edges struct {
+	Node *GetAllPostalAddresses_PostalAddresses_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetAllPostalAddresses_PostalAddresses_Edges) GetNode() *GetAllPostalAddresses_PostalAddresses_Edges_Node {
+	if t == nil {
+		t = &GetAllPostalAddresses_PostalAddresses_Edges{}
+	}
+	return t.Node
+}
+
+type GetAllPostalAddresses_PostalAddresses struct {
+	Edges []*GetAllPostalAddresses_PostalAddresses_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+}
+
+func (t *GetAllPostalAddresses_PostalAddresses) GetEdges() []*GetAllPostalAddresses_PostalAddresses_Edges {
+	if t == nil {
+		t = &GetAllPostalAddresses_PostalAddresses{}
+	}
+	return t.Edges
+}
+
+type GetPostalAddressByID_PostalAddress struct {
+	AddressLines       []string   "json:\"addressLines\" graphql:\"addressLines\""
+	AdministrativeArea *string    "json:\"administrativeArea,omitempty\" graphql:\"administrativeArea\""
+	CreatedAt          *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy          *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID                 string     "json:\"id\" graphql:\"id\""
+	LanguageCode       *string    "json:\"languageCode,omitempty\" graphql:\"languageCode\""
+	Locality           *string    "json:\"locality,omitempty\" graphql:\"locality\""
+	Organization       *string    "json:\"organization,omitempty\" graphql:\"organization\""
+	OwnerID            *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	PostalCode         *string    "json:\"postalCode,omitempty\" graphql:\"postalCode\""
+	Recipients         []string   "json:\"recipients\" graphql:\"recipients\""
+	RegionCode         string     "json:\"regionCode\" graphql:\"regionCode\""
+	SortingCode        *string    "json:\"sortingCode,omitempty\" graphql:\"sortingCode\""
+	Sublocality        *string    "json:\"sublocality,omitempty\" graphql:\"sublocality\""
+	Tags               []string   "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt          *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy          *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetPostalAddressByID_PostalAddress) GetAddressLines() []string {
+	if t == nil {
+		t = &GetPostalAddressByID_PostalAddress{}
+	}
+	return t.AddressLines
+}
+func (t *GetPostalAddressByID_PostalAddress) GetAdministrativeArea() *string {
+	if t == nil {
+		t = &GetPostalAddressByID_PostalAddress{}
+	}
+	return t.AdministrativeArea
+}
+func (t *GetPostalAddressByID_PostalAddress) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetPostalAddressByID_PostalAddress{}
+	}
+	return t.CreatedAt
+}
+func (t *GetPostalAddressByID_PostalAddress) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetPostalAddressByID_PostalAddress{}
+	}
+	return t.CreatedBy
+}
+func (t *GetPostalAddressByID_PostalAddress) GetID() string {
+	if t == nil {
+		t = &GetPostalAddressByID_PostalAddress{}
+	}
+	return t.ID
+}
+func (t *GetPostalAddressByID_PostalAddress) GetLanguageCode() *string {
+	if t == nil {
+		t = &GetPostalAddressByID_PostalAddress{}
+	}
+	return t.LanguageCode
+}
+func (t *GetPostalAddressByID_PostalAddress) GetLocality() *string {
+	if t == nil {
+		t = &GetPostalAddressByID_PostalAddress{}
+	}
+	return t.Locality
+}
+func (t *GetPostalAddressByID_PostalAddress) GetOrganization() *string {
+	if t == nil {
+		t = &GetPostalAddressByID_PostalAddress{}
+	}
+	return t.Organization
+}
+func (t *GetPostalAddressByID_PostalAddress) GetOwnerID() *string {
+	if t == nil {
+		t = &GetPostalAddressByID_PostalAddress{}
+	}
+	return t.OwnerID
+}
+func (t *GetPostalAddressByID_PostalAddress) GetPostalCode() *string {
+	if t == nil {
+		t = &GetPostalAddressByID_PostalAddress{}
+	}
+	return t.PostalCode
+}
+func (t *GetPostalAddressByID_PostalAddress) GetRecipients() []string {
+	if t == nil {
+		t = &GetPostalAddressByID_PostalAddress{}
+	}
+	return t.Recipients
+}
+func (t *GetPostalAddressByID_PostalAddress) GetRegionCode() string {
+	if t == nil {
+		t = &GetPostalAddressByID_PostalAddress{}
+	}
+	return t.RegionCode
+}
+func (t *GetPostalAddressByID_PostalAddress) GetSortingCode() *string {
+	if t == nil {
+		t = &GetPostalAddressByID_PostalAddress{}
+	}
+	return t.SortingCode
+}
+func (t *GetPostalAddressByID_PostalAddress) GetSublocality() *string {
+	if t == nil {
+		t = &GetPostalAddressByID_PostalAddress{}
+	}
+	return t.Sublocality
+}
+func (t *GetPostalAddressByID_PostalAddress) GetTags() []string {
+	if t == nil {
+		t = &GetPostalAddressByID_PostalAddress{}
+	}
+	return t.Tags
+}
+func (t *GetPostalAddressByID_PostalAddress) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetPostalAddressByID_PostalAddress{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetPostalAddressByID_PostalAddress) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetPostalAddressByID_PostalAddress{}
+	}
+	return t.UpdatedBy
+}
+
+type GetPostalAddresses_PostalAddresses_Edges_Node struct {
+	AddressLines       []string   "json:\"addressLines\" graphql:\"addressLines\""
+	AdministrativeArea *string    "json:\"administrativeArea,omitempty\" graphql:\"administrativeArea\""
+	CreatedAt          *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy          *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID                 string     "json:\"id\" graphql:\"id\""
+	LanguageCode       *string    "json:\"languageCode,omitempty\" graphql:\"languageCode\""
+	Locality           *string    "json:\"locality,omitempty\" graphql:\"locality\""
+	Organization       *string    "json:\"organization,omitempty\" graphql:\"organization\""
+	OwnerID            *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	PostalCode         *string    "json:\"postalCode,omitempty\" graphql:\"postalCode\""
+	Recipients         []string   "json:\"recipients\" graphql:\"recipients\""
+	RegionCode         string     "json:\"regionCode\" graphql:\"regionCode\""
+	SortingCode        *string    "json:\"sortingCode,omitempty\" graphql:\"sortingCode\""
+	Sublocality        *string    "json:\"sublocality,omitempty\" graphql:\"sublocality\""
+	Tags               []string   "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt          *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy          *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetPostalAddresses_PostalAddresses_Edges_Node) GetAddressLines() []string {
+	if t == nil {
+		t = &GetPostalAddresses_PostalAddresses_Edges_Node{}
+	}
+	return t.AddressLines
+}
+func (t *GetPostalAddresses_PostalAddresses_Edges_Node) GetAdministrativeArea() *string {
+	if t == nil {
+		t = &GetPostalAddresses_PostalAddresses_Edges_Node{}
+	}
+	return t.AdministrativeArea
+}
+func (t *GetPostalAddresses_PostalAddresses_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetPostalAddresses_PostalAddresses_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetPostalAddresses_PostalAddresses_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetPostalAddresses_PostalAddresses_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetPostalAddresses_PostalAddresses_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetPostalAddresses_PostalAddresses_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetPostalAddresses_PostalAddresses_Edges_Node) GetLanguageCode() *string {
+	if t == nil {
+		t = &GetPostalAddresses_PostalAddresses_Edges_Node{}
+	}
+	return t.LanguageCode
+}
+func (t *GetPostalAddresses_PostalAddresses_Edges_Node) GetLocality() *string {
+	if t == nil {
+		t = &GetPostalAddresses_PostalAddresses_Edges_Node{}
+	}
+	return t.Locality
+}
+func (t *GetPostalAddresses_PostalAddresses_Edges_Node) GetOrganization() *string {
+	if t == nil {
+		t = &GetPostalAddresses_PostalAddresses_Edges_Node{}
+	}
+	return t.Organization
+}
+func (t *GetPostalAddresses_PostalAddresses_Edges_Node) GetOwnerID() *string {
+	if t == nil {
+		t = &GetPostalAddresses_PostalAddresses_Edges_Node{}
+	}
+	return t.OwnerID
+}
+func (t *GetPostalAddresses_PostalAddresses_Edges_Node) GetPostalCode() *string {
+	if t == nil {
+		t = &GetPostalAddresses_PostalAddresses_Edges_Node{}
+	}
+	return t.PostalCode
+}
+func (t *GetPostalAddresses_PostalAddresses_Edges_Node) GetRecipients() []string {
+	if t == nil {
+		t = &GetPostalAddresses_PostalAddresses_Edges_Node{}
+	}
+	return t.Recipients
+}
+func (t *GetPostalAddresses_PostalAddresses_Edges_Node) GetRegionCode() string {
+	if t == nil {
+		t = &GetPostalAddresses_PostalAddresses_Edges_Node{}
+	}
+	return t.RegionCode
+}
+func (t *GetPostalAddresses_PostalAddresses_Edges_Node) GetSortingCode() *string {
+	if t == nil {
+		t = &GetPostalAddresses_PostalAddresses_Edges_Node{}
+	}
+	return t.SortingCode
+}
+func (t *GetPostalAddresses_PostalAddresses_Edges_Node) GetSublocality() *string {
+	if t == nil {
+		t = &GetPostalAddresses_PostalAddresses_Edges_Node{}
+	}
+	return t.Sublocality
+}
+func (t *GetPostalAddresses_PostalAddresses_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &GetPostalAddresses_PostalAddresses_Edges_Node{}
+	}
+	return t.Tags
+}
+func (t *GetPostalAddresses_PostalAddresses_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetPostalAddresses_PostalAddresses_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetPostalAddresses_PostalAddresses_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetPostalAddresses_PostalAddresses_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+
+type GetPostalAddresses_PostalAddresses_Edges struct {
+	Node *GetPostalAddresses_PostalAddresses_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetPostalAddresses_PostalAddresses_Edges) GetNode() *GetPostalAddresses_PostalAddresses_Edges_Node {
+	if t == nil {
+		t = &GetPostalAddresses_PostalAddresses_Edges{}
+	}
+	return t.Node
+}
+
+type GetPostalAddresses_PostalAddresses struct {
+	Edges []*GetPostalAddresses_PostalAddresses_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+}
+
+func (t *GetPostalAddresses_PostalAddresses) GetEdges() []*GetPostalAddresses_PostalAddresses_Edges {
+	if t == nil {
+		t = &GetPostalAddresses_PostalAddresses{}
+	}
+	return t.Edges
+}
+
+type UpdatePostalAddress_UpdatePostalAddress_PostalAddress struct {
+	AddressLines       []string   "json:\"addressLines\" graphql:\"addressLines\""
+	AdministrativeArea *string    "json:\"administrativeArea,omitempty\" graphql:\"administrativeArea\""
+	CreatedAt          *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy          *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID                 string     "json:\"id\" graphql:\"id\""
+	LanguageCode       *string    "json:\"languageCode,omitempty\" graphql:\"languageCode\""
+	Locality           *string    "json:\"locality,omitempty\" graphql:\"locality\""
+	Organization       *string    "json:\"organization,omitempty\" graphql:\"organization\""
+	OwnerID            *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	PostalCode         *string    "json:\"postalCode,omitempty\" graphql:\"postalCode\""
+	Recipients         []string   "json:\"recipients\" graphql:\"recipients\""
+	RegionCode         string     "json:\"regionCode\" graphql:\"regionCode\""
+	SortingCode        *string    "json:\"sortingCode,omitempty\" graphql:\"sortingCode\""
+	Sublocality        *string    "json:\"sublocality,omitempty\" graphql:\"sublocality\""
+	Tags               []string   "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt          *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy          *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *UpdatePostalAddress_UpdatePostalAddress_PostalAddress) GetAddressLines() []string {
+	if t == nil {
+		t = &UpdatePostalAddress_UpdatePostalAddress_PostalAddress{}
+	}
+	return t.AddressLines
+}
+func (t *UpdatePostalAddress_UpdatePostalAddress_PostalAddress) GetAdministrativeArea() *string {
+	if t == nil {
+		t = &UpdatePostalAddress_UpdatePostalAddress_PostalAddress{}
+	}
+	return t.AdministrativeArea
+}
+func (t *UpdatePostalAddress_UpdatePostalAddress_PostalAddress) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &UpdatePostalAddress_UpdatePostalAddress_PostalAddress{}
+	}
+	return t.CreatedAt
+}
+func (t *UpdatePostalAddress_UpdatePostalAddress_PostalAddress) GetCreatedBy() *string {
+	if t == nil {
+		t = &UpdatePostalAddress_UpdatePostalAddress_PostalAddress{}
+	}
+	return t.CreatedBy
+}
+func (t *UpdatePostalAddress_UpdatePostalAddress_PostalAddress) GetID() string {
+	if t == nil {
+		t = &UpdatePostalAddress_UpdatePostalAddress_PostalAddress{}
+	}
+	return t.ID
+}
+func (t *UpdatePostalAddress_UpdatePostalAddress_PostalAddress) GetLanguageCode() *string {
+	if t == nil {
+		t = &UpdatePostalAddress_UpdatePostalAddress_PostalAddress{}
+	}
+	return t.LanguageCode
+}
+func (t *UpdatePostalAddress_UpdatePostalAddress_PostalAddress) GetLocality() *string {
+	if t == nil {
+		t = &UpdatePostalAddress_UpdatePostalAddress_PostalAddress{}
+	}
+	return t.Locality
+}
+func (t *UpdatePostalAddress_UpdatePostalAddress_PostalAddress) GetOrganization() *string {
+	if t == nil {
+		t = &UpdatePostalAddress_UpdatePostalAddress_PostalAddress{}
+	}
+	return t.Organization
+}
+func (t *UpdatePostalAddress_UpdatePostalAddress_PostalAddress) GetOwnerID() *string {
+	if t == nil {
+		t = &UpdatePostalAddress_UpdatePostalAddress_PostalAddress{}
+	}
+	return t.OwnerID
+}
+func (t *UpdatePostalAddress_UpdatePostalAddress_PostalAddress) GetPostalCode() *string {
+	if t == nil {
+		t = &UpdatePostalAddress_UpdatePostalAddress_PostalAddress{}
+	}
+	return t.PostalCode
+}
+func (t *UpdatePostalAddress_UpdatePostalAddress_PostalAddress) GetRecipients() []string {
+	if t == nil {
+		t = &UpdatePostalAddress_UpdatePostalAddress_PostalAddress{}
+	}
+	return t.Recipients
+}
+func (t *UpdatePostalAddress_UpdatePostalAddress_PostalAddress) GetRegionCode() string {
+	if t == nil {
+		t = &UpdatePostalAddress_UpdatePostalAddress_PostalAddress{}
+	}
+	return t.RegionCode
+}
+func (t *UpdatePostalAddress_UpdatePostalAddress_PostalAddress) GetSortingCode() *string {
+	if t == nil {
+		t = &UpdatePostalAddress_UpdatePostalAddress_PostalAddress{}
+	}
+	return t.SortingCode
+}
+func (t *UpdatePostalAddress_UpdatePostalAddress_PostalAddress) GetSublocality() *string {
+	if t == nil {
+		t = &UpdatePostalAddress_UpdatePostalAddress_PostalAddress{}
+	}
+	return t.Sublocality
+}
+func (t *UpdatePostalAddress_UpdatePostalAddress_PostalAddress) GetTags() []string {
+	if t == nil {
+		t = &UpdatePostalAddress_UpdatePostalAddress_PostalAddress{}
+	}
+	return t.Tags
+}
+func (t *UpdatePostalAddress_UpdatePostalAddress_PostalAddress) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &UpdatePostalAddress_UpdatePostalAddress_PostalAddress{}
+	}
+	return t.UpdatedAt
+}
+func (t *UpdatePostalAddress_UpdatePostalAddress_PostalAddress) GetUpdatedBy() *string {
+	if t == nil {
+		t = &UpdatePostalAddress_UpdatePostalAddress_PostalAddress{}
+	}
+	return t.UpdatedBy
+}
+
+type UpdatePostalAddress_UpdatePostalAddress struct {
+	PostalAddress UpdatePostalAddress_UpdatePostalAddress_PostalAddress "json:\"postalAddress\" graphql:\"postalAddress\""
+}
+
+func (t *UpdatePostalAddress_UpdatePostalAddress) GetPostalAddress() *UpdatePostalAddress_UpdatePostalAddress_PostalAddress {
+	if t == nil {
+		t = &UpdatePostalAddress_UpdatePostalAddress{}
+	}
+	return &t.PostalAddress
+}
+
+type GetAllPostalAddressHistories_PostalAddressHistories_Edges_Node struct {
+	AddressLines       []string          "json:\"addressLines\" graphql:\"addressLines\""
+	AdministrativeArea *string           "json:\"administrativeArea,omitempty\" graphql:\"administrativeArea\""
+	CreatedAt          *time.Time        "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy          *string           "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	HistoryTime        time.Time         "json:\"historyTime\" graphql:\"historyTime\""
+	ID                 string            "json:\"id\" graphql:\"id\""
+	LanguageCode       *string           "json:\"languageCode,omitempty\" graphql:\"languageCode\""
+	Locality           *string           "json:\"locality,omitempty\" graphql:\"locality\""
+	Operation          enthistory.OpType "json:\"operation\" graphql:\"operation\""
+	Organization       *string           "json:\"organization,omitempty\" graphql:\"organization\""
+	OwnerID            *string           "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	PostalCode         *string           "json:\"postalCode,omitempty\" graphql:\"postalCode\""
+	Recipients         []string          "json:\"recipients\" graphql:\"recipients\""
+	Ref                *string           "json:\"ref,omitempty\" graphql:\"ref\""
+	RegionCode         string            "json:\"regionCode\" graphql:\"regionCode\""
+	SortingCode        *string           "json:\"sortingCode,omitempty\" graphql:\"sortingCode\""
+	Sublocality        *string           "json:\"sublocality,omitempty\" graphql:\"sublocality\""
+	Tags               []string          "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt          *time.Time        "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy          *string           "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetAllPostalAddressHistories_PostalAddressHistories_Edges_Node) GetAddressLines() []string {
+	if t == nil {
+		t = &GetAllPostalAddressHistories_PostalAddressHistories_Edges_Node{}
+	}
+	return t.AddressLines
+}
+func (t *GetAllPostalAddressHistories_PostalAddressHistories_Edges_Node) GetAdministrativeArea() *string {
+	if t == nil {
+		t = &GetAllPostalAddressHistories_PostalAddressHistories_Edges_Node{}
+	}
+	return t.AdministrativeArea
+}
+func (t *GetAllPostalAddressHistories_PostalAddressHistories_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllPostalAddressHistories_PostalAddressHistories_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetAllPostalAddressHistories_PostalAddressHistories_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetAllPostalAddressHistories_PostalAddressHistories_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetAllPostalAddressHistories_PostalAddressHistories_Edges_Node) GetHistoryTime() *time.Time {
+	if t == nil {
+		t = &GetAllPostalAddressHistories_PostalAddressHistories_Edges_Node{}
+	}
+	return &t.HistoryTime
+}
+func (t *GetAllPostalAddressHistories_PostalAddressHistories_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetAllPostalAddressHistories_PostalAddressHistories_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetAllPostalAddressHistories_PostalAddressHistories_Edges_Node) GetLanguageCode() *string {
+	if t == nil {
+		t = &GetAllPostalAddressHistories_PostalAddressHistories_Edges_Node{}
+	}
+	return t.LanguageCode
+}
+func (t *GetAllPostalAddressHistories_PostalAddressHistories_Edges_Node) GetLocality() *string {
+	if t == nil {
+		t = &GetAllPostalAddressHistories_PostalAddressHistories_Edges_Node{}
+	}
+	return t.Locality
+}
+func (t *GetAllPostalAddressHistories_PostalAddressHistories_Edges_Node) GetOperation() *enthistory.OpType {
+	if t == nil {
+		t = &GetAllPostalAddressHistories_PostalAddressHistories_Edges_Node{}
+	}
+	return &t.Operation
+}
+func (t *GetAllPostalAddressHistories_PostalAddressHistories_Edges_Node) GetOrganization() *string {
+	if t == nil {
+		t = &GetAllPostalAddressHistories_PostalAddressHistories_Edges_Node{}
+	}
+	return t.Organization
+}
+func (t *GetAllPostalAddressHistories_PostalAddressHistories_Edges_Node) GetOwnerID() *string {
+	if t == nil {
+		t = &GetAllPostalAddressHistories_PostalAddressHistories_Edges_Node{}
+	}
+	return t.OwnerID
+}
+func (t *GetAllPostalAddressHistories_PostalAddressHistories_Edges_Node) GetPostalCode() *string {
+	if t == nil {
+		t = &GetAllPostalAddressHistories_PostalAddressHistories_Edges_Node{}
+	}
+	return t.PostalCode
+}
+func (t *GetAllPostalAddressHistories_PostalAddressHistories_Edges_Node) GetRecipients() []string {
+	if t == nil {
+		t = &GetAllPostalAddressHistories_PostalAddressHistories_Edges_Node{}
+	}
+	return t.Recipients
+}
+func (t *GetAllPostalAddressHistories_PostalAddressHistories_Edges_Node) GetRef() *string {
+	if t == nil {
+		t = &GetAllPostalAddressHistories_PostalAddressHistories_Edges_Node{}
+	}
+	return t.Ref
+}
+func (t *GetAllPostalAddressHistories_PostalAddressHistories_Edges_Node) GetRegionCode() string {
+	if t == nil {
+		t = &GetAllPostalAddressHistories_PostalAddressHistories_Edges_Node{}
+	}
+	return t.RegionCode
+}
+func (t *GetAllPostalAddressHistories_PostalAddressHistories_Edges_Node) GetSortingCode() *string {
+	if t == nil {
+		t = &GetAllPostalAddressHistories_PostalAddressHistories_Edges_Node{}
+	}
+	return t.SortingCode
+}
+func (t *GetAllPostalAddressHistories_PostalAddressHistories_Edges_Node) GetSublocality() *string {
+	if t == nil {
+		t = &GetAllPostalAddressHistories_PostalAddressHistories_Edges_Node{}
+	}
+	return t.Sublocality
+}
+func (t *GetAllPostalAddressHistories_PostalAddressHistories_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &GetAllPostalAddressHistories_PostalAddressHistories_Edges_Node{}
+	}
+	return t.Tags
+}
+func (t *GetAllPostalAddressHistories_PostalAddressHistories_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllPostalAddressHistories_PostalAddressHistories_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetAllPostalAddressHistories_PostalAddressHistories_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetAllPostalAddressHistories_PostalAddressHistories_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+
+type GetAllPostalAddressHistories_PostalAddressHistories_Edges struct {
+	Node *GetAllPostalAddressHistories_PostalAddressHistories_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetAllPostalAddressHistories_PostalAddressHistories_Edges) GetNode() *GetAllPostalAddressHistories_PostalAddressHistories_Edges_Node {
+	if t == nil {
+		t = &GetAllPostalAddressHistories_PostalAddressHistories_Edges{}
+	}
+	return t.Node
+}
+
+type GetAllPostalAddressHistories_PostalAddressHistories struct {
+	Edges []*GetAllPostalAddressHistories_PostalAddressHistories_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+}
+
+func (t *GetAllPostalAddressHistories_PostalAddressHistories) GetEdges() []*GetAllPostalAddressHistories_PostalAddressHistories_Edges {
+	if t == nil {
+		t = &GetAllPostalAddressHistories_PostalAddressHistories{}
+	}
+	return t.Edges
+}
+
+type GetPostalAddressHistories_PostalAddressHistories_Edges_Node struct {
+	AddressLines       []string          "json:\"addressLines\" graphql:\"addressLines\""
+	AdministrativeArea *string           "json:\"administrativeArea,omitempty\" graphql:\"administrativeArea\""
+	CreatedAt          *time.Time        "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy          *string           "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	HistoryTime        time.Time         "json:\"historyTime\" graphql:\"historyTime\""
+	ID                 string            "json:\"id\" graphql:\"id\""
+	LanguageCode       *string           "json:\"languageCode,omitempty\" graphql:\"languageCode\""
+	Locality           *string           "json:\"locality,omitempty\" graphql:\"locality\""
+	Operation          enthistory.OpType "json:\"operation\" graphql:\"operation\""
+	Organization       *string           "json:\"organization,omitempty\" graphql:\"organization\""
+	OwnerID            *string           "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	PostalCode         *string           "json:\"postalCode,omitempty\" graphql:\"postalCode\""
+	Recipients         []string          "json:\"recipients\" graphql:\"recipients\""
+	Ref                *string           "json:\"ref,omitempty\" graphql:\"ref\""
+	RegionCode         string            "json:\"regionCode\" graphql:\"regionCode\""
+	SortingCode        *string           "json:\"sortingCode,omitempty\" graphql:\"sortingCode\""
+	Sublocality        *string           "json:\"sublocality,omitempty\" graphql:\"sublocality\""
+	Tags               []string          "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt          *time.Time        "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy          *string           "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetPostalAddressHistories_PostalAddressHistories_Edges_Node) GetAddressLines() []string {
+	if t == nil {
+		t = &GetPostalAddressHistories_PostalAddressHistories_Edges_Node{}
+	}
+	return t.AddressLines
+}
+func (t *GetPostalAddressHistories_PostalAddressHistories_Edges_Node) GetAdministrativeArea() *string {
+	if t == nil {
+		t = &GetPostalAddressHistories_PostalAddressHistories_Edges_Node{}
+	}
+	return t.AdministrativeArea
+}
+func (t *GetPostalAddressHistories_PostalAddressHistories_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetPostalAddressHistories_PostalAddressHistories_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetPostalAddressHistories_PostalAddressHistories_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetPostalAddressHistories_PostalAddressHistories_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetPostalAddressHistories_PostalAddressHistories_Edges_Node) GetHistoryTime() *time.Time {
+	if t == nil {
+		t = &GetPostalAddressHistories_PostalAddressHistories_Edges_Node{}
+	}
+	return &t.HistoryTime
+}
+func (t *GetPostalAddressHistories_PostalAddressHistories_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetPostalAddressHistories_PostalAddressHistories_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetPostalAddressHistories_PostalAddressHistories_Edges_Node) GetLanguageCode() *string {
+	if t == nil {
+		t = &GetPostalAddressHistories_PostalAddressHistories_Edges_Node{}
+	}
+	return t.LanguageCode
+}
+func (t *GetPostalAddressHistories_PostalAddressHistories_Edges_Node) GetLocality() *string {
+	if t == nil {
+		t = &GetPostalAddressHistories_PostalAddressHistories_Edges_Node{}
+	}
+	return t.Locality
+}
+func (t *GetPostalAddressHistories_PostalAddressHistories_Edges_Node) GetOperation() *enthistory.OpType {
+	if t == nil {
+		t = &GetPostalAddressHistories_PostalAddressHistories_Edges_Node{}
+	}
+	return &t.Operation
+}
+func (t *GetPostalAddressHistories_PostalAddressHistories_Edges_Node) GetOrganization() *string {
+	if t == nil {
+		t = &GetPostalAddressHistories_PostalAddressHistories_Edges_Node{}
+	}
+	return t.Organization
+}
+func (t *GetPostalAddressHistories_PostalAddressHistories_Edges_Node) GetOwnerID() *string {
+	if t == nil {
+		t = &GetPostalAddressHistories_PostalAddressHistories_Edges_Node{}
+	}
+	return t.OwnerID
+}
+func (t *GetPostalAddressHistories_PostalAddressHistories_Edges_Node) GetPostalCode() *string {
+	if t == nil {
+		t = &GetPostalAddressHistories_PostalAddressHistories_Edges_Node{}
+	}
+	return t.PostalCode
+}
+func (t *GetPostalAddressHistories_PostalAddressHistories_Edges_Node) GetRecipients() []string {
+	if t == nil {
+		t = &GetPostalAddressHistories_PostalAddressHistories_Edges_Node{}
+	}
+	return t.Recipients
+}
+func (t *GetPostalAddressHistories_PostalAddressHistories_Edges_Node) GetRef() *string {
+	if t == nil {
+		t = &GetPostalAddressHistories_PostalAddressHistories_Edges_Node{}
+	}
+	return t.Ref
+}
+func (t *GetPostalAddressHistories_PostalAddressHistories_Edges_Node) GetRegionCode() string {
+	if t == nil {
+		t = &GetPostalAddressHistories_PostalAddressHistories_Edges_Node{}
+	}
+	return t.RegionCode
+}
+func (t *GetPostalAddressHistories_PostalAddressHistories_Edges_Node) GetSortingCode() *string {
+	if t == nil {
+		t = &GetPostalAddressHistories_PostalAddressHistories_Edges_Node{}
+	}
+	return t.SortingCode
+}
+func (t *GetPostalAddressHistories_PostalAddressHistories_Edges_Node) GetSublocality() *string {
+	if t == nil {
+		t = &GetPostalAddressHistories_PostalAddressHistories_Edges_Node{}
+	}
+	return t.Sublocality
+}
+func (t *GetPostalAddressHistories_PostalAddressHistories_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &GetPostalAddressHistories_PostalAddressHistories_Edges_Node{}
+	}
+	return t.Tags
+}
+func (t *GetPostalAddressHistories_PostalAddressHistories_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetPostalAddressHistories_PostalAddressHistories_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetPostalAddressHistories_PostalAddressHistories_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetPostalAddressHistories_PostalAddressHistories_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+
+type GetPostalAddressHistories_PostalAddressHistories_Edges struct {
+	Node *GetPostalAddressHistories_PostalAddressHistories_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetPostalAddressHistories_PostalAddressHistories_Edges) GetNode() *GetPostalAddressHistories_PostalAddressHistories_Edges_Node {
+	if t == nil {
+		t = &GetPostalAddressHistories_PostalAddressHistories_Edges{}
+	}
+	return t.Node
+}
+
+type GetPostalAddressHistories_PostalAddressHistories struct {
+	Edges []*GetPostalAddressHistories_PostalAddressHistories_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+}
+
+func (t *GetPostalAddressHistories_PostalAddressHistories) GetEdges() []*GetPostalAddressHistories_PostalAddressHistories_Edges {
+	if t == nil {
+		t = &GetPostalAddressHistories_PostalAddressHistories{}
+	}
+	return t.Edges
+}
+
 type Search_Search_Nodes_OrganizationSearchResult_Organizations struct {
 	Description *string "json:\"description,omitempty\" graphql:\"description\""
 	DisplayName string  "json:\"displayName\" graphql:\"displayName\""
@@ -28052,6 +29369,2526 @@ func (t *GetUserSettingHistories_UserSettingHistories) GetEdges() []*GetUserSett
 	return t.Edges
 }
 
+type CreateBulkCSVVendor_CreateBulkCSVVendor_Vendors struct {
+	CreatedAt       *time.Time            "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy       *string               "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	DisplayName     string                "json:\"displayName\" graphql:\"displayName\""
+	ID              string                "json:\"id\" graphql:\"id\""
+	OnboardingState enums.OnboardingState "json:\"onboardingState\" graphql:\"onboardingState\""
+	OwnerID         *string               "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Tags            []string              "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt       *time.Time            "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy       *string               "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	VendorType      enums.VendorType      "json:\"vendorType\" graphql:\"vendorType\""
+}
+
+func (t *CreateBulkCSVVendor_CreateBulkCSVVendor_Vendors) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkCSVVendor_CreateBulkCSVVendor_Vendors{}
+	}
+	return t.CreatedAt
+}
+func (t *CreateBulkCSVVendor_CreateBulkCSVVendor_Vendors) GetCreatedBy() *string {
+	if t == nil {
+		t = &CreateBulkCSVVendor_CreateBulkCSVVendor_Vendors{}
+	}
+	return t.CreatedBy
+}
+func (t *CreateBulkCSVVendor_CreateBulkCSVVendor_Vendors) GetDisplayName() string {
+	if t == nil {
+		t = &CreateBulkCSVVendor_CreateBulkCSVVendor_Vendors{}
+	}
+	return t.DisplayName
+}
+func (t *CreateBulkCSVVendor_CreateBulkCSVVendor_Vendors) GetID() string {
+	if t == nil {
+		t = &CreateBulkCSVVendor_CreateBulkCSVVendor_Vendors{}
+	}
+	return t.ID
+}
+func (t *CreateBulkCSVVendor_CreateBulkCSVVendor_Vendors) GetOnboardingState() *enums.OnboardingState {
+	if t == nil {
+		t = &CreateBulkCSVVendor_CreateBulkCSVVendor_Vendors{}
+	}
+	return &t.OnboardingState
+}
+func (t *CreateBulkCSVVendor_CreateBulkCSVVendor_Vendors) GetOwnerID() *string {
+	if t == nil {
+		t = &CreateBulkCSVVendor_CreateBulkCSVVendor_Vendors{}
+	}
+	return t.OwnerID
+}
+func (t *CreateBulkCSVVendor_CreateBulkCSVVendor_Vendors) GetTags() []string {
+	if t == nil {
+		t = &CreateBulkCSVVendor_CreateBulkCSVVendor_Vendors{}
+	}
+	return t.Tags
+}
+func (t *CreateBulkCSVVendor_CreateBulkCSVVendor_Vendors) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkCSVVendor_CreateBulkCSVVendor_Vendors{}
+	}
+	return t.UpdatedAt
+}
+func (t *CreateBulkCSVVendor_CreateBulkCSVVendor_Vendors) GetUpdatedBy() *string {
+	if t == nil {
+		t = &CreateBulkCSVVendor_CreateBulkCSVVendor_Vendors{}
+	}
+	return t.UpdatedBy
+}
+func (t *CreateBulkCSVVendor_CreateBulkCSVVendor_Vendors) GetVendorType() *enums.VendorType {
+	if t == nil {
+		t = &CreateBulkCSVVendor_CreateBulkCSVVendor_Vendors{}
+	}
+	return &t.VendorType
+}
+
+type CreateBulkCSVVendor_CreateBulkCSVVendor struct {
+	Vendors []*CreateBulkCSVVendor_CreateBulkCSVVendor_Vendors "json:\"vendors,omitempty\" graphql:\"vendors\""
+}
+
+func (t *CreateBulkCSVVendor_CreateBulkCSVVendor) GetVendors() []*CreateBulkCSVVendor_CreateBulkCSVVendor_Vendors {
+	if t == nil {
+		t = &CreateBulkCSVVendor_CreateBulkCSVVendor{}
+	}
+	return t.Vendors
+}
+
+type CreateBulkVendor_CreateBulkVendor_Vendors struct {
+	CreatedAt       *time.Time            "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy       *string               "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	DisplayName     string                "json:\"displayName\" graphql:\"displayName\""
+	ID              string                "json:\"id\" graphql:\"id\""
+	OnboardingState enums.OnboardingState "json:\"onboardingState\" graphql:\"onboardingState\""
+	OwnerID         *string               "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Tags            []string              "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt       *time.Time            "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy       *string               "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	VendorType      enums.VendorType      "json:\"vendorType\" graphql:\"vendorType\""
+}
+
+func (t *CreateBulkVendor_CreateBulkVendor_Vendors) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkVendor_CreateBulkVendor_Vendors{}
+	}
+	return t.CreatedAt
+}
+func (t *CreateBulkVendor_CreateBulkVendor_Vendors) GetCreatedBy() *string {
+	if t == nil {
+		t = &CreateBulkVendor_CreateBulkVendor_Vendors{}
+	}
+	return t.CreatedBy
+}
+func (t *CreateBulkVendor_CreateBulkVendor_Vendors) GetDisplayName() string {
+	if t == nil {
+		t = &CreateBulkVendor_CreateBulkVendor_Vendors{}
+	}
+	return t.DisplayName
+}
+func (t *CreateBulkVendor_CreateBulkVendor_Vendors) GetID() string {
+	if t == nil {
+		t = &CreateBulkVendor_CreateBulkVendor_Vendors{}
+	}
+	return t.ID
+}
+func (t *CreateBulkVendor_CreateBulkVendor_Vendors) GetOnboardingState() *enums.OnboardingState {
+	if t == nil {
+		t = &CreateBulkVendor_CreateBulkVendor_Vendors{}
+	}
+	return &t.OnboardingState
+}
+func (t *CreateBulkVendor_CreateBulkVendor_Vendors) GetOwnerID() *string {
+	if t == nil {
+		t = &CreateBulkVendor_CreateBulkVendor_Vendors{}
+	}
+	return t.OwnerID
+}
+func (t *CreateBulkVendor_CreateBulkVendor_Vendors) GetTags() []string {
+	if t == nil {
+		t = &CreateBulkVendor_CreateBulkVendor_Vendors{}
+	}
+	return t.Tags
+}
+func (t *CreateBulkVendor_CreateBulkVendor_Vendors) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkVendor_CreateBulkVendor_Vendors{}
+	}
+	return t.UpdatedAt
+}
+func (t *CreateBulkVendor_CreateBulkVendor_Vendors) GetUpdatedBy() *string {
+	if t == nil {
+		t = &CreateBulkVendor_CreateBulkVendor_Vendors{}
+	}
+	return t.UpdatedBy
+}
+func (t *CreateBulkVendor_CreateBulkVendor_Vendors) GetVendorType() *enums.VendorType {
+	if t == nil {
+		t = &CreateBulkVendor_CreateBulkVendor_Vendors{}
+	}
+	return &t.VendorType
+}
+
+type CreateBulkVendor_CreateBulkVendor struct {
+	Vendors []*CreateBulkVendor_CreateBulkVendor_Vendors "json:\"vendors,omitempty\" graphql:\"vendors\""
+}
+
+func (t *CreateBulkVendor_CreateBulkVendor) GetVendors() []*CreateBulkVendor_CreateBulkVendor_Vendors {
+	if t == nil {
+		t = &CreateBulkVendor_CreateBulkVendor{}
+	}
+	return t.Vendors
+}
+
+type CreateVendor_CreateVendor_Vendor struct {
+	CreatedAt       *time.Time            "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy       *string               "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	DisplayName     string                "json:\"displayName\" graphql:\"displayName\""
+	ID              string                "json:\"id\" graphql:\"id\""
+	OnboardingState enums.OnboardingState "json:\"onboardingState\" graphql:\"onboardingState\""
+	OwnerID         *string               "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Tags            []string              "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt       *time.Time            "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy       *string               "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	VendorType      enums.VendorType      "json:\"vendorType\" graphql:\"vendorType\""
+}
+
+func (t *CreateVendor_CreateVendor_Vendor) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &CreateVendor_CreateVendor_Vendor{}
+	}
+	return t.CreatedAt
+}
+func (t *CreateVendor_CreateVendor_Vendor) GetCreatedBy() *string {
+	if t == nil {
+		t = &CreateVendor_CreateVendor_Vendor{}
+	}
+	return t.CreatedBy
+}
+func (t *CreateVendor_CreateVendor_Vendor) GetDisplayName() string {
+	if t == nil {
+		t = &CreateVendor_CreateVendor_Vendor{}
+	}
+	return t.DisplayName
+}
+func (t *CreateVendor_CreateVendor_Vendor) GetID() string {
+	if t == nil {
+		t = &CreateVendor_CreateVendor_Vendor{}
+	}
+	return t.ID
+}
+func (t *CreateVendor_CreateVendor_Vendor) GetOnboardingState() *enums.OnboardingState {
+	if t == nil {
+		t = &CreateVendor_CreateVendor_Vendor{}
+	}
+	return &t.OnboardingState
+}
+func (t *CreateVendor_CreateVendor_Vendor) GetOwnerID() *string {
+	if t == nil {
+		t = &CreateVendor_CreateVendor_Vendor{}
+	}
+	return t.OwnerID
+}
+func (t *CreateVendor_CreateVendor_Vendor) GetTags() []string {
+	if t == nil {
+		t = &CreateVendor_CreateVendor_Vendor{}
+	}
+	return t.Tags
+}
+func (t *CreateVendor_CreateVendor_Vendor) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &CreateVendor_CreateVendor_Vendor{}
+	}
+	return t.UpdatedAt
+}
+func (t *CreateVendor_CreateVendor_Vendor) GetUpdatedBy() *string {
+	if t == nil {
+		t = &CreateVendor_CreateVendor_Vendor{}
+	}
+	return t.UpdatedBy
+}
+func (t *CreateVendor_CreateVendor_Vendor) GetVendorType() *enums.VendorType {
+	if t == nil {
+		t = &CreateVendor_CreateVendor_Vendor{}
+	}
+	return &t.VendorType
+}
+
+type CreateVendor_CreateVendor struct {
+	Vendor CreateVendor_CreateVendor_Vendor "json:\"vendor\" graphql:\"vendor\""
+}
+
+func (t *CreateVendor_CreateVendor) GetVendor() *CreateVendor_CreateVendor_Vendor {
+	if t == nil {
+		t = &CreateVendor_CreateVendor{}
+	}
+	return &t.Vendor
+}
+
+type GetAllVendors_Vendors_Edges_Node struct {
+	CreatedAt       *time.Time            "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy       *string               "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	DisplayName     string                "json:\"displayName\" graphql:\"displayName\""
+	ID              string                "json:\"id\" graphql:\"id\""
+	OnboardingState enums.OnboardingState "json:\"onboardingState\" graphql:\"onboardingState\""
+	OwnerID         *string               "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Tags            []string              "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt       *time.Time            "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy       *string               "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	VendorType      enums.VendorType      "json:\"vendorType\" graphql:\"vendorType\""
+}
+
+func (t *GetAllVendors_Vendors_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllVendors_Vendors_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetAllVendors_Vendors_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetAllVendors_Vendors_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetAllVendors_Vendors_Edges_Node) GetDisplayName() string {
+	if t == nil {
+		t = &GetAllVendors_Vendors_Edges_Node{}
+	}
+	return t.DisplayName
+}
+func (t *GetAllVendors_Vendors_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetAllVendors_Vendors_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetAllVendors_Vendors_Edges_Node) GetOnboardingState() *enums.OnboardingState {
+	if t == nil {
+		t = &GetAllVendors_Vendors_Edges_Node{}
+	}
+	return &t.OnboardingState
+}
+func (t *GetAllVendors_Vendors_Edges_Node) GetOwnerID() *string {
+	if t == nil {
+		t = &GetAllVendors_Vendors_Edges_Node{}
+	}
+	return t.OwnerID
+}
+func (t *GetAllVendors_Vendors_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &GetAllVendors_Vendors_Edges_Node{}
+	}
+	return t.Tags
+}
+func (t *GetAllVendors_Vendors_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllVendors_Vendors_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetAllVendors_Vendors_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetAllVendors_Vendors_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+func (t *GetAllVendors_Vendors_Edges_Node) GetVendorType() *enums.VendorType {
+	if t == nil {
+		t = &GetAllVendors_Vendors_Edges_Node{}
+	}
+	return &t.VendorType
+}
+
+type GetAllVendors_Vendors_Edges struct {
+	Node *GetAllVendors_Vendors_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetAllVendors_Vendors_Edges) GetNode() *GetAllVendors_Vendors_Edges_Node {
+	if t == nil {
+		t = &GetAllVendors_Vendors_Edges{}
+	}
+	return t.Node
+}
+
+type GetAllVendors_Vendors struct {
+	Edges []*GetAllVendors_Vendors_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+}
+
+func (t *GetAllVendors_Vendors) GetEdges() []*GetAllVendors_Vendors_Edges {
+	if t == nil {
+		t = &GetAllVendors_Vendors{}
+	}
+	return t.Edges
+}
+
+type GetVendorByID_Vendor struct {
+	CreatedAt       *time.Time            "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy       *string               "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	DisplayName     string                "json:\"displayName\" graphql:\"displayName\""
+	ID              string                "json:\"id\" graphql:\"id\""
+	OnboardingState enums.OnboardingState "json:\"onboardingState\" graphql:\"onboardingState\""
+	OwnerID         *string               "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Tags            []string              "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt       *time.Time            "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy       *string               "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	VendorType      enums.VendorType      "json:\"vendorType\" graphql:\"vendorType\""
+}
+
+func (t *GetVendorByID_Vendor) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetVendorByID_Vendor{}
+	}
+	return t.CreatedAt
+}
+func (t *GetVendorByID_Vendor) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetVendorByID_Vendor{}
+	}
+	return t.CreatedBy
+}
+func (t *GetVendorByID_Vendor) GetDisplayName() string {
+	if t == nil {
+		t = &GetVendorByID_Vendor{}
+	}
+	return t.DisplayName
+}
+func (t *GetVendorByID_Vendor) GetID() string {
+	if t == nil {
+		t = &GetVendorByID_Vendor{}
+	}
+	return t.ID
+}
+func (t *GetVendorByID_Vendor) GetOnboardingState() *enums.OnboardingState {
+	if t == nil {
+		t = &GetVendorByID_Vendor{}
+	}
+	return &t.OnboardingState
+}
+func (t *GetVendorByID_Vendor) GetOwnerID() *string {
+	if t == nil {
+		t = &GetVendorByID_Vendor{}
+	}
+	return t.OwnerID
+}
+func (t *GetVendorByID_Vendor) GetTags() []string {
+	if t == nil {
+		t = &GetVendorByID_Vendor{}
+	}
+	return t.Tags
+}
+func (t *GetVendorByID_Vendor) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetVendorByID_Vendor{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetVendorByID_Vendor) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetVendorByID_Vendor{}
+	}
+	return t.UpdatedBy
+}
+func (t *GetVendorByID_Vendor) GetVendorType() *enums.VendorType {
+	if t == nil {
+		t = &GetVendorByID_Vendor{}
+	}
+	return &t.VendorType
+}
+
+type GetVendors_Vendors_Edges_Node struct {
+	CreatedAt       *time.Time            "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy       *string               "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	DisplayName     string                "json:\"displayName\" graphql:\"displayName\""
+	ID              string                "json:\"id\" graphql:\"id\""
+	OnboardingState enums.OnboardingState "json:\"onboardingState\" graphql:\"onboardingState\""
+	OwnerID         *string               "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Tags            []string              "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt       *time.Time            "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy       *string               "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	VendorType      enums.VendorType      "json:\"vendorType\" graphql:\"vendorType\""
+}
+
+func (t *GetVendors_Vendors_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetVendors_Vendors_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetVendors_Vendors_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetVendors_Vendors_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetVendors_Vendors_Edges_Node) GetDisplayName() string {
+	if t == nil {
+		t = &GetVendors_Vendors_Edges_Node{}
+	}
+	return t.DisplayName
+}
+func (t *GetVendors_Vendors_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetVendors_Vendors_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetVendors_Vendors_Edges_Node) GetOnboardingState() *enums.OnboardingState {
+	if t == nil {
+		t = &GetVendors_Vendors_Edges_Node{}
+	}
+	return &t.OnboardingState
+}
+func (t *GetVendors_Vendors_Edges_Node) GetOwnerID() *string {
+	if t == nil {
+		t = &GetVendors_Vendors_Edges_Node{}
+	}
+	return t.OwnerID
+}
+func (t *GetVendors_Vendors_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &GetVendors_Vendors_Edges_Node{}
+	}
+	return t.Tags
+}
+func (t *GetVendors_Vendors_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetVendors_Vendors_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetVendors_Vendors_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetVendors_Vendors_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+func (t *GetVendors_Vendors_Edges_Node) GetVendorType() *enums.VendorType {
+	if t == nil {
+		t = &GetVendors_Vendors_Edges_Node{}
+	}
+	return &t.VendorType
+}
+
+type GetVendors_Vendors_Edges struct {
+	Node *GetVendors_Vendors_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetVendors_Vendors_Edges) GetNode() *GetVendors_Vendors_Edges_Node {
+	if t == nil {
+		t = &GetVendors_Vendors_Edges{}
+	}
+	return t.Node
+}
+
+type GetVendors_Vendors struct {
+	Edges []*GetVendors_Vendors_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+}
+
+func (t *GetVendors_Vendors) GetEdges() []*GetVendors_Vendors_Edges {
+	if t == nil {
+		t = &GetVendors_Vendors{}
+	}
+	return t.Edges
+}
+
+type UpdateVendor_UpdateVendor_Vendor struct {
+	CreatedAt       *time.Time            "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy       *string               "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	DisplayName     string                "json:\"displayName\" graphql:\"displayName\""
+	ID              string                "json:\"id\" graphql:\"id\""
+	OnboardingState enums.OnboardingState "json:\"onboardingState\" graphql:\"onboardingState\""
+	OwnerID         *string               "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Tags            []string              "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt       *time.Time            "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy       *string               "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	VendorType      enums.VendorType      "json:\"vendorType\" graphql:\"vendorType\""
+}
+
+func (t *UpdateVendor_UpdateVendor_Vendor) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateVendor_UpdateVendor_Vendor{}
+	}
+	return t.CreatedAt
+}
+func (t *UpdateVendor_UpdateVendor_Vendor) GetCreatedBy() *string {
+	if t == nil {
+		t = &UpdateVendor_UpdateVendor_Vendor{}
+	}
+	return t.CreatedBy
+}
+func (t *UpdateVendor_UpdateVendor_Vendor) GetDisplayName() string {
+	if t == nil {
+		t = &UpdateVendor_UpdateVendor_Vendor{}
+	}
+	return t.DisplayName
+}
+func (t *UpdateVendor_UpdateVendor_Vendor) GetID() string {
+	if t == nil {
+		t = &UpdateVendor_UpdateVendor_Vendor{}
+	}
+	return t.ID
+}
+func (t *UpdateVendor_UpdateVendor_Vendor) GetOnboardingState() *enums.OnboardingState {
+	if t == nil {
+		t = &UpdateVendor_UpdateVendor_Vendor{}
+	}
+	return &t.OnboardingState
+}
+func (t *UpdateVendor_UpdateVendor_Vendor) GetOwnerID() *string {
+	if t == nil {
+		t = &UpdateVendor_UpdateVendor_Vendor{}
+	}
+	return t.OwnerID
+}
+func (t *UpdateVendor_UpdateVendor_Vendor) GetTags() []string {
+	if t == nil {
+		t = &UpdateVendor_UpdateVendor_Vendor{}
+	}
+	return t.Tags
+}
+func (t *UpdateVendor_UpdateVendor_Vendor) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateVendor_UpdateVendor_Vendor{}
+	}
+	return t.UpdatedAt
+}
+func (t *UpdateVendor_UpdateVendor_Vendor) GetUpdatedBy() *string {
+	if t == nil {
+		t = &UpdateVendor_UpdateVendor_Vendor{}
+	}
+	return t.UpdatedBy
+}
+func (t *UpdateVendor_UpdateVendor_Vendor) GetVendorType() *enums.VendorType {
+	if t == nil {
+		t = &UpdateVendor_UpdateVendor_Vendor{}
+	}
+	return &t.VendorType
+}
+
+type UpdateVendor_UpdateVendor struct {
+	Vendor UpdateVendor_UpdateVendor_Vendor "json:\"vendor\" graphql:\"vendor\""
+}
+
+func (t *UpdateVendor_UpdateVendor) GetVendor() *UpdateVendor_UpdateVendor_Vendor {
+	if t == nil {
+		t = &UpdateVendor_UpdateVendor{}
+	}
+	return &t.Vendor
+}
+
+type GetAllVendorHistories_VendorHistories_Edges_Node struct {
+	CreatedAt       *time.Time            "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy       *string               "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	DisplayName     string                "json:\"displayName\" graphql:\"displayName\""
+	HistoryTime     time.Time             "json:\"historyTime\" graphql:\"historyTime\""
+	ID              string                "json:\"id\" graphql:\"id\""
+	OnboardingState enums.OnboardingState "json:\"onboardingState\" graphql:\"onboardingState\""
+	Operation       enthistory.OpType     "json:\"operation\" graphql:\"operation\""
+	OwnerID         *string               "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Ref             *string               "json:\"ref,omitempty\" graphql:\"ref\""
+	Tags            []string              "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt       *time.Time            "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy       *string               "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	VendorType      enums.VendorType      "json:\"vendorType\" graphql:\"vendorType\""
+}
+
+func (t *GetAllVendorHistories_VendorHistories_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllVendorHistories_VendorHistories_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetAllVendorHistories_VendorHistories_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetAllVendorHistories_VendorHistories_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetAllVendorHistories_VendorHistories_Edges_Node) GetDisplayName() string {
+	if t == nil {
+		t = &GetAllVendorHistories_VendorHistories_Edges_Node{}
+	}
+	return t.DisplayName
+}
+func (t *GetAllVendorHistories_VendorHistories_Edges_Node) GetHistoryTime() *time.Time {
+	if t == nil {
+		t = &GetAllVendorHistories_VendorHistories_Edges_Node{}
+	}
+	return &t.HistoryTime
+}
+func (t *GetAllVendorHistories_VendorHistories_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetAllVendorHistories_VendorHistories_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetAllVendorHistories_VendorHistories_Edges_Node) GetOnboardingState() *enums.OnboardingState {
+	if t == nil {
+		t = &GetAllVendorHistories_VendorHistories_Edges_Node{}
+	}
+	return &t.OnboardingState
+}
+func (t *GetAllVendorHistories_VendorHistories_Edges_Node) GetOperation() *enthistory.OpType {
+	if t == nil {
+		t = &GetAllVendorHistories_VendorHistories_Edges_Node{}
+	}
+	return &t.Operation
+}
+func (t *GetAllVendorHistories_VendorHistories_Edges_Node) GetOwnerID() *string {
+	if t == nil {
+		t = &GetAllVendorHistories_VendorHistories_Edges_Node{}
+	}
+	return t.OwnerID
+}
+func (t *GetAllVendorHistories_VendorHistories_Edges_Node) GetRef() *string {
+	if t == nil {
+		t = &GetAllVendorHistories_VendorHistories_Edges_Node{}
+	}
+	return t.Ref
+}
+func (t *GetAllVendorHistories_VendorHistories_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &GetAllVendorHistories_VendorHistories_Edges_Node{}
+	}
+	return t.Tags
+}
+func (t *GetAllVendorHistories_VendorHistories_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllVendorHistories_VendorHistories_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetAllVendorHistories_VendorHistories_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetAllVendorHistories_VendorHistories_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+func (t *GetAllVendorHistories_VendorHistories_Edges_Node) GetVendorType() *enums.VendorType {
+	if t == nil {
+		t = &GetAllVendorHistories_VendorHistories_Edges_Node{}
+	}
+	return &t.VendorType
+}
+
+type GetAllVendorHistories_VendorHistories_Edges struct {
+	Node *GetAllVendorHistories_VendorHistories_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetAllVendorHistories_VendorHistories_Edges) GetNode() *GetAllVendorHistories_VendorHistories_Edges_Node {
+	if t == nil {
+		t = &GetAllVendorHistories_VendorHistories_Edges{}
+	}
+	return t.Node
+}
+
+type GetAllVendorHistories_VendorHistories struct {
+	Edges []*GetAllVendorHistories_VendorHistories_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+}
+
+func (t *GetAllVendorHistories_VendorHistories) GetEdges() []*GetAllVendorHistories_VendorHistories_Edges {
+	if t == nil {
+		t = &GetAllVendorHistories_VendorHistories{}
+	}
+	return t.Edges
+}
+
+type GetVendorHistories_VendorHistories_Edges_Node struct {
+	CreatedAt       *time.Time            "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy       *string               "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	DisplayName     string                "json:\"displayName\" graphql:\"displayName\""
+	HistoryTime     time.Time             "json:\"historyTime\" graphql:\"historyTime\""
+	ID              string                "json:\"id\" graphql:\"id\""
+	OnboardingState enums.OnboardingState "json:\"onboardingState\" graphql:\"onboardingState\""
+	Operation       enthistory.OpType     "json:\"operation\" graphql:\"operation\""
+	OwnerID         *string               "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Ref             *string               "json:\"ref,omitempty\" graphql:\"ref\""
+	Tags            []string              "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt       *time.Time            "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy       *string               "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	VendorType      enums.VendorType      "json:\"vendorType\" graphql:\"vendorType\""
+}
+
+func (t *GetVendorHistories_VendorHistories_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetVendorHistories_VendorHistories_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetVendorHistories_VendorHistories_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetVendorHistories_VendorHistories_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetVendorHistories_VendorHistories_Edges_Node) GetDisplayName() string {
+	if t == nil {
+		t = &GetVendorHistories_VendorHistories_Edges_Node{}
+	}
+	return t.DisplayName
+}
+func (t *GetVendorHistories_VendorHistories_Edges_Node) GetHistoryTime() *time.Time {
+	if t == nil {
+		t = &GetVendorHistories_VendorHistories_Edges_Node{}
+	}
+	return &t.HistoryTime
+}
+func (t *GetVendorHistories_VendorHistories_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetVendorHistories_VendorHistories_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetVendorHistories_VendorHistories_Edges_Node) GetOnboardingState() *enums.OnboardingState {
+	if t == nil {
+		t = &GetVendorHistories_VendorHistories_Edges_Node{}
+	}
+	return &t.OnboardingState
+}
+func (t *GetVendorHistories_VendorHistories_Edges_Node) GetOperation() *enthistory.OpType {
+	if t == nil {
+		t = &GetVendorHistories_VendorHistories_Edges_Node{}
+	}
+	return &t.Operation
+}
+func (t *GetVendorHistories_VendorHistories_Edges_Node) GetOwnerID() *string {
+	if t == nil {
+		t = &GetVendorHistories_VendorHistories_Edges_Node{}
+	}
+	return t.OwnerID
+}
+func (t *GetVendorHistories_VendorHistories_Edges_Node) GetRef() *string {
+	if t == nil {
+		t = &GetVendorHistories_VendorHistories_Edges_Node{}
+	}
+	return t.Ref
+}
+func (t *GetVendorHistories_VendorHistories_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &GetVendorHistories_VendorHistories_Edges_Node{}
+	}
+	return t.Tags
+}
+func (t *GetVendorHistories_VendorHistories_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetVendorHistories_VendorHistories_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetVendorHistories_VendorHistories_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetVendorHistories_VendorHistories_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+func (t *GetVendorHistories_VendorHistories_Edges_Node) GetVendorType() *enums.VendorType {
+	if t == nil {
+		t = &GetVendorHistories_VendorHistories_Edges_Node{}
+	}
+	return &t.VendorType
+}
+
+type GetVendorHistories_VendorHistories_Edges struct {
+	Node *GetVendorHistories_VendorHistories_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetVendorHistories_VendorHistories_Edges) GetNode() *GetVendorHistories_VendorHistories_Edges_Node {
+	if t == nil {
+		t = &GetVendorHistories_VendorHistories_Edges{}
+	}
+	return t.Node
+}
+
+type GetVendorHistories_VendorHistories struct {
+	Edges []*GetVendorHistories_VendorHistories_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+}
+
+func (t *GetVendorHistories_VendorHistories) GetEdges() []*GetVendorHistories_VendorHistories_Edges {
+	if t == nil {
+		t = &GetVendorHistories_VendorHistories{}
+	}
+	return t.Edges
+}
+
+type CreateBulkCSVVendorProfile_CreateBulkCSVVendorProfile_VendorProfiles struct {
+	CreatedAt   *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy   *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	DbaName     *string    "json:\"dbaName,omitempty\" graphql:\"dbaName\""
+	Description *string    "json:\"description,omitempty\" graphql:\"description\""
+	ID          string     "json:\"id\" graphql:\"id\""
+	Name        string     "json:\"name\" graphql:\"name\""
+	OwnerID     *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Tags        []string   "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt   *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy   *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	VendorID    *string    "json:\"vendorID,omitempty\" graphql:\"vendorID\""
+	WebsiteURI  *string    "json:\"websiteURI,omitempty\" graphql:\"websiteURI\""
+}
+
+func (t *CreateBulkCSVVendorProfile_CreateBulkCSVVendorProfile_VendorProfiles) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkCSVVendorProfile_CreateBulkCSVVendorProfile_VendorProfiles{}
+	}
+	return t.CreatedAt
+}
+func (t *CreateBulkCSVVendorProfile_CreateBulkCSVVendorProfile_VendorProfiles) GetCreatedBy() *string {
+	if t == nil {
+		t = &CreateBulkCSVVendorProfile_CreateBulkCSVVendorProfile_VendorProfiles{}
+	}
+	return t.CreatedBy
+}
+func (t *CreateBulkCSVVendorProfile_CreateBulkCSVVendorProfile_VendorProfiles) GetDbaName() *string {
+	if t == nil {
+		t = &CreateBulkCSVVendorProfile_CreateBulkCSVVendorProfile_VendorProfiles{}
+	}
+	return t.DbaName
+}
+func (t *CreateBulkCSVVendorProfile_CreateBulkCSVVendorProfile_VendorProfiles) GetDescription() *string {
+	if t == nil {
+		t = &CreateBulkCSVVendorProfile_CreateBulkCSVVendorProfile_VendorProfiles{}
+	}
+	return t.Description
+}
+func (t *CreateBulkCSVVendorProfile_CreateBulkCSVVendorProfile_VendorProfiles) GetID() string {
+	if t == nil {
+		t = &CreateBulkCSVVendorProfile_CreateBulkCSVVendorProfile_VendorProfiles{}
+	}
+	return t.ID
+}
+func (t *CreateBulkCSVVendorProfile_CreateBulkCSVVendorProfile_VendorProfiles) GetName() string {
+	if t == nil {
+		t = &CreateBulkCSVVendorProfile_CreateBulkCSVVendorProfile_VendorProfiles{}
+	}
+	return t.Name
+}
+func (t *CreateBulkCSVVendorProfile_CreateBulkCSVVendorProfile_VendorProfiles) GetOwnerID() *string {
+	if t == nil {
+		t = &CreateBulkCSVVendorProfile_CreateBulkCSVVendorProfile_VendorProfiles{}
+	}
+	return t.OwnerID
+}
+func (t *CreateBulkCSVVendorProfile_CreateBulkCSVVendorProfile_VendorProfiles) GetTags() []string {
+	if t == nil {
+		t = &CreateBulkCSVVendorProfile_CreateBulkCSVVendorProfile_VendorProfiles{}
+	}
+	return t.Tags
+}
+func (t *CreateBulkCSVVendorProfile_CreateBulkCSVVendorProfile_VendorProfiles) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkCSVVendorProfile_CreateBulkCSVVendorProfile_VendorProfiles{}
+	}
+	return t.UpdatedAt
+}
+func (t *CreateBulkCSVVendorProfile_CreateBulkCSVVendorProfile_VendorProfiles) GetUpdatedBy() *string {
+	if t == nil {
+		t = &CreateBulkCSVVendorProfile_CreateBulkCSVVendorProfile_VendorProfiles{}
+	}
+	return t.UpdatedBy
+}
+func (t *CreateBulkCSVVendorProfile_CreateBulkCSVVendorProfile_VendorProfiles) GetVendorID() *string {
+	if t == nil {
+		t = &CreateBulkCSVVendorProfile_CreateBulkCSVVendorProfile_VendorProfiles{}
+	}
+	return t.VendorID
+}
+func (t *CreateBulkCSVVendorProfile_CreateBulkCSVVendorProfile_VendorProfiles) GetWebsiteURI() *string {
+	if t == nil {
+		t = &CreateBulkCSVVendorProfile_CreateBulkCSVVendorProfile_VendorProfiles{}
+	}
+	return t.WebsiteURI
+}
+
+type CreateBulkCSVVendorProfile_CreateBulkCSVVendorProfile struct {
+	VendorProfiles []*CreateBulkCSVVendorProfile_CreateBulkCSVVendorProfile_VendorProfiles "json:\"vendorProfiles,omitempty\" graphql:\"vendorProfiles\""
+}
+
+func (t *CreateBulkCSVVendorProfile_CreateBulkCSVVendorProfile) GetVendorProfiles() []*CreateBulkCSVVendorProfile_CreateBulkCSVVendorProfile_VendorProfiles {
+	if t == nil {
+		t = &CreateBulkCSVVendorProfile_CreateBulkCSVVendorProfile{}
+	}
+	return t.VendorProfiles
+}
+
+type CreateBulkVendorProfile_CreateBulkVendorProfile_VendorProfiles struct {
+	CreatedAt   *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy   *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	DbaName     *string    "json:\"dbaName,omitempty\" graphql:\"dbaName\""
+	Description *string    "json:\"description,omitempty\" graphql:\"description\""
+	ID          string     "json:\"id\" graphql:\"id\""
+	Name        string     "json:\"name\" graphql:\"name\""
+	OwnerID     *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Tags        []string   "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt   *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy   *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	VendorID    *string    "json:\"vendorID,omitempty\" graphql:\"vendorID\""
+	WebsiteURI  *string    "json:\"websiteURI,omitempty\" graphql:\"websiteURI\""
+}
+
+func (t *CreateBulkVendorProfile_CreateBulkVendorProfile_VendorProfiles) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkVendorProfile_CreateBulkVendorProfile_VendorProfiles{}
+	}
+	return t.CreatedAt
+}
+func (t *CreateBulkVendorProfile_CreateBulkVendorProfile_VendorProfiles) GetCreatedBy() *string {
+	if t == nil {
+		t = &CreateBulkVendorProfile_CreateBulkVendorProfile_VendorProfiles{}
+	}
+	return t.CreatedBy
+}
+func (t *CreateBulkVendorProfile_CreateBulkVendorProfile_VendorProfiles) GetDbaName() *string {
+	if t == nil {
+		t = &CreateBulkVendorProfile_CreateBulkVendorProfile_VendorProfiles{}
+	}
+	return t.DbaName
+}
+func (t *CreateBulkVendorProfile_CreateBulkVendorProfile_VendorProfiles) GetDescription() *string {
+	if t == nil {
+		t = &CreateBulkVendorProfile_CreateBulkVendorProfile_VendorProfiles{}
+	}
+	return t.Description
+}
+func (t *CreateBulkVendorProfile_CreateBulkVendorProfile_VendorProfiles) GetID() string {
+	if t == nil {
+		t = &CreateBulkVendorProfile_CreateBulkVendorProfile_VendorProfiles{}
+	}
+	return t.ID
+}
+func (t *CreateBulkVendorProfile_CreateBulkVendorProfile_VendorProfiles) GetName() string {
+	if t == nil {
+		t = &CreateBulkVendorProfile_CreateBulkVendorProfile_VendorProfiles{}
+	}
+	return t.Name
+}
+func (t *CreateBulkVendorProfile_CreateBulkVendorProfile_VendorProfiles) GetOwnerID() *string {
+	if t == nil {
+		t = &CreateBulkVendorProfile_CreateBulkVendorProfile_VendorProfiles{}
+	}
+	return t.OwnerID
+}
+func (t *CreateBulkVendorProfile_CreateBulkVendorProfile_VendorProfiles) GetTags() []string {
+	if t == nil {
+		t = &CreateBulkVendorProfile_CreateBulkVendorProfile_VendorProfiles{}
+	}
+	return t.Tags
+}
+func (t *CreateBulkVendorProfile_CreateBulkVendorProfile_VendorProfiles) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkVendorProfile_CreateBulkVendorProfile_VendorProfiles{}
+	}
+	return t.UpdatedAt
+}
+func (t *CreateBulkVendorProfile_CreateBulkVendorProfile_VendorProfiles) GetUpdatedBy() *string {
+	if t == nil {
+		t = &CreateBulkVendorProfile_CreateBulkVendorProfile_VendorProfiles{}
+	}
+	return t.UpdatedBy
+}
+func (t *CreateBulkVendorProfile_CreateBulkVendorProfile_VendorProfiles) GetVendorID() *string {
+	if t == nil {
+		t = &CreateBulkVendorProfile_CreateBulkVendorProfile_VendorProfiles{}
+	}
+	return t.VendorID
+}
+func (t *CreateBulkVendorProfile_CreateBulkVendorProfile_VendorProfiles) GetWebsiteURI() *string {
+	if t == nil {
+		t = &CreateBulkVendorProfile_CreateBulkVendorProfile_VendorProfiles{}
+	}
+	return t.WebsiteURI
+}
+
+type CreateBulkVendorProfile_CreateBulkVendorProfile struct {
+	VendorProfiles []*CreateBulkVendorProfile_CreateBulkVendorProfile_VendorProfiles "json:\"vendorProfiles,omitempty\" graphql:\"vendorProfiles\""
+}
+
+func (t *CreateBulkVendorProfile_CreateBulkVendorProfile) GetVendorProfiles() []*CreateBulkVendorProfile_CreateBulkVendorProfile_VendorProfiles {
+	if t == nil {
+		t = &CreateBulkVendorProfile_CreateBulkVendorProfile{}
+	}
+	return t.VendorProfiles
+}
+
+type CreateVendorProfile_CreateVendorProfile_VendorProfile struct {
+	CreatedAt   *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy   *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	DbaName     *string    "json:\"dbaName,omitempty\" graphql:\"dbaName\""
+	Description *string    "json:\"description,omitempty\" graphql:\"description\""
+	ID          string     "json:\"id\" graphql:\"id\""
+	Name        string     "json:\"name\" graphql:\"name\""
+	OwnerID     *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Tags        []string   "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt   *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy   *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	VendorID    *string    "json:\"vendorID,omitempty\" graphql:\"vendorID\""
+	WebsiteURI  *string    "json:\"websiteURI,omitempty\" graphql:\"websiteURI\""
+}
+
+func (t *CreateVendorProfile_CreateVendorProfile_VendorProfile) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &CreateVendorProfile_CreateVendorProfile_VendorProfile{}
+	}
+	return t.CreatedAt
+}
+func (t *CreateVendorProfile_CreateVendorProfile_VendorProfile) GetCreatedBy() *string {
+	if t == nil {
+		t = &CreateVendorProfile_CreateVendorProfile_VendorProfile{}
+	}
+	return t.CreatedBy
+}
+func (t *CreateVendorProfile_CreateVendorProfile_VendorProfile) GetDbaName() *string {
+	if t == nil {
+		t = &CreateVendorProfile_CreateVendorProfile_VendorProfile{}
+	}
+	return t.DbaName
+}
+func (t *CreateVendorProfile_CreateVendorProfile_VendorProfile) GetDescription() *string {
+	if t == nil {
+		t = &CreateVendorProfile_CreateVendorProfile_VendorProfile{}
+	}
+	return t.Description
+}
+func (t *CreateVendorProfile_CreateVendorProfile_VendorProfile) GetID() string {
+	if t == nil {
+		t = &CreateVendorProfile_CreateVendorProfile_VendorProfile{}
+	}
+	return t.ID
+}
+func (t *CreateVendorProfile_CreateVendorProfile_VendorProfile) GetName() string {
+	if t == nil {
+		t = &CreateVendorProfile_CreateVendorProfile_VendorProfile{}
+	}
+	return t.Name
+}
+func (t *CreateVendorProfile_CreateVendorProfile_VendorProfile) GetOwnerID() *string {
+	if t == nil {
+		t = &CreateVendorProfile_CreateVendorProfile_VendorProfile{}
+	}
+	return t.OwnerID
+}
+func (t *CreateVendorProfile_CreateVendorProfile_VendorProfile) GetTags() []string {
+	if t == nil {
+		t = &CreateVendorProfile_CreateVendorProfile_VendorProfile{}
+	}
+	return t.Tags
+}
+func (t *CreateVendorProfile_CreateVendorProfile_VendorProfile) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &CreateVendorProfile_CreateVendorProfile_VendorProfile{}
+	}
+	return t.UpdatedAt
+}
+func (t *CreateVendorProfile_CreateVendorProfile_VendorProfile) GetUpdatedBy() *string {
+	if t == nil {
+		t = &CreateVendorProfile_CreateVendorProfile_VendorProfile{}
+	}
+	return t.UpdatedBy
+}
+func (t *CreateVendorProfile_CreateVendorProfile_VendorProfile) GetVendorID() *string {
+	if t == nil {
+		t = &CreateVendorProfile_CreateVendorProfile_VendorProfile{}
+	}
+	return t.VendorID
+}
+func (t *CreateVendorProfile_CreateVendorProfile_VendorProfile) GetWebsiteURI() *string {
+	if t == nil {
+		t = &CreateVendorProfile_CreateVendorProfile_VendorProfile{}
+	}
+	return t.WebsiteURI
+}
+
+type CreateVendorProfile_CreateVendorProfile struct {
+	VendorProfile CreateVendorProfile_CreateVendorProfile_VendorProfile "json:\"vendorProfile\" graphql:\"vendorProfile\""
+}
+
+func (t *CreateVendorProfile_CreateVendorProfile) GetVendorProfile() *CreateVendorProfile_CreateVendorProfile_VendorProfile {
+	if t == nil {
+		t = &CreateVendorProfile_CreateVendorProfile{}
+	}
+	return &t.VendorProfile
+}
+
+type GetAllVendorProfiles_VendorProfiles_Edges_Node struct {
+	CreatedAt   *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy   *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	DbaName     *string    "json:\"dbaName,omitempty\" graphql:\"dbaName\""
+	Description *string    "json:\"description,omitempty\" graphql:\"description\""
+	ID          string     "json:\"id\" graphql:\"id\""
+	Name        string     "json:\"name\" graphql:\"name\""
+	OwnerID     *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Tags        []string   "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt   *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy   *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	VendorID    *string    "json:\"vendorID,omitempty\" graphql:\"vendorID\""
+	WebsiteURI  *string    "json:\"websiteURI,omitempty\" graphql:\"websiteURI\""
+}
+
+func (t *GetAllVendorProfiles_VendorProfiles_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllVendorProfiles_VendorProfiles_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetAllVendorProfiles_VendorProfiles_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetAllVendorProfiles_VendorProfiles_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetAllVendorProfiles_VendorProfiles_Edges_Node) GetDbaName() *string {
+	if t == nil {
+		t = &GetAllVendorProfiles_VendorProfiles_Edges_Node{}
+	}
+	return t.DbaName
+}
+func (t *GetAllVendorProfiles_VendorProfiles_Edges_Node) GetDescription() *string {
+	if t == nil {
+		t = &GetAllVendorProfiles_VendorProfiles_Edges_Node{}
+	}
+	return t.Description
+}
+func (t *GetAllVendorProfiles_VendorProfiles_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetAllVendorProfiles_VendorProfiles_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetAllVendorProfiles_VendorProfiles_Edges_Node) GetName() string {
+	if t == nil {
+		t = &GetAllVendorProfiles_VendorProfiles_Edges_Node{}
+	}
+	return t.Name
+}
+func (t *GetAllVendorProfiles_VendorProfiles_Edges_Node) GetOwnerID() *string {
+	if t == nil {
+		t = &GetAllVendorProfiles_VendorProfiles_Edges_Node{}
+	}
+	return t.OwnerID
+}
+func (t *GetAllVendorProfiles_VendorProfiles_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &GetAllVendorProfiles_VendorProfiles_Edges_Node{}
+	}
+	return t.Tags
+}
+func (t *GetAllVendorProfiles_VendorProfiles_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllVendorProfiles_VendorProfiles_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetAllVendorProfiles_VendorProfiles_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetAllVendorProfiles_VendorProfiles_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+func (t *GetAllVendorProfiles_VendorProfiles_Edges_Node) GetVendorID() *string {
+	if t == nil {
+		t = &GetAllVendorProfiles_VendorProfiles_Edges_Node{}
+	}
+	return t.VendorID
+}
+func (t *GetAllVendorProfiles_VendorProfiles_Edges_Node) GetWebsiteURI() *string {
+	if t == nil {
+		t = &GetAllVendorProfiles_VendorProfiles_Edges_Node{}
+	}
+	return t.WebsiteURI
+}
+
+type GetAllVendorProfiles_VendorProfiles_Edges struct {
+	Node *GetAllVendorProfiles_VendorProfiles_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetAllVendorProfiles_VendorProfiles_Edges) GetNode() *GetAllVendorProfiles_VendorProfiles_Edges_Node {
+	if t == nil {
+		t = &GetAllVendorProfiles_VendorProfiles_Edges{}
+	}
+	return t.Node
+}
+
+type GetAllVendorProfiles_VendorProfiles struct {
+	Edges []*GetAllVendorProfiles_VendorProfiles_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+}
+
+func (t *GetAllVendorProfiles_VendorProfiles) GetEdges() []*GetAllVendorProfiles_VendorProfiles_Edges {
+	if t == nil {
+		t = &GetAllVendorProfiles_VendorProfiles{}
+	}
+	return t.Edges
+}
+
+type GetVendorProfileByID_VendorProfile struct {
+	CreatedAt   *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy   *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	DbaName     *string    "json:\"dbaName,omitempty\" graphql:\"dbaName\""
+	Description *string    "json:\"description,omitempty\" graphql:\"description\""
+	ID          string     "json:\"id\" graphql:\"id\""
+	Name        string     "json:\"name\" graphql:\"name\""
+	OwnerID     *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Tags        []string   "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt   *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy   *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	VendorID    *string    "json:\"vendorID,omitempty\" graphql:\"vendorID\""
+	WebsiteURI  *string    "json:\"websiteURI,omitempty\" graphql:\"websiteURI\""
+}
+
+func (t *GetVendorProfileByID_VendorProfile) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetVendorProfileByID_VendorProfile{}
+	}
+	return t.CreatedAt
+}
+func (t *GetVendorProfileByID_VendorProfile) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetVendorProfileByID_VendorProfile{}
+	}
+	return t.CreatedBy
+}
+func (t *GetVendorProfileByID_VendorProfile) GetDbaName() *string {
+	if t == nil {
+		t = &GetVendorProfileByID_VendorProfile{}
+	}
+	return t.DbaName
+}
+func (t *GetVendorProfileByID_VendorProfile) GetDescription() *string {
+	if t == nil {
+		t = &GetVendorProfileByID_VendorProfile{}
+	}
+	return t.Description
+}
+func (t *GetVendorProfileByID_VendorProfile) GetID() string {
+	if t == nil {
+		t = &GetVendorProfileByID_VendorProfile{}
+	}
+	return t.ID
+}
+func (t *GetVendorProfileByID_VendorProfile) GetName() string {
+	if t == nil {
+		t = &GetVendorProfileByID_VendorProfile{}
+	}
+	return t.Name
+}
+func (t *GetVendorProfileByID_VendorProfile) GetOwnerID() *string {
+	if t == nil {
+		t = &GetVendorProfileByID_VendorProfile{}
+	}
+	return t.OwnerID
+}
+func (t *GetVendorProfileByID_VendorProfile) GetTags() []string {
+	if t == nil {
+		t = &GetVendorProfileByID_VendorProfile{}
+	}
+	return t.Tags
+}
+func (t *GetVendorProfileByID_VendorProfile) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetVendorProfileByID_VendorProfile{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetVendorProfileByID_VendorProfile) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetVendorProfileByID_VendorProfile{}
+	}
+	return t.UpdatedBy
+}
+func (t *GetVendorProfileByID_VendorProfile) GetVendorID() *string {
+	if t == nil {
+		t = &GetVendorProfileByID_VendorProfile{}
+	}
+	return t.VendorID
+}
+func (t *GetVendorProfileByID_VendorProfile) GetWebsiteURI() *string {
+	if t == nil {
+		t = &GetVendorProfileByID_VendorProfile{}
+	}
+	return t.WebsiteURI
+}
+
+type GetVendorProfiles_VendorProfiles_Edges_Node struct {
+	CreatedAt   *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy   *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	DbaName     *string    "json:\"dbaName,omitempty\" graphql:\"dbaName\""
+	Description *string    "json:\"description,omitempty\" graphql:\"description\""
+	ID          string     "json:\"id\" graphql:\"id\""
+	Name        string     "json:\"name\" graphql:\"name\""
+	OwnerID     *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Tags        []string   "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt   *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy   *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	VendorID    *string    "json:\"vendorID,omitempty\" graphql:\"vendorID\""
+	WebsiteURI  *string    "json:\"websiteURI,omitempty\" graphql:\"websiteURI\""
+}
+
+func (t *GetVendorProfiles_VendorProfiles_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetVendorProfiles_VendorProfiles_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetVendorProfiles_VendorProfiles_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetVendorProfiles_VendorProfiles_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetVendorProfiles_VendorProfiles_Edges_Node) GetDbaName() *string {
+	if t == nil {
+		t = &GetVendorProfiles_VendorProfiles_Edges_Node{}
+	}
+	return t.DbaName
+}
+func (t *GetVendorProfiles_VendorProfiles_Edges_Node) GetDescription() *string {
+	if t == nil {
+		t = &GetVendorProfiles_VendorProfiles_Edges_Node{}
+	}
+	return t.Description
+}
+func (t *GetVendorProfiles_VendorProfiles_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetVendorProfiles_VendorProfiles_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetVendorProfiles_VendorProfiles_Edges_Node) GetName() string {
+	if t == nil {
+		t = &GetVendorProfiles_VendorProfiles_Edges_Node{}
+	}
+	return t.Name
+}
+func (t *GetVendorProfiles_VendorProfiles_Edges_Node) GetOwnerID() *string {
+	if t == nil {
+		t = &GetVendorProfiles_VendorProfiles_Edges_Node{}
+	}
+	return t.OwnerID
+}
+func (t *GetVendorProfiles_VendorProfiles_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &GetVendorProfiles_VendorProfiles_Edges_Node{}
+	}
+	return t.Tags
+}
+func (t *GetVendorProfiles_VendorProfiles_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetVendorProfiles_VendorProfiles_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetVendorProfiles_VendorProfiles_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetVendorProfiles_VendorProfiles_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+func (t *GetVendorProfiles_VendorProfiles_Edges_Node) GetVendorID() *string {
+	if t == nil {
+		t = &GetVendorProfiles_VendorProfiles_Edges_Node{}
+	}
+	return t.VendorID
+}
+func (t *GetVendorProfiles_VendorProfiles_Edges_Node) GetWebsiteURI() *string {
+	if t == nil {
+		t = &GetVendorProfiles_VendorProfiles_Edges_Node{}
+	}
+	return t.WebsiteURI
+}
+
+type GetVendorProfiles_VendorProfiles_Edges struct {
+	Node *GetVendorProfiles_VendorProfiles_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetVendorProfiles_VendorProfiles_Edges) GetNode() *GetVendorProfiles_VendorProfiles_Edges_Node {
+	if t == nil {
+		t = &GetVendorProfiles_VendorProfiles_Edges{}
+	}
+	return t.Node
+}
+
+type GetVendorProfiles_VendorProfiles struct {
+	Edges []*GetVendorProfiles_VendorProfiles_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+}
+
+func (t *GetVendorProfiles_VendorProfiles) GetEdges() []*GetVendorProfiles_VendorProfiles_Edges {
+	if t == nil {
+		t = &GetVendorProfiles_VendorProfiles{}
+	}
+	return t.Edges
+}
+
+type UpdateVendorProfile_UpdateVendorProfile_VendorProfile struct {
+	CreatedAt   *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy   *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	DbaName     *string    "json:\"dbaName,omitempty\" graphql:\"dbaName\""
+	Description *string    "json:\"description,omitempty\" graphql:\"description\""
+	ID          string     "json:\"id\" graphql:\"id\""
+	Name        string     "json:\"name\" graphql:\"name\""
+	OwnerID     *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Tags        []string   "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt   *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy   *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	VendorID    *string    "json:\"vendorID,omitempty\" graphql:\"vendorID\""
+	WebsiteURI  *string    "json:\"websiteURI,omitempty\" graphql:\"websiteURI\""
+}
+
+func (t *UpdateVendorProfile_UpdateVendorProfile_VendorProfile) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateVendorProfile_UpdateVendorProfile_VendorProfile{}
+	}
+	return t.CreatedAt
+}
+func (t *UpdateVendorProfile_UpdateVendorProfile_VendorProfile) GetCreatedBy() *string {
+	if t == nil {
+		t = &UpdateVendorProfile_UpdateVendorProfile_VendorProfile{}
+	}
+	return t.CreatedBy
+}
+func (t *UpdateVendorProfile_UpdateVendorProfile_VendorProfile) GetDbaName() *string {
+	if t == nil {
+		t = &UpdateVendorProfile_UpdateVendorProfile_VendorProfile{}
+	}
+	return t.DbaName
+}
+func (t *UpdateVendorProfile_UpdateVendorProfile_VendorProfile) GetDescription() *string {
+	if t == nil {
+		t = &UpdateVendorProfile_UpdateVendorProfile_VendorProfile{}
+	}
+	return t.Description
+}
+func (t *UpdateVendorProfile_UpdateVendorProfile_VendorProfile) GetID() string {
+	if t == nil {
+		t = &UpdateVendorProfile_UpdateVendorProfile_VendorProfile{}
+	}
+	return t.ID
+}
+func (t *UpdateVendorProfile_UpdateVendorProfile_VendorProfile) GetName() string {
+	if t == nil {
+		t = &UpdateVendorProfile_UpdateVendorProfile_VendorProfile{}
+	}
+	return t.Name
+}
+func (t *UpdateVendorProfile_UpdateVendorProfile_VendorProfile) GetOwnerID() *string {
+	if t == nil {
+		t = &UpdateVendorProfile_UpdateVendorProfile_VendorProfile{}
+	}
+	return t.OwnerID
+}
+func (t *UpdateVendorProfile_UpdateVendorProfile_VendorProfile) GetTags() []string {
+	if t == nil {
+		t = &UpdateVendorProfile_UpdateVendorProfile_VendorProfile{}
+	}
+	return t.Tags
+}
+func (t *UpdateVendorProfile_UpdateVendorProfile_VendorProfile) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateVendorProfile_UpdateVendorProfile_VendorProfile{}
+	}
+	return t.UpdatedAt
+}
+func (t *UpdateVendorProfile_UpdateVendorProfile_VendorProfile) GetUpdatedBy() *string {
+	if t == nil {
+		t = &UpdateVendorProfile_UpdateVendorProfile_VendorProfile{}
+	}
+	return t.UpdatedBy
+}
+func (t *UpdateVendorProfile_UpdateVendorProfile_VendorProfile) GetVendorID() *string {
+	if t == nil {
+		t = &UpdateVendorProfile_UpdateVendorProfile_VendorProfile{}
+	}
+	return t.VendorID
+}
+func (t *UpdateVendorProfile_UpdateVendorProfile_VendorProfile) GetWebsiteURI() *string {
+	if t == nil {
+		t = &UpdateVendorProfile_UpdateVendorProfile_VendorProfile{}
+	}
+	return t.WebsiteURI
+}
+
+type UpdateVendorProfile_UpdateVendorProfile struct {
+	VendorProfile UpdateVendorProfile_UpdateVendorProfile_VendorProfile "json:\"vendorProfile\" graphql:\"vendorProfile\""
+}
+
+func (t *UpdateVendorProfile_UpdateVendorProfile) GetVendorProfile() *UpdateVendorProfile_UpdateVendorProfile_VendorProfile {
+	if t == nil {
+		t = &UpdateVendorProfile_UpdateVendorProfile{}
+	}
+	return &t.VendorProfile
+}
+
+type GetAllVendorProfileHistories_VendorProfileHistories_Edges_Node struct {
+	CreatedAt   *time.Time        "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy   *string           "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	DbaName     *string           "json:\"dbaName,omitempty\" graphql:\"dbaName\""
+	Description *string           "json:\"description,omitempty\" graphql:\"description\""
+	HistoryTime time.Time         "json:\"historyTime\" graphql:\"historyTime\""
+	ID          string            "json:\"id\" graphql:\"id\""
+	Name        string            "json:\"name\" graphql:\"name\""
+	Operation   enthistory.OpType "json:\"operation\" graphql:\"operation\""
+	OwnerID     *string           "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Ref         *string           "json:\"ref,omitempty\" graphql:\"ref\""
+	Tags        []string          "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt   *time.Time        "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy   *string           "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	VendorID    *string           "json:\"vendorID,omitempty\" graphql:\"vendorID\""
+	WebsiteURI  *string           "json:\"websiteURI,omitempty\" graphql:\"websiteURI\""
+}
+
+func (t *GetAllVendorProfileHistories_VendorProfileHistories_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllVendorProfileHistories_VendorProfileHistories_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetAllVendorProfileHistories_VendorProfileHistories_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetAllVendorProfileHistories_VendorProfileHistories_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetAllVendorProfileHistories_VendorProfileHistories_Edges_Node) GetDbaName() *string {
+	if t == nil {
+		t = &GetAllVendorProfileHistories_VendorProfileHistories_Edges_Node{}
+	}
+	return t.DbaName
+}
+func (t *GetAllVendorProfileHistories_VendorProfileHistories_Edges_Node) GetDescription() *string {
+	if t == nil {
+		t = &GetAllVendorProfileHistories_VendorProfileHistories_Edges_Node{}
+	}
+	return t.Description
+}
+func (t *GetAllVendorProfileHistories_VendorProfileHistories_Edges_Node) GetHistoryTime() *time.Time {
+	if t == nil {
+		t = &GetAllVendorProfileHistories_VendorProfileHistories_Edges_Node{}
+	}
+	return &t.HistoryTime
+}
+func (t *GetAllVendorProfileHistories_VendorProfileHistories_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetAllVendorProfileHistories_VendorProfileHistories_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetAllVendorProfileHistories_VendorProfileHistories_Edges_Node) GetName() string {
+	if t == nil {
+		t = &GetAllVendorProfileHistories_VendorProfileHistories_Edges_Node{}
+	}
+	return t.Name
+}
+func (t *GetAllVendorProfileHistories_VendorProfileHistories_Edges_Node) GetOperation() *enthistory.OpType {
+	if t == nil {
+		t = &GetAllVendorProfileHistories_VendorProfileHistories_Edges_Node{}
+	}
+	return &t.Operation
+}
+func (t *GetAllVendorProfileHistories_VendorProfileHistories_Edges_Node) GetOwnerID() *string {
+	if t == nil {
+		t = &GetAllVendorProfileHistories_VendorProfileHistories_Edges_Node{}
+	}
+	return t.OwnerID
+}
+func (t *GetAllVendorProfileHistories_VendorProfileHistories_Edges_Node) GetRef() *string {
+	if t == nil {
+		t = &GetAllVendorProfileHistories_VendorProfileHistories_Edges_Node{}
+	}
+	return t.Ref
+}
+func (t *GetAllVendorProfileHistories_VendorProfileHistories_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &GetAllVendorProfileHistories_VendorProfileHistories_Edges_Node{}
+	}
+	return t.Tags
+}
+func (t *GetAllVendorProfileHistories_VendorProfileHistories_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllVendorProfileHistories_VendorProfileHistories_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetAllVendorProfileHistories_VendorProfileHistories_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetAllVendorProfileHistories_VendorProfileHistories_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+func (t *GetAllVendorProfileHistories_VendorProfileHistories_Edges_Node) GetVendorID() *string {
+	if t == nil {
+		t = &GetAllVendorProfileHistories_VendorProfileHistories_Edges_Node{}
+	}
+	return t.VendorID
+}
+func (t *GetAllVendorProfileHistories_VendorProfileHistories_Edges_Node) GetWebsiteURI() *string {
+	if t == nil {
+		t = &GetAllVendorProfileHistories_VendorProfileHistories_Edges_Node{}
+	}
+	return t.WebsiteURI
+}
+
+type GetAllVendorProfileHistories_VendorProfileHistories_Edges struct {
+	Node *GetAllVendorProfileHistories_VendorProfileHistories_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetAllVendorProfileHistories_VendorProfileHistories_Edges) GetNode() *GetAllVendorProfileHistories_VendorProfileHistories_Edges_Node {
+	if t == nil {
+		t = &GetAllVendorProfileHistories_VendorProfileHistories_Edges{}
+	}
+	return t.Node
+}
+
+type GetAllVendorProfileHistories_VendorProfileHistories struct {
+	Edges []*GetAllVendorProfileHistories_VendorProfileHistories_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+}
+
+func (t *GetAllVendorProfileHistories_VendorProfileHistories) GetEdges() []*GetAllVendorProfileHistories_VendorProfileHistories_Edges {
+	if t == nil {
+		t = &GetAllVendorProfileHistories_VendorProfileHistories{}
+	}
+	return t.Edges
+}
+
+type GetVendorProfileHistories_VendorProfileHistories_Edges_Node struct {
+	CreatedAt   *time.Time        "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy   *string           "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	DbaName     *string           "json:\"dbaName,omitempty\" graphql:\"dbaName\""
+	Description *string           "json:\"description,omitempty\" graphql:\"description\""
+	HistoryTime time.Time         "json:\"historyTime\" graphql:\"historyTime\""
+	ID          string            "json:\"id\" graphql:\"id\""
+	Name        string            "json:\"name\" graphql:\"name\""
+	Operation   enthistory.OpType "json:\"operation\" graphql:\"operation\""
+	OwnerID     *string           "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Ref         *string           "json:\"ref,omitempty\" graphql:\"ref\""
+	Tags        []string          "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt   *time.Time        "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy   *string           "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	VendorID    *string           "json:\"vendorID,omitempty\" graphql:\"vendorID\""
+	WebsiteURI  *string           "json:\"websiteURI,omitempty\" graphql:\"websiteURI\""
+}
+
+func (t *GetVendorProfileHistories_VendorProfileHistories_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetVendorProfileHistories_VendorProfileHistories_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetVendorProfileHistories_VendorProfileHistories_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetVendorProfileHistories_VendorProfileHistories_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetVendorProfileHistories_VendorProfileHistories_Edges_Node) GetDbaName() *string {
+	if t == nil {
+		t = &GetVendorProfileHistories_VendorProfileHistories_Edges_Node{}
+	}
+	return t.DbaName
+}
+func (t *GetVendorProfileHistories_VendorProfileHistories_Edges_Node) GetDescription() *string {
+	if t == nil {
+		t = &GetVendorProfileHistories_VendorProfileHistories_Edges_Node{}
+	}
+	return t.Description
+}
+func (t *GetVendorProfileHistories_VendorProfileHistories_Edges_Node) GetHistoryTime() *time.Time {
+	if t == nil {
+		t = &GetVendorProfileHistories_VendorProfileHistories_Edges_Node{}
+	}
+	return &t.HistoryTime
+}
+func (t *GetVendorProfileHistories_VendorProfileHistories_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetVendorProfileHistories_VendorProfileHistories_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetVendorProfileHistories_VendorProfileHistories_Edges_Node) GetName() string {
+	if t == nil {
+		t = &GetVendorProfileHistories_VendorProfileHistories_Edges_Node{}
+	}
+	return t.Name
+}
+func (t *GetVendorProfileHistories_VendorProfileHistories_Edges_Node) GetOperation() *enthistory.OpType {
+	if t == nil {
+		t = &GetVendorProfileHistories_VendorProfileHistories_Edges_Node{}
+	}
+	return &t.Operation
+}
+func (t *GetVendorProfileHistories_VendorProfileHistories_Edges_Node) GetOwnerID() *string {
+	if t == nil {
+		t = &GetVendorProfileHistories_VendorProfileHistories_Edges_Node{}
+	}
+	return t.OwnerID
+}
+func (t *GetVendorProfileHistories_VendorProfileHistories_Edges_Node) GetRef() *string {
+	if t == nil {
+		t = &GetVendorProfileHistories_VendorProfileHistories_Edges_Node{}
+	}
+	return t.Ref
+}
+func (t *GetVendorProfileHistories_VendorProfileHistories_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &GetVendorProfileHistories_VendorProfileHistories_Edges_Node{}
+	}
+	return t.Tags
+}
+func (t *GetVendorProfileHistories_VendorProfileHistories_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetVendorProfileHistories_VendorProfileHistories_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetVendorProfileHistories_VendorProfileHistories_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetVendorProfileHistories_VendorProfileHistories_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+func (t *GetVendorProfileHistories_VendorProfileHistories_Edges_Node) GetVendorID() *string {
+	if t == nil {
+		t = &GetVendorProfileHistories_VendorProfileHistories_Edges_Node{}
+	}
+	return t.VendorID
+}
+func (t *GetVendorProfileHistories_VendorProfileHistories_Edges_Node) GetWebsiteURI() *string {
+	if t == nil {
+		t = &GetVendorProfileHistories_VendorProfileHistories_Edges_Node{}
+	}
+	return t.WebsiteURI
+}
+
+type GetVendorProfileHistories_VendorProfileHistories_Edges struct {
+	Node *GetVendorProfileHistories_VendorProfileHistories_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetVendorProfileHistories_VendorProfileHistories_Edges) GetNode() *GetVendorProfileHistories_VendorProfileHistories_Edges_Node {
+	if t == nil {
+		t = &GetVendorProfileHistories_VendorProfileHistories_Edges{}
+	}
+	return t.Node
+}
+
+type GetVendorProfileHistories_VendorProfileHistories struct {
+	Edges []*GetVendorProfileHistories_VendorProfileHistories_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+}
+
+func (t *GetVendorProfileHistories_VendorProfileHistories) GetEdges() []*GetVendorProfileHistories_VendorProfileHistories_Edges {
+	if t == nil {
+		t = &GetVendorProfileHistories_VendorProfileHistories{}
+	}
+	return t.Edges
+}
+
+type CreateBulkCSVVendorProfilePostalAddress_CreateBulkCSVVendorProfilePostalAddress_VendorProfilePostalAddresses struct {
+	CreatedAt         *time.Time              "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy         *string                 "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID                string                  "json:\"id\" graphql:\"id\""
+	PostalAddressID   string                  "json:\"postalAddressID\" graphql:\"postalAddressID\""
+	PostalAddressType enums.PostalAddressType "json:\"postalAddressType\" graphql:\"postalAddressType\""
+	UpdatedAt         *time.Time              "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy         *string                 "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	VendorProfileID   string                  "json:\"vendorProfileID\" graphql:\"vendorProfileID\""
+}
+
+func (t *CreateBulkCSVVendorProfilePostalAddress_CreateBulkCSVVendorProfilePostalAddress_VendorProfilePostalAddresses) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkCSVVendorProfilePostalAddress_CreateBulkCSVVendorProfilePostalAddress_VendorProfilePostalAddresses{}
+	}
+	return t.CreatedAt
+}
+func (t *CreateBulkCSVVendorProfilePostalAddress_CreateBulkCSVVendorProfilePostalAddress_VendorProfilePostalAddresses) GetCreatedBy() *string {
+	if t == nil {
+		t = &CreateBulkCSVVendorProfilePostalAddress_CreateBulkCSVVendorProfilePostalAddress_VendorProfilePostalAddresses{}
+	}
+	return t.CreatedBy
+}
+func (t *CreateBulkCSVVendorProfilePostalAddress_CreateBulkCSVVendorProfilePostalAddress_VendorProfilePostalAddresses) GetID() string {
+	if t == nil {
+		t = &CreateBulkCSVVendorProfilePostalAddress_CreateBulkCSVVendorProfilePostalAddress_VendorProfilePostalAddresses{}
+	}
+	return t.ID
+}
+func (t *CreateBulkCSVVendorProfilePostalAddress_CreateBulkCSVVendorProfilePostalAddress_VendorProfilePostalAddresses) GetPostalAddressID() string {
+	if t == nil {
+		t = &CreateBulkCSVVendorProfilePostalAddress_CreateBulkCSVVendorProfilePostalAddress_VendorProfilePostalAddresses{}
+	}
+	return t.PostalAddressID
+}
+func (t *CreateBulkCSVVendorProfilePostalAddress_CreateBulkCSVVendorProfilePostalAddress_VendorProfilePostalAddresses) GetPostalAddressType() *enums.PostalAddressType {
+	if t == nil {
+		t = &CreateBulkCSVVendorProfilePostalAddress_CreateBulkCSVVendorProfilePostalAddress_VendorProfilePostalAddresses{}
+	}
+	return &t.PostalAddressType
+}
+func (t *CreateBulkCSVVendorProfilePostalAddress_CreateBulkCSVVendorProfilePostalAddress_VendorProfilePostalAddresses) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkCSVVendorProfilePostalAddress_CreateBulkCSVVendorProfilePostalAddress_VendorProfilePostalAddresses{}
+	}
+	return t.UpdatedAt
+}
+func (t *CreateBulkCSVVendorProfilePostalAddress_CreateBulkCSVVendorProfilePostalAddress_VendorProfilePostalAddresses) GetUpdatedBy() *string {
+	if t == nil {
+		t = &CreateBulkCSVVendorProfilePostalAddress_CreateBulkCSVVendorProfilePostalAddress_VendorProfilePostalAddresses{}
+	}
+	return t.UpdatedBy
+}
+func (t *CreateBulkCSVVendorProfilePostalAddress_CreateBulkCSVVendorProfilePostalAddress_VendorProfilePostalAddresses) GetVendorProfileID() string {
+	if t == nil {
+		t = &CreateBulkCSVVendorProfilePostalAddress_CreateBulkCSVVendorProfilePostalAddress_VendorProfilePostalAddresses{}
+	}
+	return t.VendorProfileID
+}
+
+type CreateBulkCSVVendorProfilePostalAddress_CreateBulkCSVVendorProfilePostalAddress struct {
+	VendorProfilePostalAddresses []*CreateBulkCSVVendorProfilePostalAddress_CreateBulkCSVVendorProfilePostalAddress_VendorProfilePostalAddresses "json:\"vendorProfilePostalAddresses,omitempty\" graphql:\"vendorProfilePostalAddresses\""
+}
+
+func (t *CreateBulkCSVVendorProfilePostalAddress_CreateBulkCSVVendorProfilePostalAddress) GetVendorProfilePostalAddresses() []*CreateBulkCSVVendorProfilePostalAddress_CreateBulkCSVVendorProfilePostalAddress_VendorProfilePostalAddresses {
+	if t == nil {
+		t = &CreateBulkCSVVendorProfilePostalAddress_CreateBulkCSVVendorProfilePostalAddress{}
+	}
+	return t.VendorProfilePostalAddresses
+}
+
+type CreateBulkVendorProfilePostalAddress_CreateBulkVendorProfilePostalAddress_VendorProfilePostalAddresses struct {
+	CreatedAt         *time.Time              "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy         *string                 "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID                string                  "json:\"id\" graphql:\"id\""
+	PostalAddressID   string                  "json:\"postalAddressID\" graphql:\"postalAddressID\""
+	PostalAddressType enums.PostalAddressType "json:\"postalAddressType\" graphql:\"postalAddressType\""
+	UpdatedAt         *time.Time              "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy         *string                 "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	VendorProfileID   string                  "json:\"vendorProfileID\" graphql:\"vendorProfileID\""
+}
+
+func (t *CreateBulkVendorProfilePostalAddress_CreateBulkVendorProfilePostalAddress_VendorProfilePostalAddresses) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkVendorProfilePostalAddress_CreateBulkVendorProfilePostalAddress_VendorProfilePostalAddresses{}
+	}
+	return t.CreatedAt
+}
+func (t *CreateBulkVendorProfilePostalAddress_CreateBulkVendorProfilePostalAddress_VendorProfilePostalAddresses) GetCreatedBy() *string {
+	if t == nil {
+		t = &CreateBulkVendorProfilePostalAddress_CreateBulkVendorProfilePostalAddress_VendorProfilePostalAddresses{}
+	}
+	return t.CreatedBy
+}
+func (t *CreateBulkVendorProfilePostalAddress_CreateBulkVendorProfilePostalAddress_VendorProfilePostalAddresses) GetID() string {
+	if t == nil {
+		t = &CreateBulkVendorProfilePostalAddress_CreateBulkVendorProfilePostalAddress_VendorProfilePostalAddresses{}
+	}
+	return t.ID
+}
+func (t *CreateBulkVendorProfilePostalAddress_CreateBulkVendorProfilePostalAddress_VendorProfilePostalAddresses) GetPostalAddressID() string {
+	if t == nil {
+		t = &CreateBulkVendorProfilePostalAddress_CreateBulkVendorProfilePostalAddress_VendorProfilePostalAddresses{}
+	}
+	return t.PostalAddressID
+}
+func (t *CreateBulkVendorProfilePostalAddress_CreateBulkVendorProfilePostalAddress_VendorProfilePostalAddresses) GetPostalAddressType() *enums.PostalAddressType {
+	if t == nil {
+		t = &CreateBulkVendorProfilePostalAddress_CreateBulkVendorProfilePostalAddress_VendorProfilePostalAddresses{}
+	}
+	return &t.PostalAddressType
+}
+func (t *CreateBulkVendorProfilePostalAddress_CreateBulkVendorProfilePostalAddress_VendorProfilePostalAddresses) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkVendorProfilePostalAddress_CreateBulkVendorProfilePostalAddress_VendorProfilePostalAddresses{}
+	}
+	return t.UpdatedAt
+}
+func (t *CreateBulkVendorProfilePostalAddress_CreateBulkVendorProfilePostalAddress_VendorProfilePostalAddresses) GetUpdatedBy() *string {
+	if t == nil {
+		t = &CreateBulkVendorProfilePostalAddress_CreateBulkVendorProfilePostalAddress_VendorProfilePostalAddresses{}
+	}
+	return t.UpdatedBy
+}
+func (t *CreateBulkVendorProfilePostalAddress_CreateBulkVendorProfilePostalAddress_VendorProfilePostalAddresses) GetVendorProfileID() string {
+	if t == nil {
+		t = &CreateBulkVendorProfilePostalAddress_CreateBulkVendorProfilePostalAddress_VendorProfilePostalAddresses{}
+	}
+	return t.VendorProfileID
+}
+
+type CreateBulkVendorProfilePostalAddress_CreateBulkVendorProfilePostalAddress struct {
+	VendorProfilePostalAddresses []*CreateBulkVendorProfilePostalAddress_CreateBulkVendorProfilePostalAddress_VendorProfilePostalAddresses "json:\"vendorProfilePostalAddresses,omitempty\" graphql:\"vendorProfilePostalAddresses\""
+}
+
+func (t *CreateBulkVendorProfilePostalAddress_CreateBulkVendorProfilePostalAddress) GetVendorProfilePostalAddresses() []*CreateBulkVendorProfilePostalAddress_CreateBulkVendorProfilePostalAddress_VendorProfilePostalAddresses {
+	if t == nil {
+		t = &CreateBulkVendorProfilePostalAddress_CreateBulkVendorProfilePostalAddress{}
+	}
+	return t.VendorProfilePostalAddresses
+}
+
+type CreateVendorProfilePostalAddress_CreateVendorProfilePostalAddress_VendorProfilePostalAddress struct {
+	CreatedAt         *time.Time              "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy         *string                 "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID                string                  "json:\"id\" graphql:\"id\""
+	PostalAddressID   string                  "json:\"postalAddressID\" graphql:\"postalAddressID\""
+	PostalAddressType enums.PostalAddressType "json:\"postalAddressType\" graphql:\"postalAddressType\""
+	UpdatedAt         *time.Time              "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy         *string                 "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	VendorProfileID   string                  "json:\"vendorProfileID\" graphql:\"vendorProfileID\""
+}
+
+func (t *CreateVendorProfilePostalAddress_CreateVendorProfilePostalAddress_VendorProfilePostalAddress) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &CreateVendorProfilePostalAddress_CreateVendorProfilePostalAddress_VendorProfilePostalAddress{}
+	}
+	return t.CreatedAt
+}
+func (t *CreateVendorProfilePostalAddress_CreateVendorProfilePostalAddress_VendorProfilePostalAddress) GetCreatedBy() *string {
+	if t == nil {
+		t = &CreateVendorProfilePostalAddress_CreateVendorProfilePostalAddress_VendorProfilePostalAddress{}
+	}
+	return t.CreatedBy
+}
+func (t *CreateVendorProfilePostalAddress_CreateVendorProfilePostalAddress_VendorProfilePostalAddress) GetID() string {
+	if t == nil {
+		t = &CreateVendorProfilePostalAddress_CreateVendorProfilePostalAddress_VendorProfilePostalAddress{}
+	}
+	return t.ID
+}
+func (t *CreateVendorProfilePostalAddress_CreateVendorProfilePostalAddress_VendorProfilePostalAddress) GetPostalAddressID() string {
+	if t == nil {
+		t = &CreateVendorProfilePostalAddress_CreateVendorProfilePostalAddress_VendorProfilePostalAddress{}
+	}
+	return t.PostalAddressID
+}
+func (t *CreateVendorProfilePostalAddress_CreateVendorProfilePostalAddress_VendorProfilePostalAddress) GetPostalAddressType() *enums.PostalAddressType {
+	if t == nil {
+		t = &CreateVendorProfilePostalAddress_CreateVendorProfilePostalAddress_VendorProfilePostalAddress{}
+	}
+	return &t.PostalAddressType
+}
+func (t *CreateVendorProfilePostalAddress_CreateVendorProfilePostalAddress_VendorProfilePostalAddress) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &CreateVendorProfilePostalAddress_CreateVendorProfilePostalAddress_VendorProfilePostalAddress{}
+	}
+	return t.UpdatedAt
+}
+func (t *CreateVendorProfilePostalAddress_CreateVendorProfilePostalAddress_VendorProfilePostalAddress) GetUpdatedBy() *string {
+	if t == nil {
+		t = &CreateVendorProfilePostalAddress_CreateVendorProfilePostalAddress_VendorProfilePostalAddress{}
+	}
+	return t.UpdatedBy
+}
+func (t *CreateVendorProfilePostalAddress_CreateVendorProfilePostalAddress_VendorProfilePostalAddress) GetVendorProfileID() string {
+	if t == nil {
+		t = &CreateVendorProfilePostalAddress_CreateVendorProfilePostalAddress_VendorProfilePostalAddress{}
+	}
+	return t.VendorProfileID
+}
+
+type CreateVendorProfilePostalAddress_CreateVendorProfilePostalAddress struct {
+	VendorProfilePostalAddress CreateVendorProfilePostalAddress_CreateVendorProfilePostalAddress_VendorProfilePostalAddress "json:\"vendorProfilePostalAddress\" graphql:\"vendorProfilePostalAddress\""
+}
+
+func (t *CreateVendorProfilePostalAddress_CreateVendorProfilePostalAddress) GetVendorProfilePostalAddress() *CreateVendorProfilePostalAddress_CreateVendorProfilePostalAddress_VendorProfilePostalAddress {
+	if t == nil {
+		t = &CreateVendorProfilePostalAddress_CreateVendorProfilePostalAddress{}
+	}
+	return &t.VendorProfilePostalAddress
+}
+
+type GetAllVendorProfilePostalAddresses_VendorProfilePostalAddresses_Edges_Node struct {
+	CreatedAt         *time.Time              "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy         *string                 "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID                string                  "json:\"id\" graphql:\"id\""
+	PostalAddressID   string                  "json:\"postalAddressID\" graphql:\"postalAddressID\""
+	PostalAddressType enums.PostalAddressType "json:\"postalAddressType\" graphql:\"postalAddressType\""
+	UpdatedAt         *time.Time              "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy         *string                 "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	VendorProfileID   string                  "json:\"vendorProfileID\" graphql:\"vendorProfileID\""
+}
+
+func (t *GetAllVendorProfilePostalAddresses_VendorProfilePostalAddresses_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllVendorProfilePostalAddresses_VendorProfilePostalAddresses_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetAllVendorProfilePostalAddresses_VendorProfilePostalAddresses_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetAllVendorProfilePostalAddresses_VendorProfilePostalAddresses_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetAllVendorProfilePostalAddresses_VendorProfilePostalAddresses_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetAllVendorProfilePostalAddresses_VendorProfilePostalAddresses_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetAllVendorProfilePostalAddresses_VendorProfilePostalAddresses_Edges_Node) GetPostalAddressID() string {
+	if t == nil {
+		t = &GetAllVendorProfilePostalAddresses_VendorProfilePostalAddresses_Edges_Node{}
+	}
+	return t.PostalAddressID
+}
+func (t *GetAllVendorProfilePostalAddresses_VendorProfilePostalAddresses_Edges_Node) GetPostalAddressType() *enums.PostalAddressType {
+	if t == nil {
+		t = &GetAllVendorProfilePostalAddresses_VendorProfilePostalAddresses_Edges_Node{}
+	}
+	return &t.PostalAddressType
+}
+func (t *GetAllVendorProfilePostalAddresses_VendorProfilePostalAddresses_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllVendorProfilePostalAddresses_VendorProfilePostalAddresses_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetAllVendorProfilePostalAddresses_VendorProfilePostalAddresses_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetAllVendorProfilePostalAddresses_VendorProfilePostalAddresses_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+func (t *GetAllVendorProfilePostalAddresses_VendorProfilePostalAddresses_Edges_Node) GetVendorProfileID() string {
+	if t == nil {
+		t = &GetAllVendorProfilePostalAddresses_VendorProfilePostalAddresses_Edges_Node{}
+	}
+	return t.VendorProfileID
+}
+
+type GetAllVendorProfilePostalAddresses_VendorProfilePostalAddresses_Edges struct {
+	Node *GetAllVendorProfilePostalAddresses_VendorProfilePostalAddresses_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetAllVendorProfilePostalAddresses_VendorProfilePostalAddresses_Edges) GetNode() *GetAllVendorProfilePostalAddresses_VendorProfilePostalAddresses_Edges_Node {
+	if t == nil {
+		t = &GetAllVendorProfilePostalAddresses_VendorProfilePostalAddresses_Edges{}
+	}
+	return t.Node
+}
+
+type GetAllVendorProfilePostalAddresses_VendorProfilePostalAddresses struct {
+	Edges []*GetAllVendorProfilePostalAddresses_VendorProfilePostalAddresses_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+}
+
+func (t *GetAllVendorProfilePostalAddresses_VendorProfilePostalAddresses) GetEdges() []*GetAllVendorProfilePostalAddresses_VendorProfilePostalAddresses_Edges {
+	if t == nil {
+		t = &GetAllVendorProfilePostalAddresses_VendorProfilePostalAddresses{}
+	}
+	return t.Edges
+}
+
+type GetVendorProfilePostalAddressByID_VendorProfilePostalAddress struct {
+	CreatedAt         *time.Time              "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy         *string                 "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID                string                  "json:\"id\" graphql:\"id\""
+	PostalAddressID   string                  "json:\"postalAddressID\" graphql:\"postalAddressID\""
+	PostalAddressType enums.PostalAddressType "json:\"postalAddressType\" graphql:\"postalAddressType\""
+	UpdatedAt         *time.Time              "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy         *string                 "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	VendorProfileID   string                  "json:\"vendorProfileID\" graphql:\"vendorProfileID\""
+}
+
+func (t *GetVendorProfilePostalAddressByID_VendorProfilePostalAddress) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetVendorProfilePostalAddressByID_VendorProfilePostalAddress{}
+	}
+	return t.CreatedAt
+}
+func (t *GetVendorProfilePostalAddressByID_VendorProfilePostalAddress) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetVendorProfilePostalAddressByID_VendorProfilePostalAddress{}
+	}
+	return t.CreatedBy
+}
+func (t *GetVendorProfilePostalAddressByID_VendorProfilePostalAddress) GetID() string {
+	if t == nil {
+		t = &GetVendorProfilePostalAddressByID_VendorProfilePostalAddress{}
+	}
+	return t.ID
+}
+func (t *GetVendorProfilePostalAddressByID_VendorProfilePostalAddress) GetPostalAddressID() string {
+	if t == nil {
+		t = &GetVendorProfilePostalAddressByID_VendorProfilePostalAddress{}
+	}
+	return t.PostalAddressID
+}
+func (t *GetVendorProfilePostalAddressByID_VendorProfilePostalAddress) GetPostalAddressType() *enums.PostalAddressType {
+	if t == nil {
+		t = &GetVendorProfilePostalAddressByID_VendorProfilePostalAddress{}
+	}
+	return &t.PostalAddressType
+}
+func (t *GetVendorProfilePostalAddressByID_VendorProfilePostalAddress) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetVendorProfilePostalAddressByID_VendorProfilePostalAddress{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetVendorProfilePostalAddressByID_VendorProfilePostalAddress) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetVendorProfilePostalAddressByID_VendorProfilePostalAddress{}
+	}
+	return t.UpdatedBy
+}
+func (t *GetVendorProfilePostalAddressByID_VendorProfilePostalAddress) GetVendorProfileID() string {
+	if t == nil {
+		t = &GetVendorProfilePostalAddressByID_VendorProfilePostalAddress{}
+	}
+	return t.VendorProfileID
+}
+
+type GetVendorProfilePostalAddresses_VendorProfilePostalAddresses_Edges_Node struct {
+	CreatedAt         *time.Time              "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy         *string                 "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID                string                  "json:\"id\" graphql:\"id\""
+	PostalAddressID   string                  "json:\"postalAddressID\" graphql:\"postalAddressID\""
+	PostalAddressType enums.PostalAddressType "json:\"postalAddressType\" graphql:\"postalAddressType\""
+	UpdatedAt         *time.Time              "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy         *string                 "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	VendorProfileID   string                  "json:\"vendorProfileID\" graphql:\"vendorProfileID\""
+}
+
+func (t *GetVendorProfilePostalAddresses_VendorProfilePostalAddresses_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetVendorProfilePostalAddresses_VendorProfilePostalAddresses_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetVendorProfilePostalAddresses_VendorProfilePostalAddresses_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetVendorProfilePostalAddresses_VendorProfilePostalAddresses_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetVendorProfilePostalAddresses_VendorProfilePostalAddresses_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetVendorProfilePostalAddresses_VendorProfilePostalAddresses_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetVendorProfilePostalAddresses_VendorProfilePostalAddresses_Edges_Node) GetPostalAddressID() string {
+	if t == nil {
+		t = &GetVendorProfilePostalAddresses_VendorProfilePostalAddresses_Edges_Node{}
+	}
+	return t.PostalAddressID
+}
+func (t *GetVendorProfilePostalAddresses_VendorProfilePostalAddresses_Edges_Node) GetPostalAddressType() *enums.PostalAddressType {
+	if t == nil {
+		t = &GetVendorProfilePostalAddresses_VendorProfilePostalAddresses_Edges_Node{}
+	}
+	return &t.PostalAddressType
+}
+func (t *GetVendorProfilePostalAddresses_VendorProfilePostalAddresses_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetVendorProfilePostalAddresses_VendorProfilePostalAddresses_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetVendorProfilePostalAddresses_VendorProfilePostalAddresses_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetVendorProfilePostalAddresses_VendorProfilePostalAddresses_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+func (t *GetVendorProfilePostalAddresses_VendorProfilePostalAddresses_Edges_Node) GetVendorProfileID() string {
+	if t == nil {
+		t = &GetVendorProfilePostalAddresses_VendorProfilePostalAddresses_Edges_Node{}
+	}
+	return t.VendorProfileID
+}
+
+type GetVendorProfilePostalAddresses_VendorProfilePostalAddresses_Edges struct {
+	Node *GetVendorProfilePostalAddresses_VendorProfilePostalAddresses_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetVendorProfilePostalAddresses_VendorProfilePostalAddresses_Edges) GetNode() *GetVendorProfilePostalAddresses_VendorProfilePostalAddresses_Edges_Node {
+	if t == nil {
+		t = &GetVendorProfilePostalAddresses_VendorProfilePostalAddresses_Edges{}
+	}
+	return t.Node
+}
+
+type GetVendorProfilePostalAddresses_VendorProfilePostalAddresses struct {
+	Edges []*GetVendorProfilePostalAddresses_VendorProfilePostalAddresses_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+}
+
+func (t *GetVendorProfilePostalAddresses_VendorProfilePostalAddresses) GetEdges() []*GetVendorProfilePostalAddresses_VendorProfilePostalAddresses_Edges {
+	if t == nil {
+		t = &GetVendorProfilePostalAddresses_VendorProfilePostalAddresses{}
+	}
+	return t.Edges
+}
+
+type UpdateVendorProfilePostalAddress_UpdateVendorProfilePostalAddress_VendorProfilePostalAddress struct {
+	CreatedAt         *time.Time              "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy         *string                 "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID                string                  "json:\"id\" graphql:\"id\""
+	PostalAddressID   string                  "json:\"postalAddressID\" graphql:\"postalAddressID\""
+	PostalAddressType enums.PostalAddressType "json:\"postalAddressType\" graphql:\"postalAddressType\""
+	UpdatedAt         *time.Time              "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy         *string                 "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	VendorProfileID   string                  "json:\"vendorProfileID\" graphql:\"vendorProfileID\""
+}
+
+func (t *UpdateVendorProfilePostalAddress_UpdateVendorProfilePostalAddress_VendorProfilePostalAddress) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateVendorProfilePostalAddress_UpdateVendorProfilePostalAddress_VendorProfilePostalAddress{}
+	}
+	return t.CreatedAt
+}
+func (t *UpdateVendorProfilePostalAddress_UpdateVendorProfilePostalAddress_VendorProfilePostalAddress) GetCreatedBy() *string {
+	if t == nil {
+		t = &UpdateVendorProfilePostalAddress_UpdateVendorProfilePostalAddress_VendorProfilePostalAddress{}
+	}
+	return t.CreatedBy
+}
+func (t *UpdateVendorProfilePostalAddress_UpdateVendorProfilePostalAddress_VendorProfilePostalAddress) GetID() string {
+	if t == nil {
+		t = &UpdateVendorProfilePostalAddress_UpdateVendorProfilePostalAddress_VendorProfilePostalAddress{}
+	}
+	return t.ID
+}
+func (t *UpdateVendorProfilePostalAddress_UpdateVendorProfilePostalAddress_VendorProfilePostalAddress) GetPostalAddressID() string {
+	if t == nil {
+		t = &UpdateVendorProfilePostalAddress_UpdateVendorProfilePostalAddress_VendorProfilePostalAddress{}
+	}
+	return t.PostalAddressID
+}
+func (t *UpdateVendorProfilePostalAddress_UpdateVendorProfilePostalAddress_VendorProfilePostalAddress) GetPostalAddressType() *enums.PostalAddressType {
+	if t == nil {
+		t = &UpdateVendorProfilePostalAddress_UpdateVendorProfilePostalAddress_VendorProfilePostalAddress{}
+	}
+	return &t.PostalAddressType
+}
+func (t *UpdateVendorProfilePostalAddress_UpdateVendorProfilePostalAddress_VendorProfilePostalAddress) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateVendorProfilePostalAddress_UpdateVendorProfilePostalAddress_VendorProfilePostalAddress{}
+	}
+	return t.UpdatedAt
+}
+func (t *UpdateVendorProfilePostalAddress_UpdateVendorProfilePostalAddress_VendorProfilePostalAddress) GetUpdatedBy() *string {
+	if t == nil {
+		t = &UpdateVendorProfilePostalAddress_UpdateVendorProfilePostalAddress_VendorProfilePostalAddress{}
+	}
+	return t.UpdatedBy
+}
+func (t *UpdateVendorProfilePostalAddress_UpdateVendorProfilePostalAddress_VendorProfilePostalAddress) GetVendorProfileID() string {
+	if t == nil {
+		t = &UpdateVendorProfilePostalAddress_UpdateVendorProfilePostalAddress_VendorProfilePostalAddress{}
+	}
+	return t.VendorProfileID
+}
+
+type UpdateVendorProfilePostalAddress_UpdateVendorProfilePostalAddress struct {
+	VendorProfilePostalAddress UpdateVendorProfilePostalAddress_UpdateVendorProfilePostalAddress_VendorProfilePostalAddress "json:\"vendorProfilePostalAddress\" graphql:\"vendorProfilePostalAddress\""
+}
+
+func (t *UpdateVendorProfilePostalAddress_UpdateVendorProfilePostalAddress) GetVendorProfilePostalAddress() *UpdateVendorProfilePostalAddress_UpdateVendorProfilePostalAddress_VendorProfilePostalAddress {
+	if t == nil {
+		t = &UpdateVendorProfilePostalAddress_UpdateVendorProfilePostalAddress{}
+	}
+	return &t.VendorProfilePostalAddress
+}
+
+type GetAllVendorProfilePostalAddressHistories_VendorProfilePostalAddressHistories_Edges_Node struct {
+	CreatedAt         *time.Time              "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy         *string                 "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	HistoryTime       time.Time               "json:\"historyTime\" graphql:\"historyTime\""
+	ID                string                  "json:\"id\" graphql:\"id\""
+	Operation         enthistory.OpType       "json:\"operation\" graphql:\"operation\""
+	PostalAddressID   string                  "json:\"postalAddressID\" graphql:\"postalAddressID\""
+	PostalAddressType enums.PostalAddressType "json:\"postalAddressType\" graphql:\"postalAddressType\""
+	Ref               *string                 "json:\"ref,omitempty\" graphql:\"ref\""
+	UpdatedAt         *time.Time              "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy         *string                 "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	VendorProfileID   string                  "json:\"vendorProfileID\" graphql:\"vendorProfileID\""
+}
+
+func (t *GetAllVendorProfilePostalAddressHistories_VendorProfilePostalAddressHistories_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllVendorProfilePostalAddressHistories_VendorProfilePostalAddressHistories_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetAllVendorProfilePostalAddressHistories_VendorProfilePostalAddressHistories_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetAllVendorProfilePostalAddressHistories_VendorProfilePostalAddressHistories_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetAllVendorProfilePostalAddressHistories_VendorProfilePostalAddressHistories_Edges_Node) GetHistoryTime() *time.Time {
+	if t == nil {
+		t = &GetAllVendorProfilePostalAddressHistories_VendorProfilePostalAddressHistories_Edges_Node{}
+	}
+	return &t.HistoryTime
+}
+func (t *GetAllVendorProfilePostalAddressHistories_VendorProfilePostalAddressHistories_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetAllVendorProfilePostalAddressHistories_VendorProfilePostalAddressHistories_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetAllVendorProfilePostalAddressHistories_VendorProfilePostalAddressHistories_Edges_Node) GetOperation() *enthistory.OpType {
+	if t == nil {
+		t = &GetAllVendorProfilePostalAddressHistories_VendorProfilePostalAddressHistories_Edges_Node{}
+	}
+	return &t.Operation
+}
+func (t *GetAllVendorProfilePostalAddressHistories_VendorProfilePostalAddressHistories_Edges_Node) GetPostalAddressID() string {
+	if t == nil {
+		t = &GetAllVendorProfilePostalAddressHistories_VendorProfilePostalAddressHistories_Edges_Node{}
+	}
+	return t.PostalAddressID
+}
+func (t *GetAllVendorProfilePostalAddressHistories_VendorProfilePostalAddressHistories_Edges_Node) GetPostalAddressType() *enums.PostalAddressType {
+	if t == nil {
+		t = &GetAllVendorProfilePostalAddressHistories_VendorProfilePostalAddressHistories_Edges_Node{}
+	}
+	return &t.PostalAddressType
+}
+func (t *GetAllVendorProfilePostalAddressHistories_VendorProfilePostalAddressHistories_Edges_Node) GetRef() *string {
+	if t == nil {
+		t = &GetAllVendorProfilePostalAddressHistories_VendorProfilePostalAddressHistories_Edges_Node{}
+	}
+	return t.Ref
+}
+func (t *GetAllVendorProfilePostalAddressHistories_VendorProfilePostalAddressHistories_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllVendorProfilePostalAddressHistories_VendorProfilePostalAddressHistories_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetAllVendorProfilePostalAddressHistories_VendorProfilePostalAddressHistories_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetAllVendorProfilePostalAddressHistories_VendorProfilePostalAddressHistories_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+func (t *GetAllVendorProfilePostalAddressHistories_VendorProfilePostalAddressHistories_Edges_Node) GetVendorProfileID() string {
+	if t == nil {
+		t = &GetAllVendorProfilePostalAddressHistories_VendorProfilePostalAddressHistories_Edges_Node{}
+	}
+	return t.VendorProfileID
+}
+
+type GetAllVendorProfilePostalAddressHistories_VendorProfilePostalAddressHistories_Edges struct {
+	Node *GetAllVendorProfilePostalAddressHistories_VendorProfilePostalAddressHistories_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetAllVendorProfilePostalAddressHistories_VendorProfilePostalAddressHistories_Edges) GetNode() *GetAllVendorProfilePostalAddressHistories_VendorProfilePostalAddressHistories_Edges_Node {
+	if t == nil {
+		t = &GetAllVendorProfilePostalAddressHistories_VendorProfilePostalAddressHistories_Edges{}
+	}
+	return t.Node
+}
+
+type GetAllVendorProfilePostalAddressHistories_VendorProfilePostalAddressHistories struct {
+	Edges []*GetAllVendorProfilePostalAddressHistories_VendorProfilePostalAddressHistories_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+}
+
+func (t *GetAllVendorProfilePostalAddressHistories_VendorProfilePostalAddressHistories) GetEdges() []*GetAllVendorProfilePostalAddressHistories_VendorProfilePostalAddressHistories_Edges {
+	if t == nil {
+		t = &GetAllVendorProfilePostalAddressHistories_VendorProfilePostalAddressHistories{}
+	}
+	return t.Edges
+}
+
+type GetVendorProfilePostalAddressHistories_VendorProfilePostalAddressHistories_Edges_Node struct {
+	CreatedAt         *time.Time              "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy         *string                 "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	HistoryTime       time.Time               "json:\"historyTime\" graphql:\"historyTime\""
+	ID                string                  "json:\"id\" graphql:\"id\""
+	Operation         enthistory.OpType       "json:\"operation\" graphql:\"operation\""
+	PostalAddressID   string                  "json:\"postalAddressID\" graphql:\"postalAddressID\""
+	PostalAddressType enums.PostalAddressType "json:\"postalAddressType\" graphql:\"postalAddressType\""
+	Ref               *string                 "json:\"ref,omitempty\" graphql:\"ref\""
+	UpdatedAt         *time.Time              "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy         *string                 "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	VendorProfileID   string                  "json:\"vendorProfileID\" graphql:\"vendorProfileID\""
+}
+
+func (t *GetVendorProfilePostalAddressHistories_VendorProfilePostalAddressHistories_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetVendorProfilePostalAddressHistories_VendorProfilePostalAddressHistories_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetVendorProfilePostalAddressHistories_VendorProfilePostalAddressHistories_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetVendorProfilePostalAddressHistories_VendorProfilePostalAddressHistories_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetVendorProfilePostalAddressHistories_VendorProfilePostalAddressHistories_Edges_Node) GetHistoryTime() *time.Time {
+	if t == nil {
+		t = &GetVendorProfilePostalAddressHistories_VendorProfilePostalAddressHistories_Edges_Node{}
+	}
+	return &t.HistoryTime
+}
+func (t *GetVendorProfilePostalAddressHistories_VendorProfilePostalAddressHistories_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetVendorProfilePostalAddressHistories_VendorProfilePostalAddressHistories_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetVendorProfilePostalAddressHistories_VendorProfilePostalAddressHistories_Edges_Node) GetOperation() *enthistory.OpType {
+	if t == nil {
+		t = &GetVendorProfilePostalAddressHistories_VendorProfilePostalAddressHistories_Edges_Node{}
+	}
+	return &t.Operation
+}
+func (t *GetVendorProfilePostalAddressHistories_VendorProfilePostalAddressHistories_Edges_Node) GetPostalAddressID() string {
+	if t == nil {
+		t = &GetVendorProfilePostalAddressHistories_VendorProfilePostalAddressHistories_Edges_Node{}
+	}
+	return t.PostalAddressID
+}
+func (t *GetVendorProfilePostalAddressHistories_VendorProfilePostalAddressHistories_Edges_Node) GetPostalAddressType() *enums.PostalAddressType {
+	if t == nil {
+		t = &GetVendorProfilePostalAddressHistories_VendorProfilePostalAddressHistories_Edges_Node{}
+	}
+	return &t.PostalAddressType
+}
+func (t *GetVendorProfilePostalAddressHistories_VendorProfilePostalAddressHistories_Edges_Node) GetRef() *string {
+	if t == nil {
+		t = &GetVendorProfilePostalAddressHistories_VendorProfilePostalAddressHistories_Edges_Node{}
+	}
+	return t.Ref
+}
+func (t *GetVendorProfilePostalAddressHistories_VendorProfilePostalAddressHistories_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetVendorProfilePostalAddressHistories_VendorProfilePostalAddressHistories_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetVendorProfilePostalAddressHistories_VendorProfilePostalAddressHistories_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetVendorProfilePostalAddressHistories_VendorProfilePostalAddressHistories_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+func (t *GetVendorProfilePostalAddressHistories_VendorProfilePostalAddressHistories_Edges_Node) GetVendorProfileID() string {
+	if t == nil {
+		t = &GetVendorProfilePostalAddressHistories_VendorProfilePostalAddressHistories_Edges_Node{}
+	}
+	return t.VendorProfileID
+}
+
+type GetVendorProfilePostalAddressHistories_VendorProfilePostalAddressHistories_Edges struct {
+	Node *GetVendorProfilePostalAddressHistories_VendorProfilePostalAddressHistories_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetVendorProfilePostalAddressHistories_VendorProfilePostalAddressHistories_Edges) GetNode() *GetVendorProfilePostalAddressHistories_VendorProfilePostalAddressHistories_Edges_Node {
+	if t == nil {
+		t = &GetVendorProfilePostalAddressHistories_VendorProfilePostalAddressHistories_Edges{}
+	}
+	return t.Node
+}
+
+type GetVendorProfilePostalAddressHistories_VendorProfilePostalAddressHistories struct {
+	Edges []*GetVendorProfilePostalAddressHistories_VendorProfilePostalAddressHistories_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+}
+
+func (t *GetVendorProfilePostalAddressHistories_VendorProfilePostalAddressHistories) GetEdges() []*GetVendorProfilePostalAddressHistories_VendorProfilePostalAddressHistories_Edges {
+	if t == nil {
+		t = &GetVendorProfilePostalAddressHistories_VendorProfilePostalAddressHistories{}
+	}
+	return t.Edges
+}
+
 type GetWebhookByID_Webhook_Events struct {
 	ID string "json:\"id\" graphql:\"id\""
 }
@@ -31276,6 +35113,105 @@ func (t *UpdatePersonalAccessToken) GetUpdatePersonalAccessToken() *UpdatePerson
 	return &t.UpdatePersonalAccessToken
 }
 
+type CreateBulkCSVPostalAddress struct {
+	CreateBulkCSVPostalAddress CreateBulkCSVPostalAddress_CreateBulkCSVPostalAddress "json:\"createBulkCSVPostalAddress\" graphql:\"createBulkCSVPostalAddress\""
+}
+
+func (t *CreateBulkCSVPostalAddress) GetCreateBulkCSVPostalAddress() *CreateBulkCSVPostalAddress_CreateBulkCSVPostalAddress {
+	if t == nil {
+		t = &CreateBulkCSVPostalAddress{}
+	}
+	return &t.CreateBulkCSVPostalAddress
+}
+
+type CreateBulkPostalAddress struct {
+	CreateBulkPostalAddress CreateBulkPostalAddress_CreateBulkPostalAddress "json:\"createBulkPostalAddress\" graphql:\"createBulkPostalAddress\""
+}
+
+func (t *CreateBulkPostalAddress) GetCreateBulkPostalAddress() *CreateBulkPostalAddress_CreateBulkPostalAddress {
+	if t == nil {
+		t = &CreateBulkPostalAddress{}
+	}
+	return &t.CreateBulkPostalAddress
+}
+
+type CreatePostalAddress struct {
+	CreatePostalAddress CreatePostalAddress_CreatePostalAddress "json:\"createPostalAddress\" graphql:\"createPostalAddress\""
+}
+
+func (t *CreatePostalAddress) GetCreatePostalAddress() *CreatePostalAddress_CreatePostalAddress {
+	if t == nil {
+		t = &CreatePostalAddress{}
+	}
+	return &t.CreatePostalAddress
+}
+
+type GetAllPostalAddresses struct {
+	PostalAddresses GetAllPostalAddresses_PostalAddresses "json:\"postalAddresses\" graphql:\"postalAddresses\""
+}
+
+func (t *GetAllPostalAddresses) GetPostalAddresses() *GetAllPostalAddresses_PostalAddresses {
+	if t == nil {
+		t = &GetAllPostalAddresses{}
+	}
+	return &t.PostalAddresses
+}
+
+type GetPostalAddressByID struct {
+	PostalAddress GetPostalAddressByID_PostalAddress "json:\"postalAddress\" graphql:\"postalAddress\""
+}
+
+func (t *GetPostalAddressByID) GetPostalAddress() *GetPostalAddressByID_PostalAddress {
+	if t == nil {
+		t = &GetPostalAddressByID{}
+	}
+	return &t.PostalAddress
+}
+
+type GetPostalAddresses struct {
+	PostalAddresses GetPostalAddresses_PostalAddresses "json:\"postalAddresses\" graphql:\"postalAddresses\""
+}
+
+func (t *GetPostalAddresses) GetPostalAddresses() *GetPostalAddresses_PostalAddresses {
+	if t == nil {
+		t = &GetPostalAddresses{}
+	}
+	return &t.PostalAddresses
+}
+
+type UpdatePostalAddress struct {
+	UpdatePostalAddress UpdatePostalAddress_UpdatePostalAddress "json:\"updatePostalAddress\" graphql:\"updatePostalAddress\""
+}
+
+func (t *UpdatePostalAddress) GetUpdatePostalAddress() *UpdatePostalAddress_UpdatePostalAddress {
+	if t == nil {
+		t = &UpdatePostalAddress{}
+	}
+	return &t.UpdatePostalAddress
+}
+
+type GetAllPostalAddressHistories struct {
+	PostalAddressHistories GetAllPostalAddressHistories_PostalAddressHistories "json:\"postalAddressHistories\" graphql:\"postalAddressHistories\""
+}
+
+func (t *GetAllPostalAddressHistories) GetPostalAddressHistories() *GetAllPostalAddressHistories_PostalAddressHistories {
+	if t == nil {
+		t = &GetAllPostalAddressHistories{}
+	}
+	return &t.PostalAddressHistories
+}
+
+type GetPostalAddressHistories struct {
+	PostalAddressHistories GetPostalAddressHistories_PostalAddressHistories "json:\"postalAddressHistories\" graphql:\"postalAddressHistories\""
+}
+
+func (t *GetPostalAddressHistories) GetPostalAddressHistories() *GetPostalAddressHistories_PostalAddressHistories {
+	if t == nil {
+		t = &GetPostalAddressHistories{}
+	}
+	return &t.PostalAddressHistories
+}
+
 type Search struct {
 	Search *Search_Search "json:\"search,omitempty\" graphql:\"search\""
 }
@@ -31659,6 +35595,303 @@ func (t *GetUserSettingHistories) GetUserSettingHistories() *GetUserSettingHisto
 		t = &GetUserSettingHistories{}
 	}
 	return &t.UserSettingHistories
+}
+
+type CreateBulkCSVVendor struct {
+	CreateBulkCSVVendor CreateBulkCSVVendor_CreateBulkCSVVendor "json:\"createBulkCSVVendor\" graphql:\"createBulkCSVVendor\""
+}
+
+func (t *CreateBulkCSVVendor) GetCreateBulkCSVVendor() *CreateBulkCSVVendor_CreateBulkCSVVendor {
+	if t == nil {
+		t = &CreateBulkCSVVendor{}
+	}
+	return &t.CreateBulkCSVVendor
+}
+
+type CreateBulkVendor struct {
+	CreateBulkVendor CreateBulkVendor_CreateBulkVendor "json:\"createBulkVendor\" graphql:\"createBulkVendor\""
+}
+
+func (t *CreateBulkVendor) GetCreateBulkVendor() *CreateBulkVendor_CreateBulkVendor {
+	if t == nil {
+		t = &CreateBulkVendor{}
+	}
+	return &t.CreateBulkVendor
+}
+
+type CreateVendor struct {
+	CreateVendor CreateVendor_CreateVendor "json:\"createVendor\" graphql:\"createVendor\""
+}
+
+func (t *CreateVendor) GetCreateVendor() *CreateVendor_CreateVendor {
+	if t == nil {
+		t = &CreateVendor{}
+	}
+	return &t.CreateVendor
+}
+
+type GetAllVendors struct {
+	Vendors GetAllVendors_Vendors "json:\"vendors\" graphql:\"vendors\""
+}
+
+func (t *GetAllVendors) GetVendors() *GetAllVendors_Vendors {
+	if t == nil {
+		t = &GetAllVendors{}
+	}
+	return &t.Vendors
+}
+
+type GetVendorByID struct {
+	Vendor GetVendorByID_Vendor "json:\"vendor\" graphql:\"vendor\""
+}
+
+func (t *GetVendorByID) GetVendor() *GetVendorByID_Vendor {
+	if t == nil {
+		t = &GetVendorByID{}
+	}
+	return &t.Vendor
+}
+
+type GetVendors struct {
+	Vendors GetVendors_Vendors "json:\"vendors\" graphql:\"vendors\""
+}
+
+func (t *GetVendors) GetVendors() *GetVendors_Vendors {
+	if t == nil {
+		t = &GetVendors{}
+	}
+	return &t.Vendors
+}
+
+type UpdateVendor struct {
+	UpdateVendor UpdateVendor_UpdateVendor "json:\"updateVendor\" graphql:\"updateVendor\""
+}
+
+func (t *UpdateVendor) GetUpdateVendor() *UpdateVendor_UpdateVendor {
+	if t == nil {
+		t = &UpdateVendor{}
+	}
+	return &t.UpdateVendor
+}
+
+type GetAllVendorHistories struct {
+	VendorHistories GetAllVendorHistories_VendorHistories "json:\"vendorHistories\" graphql:\"vendorHistories\""
+}
+
+func (t *GetAllVendorHistories) GetVendorHistories() *GetAllVendorHistories_VendorHistories {
+	if t == nil {
+		t = &GetAllVendorHistories{}
+	}
+	return &t.VendorHistories
+}
+
+type GetVendorHistories struct {
+	VendorHistories GetVendorHistories_VendorHistories "json:\"vendorHistories\" graphql:\"vendorHistories\""
+}
+
+func (t *GetVendorHistories) GetVendorHistories() *GetVendorHistories_VendorHistories {
+	if t == nil {
+		t = &GetVendorHistories{}
+	}
+	return &t.VendorHistories
+}
+
+type CreateBulkCSVVendorProfile struct {
+	CreateBulkCSVVendorProfile CreateBulkCSVVendorProfile_CreateBulkCSVVendorProfile "json:\"createBulkCSVVendorProfile\" graphql:\"createBulkCSVVendorProfile\""
+}
+
+func (t *CreateBulkCSVVendorProfile) GetCreateBulkCSVVendorProfile() *CreateBulkCSVVendorProfile_CreateBulkCSVVendorProfile {
+	if t == nil {
+		t = &CreateBulkCSVVendorProfile{}
+	}
+	return &t.CreateBulkCSVVendorProfile
+}
+
+type CreateBulkVendorProfile struct {
+	CreateBulkVendorProfile CreateBulkVendorProfile_CreateBulkVendorProfile "json:\"createBulkVendorProfile\" graphql:\"createBulkVendorProfile\""
+}
+
+func (t *CreateBulkVendorProfile) GetCreateBulkVendorProfile() *CreateBulkVendorProfile_CreateBulkVendorProfile {
+	if t == nil {
+		t = &CreateBulkVendorProfile{}
+	}
+	return &t.CreateBulkVendorProfile
+}
+
+type CreateVendorProfile struct {
+	CreateVendorProfile CreateVendorProfile_CreateVendorProfile "json:\"createVendorProfile\" graphql:\"createVendorProfile\""
+}
+
+func (t *CreateVendorProfile) GetCreateVendorProfile() *CreateVendorProfile_CreateVendorProfile {
+	if t == nil {
+		t = &CreateVendorProfile{}
+	}
+	return &t.CreateVendorProfile
+}
+
+type GetAllVendorProfiles struct {
+	VendorProfiles GetAllVendorProfiles_VendorProfiles "json:\"vendorProfiles\" graphql:\"vendorProfiles\""
+}
+
+func (t *GetAllVendorProfiles) GetVendorProfiles() *GetAllVendorProfiles_VendorProfiles {
+	if t == nil {
+		t = &GetAllVendorProfiles{}
+	}
+	return &t.VendorProfiles
+}
+
+type GetVendorProfileByID struct {
+	VendorProfile GetVendorProfileByID_VendorProfile "json:\"vendorProfile\" graphql:\"vendorProfile\""
+}
+
+func (t *GetVendorProfileByID) GetVendorProfile() *GetVendorProfileByID_VendorProfile {
+	if t == nil {
+		t = &GetVendorProfileByID{}
+	}
+	return &t.VendorProfile
+}
+
+type GetVendorProfiles struct {
+	VendorProfiles GetVendorProfiles_VendorProfiles "json:\"vendorProfiles\" graphql:\"vendorProfiles\""
+}
+
+func (t *GetVendorProfiles) GetVendorProfiles() *GetVendorProfiles_VendorProfiles {
+	if t == nil {
+		t = &GetVendorProfiles{}
+	}
+	return &t.VendorProfiles
+}
+
+type UpdateVendorProfile struct {
+	UpdateVendorProfile UpdateVendorProfile_UpdateVendorProfile "json:\"updateVendorProfile\" graphql:\"updateVendorProfile\""
+}
+
+func (t *UpdateVendorProfile) GetUpdateVendorProfile() *UpdateVendorProfile_UpdateVendorProfile {
+	if t == nil {
+		t = &UpdateVendorProfile{}
+	}
+	return &t.UpdateVendorProfile
+}
+
+type GetAllVendorProfileHistories struct {
+	VendorProfileHistories GetAllVendorProfileHistories_VendorProfileHistories "json:\"vendorProfileHistories\" graphql:\"vendorProfileHistories\""
+}
+
+func (t *GetAllVendorProfileHistories) GetVendorProfileHistories() *GetAllVendorProfileHistories_VendorProfileHistories {
+	if t == nil {
+		t = &GetAllVendorProfileHistories{}
+	}
+	return &t.VendorProfileHistories
+}
+
+type GetVendorProfileHistories struct {
+	VendorProfileHistories GetVendorProfileHistories_VendorProfileHistories "json:\"vendorProfileHistories\" graphql:\"vendorProfileHistories\""
+}
+
+func (t *GetVendorProfileHistories) GetVendorProfileHistories() *GetVendorProfileHistories_VendorProfileHistories {
+	if t == nil {
+		t = &GetVendorProfileHistories{}
+	}
+	return &t.VendorProfileHistories
+}
+
+type CreateBulkCSVVendorProfilePostalAddress struct {
+	CreateBulkCSVVendorProfilePostalAddress CreateBulkCSVVendorProfilePostalAddress_CreateBulkCSVVendorProfilePostalAddress "json:\"createBulkCSVVendorProfilePostalAddress\" graphql:\"createBulkCSVVendorProfilePostalAddress\""
+}
+
+func (t *CreateBulkCSVVendorProfilePostalAddress) GetCreateBulkCSVVendorProfilePostalAddress() *CreateBulkCSVVendorProfilePostalAddress_CreateBulkCSVVendorProfilePostalAddress {
+	if t == nil {
+		t = &CreateBulkCSVVendorProfilePostalAddress{}
+	}
+	return &t.CreateBulkCSVVendorProfilePostalAddress
+}
+
+type CreateBulkVendorProfilePostalAddress struct {
+	CreateBulkVendorProfilePostalAddress CreateBulkVendorProfilePostalAddress_CreateBulkVendorProfilePostalAddress "json:\"createBulkVendorProfilePostalAddress\" graphql:\"createBulkVendorProfilePostalAddress\""
+}
+
+func (t *CreateBulkVendorProfilePostalAddress) GetCreateBulkVendorProfilePostalAddress() *CreateBulkVendorProfilePostalAddress_CreateBulkVendorProfilePostalAddress {
+	if t == nil {
+		t = &CreateBulkVendorProfilePostalAddress{}
+	}
+	return &t.CreateBulkVendorProfilePostalAddress
+}
+
+type CreateVendorProfilePostalAddress struct {
+	CreateVendorProfilePostalAddress CreateVendorProfilePostalAddress_CreateVendorProfilePostalAddress "json:\"createVendorProfilePostalAddress\" graphql:\"createVendorProfilePostalAddress\""
+}
+
+func (t *CreateVendorProfilePostalAddress) GetCreateVendorProfilePostalAddress() *CreateVendorProfilePostalAddress_CreateVendorProfilePostalAddress {
+	if t == nil {
+		t = &CreateVendorProfilePostalAddress{}
+	}
+	return &t.CreateVendorProfilePostalAddress
+}
+
+type GetAllVendorProfilePostalAddresses struct {
+	VendorProfilePostalAddresses GetAllVendorProfilePostalAddresses_VendorProfilePostalAddresses "json:\"vendorProfilePostalAddresses\" graphql:\"vendorProfilePostalAddresses\""
+}
+
+func (t *GetAllVendorProfilePostalAddresses) GetVendorProfilePostalAddresses() *GetAllVendorProfilePostalAddresses_VendorProfilePostalAddresses {
+	if t == nil {
+		t = &GetAllVendorProfilePostalAddresses{}
+	}
+	return &t.VendorProfilePostalAddresses
+}
+
+type GetVendorProfilePostalAddressByID struct {
+	VendorProfilePostalAddress GetVendorProfilePostalAddressByID_VendorProfilePostalAddress "json:\"vendorProfilePostalAddress\" graphql:\"vendorProfilePostalAddress\""
+}
+
+func (t *GetVendorProfilePostalAddressByID) GetVendorProfilePostalAddress() *GetVendorProfilePostalAddressByID_VendorProfilePostalAddress {
+	if t == nil {
+		t = &GetVendorProfilePostalAddressByID{}
+	}
+	return &t.VendorProfilePostalAddress
+}
+
+type GetVendorProfilePostalAddresses struct {
+	VendorProfilePostalAddresses GetVendorProfilePostalAddresses_VendorProfilePostalAddresses "json:\"vendorProfilePostalAddresses\" graphql:\"vendorProfilePostalAddresses\""
+}
+
+func (t *GetVendorProfilePostalAddresses) GetVendorProfilePostalAddresses() *GetVendorProfilePostalAddresses_VendorProfilePostalAddresses {
+	if t == nil {
+		t = &GetVendorProfilePostalAddresses{}
+	}
+	return &t.VendorProfilePostalAddresses
+}
+
+type UpdateVendorProfilePostalAddress struct {
+	UpdateVendorProfilePostalAddress UpdateVendorProfilePostalAddress_UpdateVendorProfilePostalAddress "json:\"updateVendorProfilePostalAddress\" graphql:\"updateVendorProfilePostalAddress\""
+}
+
+func (t *UpdateVendorProfilePostalAddress) GetUpdateVendorProfilePostalAddress() *UpdateVendorProfilePostalAddress_UpdateVendorProfilePostalAddress {
+	if t == nil {
+		t = &UpdateVendorProfilePostalAddress{}
+	}
+	return &t.UpdateVendorProfilePostalAddress
+}
+
+type GetAllVendorProfilePostalAddressHistories struct {
+	VendorProfilePostalAddressHistories GetAllVendorProfilePostalAddressHistories_VendorProfilePostalAddressHistories "json:\"vendorProfilePostalAddressHistories\" graphql:\"vendorProfilePostalAddressHistories\""
+}
+
+func (t *GetAllVendorProfilePostalAddressHistories) GetVendorProfilePostalAddressHistories() *GetAllVendorProfilePostalAddressHistories_VendorProfilePostalAddressHistories {
+	if t == nil {
+		t = &GetAllVendorProfilePostalAddressHistories{}
+	}
+	return &t.VendorProfilePostalAddressHistories
+}
+
+type GetVendorProfilePostalAddressHistories struct {
+	VendorProfilePostalAddressHistories GetVendorProfilePostalAddressHistories_VendorProfilePostalAddressHistories "json:\"vendorProfilePostalAddressHistories\" graphql:\"vendorProfilePostalAddressHistories\""
+}
+
+func (t *GetVendorProfilePostalAddressHistories) GetVendorProfilePostalAddressHistories() *GetVendorProfilePostalAddressHistories_VendorProfilePostalAddressHistories {
+	if t == nil {
+		t = &GetVendorProfilePostalAddressHistories{}
+	}
+	return &t.VendorProfilePostalAddressHistories
 }
 
 type GetWebhookByID struct {
@@ -40016,6 +44249,393 @@ func (c *Client) UpdatePersonalAccessToken(ctx context.Context, updatePersonalAc
 	return &res, nil
 }
 
+const CreateBulkCSVPostalAddressDocument = `mutation CreateBulkCSVPostalAddress ($input: Upload!) {
+	createBulkCSVPostalAddress(input: $input) {
+		postalAddresses {
+			addressLines
+			administrativeArea
+			createdAt
+			createdBy
+			id
+			languageCode
+			locality
+			organization
+			ownerID
+			postalCode
+			recipients
+			regionCode
+			sortingCode
+			sublocality
+			tags
+			updatedAt
+			updatedBy
+		}
+	}
+}
+`
+
+func (c *Client) CreateBulkCSVPostalAddress(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVPostalAddress, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res CreateBulkCSVPostalAddress
+	if err := c.Client.Post(ctx, "CreateBulkCSVPostalAddress", CreateBulkCSVPostalAddressDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const CreateBulkPostalAddressDocument = `mutation CreateBulkPostalAddress ($input: [CreatePostalAddressInput!]) {
+	createBulkPostalAddress(input: $input) {
+		postalAddresses {
+			addressLines
+			administrativeArea
+			createdAt
+			createdBy
+			id
+			languageCode
+			locality
+			organization
+			ownerID
+			postalCode
+			recipients
+			regionCode
+			sortingCode
+			sublocality
+			tags
+			updatedAt
+			updatedBy
+		}
+	}
+}
+`
+
+func (c *Client) CreateBulkPostalAddress(ctx context.Context, input []*CreatePostalAddressInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkPostalAddress, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res CreateBulkPostalAddress
+	if err := c.Client.Post(ctx, "CreateBulkPostalAddress", CreateBulkPostalAddressDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const CreatePostalAddressDocument = `mutation CreatePostalAddress ($input: CreatePostalAddressInput!) {
+	createPostalAddress(input: $input) {
+		postalAddress {
+			addressLines
+			administrativeArea
+			createdAt
+			createdBy
+			id
+			languageCode
+			locality
+			organization
+			ownerID
+			postalCode
+			recipients
+			regionCode
+			sortingCode
+			sublocality
+			tags
+			updatedAt
+			updatedBy
+		}
+	}
+}
+`
+
+func (c *Client) CreatePostalAddress(ctx context.Context, input CreatePostalAddressInput, interceptors ...clientv2.RequestInterceptor) (*CreatePostalAddress, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res CreatePostalAddress
+	if err := c.Client.Post(ctx, "CreatePostalAddress", CreatePostalAddressDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetAllPostalAddressesDocument = `query GetAllPostalAddresses {
+	postalAddresses {
+		edges {
+			node {
+				addressLines
+				administrativeArea
+				createdAt
+				createdBy
+				id
+				languageCode
+				locality
+				organization
+				ownerID
+				postalCode
+				recipients
+				regionCode
+				sortingCode
+				sublocality
+				tags
+				updatedAt
+				updatedBy
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetAllPostalAddresses(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllPostalAddresses, error) {
+	vars := map[string]any{}
+
+	var res GetAllPostalAddresses
+	if err := c.Client.Post(ctx, "GetAllPostalAddresses", GetAllPostalAddressesDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetPostalAddressByIDDocument = `query GetPostalAddressByID ($postalAddressId: ID!) {
+	postalAddress(id: $postalAddressId) {
+		addressLines
+		administrativeArea
+		createdAt
+		createdBy
+		id
+		languageCode
+		locality
+		organization
+		ownerID
+		postalCode
+		recipients
+		regionCode
+		sortingCode
+		sublocality
+		tags
+		updatedAt
+		updatedBy
+	}
+}
+`
+
+func (c *Client) GetPostalAddressByID(ctx context.Context, postalAddressID string, interceptors ...clientv2.RequestInterceptor) (*GetPostalAddressByID, error) {
+	vars := map[string]any{
+		"postalAddressId": postalAddressID,
+	}
+
+	var res GetPostalAddressByID
+	if err := c.Client.Post(ctx, "GetPostalAddressByID", GetPostalAddressByIDDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetPostalAddressesDocument = `query GetPostalAddresses ($where: PostalAddressWhereInput) {
+	postalAddresses(where: $where) {
+		edges {
+			node {
+				addressLines
+				administrativeArea
+				createdAt
+				createdBy
+				id
+				languageCode
+				locality
+				organization
+				ownerID
+				postalCode
+				recipients
+				regionCode
+				sortingCode
+				sublocality
+				tags
+				updatedAt
+				updatedBy
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetPostalAddresses(ctx context.Context, where *PostalAddressWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetPostalAddresses, error) {
+	vars := map[string]any{
+		"where": where,
+	}
+
+	var res GetPostalAddresses
+	if err := c.Client.Post(ctx, "GetPostalAddresses", GetPostalAddressesDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const UpdatePostalAddressDocument = `mutation UpdatePostalAddress ($updatePostalAddressId: ID!, $input: UpdatePostalAddressInput!) {
+	updatePostalAddress(id: $updatePostalAddressId, input: $input) {
+		postalAddress {
+			addressLines
+			administrativeArea
+			createdAt
+			createdBy
+			id
+			languageCode
+			locality
+			organization
+			ownerID
+			postalCode
+			recipients
+			regionCode
+			sortingCode
+			sublocality
+			tags
+			updatedAt
+			updatedBy
+		}
+	}
+}
+`
+
+func (c *Client) UpdatePostalAddress(ctx context.Context, updatePostalAddressID string, input UpdatePostalAddressInput, interceptors ...clientv2.RequestInterceptor) (*UpdatePostalAddress, error) {
+	vars := map[string]any{
+		"updatePostalAddressId": updatePostalAddressID,
+		"input":                 input,
+	}
+
+	var res UpdatePostalAddress
+	if err := c.Client.Post(ctx, "UpdatePostalAddress", UpdatePostalAddressDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetAllPostalAddressHistoriesDocument = `query GetAllPostalAddressHistories {
+	postalAddressHistories {
+		edges {
+			node {
+				addressLines
+				administrativeArea
+				createdAt
+				createdBy
+				historyTime
+				id
+				languageCode
+				locality
+				operation
+				organization
+				ownerID
+				postalCode
+				recipients
+				ref
+				regionCode
+				sortingCode
+				sublocality
+				tags
+				updatedAt
+				updatedBy
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetAllPostalAddressHistories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllPostalAddressHistories, error) {
+	vars := map[string]any{}
+
+	var res GetAllPostalAddressHistories
+	if err := c.Client.Post(ctx, "GetAllPostalAddressHistories", GetAllPostalAddressHistoriesDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetPostalAddressHistoriesDocument = `query GetPostalAddressHistories ($where: PostalAddressHistoryWhereInput) {
+	postalAddressHistories(where: $where) {
+		edges {
+			node {
+				addressLines
+				administrativeArea
+				createdAt
+				createdBy
+				historyTime
+				id
+				languageCode
+				locality
+				operation
+				organization
+				ownerID
+				postalCode
+				recipients
+				ref
+				regionCode
+				sortingCode
+				sublocality
+				tags
+				updatedAt
+				updatedBy
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetPostalAddressHistories(ctx context.Context, where *PostalAddressHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetPostalAddressHistories, error) {
+	vars := map[string]any{
+		"where": where,
+	}
+
+	var res GetPostalAddressHistories
+	if err := c.Client.Post(ctx, "GetPostalAddressHistories", GetPostalAddressHistoriesDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
 const SearchDocument = `query Search ($query: String!) {
 	search(query: $query) {
 		nodes {
@@ -41401,6 +46021,978 @@ func (c *Client) GetUserSettingHistories(ctx context.Context, where *UserSetting
 	return &res, nil
 }
 
+const CreateBulkCSVVendorDocument = `mutation CreateBulkCSVVendor ($input: Upload!) {
+	createBulkCSVVendor(input: $input) {
+		vendors {
+			createdAt
+			createdBy
+			displayName
+			id
+			onboardingState
+			ownerID
+			tags
+			updatedAt
+			updatedBy
+			vendorType
+		}
+	}
+}
+`
+
+func (c *Client) CreateBulkCSVVendor(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVVendor, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res CreateBulkCSVVendor
+	if err := c.Client.Post(ctx, "CreateBulkCSVVendor", CreateBulkCSVVendorDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const CreateBulkVendorDocument = `mutation CreateBulkVendor ($input: [CreateVendorInput!]) {
+	createBulkVendor(input: $input) {
+		vendors {
+			createdAt
+			createdBy
+			displayName
+			id
+			onboardingState
+			ownerID
+			tags
+			updatedAt
+			updatedBy
+			vendorType
+		}
+	}
+}
+`
+
+func (c *Client) CreateBulkVendor(ctx context.Context, input []*CreateVendorInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkVendor, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res CreateBulkVendor
+	if err := c.Client.Post(ctx, "CreateBulkVendor", CreateBulkVendorDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const CreateVendorDocument = `mutation CreateVendor ($input: CreateVendorInput!) {
+	createVendor(input: $input) {
+		vendor {
+			createdAt
+			createdBy
+			displayName
+			id
+			onboardingState
+			ownerID
+			tags
+			updatedAt
+			updatedBy
+			vendorType
+		}
+	}
+}
+`
+
+func (c *Client) CreateVendor(ctx context.Context, input CreateVendorInput, interceptors ...clientv2.RequestInterceptor) (*CreateVendor, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res CreateVendor
+	if err := c.Client.Post(ctx, "CreateVendor", CreateVendorDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetAllVendorsDocument = `query GetAllVendors {
+	vendors {
+		edges {
+			node {
+				createdAt
+				createdBy
+				displayName
+				id
+				onboardingState
+				ownerID
+				tags
+				updatedAt
+				updatedBy
+				vendorType
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetAllVendors(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllVendors, error) {
+	vars := map[string]any{}
+
+	var res GetAllVendors
+	if err := c.Client.Post(ctx, "GetAllVendors", GetAllVendorsDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetVendorByIDDocument = `query GetVendorByID ($vendorId: ID!) {
+	vendor(id: $vendorId) {
+		createdAt
+		createdBy
+		displayName
+		id
+		onboardingState
+		ownerID
+		tags
+		updatedAt
+		updatedBy
+		vendorType
+	}
+}
+`
+
+func (c *Client) GetVendorByID(ctx context.Context, vendorID string, interceptors ...clientv2.RequestInterceptor) (*GetVendorByID, error) {
+	vars := map[string]any{
+		"vendorId": vendorID,
+	}
+
+	var res GetVendorByID
+	if err := c.Client.Post(ctx, "GetVendorByID", GetVendorByIDDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetVendorsDocument = `query GetVendors ($where: VendorWhereInput) {
+	vendors(where: $where) {
+		edges {
+			node {
+				createdAt
+				createdBy
+				displayName
+				id
+				onboardingState
+				ownerID
+				tags
+				updatedAt
+				updatedBy
+				vendorType
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetVendors(ctx context.Context, where *VendorWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetVendors, error) {
+	vars := map[string]any{
+		"where": where,
+	}
+
+	var res GetVendors
+	if err := c.Client.Post(ctx, "GetVendors", GetVendorsDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const UpdateVendorDocument = `mutation UpdateVendor ($updateVendorId: ID!, $input: UpdateVendorInput!) {
+	updateVendor(id: $updateVendorId, input: $input) {
+		vendor {
+			createdAt
+			createdBy
+			displayName
+			id
+			onboardingState
+			ownerID
+			tags
+			updatedAt
+			updatedBy
+			vendorType
+		}
+	}
+}
+`
+
+func (c *Client) UpdateVendor(ctx context.Context, updateVendorID string, input UpdateVendorInput, interceptors ...clientv2.RequestInterceptor) (*UpdateVendor, error) {
+	vars := map[string]any{
+		"updateVendorId": updateVendorID,
+		"input":          input,
+	}
+
+	var res UpdateVendor
+	if err := c.Client.Post(ctx, "UpdateVendor", UpdateVendorDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetAllVendorHistoriesDocument = `query GetAllVendorHistories {
+	vendorHistories {
+		edges {
+			node {
+				createdAt
+				createdBy
+				displayName
+				historyTime
+				id
+				onboardingState
+				operation
+				ownerID
+				ref
+				tags
+				updatedAt
+				updatedBy
+				vendorType
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetAllVendorHistories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllVendorHistories, error) {
+	vars := map[string]any{}
+
+	var res GetAllVendorHistories
+	if err := c.Client.Post(ctx, "GetAllVendorHistories", GetAllVendorHistoriesDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetVendorHistoriesDocument = `query GetVendorHistories ($where: VendorHistoryWhereInput) {
+	vendorHistories(where: $where) {
+		edges {
+			node {
+				createdAt
+				createdBy
+				displayName
+				historyTime
+				id
+				onboardingState
+				operation
+				ownerID
+				ref
+				tags
+				updatedAt
+				updatedBy
+				vendorType
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetVendorHistories(ctx context.Context, where *VendorHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetVendorHistories, error) {
+	vars := map[string]any{
+		"where": where,
+	}
+
+	var res GetVendorHistories
+	if err := c.Client.Post(ctx, "GetVendorHistories", GetVendorHistoriesDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const CreateBulkCSVVendorProfileDocument = `mutation CreateBulkCSVVendorProfile ($input: Upload!) {
+	createBulkCSVVendorProfile(input: $input) {
+		vendorProfiles {
+			createdAt
+			createdBy
+			dbaName
+			description
+			id
+			name
+			ownerID
+			tags
+			updatedAt
+			updatedBy
+			vendorID
+			websiteURI
+		}
+	}
+}
+`
+
+func (c *Client) CreateBulkCSVVendorProfile(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVVendorProfile, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res CreateBulkCSVVendorProfile
+	if err := c.Client.Post(ctx, "CreateBulkCSVVendorProfile", CreateBulkCSVVendorProfileDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const CreateBulkVendorProfileDocument = `mutation CreateBulkVendorProfile ($input: [CreateVendorProfileInput!]) {
+	createBulkVendorProfile(input: $input) {
+		vendorProfiles {
+			createdAt
+			createdBy
+			dbaName
+			description
+			id
+			name
+			ownerID
+			tags
+			updatedAt
+			updatedBy
+			vendorID
+			websiteURI
+		}
+	}
+}
+`
+
+func (c *Client) CreateBulkVendorProfile(ctx context.Context, input []*CreateVendorProfileInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkVendorProfile, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res CreateBulkVendorProfile
+	if err := c.Client.Post(ctx, "CreateBulkVendorProfile", CreateBulkVendorProfileDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const CreateVendorProfileDocument = `mutation CreateVendorProfile ($input: CreateVendorProfileInput!) {
+	createVendorProfile(input: $input) {
+		vendorProfile {
+			createdAt
+			createdBy
+			dbaName
+			description
+			id
+			name
+			ownerID
+			tags
+			updatedAt
+			updatedBy
+			vendorID
+			websiteURI
+		}
+	}
+}
+`
+
+func (c *Client) CreateVendorProfile(ctx context.Context, input CreateVendorProfileInput, interceptors ...clientv2.RequestInterceptor) (*CreateVendorProfile, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res CreateVendorProfile
+	if err := c.Client.Post(ctx, "CreateVendorProfile", CreateVendorProfileDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetAllVendorProfilesDocument = `query GetAllVendorProfiles {
+	vendorProfiles {
+		edges {
+			node {
+				createdAt
+				createdBy
+				dbaName
+				description
+				id
+				name
+				ownerID
+				tags
+				updatedAt
+				updatedBy
+				vendorID
+				websiteURI
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetAllVendorProfiles(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllVendorProfiles, error) {
+	vars := map[string]any{}
+
+	var res GetAllVendorProfiles
+	if err := c.Client.Post(ctx, "GetAllVendorProfiles", GetAllVendorProfilesDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetVendorProfileByIDDocument = `query GetVendorProfileByID ($vendorProfileId: ID!) {
+	vendorProfile(id: $vendorProfileId) {
+		createdAt
+		createdBy
+		dbaName
+		description
+		id
+		name
+		ownerID
+		tags
+		updatedAt
+		updatedBy
+		vendorID
+		websiteURI
+	}
+}
+`
+
+func (c *Client) GetVendorProfileByID(ctx context.Context, vendorProfileID string, interceptors ...clientv2.RequestInterceptor) (*GetVendorProfileByID, error) {
+	vars := map[string]any{
+		"vendorProfileId": vendorProfileID,
+	}
+
+	var res GetVendorProfileByID
+	if err := c.Client.Post(ctx, "GetVendorProfileByID", GetVendorProfileByIDDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetVendorProfilesDocument = `query GetVendorProfiles ($where: VendorProfileWhereInput) {
+	vendorProfiles(where: $where) {
+		edges {
+			node {
+				createdAt
+				createdBy
+				dbaName
+				description
+				id
+				name
+				ownerID
+				tags
+				updatedAt
+				updatedBy
+				vendorID
+				websiteURI
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetVendorProfiles(ctx context.Context, where *VendorProfileWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetVendorProfiles, error) {
+	vars := map[string]any{
+		"where": where,
+	}
+
+	var res GetVendorProfiles
+	if err := c.Client.Post(ctx, "GetVendorProfiles", GetVendorProfilesDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const UpdateVendorProfileDocument = `mutation UpdateVendorProfile ($updateVendorProfileId: ID!, $input: UpdateVendorProfileInput!) {
+	updateVendorProfile(id: $updateVendorProfileId, input: $input) {
+		vendorProfile {
+			createdAt
+			createdBy
+			dbaName
+			description
+			id
+			name
+			ownerID
+			tags
+			updatedAt
+			updatedBy
+			vendorID
+			websiteURI
+		}
+	}
+}
+`
+
+func (c *Client) UpdateVendorProfile(ctx context.Context, updateVendorProfileID string, input UpdateVendorProfileInput, interceptors ...clientv2.RequestInterceptor) (*UpdateVendorProfile, error) {
+	vars := map[string]any{
+		"updateVendorProfileId": updateVendorProfileID,
+		"input":                 input,
+	}
+
+	var res UpdateVendorProfile
+	if err := c.Client.Post(ctx, "UpdateVendorProfile", UpdateVendorProfileDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetAllVendorProfileHistoriesDocument = `query GetAllVendorProfileHistories {
+	vendorProfileHistories {
+		edges {
+			node {
+				createdAt
+				createdBy
+				dbaName
+				description
+				historyTime
+				id
+				name
+				operation
+				ownerID
+				ref
+				tags
+				updatedAt
+				updatedBy
+				vendorID
+				websiteURI
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetAllVendorProfileHistories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllVendorProfileHistories, error) {
+	vars := map[string]any{}
+
+	var res GetAllVendorProfileHistories
+	if err := c.Client.Post(ctx, "GetAllVendorProfileHistories", GetAllVendorProfileHistoriesDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetVendorProfileHistoriesDocument = `query GetVendorProfileHistories ($where: VendorProfileHistoryWhereInput) {
+	vendorProfileHistories(where: $where) {
+		edges {
+			node {
+				createdAt
+				createdBy
+				dbaName
+				description
+				historyTime
+				id
+				name
+				operation
+				ownerID
+				ref
+				tags
+				updatedAt
+				updatedBy
+				vendorID
+				websiteURI
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetVendorProfileHistories(ctx context.Context, where *VendorProfileHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetVendorProfileHistories, error) {
+	vars := map[string]any{
+		"where": where,
+	}
+
+	var res GetVendorProfileHistories
+	if err := c.Client.Post(ctx, "GetVendorProfileHistories", GetVendorProfileHistoriesDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const CreateBulkCSVVendorProfilePostalAddressDocument = `mutation CreateBulkCSVVendorProfilePostalAddress ($input: Upload!) {
+	createBulkCSVVendorProfilePostalAddress(input: $input) {
+		vendorProfilePostalAddresses {
+			createdAt
+			createdBy
+			id
+			postalAddressID
+			postalAddressType
+			updatedAt
+			updatedBy
+			vendorProfileID
+		}
+	}
+}
+`
+
+func (c *Client) CreateBulkCSVVendorProfilePostalAddress(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVVendorProfilePostalAddress, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res CreateBulkCSVVendorProfilePostalAddress
+	if err := c.Client.Post(ctx, "CreateBulkCSVVendorProfilePostalAddress", CreateBulkCSVVendorProfilePostalAddressDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const CreateBulkVendorProfilePostalAddressDocument = `mutation CreateBulkVendorProfilePostalAddress ($input: [CreateVendorProfilePostalAddressInput!]) {
+	createBulkVendorProfilePostalAddress(input: $input) {
+		vendorProfilePostalAddresses {
+			createdAt
+			createdBy
+			id
+			postalAddressID
+			postalAddressType
+			updatedAt
+			updatedBy
+			vendorProfileID
+		}
+	}
+}
+`
+
+func (c *Client) CreateBulkVendorProfilePostalAddress(ctx context.Context, input []*CreateVendorProfilePostalAddressInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkVendorProfilePostalAddress, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res CreateBulkVendorProfilePostalAddress
+	if err := c.Client.Post(ctx, "CreateBulkVendorProfilePostalAddress", CreateBulkVendorProfilePostalAddressDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const CreateVendorProfilePostalAddressDocument = `mutation CreateVendorProfilePostalAddress ($input: CreateVendorProfilePostalAddressInput!) {
+	createVendorProfilePostalAddress(input: $input) {
+		vendorProfilePostalAddress {
+			createdAt
+			createdBy
+			id
+			postalAddressID
+			postalAddressType
+			updatedAt
+			updatedBy
+			vendorProfileID
+		}
+	}
+}
+`
+
+func (c *Client) CreateVendorProfilePostalAddress(ctx context.Context, input CreateVendorProfilePostalAddressInput, interceptors ...clientv2.RequestInterceptor) (*CreateVendorProfilePostalAddress, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res CreateVendorProfilePostalAddress
+	if err := c.Client.Post(ctx, "CreateVendorProfilePostalAddress", CreateVendorProfilePostalAddressDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetAllVendorProfilePostalAddressesDocument = `query GetAllVendorProfilePostalAddresses {
+	vendorProfilePostalAddresses {
+		edges {
+			node {
+				createdAt
+				createdBy
+				id
+				postalAddressID
+				postalAddressType
+				updatedAt
+				updatedBy
+				vendorProfileID
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetAllVendorProfilePostalAddresses(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllVendorProfilePostalAddresses, error) {
+	vars := map[string]any{}
+
+	var res GetAllVendorProfilePostalAddresses
+	if err := c.Client.Post(ctx, "GetAllVendorProfilePostalAddresses", GetAllVendorProfilePostalAddressesDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetVendorProfilePostalAddressByIDDocument = `query GetVendorProfilePostalAddressByID ($vendorProfilePostalAddressId: ID!) {
+	vendorProfilePostalAddress(id: $vendorProfilePostalAddressId) {
+		createdAt
+		createdBy
+		id
+		postalAddressID
+		postalAddressType
+		updatedAt
+		updatedBy
+		vendorProfileID
+	}
+}
+`
+
+func (c *Client) GetVendorProfilePostalAddressByID(ctx context.Context, vendorProfilePostalAddressID string, interceptors ...clientv2.RequestInterceptor) (*GetVendorProfilePostalAddressByID, error) {
+	vars := map[string]any{
+		"vendorProfilePostalAddressId": vendorProfilePostalAddressID,
+	}
+
+	var res GetVendorProfilePostalAddressByID
+	if err := c.Client.Post(ctx, "GetVendorProfilePostalAddressByID", GetVendorProfilePostalAddressByIDDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetVendorProfilePostalAddressesDocument = `query GetVendorProfilePostalAddresses ($where: VendorProfilePostalAddressWhereInput) {
+	vendorProfilePostalAddresses(where: $where) {
+		edges {
+			node {
+				createdAt
+				createdBy
+				id
+				postalAddressID
+				postalAddressType
+				updatedAt
+				updatedBy
+				vendorProfileID
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetVendorProfilePostalAddresses(ctx context.Context, where *VendorProfilePostalAddressWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetVendorProfilePostalAddresses, error) {
+	vars := map[string]any{
+		"where": where,
+	}
+
+	var res GetVendorProfilePostalAddresses
+	if err := c.Client.Post(ctx, "GetVendorProfilePostalAddresses", GetVendorProfilePostalAddressesDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const UpdateVendorProfilePostalAddressDocument = `mutation UpdateVendorProfilePostalAddress ($updateVendorProfilePostalAddressId: ID!, $input: UpdateVendorProfilePostalAddressInput!) {
+	updateVendorProfilePostalAddress(id: $updateVendorProfilePostalAddressId, input: $input) {
+		vendorProfilePostalAddress {
+			createdAt
+			createdBy
+			id
+			postalAddressID
+			postalAddressType
+			updatedAt
+			updatedBy
+			vendorProfileID
+		}
+	}
+}
+`
+
+func (c *Client) UpdateVendorProfilePostalAddress(ctx context.Context, updateVendorProfilePostalAddressID string, input UpdateVendorProfilePostalAddressInput, interceptors ...clientv2.RequestInterceptor) (*UpdateVendorProfilePostalAddress, error) {
+	vars := map[string]any{
+		"updateVendorProfilePostalAddressId": updateVendorProfilePostalAddressID,
+		"input":                              input,
+	}
+
+	var res UpdateVendorProfilePostalAddress
+	if err := c.Client.Post(ctx, "UpdateVendorProfilePostalAddress", UpdateVendorProfilePostalAddressDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetAllVendorProfilePostalAddressHistoriesDocument = `query GetAllVendorProfilePostalAddressHistories {
+	vendorProfilePostalAddressHistories {
+		edges {
+			node {
+				createdAt
+				createdBy
+				historyTime
+				id
+				operation
+				postalAddressID
+				postalAddressType
+				ref
+				updatedAt
+				updatedBy
+				vendorProfileID
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetAllVendorProfilePostalAddressHistories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllVendorProfilePostalAddressHistories, error) {
+	vars := map[string]any{}
+
+	var res GetAllVendorProfilePostalAddressHistories
+	if err := c.Client.Post(ctx, "GetAllVendorProfilePostalAddressHistories", GetAllVendorProfilePostalAddressHistoriesDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetVendorProfilePostalAddressHistoriesDocument = `query GetVendorProfilePostalAddressHistories ($where: VendorProfilePostalAddressHistoryWhereInput) {
+	vendorProfilePostalAddressHistories(where: $where) {
+		edges {
+			node {
+				createdAt
+				createdBy
+				historyTime
+				id
+				operation
+				postalAddressID
+				postalAddressType
+				ref
+				updatedAt
+				updatedBy
+				vendorProfileID
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetVendorProfilePostalAddressHistories(ctx context.Context, where *VendorProfilePostalAddressHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetVendorProfilePostalAddressHistories, error) {
+	vars := map[string]any{
+		"where": where,
+	}
+
+	var res GetVendorProfilePostalAddressHistories
+	if err := c.Client.Post(ctx, "GetVendorProfilePostalAddressHistories", GetVendorProfilePostalAddressHistoriesDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
 const GetWebhookByIDDocument = `query GetWebhookByID ($webhookId: ID!) {
 	webhook(id: $webhookId) {
 		createdAt
@@ -41739,257 +47331,293 @@ func (c *Client) GetWebhookHistories(ctx context.Context, where *WebhookHistoryW
 }
 
 var DocumentOperationNames = map[string]string{
-	CreateAPITokenDocument:                        "CreateAPIToken",
-	UpdateAPITokenDocument:                        "UpdateAPIToken",
-	GetAllAPITokensDocument:                       "GetAllAPITokens",
-	GetAPITokenByIDDocument:                       "GetAPITokenByID",
-	DeleteAPITokenDocument:                        "DeleteAPIToken",
-	CreateBulkCSVContactDocument:                  "CreateBulkCSVContact",
-	CreateBulkContactDocument:                     "CreateBulkContact",
-	CreateContactDocument:                         "CreateContact",
-	DeleteContactDocument:                         "DeleteContact",
-	GetAllContactsDocument:                        "GetAllContacts",
-	GetContactByIDDocument:                        "GetContactByID",
-	GetContactsDocument:                           "GetContacts",
-	UpdateContactDocument:                         "UpdateContact",
-	GetAllContactHistoriesDocument:                "GetAllContactHistories",
-	GetContactHistoriesDocument:                   "GetContactHistories",
-	CreateBulkCSVContactListDocument:              "CreateBulkCSVContactList",
-	CreateBulkContactListDocument:                 "CreateBulkContactList",
-	CreateContactListDocument:                     "CreateContactList",
-	GetAllContactListsDocument:                    "GetAllContactLists",
-	GetContactListByIDDocument:                    "GetContactListByID",
-	GetContactListsDocument:                       "GetContactLists",
-	UpdateContactListDocument:                     "UpdateContactList",
-	GetAllContactListHistoriesDocument:            "GetAllContactListHistories",
-	GetContactListHistoriesDocument:               "GetContactListHistories",
-	CreateBulkCSVContactListMembershipDocument:    "CreateBulkCSVContactListMembership",
-	CreateBulkContactListMembershipDocument:       "CreateBulkContactListMembership",
-	CreateContactListMembershipDocument:           "CreateContactListMembership",
-	GetAllContactListMembershipsDocument:          "GetAllContactListMemberships",
-	GetContactListMembershipByIDDocument:          "GetContactListMembershipByID",
-	GetContactListMembershipsDocument:             "GetContactListMemberships",
-	UpdateContactListMembershipDocument:           "UpdateContactListMembership",
-	GetAllContactListMembershipHistoriesDocument:  "GetAllContactListMembershipHistories",
-	GetContactListMembershipHistoriesDocument:     "GetContactListMembershipHistories",
-	CreateDocumentDataDocument:                    "CreateDocumentData",
-	DeleteDocumentDataDocument:                    "DeleteDocumentData",
-	GetDocumentDataByIDDocument:                   "GetDocumentDataByID",
-	UpdateDocumentDataDocument:                    "UpdateDocumentData",
-	GetAllDocumentDataHistoriesDocument:           "GetAllDocumentDataHistories",
-	GetDocumentDataHistoriesDocument:              "GetDocumentDataHistories",
-	CreateBulkCSVEntitlementDocument:              "CreateBulkCSVEntitlement",
-	CreateBulkEntitlementDocument:                 "CreateBulkEntitlement",
-	CreateEntitlementDocument:                     "CreateEntitlement",
-	DeleteEntitlementDocument:                     "DeleteEntitlement",
-	GetAllEntitlementsDocument:                    "GetAllEntitlements",
-	GetEntitlementByIDDocument:                    "GetEntitlementByID",
-	GetEntitlementsDocument:                       "GetEntitlements",
-	UpdateEntitlementDocument:                     "UpdateEntitlement",
-	GetAllEntitlementHistoriesDocument:            "GetAllEntitlementHistories",
-	GetEntitlementHistoriesDocument:               "GetEntitlementHistories",
-	CreateBulkCSVEntitlementPlanDocument:          "CreateBulkCSVEntitlementPlan",
-	CreateBulkEntitlementPlanDocument:             "CreateBulkEntitlementPlan",
-	CreateEntitlementPlanDocument:                 "CreateEntitlementPlan",
-	DeleteEntitlementPlanDocument:                 "DeleteEntitlementPlan",
-	GetAllEntitlementPlansDocument:                "GetAllEntitlementPlans",
-	GetEntitlementPlanByIDDocument:                "GetEntitlementPlanByID",
-	GetEntitlementPlansDocument:                   "GetEntitlementPlans",
-	UpdateEntitlementPlanDocument:                 "UpdateEntitlementPlan",
-	GetAllEntitlementPlanFeaturesDocument:         "GetAllEntitlementPlanFeatures",
-	GetEntitlementPlanFeatureByIDDocument:         "GetEntitlementPlanFeatureByID",
-	GetEntitlementPlanFeaturesDocument:            "GetEntitlementPlanFeatures",
-	CreateEntitlementPlanFeatureDocument:          "CreateEntitlementPlanFeature",
-	CreateBulkCSVEntitlementPlanFeatureDocument:   "CreateBulkCSVEntitlementPlanFeature",
-	CreateBulkEntitlementPlanFeatureDocument:      "CreateBulkEntitlementPlanFeature",
-	UpdateEntitlementPlanFeatureDocument:          "UpdateEntitlementPlanFeature",
-	DeleteEntitlementPlanFeatureDocument:          "DeleteEntitlementPlanFeature",
-	GetAllEntitlementPlanFeatureHistoriesDocument: "GetAllEntitlementPlanFeatureHistories",
-	GetEntitlementPlanFeatureHistoriesDocument:    "GetEntitlementPlanFeatureHistories",
-	GetAllEntitlementPlanHistoriesDocument:        "GetAllEntitlementPlanHistories",
-	GetEntitlementPlanHistoriesDocument:           "GetEntitlementPlanHistories",
-	CreateBulkCSVEntityDocument:                   "CreateBulkCSVEntity",
-	CreateBulkEntityDocument:                      "CreateBulkEntity",
-	CreateEntityDocument:                          "CreateEntity",
-	DeleteEntityDocument:                          "DeleteEntity",
-	GetAllEntitiesDocument:                        "GetAllEntities",
-	GetEntitiesDocument:                           "GetEntities",
-	GetEntityByIDDocument:                         "GetEntityByID",
-	UpdateEntityDocument:                          "UpdateEntity",
-	GetAllEntityHistoriesDocument:                 "GetAllEntityHistories",
-	GetEntityHistoriesDocument:                    "GetEntityHistories",
-	CreateBulkCSVEntityTypeDocument:               "CreateBulkCSVEntityType",
-	CreateBulkEntityTypeDocument:                  "CreateBulkEntityType",
-	CreateEntityTypeDocument:                      "CreateEntityType",
-	DeleteEntityTypeDocument:                      "DeleteEntityType",
-	GetAllEntityTypesDocument:                     "GetAllEntityTypes",
-	GetEntityTypeByIDDocument:                     "GetEntityTypeByID",
-	GetEntityTypesDocument:                        "GetEntityTypes",
-	UpdateEntityTypeDocument:                      "UpdateEntityType",
-	GetAllEntityTypeHistoriesDocument:             "GetAllEntityTypeHistories",
-	GetEntityTypeHistoriesDocument:                "GetEntityTypeHistories",
-	GetEventsDocument:                             "GetEvents",
-	GetEventByIDDocument:                          "GetEventByID",
-	GetAllEventsDocument:                          "GetAllEvents",
-	CreateEventDocument:                           "CreateEvent",
-	CreateBulkEventDocument:                       "CreateBulkEvent",
-	CreateBulkCSVEventDocument:                    "CreateBulkCSVEvent",
-	UpdateEventDocument:                           "UpdateEvent",
-	DeleteEventDocument:                           "DeleteEvent",
-	GetAllEventHistoriesDocument:                  "GetAllEventHistories",
-	GetEventHistoriesDocument:                     "GetEventHistories",
-	CreateBulkCSVFeatureDocument:                  "CreateBulkCSVFeature",
-	CreateBulkFeatureDocument:                     "CreateBulkFeature",
-	CreateFeatureDocument:                         "CreateFeature",
-	DeleteFeatureDocument:                         "DeleteFeature",
-	GetAllFeaturesDocument:                        "GetAllFeatures",
-	GetFeatureByIDDocument:                        "GetFeatureByID",
-	GetFeaturesDocument:                           "GetFeatures",
-	UpdateFeatureDocument:                         "UpdateFeature",
-	GetAllFeatureHistoriesDocument:                "GetAllFeatureHistories",
-	GetFeatureHistoriesDocument:                   "GetFeatureHistories",
-	CreateBulkCSVFileDocument:                     "CreateBulkCSVFile",
-	CreateBulkFileDocument:                        "CreateBulkFile",
-	CreateFileDocument:                            "CreateFile",
-	DeleteFileDocument:                            "DeleteFile",
-	GetAllFilesDocument:                           "GetAllFiles",
-	GetFilesDocument:                              "GetFiles",
-	UpdateFileDocument:                            "UpdateFile",
-	GetAllFileHistoriesDocument:                   "GetAllFileHistories",
-	GetFileHistoriesDocument:                      "GetFileHistories",
-	CreateBulkCSVGroupDocument:                    "CreateBulkCSVGroup",
-	CreateBulkGroupDocument:                       "CreateBulkGroup",
-	CreateGroupDocument:                           "CreateGroup",
-	DeleteGroupDocument:                           "DeleteGroup",
-	GetAllGroupsDocument:                          "GetAllGroups",
-	GetGroupByIDDocument:                          "GetGroupByID",
-	GetGroupsDocument:                             "GetGroups",
-	UpdateGroupDocument:                           "UpdateGroup",
-	GetAllGroupHistoriesDocument:                  "GetAllGroupHistories",
-	GetGroupHistoriesDocument:                     "GetGroupHistories",
-	AddUserToGroupWithRoleDocument:                "AddUserToGroupWithRole",
-	CreateBulkCSVGroupMembersDocument:             "CreateBulkCSVGroupMembers",
-	CreateBulkGroupMembersDocument:                "CreateBulkGroupMembers",
-	GetGroupMembersByGroupIDDocument:              "GetGroupMembersByGroupID",
-	RemoveUserFromGroupDocument:                   "RemoveUserFromGroup",
-	UpdateUserRoleInGroupDocument:                 "UpdateUserRoleInGroup",
-	GetAllGroupMembershipHistoriesDocument:        "GetAllGroupMembershipHistories",
-	GetGroupMembershipHistoriesDocument:           "GetGroupMembershipHistories",
-	GetAllGroupSettingsDocument:                   "GetAllGroupSettings",
-	GetGroupSettingByIDDocument:                   "GetGroupSettingByID",
-	GetGroupSettingsDocument:                      "GetGroupSettings",
-	UpdateGroupSettingDocument:                    "UpdateGroupSetting",
-	GetAllGroupSettingHistoriesDocument:           "GetAllGroupSettingHistories",
-	GetGroupSettingHistoriesDocument:              "GetGroupSettingHistories",
-	CreateBulkCSVHushDocument:                     "CreateBulkCSVHush",
-	CreateBulkHushDocument:                        "CreateBulkHush",
-	CreateHushDocument:                            "CreateHush",
-	GetAllHushesDocument:                          "GetAllHushes",
-	GetHushByIDDocument:                           "GetHushByID",
-	GetHushesDocument:                             "GetHushes",
-	UpdateHushDocument:                            "UpdateHush",
-	GetAllHushHistoriesDocument:                   "GetAllHushHistories",
-	GetHushHistoriesDocument:                      "GetHushHistories",
-	CreateBulkCSVIntegrationDocument:              "CreateBulkCSVIntegration",
-	CreateBulkIntegrationDocument:                 "CreateBulkIntegration",
-	CreateIntegrationDocument:                     "CreateIntegration",
-	DeleteIntegrationDocument:                     "DeleteIntegration",
-	GetAllIntegrationsDocument:                    "GetAllIntegrations",
-	GetIntegrationByIDDocument:                    "GetIntegrationByID",
-	GetIntegrationsDocument:                       "GetIntegrations",
-	UpdateIntegrationDocument:                     "UpdateIntegration",
-	GetAllIntegrationHistoriesDocument:            "GetAllIntegrationHistories",
-	GetIntegrationHistoriesDocument:               "GetIntegrationHistories",
-	CreateBulkCSVInviteDocument:                   "CreateBulkCSVInvite",
-	CreateBulkInviteDocument:                      "CreateBulkInvite",
-	CreateInviteDocument:                          "CreateInvite",
-	DeleteInviteDocument:                          "DeleteInvite",
-	GetInviteByIDDocument:                         "GetInviteByID",
-	GetAllInvitesDocument:                         "GetAllInvites",
-	InvitesByOrgIDDocument:                        "InvitesByOrgID",
-	GetAllNoteHistoriesDocument:                   "GetAllNoteHistories",
-	GetNoteHistoriesDocument:                      "GetNoteHistories",
-	GetAllOauthProviderHistoriesDocument:          "GetAllOauthProviderHistories",
-	GetOauthProviderHistoriesDocument:             "GetOauthProviderHistories",
-	CreateBulkCSVOhAuthTooTokenDocument:           "CreateBulkCSVOhAuthTooToken",
-	CreateBulkOhAuthTooTokenDocument:              "CreateBulkOhAuthTooToken",
-	CreateOhAuthTooTokenDocument:                  "CreateOhAuthTooToken",
-	DeleteOhAuthTooTokenDocument:                  "DeleteOhAuthTooToken",
-	GetOhAuthTooTokensDocument:                    "GetOhAuthTooTokens",
-	UpdateOhAuthTooTokenDocument:                  "UpdateOhAuthTooToken",
-	CreateBulkCSVOrganizationDocument:             "CreateBulkCSVOrganization",
-	CreateBulkOrganizationDocument:                "CreateBulkOrganization",
-	CreateOrganizationDocument:                    "CreateOrganization",
-	DeleteOrganizationDocument:                    "DeleteOrganization",
-	GetAllOrganizationsDocument:                   "GetAllOrganizations",
-	GetOrganizationByIDDocument:                   "GetOrganizationByID",
-	GetOrganizationsDocument:                      "GetOrganizations",
-	UpdateOrganizationDocument:                    "UpdateOrganization",
-	GetAllOrganizationHistoriesDocument:           "GetAllOrganizationHistories",
-	GetOrganizationHistoriesDocument:              "GetOrganizationHistories",
-	GetAllOrganizationSettingsDocument:            "GetAllOrganizationSettings",
-	GetOrganizationSettingByIDDocument:            "GetOrganizationSettingByID",
-	GetOrganizationSettingsDocument:               "GetOrganizationSettings",
-	UpdateOrganizationSettingDocument:             "UpdateOrganizationSetting",
-	GetAllOrganizationSettingHistoriesDocument:    "GetAllOrganizationSettingHistories",
-	GetOrganizationSettingHistoriesDocument:       "GetOrganizationSettingHistories",
-	AddUserToOrgWithRoleDocument:                  "AddUserToOrgWithRole",
-	CreateBulkCSVOrgMembersDocument:               "CreateBulkCSVOrgMembers",
-	CreateBulkOrgMembersDocument:                  "CreateBulkOrgMembers",
-	GetOrgMembersByOrgIDDocument:                  "GetOrgMembersByOrgID",
-	RemoveUserFromOrgDocument:                     "RemoveUserFromOrg",
-	UpdateUserRoleInOrgDocument:                   "UpdateUserRoleInOrg",
-	GetAllOrgMembershipHistoriesDocument:          "GetAllOrgMembershipHistories",
-	GetOrgMembershipHistoriesDocument:             "GetOrgMembershipHistories",
-	CreateBulkCSVPersonalAccessTokenDocument:      "CreateBulkCSVPersonalAccessToken",
-	CreateBulkPersonalAccessTokenDocument:         "CreateBulkPersonalAccessToken",
-	CreatePersonalAccessTokenDocument:             "CreatePersonalAccessToken",
-	DeletePersonalAccessTokenDocument:             "DeletePersonalAccessToken",
-	GetAllPersonalAccessTokensDocument:            "GetAllPersonalAccessTokens",
-	GetPersonalAccessTokenByIDDocument:            "GetPersonalAccessTokenByID",
-	UpdatePersonalAccessTokenDocument:             "UpdatePersonalAccessToken",
-	SearchDocument:                                "Search",
-	CreateBulkCSVSubscriberDocument:               "CreateBulkCSVSubscriber",
-	CreateBulkSubscriberDocument:                  "CreateBulkSubscriber",
-	CreateSubscriberDocument:                      "CreateSubscriber",
-	DeleteSubscriberDocument:                      "DeleteSubscriber",
-	GetAllSubscribersDocument:                     "GetAllSubscribers",
-	GetSubscriberByEmailDocument:                  "GetSubscriberByEmail",
-	GetSubscribersDocument:                        "GetSubscribers",
-	UpdateSubscriberDocument:                      "UpdateSubscriber",
-	CreateBulkCSVTemplateDocument:                 "CreateBulkCSVTemplate",
-	CreateBulkTemplateDocument:                    "CreateBulkTemplate",
-	CreateTemplateDocument:                        "CreateTemplate",
-	GetAllTemplatesDocument:                       "GetAllTemplates",
-	GetTemplateByIDDocument:                       "GetTemplateByID",
-	UpdateTemplateDocument:                        "UpdateTemplate",
-	GetAllTemplateHistoriesDocument:               "GetAllTemplateHistories",
-	GetTemplateHistoriesDocument:                  "GetTemplateHistories",
-	CreateTFASettingDocument:                      "CreateTFASetting",
-	GetAllTFASettingsDocument:                     "GetAllTFASettings",
-	GetTFASettingDocument:                         "GetTFASetting",
-	UpdateTFASettingDocument:                      "UpdateTFASetting",
-	CreateUserDocument:                            "CreateUser",
-	DeleteUserDocument:                            "DeleteUser",
-	GetAllUsersDocument:                           "GetAllUsers",
-	GetUserByIDDocument:                           "GetUserByID",
-	GetUserByIDWithOrgsDocument:                   "GetUserByIDWithOrgs",
-	UpdateUserDocument:                            "UpdateUser",
-	GetAllUserHistoriesDocument:                   "GetAllUserHistories",
-	GetUserHistoriesDocument:                      "GetUserHistories",
-	GetAllUserSettingsDocument:                    "GetAllUserSettings",
-	GetUserSettingByIDDocument:                    "GetUserSettingByID",
-	GetUserSettingsDocument:                       "GetUserSettings",
-	UpdateUserSettingDocument:                     "UpdateUserSetting",
-	GetAllUserSettingHistoriesDocument:            "GetAllUserSettingHistories",
-	GetUserSettingHistoriesDocument:               "GetUserSettingHistories",
-	GetWebhookByIDDocument:                        "GetWebhookByID",
-	GetAllWebhooksDocument:                        "GetAllWebhooks",
-	CreateWebhookDocument:                         "CreateWebhook",
-	CreateBulkWebhookDocument:                     "CreateBulkWebhook",
-	CreateBulkCSVWebhookDocument:                  "CreateBulkCSVWebhook",
-	UpdateWebhookDocument:                         "UpdateWebhook",
-	DeleteWebhookDocument:                         "DeleteWebhook",
-	GetAllWebhookHistoriesDocument:                "GetAllWebhookHistories",
-	GetWebhookHistoriesDocument:                   "GetWebhookHistories",
+	CreateAPITokenDocument:                            "CreateAPIToken",
+	UpdateAPITokenDocument:                            "UpdateAPIToken",
+	GetAllAPITokensDocument:                           "GetAllAPITokens",
+	GetAPITokenByIDDocument:                           "GetAPITokenByID",
+	DeleteAPITokenDocument:                            "DeleteAPIToken",
+	CreateBulkCSVContactDocument:                      "CreateBulkCSVContact",
+	CreateBulkContactDocument:                         "CreateBulkContact",
+	CreateContactDocument:                             "CreateContact",
+	DeleteContactDocument:                             "DeleteContact",
+	GetAllContactsDocument:                            "GetAllContacts",
+	GetContactByIDDocument:                            "GetContactByID",
+	GetContactsDocument:                               "GetContacts",
+	UpdateContactDocument:                             "UpdateContact",
+	GetAllContactHistoriesDocument:                    "GetAllContactHistories",
+	GetContactHistoriesDocument:                       "GetContactHistories",
+	CreateBulkCSVContactListDocument:                  "CreateBulkCSVContactList",
+	CreateBulkContactListDocument:                     "CreateBulkContactList",
+	CreateContactListDocument:                         "CreateContactList",
+	GetAllContactListsDocument:                        "GetAllContactLists",
+	GetContactListByIDDocument:                        "GetContactListByID",
+	GetContactListsDocument:                           "GetContactLists",
+	UpdateContactListDocument:                         "UpdateContactList",
+	GetAllContactListHistoriesDocument:                "GetAllContactListHistories",
+	GetContactListHistoriesDocument:                   "GetContactListHistories",
+	CreateBulkCSVContactListMembershipDocument:        "CreateBulkCSVContactListMembership",
+	CreateBulkContactListMembershipDocument:           "CreateBulkContactListMembership",
+	CreateContactListMembershipDocument:               "CreateContactListMembership",
+	GetAllContactListMembershipsDocument:              "GetAllContactListMemberships",
+	GetContactListMembershipByIDDocument:              "GetContactListMembershipByID",
+	GetContactListMembershipsDocument:                 "GetContactListMemberships",
+	UpdateContactListMembershipDocument:               "UpdateContactListMembership",
+	GetAllContactListMembershipHistoriesDocument:      "GetAllContactListMembershipHistories",
+	GetContactListMembershipHistoriesDocument:         "GetContactListMembershipHistories",
+	CreateDocumentDataDocument:                        "CreateDocumentData",
+	DeleteDocumentDataDocument:                        "DeleteDocumentData",
+	GetDocumentDataByIDDocument:                       "GetDocumentDataByID",
+	UpdateDocumentDataDocument:                        "UpdateDocumentData",
+	GetAllDocumentDataHistoriesDocument:               "GetAllDocumentDataHistories",
+	GetDocumentDataHistoriesDocument:                  "GetDocumentDataHistories",
+	CreateBulkCSVEntitlementDocument:                  "CreateBulkCSVEntitlement",
+	CreateBulkEntitlementDocument:                     "CreateBulkEntitlement",
+	CreateEntitlementDocument:                         "CreateEntitlement",
+	DeleteEntitlementDocument:                         "DeleteEntitlement",
+	GetAllEntitlementsDocument:                        "GetAllEntitlements",
+	GetEntitlementByIDDocument:                        "GetEntitlementByID",
+	GetEntitlementsDocument:                           "GetEntitlements",
+	UpdateEntitlementDocument:                         "UpdateEntitlement",
+	GetAllEntitlementHistoriesDocument:                "GetAllEntitlementHistories",
+	GetEntitlementHistoriesDocument:                   "GetEntitlementHistories",
+	CreateBulkCSVEntitlementPlanDocument:              "CreateBulkCSVEntitlementPlan",
+	CreateBulkEntitlementPlanDocument:                 "CreateBulkEntitlementPlan",
+	CreateEntitlementPlanDocument:                     "CreateEntitlementPlan",
+	DeleteEntitlementPlanDocument:                     "DeleteEntitlementPlan",
+	GetAllEntitlementPlansDocument:                    "GetAllEntitlementPlans",
+	GetEntitlementPlanByIDDocument:                    "GetEntitlementPlanByID",
+	GetEntitlementPlansDocument:                       "GetEntitlementPlans",
+	UpdateEntitlementPlanDocument:                     "UpdateEntitlementPlan",
+	GetAllEntitlementPlanFeaturesDocument:             "GetAllEntitlementPlanFeatures",
+	GetEntitlementPlanFeatureByIDDocument:             "GetEntitlementPlanFeatureByID",
+	GetEntitlementPlanFeaturesDocument:                "GetEntitlementPlanFeatures",
+	CreateEntitlementPlanFeatureDocument:              "CreateEntitlementPlanFeature",
+	CreateBulkCSVEntitlementPlanFeatureDocument:       "CreateBulkCSVEntitlementPlanFeature",
+	CreateBulkEntitlementPlanFeatureDocument:          "CreateBulkEntitlementPlanFeature",
+	UpdateEntitlementPlanFeatureDocument:              "UpdateEntitlementPlanFeature",
+	DeleteEntitlementPlanFeatureDocument:              "DeleteEntitlementPlanFeature",
+	GetAllEntitlementPlanFeatureHistoriesDocument:     "GetAllEntitlementPlanFeatureHistories",
+	GetEntitlementPlanFeatureHistoriesDocument:        "GetEntitlementPlanFeatureHistories",
+	GetAllEntitlementPlanHistoriesDocument:            "GetAllEntitlementPlanHistories",
+	GetEntitlementPlanHistoriesDocument:               "GetEntitlementPlanHistories",
+	CreateBulkCSVEntityDocument:                       "CreateBulkCSVEntity",
+	CreateBulkEntityDocument:                          "CreateBulkEntity",
+	CreateEntityDocument:                              "CreateEntity",
+	DeleteEntityDocument:                              "DeleteEntity",
+	GetAllEntitiesDocument:                            "GetAllEntities",
+	GetEntitiesDocument:                               "GetEntities",
+	GetEntityByIDDocument:                             "GetEntityByID",
+	UpdateEntityDocument:                              "UpdateEntity",
+	GetAllEntityHistoriesDocument:                     "GetAllEntityHistories",
+	GetEntityHistoriesDocument:                        "GetEntityHistories",
+	CreateBulkCSVEntityTypeDocument:                   "CreateBulkCSVEntityType",
+	CreateBulkEntityTypeDocument:                      "CreateBulkEntityType",
+	CreateEntityTypeDocument:                          "CreateEntityType",
+	DeleteEntityTypeDocument:                          "DeleteEntityType",
+	GetAllEntityTypesDocument:                         "GetAllEntityTypes",
+	GetEntityTypeByIDDocument:                         "GetEntityTypeByID",
+	GetEntityTypesDocument:                            "GetEntityTypes",
+	UpdateEntityTypeDocument:                          "UpdateEntityType",
+	GetAllEntityTypeHistoriesDocument:                 "GetAllEntityTypeHistories",
+	GetEntityTypeHistoriesDocument:                    "GetEntityTypeHistories",
+	GetEventsDocument:                                 "GetEvents",
+	GetEventByIDDocument:                              "GetEventByID",
+	GetAllEventsDocument:                              "GetAllEvents",
+	CreateEventDocument:                               "CreateEvent",
+	CreateBulkEventDocument:                           "CreateBulkEvent",
+	CreateBulkCSVEventDocument:                        "CreateBulkCSVEvent",
+	UpdateEventDocument:                               "UpdateEvent",
+	DeleteEventDocument:                               "DeleteEvent",
+	GetAllEventHistoriesDocument:                      "GetAllEventHistories",
+	GetEventHistoriesDocument:                         "GetEventHistories",
+	CreateBulkCSVFeatureDocument:                      "CreateBulkCSVFeature",
+	CreateBulkFeatureDocument:                         "CreateBulkFeature",
+	CreateFeatureDocument:                             "CreateFeature",
+	DeleteFeatureDocument:                             "DeleteFeature",
+	GetAllFeaturesDocument:                            "GetAllFeatures",
+	GetFeatureByIDDocument:                            "GetFeatureByID",
+	GetFeaturesDocument:                               "GetFeatures",
+	UpdateFeatureDocument:                             "UpdateFeature",
+	GetAllFeatureHistoriesDocument:                    "GetAllFeatureHistories",
+	GetFeatureHistoriesDocument:                       "GetFeatureHistories",
+	CreateBulkCSVFileDocument:                         "CreateBulkCSVFile",
+	CreateBulkFileDocument:                            "CreateBulkFile",
+	CreateFileDocument:                                "CreateFile",
+	DeleteFileDocument:                                "DeleteFile",
+	GetAllFilesDocument:                               "GetAllFiles",
+	GetFilesDocument:                                  "GetFiles",
+	UpdateFileDocument:                                "UpdateFile",
+	GetAllFileHistoriesDocument:                       "GetAllFileHistories",
+	GetFileHistoriesDocument:                          "GetFileHistories",
+	CreateBulkCSVGroupDocument:                        "CreateBulkCSVGroup",
+	CreateBulkGroupDocument:                           "CreateBulkGroup",
+	CreateGroupDocument:                               "CreateGroup",
+	DeleteGroupDocument:                               "DeleteGroup",
+	GetAllGroupsDocument:                              "GetAllGroups",
+	GetGroupByIDDocument:                              "GetGroupByID",
+	GetGroupsDocument:                                 "GetGroups",
+	UpdateGroupDocument:                               "UpdateGroup",
+	GetAllGroupHistoriesDocument:                      "GetAllGroupHistories",
+	GetGroupHistoriesDocument:                         "GetGroupHistories",
+	AddUserToGroupWithRoleDocument:                    "AddUserToGroupWithRole",
+	CreateBulkCSVGroupMembersDocument:                 "CreateBulkCSVGroupMembers",
+	CreateBulkGroupMembersDocument:                    "CreateBulkGroupMembers",
+	GetGroupMembersByGroupIDDocument:                  "GetGroupMembersByGroupID",
+	RemoveUserFromGroupDocument:                       "RemoveUserFromGroup",
+	UpdateUserRoleInGroupDocument:                     "UpdateUserRoleInGroup",
+	GetAllGroupMembershipHistoriesDocument:            "GetAllGroupMembershipHistories",
+	GetGroupMembershipHistoriesDocument:               "GetGroupMembershipHistories",
+	GetAllGroupSettingsDocument:                       "GetAllGroupSettings",
+	GetGroupSettingByIDDocument:                       "GetGroupSettingByID",
+	GetGroupSettingsDocument:                          "GetGroupSettings",
+	UpdateGroupSettingDocument:                        "UpdateGroupSetting",
+	GetAllGroupSettingHistoriesDocument:               "GetAllGroupSettingHistories",
+	GetGroupSettingHistoriesDocument:                  "GetGroupSettingHistories",
+	CreateBulkCSVHushDocument:                         "CreateBulkCSVHush",
+	CreateBulkHushDocument:                            "CreateBulkHush",
+	CreateHushDocument:                                "CreateHush",
+	GetAllHushesDocument:                              "GetAllHushes",
+	GetHushByIDDocument:                               "GetHushByID",
+	GetHushesDocument:                                 "GetHushes",
+	UpdateHushDocument:                                "UpdateHush",
+	GetAllHushHistoriesDocument:                       "GetAllHushHistories",
+	GetHushHistoriesDocument:                          "GetHushHistories",
+	CreateBulkCSVIntegrationDocument:                  "CreateBulkCSVIntegration",
+	CreateBulkIntegrationDocument:                     "CreateBulkIntegration",
+	CreateIntegrationDocument:                         "CreateIntegration",
+	DeleteIntegrationDocument:                         "DeleteIntegration",
+	GetAllIntegrationsDocument:                        "GetAllIntegrations",
+	GetIntegrationByIDDocument:                        "GetIntegrationByID",
+	GetIntegrationsDocument:                           "GetIntegrations",
+	UpdateIntegrationDocument:                         "UpdateIntegration",
+	GetAllIntegrationHistoriesDocument:                "GetAllIntegrationHistories",
+	GetIntegrationHistoriesDocument:                   "GetIntegrationHistories",
+	CreateBulkCSVInviteDocument:                       "CreateBulkCSVInvite",
+	CreateBulkInviteDocument:                          "CreateBulkInvite",
+	CreateInviteDocument:                              "CreateInvite",
+	DeleteInviteDocument:                              "DeleteInvite",
+	GetInviteByIDDocument:                             "GetInviteByID",
+	GetAllInvitesDocument:                             "GetAllInvites",
+	InvitesByOrgIDDocument:                            "InvitesByOrgID",
+	GetAllNoteHistoriesDocument:                       "GetAllNoteHistories",
+	GetNoteHistoriesDocument:                          "GetNoteHistories",
+	GetAllOauthProviderHistoriesDocument:              "GetAllOauthProviderHistories",
+	GetOauthProviderHistoriesDocument:                 "GetOauthProviderHistories",
+	CreateBulkCSVOhAuthTooTokenDocument:               "CreateBulkCSVOhAuthTooToken",
+	CreateBulkOhAuthTooTokenDocument:                  "CreateBulkOhAuthTooToken",
+	CreateOhAuthTooTokenDocument:                      "CreateOhAuthTooToken",
+	DeleteOhAuthTooTokenDocument:                      "DeleteOhAuthTooToken",
+	GetOhAuthTooTokensDocument:                        "GetOhAuthTooTokens",
+	UpdateOhAuthTooTokenDocument:                      "UpdateOhAuthTooToken",
+	CreateBulkCSVOrganizationDocument:                 "CreateBulkCSVOrganization",
+	CreateBulkOrganizationDocument:                    "CreateBulkOrganization",
+	CreateOrganizationDocument:                        "CreateOrganization",
+	DeleteOrganizationDocument:                        "DeleteOrganization",
+	GetAllOrganizationsDocument:                       "GetAllOrganizations",
+	GetOrganizationByIDDocument:                       "GetOrganizationByID",
+	GetOrganizationsDocument:                          "GetOrganizations",
+	UpdateOrganizationDocument:                        "UpdateOrganization",
+	GetAllOrganizationHistoriesDocument:               "GetAllOrganizationHistories",
+	GetOrganizationHistoriesDocument:                  "GetOrganizationHistories",
+	GetAllOrganizationSettingsDocument:                "GetAllOrganizationSettings",
+	GetOrganizationSettingByIDDocument:                "GetOrganizationSettingByID",
+	GetOrganizationSettingsDocument:                   "GetOrganizationSettings",
+	UpdateOrganizationSettingDocument:                 "UpdateOrganizationSetting",
+	GetAllOrganizationSettingHistoriesDocument:        "GetAllOrganizationSettingHistories",
+	GetOrganizationSettingHistoriesDocument:           "GetOrganizationSettingHistories",
+	AddUserToOrgWithRoleDocument:                      "AddUserToOrgWithRole",
+	CreateBulkCSVOrgMembersDocument:                   "CreateBulkCSVOrgMembers",
+	CreateBulkOrgMembersDocument:                      "CreateBulkOrgMembers",
+	GetOrgMembersByOrgIDDocument:                      "GetOrgMembersByOrgID",
+	RemoveUserFromOrgDocument:                         "RemoveUserFromOrg",
+	UpdateUserRoleInOrgDocument:                       "UpdateUserRoleInOrg",
+	GetAllOrgMembershipHistoriesDocument:              "GetAllOrgMembershipHistories",
+	GetOrgMembershipHistoriesDocument:                 "GetOrgMembershipHistories",
+	CreateBulkCSVPersonalAccessTokenDocument:          "CreateBulkCSVPersonalAccessToken",
+	CreateBulkPersonalAccessTokenDocument:             "CreateBulkPersonalAccessToken",
+	CreatePersonalAccessTokenDocument:                 "CreatePersonalAccessToken",
+	DeletePersonalAccessTokenDocument:                 "DeletePersonalAccessToken",
+	GetAllPersonalAccessTokensDocument:                "GetAllPersonalAccessTokens",
+	GetPersonalAccessTokenByIDDocument:                "GetPersonalAccessTokenByID",
+	UpdatePersonalAccessTokenDocument:                 "UpdatePersonalAccessToken",
+	CreateBulkCSVPostalAddressDocument:                "CreateBulkCSVPostalAddress",
+	CreateBulkPostalAddressDocument:                   "CreateBulkPostalAddress",
+	CreatePostalAddressDocument:                       "CreatePostalAddress",
+	GetAllPostalAddressesDocument:                     "GetAllPostalAddresses",
+	GetPostalAddressByIDDocument:                      "GetPostalAddressByID",
+	GetPostalAddressesDocument:                        "GetPostalAddresses",
+	UpdatePostalAddressDocument:                       "UpdatePostalAddress",
+	GetAllPostalAddressHistoriesDocument:              "GetAllPostalAddressHistories",
+	GetPostalAddressHistoriesDocument:                 "GetPostalAddressHistories",
+	SearchDocument:                                    "Search",
+	CreateBulkCSVSubscriberDocument:                   "CreateBulkCSVSubscriber",
+	CreateBulkSubscriberDocument:                      "CreateBulkSubscriber",
+	CreateSubscriberDocument:                          "CreateSubscriber",
+	DeleteSubscriberDocument:                          "DeleteSubscriber",
+	GetAllSubscribersDocument:                         "GetAllSubscribers",
+	GetSubscriberByEmailDocument:                      "GetSubscriberByEmail",
+	GetSubscribersDocument:                            "GetSubscribers",
+	UpdateSubscriberDocument:                          "UpdateSubscriber",
+	CreateBulkCSVTemplateDocument:                     "CreateBulkCSVTemplate",
+	CreateBulkTemplateDocument:                        "CreateBulkTemplate",
+	CreateTemplateDocument:                            "CreateTemplate",
+	GetAllTemplatesDocument:                           "GetAllTemplates",
+	GetTemplateByIDDocument:                           "GetTemplateByID",
+	UpdateTemplateDocument:                            "UpdateTemplate",
+	GetAllTemplateHistoriesDocument:                   "GetAllTemplateHistories",
+	GetTemplateHistoriesDocument:                      "GetTemplateHistories",
+	CreateTFASettingDocument:                          "CreateTFASetting",
+	GetAllTFASettingsDocument:                         "GetAllTFASettings",
+	GetTFASettingDocument:                             "GetTFASetting",
+	UpdateTFASettingDocument:                          "UpdateTFASetting",
+	CreateUserDocument:                                "CreateUser",
+	DeleteUserDocument:                                "DeleteUser",
+	GetAllUsersDocument:                               "GetAllUsers",
+	GetUserByIDDocument:                               "GetUserByID",
+	GetUserByIDWithOrgsDocument:                       "GetUserByIDWithOrgs",
+	UpdateUserDocument:                                "UpdateUser",
+	GetAllUserHistoriesDocument:                       "GetAllUserHistories",
+	GetUserHistoriesDocument:                          "GetUserHistories",
+	GetAllUserSettingsDocument:                        "GetAllUserSettings",
+	GetUserSettingByIDDocument:                        "GetUserSettingByID",
+	GetUserSettingsDocument:                           "GetUserSettings",
+	UpdateUserSettingDocument:                         "UpdateUserSetting",
+	GetAllUserSettingHistoriesDocument:                "GetAllUserSettingHistories",
+	GetUserSettingHistoriesDocument:                   "GetUserSettingHistories",
+	CreateBulkCSVVendorDocument:                       "CreateBulkCSVVendor",
+	CreateBulkVendorDocument:                          "CreateBulkVendor",
+	CreateVendorDocument:                              "CreateVendor",
+	GetAllVendorsDocument:                             "GetAllVendors",
+	GetVendorByIDDocument:                             "GetVendorByID",
+	GetVendorsDocument:                                "GetVendors",
+	UpdateVendorDocument:                              "UpdateVendor",
+	GetAllVendorHistoriesDocument:                     "GetAllVendorHistories",
+	GetVendorHistoriesDocument:                        "GetVendorHistories",
+	CreateBulkCSVVendorProfileDocument:                "CreateBulkCSVVendorProfile",
+	CreateBulkVendorProfileDocument:                   "CreateBulkVendorProfile",
+	CreateVendorProfileDocument:                       "CreateVendorProfile",
+	GetAllVendorProfilesDocument:                      "GetAllVendorProfiles",
+	GetVendorProfileByIDDocument:                      "GetVendorProfileByID",
+	GetVendorProfilesDocument:                         "GetVendorProfiles",
+	UpdateVendorProfileDocument:                       "UpdateVendorProfile",
+	GetAllVendorProfileHistoriesDocument:              "GetAllVendorProfileHistories",
+	GetVendorProfileHistoriesDocument:                 "GetVendorProfileHistories",
+	CreateBulkCSVVendorProfilePostalAddressDocument:   "CreateBulkCSVVendorProfilePostalAddress",
+	CreateBulkVendorProfilePostalAddressDocument:      "CreateBulkVendorProfilePostalAddress",
+	CreateVendorProfilePostalAddressDocument:          "CreateVendorProfilePostalAddress",
+	GetAllVendorProfilePostalAddressesDocument:        "GetAllVendorProfilePostalAddresses",
+	GetVendorProfilePostalAddressByIDDocument:         "GetVendorProfilePostalAddressByID",
+	GetVendorProfilePostalAddressesDocument:           "GetVendorProfilePostalAddresses",
+	UpdateVendorProfilePostalAddressDocument:          "UpdateVendorProfilePostalAddress",
+	GetAllVendorProfilePostalAddressHistoriesDocument: "GetAllVendorProfilePostalAddressHistories",
+	GetVendorProfilePostalAddressHistoriesDocument:    "GetVendorProfilePostalAddressHistories",
+	GetWebhookByIDDocument:                            "GetWebhookByID",
+	GetAllWebhooksDocument:                            "GetAllWebhooks",
+	CreateWebhookDocument:                             "CreateWebhook",
+	CreateBulkWebhookDocument:                         "CreateBulkWebhook",
+	CreateBulkCSVWebhookDocument:                      "CreateBulkCSVWebhook",
+	UpdateWebhookDocument:                             "UpdateWebhook",
+	DeleteWebhookDocument:                             "DeleteWebhook",
+	GetAllWebhookHistoriesDocument:                    "GetAllWebhookHistories",
+	GetWebhookHistoriesDocument:                       "GetWebhookHistories",
 }

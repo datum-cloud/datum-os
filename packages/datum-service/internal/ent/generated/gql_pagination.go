@@ -62,6 +62,8 @@ import (
 	"github.com/datum-cloud/datum-os/internal/ent/generated/orgmembership"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/orgmembershiphistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/personalaccesstoken"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/postaladdress"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/postaladdresshistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/subscriber"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/template"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/templatehistory"
@@ -70,6 +72,12 @@ import (
 	"github.com/datum-cloud/datum-os/internal/ent/generated/userhistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/usersetting"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/usersettinghistory"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/vendor"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorhistory"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofile"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofilehistory"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofilepostaladdress"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofilepostaladdresshistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/webhook"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/webhookhistory"
 	"github.com/vektah/gqlparser/v2/gqlerror"
@@ -12981,6 +12989,598 @@ func (pat *PersonalAccessToken) ToEdge(order *PersonalAccessTokenOrder) *Persona
 	}
 }
 
+// PostalAddressEdge is the edge representation of PostalAddress.
+type PostalAddressEdge struct {
+	Node   *PostalAddress `json:"node"`
+	Cursor Cursor         `json:"cursor"`
+}
+
+// PostalAddressConnection is the connection containing edges to PostalAddress.
+type PostalAddressConnection struct {
+	Edges      []*PostalAddressEdge `json:"edges"`
+	PageInfo   PageInfo             `json:"pageInfo"`
+	TotalCount int                  `json:"totalCount"`
+}
+
+func (c *PostalAddressConnection) build(nodes []*PostalAddress, pager *postaladdressPager, after *Cursor, first *int, before *Cursor, last *int) {
+	c.PageInfo.HasNextPage = before != nil
+	c.PageInfo.HasPreviousPage = after != nil
+	if first != nil && *first+1 == len(nodes) {
+		c.PageInfo.HasNextPage = true
+		nodes = nodes[:len(nodes)-1]
+	} else if last != nil && *last+1 == len(nodes) {
+		c.PageInfo.HasPreviousPage = true
+		nodes = nodes[:len(nodes)-1]
+	}
+	var nodeAt func(int) *PostalAddress
+	if last != nil {
+		n := len(nodes) - 1
+		nodeAt = func(i int) *PostalAddress {
+			return nodes[n-i]
+		}
+	} else {
+		nodeAt = func(i int) *PostalAddress {
+			return nodes[i]
+		}
+	}
+	c.Edges = make([]*PostalAddressEdge, len(nodes))
+	for i := range nodes {
+		node := nodeAt(i)
+		c.Edges[i] = &PostalAddressEdge{
+			Node:   node,
+			Cursor: pager.toCursor(node),
+		}
+	}
+	if l := len(c.Edges); l > 0 {
+		c.PageInfo.StartCursor = &c.Edges[0].Cursor
+		c.PageInfo.EndCursor = &c.Edges[l-1].Cursor
+	}
+	if c.TotalCount == 0 {
+		c.TotalCount = len(nodes)
+	}
+}
+
+// PostalAddressPaginateOption enables pagination customization.
+type PostalAddressPaginateOption func(*postaladdressPager) error
+
+// WithPostalAddressOrder configures pagination ordering.
+func WithPostalAddressOrder(order *PostalAddressOrder) PostalAddressPaginateOption {
+	if order == nil {
+		order = DefaultPostalAddressOrder
+	}
+	o := *order
+	return func(pager *postaladdressPager) error {
+		if err := o.Direction.Validate(); err != nil {
+			return err
+		}
+		if o.Field == nil {
+			o.Field = DefaultPostalAddressOrder.Field
+		}
+		pager.order = &o
+		return nil
+	}
+}
+
+// WithPostalAddressFilter configures pagination filter.
+func WithPostalAddressFilter(filter func(*PostalAddressQuery) (*PostalAddressQuery, error)) PostalAddressPaginateOption {
+	return func(pager *postaladdressPager) error {
+		if filter == nil {
+			return errors.New("PostalAddressQuery filter cannot be nil")
+		}
+		pager.filter = filter
+		return nil
+	}
+}
+
+type postaladdressPager struct {
+	reverse bool
+	order   *PostalAddressOrder
+	filter  func(*PostalAddressQuery) (*PostalAddressQuery, error)
+}
+
+func newPostalAddressPager(opts []PostalAddressPaginateOption, reverse bool) (*postaladdressPager, error) {
+	pager := &postaladdressPager{reverse: reverse}
+	for _, opt := range opts {
+		if err := opt(pager); err != nil {
+			return nil, err
+		}
+	}
+	if pager.order == nil {
+		pager.order = DefaultPostalAddressOrder
+	}
+	return pager, nil
+}
+
+func (p *postaladdressPager) applyFilter(query *PostalAddressQuery) (*PostalAddressQuery, error) {
+	if p.filter != nil {
+		return p.filter(query)
+	}
+	return query, nil
+}
+
+func (p *postaladdressPager) toCursor(pa *PostalAddress) Cursor {
+	return p.order.Field.toCursor(pa)
+}
+
+func (p *postaladdressPager) applyCursors(query *PostalAddressQuery, after, before *Cursor) (*PostalAddressQuery, error) {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	for _, predicate := range entgql.CursorsPredicate(after, before, DefaultPostalAddressOrder.Field.column, p.order.Field.column, direction) {
+		query = query.Where(predicate)
+	}
+	return query, nil
+}
+
+func (p *postaladdressPager) applyOrder(query *PostalAddressQuery) *PostalAddressQuery {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	query = query.Order(p.order.Field.toTerm(direction.OrderTermOption()))
+	if p.order.Field != DefaultPostalAddressOrder.Field {
+		query = query.Order(DefaultPostalAddressOrder.Field.toTerm(direction.OrderTermOption()))
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(p.order.Field.column)
+	}
+	return query
+}
+
+func (p *postaladdressPager) orderExpr(query *PostalAddressQuery) sql.Querier {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(p.order.Field.column)
+	}
+	return sql.ExprFunc(func(b *sql.Builder) {
+		b.Ident(p.order.Field.column).Pad().WriteString(string(direction))
+		if p.order.Field != DefaultPostalAddressOrder.Field {
+			b.Comma().Ident(DefaultPostalAddressOrder.Field.column).Pad().WriteString(string(direction))
+		}
+	})
+}
+
+// Paginate executes the query and returns a relay based cursor connection to PostalAddress.
+func (pa *PostalAddressQuery) Paginate(
+	ctx context.Context, after *Cursor, first *int,
+	before *Cursor, last *int, opts ...PostalAddressPaginateOption,
+) (*PostalAddressConnection, error) {
+	if err := validateFirstLast(first, last); err != nil {
+		return nil, err
+	}
+	pager, err := newPostalAddressPager(opts, last != nil)
+	if err != nil {
+		return nil, err
+	}
+	if pa, err = pager.applyFilter(pa); err != nil {
+		return nil, err
+	}
+	conn := &PostalAddressConnection{Edges: []*PostalAddressEdge{}}
+	ignoredEdges := !hasCollectedField(ctx, edgesField)
+	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+		hasPagination := after != nil || first != nil || before != nil || last != nil
+		if hasPagination || ignoredEdges {
+			c := pa.Clone()
+			c.ctx.Fields = nil
+			if conn.TotalCount, err = c.Count(ctx); err != nil {
+				return nil, err
+			}
+			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
+			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
+		}
+	}
+	if ignoredEdges || (first != nil && *first == 0) || (last != nil && *last == 0) {
+		return conn, nil
+	}
+	if pa, err = pager.applyCursors(pa, after, before); err != nil {
+		return nil, err
+	}
+	limit := paginateLimit(first, last)
+	if limit != 0 {
+		pa.Limit(limit)
+	}
+	if field := collectedField(ctx, edgesField, nodeField); field != nil {
+		if err := pa.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
+			return nil, err
+		}
+	}
+	pa = pager.applyOrder(pa)
+	nodes, err := pa.All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	conn.build(nodes, pager, after, first, before, last)
+	return conn, nil
+}
+
+var (
+	// PostalAddressOrderFieldRegionCode orders PostalAddress by region_code.
+	PostalAddressOrderFieldRegionCode = &PostalAddressOrderField{
+		Value: func(pa *PostalAddress) (ent.Value, error) {
+			return pa.RegionCode, nil
+		},
+		column: postaladdress.FieldRegionCode,
+		toTerm: postaladdress.ByRegionCode,
+		toCursor: func(pa *PostalAddress) Cursor {
+			return Cursor{
+				ID:    pa.ID,
+				Value: pa.RegionCode,
+			}
+		},
+	}
+)
+
+// String implement fmt.Stringer interface.
+func (f PostalAddressOrderField) String() string {
+	var str string
+	switch f.column {
+	case PostalAddressOrderFieldRegionCode.column:
+		str = "region_code"
+	}
+	return str
+}
+
+// MarshalGQL implements graphql.Marshaler interface.
+func (f PostalAddressOrderField) MarshalGQL(w io.Writer) {
+	io.WriteString(w, strconv.Quote(f.String()))
+}
+
+// UnmarshalGQL implements graphql.Unmarshaler interface.
+func (f *PostalAddressOrderField) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("PostalAddressOrderField %T must be a string", v)
+	}
+	switch str {
+	case "region_code":
+		*f = *PostalAddressOrderFieldRegionCode
+	default:
+		return fmt.Errorf("%s is not a valid PostalAddressOrderField", str)
+	}
+	return nil
+}
+
+// PostalAddressOrderField defines the ordering field of PostalAddress.
+type PostalAddressOrderField struct {
+	// Value extracts the ordering value from the given PostalAddress.
+	Value    func(*PostalAddress) (ent.Value, error)
+	column   string // field or computed.
+	toTerm   func(...sql.OrderTermOption) postaladdress.OrderOption
+	toCursor func(*PostalAddress) Cursor
+}
+
+// PostalAddressOrder defines the ordering of PostalAddress.
+type PostalAddressOrder struct {
+	Direction OrderDirection           `json:"direction"`
+	Field     *PostalAddressOrderField `json:"field"`
+}
+
+// DefaultPostalAddressOrder is the default ordering of PostalAddress.
+var DefaultPostalAddressOrder = &PostalAddressOrder{
+	Direction: entgql.OrderDirectionAsc,
+	Field: &PostalAddressOrderField{
+		Value: func(pa *PostalAddress) (ent.Value, error) {
+			return pa.ID, nil
+		},
+		column: postaladdress.FieldID,
+		toTerm: postaladdress.ByID,
+		toCursor: func(pa *PostalAddress) Cursor {
+			return Cursor{ID: pa.ID}
+		},
+	},
+}
+
+// ToEdge converts PostalAddress into PostalAddressEdge.
+func (pa *PostalAddress) ToEdge(order *PostalAddressOrder) *PostalAddressEdge {
+	if order == nil {
+		order = DefaultPostalAddressOrder
+	}
+	return &PostalAddressEdge{
+		Node:   pa,
+		Cursor: order.Field.toCursor(pa),
+	}
+}
+
+// PostalAddressHistoryEdge is the edge representation of PostalAddressHistory.
+type PostalAddressHistoryEdge struct {
+	Node   *PostalAddressHistory `json:"node"`
+	Cursor Cursor                `json:"cursor"`
+}
+
+// PostalAddressHistoryConnection is the connection containing edges to PostalAddressHistory.
+type PostalAddressHistoryConnection struct {
+	Edges      []*PostalAddressHistoryEdge `json:"edges"`
+	PageInfo   PageInfo                    `json:"pageInfo"`
+	TotalCount int                         `json:"totalCount"`
+}
+
+func (c *PostalAddressHistoryConnection) build(nodes []*PostalAddressHistory, pager *postaladdresshistoryPager, after *Cursor, first *int, before *Cursor, last *int) {
+	c.PageInfo.HasNextPage = before != nil
+	c.PageInfo.HasPreviousPage = after != nil
+	if first != nil && *first+1 == len(nodes) {
+		c.PageInfo.HasNextPage = true
+		nodes = nodes[:len(nodes)-1]
+	} else if last != nil && *last+1 == len(nodes) {
+		c.PageInfo.HasPreviousPage = true
+		nodes = nodes[:len(nodes)-1]
+	}
+	var nodeAt func(int) *PostalAddressHistory
+	if last != nil {
+		n := len(nodes) - 1
+		nodeAt = func(i int) *PostalAddressHistory {
+			return nodes[n-i]
+		}
+	} else {
+		nodeAt = func(i int) *PostalAddressHistory {
+			return nodes[i]
+		}
+	}
+	c.Edges = make([]*PostalAddressHistoryEdge, len(nodes))
+	for i := range nodes {
+		node := nodeAt(i)
+		c.Edges[i] = &PostalAddressHistoryEdge{
+			Node:   node,
+			Cursor: pager.toCursor(node),
+		}
+	}
+	if l := len(c.Edges); l > 0 {
+		c.PageInfo.StartCursor = &c.Edges[0].Cursor
+		c.PageInfo.EndCursor = &c.Edges[l-1].Cursor
+	}
+	if c.TotalCount == 0 {
+		c.TotalCount = len(nodes)
+	}
+}
+
+// PostalAddressHistoryPaginateOption enables pagination customization.
+type PostalAddressHistoryPaginateOption func(*postaladdresshistoryPager) error
+
+// WithPostalAddressHistoryOrder configures pagination ordering.
+func WithPostalAddressHistoryOrder(order *PostalAddressHistoryOrder) PostalAddressHistoryPaginateOption {
+	if order == nil {
+		order = DefaultPostalAddressHistoryOrder
+	}
+	o := *order
+	return func(pager *postaladdresshistoryPager) error {
+		if err := o.Direction.Validate(); err != nil {
+			return err
+		}
+		if o.Field == nil {
+			o.Field = DefaultPostalAddressHistoryOrder.Field
+		}
+		pager.order = &o
+		return nil
+	}
+}
+
+// WithPostalAddressHistoryFilter configures pagination filter.
+func WithPostalAddressHistoryFilter(filter func(*PostalAddressHistoryQuery) (*PostalAddressHistoryQuery, error)) PostalAddressHistoryPaginateOption {
+	return func(pager *postaladdresshistoryPager) error {
+		if filter == nil {
+			return errors.New("PostalAddressHistoryQuery filter cannot be nil")
+		}
+		pager.filter = filter
+		return nil
+	}
+}
+
+type postaladdresshistoryPager struct {
+	reverse bool
+	order   *PostalAddressHistoryOrder
+	filter  func(*PostalAddressHistoryQuery) (*PostalAddressHistoryQuery, error)
+}
+
+func newPostalAddressHistoryPager(opts []PostalAddressHistoryPaginateOption, reverse bool) (*postaladdresshistoryPager, error) {
+	pager := &postaladdresshistoryPager{reverse: reverse}
+	for _, opt := range opts {
+		if err := opt(pager); err != nil {
+			return nil, err
+		}
+	}
+	if pager.order == nil {
+		pager.order = DefaultPostalAddressHistoryOrder
+	}
+	return pager, nil
+}
+
+func (p *postaladdresshistoryPager) applyFilter(query *PostalAddressHistoryQuery) (*PostalAddressHistoryQuery, error) {
+	if p.filter != nil {
+		return p.filter(query)
+	}
+	return query, nil
+}
+
+func (p *postaladdresshistoryPager) toCursor(pah *PostalAddressHistory) Cursor {
+	return p.order.Field.toCursor(pah)
+}
+
+func (p *postaladdresshistoryPager) applyCursors(query *PostalAddressHistoryQuery, after, before *Cursor) (*PostalAddressHistoryQuery, error) {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	for _, predicate := range entgql.CursorsPredicate(after, before, DefaultPostalAddressHistoryOrder.Field.column, p.order.Field.column, direction) {
+		query = query.Where(predicate)
+	}
+	return query, nil
+}
+
+func (p *postaladdresshistoryPager) applyOrder(query *PostalAddressHistoryQuery) *PostalAddressHistoryQuery {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	query = query.Order(p.order.Field.toTerm(direction.OrderTermOption()))
+	if p.order.Field != DefaultPostalAddressHistoryOrder.Field {
+		query = query.Order(DefaultPostalAddressHistoryOrder.Field.toTerm(direction.OrderTermOption()))
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(p.order.Field.column)
+	}
+	return query
+}
+
+func (p *postaladdresshistoryPager) orderExpr(query *PostalAddressHistoryQuery) sql.Querier {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(p.order.Field.column)
+	}
+	return sql.ExprFunc(func(b *sql.Builder) {
+		b.Ident(p.order.Field.column).Pad().WriteString(string(direction))
+		if p.order.Field != DefaultPostalAddressHistoryOrder.Field {
+			b.Comma().Ident(DefaultPostalAddressHistoryOrder.Field.column).Pad().WriteString(string(direction))
+		}
+	})
+}
+
+// Paginate executes the query and returns a relay based cursor connection to PostalAddressHistory.
+func (pah *PostalAddressHistoryQuery) Paginate(
+	ctx context.Context, after *Cursor, first *int,
+	before *Cursor, last *int, opts ...PostalAddressHistoryPaginateOption,
+) (*PostalAddressHistoryConnection, error) {
+	if err := validateFirstLast(first, last); err != nil {
+		return nil, err
+	}
+	pager, err := newPostalAddressHistoryPager(opts, last != nil)
+	if err != nil {
+		return nil, err
+	}
+	if pah, err = pager.applyFilter(pah); err != nil {
+		return nil, err
+	}
+	conn := &PostalAddressHistoryConnection{Edges: []*PostalAddressHistoryEdge{}}
+	ignoredEdges := !hasCollectedField(ctx, edgesField)
+	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+		hasPagination := after != nil || first != nil || before != nil || last != nil
+		if hasPagination || ignoredEdges {
+			c := pah.Clone()
+			c.ctx.Fields = nil
+			if conn.TotalCount, err = c.Count(ctx); err != nil {
+				return nil, err
+			}
+			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
+			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
+		}
+	}
+	if ignoredEdges || (first != nil && *first == 0) || (last != nil && *last == 0) {
+		return conn, nil
+	}
+	if pah, err = pager.applyCursors(pah, after, before); err != nil {
+		return nil, err
+	}
+	limit := paginateLimit(first, last)
+	if limit != 0 {
+		pah.Limit(limit)
+	}
+	if field := collectedField(ctx, edgesField, nodeField); field != nil {
+		if err := pah.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
+			return nil, err
+		}
+	}
+	pah = pager.applyOrder(pah)
+	nodes, err := pah.All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	conn.build(nodes, pager, after, first, before, last)
+	return conn, nil
+}
+
+var (
+	// PostalAddressHistoryOrderFieldRegionCode orders PostalAddressHistory by region_code.
+	PostalAddressHistoryOrderFieldRegionCode = &PostalAddressHistoryOrderField{
+		Value: func(pah *PostalAddressHistory) (ent.Value, error) {
+			return pah.RegionCode, nil
+		},
+		column: postaladdresshistory.FieldRegionCode,
+		toTerm: postaladdresshistory.ByRegionCode,
+		toCursor: func(pah *PostalAddressHistory) Cursor {
+			return Cursor{
+				ID:    pah.ID,
+				Value: pah.RegionCode,
+			}
+		},
+	}
+)
+
+// String implement fmt.Stringer interface.
+func (f PostalAddressHistoryOrderField) String() string {
+	var str string
+	switch f.column {
+	case PostalAddressHistoryOrderFieldRegionCode.column:
+		str = "region_code"
+	}
+	return str
+}
+
+// MarshalGQL implements graphql.Marshaler interface.
+func (f PostalAddressHistoryOrderField) MarshalGQL(w io.Writer) {
+	io.WriteString(w, strconv.Quote(f.String()))
+}
+
+// UnmarshalGQL implements graphql.Unmarshaler interface.
+func (f *PostalAddressHistoryOrderField) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("PostalAddressHistoryOrderField %T must be a string", v)
+	}
+	switch str {
+	case "region_code":
+		*f = *PostalAddressHistoryOrderFieldRegionCode
+	default:
+		return fmt.Errorf("%s is not a valid PostalAddressHistoryOrderField", str)
+	}
+	return nil
+}
+
+// PostalAddressHistoryOrderField defines the ordering field of PostalAddressHistory.
+type PostalAddressHistoryOrderField struct {
+	// Value extracts the ordering value from the given PostalAddressHistory.
+	Value    func(*PostalAddressHistory) (ent.Value, error)
+	column   string // field or computed.
+	toTerm   func(...sql.OrderTermOption) postaladdresshistory.OrderOption
+	toCursor func(*PostalAddressHistory) Cursor
+}
+
+// PostalAddressHistoryOrder defines the ordering of PostalAddressHistory.
+type PostalAddressHistoryOrder struct {
+	Direction OrderDirection                  `json:"direction"`
+	Field     *PostalAddressHistoryOrderField `json:"field"`
+}
+
+// DefaultPostalAddressHistoryOrder is the default ordering of PostalAddressHistory.
+var DefaultPostalAddressHistoryOrder = &PostalAddressHistoryOrder{
+	Direction: entgql.OrderDirectionAsc,
+	Field: &PostalAddressHistoryOrderField{
+		Value: func(pah *PostalAddressHistory) (ent.Value, error) {
+			return pah.ID, nil
+		},
+		column: postaladdresshistory.FieldID,
+		toTerm: postaladdresshistory.ByID,
+		toCursor: func(pah *PostalAddressHistory) Cursor {
+			return Cursor{ID: pah.ID}
+		},
+	},
+}
+
+// ToEdge converts PostalAddressHistory into PostalAddressHistoryEdge.
+func (pah *PostalAddressHistory) ToEdge(order *PostalAddressHistoryOrder) *PostalAddressHistoryEdge {
+	if order == nil {
+		order = DefaultPostalAddressHistoryOrder
+	}
+	return &PostalAddressHistoryEdge{
+		Node:   pah,
+		Cursor: order.Field.toCursor(pah),
+	}
+}
+
 // SubscriberEdge is the edge representation of Subscriber.
 type SubscriberEdge struct {
 	Node   *Subscriber `json:"node"`
@@ -15230,6 +15830,1760 @@ func (ush *UserSettingHistory) ToEdge(order *UserSettingHistoryOrder) *UserSetti
 	return &UserSettingHistoryEdge{
 		Node:   ush,
 		Cursor: order.Field.toCursor(ush),
+	}
+}
+
+// VendorEdge is the edge representation of Vendor.
+type VendorEdge struct {
+	Node   *Vendor `json:"node"`
+	Cursor Cursor  `json:"cursor"`
+}
+
+// VendorConnection is the connection containing edges to Vendor.
+type VendorConnection struct {
+	Edges      []*VendorEdge `json:"edges"`
+	PageInfo   PageInfo      `json:"pageInfo"`
+	TotalCount int           `json:"totalCount"`
+}
+
+func (c *VendorConnection) build(nodes []*Vendor, pager *vendorPager, after *Cursor, first *int, before *Cursor, last *int) {
+	c.PageInfo.HasNextPage = before != nil
+	c.PageInfo.HasPreviousPage = after != nil
+	if first != nil && *first+1 == len(nodes) {
+		c.PageInfo.HasNextPage = true
+		nodes = nodes[:len(nodes)-1]
+	} else if last != nil && *last+1 == len(nodes) {
+		c.PageInfo.HasPreviousPage = true
+		nodes = nodes[:len(nodes)-1]
+	}
+	var nodeAt func(int) *Vendor
+	if last != nil {
+		n := len(nodes) - 1
+		nodeAt = func(i int) *Vendor {
+			return nodes[n-i]
+		}
+	} else {
+		nodeAt = func(i int) *Vendor {
+			return nodes[i]
+		}
+	}
+	c.Edges = make([]*VendorEdge, len(nodes))
+	for i := range nodes {
+		node := nodeAt(i)
+		c.Edges[i] = &VendorEdge{
+			Node:   node,
+			Cursor: pager.toCursor(node),
+		}
+	}
+	if l := len(c.Edges); l > 0 {
+		c.PageInfo.StartCursor = &c.Edges[0].Cursor
+		c.PageInfo.EndCursor = &c.Edges[l-1].Cursor
+	}
+	if c.TotalCount == 0 {
+		c.TotalCount = len(nodes)
+	}
+}
+
+// VendorPaginateOption enables pagination customization.
+type VendorPaginateOption func(*vendorPager) error
+
+// WithVendorOrder configures pagination ordering.
+func WithVendorOrder(order *VendorOrder) VendorPaginateOption {
+	if order == nil {
+		order = DefaultVendorOrder
+	}
+	o := *order
+	return func(pager *vendorPager) error {
+		if err := o.Direction.Validate(); err != nil {
+			return err
+		}
+		if o.Field == nil {
+			o.Field = DefaultVendorOrder.Field
+		}
+		pager.order = &o
+		return nil
+	}
+}
+
+// WithVendorFilter configures pagination filter.
+func WithVendorFilter(filter func(*VendorQuery) (*VendorQuery, error)) VendorPaginateOption {
+	return func(pager *vendorPager) error {
+		if filter == nil {
+			return errors.New("VendorQuery filter cannot be nil")
+		}
+		pager.filter = filter
+		return nil
+	}
+}
+
+type vendorPager struct {
+	reverse bool
+	order   *VendorOrder
+	filter  func(*VendorQuery) (*VendorQuery, error)
+}
+
+func newVendorPager(opts []VendorPaginateOption, reverse bool) (*vendorPager, error) {
+	pager := &vendorPager{reverse: reverse}
+	for _, opt := range opts {
+		if err := opt(pager); err != nil {
+			return nil, err
+		}
+	}
+	if pager.order == nil {
+		pager.order = DefaultVendorOrder
+	}
+	return pager, nil
+}
+
+func (p *vendorPager) applyFilter(query *VendorQuery) (*VendorQuery, error) {
+	if p.filter != nil {
+		return p.filter(query)
+	}
+	return query, nil
+}
+
+func (p *vendorPager) toCursor(v *Vendor) Cursor {
+	return p.order.Field.toCursor(v)
+}
+
+func (p *vendorPager) applyCursors(query *VendorQuery, after, before *Cursor) (*VendorQuery, error) {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	for _, predicate := range entgql.CursorsPredicate(after, before, DefaultVendorOrder.Field.column, p.order.Field.column, direction) {
+		query = query.Where(predicate)
+	}
+	return query, nil
+}
+
+func (p *vendorPager) applyOrder(query *VendorQuery) *VendorQuery {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	query = query.Order(p.order.Field.toTerm(direction.OrderTermOption()))
+	if p.order.Field != DefaultVendorOrder.Field {
+		query = query.Order(DefaultVendorOrder.Field.toTerm(direction.OrderTermOption()))
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(p.order.Field.column)
+	}
+	return query
+}
+
+func (p *vendorPager) orderExpr(query *VendorQuery) sql.Querier {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(p.order.Field.column)
+	}
+	return sql.ExprFunc(func(b *sql.Builder) {
+		b.Ident(p.order.Field.column).Pad().WriteString(string(direction))
+		if p.order.Field != DefaultVendorOrder.Field {
+			b.Comma().Ident(DefaultVendorOrder.Field.column).Pad().WriteString(string(direction))
+		}
+	})
+}
+
+// Paginate executes the query and returns a relay based cursor connection to Vendor.
+func (v *VendorQuery) Paginate(
+	ctx context.Context, after *Cursor, first *int,
+	before *Cursor, last *int, opts ...VendorPaginateOption,
+) (*VendorConnection, error) {
+	if err := validateFirstLast(first, last); err != nil {
+		return nil, err
+	}
+	pager, err := newVendorPager(opts, last != nil)
+	if err != nil {
+		return nil, err
+	}
+	if v, err = pager.applyFilter(v); err != nil {
+		return nil, err
+	}
+	conn := &VendorConnection{Edges: []*VendorEdge{}}
+	ignoredEdges := !hasCollectedField(ctx, edgesField)
+	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+		hasPagination := after != nil || first != nil || before != nil || last != nil
+		if hasPagination || ignoredEdges {
+			c := v.Clone()
+			c.ctx.Fields = nil
+			if conn.TotalCount, err = c.Count(ctx); err != nil {
+				return nil, err
+			}
+			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
+			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
+		}
+	}
+	if ignoredEdges || (first != nil && *first == 0) || (last != nil && *last == 0) {
+		return conn, nil
+	}
+	if v, err = pager.applyCursors(v, after, before); err != nil {
+		return nil, err
+	}
+	limit := paginateLimit(first, last)
+	if limit != 0 {
+		v.Limit(limit)
+	}
+	if field := collectedField(ctx, edgesField, nodeField); field != nil {
+		if err := v.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
+			return nil, err
+		}
+	}
+	v = pager.applyOrder(v)
+	nodes, err := v.All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	conn.build(nodes, pager, after, first, before, last)
+	return conn, nil
+}
+
+var (
+	// VendorOrderFieldDisplayName orders Vendor by display_name.
+	VendorOrderFieldDisplayName = &VendorOrderField{
+		Value: func(v *Vendor) (ent.Value, error) {
+			return v.DisplayName, nil
+		},
+		column: vendor.FieldDisplayName,
+		toTerm: vendor.ByDisplayName,
+		toCursor: func(v *Vendor) Cursor {
+			return Cursor{
+				ID:    v.ID,
+				Value: v.DisplayName,
+			}
+		},
+	}
+	// VendorOrderFieldVendorType orders Vendor by vendor_type.
+	VendorOrderFieldVendorType = &VendorOrderField{
+		Value: func(v *Vendor) (ent.Value, error) {
+			return v.VendorType, nil
+		},
+		column: vendor.FieldVendorType,
+		toTerm: vendor.ByVendorType,
+		toCursor: func(v *Vendor) Cursor {
+			return Cursor{
+				ID:    v.ID,
+				Value: v.VendorType,
+			}
+		},
+	}
+	// VendorOrderFieldOnboardingState orders Vendor by onboarding_state.
+	VendorOrderFieldOnboardingState = &VendorOrderField{
+		Value: func(v *Vendor) (ent.Value, error) {
+			return v.OnboardingState, nil
+		},
+		column: vendor.FieldOnboardingState,
+		toTerm: vendor.ByOnboardingState,
+		toCursor: func(v *Vendor) Cursor {
+			return Cursor{
+				ID:    v.ID,
+				Value: v.OnboardingState,
+			}
+		},
+	}
+)
+
+// String implement fmt.Stringer interface.
+func (f VendorOrderField) String() string {
+	var str string
+	switch f.column {
+	case VendorOrderFieldDisplayName.column:
+		str = "display_name"
+	case VendorOrderFieldVendorType.column:
+		str = "vendor_type"
+	case VendorOrderFieldOnboardingState.column:
+		str = "onboarding_state"
+	}
+	return str
+}
+
+// MarshalGQL implements graphql.Marshaler interface.
+func (f VendorOrderField) MarshalGQL(w io.Writer) {
+	io.WriteString(w, strconv.Quote(f.String()))
+}
+
+// UnmarshalGQL implements graphql.Unmarshaler interface.
+func (f *VendorOrderField) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("VendorOrderField %T must be a string", v)
+	}
+	switch str {
+	case "display_name":
+		*f = *VendorOrderFieldDisplayName
+	case "vendor_type":
+		*f = *VendorOrderFieldVendorType
+	case "onboarding_state":
+		*f = *VendorOrderFieldOnboardingState
+	default:
+		return fmt.Errorf("%s is not a valid VendorOrderField", str)
+	}
+	return nil
+}
+
+// VendorOrderField defines the ordering field of Vendor.
+type VendorOrderField struct {
+	// Value extracts the ordering value from the given Vendor.
+	Value    func(*Vendor) (ent.Value, error)
+	column   string // field or computed.
+	toTerm   func(...sql.OrderTermOption) vendor.OrderOption
+	toCursor func(*Vendor) Cursor
+}
+
+// VendorOrder defines the ordering of Vendor.
+type VendorOrder struct {
+	Direction OrderDirection    `json:"direction"`
+	Field     *VendorOrderField `json:"field"`
+}
+
+// DefaultVendorOrder is the default ordering of Vendor.
+var DefaultVendorOrder = &VendorOrder{
+	Direction: entgql.OrderDirectionAsc,
+	Field: &VendorOrderField{
+		Value: func(v *Vendor) (ent.Value, error) {
+			return v.ID, nil
+		},
+		column: vendor.FieldID,
+		toTerm: vendor.ByID,
+		toCursor: func(v *Vendor) Cursor {
+			return Cursor{ID: v.ID}
+		},
+	},
+}
+
+// ToEdge converts Vendor into VendorEdge.
+func (v *Vendor) ToEdge(order *VendorOrder) *VendorEdge {
+	if order == nil {
+		order = DefaultVendorOrder
+	}
+	return &VendorEdge{
+		Node:   v,
+		Cursor: order.Field.toCursor(v),
+	}
+}
+
+// VendorHistoryEdge is the edge representation of VendorHistory.
+type VendorHistoryEdge struct {
+	Node   *VendorHistory `json:"node"`
+	Cursor Cursor         `json:"cursor"`
+}
+
+// VendorHistoryConnection is the connection containing edges to VendorHistory.
+type VendorHistoryConnection struct {
+	Edges      []*VendorHistoryEdge `json:"edges"`
+	PageInfo   PageInfo             `json:"pageInfo"`
+	TotalCount int                  `json:"totalCount"`
+}
+
+func (c *VendorHistoryConnection) build(nodes []*VendorHistory, pager *vendorhistoryPager, after *Cursor, first *int, before *Cursor, last *int) {
+	c.PageInfo.HasNextPage = before != nil
+	c.PageInfo.HasPreviousPage = after != nil
+	if first != nil && *first+1 == len(nodes) {
+		c.PageInfo.HasNextPage = true
+		nodes = nodes[:len(nodes)-1]
+	} else if last != nil && *last+1 == len(nodes) {
+		c.PageInfo.HasPreviousPage = true
+		nodes = nodes[:len(nodes)-1]
+	}
+	var nodeAt func(int) *VendorHistory
+	if last != nil {
+		n := len(nodes) - 1
+		nodeAt = func(i int) *VendorHistory {
+			return nodes[n-i]
+		}
+	} else {
+		nodeAt = func(i int) *VendorHistory {
+			return nodes[i]
+		}
+	}
+	c.Edges = make([]*VendorHistoryEdge, len(nodes))
+	for i := range nodes {
+		node := nodeAt(i)
+		c.Edges[i] = &VendorHistoryEdge{
+			Node:   node,
+			Cursor: pager.toCursor(node),
+		}
+	}
+	if l := len(c.Edges); l > 0 {
+		c.PageInfo.StartCursor = &c.Edges[0].Cursor
+		c.PageInfo.EndCursor = &c.Edges[l-1].Cursor
+	}
+	if c.TotalCount == 0 {
+		c.TotalCount = len(nodes)
+	}
+}
+
+// VendorHistoryPaginateOption enables pagination customization.
+type VendorHistoryPaginateOption func(*vendorhistoryPager) error
+
+// WithVendorHistoryOrder configures pagination ordering.
+func WithVendorHistoryOrder(order *VendorHistoryOrder) VendorHistoryPaginateOption {
+	if order == nil {
+		order = DefaultVendorHistoryOrder
+	}
+	o := *order
+	return func(pager *vendorhistoryPager) error {
+		if err := o.Direction.Validate(); err != nil {
+			return err
+		}
+		if o.Field == nil {
+			o.Field = DefaultVendorHistoryOrder.Field
+		}
+		pager.order = &o
+		return nil
+	}
+}
+
+// WithVendorHistoryFilter configures pagination filter.
+func WithVendorHistoryFilter(filter func(*VendorHistoryQuery) (*VendorHistoryQuery, error)) VendorHistoryPaginateOption {
+	return func(pager *vendorhistoryPager) error {
+		if filter == nil {
+			return errors.New("VendorHistoryQuery filter cannot be nil")
+		}
+		pager.filter = filter
+		return nil
+	}
+}
+
+type vendorhistoryPager struct {
+	reverse bool
+	order   *VendorHistoryOrder
+	filter  func(*VendorHistoryQuery) (*VendorHistoryQuery, error)
+}
+
+func newVendorHistoryPager(opts []VendorHistoryPaginateOption, reverse bool) (*vendorhistoryPager, error) {
+	pager := &vendorhistoryPager{reverse: reverse}
+	for _, opt := range opts {
+		if err := opt(pager); err != nil {
+			return nil, err
+		}
+	}
+	if pager.order == nil {
+		pager.order = DefaultVendorHistoryOrder
+	}
+	return pager, nil
+}
+
+func (p *vendorhistoryPager) applyFilter(query *VendorHistoryQuery) (*VendorHistoryQuery, error) {
+	if p.filter != nil {
+		return p.filter(query)
+	}
+	return query, nil
+}
+
+func (p *vendorhistoryPager) toCursor(vh *VendorHistory) Cursor {
+	return p.order.Field.toCursor(vh)
+}
+
+func (p *vendorhistoryPager) applyCursors(query *VendorHistoryQuery, after, before *Cursor) (*VendorHistoryQuery, error) {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	for _, predicate := range entgql.CursorsPredicate(after, before, DefaultVendorHistoryOrder.Field.column, p.order.Field.column, direction) {
+		query = query.Where(predicate)
+	}
+	return query, nil
+}
+
+func (p *vendorhistoryPager) applyOrder(query *VendorHistoryQuery) *VendorHistoryQuery {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	query = query.Order(p.order.Field.toTerm(direction.OrderTermOption()))
+	if p.order.Field != DefaultVendorHistoryOrder.Field {
+		query = query.Order(DefaultVendorHistoryOrder.Field.toTerm(direction.OrderTermOption()))
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(p.order.Field.column)
+	}
+	return query
+}
+
+func (p *vendorhistoryPager) orderExpr(query *VendorHistoryQuery) sql.Querier {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(p.order.Field.column)
+	}
+	return sql.ExprFunc(func(b *sql.Builder) {
+		b.Ident(p.order.Field.column).Pad().WriteString(string(direction))
+		if p.order.Field != DefaultVendorHistoryOrder.Field {
+			b.Comma().Ident(DefaultVendorHistoryOrder.Field.column).Pad().WriteString(string(direction))
+		}
+	})
+}
+
+// Paginate executes the query and returns a relay based cursor connection to VendorHistory.
+func (vh *VendorHistoryQuery) Paginate(
+	ctx context.Context, after *Cursor, first *int,
+	before *Cursor, last *int, opts ...VendorHistoryPaginateOption,
+) (*VendorHistoryConnection, error) {
+	if err := validateFirstLast(first, last); err != nil {
+		return nil, err
+	}
+	pager, err := newVendorHistoryPager(opts, last != nil)
+	if err != nil {
+		return nil, err
+	}
+	if vh, err = pager.applyFilter(vh); err != nil {
+		return nil, err
+	}
+	conn := &VendorHistoryConnection{Edges: []*VendorHistoryEdge{}}
+	ignoredEdges := !hasCollectedField(ctx, edgesField)
+	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+		hasPagination := after != nil || first != nil || before != nil || last != nil
+		if hasPagination || ignoredEdges {
+			c := vh.Clone()
+			c.ctx.Fields = nil
+			if conn.TotalCount, err = c.Count(ctx); err != nil {
+				return nil, err
+			}
+			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
+			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
+		}
+	}
+	if ignoredEdges || (first != nil && *first == 0) || (last != nil && *last == 0) {
+		return conn, nil
+	}
+	if vh, err = pager.applyCursors(vh, after, before); err != nil {
+		return nil, err
+	}
+	limit := paginateLimit(first, last)
+	if limit != 0 {
+		vh.Limit(limit)
+	}
+	if field := collectedField(ctx, edgesField, nodeField); field != nil {
+		if err := vh.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
+			return nil, err
+		}
+	}
+	vh = pager.applyOrder(vh)
+	nodes, err := vh.All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	conn.build(nodes, pager, after, first, before, last)
+	return conn, nil
+}
+
+var (
+	// VendorHistoryOrderFieldDisplayName orders VendorHistory by display_name.
+	VendorHistoryOrderFieldDisplayName = &VendorHistoryOrderField{
+		Value: func(vh *VendorHistory) (ent.Value, error) {
+			return vh.DisplayName, nil
+		},
+		column: vendorhistory.FieldDisplayName,
+		toTerm: vendorhistory.ByDisplayName,
+		toCursor: func(vh *VendorHistory) Cursor {
+			return Cursor{
+				ID:    vh.ID,
+				Value: vh.DisplayName,
+			}
+		},
+	}
+	// VendorHistoryOrderFieldVendorType orders VendorHistory by vendor_type.
+	VendorHistoryOrderFieldVendorType = &VendorHistoryOrderField{
+		Value: func(vh *VendorHistory) (ent.Value, error) {
+			return vh.VendorType, nil
+		},
+		column: vendorhistory.FieldVendorType,
+		toTerm: vendorhistory.ByVendorType,
+		toCursor: func(vh *VendorHistory) Cursor {
+			return Cursor{
+				ID:    vh.ID,
+				Value: vh.VendorType,
+			}
+		},
+	}
+	// VendorHistoryOrderFieldOnboardingState orders VendorHistory by onboarding_state.
+	VendorHistoryOrderFieldOnboardingState = &VendorHistoryOrderField{
+		Value: func(vh *VendorHistory) (ent.Value, error) {
+			return vh.OnboardingState, nil
+		},
+		column: vendorhistory.FieldOnboardingState,
+		toTerm: vendorhistory.ByOnboardingState,
+		toCursor: func(vh *VendorHistory) Cursor {
+			return Cursor{
+				ID:    vh.ID,
+				Value: vh.OnboardingState,
+			}
+		},
+	}
+)
+
+// String implement fmt.Stringer interface.
+func (f VendorHistoryOrderField) String() string {
+	var str string
+	switch f.column {
+	case VendorHistoryOrderFieldDisplayName.column:
+		str = "display_name"
+	case VendorHistoryOrderFieldVendorType.column:
+		str = "vendor_type"
+	case VendorHistoryOrderFieldOnboardingState.column:
+		str = "onboarding_state"
+	}
+	return str
+}
+
+// MarshalGQL implements graphql.Marshaler interface.
+func (f VendorHistoryOrderField) MarshalGQL(w io.Writer) {
+	io.WriteString(w, strconv.Quote(f.String()))
+}
+
+// UnmarshalGQL implements graphql.Unmarshaler interface.
+func (f *VendorHistoryOrderField) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("VendorHistoryOrderField %T must be a string", v)
+	}
+	switch str {
+	case "display_name":
+		*f = *VendorHistoryOrderFieldDisplayName
+	case "vendor_type":
+		*f = *VendorHistoryOrderFieldVendorType
+	case "onboarding_state":
+		*f = *VendorHistoryOrderFieldOnboardingState
+	default:
+		return fmt.Errorf("%s is not a valid VendorHistoryOrderField", str)
+	}
+	return nil
+}
+
+// VendorHistoryOrderField defines the ordering field of VendorHistory.
+type VendorHistoryOrderField struct {
+	// Value extracts the ordering value from the given VendorHistory.
+	Value    func(*VendorHistory) (ent.Value, error)
+	column   string // field or computed.
+	toTerm   func(...sql.OrderTermOption) vendorhistory.OrderOption
+	toCursor func(*VendorHistory) Cursor
+}
+
+// VendorHistoryOrder defines the ordering of VendorHistory.
+type VendorHistoryOrder struct {
+	Direction OrderDirection           `json:"direction"`
+	Field     *VendorHistoryOrderField `json:"field"`
+}
+
+// DefaultVendorHistoryOrder is the default ordering of VendorHistory.
+var DefaultVendorHistoryOrder = &VendorHistoryOrder{
+	Direction: entgql.OrderDirectionAsc,
+	Field: &VendorHistoryOrderField{
+		Value: func(vh *VendorHistory) (ent.Value, error) {
+			return vh.ID, nil
+		},
+		column: vendorhistory.FieldID,
+		toTerm: vendorhistory.ByID,
+		toCursor: func(vh *VendorHistory) Cursor {
+			return Cursor{ID: vh.ID}
+		},
+	},
+}
+
+// ToEdge converts VendorHistory into VendorHistoryEdge.
+func (vh *VendorHistory) ToEdge(order *VendorHistoryOrder) *VendorHistoryEdge {
+	if order == nil {
+		order = DefaultVendorHistoryOrder
+	}
+	return &VendorHistoryEdge{
+		Node:   vh,
+		Cursor: order.Field.toCursor(vh),
+	}
+}
+
+// VendorProfileEdge is the edge representation of VendorProfile.
+type VendorProfileEdge struct {
+	Node   *VendorProfile `json:"node"`
+	Cursor Cursor         `json:"cursor"`
+}
+
+// VendorProfileConnection is the connection containing edges to VendorProfile.
+type VendorProfileConnection struct {
+	Edges      []*VendorProfileEdge `json:"edges"`
+	PageInfo   PageInfo             `json:"pageInfo"`
+	TotalCount int                  `json:"totalCount"`
+}
+
+func (c *VendorProfileConnection) build(nodes []*VendorProfile, pager *vendorprofilePager, after *Cursor, first *int, before *Cursor, last *int) {
+	c.PageInfo.HasNextPage = before != nil
+	c.PageInfo.HasPreviousPage = after != nil
+	if first != nil && *first+1 == len(nodes) {
+		c.PageInfo.HasNextPage = true
+		nodes = nodes[:len(nodes)-1]
+	} else if last != nil && *last+1 == len(nodes) {
+		c.PageInfo.HasPreviousPage = true
+		nodes = nodes[:len(nodes)-1]
+	}
+	var nodeAt func(int) *VendorProfile
+	if last != nil {
+		n := len(nodes) - 1
+		nodeAt = func(i int) *VendorProfile {
+			return nodes[n-i]
+		}
+	} else {
+		nodeAt = func(i int) *VendorProfile {
+			return nodes[i]
+		}
+	}
+	c.Edges = make([]*VendorProfileEdge, len(nodes))
+	for i := range nodes {
+		node := nodeAt(i)
+		c.Edges[i] = &VendorProfileEdge{
+			Node:   node,
+			Cursor: pager.toCursor(node),
+		}
+	}
+	if l := len(c.Edges); l > 0 {
+		c.PageInfo.StartCursor = &c.Edges[0].Cursor
+		c.PageInfo.EndCursor = &c.Edges[l-1].Cursor
+	}
+	if c.TotalCount == 0 {
+		c.TotalCount = len(nodes)
+	}
+}
+
+// VendorProfilePaginateOption enables pagination customization.
+type VendorProfilePaginateOption func(*vendorprofilePager) error
+
+// WithVendorProfileOrder configures pagination ordering.
+func WithVendorProfileOrder(order *VendorProfileOrder) VendorProfilePaginateOption {
+	if order == nil {
+		order = DefaultVendorProfileOrder
+	}
+	o := *order
+	return func(pager *vendorprofilePager) error {
+		if err := o.Direction.Validate(); err != nil {
+			return err
+		}
+		if o.Field == nil {
+			o.Field = DefaultVendorProfileOrder.Field
+		}
+		pager.order = &o
+		return nil
+	}
+}
+
+// WithVendorProfileFilter configures pagination filter.
+func WithVendorProfileFilter(filter func(*VendorProfileQuery) (*VendorProfileQuery, error)) VendorProfilePaginateOption {
+	return func(pager *vendorprofilePager) error {
+		if filter == nil {
+			return errors.New("VendorProfileQuery filter cannot be nil")
+		}
+		pager.filter = filter
+		return nil
+	}
+}
+
+type vendorprofilePager struct {
+	reverse bool
+	order   *VendorProfileOrder
+	filter  func(*VendorProfileQuery) (*VendorProfileQuery, error)
+}
+
+func newVendorProfilePager(opts []VendorProfilePaginateOption, reverse bool) (*vendorprofilePager, error) {
+	pager := &vendorprofilePager{reverse: reverse}
+	for _, opt := range opts {
+		if err := opt(pager); err != nil {
+			return nil, err
+		}
+	}
+	if pager.order == nil {
+		pager.order = DefaultVendorProfileOrder
+	}
+	return pager, nil
+}
+
+func (p *vendorprofilePager) applyFilter(query *VendorProfileQuery) (*VendorProfileQuery, error) {
+	if p.filter != nil {
+		return p.filter(query)
+	}
+	return query, nil
+}
+
+func (p *vendorprofilePager) toCursor(vp *VendorProfile) Cursor {
+	return p.order.Field.toCursor(vp)
+}
+
+func (p *vendorprofilePager) applyCursors(query *VendorProfileQuery, after, before *Cursor) (*VendorProfileQuery, error) {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	for _, predicate := range entgql.CursorsPredicate(after, before, DefaultVendorProfileOrder.Field.column, p.order.Field.column, direction) {
+		query = query.Where(predicate)
+	}
+	return query, nil
+}
+
+func (p *vendorprofilePager) applyOrder(query *VendorProfileQuery) *VendorProfileQuery {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	query = query.Order(p.order.Field.toTerm(direction.OrderTermOption()))
+	if p.order.Field != DefaultVendorProfileOrder.Field {
+		query = query.Order(DefaultVendorProfileOrder.Field.toTerm(direction.OrderTermOption()))
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(p.order.Field.column)
+	}
+	return query
+}
+
+func (p *vendorprofilePager) orderExpr(query *VendorProfileQuery) sql.Querier {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(p.order.Field.column)
+	}
+	return sql.ExprFunc(func(b *sql.Builder) {
+		b.Ident(p.order.Field.column).Pad().WriteString(string(direction))
+		if p.order.Field != DefaultVendorProfileOrder.Field {
+			b.Comma().Ident(DefaultVendorProfileOrder.Field.column).Pad().WriteString(string(direction))
+		}
+	})
+}
+
+// Paginate executes the query and returns a relay based cursor connection to VendorProfile.
+func (vp *VendorProfileQuery) Paginate(
+	ctx context.Context, after *Cursor, first *int,
+	before *Cursor, last *int, opts ...VendorProfilePaginateOption,
+) (*VendorProfileConnection, error) {
+	if err := validateFirstLast(first, last); err != nil {
+		return nil, err
+	}
+	pager, err := newVendorProfilePager(opts, last != nil)
+	if err != nil {
+		return nil, err
+	}
+	if vp, err = pager.applyFilter(vp); err != nil {
+		return nil, err
+	}
+	conn := &VendorProfileConnection{Edges: []*VendorProfileEdge{}}
+	ignoredEdges := !hasCollectedField(ctx, edgesField)
+	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+		hasPagination := after != nil || first != nil || before != nil || last != nil
+		if hasPagination || ignoredEdges {
+			c := vp.Clone()
+			c.ctx.Fields = nil
+			if conn.TotalCount, err = c.Count(ctx); err != nil {
+				return nil, err
+			}
+			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
+			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
+		}
+	}
+	if ignoredEdges || (first != nil && *first == 0) || (last != nil && *last == 0) {
+		return conn, nil
+	}
+	if vp, err = pager.applyCursors(vp, after, before); err != nil {
+		return nil, err
+	}
+	limit := paginateLimit(first, last)
+	if limit != 0 {
+		vp.Limit(limit)
+	}
+	if field := collectedField(ctx, edgesField, nodeField); field != nil {
+		if err := vp.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
+			return nil, err
+		}
+	}
+	vp = pager.applyOrder(vp)
+	nodes, err := vp.All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	conn.build(nodes, pager, after, first, before, last)
+	return conn, nil
+}
+
+var (
+	// VendorProfileOrderFieldName orders VendorProfile by name.
+	VendorProfileOrderFieldName = &VendorProfileOrderField{
+		Value: func(vp *VendorProfile) (ent.Value, error) {
+			return vp.Name, nil
+		},
+		column: vendorprofile.FieldName,
+		toTerm: vendorprofile.ByName,
+		toCursor: func(vp *VendorProfile) Cursor {
+			return Cursor{
+				ID:    vp.ID,
+				Value: vp.Name,
+			}
+		},
+	}
+)
+
+// String implement fmt.Stringer interface.
+func (f VendorProfileOrderField) String() string {
+	var str string
+	switch f.column {
+	case VendorProfileOrderFieldName.column:
+		str = "name"
+	}
+	return str
+}
+
+// MarshalGQL implements graphql.Marshaler interface.
+func (f VendorProfileOrderField) MarshalGQL(w io.Writer) {
+	io.WriteString(w, strconv.Quote(f.String()))
+}
+
+// UnmarshalGQL implements graphql.Unmarshaler interface.
+func (f *VendorProfileOrderField) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("VendorProfileOrderField %T must be a string", v)
+	}
+	switch str {
+	case "name":
+		*f = *VendorProfileOrderFieldName
+	default:
+		return fmt.Errorf("%s is not a valid VendorProfileOrderField", str)
+	}
+	return nil
+}
+
+// VendorProfileOrderField defines the ordering field of VendorProfile.
+type VendorProfileOrderField struct {
+	// Value extracts the ordering value from the given VendorProfile.
+	Value    func(*VendorProfile) (ent.Value, error)
+	column   string // field or computed.
+	toTerm   func(...sql.OrderTermOption) vendorprofile.OrderOption
+	toCursor func(*VendorProfile) Cursor
+}
+
+// VendorProfileOrder defines the ordering of VendorProfile.
+type VendorProfileOrder struct {
+	Direction OrderDirection           `json:"direction"`
+	Field     *VendorProfileOrderField `json:"field"`
+}
+
+// DefaultVendorProfileOrder is the default ordering of VendorProfile.
+var DefaultVendorProfileOrder = &VendorProfileOrder{
+	Direction: entgql.OrderDirectionAsc,
+	Field: &VendorProfileOrderField{
+		Value: func(vp *VendorProfile) (ent.Value, error) {
+			return vp.ID, nil
+		},
+		column: vendorprofile.FieldID,
+		toTerm: vendorprofile.ByID,
+		toCursor: func(vp *VendorProfile) Cursor {
+			return Cursor{ID: vp.ID}
+		},
+	},
+}
+
+// ToEdge converts VendorProfile into VendorProfileEdge.
+func (vp *VendorProfile) ToEdge(order *VendorProfileOrder) *VendorProfileEdge {
+	if order == nil {
+		order = DefaultVendorProfileOrder
+	}
+	return &VendorProfileEdge{
+		Node:   vp,
+		Cursor: order.Field.toCursor(vp),
+	}
+}
+
+// VendorProfileHistoryEdge is the edge representation of VendorProfileHistory.
+type VendorProfileHistoryEdge struct {
+	Node   *VendorProfileHistory `json:"node"`
+	Cursor Cursor                `json:"cursor"`
+}
+
+// VendorProfileHistoryConnection is the connection containing edges to VendorProfileHistory.
+type VendorProfileHistoryConnection struct {
+	Edges      []*VendorProfileHistoryEdge `json:"edges"`
+	PageInfo   PageInfo                    `json:"pageInfo"`
+	TotalCount int                         `json:"totalCount"`
+}
+
+func (c *VendorProfileHistoryConnection) build(nodes []*VendorProfileHistory, pager *vendorprofilehistoryPager, after *Cursor, first *int, before *Cursor, last *int) {
+	c.PageInfo.HasNextPage = before != nil
+	c.PageInfo.HasPreviousPage = after != nil
+	if first != nil && *first+1 == len(nodes) {
+		c.PageInfo.HasNextPage = true
+		nodes = nodes[:len(nodes)-1]
+	} else if last != nil && *last+1 == len(nodes) {
+		c.PageInfo.HasPreviousPage = true
+		nodes = nodes[:len(nodes)-1]
+	}
+	var nodeAt func(int) *VendorProfileHistory
+	if last != nil {
+		n := len(nodes) - 1
+		nodeAt = func(i int) *VendorProfileHistory {
+			return nodes[n-i]
+		}
+	} else {
+		nodeAt = func(i int) *VendorProfileHistory {
+			return nodes[i]
+		}
+	}
+	c.Edges = make([]*VendorProfileHistoryEdge, len(nodes))
+	for i := range nodes {
+		node := nodeAt(i)
+		c.Edges[i] = &VendorProfileHistoryEdge{
+			Node:   node,
+			Cursor: pager.toCursor(node),
+		}
+	}
+	if l := len(c.Edges); l > 0 {
+		c.PageInfo.StartCursor = &c.Edges[0].Cursor
+		c.PageInfo.EndCursor = &c.Edges[l-1].Cursor
+	}
+	if c.TotalCount == 0 {
+		c.TotalCount = len(nodes)
+	}
+}
+
+// VendorProfileHistoryPaginateOption enables pagination customization.
+type VendorProfileHistoryPaginateOption func(*vendorprofilehistoryPager) error
+
+// WithVendorProfileHistoryOrder configures pagination ordering.
+func WithVendorProfileHistoryOrder(order *VendorProfileHistoryOrder) VendorProfileHistoryPaginateOption {
+	if order == nil {
+		order = DefaultVendorProfileHistoryOrder
+	}
+	o := *order
+	return func(pager *vendorprofilehistoryPager) error {
+		if err := o.Direction.Validate(); err != nil {
+			return err
+		}
+		if o.Field == nil {
+			o.Field = DefaultVendorProfileHistoryOrder.Field
+		}
+		pager.order = &o
+		return nil
+	}
+}
+
+// WithVendorProfileHistoryFilter configures pagination filter.
+func WithVendorProfileHistoryFilter(filter func(*VendorProfileHistoryQuery) (*VendorProfileHistoryQuery, error)) VendorProfileHistoryPaginateOption {
+	return func(pager *vendorprofilehistoryPager) error {
+		if filter == nil {
+			return errors.New("VendorProfileHistoryQuery filter cannot be nil")
+		}
+		pager.filter = filter
+		return nil
+	}
+}
+
+type vendorprofilehistoryPager struct {
+	reverse bool
+	order   *VendorProfileHistoryOrder
+	filter  func(*VendorProfileHistoryQuery) (*VendorProfileHistoryQuery, error)
+}
+
+func newVendorProfileHistoryPager(opts []VendorProfileHistoryPaginateOption, reverse bool) (*vendorprofilehistoryPager, error) {
+	pager := &vendorprofilehistoryPager{reverse: reverse}
+	for _, opt := range opts {
+		if err := opt(pager); err != nil {
+			return nil, err
+		}
+	}
+	if pager.order == nil {
+		pager.order = DefaultVendorProfileHistoryOrder
+	}
+	return pager, nil
+}
+
+func (p *vendorprofilehistoryPager) applyFilter(query *VendorProfileHistoryQuery) (*VendorProfileHistoryQuery, error) {
+	if p.filter != nil {
+		return p.filter(query)
+	}
+	return query, nil
+}
+
+func (p *vendorprofilehistoryPager) toCursor(vph *VendorProfileHistory) Cursor {
+	return p.order.Field.toCursor(vph)
+}
+
+func (p *vendorprofilehistoryPager) applyCursors(query *VendorProfileHistoryQuery, after, before *Cursor) (*VendorProfileHistoryQuery, error) {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	for _, predicate := range entgql.CursorsPredicate(after, before, DefaultVendorProfileHistoryOrder.Field.column, p.order.Field.column, direction) {
+		query = query.Where(predicate)
+	}
+	return query, nil
+}
+
+func (p *vendorprofilehistoryPager) applyOrder(query *VendorProfileHistoryQuery) *VendorProfileHistoryQuery {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	query = query.Order(p.order.Field.toTerm(direction.OrderTermOption()))
+	if p.order.Field != DefaultVendorProfileHistoryOrder.Field {
+		query = query.Order(DefaultVendorProfileHistoryOrder.Field.toTerm(direction.OrderTermOption()))
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(p.order.Field.column)
+	}
+	return query
+}
+
+func (p *vendorprofilehistoryPager) orderExpr(query *VendorProfileHistoryQuery) sql.Querier {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(p.order.Field.column)
+	}
+	return sql.ExprFunc(func(b *sql.Builder) {
+		b.Ident(p.order.Field.column).Pad().WriteString(string(direction))
+		if p.order.Field != DefaultVendorProfileHistoryOrder.Field {
+			b.Comma().Ident(DefaultVendorProfileHistoryOrder.Field.column).Pad().WriteString(string(direction))
+		}
+	})
+}
+
+// Paginate executes the query and returns a relay based cursor connection to VendorProfileHistory.
+func (vph *VendorProfileHistoryQuery) Paginate(
+	ctx context.Context, after *Cursor, first *int,
+	before *Cursor, last *int, opts ...VendorProfileHistoryPaginateOption,
+) (*VendorProfileHistoryConnection, error) {
+	if err := validateFirstLast(first, last); err != nil {
+		return nil, err
+	}
+	pager, err := newVendorProfileHistoryPager(opts, last != nil)
+	if err != nil {
+		return nil, err
+	}
+	if vph, err = pager.applyFilter(vph); err != nil {
+		return nil, err
+	}
+	conn := &VendorProfileHistoryConnection{Edges: []*VendorProfileHistoryEdge{}}
+	ignoredEdges := !hasCollectedField(ctx, edgesField)
+	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+		hasPagination := after != nil || first != nil || before != nil || last != nil
+		if hasPagination || ignoredEdges {
+			c := vph.Clone()
+			c.ctx.Fields = nil
+			if conn.TotalCount, err = c.Count(ctx); err != nil {
+				return nil, err
+			}
+			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
+			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
+		}
+	}
+	if ignoredEdges || (first != nil && *first == 0) || (last != nil && *last == 0) {
+		return conn, nil
+	}
+	if vph, err = pager.applyCursors(vph, after, before); err != nil {
+		return nil, err
+	}
+	limit := paginateLimit(first, last)
+	if limit != 0 {
+		vph.Limit(limit)
+	}
+	if field := collectedField(ctx, edgesField, nodeField); field != nil {
+		if err := vph.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
+			return nil, err
+		}
+	}
+	vph = pager.applyOrder(vph)
+	nodes, err := vph.All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	conn.build(nodes, pager, after, first, before, last)
+	return conn, nil
+}
+
+var (
+	// VendorProfileHistoryOrderFieldName orders VendorProfileHistory by name.
+	VendorProfileHistoryOrderFieldName = &VendorProfileHistoryOrderField{
+		Value: func(vph *VendorProfileHistory) (ent.Value, error) {
+			return vph.Name, nil
+		},
+		column: vendorprofilehistory.FieldName,
+		toTerm: vendorprofilehistory.ByName,
+		toCursor: func(vph *VendorProfileHistory) Cursor {
+			return Cursor{
+				ID:    vph.ID,
+				Value: vph.Name,
+			}
+		},
+	}
+)
+
+// String implement fmt.Stringer interface.
+func (f VendorProfileHistoryOrderField) String() string {
+	var str string
+	switch f.column {
+	case VendorProfileHistoryOrderFieldName.column:
+		str = "name"
+	}
+	return str
+}
+
+// MarshalGQL implements graphql.Marshaler interface.
+func (f VendorProfileHistoryOrderField) MarshalGQL(w io.Writer) {
+	io.WriteString(w, strconv.Quote(f.String()))
+}
+
+// UnmarshalGQL implements graphql.Unmarshaler interface.
+func (f *VendorProfileHistoryOrderField) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("VendorProfileHistoryOrderField %T must be a string", v)
+	}
+	switch str {
+	case "name":
+		*f = *VendorProfileHistoryOrderFieldName
+	default:
+		return fmt.Errorf("%s is not a valid VendorProfileHistoryOrderField", str)
+	}
+	return nil
+}
+
+// VendorProfileHistoryOrderField defines the ordering field of VendorProfileHistory.
+type VendorProfileHistoryOrderField struct {
+	// Value extracts the ordering value from the given VendorProfileHistory.
+	Value    func(*VendorProfileHistory) (ent.Value, error)
+	column   string // field or computed.
+	toTerm   func(...sql.OrderTermOption) vendorprofilehistory.OrderOption
+	toCursor func(*VendorProfileHistory) Cursor
+}
+
+// VendorProfileHistoryOrder defines the ordering of VendorProfileHistory.
+type VendorProfileHistoryOrder struct {
+	Direction OrderDirection                  `json:"direction"`
+	Field     *VendorProfileHistoryOrderField `json:"field"`
+}
+
+// DefaultVendorProfileHistoryOrder is the default ordering of VendorProfileHistory.
+var DefaultVendorProfileHistoryOrder = &VendorProfileHistoryOrder{
+	Direction: entgql.OrderDirectionAsc,
+	Field: &VendorProfileHistoryOrderField{
+		Value: func(vph *VendorProfileHistory) (ent.Value, error) {
+			return vph.ID, nil
+		},
+		column: vendorprofilehistory.FieldID,
+		toTerm: vendorprofilehistory.ByID,
+		toCursor: func(vph *VendorProfileHistory) Cursor {
+			return Cursor{ID: vph.ID}
+		},
+	},
+}
+
+// ToEdge converts VendorProfileHistory into VendorProfileHistoryEdge.
+func (vph *VendorProfileHistory) ToEdge(order *VendorProfileHistoryOrder) *VendorProfileHistoryEdge {
+	if order == nil {
+		order = DefaultVendorProfileHistoryOrder
+	}
+	return &VendorProfileHistoryEdge{
+		Node:   vph,
+		Cursor: order.Field.toCursor(vph),
+	}
+}
+
+// VendorProfilePostalAddressEdge is the edge representation of VendorProfilePostalAddress.
+type VendorProfilePostalAddressEdge struct {
+	Node   *VendorProfilePostalAddress `json:"node"`
+	Cursor Cursor                      `json:"cursor"`
+}
+
+// VendorProfilePostalAddressConnection is the connection containing edges to VendorProfilePostalAddress.
+type VendorProfilePostalAddressConnection struct {
+	Edges      []*VendorProfilePostalAddressEdge `json:"edges"`
+	PageInfo   PageInfo                          `json:"pageInfo"`
+	TotalCount int                               `json:"totalCount"`
+}
+
+func (c *VendorProfilePostalAddressConnection) build(nodes []*VendorProfilePostalAddress, pager *vendorprofilepostaladdressPager, after *Cursor, first *int, before *Cursor, last *int) {
+	c.PageInfo.HasNextPage = before != nil
+	c.PageInfo.HasPreviousPage = after != nil
+	if first != nil && *first+1 == len(nodes) {
+		c.PageInfo.HasNextPage = true
+		nodes = nodes[:len(nodes)-1]
+	} else if last != nil && *last+1 == len(nodes) {
+		c.PageInfo.HasPreviousPage = true
+		nodes = nodes[:len(nodes)-1]
+	}
+	var nodeAt func(int) *VendorProfilePostalAddress
+	if last != nil {
+		n := len(nodes) - 1
+		nodeAt = func(i int) *VendorProfilePostalAddress {
+			return nodes[n-i]
+		}
+	} else {
+		nodeAt = func(i int) *VendorProfilePostalAddress {
+			return nodes[i]
+		}
+	}
+	c.Edges = make([]*VendorProfilePostalAddressEdge, len(nodes))
+	for i := range nodes {
+		node := nodeAt(i)
+		c.Edges[i] = &VendorProfilePostalAddressEdge{
+			Node:   node,
+			Cursor: pager.toCursor(node),
+		}
+	}
+	if l := len(c.Edges); l > 0 {
+		c.PageInfo.StartCursor = &c.Edges[0].Cursor
+		c.PageInfo.EndCursor = &c.Edges[l-1].Cursor
+	}
+	if c.TotalCount == 0 {
+		c.TotalCount = len(nodes)
+	}
+}
+
+// VendorProfilePostalAddressPaginateOption enables pagination customization.
+type VendorProfilePostalAddressPaginateOption func(*vendorprofilepostaladdressPager) error
+
+// WithVendorProfilePostalAddressOrder configures pagination ordering.
+func WithVendorProfilePostalAddressOrder(order *VendorProfilePostalAddressOrder) VendorProfilePostalAddressPaginateOption {
+	if order == nil {
+		order = DefaultVendorProfilePostalAddressOrder
+	}
+	o := *order
+	return func(pager *vendorprofilepostaladdressPager) error {
+		if err := o.Direction.Validate(); err != nil {
+			return err
+		}
+		if o.Field == nil {
+			o.Field = DefaultVendorProfilePostalAddressOrder.Field
+		}
+		pager.order = &o
+		return nil
+	}
+}
+
+// WithVendorProfilePostalAddressFilter configures pagination filter.
+func WithVendorProfilePostalAddressFilter(filter func(*VendorProfilePostalAddressQuery) (*VendorProfilePostalAddressQuery, error)) VendorProfilePostalAddressPaginateOption {
+	return func(pager *vendorprofilepostaladdressPager) error {
+		if filter == nil {
+			return errors.New("VendorProfilePostalAddressQuery filter cannot be nil")
+		}
+		pager.filter = filter
+		return nil
+	}
+}
+
+type vendorprofilepostaladdressPager struct {
+	reverse bool
+	order   *VendorProfilePostalAddressOrder
+	filter  func(*VendorProfilePostalAddressQuery) (*VendorProfilePostalAddressQuery, error)
+}
+
+func newVendorProfilePostalAddressPager(opts []VendorProfilePostalAddressPaginateOption, reverse bool) (*vendorprofilepostaladdressPager, error) {
+	pager := &vendorprofilepostaladdressPager{reverse: reverse}
+	for _, opt := range opts {
+		if err := opt(pager); err != nil {
+			return nil, err
+		}
+	}
+	if pager.order == nil {
+		pager.order = DefaultVendorProfilePostalAddressOrder
+	}
+	return pager, nil
+}
+
+func (p *vendorprofilepostaladdressPager) applyFilter(query *VendorProfilePostalAddressQuery) (*VendorProfilePostalAddressQuery, error) {
+	if p.filter != nil {
+		return p.filter(query)
+	}
+	return query, nil
+}
+
+func (p *vendorprofilepostaladdressPager) toCursor(vppa *VendorProfilePostalAddress) Cursor {
+	return p.order.Field.toCursor(vppa)
+}
+
+func (p *vendorprofilepostaladdressPager) applyCursors(query *VendorProfilePostalAddressQuery, after, before *Cursor) (*VendorProfilePostalAddressQuery, error) {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	for _, predicate := range entgql.CursorsPredicate(after, before, DefaultVendorProfilePostalAddressOrder.Field.column, p.order.Field.column, direction) {
+		query = query.Where(predicate)
+	}
+	return query, nil
+}
+
+func (p *vendorprofilepostaladdressPager) applyOrder(query *VendorProfilePostalAddressQuery) *VendorProfilePostalAddressQuery {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	query = query.Order(p.order.Field.toTerm(direction.OrderTermOption()))
+	if p.order.Field != DefaultVendorProfilePostalAddressOrder.Field {
+		query = query.Order(DefaultVendorProfilePostalAddressOrder.Field.toTerm(direction.OrderTermOption()))
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(p.order.Field.column)
+	}
+	return query
+}
+
+func (p *vendorprofilepostaladdressPager) orderExpr(query *VendorProfilePostalAddressQuery) sql.Querier {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(p.order.Field.column)
+	}
+	return sql.ExprFunc(func(b *sql.Builder) {
+		b.Ident(p.order.Field.column).Pad().WriteString(string(direction))
+		if p.order.Field != DefaultVendorProfilePostalAddressOrder.Field {
+			b.Comma().Ident(DefaultVendorProfilePostalAddressOrder.Field.column).Pad().WriteString(string(direction))
+		}
+	})
+}
+
+// Paginate executes the query and returns a relay based cursor connection to VendorProfilePostalAddress.
+func (vppa *VendorProfilePostalAddressQuery) Paginate(
+	ctx context.Context, after *Cursor, first *int,
+	before *Cursor, last *int, opts ...VendorProfilePostalAddressPaginateOption,
+) (*VendorProfilePostalAddressConnection, error) {
+	if err := validateFirstLast(first, last); err != nil {
+		return nil, err
+	}
+	pager, err := newVendorProfilePostalAddressPager(opts, last != nil)
+	if err != nil {
+		return nil, err
+	}
+	if vppa, err = pager.applyFilter(vppa); err != nil {
+		return nil, err
+	}
+	conn := &VendorProfilePostalAddressConnection{Edges: []*VendorProfilePostalAddressEdge{}}
+	ignoredEdges := !hasCollectedField(ctx, edgesField)
+	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+		hasPagination := after != nil || first != nil || before != nil || last != nil
+		if hasPagination || ignoredEdges {
+			c := vppa.Clone()
+			c.ctx.Fields = nil
+			if conn.TotalCount, err = c.Count(ctx); err != nil {
+				return nil, err
+			}
+			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
+			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
+		}
+	}
+	if ignoredEdges || (first != nil && *first == 0) || (last != nil && *last == 0) {
+		return conn, nil
+	}
+	if vppa, err = pager.applyCursors(vppa, after, before); err != nil {
+		return nil, err
+	}
+	limit := paginateLimit(first, last)
+	if limit != 0 {
+		vppa.Limit(limit)
+	}
+	if field := collectedField(ctx, edgesField, nodeField); field != nil {
+		if err := vppa.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
+			return nil, err
+		}
+	}
+	vppa = pager.applyOrder(vppa)
+	nodes, err := vppa.All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	conn.build(nodes, pager, after, first, before, last)
+	return conn, nil
+}
+
+// VendorProfilePostalAddressOrderField defines the ordering field of VendorProfilePostalAddress.
+type VendorProfilePostalAddressOrderField struct {
+	// Value extracts the ordering value from the given VendorProfilePostalAddress.
+	Value    func(*VendorProfilePostalAddress) (ent.Value, error)
+	column   string // field or computed.
+	toTerm   func(...sql.OrderTermOption) vendorprofilepostaladdress.OrderOption
+	toCursor func(*VendorProfilePostalAddress) Cursor
+}
+
+// VendorProfilePostalAddressOrder defines the ordering of VendorProfilePostalAddress.
+type VendorProfilePostalAddressOrder struct {
+	Direction OrderDirection                        `json:"direction"`
+	Field     *VendorProfilePostalAddressOrderField `json:"field"`
+}
+
+// DefaultVendorProfilePostalAddressOrder is the default ordering of VendorProfilePostalAddress.
+var DefaultVendorProfilePostalAddressOrder = &VendorProfilePostalAddressOrder{
+	Direction: entgql.OrderDirectionAsc,
+	Field: &VendorProfilePostalAddressOrderField{
+		Value: func(vppa *VendorProfilePostalAddress) (ent.Value, error) {
+			return vppa.ID, nil
+		},
+		column: vendorprofilepostaladdress.FieldID,
+		toTerm: vendorprofilepostaladdress.ByID,
+		toCursor: func(vppa *VendorProfilePostalAddress) Cursor {
+			return Cursor{ID: vppa.ID}
+		},
+	},
+}
+
+// ToEdge converts VendorProfilePostalAddress into VendorProfilePostalAddressEdge.
+func (vppa *VendorProfilePostalAddress) ToEdge(order *VendorProfilePostalAddressOrder) *VendorProfilePostalAddressEdge {
+	if order == nil {
+		order = DefaultVendorProfilePostalAddressOrder
+	}
+	return &VendorProfilePostalAddressEdge{
+		Node:   vppa,
+		Cursor: order.Field.toCursor(vppa),
+	}
+}
+
+// VendorProfilePostalAddressHistoryEdge is the edge representation of VendorProfilePostalAddressHistory.
+type VendorProfilePostalAddressHistoryEdge struct {
+	Node   *VendorProfilePostalAddressHistory `json:"node"`
+	Cursor Cursor                             `json:"cursor"`
+}
+
+// VendorProfilePostalAddressHistoryConnection is the connection containing edges to VendorProfilePostalAddressHistory.
+type VendorProfilePostalAddressHistoryConnection struct {
+	Edges      []*VendorProfilePostalAddressHistoryEdge `json:"edges"`
+	PageInfo   PageInfo                                 `json:"pageInfo"`
+	TotalCount int                                      `json:"totalCount"`
+}
+
+func (c *VendorProfilePostalAddressHistoryConnection) build(nodes []*VendorProfilePostalAddressHistory, pager *vendorprofilepostaladdresshistoryPager, after *Cursor, first *int, before *Cursor, last *int) {
+	c.PageInfo.HasNextPage = before != nil
+	c.PageInfo.HasPreviousPage = after != nil
+	if first != nil && *first+1 == len(nodes) {
+		c.PageInfo.HasNextPage = true
+		nodes = nodes[:len(nodes)-1]
+	} else if last != nil && *last+1 == len(nodes) {
+		c.PageInfo.HasPreviousPage = true
+		nodes = nodes[:len(nodes)-1]
+	}
+	var nodeAt func(int) *VendorProfilePostalAddressHistory
+	if last != nil {
+		n := len(nodes) - 1
+		nodeAt = func(i int) *VendorProfilePostalAddressHistory {
+			return nodes[n-i]
+		}
+	} else {
+		nodeAt = func(i int) *VendorProfilePostalAddressHistory {
+			return nodes[i]
+		}
+	}
+	c.Edges = make([]*VendorProfilePostalAddressHistoryEdge, len(nodes))
+	for i := range nodes {
+		node := nodeAt(i)
+		c.Edges[i] = &VendorProfilePostalAddressHistoryEdge{
+			Node:   node,
+			Cursor: pager.toCursor(node),
+		}
+	}
+	if l := len(c.Edges); l > 0 {
+		c.PageInfo.StartCursor = &c.Edges[0].Cursor
+		c.PageInfo.EndCursor = &c.Edges[l-1].Cursor
+	}
+	if c.TotalCount == 0 {
+		c.TotalCount = len(nodes)
+	}
+}
+
+// VendorProfilePostalAddressHistoryPaginateOption enables pagination customization.
+type VendorProfilePostalAddressHistoryPaginateOption func(*vendorprofilepostaladdresshistoryPager) error
+
+// WithVendorProfilePostalAddressHistoryOrder configures pagination ordering.
+func WithVendorProfilePostalAddressHistoryOrder(order *VendorProfilePostalAddressHistoryOrder) VendorProfilePostalAddressHistoryPaginateOption {
+	if order == nil {
+		order = DefaultVendorProfilePostalAddressHistoryOrder
+	}
+	o := *order
+	return func(pager *vendorprofilepostaladdresshistoryPager) error {
+		if err := o.Direction.Validate(); err != nil {
+			return err
+		}
+		if o.Field == nil {
+			o.Field = DefaultVendorProfilePostalAddressHistoryOrder.Field
+		}
+		pager.order = &o
+		return nil
+	}
+}
+
+// WithVendorProfilePostalAddressHistoryFilter configures pagination filter.
+func WithVendorProfilePostalAddressHistoryFilter(filter func(*VendorProfilePostalAddressHistoryQuery) (*VendorProfilePostalAddressHistoryQuery, error)) VendorProfilePostalAddressHistoryPaginateOption {
+	return func(pager *vendorprofilepostaladdresshistoryPager) error {
+		if filter == nil {
+			return errors.New("VendorProfilePostalAddressHistoryQuery filter cannot be nil")
+		}
+		pager.filter = filter
+		return nil
+	}
+}
+
+type vendorprofilepostaladdresshistoryPager struct {
+	reverse bool
+	order   *VendorProfilePostalAddressHistoryOrder
+	filter  func(*VendorProfilePostalAddressHistoryQuery) (*VendorProfilePostalAddressHistoryQuery, error)
+}
+
+func newVendorProfilePostalAddressHistoryPager(opts []VendorProfilePostalAddressHistoryPaginateOption, reverse bool) (*vendorprofilepostaladdresshistoryPager, error) {
+	pager := &vendorprofilepostaladdresshistoryPager{reverse: reverse}
+	for _, opt := range opts {
+		if err := opt(pager); err != nil {
+			return nil, err
+		}
+	}
+	if pager.order == nil {
+		pager.order = DefaultVendorProfilePostalAddressHistoryOrder
+	}
+	return pager, nil
+}
+
+func (p *vendorprofilepostaladdresshistoryPager) applyFilter(query *VendorProfilePostalAddressHistoryQuery) (*VendorProfilePostalAddressHistoryQuery, error) {
+	if p.filter != nil {
+		return p.filter(query)
+	}
+	return query, nil
+}
+
+func (p *vendorprofilepostaladdresshistoryPager) toCursor(vppah *VendorProfilePostalAddressHistory) Cursor {
+	return p.order.Field.toCursor(vppah)
+}
+
+func (p *vendorprofilepostaladdresshistoryPager) applyCursors(query *VendorProfilePostalAddressHistoryQuery, after, before *Cursor) (*VendorProfilePostalAddressHistoryQuery, error) {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	for _, predicate := range entgql.CursorsPredicate(after, before, DefaultVendorProfilePostalAddressHistoryOrder.Field.column, p.order.Field.column, direction) {
+		query = query.Where(predicate)
+	}
+	return query, nil
+}
+
+func (p *vendorprofilepostaladdresshistoryPager) applyOrder(query *VendorProfilePostalAddressHistoryQuery) *VendorProfilePostalAddressHistoryQuery {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	query = query.Order(p.order.Field.toTerm(direction.OrderTermOption()))
+	if p.order.Field != DefaultVendorProfilePostalAddressHistoryOrder.Field {
+		query = query.Order(DefaultVendorProfilePostalAddressHistoryOrder.Field.toTerm(direction.OrderTermOption()))
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(p.order.Field.column)
+	}
+	return query
+}
+
+func (p *vendorprofilepostaladdresshistoryPager) orderExpr(query *VendorProfilePostalAddressHistoryQuery) sql.Querier {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(p.order.Field.column)
+	}
+	return sql.ExprFunc(func(b *sql.Builder) {
+		b.Ident(p.order.Field.column).Pad().WriteString(string(direction))
+		if p.order.Field != DefaultVendorProfilePostalAddressHistoryOrder.Field {
+			b.Comma().Ident(DefaultVendorProfilePostalAddressHistoryOrder.Field.column).Pad().WriteString(string(direction))
+		}
+	})
+}
+
+// Paginate executes the query and returns a relay based cursor connection to VendorProfilePostalAddressHistory.
+func (vppah *VendorProfilePostalAddressHistoryQuery) Paginate(
+	ctx context.Context, after *Cursor, first *int,
+	before *Cursor, last *int, opts ...VendorProfilePostalAddressHistoryPaginateOption,
+) (*VendorProfilePostalAddressHistoryConnection, error) {
+	if err := validateFirstLast(first, last); err != nil {
+		return nil, err
+	}
+	pager, err := newVendorProfilePostalAddressHistoryPager(opts, last != nil)
+	if err != nil {
+		return nil, err
+	}
+	if vppah, err = pager.applyFilter(vppah); err != nil {
+		return nil, err
+	}
+	conn := &VendorProfilePostalAddressHistoryConnection{Edges: []*VendorProfilePostalAddressHistoryEdge{}}
+	ignoredEdges := !hasCollectedField(ctx, edgesField)
+	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+		hasPagination := after != nil || first != nil || before != nil || last != nil
+		if hasPagination || ignoredEdges {
+			c := vppah.Clone()
+			c.ctx.Fields = nil
+			if conn.TotalCount, err = c.Count(ctx); err != nil {
+				return nil, err
+			}
+			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
+			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
+		}
+	}
+	if ignoredEdges || (first != nil && *first == 0) || (last != nil && *last == 0) {
+		return conn, nil
+	}
+	if vppah, err = pager.applyCursors(vppah, after, before); err != nil {
+		return nil, err
+	}
+	limit := paginateLimit(first, last)
+	if limit != 0 {
+		vppah.Limit(limit)
+	}
+	if field := collectedField(ctx, edgesField, nodeField); field != nil {
+		if err := vppah.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
+			return nil, err
+		}
+	}
+	vppah = pager.applyOrder(vppah)
+	nodes, err := vppah.All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	conn.build(nodes, pager, after, first, before, last)
+	return conn, nil
+}
+
+// VendorProfilePostalAddressHistoryOrderField defines the ordering field of VendorProfilePostalAddressHistory.
+type VendorProfilePostalAddressHistoryOrderField struct {
+	// Value extracts the ordering value from the given VendorProfilePostalAddressHistory.
+	Value    func(*VendorProfilePostalAddressHistory) (ent.Value, error)
+	column   string // field or computed.
+	toTerm   func(...sql.OrderTermOption) vendorprofilepostaladdresshistory.OrderOption
+	toCursor func(*VendorProfilePostalAddressHistory) Cursor
+}
+
+// VendorProfilePostalAddressHistoryOrder defines the ordering of VendorProfilePostalAddressHistory.
+type VendorProfilePostalAddressHistoryOrder struct {
+	Direction OrderDirection                               `json:"direction"`
+	Field     *VendorProfilePostalAddressHistoryOrderField `json:"field"`
+}
+
+// DefaultVendorProfilePostalAddressHistoryOrder is the default ordering of VendorProfilePostalAddressHistory.
+var DefaultVendorProfilePostalAddressHistoryOrder = &VendorProfilePostalAddressHistoryOrder{
+	Direction: entgql.OrderDirectionAsc,
+	Field: &VendorProfilePostalAddressHistoryOrderField{
+		Value: func(vppah *VendorProfilePostalAddressHistory) (ent.Value, error) {
+			return vppah.ID, nil
+		},
+		column: vendorprofilepostaladdresshistory.FieldID,
+		toTerm: vendorprofilepostaladdresshistory.ByID,
+		toCursor: func(vppah *VendorProfilePostalAddressHistory) Cursor {
+			return Cursor{ID: vppah.ID}
+		},
+	},
+}
+
+// ToEdge converts VendorProfilePostalAddressHistory into VendorProfilePostalAddressHistoryEdge.
+func (vppah *VendorProfilePostalAddressHistory) ToEdge(order *VendorProfilePostalAddressHistoryOrder) *VendorProfilePostalAddressHistoryEdge {
+	if order == nil {
+		order = DefaultVendorProfilePostalAddressHistoryOrder
+	}
+	return &VendorProfilePostalAddressHistoryEdge{
+		Node:   vppah,
+		Cursor: order.Field.toCursor(vppah),
 	}
 }
 

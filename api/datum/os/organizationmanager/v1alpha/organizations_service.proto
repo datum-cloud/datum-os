@@ -1,0 +1,163 @@
+syntax = "proto3";
+
+option go_package = "go.datumapis.com/os/genproto/os/organizationmanager/v1alpha";
+
+package datum.os.organizationmanager.v1alpha;
+
+import "google/api/annotations.proto";
+import "google/api/client.proto";
+import "google/api/field_behavior.proto";
+import "google/api/resource.proto";
+import "google/longrunning/operations.proto";
+import "google/protobuf/field_mask.proto";
+import "datum/os/organizationmanager/v1alpha/organizations_resources.proto";
+
+// Organizations is the service for managing Organizations.
+// TODO: Add support for parent/child relationships for Organizations.
+service Organizations {
+    // CreateOrganization creates a new Organization.
+    rpc CreateOrganization(CreateOrganizationRequest) returns (google.longrunning.Operation) {
+        option (google.api.method_signature) = "parent,organization,organization_id";
+        option (google.api.http) = {
+            post: "/v1alpha/{parent=organizations}"
+            body: "organization"
+        };
+        option (google.longrunning.operation_info) = {
+            response_type: "Organization"
+            metadata_type: "google.cloud.common.OperationMetadata"
+        };
+    }
+    // GetOrganization gets an Organization by name.
+    rpc GetOrganization(GetOrganizationRequest) returns (Organization) {
+        option (google.api.method_signature) = "name";
+        option (google.api.http) = {
+            get: "/v1alpha/{name=organizations/*}"
+        };
+    }
+
+    // ListOrganizations lists all Organizations.
+    rpc ListOrganizations(ListOrganizationsRequest) returns (ListOrganizationsResponse) {
+        option (google.api.method_signature) = "parent";
+        option (google.api.http) = {
+            get: "/v1alpha/{parent=organizations}"
+        };
+    }
+
+    // UpdateOrganization updates an Organization.
+    rpc UpdateOrganization(UpdateOrganizationRequest) returns (google.longrunning.Operation) {
+        option (google.api.method_signature) = "organization,update_mask";
+        option (google.api.http) = {
+            patch: "/v1alpha/{organization.name=organizations/*}"
+            body: "organization"
+        };
+        option (google.longrunning.operation_info) = {
+            response_type: "Organization"
+            metadata_type: "google.cloud.common.OperationMetadata"
+        };
+    }
+
+    // DeleteOrganization deletes an Organization by name.
+    rpc DeleteOrganization(DeleteOrganizationRequest) returns (google.longrunning.Operation) {
+        option (google.api.method_signature) = "name";
+        option (google.api.http) = {
+            delete: "/v1alpha/{name=organizations/*}"
+        };
+        option (google.longrunning.operation_info) = {
+            response_type: "google.protobuf.Empty"
+            metadata_type: "google.cloud.common.OperationMetadata"
+        };
+    }
+}
+
+// CreateOrganizationRequest is the request for creating an Organization.
+message CreateOrganizationRequest {
+    // The parent resource where the Organization will be created. Defaults to the current user's organization.
+    // Format: organizations
+    string parent = 1 [
+        (google.api.field_behavior) = REQUIRED,
+        (google.api.resource_reference) = {
+            type: "*"
+            child_type: "api.datum.net/Organization"
+        }
+    ];
+    // The ID to use for the Organization. If not specified, an ID will be automatically generated.
+    // If the ID is automatically generated, the Client is responsible for reconciliation.
+    string organization_id = 2 [(google.api.field_behavior) = OPTIONAL];
+    // The Organization to create.
+    Organization organization = 3 [(google.api.field_behavior) = REQUIRED];
+    // If true, the request is validated and nothing is persisted.
+    bool validate_only = 4 [(google.api.field_behavior) = OPTIONAL];
+}
+
+// GetOrganizationRequest is the request for getting an Organization by name.
+message GetOrganizationRequest {
+    // The name of the Organization to get.
+    // Format: organizations/{organization}
+    string name = 1 [
+        (google.api.field_behavior) = REQUIRED,
+        (google.api.resource_reference) = {
+            type: "api.datum.net/Organization"
+        }
+    ];
+}
+
+// ListOrganizationsRequest is the request for listing Organizations.
+message ListOrganizationsRequest {
+    // The parent organization where the Organizations will be listed.
+    // If not specified, the current user's organization will be used.
+    string parent = 1 [
+        (google.api.field_behavior) = REQUIRED,
+        (google.api.resource_reference) = {
+            child_type: "api.datum.net/Organization"
+        }
+    ];
+    // The maximum number of Organizations to return. The service may return fewer than this value.
+    // If unspecified, at most 50 Organizations will be returned. The maximum value is 1000; values above 1000 will be coerced to 1000.
+    int32 page_size = 2 [(google.api.field_behavior) = OPTIONAL];
+    // A page token, received from a previous `ListOrganizations` call. Provide this to retrieve the subsequent page.
+    // When paginating, all other parameters must match the call that provided the page token.
+    string page_token = 3 [(google.api.field_behavior) = OPTIONAL];
+    // A filter expression that filters the Organizations to be listed.
+    string filter = 4 [(google.api.field_behavior) = OPTIONAL];
+    // The order by fields for the Organizations. The default order is ascending. There is no descending order.
+    string order_by = 5 [(google.api.field_behavior) = OPTIONAL];
+}
+
+// ListOrganizationsResponse is the response for listing Organizations.
+message ListOrganizationsResponse {
+    // The list of Organizations.
+    repeated Organization organizations = 1;
+    // A token to retrieve the next page of results.
+    // Pass this value in the ListOrganizationsRequest.page_token field in a subsequent call to `ListOrganizations` to retrieve the next page of results.
+    // If the page token is not set, there are no more results.
+    string next_page_token = 2;
+}
+
+// UpdateOrganizationRequest is the request for updating an Organization.
+message UpdateOrganizationRequest {
+    // The Organization to update.
+    Organization organization = 1 [(google.api.field_behavior) = REQUIRED];
+    // The field mask to update the Organization.
+    google.protobuf.FieldMask update_mask = 2 [(google.api.field_behavior) = OPTIONAL];
+    // Allow missing Organization. If true, the Organization will be created if it does not exist. In this case,
+    // field_mask is ignored.
+    bool allow_missing = 3 [(google.api.field_behavior) = OPTIONAL];
+    // If true, the request is validated and nothing is persisted.
+    bool validate_only = 4 [(google.api.field_behavior) = OPTIONAL];
+}
+
+// DeleteOrganizationRequest is the request for deleting an Organization by name.
+message DeleteOrganizationRequest {
+    // The name of the Organization to delete.
+    string name = 1 [
+        (google.api.field_behavior) = REQUIRED,
+        (google.api.resource_reference) = {
+            type: "api.datum.net/Organization"
+        }
+    ];
+    // The etag of the Organization to delete. If this is not the same etag as the currently stored Organization,
+    // the request will be rejected. If not provided, the Organization will be deleted unconditionally.
+    string etag = 2 [(google.api.field_behavior) = OPTIONAL];
+    // If true, the request is validated and nothing is persisted.
+    bool validate_only = 3 [(google.api.field_behavior) = OPTIONAL];
+}

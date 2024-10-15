@@ -344,6 +344,18 @@ func (e *Entity) Notes(ctx context.Context) (result []*Note, err error) {
 	return result, err
 }
 
+func (e *Entity) PostalAddresses(ctx context.Context) (result []*PostalAddress, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = e.NamedPostalAddresses(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = e.Edges.PostalAddressesOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = e.QueryPostalAddresses().All(ctx)
+	}
+	return result, err
+}
+
 func (e *Entity) Files(ctx context.Context) (result []*File, err error) {
 	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
 		result, err = e.NamedFiles(graphql.GetFieldContext(ctx).Field.Alias)
@@ -1289,6 +1301,42 @@ func (o *Organization) Notes(ctx context.Context) (result []*Note, err error) {
 	return result, err
 }
 
+func (o *Organization) Vendors(ctx context.Context) (result []*Vendor, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = o.NamedVendors(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = o.Edges.VendorsOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = o.QueryVendors().All(ctx)
+	}
+	return result, err
+}
+
+func (o *Organization) VendorProfiles(ctx context.Context) (result []*VendorProfile, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = o.NamedVendorProfiles(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = o.Edges.VendorProfilesOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = o.QueryVendorProfiles().All(ctx)
+	}
+	return result, err
+}
+
+func (o *Organization) PostalAddresses(ctx context.Context) (result []*PostalAddress, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = o.NamedPostalAddresses(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = o.Edges.PostalAddressesOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = o.QueryPostalAddresses().All(ctx)
+	}
+	return result, err
+}
+
 func (o *Organization) Members(ctx context.Context) (result []*OrgMembership, err error) {
 	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
 		result, err = o.NamedMembers(graphql.GetFieldContext(ctx).Field.Alias)
@@ -1337,6 +1385,50 @@ func (pat *PersonalAccessToken) Events(ctx context.Context) (result []*Event, er
 	}
 	if IsNotLoaded(err) {
 		result, err = pat.QueryEvents().All(ctx)
+	}
+	return result, err
+}
+
+func (pa *PostalAddress) Owner(ctx context.Context) (*Organization, error) {
+	result, err := pa.Edges.OwnerOrErr()
+	if IsNotLoaded(err) {
+		result, err = pa.QueryOwner().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (pa *PostalAddress) Events(ctx context.Context) (result []*Event, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = pa.NamedEvents(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = pa.Edges.EventsOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = pa.QueryEvents().All(ctx)
+	}
+	return result, err
+}
+
+func (pa *PostalAddress) Profile(ctx context.Context) (result []*VendorProfile, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = pa.NamedProfile(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = pa.Edges.ProfileOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = pa.QueryProfile().All(ctx)
+	}
+	return result, err
+}
+
+func (pa *PostalAddress) VendorProfilePostalAddresses(ctx context.Context) (result []*VendorProfilePostalAddress, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = pa.NamedVendorProfilePostalAddresses(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = pa.Edges.VendorProfilePostalAddressesOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = pa.QueryVendorProfilePostalAddresses().All(ctx)
 	}
 	return result, err
 }
@@ -1507,6 +1599,102 @@ func (us *UserSetting) DefaultOrg(ctx context.Context) (*Organization, error) {
 		result, err = us.QueryDefaultOrg().Only(ctx)
 	}
 	return result, MaskNotFound(err)
+}
+
+func (v *Vendor) Owner(ctx context.Context) (*Organization, error) {
+	result, err := v.Edges.OwnerOrErr()
+	if IsNotLoaded(err) {
+		result, err = v.QueryOwner().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (v *Vendor) Profile(ctx context.Context) (*VendorProfile, error) {
+	result, err := v.Edges.ProfileOrErr()
+	if IsNotLoaded(err) {
+		result, err = v.QueryProfile().Only(ctx)
+	}
+	return result, err
+}
+
+func (v *Vendor) Events(ctx context.Context) (result []*Event, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = v.NamedEvents(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = v.Edges.EventsOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = v.QueryEvents().All(ctx)
+	}
+	return result, err
+}
+
+func (vp *VendorProfile) Owner(ctx context.Context) (*Organization, error) {
+	result, err := vp.Edges.OwnerOrErr()
+	if IsNotLoaded(err) {
+		result, err = vp.QueryOwner().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (vp *VendorProfile) PostalAddresses(ctx context.Context) (result []*PostalAddress, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = vp.NamedPostalAddresses(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = vp.Edges.PostalAddressesOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = vp.QueryPostalAddresses().All(ctx)
+	}
+	return result, err
+}
+
+func (vp *VendorProfile) Vendor(ctx context.Context) (*Vendor, error) {
+	result, err := vp.Edges.VendorOrErr()
+	if IsNotLoaded(err) {
+		result, err = vp.QueryVendor().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (vp *VendorProfile) VendorProfilePostalAddresses(ctx context.Context) (result []*VendorProfilePostalAddress, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = vp.NamedVendorProfilePostalAddresses(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = vp.Edges.VendorProfilePostalAddressesOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = vp.QueryVendorProfilePostalAddresses().All(ctx)
+	}
+	return result, err
+}
+
+func (vppa *VendorProfilePostalAddress) PostalAddress(ctx context.Context) (*PostalAddress, error) {
+	result, err := vppa.Edges.PostalAddressOrErr()
+	if IsNotLoaded(err) {
+		result, err = vppa.QueryPostalAddress().Only(ctx)
+	}
+	return result, err
+}
+
+func (vppa *VendorProfilePostalAddress) Profile(ctx context.Context) (*VendorProfile, error) {
+	result, err := vppa.Edges.ProfileOrErr()
+	if IsNotLoaded(err) {
+		result, err = vppa.QueryProfile().Only(ctx)
+	}
+	return result, err
+}
+
+func (vppa *VendorProfilePostalAddress) Events(ctx context.Context) (result []*Event, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = vppa.NamedEvents(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = vppa.Edges.EventsOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = vppa.QueryEvents().All(ctx)
+	}
+	return result, err
 }
 
 func (w *Webhook) Owner(ctx context.Context) (*Organization, error) {

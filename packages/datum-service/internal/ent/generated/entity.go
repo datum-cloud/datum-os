@@ -67,20 +67,23 @@ type EntityEdges struct {
 	Documents []*DocumentData `json:"documents,omitempty"`
 	// Notes holds the value of the notes edge.
 	Notes []*Note `json:"notes,omitempty"`
+	// PostalAddresses holds the value of the postal_addresses edge.
+	PostalAddresses []*PostalAddress `json:"postal_addresses,omitempty"`
 	// Files holds the value of the files edge.
 	Files []*File `json:"files,omitempty"`
 	// EntityType holds the value of the entity_type edge.
 	EntityType *EntityType `json:"entity_type,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [6]bool
+	loadedTypes [7]bool
 	// totalCount holds the count of the edges above.
-	totalCount [6]map[string]int
+	totalCount [7]map[string]int
 
-	namedContacts  map[string][]*Contact
-	namedDocuments map[string][]*DocumentData
-	namedNotes     map[string][]*Note
-	namedFiles     map[string][]*File
+	namedContacts        map[string][]*Contact
+	namedDocuments       map[string][]*DocumentData
+	namedNotes           map[string][]*Note
+	namedPostalAddresses map[string][]*PostalAddress
+	namedFiles           map[string][]*File
 }
 
 // OwnerOrErr returns the Owner value or an error if the edge
@@ -121,10 +124,19 @@ func (e EntityEdges) NotesOrErr() ([]*Note, error) {
 	return nil, &NotLoadedError{edge: "notes"}
 }
 
+// PostalAddressesOrErr returns the PostalAddresses value or an error if the edge
+// was not loaded in eager-loading.
+func (e EntityEdges) PostalAddressesOrErr() ([]*PostalAddress, error) {
+	if e.loadedTypes[4] {
+		return e.PostalAddresses, nil
+	}
+	return nil, &NotLoadedError{edge: "postal_addresses"}
+}
+
 // FilesOrErr returns the Files value or an error if the edge
 // was not loaded in eager-loading.
 func (e EntityEdges) FilesOrErr() ([]*File, error) {
-	if e.loadedTypes[4] {
+	if e.loadedTypes[5] {
 		return e.Files, nil
 	}
 	return nil, &NotLoadedError{edge: "files"}
@@ -135,7 +147,7 @@ func (e EntityEdges) FilesOrErr() ([]*File, error) {
 func (e EntityEdges) EntityTypeOrErr() (*EntityType, error) {
 	if e.EntityType != nil {
 		return e.EntityType, nil
-	} else if e.loadedTypes[5] {
+	} else if e.loadedTypes[6] {
 		return nil, &NotFoundError{label: entitytype.Label}
 	}
 	return nil, &NotLoadedError{edge: "entity_type"}
@@ -309,6 +321,11 @@ func (e *Entity) QueryNotes() *NoteQuery {
 	return NewEntityClient(e.config).QueryNotes(e)
 }
 
+// QueryPostalAddresses queries the "postal_addresses" edge of the Entity entity.
+func (e *Entity) QueryPostalAddresses() *PostalAddressQuery {
+	return NewEntityClient(e.config).QueryPostalAddresses(e)
+}
+
 // QueryFiles queries the "files" edge of the Entity entity.
 func (e *Entity) QueryFiles() *FileQuery {
 	return NewEntityClient(e.config).QueryFiles(e)
@@ -459,6 +476,30 @@ func (e *Entity) appendNamedNotes(name string, edges ...*Note) {
 		e.Edges.namedNotes[name] = []*Note{}
 	} else {
 		e.Edges.namedNotes[name] = append(e.Edges.namedNotes[name], edges...)
+	}
+}
+
+// NamedPostalAddresses returns the PostalAddresses named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (e *Entity) NamedPostalAddresses(name string) ([]*PostalAddress, error) {
+	if e.Edges.namedPostalAddresses == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := e.Edges.namedPostalAddresses[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (e *Entity) appendNamedPostalAddresses(name string, edges ...*PostalAddress) {
+	if e.Edges.namedPostalAddresses == nil {
+		e.Edges.namedPostalAddresses = make(map[string][]*PostalAddress)
+	}
+	if len(edges) == 0 {
+		e.Edges.namedPostalAddresses[name] = []*PostalAddress{}
+	} else {
+		e.Edges.namedPostalAddresses[name] = append(e.Edges.namedPostalAddresses[name], edges...)
 	}
 }
 

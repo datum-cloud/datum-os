@@ -1,0 +1,105 @@
+
+mutation CreateBulkCSVVendorProfilePostalAddress($input: Upload!) {
+  createBulkCSVVendorProfilePostalAddress(input: $input) {
+    vendorProfilePostalAddresses {
+      createdAt
+      createdBy
+      id
+      postalAddressID
+      postalAddressType
+      updatedAt
+      updatedBy
+      vendorProfileID
+    }
+  }
+}
+
+mutation CreateBulkVendorProfilePostalAddress($input: [CreateVendorProfilePostalAddressInput!]) {
+  createBulkVendorProfilePostalAddress(input: $input) {
+    vendorProfilePostalAddresses {
+      createdAt
+      createdBy
+      id
+      postalAddressID
+      postalAddressType
+      updatedAt
+      updatedBy
+      vendorProfileID
+    }
+  }
+}
+
+mutation CreateVendorProfilePostalAddress($input: CreateVendorProfilePostalAddressInput!) {
+  createVendorProfilePostalAddress(input: $input) {
+    vendorProfilePostalAddress {
+      createdAt
+      createdBy
+      id
+      postalAddressID
+      postalAddressType
+      updatedAt
+      updatedBy
+      vendorProfileID
+    }
+  }
+}
+
+query GetAllVendorProfilePostalAddresses {
+  vendorProfilePostalAddresses {
+    edges {
+      node {
+        createdAt
+        createdBy
+        id
+        postalAddressID
+        postalAddressType
+        updatedAt
+        updatedBy
+        vendorProfileID
+      }
+    }
+  }
+}
+query GetVendorProfilePostalAddressByID($vendorProfilePostalAddressId: ID!) {
+  vendorProfilePostalAddress(id: $vendorProfilePostalAddressId) {
+    createdAt
+    createdBy
+    id
+    postalAddressID
+    postalAddressType
+    updatedAt
+    updatedBy
+    vendorProfileID
+  }
+}
+
+query GetVendorProfilePostalAddresses($where: VendorProfilePostalAddressWhereInput) {
+  vendorProfilePostalAddresses(where: $where) {
+    edges {
+      node {
+        createdAt
+        createdBy
+        id
+        postalAddressID
+        postalAddressType
+        updatedAt
+        updatedBy
+        vendorProfileID
+      }
+    }
+  }
+}
+mutation UpdateVendorProfilePostalAddress($updateVendorProfilePostalAddressId: ID!, $input: UpdateVendorProfilePostalAddressInput!) {
+  updateVendorProfilePostalAddress(id: $updateVendorProfilePostalAddressId, input: $input) {
+    vendorProfilePostalAddress {
+      createdAt
+      createdBy
+      id
+      postalAddressID
+      postalAddressType
+      updatedAt
+      updatedBy
+      vendorProfileID
+    }
+  }
+}

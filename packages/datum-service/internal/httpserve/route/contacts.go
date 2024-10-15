@@ -3,6 +3,7 @@ package route
 import (
 	"net/http"
 
+	"github.com/datum-cloud/datum-os/internal/httpserve/mw"
 	echo "github.com/datum-cloud/datum-os/pkg/echox"
 )
 
@@ -15,7 +16,7 @@ func registerContactsHandlers(router *Router) (err error) {
 		Name:        name + "Get",
 		Method:      http.MethodGet,
 		Path:        path,
-		Middlewares: authMW,
+		Middlewares: mw.GetAuthMiddleware(),
 		Handler: func(c echo.Context) error {
 			return router.Handler.ContactsGet(c)
 		},
@@ -31,7 +32,7 @@ func registerContactsHandlers(router *Router) (err error) {
 		Name:        name + "GetOne",
 		Method:      http.MethodGet,
 		Path:        path + "/:id",
-		Middlewares: authMW,
+		Middlewares: mw.GetAuthMiddleware(),
 		Handler: func(c echo.Context) error {
 			return router.Handler.ContactsGetOne(c)
 		},
@@ -47,7 +48,7 @@ func registerContactsHandlers(router *Router) (err error) {
 		Name:        name + "Post",
 		Method:      http.MethodPost,
 		Path:        path,
-		Middlewares: authMW,
+		Middlewares: mw.GetAuthMiddleware(),
 		Handler: func(c echo.Context) error {
 			return router.Handler.ContactsPost(c)
 		},
@@ -63,7 +64,7 @@ func registerContactsHandlers(router *Router) (err error) {
 		Name:        name + "Put",
 		Method:      http.MethodPut,
 		Path:        path,
-		Middlewares: authMW,
+		Middlewares: mw.GetAuthMiddleware(),
 		Handler: func(c echo.Context) error {
 			return router.Handler.ContactsPut(c)
 		},
@@ -79,7 +80,7 @@ func registerContactsHandlers(router *Router) (err error) {
 		Name:        name + "Delete",
 		Method:      http.MethodDelete,
 		Path:        path,
-		Middlewares: authMW,
+		Middlewares: mw.GetAuthMiddleware(),
 		Handler: func(c echo.Context) error {
 			return router.Handler.ContactsDelete(c)
 		},

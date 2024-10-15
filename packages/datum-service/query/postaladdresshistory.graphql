@@ -1,0 +1,59 @@
+
+
+query GetAllPostalAddressHistories {
+  postalAddressHistories {
+    edges {
+      node {
+        addressLines
+        administrativeArea
+        createdAt
+        createdBy
+        historyTime
+        id
+        languageCode
+        locality
+        operation
+        organization
+        ownerID
+        postalCode
+        recipients
+        ref
+        regionCode
+        sortingCode
+        sublocality
+        tags
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}
+
+query GetPostalAddressHistories($where: PostalAddressHistoryWhereInput) {
+  postalAddressHistories(where: $where) {
+    edges {
+      node {
+        addressLines
+        administrativeArea
+        createdAt
+        createdBy
+        historyTime
+        id
+        languageCode
+        locality
+        operation
+        organization
+        ownerID
+        postalCode
+        recipients
+        ref
+        regionCode
+        sortingCode
+        sublocality
+        tags
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}
