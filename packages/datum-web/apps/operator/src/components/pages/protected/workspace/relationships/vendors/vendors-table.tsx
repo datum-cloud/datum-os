@@ -126,7 +126,7 @@ export const VENDOR_COLUMNS: ColumnDef<Datum.Vendor>[] = [
   },
   {
     id: 'contact',
-    accessorKey: 'contact',
+    accessorFn: (row) => row.primaryContact.fullName,
     header: ({ column }) => (
       <DataTableColumnHeader
         className={header()}
@@ -143,7 +143,7 @@ export const VENDOR_COLUMNS: ColumnDef<Datum.Vendor>[] = [
   },
   {
     id: 'email',
-    accessorKey: 'email',
+    accessorFn: (row) => row.primaryContact.email,
     header: ({ column }) => (
       <DataTableColumnHeader
         className={header()}
@@ -151,7 +151,9 @@ export const VENDOR_COLUMNS: ColumnDef<Datum.Vendor>[] = [
         children="Email"
       />
     ),
-    minSize: 185,
+    meta: {
+      minWidth: 225,
+    },
     enableGlobalFilter: true,
     enableSorting: true,
     cell: ({ cell }) => {
@@ -160,7 +162,14 @@ export const VENDOR_COLUMNS: ColumnDef<Datum.Vendor>[] = [
       if (!value) return ''
 
       return (
-        <Tag variant={value === 'public' ? 'public' : 'private'}>{value}</Tag>
+        <a
+          href={`mailto:${value}`}
+          className={link()}
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          {value}
+        </a>
       )
     },
     sortingFn: fuzzySort,
@@ -217,9 +226,11 @@ export const VENDOR_COLUMNS: ColumnDef<Datum.Vendor>[] = [
     enableGlobalFilter: false,
     enableSorting: false,
     cell: ({ cell }) => {
-      const isodate = cell.getValue() as string
+      const status = cell.getValue() as string
 
-      return <Tag>{formatDate(new Date(isodate))}</Tag>
+      const variant = status === 'ACTIVE' ? 'success' : 'default'
+
+      return <Tag variant={variant}>{status}</Tag>
     },
   },
 ]

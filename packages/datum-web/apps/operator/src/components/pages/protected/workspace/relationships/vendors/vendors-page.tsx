@@ -8,16 +8,18 @@ import type { Datum } from '@repo/types'
 import type { ColumnFiltersState, Row } from '@repo/ui/data-table'
 
 import PageTitle from '@/components/page-title'
-import VendorsDeleteDialog from '@/components/pages/protected/workspace/relationships/vendors/vendors-delete-dialog'
+import { Error } from '@/components/shared/error/error'
+import { Loading } from '@/components/shared/loading/loading'
 import { useVendors } from '@/hooks/useVendors'
 
+import { pageStyles } from './page.styles'
+import VendorsControls from './vendors-controls'
+import VendorsDeleteDialog from './vendors-delete-dialog'
 // import { Error } from '@/components/shared/error/error'
 // import { Loading } from '@/components/shared/loading/loading'
 // import { useContacts } from '@/hooks/useContacts'
 // import { formatContactsExportData } from '@/utils/export'
-// import VendorsTable from './vendors-table'
-import { pageStyles } from './page.styles'
-import VendorsControls from './vendors-controls'
+import VendorsTable from './vendors-table'
 
 const VendorsPage: React.FC = () => {
   const [exportData, setExportData] = useState<Row<Datum.Vendor>[]>([])
@@ -56,20 +58,20 @@ const VendorsPage: React.FC = () => {
           selectedVendors={selectedVendors}
         />
       </div>
-      {/* {isLoading ? (
+      {isLoading ? (
         <Loading className="h-full w-full grow" />
       ) : error ? (
         <Error />
       ) : (
-        <ContactsTable
+        <VendorsTable
           setGlobalFilter={setQuery}
-          setSelection={setSelectedContacts}
+          setSelection={setSelectedVendors}
           globalFilter={query}
           columnFilters={columnFilters}
-          contacts={contacts}
+          vendors={vendors}
           onRowsFetched={setExportData}
         />
-      )} */}
+      )}
       <VendorsDeleteDialog
         vendors={selectedVendors}
         open={openDeleteDialog}

@@ -1,8 +1,9 @@
 import React from 'react'
-import PageTitle from '@/components/page-title'
+
+import VendorsPage from '@/components/pages/protected/workspace/relationships/vendors/vendors-page'
 
 const Page: React.FC = () => {
-  return <PageTitle title="Relationships - Vendors" description="" />
+  return <VendorsPage />
 }
 
 export default Page

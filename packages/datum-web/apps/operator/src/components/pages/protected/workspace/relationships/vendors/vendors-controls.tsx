@@ -57,11 +57,7 @@ const VendorsControls = ({
           placeholder="Search contacts"
           search={search}
         />
-        <Button
-          variant="outline"
-          icon={<ChevronDown />}
-          onClick={() => setOpenVendorDialog(true)}
-        >
+        <Button variant="outline" onClick={() => setOpenVendorDialog(true)}>
           Create new
         </Button>
         <DropdownMenu open={openActionsMenu} onOpenChange={setOpenActionsMenu}>
