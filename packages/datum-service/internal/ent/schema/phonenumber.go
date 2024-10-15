@@ -66,7 +66,8 @@ func (PhoneNumber) Fields() []ent.Field {
 
 func (PhoneNumber) Indexes() []ent.Index {
 	return []ent.Index{
-		index.Fields("number").Unique(),
+		index.Fields("owner_id", "region_code", "short_code").Unique(),
+		index.Fields("owner_id", "number").Unique(),
 	}
 }
 
