@@ -15,7 +15,7 @@ import {
 
 import FilterDialog from '@/components/shared/filter-dialog/filter-dialog'
 import Search from '@/components/shared/table-search/table-search'
-import { USER_FILTERS } from '@/utils/filters'
+import { USER_FILTERS } from '@/utils/filters/schemas'
 
 import { pageStyles } from './page.styles'
 import UsersFormDialog from './users-form-dialog'
