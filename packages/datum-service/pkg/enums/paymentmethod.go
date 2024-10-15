@@ -9,7 +9,7 @@ import (
 type PaymentMethod string
 
 var (
-	PaymentMethodUnspecified               PaymentMethod = ""
+	PaymentMethodUnspecified               PaymentMethod = "UNSPECIFIED"
 	PaymentMethodDomesticWireTransfer      PaymentMethod = "DOMESTIC_WIRE_TRANSFER"
 	PaymentMethodInternationalWireTransfer PaymentMethod = "INTERNATIONAL_WIRE_TRANSFER"
 	PaymentMethodACH                       PaymentMethod = "ACH"

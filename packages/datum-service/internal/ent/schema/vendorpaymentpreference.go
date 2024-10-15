@@ -38,7 +38,7 @@ func (VendorPaymentPreference) Fields() []ent.Field {
 			Default(false).
 			Comment("Whether this is the preferred payment method."),
 		field.Enum("method").
-			Comment("The payment method.").
+			Comment("The payment method. (e.g. DOMESTIC_WIRE_TRANSFER, INTERNATIONAL_WIRE_TRANSFER, ACH, CREDIT_CARD)").
 			GoType(enums.PaymentMethod("")).
 			Default(string(enums.PaymentMethodUnspecified)),
 	}
@@ -46,6 +46,7 @@ func (VendorPaymentPreference) Fields() []ent.Field {
 
 func (VendorPaymentPreference) Indexes() []ent.Index {
 	return []ent.Index{
+		// Only one preferred payment method per vendor.
 		index.Fields("vendor_id", "preferred").Unique(),
 	}
 }
