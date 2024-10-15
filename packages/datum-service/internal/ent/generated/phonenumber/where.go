@@ -108,12 +108,6 @@ func OwnerID(v string) predicate.PhoneNumber {
 	return predicate.PhoneNumber(sql.FieldEQ(FieldOwnerID, v))
 }
 
-// Kind applies equality check predicate on the "kind" field. It's identical to KindEQ.
-func Kind(v enums.PhoneNumberType) predicate.PhoneNumber {
-	vc := string(v)
-	return predicate.PhoneNumber(sql.FieldEQ(FieldKind, vc))
-}
-
 // RegionCode applies equality check predicate on the "region_code" field. It's identical to RegionCodeEQ.
 func RegionCode(v string) predicate.PhoneNumber {
 	return predicate.PhoneNumber(sql.FieldEQ(FieldRegionCode, v))
@@ -661,13 +655,13 @@ func OwnerIDContainsFold(v string) predicate.PhoneNumber {
 
 // KindEQ applies the EQ predicate on the "kind" field.
 func KindEQ(v enums.PhoneNumberType) predicate.PhoneNumber {
-	vc := string(v)
+	vc := v
 	return predicate.PhoneNumber(sql.FieldEQ(FieldKind, vc))
 }
 
 // KindNEQ applies the NEQ predicate on the "kind" field.
 func KindNEQ(v enums.PhoneNumberType) predicate.PhoneNumber {
-	vc := string(v)
+	vc := v
 	return predicate.PhoneNumber(sql.FieldNEQ(FieldKind, vc))
 }
 
@@ -675,7 +669,7 @@ func KindNEQ(v enums.PhoneNumberType) predicate.PhoneNumber {
 func KindIn(vs ...enums.PhoneNumberType) predicate.PhoneNumber {
 	v := make([]any, len(vs))
 	for i := range v {
-		v[i] = string(vs[i])
+		v[i] = vs[i]
 	}
 	return predicate.PhoneNumber(sql.FieldIn(FieldKind, v...))
 }
@@ -684,63 +678,9 @@ func KindIn(vs ...enums.PhoneNumberType) predicate.PhoneNumber {
 func KindNotIn(vs ...enums.PhoneNumberType) predicate.PhoneNumber {
 	v := make([]any, len(vs))
 	for i := range v {
-		v[i] = string(vs[i])
+		v[i] = vs[i]
 	}
 	return predicate.PhoneNumber(sql.FieldNotIn(FieldKind, v...))
-}
-
-// KindGT applies the GT predicate on the "kind" field.
-func KindGT(v enums.PhoneNumberType) predicate.PhoneNumber {
-	vc := string(v)
-	return predicate.PhoneNumber(sql.FieldGT(FieldKind, vc))
-}
-
-// KindGTE applies the GTE predicate on the "kind" field.
-func KindGTE(v enums.PhoneNumberType) predicate.PhoneNumber {
-	vc := string(v)
-	return predicate.PhoneNumber(sql.FieldGTE(FieldKind, vc))
-}
-
-// KindLT applies the LT predicate on the "kind" field.
-func KindLT(v enums.PhoneNumberType) predicate.PhoneNumber {
-	vc := string(v)
-	return predicate.PhoneNumber(sql.FieldLT(FieldKind, vc))
-}
-
-// KindLTE applies the LTE predicate on the "kind" field.
-func KindLTE(v enums.PhoneNumberType) predicate.PhoneNumber {
-	vc := string(v)
-	return predicate.PhoneNumber(sql.FieldLTE(FieldKind, vc))
-}
-
-// KindContains applies the Contains predicate on the "kind" field.
-func KindContains(v enums.PhoneNumberType) predicate.PhoneNumber {
-	vc := string(v)
-	return predicate.PhoneNumber(sql.FieldContains(FieldKind, vc))
-}
-
-// KindHasPrefix applies the HasPrefix predicate on the "kind" field.
-func KindHasPrefix(v enums.PhoneNumberType) predicate.PhoneNumber {
-	vc := string(v)
-	return predicate.PhoneNumber(sql.FieldHasPrefix(FieldKind, vc))
-}
-
-// KindHasSuffix applies the HasSuffix predicate on the "kind" field.
-func KindHasSuffix(v enums.PhoneNumberType) predicate.PhoneNumber {
-	vc := string(v)
-	return predicate.PhoneNumber(sql.FieldHasSuffix(FieldKind, vc))
-}
-
-// KindEqualFold applies the EqualFold predicate on the "kind" field.
-func KindEqualFold(v enums.PhoneNumberType) predicate.PhoneNumber {
-	vc := string(v)
-	return predicate.PhoneNumber(sql.FieldEqualFold(FieldKind, vc))
-}
-
-// KindContainsFold applies the ContainsFold predicate on the "kind" field.
-func KindContainsFold(v enums.PhoneNumberType) predicate.PhoneNumber {
-	vc := string(v)
-	return predicate.PhoneNumber(sql.FieldContainsFold(FieldKind, vc))
 }
 
 // RegionCodeEQ applies the EQ predicate on the "region_code" field.

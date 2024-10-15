@@ -2216,7 +2216,7 @@ type CreatePhoneNumberInput struct {
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// The type of phone number. E.g. 'E164' or 'SHORT_CODE'
-	Kind *string `json:"kind,omitempty"`
+	Kind *enums.PhoneNumberType `json:"kind,omitempty"`
 	// The BCP-47 region code of the phone number. E.g. 'US' or 'CA'
 	RegionCode *string `json:"regionCode,omitempty"`
 	// The short code of the phone number. E.g. '611'
@@ -12154,7 +12154,7 @@ type PhoneNumber struct {
 	// The organization id that owns the object
 	OwnerID *string `json:"ownerID,omitempty"`
 	// The type of phone number. E.g. 'E164' or 'SHORT_CODE'
-	Kind string `json:"kind"`
+	Kind enums.PhoneNumberType `json:"kind"`
 	// The BCP-47 region code of the phone number. E.g. 'US' or 'CA'
 	RegionCode *string `json:"regionCode,omitempty"`
 	// The short code of the phone number. E.g. '611'
@@ -12223,7 +12223,7 @@ type PhoneNumberHistory struct {
 	// The organization id that owns the object
 	OwnerID *string `json:"ownerID,omitempty"`
 	// The type of phone number. E.g. 'E164' or 'SHORT_CODE'
-	Kind string `json:"kind"`
+	Kind enums.PhoneNumberType `json:"kind"`
 	// The BCP-47 region code of the phone number. E.g. 'US' or 'CA'
 	RegionCode *string `json:"regionCode,omitempty"`
 	// The short code of the phone number. E.g. '611'
@@ -12399,19 +12399,10 @@ type PhoneNumberHistoryWhereInput struct {
 	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
 	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
 	// kind field predicates
-	Kind             *string  `json:"kind,omitempty"`
-	KindNeq          *string  `json:"kindNEQ,omitempty"`
-	KindIn           []string `json:"kindIn,omitempty"`
-	KindNotIn        []string `json:"kindNotIn,omitempty"`
-	KindGt           *string  `json:"kindGT,omitempty"`
-	KindGte          *string  `json:"kindGTE,omitempty"`
-	KindLt           *string  `json:"kindLT,omitempty"`
-	KindLte          *string  `json:"kindLTE,omitempty"`
-	KindContains     *string  `json:"kindContains,omitempty"`
-	KindHasPrefix    *string  `json:"kindHasPrefix,omitempty"`
-	KindHasSuffix    *string  `json:"kindHasSuffix,omitempty"`
-	KindEqualFold    *string  `json:"kindEqualFold,omitempty"`
-	KindContainsFold *string  `json:"kindContainsFold,omitempty"`
+	Kind      *enums.PhoneNumberType  `json:"kind,omitempty"`
+	KindNeq   *enums.PhoneNumberType  `json:"kindNEQ,omitempty"`
+	KindIn    []enums.PhoneNumberType `json:"kindIn,omitempty"`
+	KindNotIn []enums.PhoneNumberType `json:"kindNotIn,omitempty"`
 	// region_code field predicates
 	RegionCode             *string  `json:"regionCode,omitempty"`
 	RegionCodeNeq          *string  `json:"regionCodeNEQ,omitempty"`
@@ -12599,19 +12590,10 @@ type PhoneNumberWhereInput struct {
 	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
 	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
 	// kind field predicates
-	Kind             *string  `json:"kind,omitempty"`
-	KindNeq          *string  `json:"kindNEQ,omitempty"`
-	KindIn           []string `json:"kindIn,omitempty"`
-	KindNotIn        []string `json:"kindNotIn,omitempty"`
-	KindGt           *string  `json:"kindGT,omitempty"`
-	KindGte          *string  `json:"kindGTE,omitempty"`
-	KindLt           *string  `json:"kindLT,omitempty"`
-	KindLte          *string  `json:"kindLTE,omitempty"`
-	KindContains     *string  `json:"kindContains,omitempty"`
-	KindHasPrefix    *string  `json:"kindHasPrefix,omitempty"`
-	KindHasSuffix    *string  `json:"kindHasSuffix,omitempty"`
-	KindEqualFold    *string  `json:"kindEqualFold,omitempty"`
-	KindContainsFold *string  `json:"kindContainsFold,omitempty"`
+	Kind      *enums.PhoneNumberType  `json:"kind,omitempty"`
+	KindNeq   *enums.PhoneNumberType  `json:"kindNEQ,omitempty"`
+	KindIn    []enums.PhoneNumberType `json:"kindIn,omitempty"`
+	KindNotIn []enums.PhoneNumberType `json:"kindNotIn,omitempty"`
 	// region_code field predicates
 	RegionCode             *string  `json:"regionCode,omitempty"`
 	RegionCodeNeq          *string  `json:"regionCodeNEQ,omitempty"`
@@ -15013,7 +14995,7 @@ type UpdatePhoneNumberInput struct {
 	AppendTags []string `json:"appendTags,omitempty"`
 	ClearTags  *bool    `json:"clearTags,omitempty"`
 	// The type of phone number. E.g. 'E164' or 'SHORT_CODE'
-	Kind *string `json:"kind,omitempty"`
+	Kind *enums.PhoneNumberType `json:"kind,omitempty"`
 	// The BCP-47 region code of the phone number. E.g. 'US' or 'CA'
 	RegionCode      *string `json:"regionCode,omitempty"`
 	ClearRegionCode *bool   `json:"clearRegionCode,omitempty"`

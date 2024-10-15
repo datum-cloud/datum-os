@@ -413,6 +413,11 @@ func (pnu *PhoneNumberUpdate) check() error {
 			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "PhoneNumber.owner_id": %w`, err)}
 		}
 	}
+	if v, ok := pnu.mutation.Kind(); ok {
+		if err := phonenumber.KindValidator(v); err != nil {
+			return &ValidationError{Name: "kind", err: fmt.Errorf(`generated: validator failed for field "PhoneNumber.kind": %w`, err)}
+		}
+	}
 	if v, ok := pnu.mutation.RegionCode(); ok {
 		if err := phonenumber.RegionCodeValidator(v); err != nil {
 			return &ValidationError{Name: "region_code", err: fmt.Errorf(`generated: validator failed for field "PhoneNumber.region_code": %w`, err)}
@@ -480,7 +485,7 @@ func (pnu *PhoneNumberUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		_spec.ClearField(phonenumber.FieldTags, field.TypeJSON)
 	}
 	if value, ok := pnu.mutation.Kind(); ok {
-		_spec.SetField(phonenumber.FieldKind, field.TypeString, value)
+		_spec.SetField(phonenumber.FieldKind, field.TypeEnum, value)
 	}
 	if value, ok := pnu.mutation.RegionCode(); ok {
 		_spec.SetField(phonenumber.FieldRegionCode, field.TypeString, value)
@@ -1114,6 +1119,11 @@ func (pnuo *PhoneNumberUpdateOne) check() error {
 			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "PhoneNumber.owner_id": %w`, err)}
 		}
 	}
+	if v, ok := pnuo.mutation.Kind(); ok {
+		if err := phonenumber.KindValidator(v); err != nil {
+			return &ValidationError{Name: "kind", err: fmt.Errorf(`generated: validator failed for field "PhoneNumber.kind": %w`, err)}
+		}
+	}
 	if v, ok := pnuo.mutation.RegionCode(); ok {
 		if err := phonenumber.RegionCodeValidator(v); err != nil {
 			return &ValidationError{Name: "region_code", err: fmt.Errorf(`generated: validator failed for field "PhoneNumber.region_code": %w`, err)}
@@ -1198,7 +1208,7 @@ func (pnuo *PhoneNumberUpdateOne) sqlSave(ctx context.Context) (_node *PhoneNumb
 		_spec.ClearField(phonenumber.FieldTags, field.TypeJSON)
 	}
 	if value, ok := pnuo.mutation.Kind(); ok {
-		_spec.SetField(phonenumber.FieldKind, field.TypeString, value)
+		_spec.SetField(phonenumber.FieldKind, field.TypeEnum, value)
 	}
 	if value, ok := pnuo.mutation.RegionCode(); ok {
 		_spec.SetField(phonenumber.FieldRegionCode, field.TypeString, value)

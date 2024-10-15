@@ -2899,7 +2899,7 @@ input CreatePhoneNumberInput {
 	"""
 	The type of phone number. E.g. 'E164' or 'SHORT_CODE'
 	"""
-	kind: String
+	kind: PhoneNumberPhoneNumberType
 	"""
 	The BCP-47 region code of the phone number. E.g. 'US' or 'CA'
 	"""
@@ -17532,7 +17532,7 @@ type PhoneNumber implements Node {
 	"""
 	The type of phone number. E.g. 'E164' or 'SHORT_CODE'
 	"""
-	kind: String!
+	kind: PhoneNumberPhoneNumberType!
 	"""
 	The BCP-47 region code of the phone number. E.g. 'US' or 'CA'
 	"""
@@ -17633,7 +17633,7 @@ type PhoneNumberHistory implements Node {
 	"""
 	The type of phone number. E.g. 'E164' or 'SHORT_CODE'
 	"""
-	kind: String!
+	kind: PhoneNumberHistoryPhoneNumberType!
 	"""
 	The BCP-47 region code of the phone number. E.g. 'US' or 'CA'
 	"""
@@ -17688,6 +17688,14 @@ enum PhoneNumberHistoryOpType @goModel(model: "github.com/datum-cloud/datum-os/p
 	INSERT
 	UPDATE
 	DELETE
+}
+"""
+PhoneNumberHistoryPhoneNumberType is enum for the field kind
+"""
+enum PhoneNumberHistoryPhoneNumberType @goModel(model: "github.com/datum-cloud/datum-os/pkg/enums.PhoneNumberType") {
+	E164
+	SHORT_CODE
+	UNSPECIFIED
 }
 """
 PhoneNumberHistoryWhereInput is used for filtering PhoneNumberHistory objects.
@@ -17860,19 +17868,10 @@ input PhoneNumberHistoryWhereInput {
 	"""
 	kind field predicates
 	"""
-	kind: String
-	kindNEQ: String
-	kindIn: [String!]
-	kindNotIn: [String!]
-	kindGT: String
-	kindGTE: String
-	kindLT: String
-	kindLTE: String
-	kindContains: String
-	kindHasPrefix: String
-	kindHasSuffix: String
-	kindEqualFold: String
-	kindContainsFold: String
+	kind: PhoneNumberHistoryPhoneNumberType
+	kindNEQ: PhoneNumberHistoryPhoneNumberType
+	kindIn: [PhoneNumberHistoryPhoneNumberType!]
+	kindNotIn: [PhoneNumberHistoryPhoneNumberType!]
 	"""
 	region_code field predicates
 	"""
@@ -17945,6 +17944,14 @@ input PhoneNumberHistoryWhereInput {
 	extensionNotNil: Boolean
 	extensionEqualFold: String
 	extensionContainsFold: String
+}
+"""
+PhoneNumberPhoneNumberType is enum for the field kind
+"""
+enum PhoneNumberPhoneNumberType @goModel(model: "github.com/datum-cloud/datum-os/pkg/enums.PhoneNumberType") {
+	E164
+	SHORT_CODE
+	UNSPECIFIED
 }
 """
 Return response for updatePhoneNumber mutation
@@ -18090,19 +18097,10 @@ input PhoneNumberWhereInput {
 	"""
 	kind field predicates
 	"""
-	kind: String
-	kindNEQ: String
-	kindIn: [String!]
-	kindNotIn: [String!]
-	kindGT: String
-	kindGTE: String
-	kindLT: String
-	kindLTE: String
-	kindContains: String
-	kindHasPrefix: String
-	kindHasSuffix: String
-	kindEqualFold: String
-	kindContainsFold: String
+	kind: PhoneNumberPhoneNumberType
+	kindNEQ: PhoneNumberPhoneNumberType
+	kindIn: [PhoneNumberPhoneNumberType!]
+	kindNotIn: [PhoneNumberPhoneNumberType!]
 	"""
 	region_code field predicates
 	"""
@@ -23537,7 +23535,7 @@ input UpdatePhoneNumberInput {
 	"""
 	The type of phone number. E.g. 'E164' or 'SHORT_CODE'
 	"""
-	kind: String
+	kind: PhoneNumberPhoneNumberType
 	"""
 	The BCP-47 region code of the phone number. E.g. 'US' or 'CA'
 	"""

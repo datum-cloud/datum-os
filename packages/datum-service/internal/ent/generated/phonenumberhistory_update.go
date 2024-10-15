@@ -277,7 +277,20 @@ func (pnhu *PhoneNumberHistoryUpdate) defaults() {
 	}
 }
 
+// check runs all checks and user-defined validators on the builder.
+func (pnhu *PhoneNumberHistoryUpdate) check() error {
+	if v, ok := pnhu.mutation.Kind(); ok {
+		if err := phonenumberhistory.KindValidator(v); err != nil {
+			return &ValidationError{Name: "kind", err: fmt.Errorf(`generated: validator failed for field "PhoneNumberHistory.kind": %w`, err)}
+		}
+	}
+	return nil
+}
+
 func (pnhu *PhoneNumberHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
+	if err := pnhu.check(); err != nil {
+		return n, err
+	}
 	_spec := sqlgraph.NewUpdateSpec(phonenumberhistory.Table, phonenumberhistory.Columns, sqlgraph.NewFieldSpec(phonenumberhistory.FieldID, field.TypeString))
 	if ps := pnhu.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
@@ -337,7 +350,7 @@ func (pnhu *PhoneNumberHistoryUpdate) sqlSave(ctx context.Context) (n int, err e
 		_spec.ClearField(phonenumberhistory.FieldOwnerID, field.TypeString)
 	}
 	if value, ok := pnhu.mutation.Kind(); ok {
-		_spec.SetField(phonenumberhistory.FieldKind, field.TypeString, value)
+		_spec.SetField(phonenumberhistory.FieldKind, field.TypeEnum, value)
 	}
 	if value, ok := pnhu.mutation.RegionCode(); ok {
 		_spec.SetField(phonenumberhistory.FieldRegionCode, field.TypeString, value)
@@ -643,7 +656,20 @@ func (pnhuo *PhoneNumberHistoryUpdateOne) defaults() {
 	}
 }
 
+// check runs all checks and user-defined validators on the builder.
+func (pnhuo *PhoneNumberHistoryUpdateOne) check() error {
+	if v, ok := pnhuo.mutation.Kind(); ok {
+		if err := phonenumberhistory.KindValidator(v); err != nil {
+			return &ValidationError{Name: "kind", err: fmt.Errorf(`generated: validator failed for field "PhoneNumberHistory.kind": %w`, err)}
+		}
+	}
+	return nil
+}
+
 func (pnhuo *PhoneNumberHistoryUpdateOne) sqlSave(ctx context.Context) (_node *PhoneNumberHistory, err error) {
+	if err := pnhuo.check(); err != nil {
+		return _node, err
+	}
 	_spec := sqlgraph.NewUpdateSpec(phonenumberhistory.Table, phonenumberhistory.Columns, sqlgraph.NewFieldSpec(phonenumberhistory.FieldID, field.TypeString))
 	id, ok := pnhuo.mutation.ID()
 	if !ok {
@@ -720,7 +746,7 @@ func (pnhuo *PhoneNumberHistoryUpdateOne) sqlSave(ctx context.Context) (_node *P
 		_spec.ClearField(phonenumberhistory.FieldOwnerID, field.TypeString)
 	}
 	if value, ok := pnhuo.mutation.Kind(); ok {
-		_spec.SetField(phonenumberhistory.FieldKind, field.TypeString, value)
+		_spec.SetField(phonenumberhistory.FieldKind, field.TypeEnum, value)
 	}
 	if value, ok := pnhuo.mutation.RegionCode(); ok {
 		_spec.SetField(phonenumberhistory.FieldRegionCode, field.TypeString, value)

@@ -24053,18 +24053,18 @@ func (t *UpdatePersonalAccessToken_UpdatePersonalAccessToken) GetPersonalAccessT
 }
 
 type CreateBulkCSVPhoneNumber_CreateBulkCSVPhoneNumber_PhoneNumbers struct {
-	CreatedAt  *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy  *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Extension  *string    "json:\"extension,omitempty\" graphql:\"extension\""
-	ID         string     "json:\"id\" graphql:\"id\""
-	Kind       string     "json:\"kind\" graphql:\"kind\""
-	Number     *string    "json:\"number,omitempty\" graphql:\"number\""
-	OwnerID    *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	RegionCode *string    "json:\"regionCode,omitempty\" graphql:\"regionCode\""
-	ShortCode  *string    "json:\"shortCode,omitempty\" graphql:\"shortCode\""
-	Tags       []string   "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt  *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy  *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	CreatedAt  *time.Time            "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy  *string               "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Extension  *string               "json:\"extension,omitempty\" graphql:\"extension\""
+	ID         string                "json:\"id\" graphql:\"id\""
+	Kind       enums.PhoneNumberType "json:\"kind\" graphql:\"kind\""
+	Number     *string               "json:\"number,omitempty\" graphql:\"number\""
+	OwnerID    *string               "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	RegionCode *string               "json:\"regionCode,omitempty\" graphql:\"regionCode\""
+	ShortCode  *string               "json:\"shortCode,omitempty\" graphql:\"shortCode\""
+	Tags       []string              "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt  *time.Time            "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy  *string               "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *CreateBulkCSVPhoneNumber_CreateBulkCSVPhoneNumber_PhoneNumbers) GetCreatedAt() *time.Time {
@@ -24091,11 +24091,11 @@ func (t *CreateBulkCSVPhoneNumber_CreateBulkCSVPhoneNumber_PhoneNumbers) GetID()
 	}
 	return t.ID
 }
-func (t *CreateBulkCSVPhoneNumber_CreateBulkCSVPhoneNumber_PhoneNumbers) GetKind() string {
+func (t *CreateBulkCSVPhoneNumber_CreateBulkCSVPhoneNumber_PhoneNumbers) GetKind() *enums.PhoneNumberType {
 	if t == nil {
 		t = &CreateBulkCSVPhoneNumber_CreateBulkCSVPhoneNumber_PhoneNumbers{}
 	}
-	return t.Kind
+	return &t.Kind
 }
 func (t *CreateBulkCSVPhoneNumber_CreateBulkCSVPhoneNumber_PhoneNumbers) GetNumber() *string {
 	if t == nil {
@@ -24152,18 +24152,18 @@ func (t *CreateBulkCSVPhoneNumber_CreateBulkCSVPhoneNumber) GetPhoneNumbers() []
 }
 
 type CreateBulkPhoneNumber_CreateBulkPhoneNumber_PhoneNumbers struct {
-	CreatedAt  *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy  *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Extension  *string    "json:\"extension,omitempty\" graphql:\"extension\""
-	ID         string     "json:\"id\" graphql:\"id\""
-	Kind       string     "json:\"kind\" graphql:\"kind\""
-	Number     *string    "json:\"number,omitempty\" graphql:\"number\""
-	OwnerID    *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	RegionCode *string    "json:\"regionCode,omitempty\" graphql:\"regionCode\""
-	ShortCode  *string    "json:\"shortCode,omitempty\" graphql:\"shortCode\""
-	Tags       []string   "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt  *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy  *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	CreatedAt  *time.Time            "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy  *string               "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Extension  *string               "json:\"extension,omitempty\" graphql:\"extension\""
+	ID         string                "json:\"id\" graphql:\"id\""
+	Kind       enums.PhoneNumberType "json:\"kind\" graphql:\"kind\""
+	Number     *string               "json:\"number,omitempty\" graphql:\"number\""
+	OwnerID    *string               "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	RegionCode *string               "json:\"regionCode,omitempty\" graphql:\"regionCode\""
+	ShortCode  *string               "json:\"shortCode,omitempty\" graphql:\"shortCode\""
+	Tags       []string              "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt  *time.Time            "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy  *string               "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *CreateBulkPhoneNumber_CreateBulkPhoneNumber_PhoneNumbers) GetCreatedAt() *time.Time {
@@ -24190,11 +24190,11 @@ func (t *CreateBulkPhoneNumber_CreateBulkPhoneNumber_PhoneNumbers) GetID() strin
 	}
 	return t.ID
 }
-func (t *CreateBulkPhoneNumber_CreateBulkPhoneNumber_PhoneNumbers) GetKind() string {
+func (t *CreateBulkPhoneNumber_CreateBulkPhoneNumber_PhoneNumbers) GetKind() *enums.PhoneNumberType {
 	if t == nil {
 		t = &CreateBulkPhoneNumber_CreateBulkPhoneNumber_PhoneNumbers{}
 	}
-	return t.Kind
+	return &t.Kind
 }
 func (t *CreateBulkPhoneNumber_CreateBulkPhoneNumber_PhoneNumbers) GetNumber() *string {
 	if t == nil {
@@ -24251,18 +24251,18 @@ func (t *CreateBulkPhoneNumber_CreateBulkPhoneNumber) GetPhoneNumbers() []*Creat
 }
 
 type CreatePhoneNumber_CreatePhoneNumber_PhoneNumber struct {
-	CreatedAt  *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy  *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Extension  *string    "json:\"extension,omitempty\" graphql:\"extension\""
-	ID         string     "json:\"id\" graphql:\"id\""
-	Kind       string     "json:\"kind\" graphql:\"kind\""
-	Number     *string    "json:\"number,omitempty\" graphql:\"number\""
-	OwnerID    *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	RegionCode *string    "json:\"regionCode,omitempty\" graphql:\"regionCode\""
-	ShortCode  *string    "json:\"shortCode,omitempty\" graphql:\"shortCode\""
-	Tags       []string   "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt  *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy  *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	CreatedAt  *time.Time            "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy  *string               "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Extension  *string               "json:\"extension,omitempty\" graphql:\"extension\""
+	ID         string                "json:\"id\" graphql:\"id\""
+	Kind       enums.PhoneNumberType "json:\"kind\" graphql:\"kind\""
+	Number     *string               "json:\"number,omitempty\" graphql:\"number\""
+	OwnerID    *string               "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	RegionCode *string               "json:\"regionCode,omitempty\" graphql:\"regionCode\""
+	ShortCode  *string               "json:\"shortCode,omitempty\" graphql:\"shortCode\""
+	Tags       []string              "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt  *time.Time            "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy  *string               "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *CreatePhoneNumber_CreatePhoneNumber_PhoneNumber) GetCreatedAt() *time.Time {
@@ -24289,11 +24289,11 @@ func (t *CreatePhoneNumber_CreatePhoneNumber_PhoneNumber) GetID() string {
 	}
 	return t.ID
 }
-func (t *CreatePhoneNumber_CreatePhoneNumber_PhoneNumber) GetKind() string {
+func (t *CreatePhoneNumber_CreatePhoneNumber_PhoneNumber) GetKind() *enums.PhoneNumberType {
 	if t == nil {
 		t = &CreatePhoneNumber_CreatePhoneNumber_PhoneNumber{}
 	}
-	return t.Kind
+	return &t.Kind
 }
 func (t *CreatePhoneNumber_CreatePhoneNumber_PhoneNumber) GetNumber() *string {
 	if t == nil {
@@ -24350,18 +24350,18 @@ func (t *CreatePhoneNumber_CreatePhoneNumber) GetPhoneNumber() *CreatePhoneNumbe
 }
 
 type GetAllPhoneNumbers_PhoneNumbers_Edges_Node struct {
-	CreatedAt  *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy  *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Extension  *string    "json:\"extension,omitempty\" graphql:\"extension\""
-	ID         string     "json:\"id\" graphql:\"id\""
-	Kind       string     "json:\"kind\" graphql:\"kind\""
-	Number     *string    "json:\"number,omitempty\" graphql:\"number\""
-	OwnerID    *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	RegionCode *string    "json:\"regionCode,omitempty\" graphql:\"regionCode\""
-	ShortCode  *string    "json:\"shortCode,omitempty\" graphql:\"shortCode\""
-	Tags       []string   "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt  *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy  *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	CreatedAt  *time.Time            "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy  *string               "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Extension  *string               "json:\"extension,omitempty\" graphql:\"extension\""
+	ID         string                "json:\"id\" graphql:\"id\""
+	Kind       enums.PhoneNumberType "json:\"kind\" graphql:\"kind\""
+	Number     *string               "json:\"number,omitempty\" graphql:\"number\""
+	OwnerID    *string               "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	RegionCode *string               "json:\"regionCode,omitempty\" graphql:\"regionCode\""
+	ShortCode  *string               "json:\"shortCode,omitempty\" graphql:\"shortCode\""
+	Tags       []string              "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt  *time.Time            "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy  *string               "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *GetAllPhoneNumbers_PhoneNumbers_Edges_Node) GetCreatedAt() *time.Time {
@@ -24388,11 +24388,11 @@ func (t *GetAllPhoneNumbers_PhoneNumbers_Edges_Node) GetID() string {
 	}
 	return t.ID
 }
-func (t *GetAllPhoneNumbers_PhoneNumbers_Edges_Node) GetKind() string {
+func (t *GetAllPhoneNumbers_PhoneNumbers_Edges_Node) GetKind() *enums.PhoneNumberType {
 	if t == nil {
 		t = &GetAllPhoneNumbers_PhoneNumbers_Edges_Node{}
 	}
-	return t.Kind
+	return &t.Kind
 }
 func (t *GetAllPhoneNumbers_PhoneNumbers_Edges_Node) GetNumber() *string {
 	if t == nil {
@@ -24460,18 +24460,18 @@ func (t *GetAllPhoneNumbers_PhoneNumbers) GetEdges() []*GetAllPhoneNumbers_Phone
 }
 
 type GetPhoneNumberByID_PhoneNumber struct {
-	CreatedAt  *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy  *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Extension  *string    "json:\"extension,omitempty\" graphql:\"extension\""
-	ID         string     "json:\"id\" graphql:\"id\""
-	Kind       string     "json:\"kind\" graphql:\"kind\""
-	Number     *string    "json:\"number,omitempty\" graphql:\"number\""
-	OwnerID    *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	RegionCode *string    "json:\"regionCode,omitempty\" graphql:\"regionCode\""
-	ShortCode  *string    "json:\"shortCode,omitempty\" graphql:\"shortCode\""
-	Tags       []string   "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt  *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy  *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	CreatedAt  *time.Time            "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy  *string               "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Extension  *string               "json:\"extension,omitempty\" graphql:\"extension\""
+	ID         string                "json:\"id\" graphql:\"id\""
+	Kind       enums.PhoneNumberType "json:\"kind\" graphql:\"kind\""
+	Number     *string               "json:\"number,omitempty\" graphql:\"number\""
+	OwnerID    *string               "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	RegionCode *string               "json:\"regionCode,omitempty\" graphql:\"regionCode\""
+	ShortCode  *string               "json:\"shortCode,omitempty\" graphql:\"shortCode\""
+	Tags       []string              "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt  *time.Time            "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy  *string               "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *GetPhoneNumberByID_PhoneNumber) GetCreatedAt() *time.Time {
@@ -24498,11 +24498,11 @@ func (t *GetPhoneNumberByID_PhoneNumber) GetID() string {
 	}
 	return t.ID
 }
-func (t *GetPhoneNumberByID_PhoneNumber) GetKind() string {
+func (t *GetPhoneNumberByID_PhoneNumber) GetKind() *enums.PhoneNumberType {
 	if t == nil {
 		t = &GetPhoneNumberByID_PhoneNumber{}
 	}
-	return t.Kind
+	return &t.Kind
 }
 func (t *GetPhoneNumberByID_PhoneNumber) GetNumber() *string {
 	if t == nil {
@@ -24548,18 +24548,18 @@ func (t *GetPhoneNumberByID_PhoneNumber) GetUpdatedBy() *string {
 }
 
 type GetPhoneNumbers_PhoneNumbers_Edges_Node struct {
-	CreatedAt  *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy  *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Extension  *string    "json:\"extension,omitempty\" graphql:\"extension\""
-	ID         string     "json:\"id\" graphql:\"id\""
-	Kind       string     "json:\"kind\" graphql:\"kind\""
-	Number     *string    "json:\"number,omitempty\" graphql:\"number\""
-	OwnerID    *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	RegionCode *string    "json:\"regionCode,omitempty\" graphql:\"regionCode\""
-	ShortCode  *string    "json:\"shortCode,omitempty\" graphql:\"shortCode\""
-	Tags       []string   "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt  *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy  *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	CreatedAt  *time.Time            "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy  *string               "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Extension  *string               "json:\"extension,omitempty\" graphql:\"extension\""
+	ID         string                "json:\"id\" graphql:\"id\""
+	Kind       enums.PhoneNumberType "json:\"kind\" graphql:\"kind\""
+	Number     *string               "json:\"number,omitempty\" graphql:\"number\""
+	OwnerID    *string               "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	RegionCode *string               "json:\"regionCode,omitempty\" graphql:\"regionCode\""
+	ShortCode  *string               "json:\"shortCode,omitempty\" graphql:\"shortCode\""
+	Tags       []string              "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt  *time.Time            "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy  *string               "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *GetPhoneNumbers_PhoneNumbers_Edges_Node) GetCreatedAt() *time.Time {
@@ -24586,11 +24586,11 @@ func (t *GetPhoneNumbers_PhoneNumbers_Edges_Node) GetID() string {
 	}
 	return t.ID
 }
-func (t *GetPhoneNumbers_PhoneNumbers_Edges_Node) GetKind() string {
+func (t *GetPhoneNumbers_PhoneNumbers_Edges_Node) GetKind() *enums.PhoneNumberType {
 	if t == nil {
 		t = &GetPhoneNumbers_PhoneNumbers_Edges_Node{}
 	}
-	return t.Kind
+	return &t.Kind
 }
 func (t *GetPhoneNumbers_PhoneNumbers_Edges_Node) GetNumber() *string {
 	if t == nil {
@@ -24658,18 +24658,18 @@ func (t *GetPhoneNumbers_PhoneNumbers) GetEdges() []*GetPhoneNumbers_PhoneNumber
 }
 
 type UpdatePhoneNumber_UpdatePhoneNumber_PhoneNumber struct {
-	CreatedAt  *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy  *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Extension  *string    "json:\"extension,omitempty\" graphql:\"extension\""
-	ID         string     "json:\"id\" graphql:\"id\""
-	Kind       string     "json:\"kind\" graphql:\"kind\""
-	Number     *string    "json:\"number,omitempty\" graphql:\"number\""
-	OwnerID    *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	RegionCode *string    "json:\"regionCode,omitempty\" graphql:\"regionCode\""
-	ShortCode  *string    "json:\"shortCode,omitempty\" graphql:\"shortCode\""
-	Tags       []string   "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt  *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy  *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	CreatedAt  *time.Time            "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy  *string               "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Extension  *string               "json:\"extension,omitempty\" graphql:\"extension\""
+	ID         string                "json:\"id\" graphql:\"id\""
+	Kind       enums.PhoneNumberType "json:\"kind\" graphql:\"kind\""
+	Number     *string               "json:\"number,omitempty\" graphql:\"number\""
+	OwnerID    *string               "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	RegionCode *string               "json:\"regionCode,omitempty\" graphql:\"regionCode\""
+	ShortCode  *string               "json:\"shortCode,omitempty\" graphql:\"shortCode\""
+	Tags       []string              "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt  *time.Time            "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy  *string               "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *UpdatePhoneNumber_UpdatePhoneNumber_PhoneNumber) GetCreatedAt() *time.Time {
@@ -24696,11 +24696,11 @@ func (t *UpdatePhoneNumber_UpdatePhoneNumber_PhoneNumber) GetID() string {
 	}
 	return t.ID
 }
-func (t *UpdatePhoneNumber_UpdatePhoneNumber_PhoneNumber) GetKind() string {
+func (t *UpdatePhoneNumber_UpdatePhoneNumber_PhoneNumber) GetKind() *enums.PhoneNumberType {
 	if t == nil {
 		t = &UpdatePhoneNumber_UpdatePhoneNumber_PhoneNumber{}
 	}
-	return t.Kind
+	return &t.Kind
 }
 func (t *UpdatePhoneNumber_UpdatePhoneNumber_PhoneNumber) GetNumber() *string {
 	if t == nil {
@@ -24757,21 +24757,21 @@ func (t *UpdatePhoneNumber_UpdatePhoneNumber) GetPhoneNumber() *UpdatePhoneNumbe
 }
 
 type GetAllPhoneNumberHistories_PhoneNumberHistories_Edges_Node struct {
-	CreatedAt   *time.Time        "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy   *string           "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Extension   *string           "json:\"extension,omitempty\" graphql:\"extension\""
-	HistoryTime time.Time         "json:\"historyTime\" graphql:\"historyTime\""
-	ID          string            "json:\"id\" graphql:\"id\""
-	Kind        string            "json:\"kind\" graphql:\"kind\""
-	Number      *string           "json:\"number,omitempty\" graphql:\"number\""
-	Operation   enthistory.OpType "json:\"operation\" graphql:\"operation\""
-	OwnerID     *string           "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Ref         *string           "json:\"ref,omitempty\" graphql:\"ref\""
-	RegionCode  *string           "json:\"regionCode,omitempty\" graphql:\"regionCode\""
-	ShortCode   *string           "json:\"shortCode,omitempty\" graphql:\"shortCode\""
-	Tags        []string          "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt   *time.Time        "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy   *string           "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	CreatedAt   *time.Time            "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy   *string               "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Extension   *string               "json:\"extension,omitempty\" graphql:\"extension\""
+	HistoryTime time.Time             "json:\"historyTime\" graphql:\"historyTime\""
+	ID          string                "json:\"id\" graphql:\"id\""
+	Kind        enums.PhoneNumberType "json:\"kind\" graphql:\"kind\""
+	Number      *string               "json:\"number,omitempty\" graphql:\"number\""
+	Operation   enthistory.OpType     "json:\"operation\" graphql:\"operation\""
+	OwnerID     *string               "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Ref         *string               "json:\"ref,omitempty\" graphql:\"ref\""
+	RegionCode  *string               "json:\"regionCode,omitempty\" graphql:\"regionCode\""
+	ShortCode   *string               "json:\"shortCode,omitempty\" graphql:\"shortCode\""
+	Tags        []string              "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt   *time.Time            "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy   *string               "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *GetAllPhoneNumberHistories_PhoneNumberHistories_Edges_Node) GetCreatedAt() *time.Time {
@@ -24804,11 +24804,11 @@ func (t *GetAllPhoneNumberHistories_PhoneNumberHistories_Edges_Node) GetID() str
 	}
 	return t.ID
 }
-func (t *GetAllPhoneNumberHistories_PhoneNumberHistories_Edges_Node) GetKind() string {
+func (t *GetAllPhoneNumberHistories_PhoneNumberHistories_Edges_Node) GetKind() *enums.PhoneNumberType {
 	if t == nil {
 		t = &GetAllPhoneNumberHistories_PhoneNumberHistories_Edges_Node{}
 	}
-	return t.Kind
+	return &t.Kind
 }
 func (t *GetAllPhoneNumberHistories_PhoneNumberHistories_Edges_Node) GetNumber() *string {
 	if t == nil {
@@ -24888,21 +24888,21 @@ func (t *GetAllPhoneNumberHistories_PhoneNumberHistories) GetEdges() []*GetAllPh
 }
 
 type GetPhoneNumberHistories_PhoneNumberHistories_Edges_Node struct {
-	CreatedAt   *time.Time        "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy   *string           "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Extension   *string           "json:\"extension,omitempty\" graphql:\"extension\""
-	HistoryTime time.Time         "json:\"historyTime\" graphql:\"historyTime\""
-	ID          string            "json:\"id\" graphql:\"id\""
-	Kind        string            "json:\"kind\" graphql:\"kind\""
-	Number      *string           "json:\"number,omitempty\" graphql:\"number\""
-	Operation   enthistory.OpType "json:\"operation\" graphql:\"operation\""
-	OwnerID     *string           "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Ref         *string           "json:\"ref,omitempty\" graphql:\"ref\""
-	RegionCode  *string           "json:\"regionCode,omitempty\" graphql:\"regionCode\""
-	ShortCode   *string           "json:\"shortCode,omitempty\" graphql:\"shortCode\""
-	Tags        []string          "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt   *time.Time        "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy   *string           "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	CreatedAt   *time.Time            "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy   *string               "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Extension   *string               "json:\"extension,omitempty\" graphql:\"extension\""
+	HistoryTime time.Time             "json:\"historyTime\" graphql:\"historyTime\""
+	ID          string                "json:\"id\" graphql:\"id\""
+	Kind        enums.PhoneNumberType "json:\"kind\" graphql:\"kind\""
+	Number      *string               "json:\"number,omitempty\" graphql:\"number\""
+	Operation   enthistory.OpType     "json:\"operation\" graphql:\"operation\""
+	OwnerID     *string               "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Ref         *string               "json:\"ref,omitempty\" graphql:\"ref\""
+	RegionCode  *string               "json:\"regionCode,omitempty\" graphql:\"regionCode\""
+	ShortCode   *string               "json:\"shortCode,omitempty\" graphql:\"shortCode\""
+	Tags        []string              "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt   *time.Time            "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy   *string               "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *GetPhoneNumberHistories_PhoneNumberHistories_Edges_Node) GetCreatedAt() *time.Time {
@@ -24935,11 +24935,11 @@ func (t *GetPhoneNumberHistories_PhoneNumberHistories_Edges_Node) GetID() string
 	}
 	return t.ID
 }
-func (t *GetPhoneNumberHistories_PhoneNumberHistories_Edges_Node) GetKind() string {
+func (t *GetPhoneNumberHistories_PhoneNumberHistories_Edges_Node) GetKind() *enums.PhoneNumberType {
 	if t == nil {
 		t = &GetPhoneNumberHistories_PhoneNumberHistories_Edges_Node{}
 	}
-	return t.Kind
+	return &t.Kind
 }
 func (t *GetPhoneNumberHistories_PhoneNumberHistories_Edges_Node) GetNumber() *string {
 	if t == nil {

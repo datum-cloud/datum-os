@@ -80,7 +80,6 @@ import (
 	"github.com/datum-cloud/datum-os/internal/ent/generated/webhook"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/webhookhistory"
 	"github.com/datum-cloud/datum-os/internal/ent/schema"
-	"github.com/datum-cloud/datum-os/pkg/enums"
 
 	"entgo.io/ent"
 	"entgo.io/ent/privacy"
@@ -2858,10 +2857,6 @@ func init() {
 	phonenumberDescOwnerID := phonenumberMixinFields4[0].Descriptor()
 	// phonenumber.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
 	phonenumber.OwnerIDValidator = phonenumberDescOwnerID.Validators[0].(func(string) error)
-	// phonenumberDescKind is the schema descriptor for kind field.
-	phonenumberDescKind := phonenumberFields[0].Descriptor()
-	// phonenumber.DefaultKind holds the default value on creation for the kind field.
-	phonenumber.DefaultKind = enums.PhoneNumberType(phonenumberDescKind.Default.(string))
 	// phonenumberDescRegionCode is the schema descriptor for region_code field.
 	phonenumberDescRegionCode := phonenumberFields[1].Descriptor()
 	// phonenumber.RegionCodeValidator is a validator for the "region_code" field. It is called by the builders before save.
@@ -2900,10 +2895,6 @@ func init() {
 	phonenumberhistoryDescTags := phonenumberhistoryFields[11].Descriptor()
 	// phonenumberhistory.DefaultTags holds the default value on creation for the tags field.
 	phonenumberhistory.DefaultTags = phonenumberhistoryDescTags.Default.([]string)
-	// phonenumberhistoryDescKind is the schema descriptor for kind field.
-	phonenumberhistoryDescKind := phonenumberhistoryFields[13].Descriptor()
-	// phonenumberhistory.DefaultKind holds the default value on creation for the kind field.
-	phonenumberhistory.DefaultKind = enums.PhoneNumberType(phonenumberhistoryDescKind.Default.(string))
 	// phonenumberhistoryDescID is the schema descriptor for id field.
 	phonenumberhistoryDescID := phonenumberhistoryFields[9].Descriptor()
 	// phonenumberhistory.DefaultID holds the default value on creation for the id field.

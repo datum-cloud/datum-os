@@ -37547,19 +37547,10 @@ type PhoneNumberWhereInput struct {
 	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
 
 	// "kind" field predicates.
-	Kind             *enums.PhoneNumberType  `json:"kind,omitempty"`
-	KindNEQ          *enums.PhoneNumberType  `json:"kindNEQ,omitempty"`
-	KindIn           []enums.PhoneNumberType `json:"kindIn,omitempty"`
-	KindNotIn        []enums.PhoneNumberType `json:"kindNotIn,omitempty"`
-	KindGT           *enums.PhoneNumberType  `json:"kindGT,omitempty"`
-	KindGTE          *enums.PhoneNumberType  `json:"kindGTE,omitempty"`
-	KindLT           *enums.PhoneNumberType  `json:"kindLT,omitempty"`
-	KindLTE          *enums.PhoneNumberType  `json:"kindLTE,omitempty"`
-	KindContains     *enums.PhoneNumberType  `json:"kindContains,omitempty"`
-	KindHasPrefix    *enums.PhoneNumberType  `json:"kindHasPrefix,omitempty"`
-	KindHasSuffix    *enums.PhoneNumberType  `json:"kindHasSuffix,omitempty"`
-	KindEqualFold    *enums.PhoneNumberType  `json:"kindEqualFold,omitempty"`
-	KindContainsFold *enums.PhoneNumberType  `json:"kindContainsFold,omitempty"`
+	Kind      *enums.PhoneNumberType  `json:"kind,omitempty"`
+	KindNEQ   *enums.PhoneNumberType  `json:"kindNEQ,omitempty"`
+	KindIn    []enums.PhoneNumberType `json:"kindIn,omitempty"`
+	KindNotIn []enums.PhoneNumberType `json:"kindNotIn,omitempty"`
 
 	// "region_code" field predicates.
 	RegionCode             *string  `json:"regionCode,omitempty"`
@@ -38029,33 +38020,6 @@ func (i *PhoneNumberWhereInput) P() (predicate.PhoneNumber, error) {
 	if len(i.KindNotIn) > 0 {
 		predicates = append(predicates, phonenumber.KindNotIn(i.KindNotIn...))
 	}
-	if i.KindGT != nil {
-		predicates = append(predicates, phonenumber.KindGT(*i.KindGT))
-	}
-	if i.KindGTE != nil {
-		predicates = append(predicates, phonenumber.KindGTE(*i.KindGTE))
-	}
-	if i.KindLT != nil {
-		predicates = append(predicates, phonenumber.KindLT(*i.KindLT))
-	}
-	if i.KindLTE != nil {
-		predicates = append(predicates, phonenumber.KindLTE(*i.KindLTE))
-	}
-	if i.KindContains != nil {
-		predicates = append(predicates, phonenumber.KindContains(*i.KindContains))
-	}
-	if i.KindHasPrefix != nil {
-		predicates = append(predicates, phonenumber.KindHasPrefix(*i.KindHasPrefix))
-	}
-	if i.KindHasSuffix != nil {
-		predicates = append(predicates, phonenumber.KindHasSuffix(*i.KindHasSuffix))
-	}
-	if i.KindEqualFold != nil {
-		predicates = append(predicates, phonenumber.KindEqualFold(*i.KindEqualFold))
-	}
-	if i.KindContainsFold != nil {
-		predicates = append(predicates, phonenumber.KindContainsFold(*i.KindContainsFold))
-	}
 	if i.RegionCode != nil {
 		predicates = append(predicates, phonenumber.RegionCodeEQ(*i.RegionCode))
 	}
@@ -38476,19 +38440,10 @@ type PhoneNumberHistoryWhereInput struct {
 	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
 
 	// "kind" field predicates.
-	Kind             *enums.PhoneNumberType  `json:"kind,omitempty"`
-	KindNEQ          *enums.PhoneNumberType  `json:"kindNEQ,omitempty"`
-	KindIn           []enums.PhoneNumberType `json:"kindIn,omitempty"`
-	KindNotIn        []enums.PhoneNumberType `json:"kindNotIn,omitempty"`
-	KindGT           *enums.PhoneNumberType  `json:"kindGT,omitempty"`
-	KindGTE          *enums.PhoneNumberType  `json:"kindGTE,omitempty"`
-	KindLT           *enums.PhoneNumberType  `json:"kindLT,omitempty"`
-	KindLTE          *enums.PhoneNumberType  `json:"kindLTE,omitempty"`
-	KindContains     *enums.PhoneNumberType  `json:"kindContains,omitempty"`
-	KindHasPrefix    *enums.PhoneNumberType  `json:"kindHasPrefix,omitempty"`
-	KindHasSuffix    *enums.PhoneNumberType  `json:"kindHasSuffix,omitempty"`
-	KindEqualFold    *enums.PhoneNumberType  `json:"kindEqualFold,omitempty"`
-	KindContainsFold *enums.PhoneNumberType  `json:"kindContainsFold,omitempty"`
+	Kind      *enums.PhoneNumberType  `json:"kind,omitempty"`
+	KindNEQ   *enums.PhoneNumberType  `json:"kindNEQ,omitempty"`
+	KindIn    []enums.PhoneNumberType `json:"kindIn,omitempty"`
+	KindNotIn []enums.PhoneNumberType `json:"kindNotIn,omitempty"`
 
 	// "region_code" field predicates.
 	RegionCode             *string  `json:"regionCode,omitempty"`
@@ -39022,33 +38977,6 @@ func (i *PhoneNumberHistoryWhereInput) P() (predicate.PhoneNumberHistory, error)
 	}
 	if len(i.KindNotIn) > 0 {
 		predicates = append(predicates, phonenumberhistory.KindNotIn(i.KindNotIn...))
-	}
-	if i.KindGT != nil {
-		predicates = append(predicates, phonenumberhistory.KindGT(*i.KindGT))
-	}
-	if i.KindGTE != nil {
-		predicates = append(predicates, phonenumberhistory.KindGTE(*i.KindGTE))
-	}
-	if i.KindLT != nil {
-		predicates = append(predicates, phonenumberhistory.KindLT(*i.KindLT))
-	}
-	if i.KindLTE != nil {
-		predicates = append(predicates, phonenumberhistory.KindLTE(*i.KindLTE))
-	}
-	if i.KindContains != nil {
-		predicates = append(predicates, phonenumberhistory.KindContains(*i.KindContains))
-	}
-	if i.KindHasPrefix != nil {
-		predicates = append(predicates, phonenumberhistory.KindHasPrefix(*i.KindHasPrefix))
-	}
-	if i.KindHasSuffix != nil {
-		predicates = append(predicates, phonenumberhistory.KindHasSuffix(*i.KindHasSuffix))
-	}
-	if i.KindEqualFold != nil {
-		predicates = append(predicates, phonenumberhistory.KindEqualFold(*i.KindEqualFold))
-	}
-	if i.KindContainsFold != nil {
-		predicates = append(predicates, phonenumberhistory.KindContainsFold(*i.KindContainsFold))
 	}
 	if i.RegionCode != nil {
 		predicates = append(predicates, phonenumberhistory.RegionCodeEQ(*i.RegionCode))

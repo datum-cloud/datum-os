@@ -107,8 +107,6 @@ var (
 	DefaultMappingID func() string
 	// DefaultTags holds the default value on creation for the "tags" field.
 	DefaultTags []string
-	// DefaultKind holds the default value on creation for the "kind" field.
-	DefaultKind enums.PhoneNumberType
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )
@@ -120,6 +118,18 @@ func OperationValidator(o enthistory.OpType) error {
 		return nil
 	default:
 		return fmt.Errorf("phonenumberhistory: invalid enum value for operation field: %q", o)
+	}
+}
+
+const DefaultKind enums.PhoneNumberType = "UNSPECIFIED"
+
+// KindValidator is a validator for the "kind" field enum values. It is called by the builders before save.
+func KindValidator(k enums.PhoneNumberType) error {
+	switch k.String() {
+	case "E164", "SHORT_CODE", "UNSPECIFIED":
+		return nil
+	default:
+		return fmt.Errorf("phonenumberhistory: invalid enum value for kind field: %q", k)
 	}
 }
 
@@ -216,4 +226,11 @@ var (
 	_ graphql.Marshaler = (*enthistory.OpType)(nil)
 	// enthistory.OpType must implement graphql.Unmarshaler.
 	_ graphql.Unmarshaler = (*enthistory.OpType)(nil)
+)
+
+var (
+	// enums.PhoneNumberType must implement graphql.Marshaler.
+	_ graphql.Marshaler = (*enums.PhoneNumberType)(nil)
+	// enums.PhoneNumberType must implement graphql.Unmarshaler.
+	_ graphql.Unmarshaler = (*enums.PhoneNumberType)(nil)
 )

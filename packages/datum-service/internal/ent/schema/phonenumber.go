@@ -34,7 +34,7 @@ func (PhoneNumber) Mixin() []ent.Mixin {
 
 func (PhoneNumber) Fields() []ent.Field {
 	return []ent.Field{
-		field.String("kind").
+		field.Enum("kind").
 			Comment("The type of phone number. E.g. 'E164' or 'SHORT_CODE'").
 			GoType(enums.PhoneNumberType("")).
 			Default(string(enums.PhoneNumberTypeUnspecified)),

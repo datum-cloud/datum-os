@@ -366,6 +366,11 @@ func (pnc *PhoneNumberCreate) check() error {
 	if _, ok := pnc.mutation.Kind(); !ok {
 		return &ValidationError{Name: "kind", err: errors.New(`generated: missing required field "PhoneNumber.kind"`)}
 	}
+	if v, ok := pnc.mutation.Kind(); ok {
+		if err := phonenumber.KindValidator(v); err != nil {
+			return &ValidationError{Name: "kind", err: fmt.Errorf(`generated: validator failed for field "PhoneNumber.kind": %w`, err)}
+		}
+	}
 	if v, ok := pnc.mutation.RegionCode(); ok {
 		if err := phonenumber.RegionCodeValidator(v); err != nil {
 			return &ValidationError{Name: "region_code", err: fmt.Errorf(`generated: validator failed for field "PhoneNumber.region_code": %w`, err)}
@@ -445,7 +450,7 @@ func (pnc *PhoneNumberCreate) createSpec() (*PhoneNumber, *sqlgraph.CreateSpec) 
 		_node.Tags = value
 	}
 	if value, ok := pnc.mutation.Kind(); ok {
-		_spec.SetField(phonenumber.FieldKind, field.TypeString, value)
+		_spec.SetField(phonenumber.FieldKind, field.TypeEnum, value)
 		_node.Kind = value
 	}
 	if value, ok := pnc.mutation.RegionCode(); ok {

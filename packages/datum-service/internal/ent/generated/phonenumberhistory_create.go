@@ -342,6 +342,11 @@ func (pnhc *PhoneNumberHistoryCreate) check() error {
 	if _, ok := pnhc.mutation.Kind(); !ok {
 		return &ValidationError{Name: "kind", err: errors.New(`generated: missing required field "PhoneNumberHistory.kind"`)}
 	}
+	if v, ok := pnhc.mutation.Kind(); ok {
+		if err := phonenumberhistory.KindValidator(v); err != nil {
+			return &ValidationError{Name: "kind", err: fmt.Errorf(`generated: validator failed for field "PhoneNumberHistory.kind": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -427,7 +432,7 @@ func (pnhc *PhoneNumberHistoryCreate) createSpec() (*PhoneNumberHistory, *sqlgra
 		_node.OwnerID = value
 	}
 	if value, ok := pnhc.mutation.Kind(); ok {
-		_spec.SetField(phonenumberhistory.FieldKind, field.TypeString, value)
+		_spec.SetField(phonenumberhistory.FieldKind, field.TypeEnum, value)
 		_node.Kind = value
 	}
 	if value, ok := pnhc.mutation.RegionCode(); ok {

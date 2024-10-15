@@ -3,11 +3,13 @@
 package phonenumber
 
 import (
+	"fmt"
 	"time"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
+	"github.com/99designs/gqlgen/graphql"
 	"github.com/datum-cloud/datum-os/pkg/enums"
 )
 
@@ -138,8 +140,6 @@ var (
 	DefaultTags []string
 	// OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
 	OwnerIDValidator func(string) error
-	// DefaultKind holds the default value on creation for the "kind" field.
-	DefaultKind enums.PhoneNumberType
 	// RegionCodeValidator is a validator for the "region_code" field. It is called by the builders before save.
 	RegionCodeValidator func(string) error
 	// NumberValidator is a validator for the "number" field. It is called by the builders before save.
@@ -147,6 +147,18 @@ var (
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )
+
+const DefaultKind enums.PhoneNumberType = "UNSPECIFIED"
+
+// KindValidator is a validator for the "kind" field enum values. It is called by the builders before save.
+func KindValidator(k enums.PhoneNumberType) error {
+	switch k.String() {
+	case "E164", "SHORT_CODE", "UNSPECIFIED":
+		return nil
+	default:
+		return fmt.Errorf("phonenumber: invalid enum value for kind field: %q", k)
+	}
+}
 
 // OrderOption defines the ordering options for the PhoneNumber queries.
 type OrderOption func(*sql.Selector)
@@ -297,3 +309,10 @@ func newVendorProfilePhoneNumbersStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.O2M, true, VendorProfilePhoneNumbersTable, VendorProfilePhoneNumbersColumn),
 	)
 }
+
+var (
+	// enums.PhoneNumberType must implement graphql.Marshaler.
+	_ graphql.Marshaler = (*enums.PhoneNumberType)(nil)
+	// enums.PhoneNumberType must implement graphql.Unmarshaler.
+	_ graphql.Unmarshaler = (*enums.PhoneNumberType)(nil)
+)
