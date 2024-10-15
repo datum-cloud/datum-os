@@ -13,6 +13,7 @@ import (
 	"github.com/datum-cloud/datum-os/internal/ent/generated/privacy"
 	"github.com/datum-cloud/datum-os/internal/ent/mixin"
 	emixin "github.com/datum-cloud/datum-os/pkg/entx/mixin"
+	"github.com/datum-cloud/datum-os/pkg/enums"
 )
 
 type VendorProfile struct {
@@ -45,10 +46,14 @@ func (VendorProfile) Fields() []ent.Field {
 			Annotations(
 				entgql.OrderField("name"),
 			),
-		field.String("dba_name").
+		field.String("corporation_type").
+			Comment("The type of corporation (e.g. LLC, S-Corp, C-Corp, Other)").
+			Optional().
+			MaxLen(64),
+		field.String("corporation_dba").
 			Comment("The Doing Business As (DBA) name of the Corporation").
 			Optional().
-			MaxLen(255),
+			MaxLen(64),
 		field.String("description").
 			Comment("The description of the Corporation or Person and the services they provide").
 			Optional().
@@ -58,12 +63,22 @@ func (VendorProfile) Fields() []ent.Field {
 		field.String("website_uri").
 			Comment("The URL of the website of the Corporation or Person").
 			Optional().
-			MaxLen(2048).Validate(func(s string) error {
-			if _, err := url.Parse(s); err != nil {
-				return errors.New("invalid URL")
-			}
-			return nil
-		}),
+			MaxLen(2048).
+			Validate(func(s string) error {
+				if _, err := url.Parse(s); err != nil {
+					return errors.New("invalid URL")
+				}
+				return nil
+			}),
+		field.String("tax_id").
+			Comment("The tax ID of the Corporation or Person").
+			Optional().
+			Sensitive().
+			MaxLen(32),
+		field.Enum("tax_id_type").
+			Comment("The type of tax ID (e.g. EIN, SSN, TIN, etc.)").
+			GoType(enums.TaxIDType("")).
+			Default(string(enums.TaxIDTypeUnspecified)),
 	}
 }
 

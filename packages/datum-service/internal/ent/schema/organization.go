@@ -171,6 +171,8 @@ func (Organization) Edges() []ent.Edge {
 			Annotations(entx.CascadeAnnotationField("Owner")),
 		edge.To("postal_addresses", PostalAddress.Type).
 			Annotations(entx.CascadeAnnotationField("Owner")),
+		edge.To("phone_numbers", PhoneNumber.Type).
+			Annotations(entx.CascadeAnnotationField("Owner")),
 	}
 }
 
