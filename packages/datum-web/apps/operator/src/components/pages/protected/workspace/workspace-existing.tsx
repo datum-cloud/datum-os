@@ -1,11 +1,11 @@
 import { useRouter } from 'next/navigation'
 
 import { OPERATOR_APP_ROUTES } from '@repo/constants'
-import { Panel, PanelHeader } from '@repo/ui/panel'
+import { Datum } from '@repo/types'
 import { Avatar, AvatarFallback, AvatarImage } from '@repo/ui/avatar'
 import { Button } from '@repo/ui/button'
+import { Panel, PanelHeader } from '@repo/ui/panel'
 import { Tag } from '@repo/ui/tag'
-import { Datum } from '@repo/types'
 
 import { existingWorkspacesStyles } from './page.styles'
 
@@ -58,9 +58,11 @@ export const ExistingWorkspaces = ({
                 <Button
                   variant="outline"
                   size="md"
-                  onClick={() => push(OPERATOR_APP_ROUTES.dashboard)}
+                  onClick={() =>
+                    push(OPERATOR_APP_ROUTES.personalWorkspaceSettings)
+                  }
                 >
-                  Go to Dashboard
+                  Edit Personal Workspace
                 </Button>
               )}
             </div>
@@ -81,9 +83,7 @@ export const ExistingWorkspaces = ({
               <div>
                 <Avatar variant="large">
                   {avatar && <AvatarImage src={avatar} />}
-                  <AvatarFallback>
-                    {name.substring(0, 2)}
-                  </AvatarFallback>
+                  <AvatarFallback>{name.substring(0, 2)}</AvatarFallback>
                 </Avatar>
               </div>
               <div className={orgInfo()}>

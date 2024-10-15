@@ -7,13 +7,14 @@ import {
   useGetUserProfileQuery,
   useUpdateUserInfoMutation,
 } from '@repo/codegen/src/schema'
+import { TOAST_DURATION } from '@repo/constants'
+import { toast } from '@repo/ui/use-toast'
 
 import PageTitle from '@/components/page-title'
 import { AvatarUpload } from '@/components/shared/avatar-upload/avatar-upload'
 
-import { ProfileNameForm } from './profile-name-form'
 import { pageStyles } from './page.styles'
-import { toast } from '@repo/ui/use-toast'
+import { ProfileNameForm } from './profile-name-form'
 
 const ProfilePage = () => {
   const { wrapper } = pageStyles()
@@ -33,23 +34,27 @@ const ProfilePage = () => {
       input,
     })
 
-
     if (error) {
       console.error(error)
       toast({
         title: 'Error updating profile',
         variant: 'destructive',
+        duration: TOAST_DURATION,
       })
     } else {
       toast({
         title: 'Profile updated',
         variant: 'success',
+        duration: TOAST_DURATION,
       })
       update({
         ...sessionData,
         user: {
           ...sessionData?.user,
-          name: input?.firstName || input?.lastName ? `${input?.firstName} ${input?.lastName}` : sessionData?.user.name,
+          name:
+            input?.firstName || input?.lastName
+              ? `${input?.firstName} ${input?.lastName}`
+              : sessionData?.user.name,
         },
       })
     }

@@ -8,6 +8,7 @@ import {
   useCreateBulkInviteMutation,
 } from '@repo/codegen/src/schema'
 import { pluralize } from '@repo/common/text'
+import { TOAST_DURATION } from '@repo/constants'
 import { Button } from '@repo/ui/button'
 import {
   Dialog,
@@ -97,6 +98,7 @@ const UsersFormDialog: React.FC<UsersDialogFormProps> = ({
       toast({
         title: `${pluralize('Invite', data.emails.length)} sent successfully`,
         variant: 'success',
+        duration: TOAST_DURATION,
       })
       setEmails([])
     } catch (error) {
@@ -105,6 +107,7 @@ const UsersFormDialog: React.FC<UsersDialogFormProps> = ({
       toast({
         title: `${pluralize('Invite', data.emails.length)} could not be sent`,
         variant: 'destructive',
+        duration: TOAST_DURATION,
       })
     }
   }
