@@ -1,8 +1,5 @@
 'use client'
 
-import { useRouter } from 'next/navigation'
-import { useSession } from 'next-auth/react'
-import { useState } from 'react'
 import {
   Check,
   ChevronDown,
@@ -12,18 +9,22 @@ import {
   Trash,
   User,
 } from 'lucide-react'
+import { useSession } from 'next-auth/react'
+import { useRouter } from 'next/navigation'
+import { useState } from 'react'
 
 import { OPERATOR_APP_ROUTES } from '@repo/constants'
+import type { Datum } from '@repo/types'
 import { Button } from '@repo/ui/button'
+import type { ColumnFiltersState } from '@repo/ui/data-table'
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@repo/ui/dropdown-menu'
-import type { ColumnFiltersState } from '@repo/ui/data-table'
-import type { Datum } from '@repo/types'
 
+import FilterDialog from '@/components/shared/filter-dialog/filter-dialog'
 import {
   Accordion,
   AccordionContent,
@@ -33,11 +34,10 @@ import {
 import Search from '@/components/shared/table-search/table-search'
 import { useLists } from '@/hooks/useLists'
 import { createListMembers, removeListMembers } from '@/query/lists'
+import { CONTACT_FILTERS } from '@/utils/filters/schemas'
 
 import ContactFormDialog from './contacts-form-dialog'
-import FilterDialog from '@/components/shared/filter-dialog/filter-dialog'
 import { pageStyles } from './page.styles'
-import { CONTACT_FILTERS } from '@/utils/filters'
 
 type ContactsControlsProps = {
   search(query: string): void

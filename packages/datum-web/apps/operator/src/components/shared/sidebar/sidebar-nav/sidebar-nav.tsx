@@ -1,9 +1,11 @@
 'use client'
-import Link from 'next/link'
 
-import { NavHeading, type NavItem, type Separator } from '@/types'
+import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { useSidebar } from '@/hooks/useSidebar'
+import { useEffect, useState } from 'react'
+
+import { cn } from '@repo/ui/lib/utils'
+import { Separator as Hr } from '@repo/ui/separator'
 
 import {
   Accordion,
@@ -11,9 +13,9 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@/components/shared/sidebar/sidebar-accordion/sidebar-accordion'
-import { useEffect, useState } from 'react'
-import { cn } from '@repo/ui/lib/utils'
-import { Separator as Hr } from '@repo/ui/separator'
+import { useSidebar } from '@/hooks/useSidebar'
+import { NavHeading, type NavItem, type Separator } from '@/types'
+
 import { sidebarNavStyles } from './sidebar-nav.styles'
 
 interface SideNavProps {
@@ -25,8 +27,13 @@ interface SideNavProps {
 export function SideNav({ items, setOpen, className }: SideNavProps) {
   const path = usePathname()
   const { isOpen: isSidebarOpen, toggle: toggleOpen } = useSidebar()
-  const [openItems, setOpenItems] = useState<string[]>([])
-  const [lastOpenItems, setLastOpenItems] = useState<string[]>([])
+  const activeNavAccordions = items
+    .filter((item) => 'title' in item && 'href' in item)
+    .filter((item) => path.includes(item.href))
+    .map((item) => item.title)
+  const [openItems, setOpenItems] = useState<string[]>(activeNavAccordions)
+  const [lastOpenItems, setLastOpenItems] =
+    useState<string[]>(activeNavAccordions)
 
   const {
     nav,

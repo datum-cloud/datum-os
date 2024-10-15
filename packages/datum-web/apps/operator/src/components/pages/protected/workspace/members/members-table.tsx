@@ -13,13 +13,14 @@ import {
   ColumnFiltersState,
   DataTable,
   DataTableColumnHeader,
-  FilterFn,
   Row,
-  SortingFn,
-  compareItems,
-  rankItem,
-  sortingFns,
 } from '@repo/ui/data-table'
+
+import {
+  booleanFilter,
+  fuzzyFilter,
+  fuzzySort,
+} from '@/utils/filters/functions'
 
 import MembersTableDropdown from './members-table-dropdown'
 import { pageStyles } from './page.styles'
@@ -47,45 +48,6 @@ export const MembersTable = ({
 }: MembersTableProps) => {
   const { checkboxContainer, userDetails, userDetailsText, header } =
     pageStyles()
-
-  const fuzzyFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
-    if (!value || value === '') return true
-
-    const cellValue = row.getValue(columnId)
-
-    if (!cellValue) return false
-
-    const itemRank = rankItem(cellValue, value)
-
-    addMeta({
-      itemRank,
-    })
-
-    return itemRank.passed
-  }
-
-  const booleanFilter: FilterFn<any> = (row, columnId, value) => {
-    let cellValue = row.getValue(columnId)
-
-    if (typeof cellValue === 'string') {
-      cellValue = cellValue.trim()
-    }
-
-    return Boolean(cellValue) === value
-  }
-
-  const fuzzySort: SortingFn<any> = (rowA, rowB, columnId) => {
-    let dir = 0
-
-    if (rowA.columnFiltersMeta[columnId]) {
-      dir = compareItems(
-        rowA.columnFiltersMeta[columnId].itemRank!,
-        rowB.columnFiltersMeta[columnId].itemRank!,
-      )
-    }
-
-    return dir === 0 ? sortingFns.alphanumeric(rowA, rowB, columnId) : dir
-  }
 
   const filterFns = {
     fuzzy: fuzzyFilter,

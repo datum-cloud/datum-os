@@ -1,28 +1,28 @@
 'use client'
 
 import Link from 'next/link'
-import { useState, useEffect } from 'react'
+import { useEffect, useState } from 'react'
 
 import { getPathWithParams } from '@repo/common/routes'
 import { OPERATOR_APP_ROUTES } from '@repo/constants'
+import { Datum } from '@repo/types'
 import { Avatar, AvatarFallback, AvatarImage } from '@repo/ui/avatar'
 import { Checkbox } from '@repo/ui/checkbox'
 import {
   ColumnDef,
-  FilterFn,
-  SortingFn,
+  ColumnFiltersState,
   DataTable,
   DataTableColumnHeader,
-  sortingFns,
-  rankItem,
-  compareItems,
-  ColumnFiltersState,
   Row,
 } from '@repo/ui/data-table'
 import { Tag, TagVariants } from '@repo/ui/tag'
-import { Datum } from '@repo/types'
 
 import { formatDate } from '@/utils/date'
+import {
+  booleanFilter,
+  fuzzyFilter,
+  fuzzySort,
+} from '@/utils/filters/functions'
 
 import { tableStyles } from './page.styles'
 
@@ -37,45 +37,6 @@ type UsersTableProps = {
 
 const { header, checkboxContainer, link, userDetails, userDetailsText } =
   tableStyles()
-
-const fuzzyFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
-  if (!value || value === '') return true
-
-  const cellValue = row.getValue(columnId)
-
-  if (!cellValue) return false
-
-  const itemRank = rankItem(cellValue, value)
-
-  addMeta({
-    itemRank,
-  })
-
-  return itemRank.passed
-}
-
-const booleanFilter: FilterFn<any> = (row, columnId, value) => {
-  let cellValue = row.getValue(columnId)
-
-  if (typeof cellValue === 'string') {
-    cellValue = cellValue.trim()
-  }
-
-  return Boolean(cellValue) === value
-}
-
-const fuzzySort: SortingFn<any> = (rowA, rowB, columnId) => {
-  let dir = 0
-
-  if (rowA.columnFiltersMeta[columnId]) {
-    dir = compareItems(
-      rowA.columnFiltersMeta[columnId].itemRank!,
-      rowB.columnFiltersMeta[columnId].itemRank!
-    )
-  }
-
-  return dir === 0 ? sortingFns.alphanumeric(rowA, rowB, columnId) : dir
-}
 
 const filterFns = {
   fuzzy: fuzzyFilter,
