@@ -79,6 +79,8 @@ import (
 	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorhistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofile"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofilehistory"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofilepaymentpreference"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofilepaymentpreferencehistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofilephonenumber"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofilephonenumberhistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofilepostaladdress"
@@ -99,79 +101,81 @@ const (
 	OpUpdateOne = ent.OpUpdateOne
 
 	// Node types.
-	TypeAPIToken                          = "APIToken"
-	TypeContact                           = "Contact"
-	TypeContactHistory                    = "ContactHistory"
-	TypeContactList                       = "ContactList"
-	TypeContactListHistory                = "ContactListHistory"
-	TypeContactListMembership             = "ContactListMembership"
-	TypeContactListMembershipHistory      = "ContactListMembershipHistory"
-	TypeDocumentData                      = "DocumentData"
-	TypeDocumentDataHistory               = "DocumentDataHistory"
-	TypeEmailVerificationToken            = "EmailVerificationToken"
-	TypeEntitlement                       = "Entitlement"
-	TypeEntitlementHistory                = "EntitlementHistory"
-	TypeEntitlementPlan                   = "EntitlementPlan"
-	TypeEntitlementPlanFeature            = "EntitlementPlanFeature"
-	TypeEntitlementPlanFeatureHistory     = "EntitlementPlanFeatureHistory"
-	TypeEntitlementPlanHistory            = "EntitlementPlanHistory"
-	TypeEntity                            = "Entity"
-	TypeEntityHistory                     = "EntityHistory"
-	TypeEntityType                        = "EntityType"
-	TypeEntityTypeHistory                 = "EntityTypeHistory"
-	TypeEvent                             = "Event"
-	TypeEventHistory                      = "EventHistory"
-	TypeFeature                           = "Feature"
-	TypeFeatureHistory                    = "FeatureHistory"
-	TypeFile                              = "File"
-	TypeFileHistory                       = "FileHistory"
-	TypeGroup                             = "Group"
-	TypeGroupHistory                      = "GroupHistory"
-	TypeGroupMembership                   = "GroupMembership"
-	TypeGroupMembershipHistory            = "GroupMembershipHistory"
-	TypeGroupSetting                      = "GroupSetting"
-	TypeGroupSettingHistory               = "GroupSettingHistory"
-	TypeHush                              = "Hush"
-	TypeHushHistory                       = "HushHistory"
-	TypeIntegration                       = "Integration"
-	TypeIntegrationHistory                = "IntegrationHistory"
-	TypeInvite                            = "Invite"
-	TypeNote                              = "Note"
-	TypeNoteHistory                       = "NoteHistory"
-	TypeOauthProvider                     = "OauthProvider"
-	TypeOauthProviderHistory              = "OauthProviderHistory"
-	TypeOhAuthTooToken                    = "OhAuthTooToken"
-	TypeOrgMembership                     = "OrgMembership"
-	TypeOrgMembershipHistory              = "OrgMembershipHistory"
-	TypeOrganization                      = "Organization"
-	TypeOrganizationHistory               = "OrganizationHistory"
-	TypeOrganizationSetting               = "OrganizationSetting"
-	TypeOrganizationSettingHistory        = "OrganizationSettingHistory"
-	TypePasswordResetToken                = "PasswordResetToken"
-	TypePersonalAccessToken               = "PersonalAccessToken"
-	TypePhoneNumber                       = "PhoneNumber"
-	TypePhoneNumberHistory                = "PhoneNumberHistory"
-	TypePostalAddress                     = "PostalAddress"
-	TypePostalAddressHistory              = "PostalAddressHistory"
-	TypeSubscriber                        = "Subscriber"
-	TypeTFASetting                        = "TFASetting"
-	TypeTemplate                          = "Template"
-	TypeTemplateHistory                   = "TemplateHistory"
-	TypeUser                              = "User"
-	TypeUserHistory                       = "UserHistory"
-	TypeUserSetting                       = "UserSetting"
-	TypeUserSettingHistory                = "UserSettingHistory"
-	TypeVendor                            = "Vendor"
-	TypeVendorHistory                     = "VendorHistory"
-	TypeVendorProfile                     = "VendorProfile"
-	TypeVendorProfileHistory              = "VendorProfileHistory"
-	TypeVendorProfilePhoneNumber          = "VendorProfilePhoneNumber"
-	TypeVendorProfilePhoneNumberHistory   = "VendorProfilePhoneNumberHistory"
-	TypeVendorProfilePostalAddress        = "VendorProfilePostalAddress"
-	TypeVendorProfilePostalAddressHistory = "VendorProfilePostalAddressHistory"
-	TypeWebauthn                          = "Webauthn"
-	TypeWebhook                           = "Webhook"
-	TypeWebhookHistory                    = "WebhookHistory"
+	TypeAPIToken                              = "APIToken"
+	TypeContact                               = "Contact"
+	TypeContactHistory                        = "ContactHistory"
+	TypeContactList                           = "ContactList"
+	TypeContactListHistory                    = "ContactListHistory"
+	TypeContactListMembership                 = "ContactListMembership"
+	TypeContactListMembershipHistory          = "ContactListMembershipHistory"
+	TypeDocumentData                          = "DocumentData"
+	TypeDocumentDataHistory                   = "DocumentDataHistory"
+	TypeEmailVerificationToken                = "EmailVerificationToken"
+	TypeEntitlement                           = "Entitlement"
+	TypeEntitlementHistory                    = "EntitlementHistory"
+	TypeEntitlementPlan                       = "EntitlementPlan"
+	TypeEntitlementPlanFeature                = "EntitlementPlanFeature"
+	TypeEntitlementPlanFeatureHistory         = "EntitlementPlanFeatureHistory"
+	TypeEntitlementPlanHistory                = "EntitlementPlanHistory"
+	TypeEntity                                = "Entity"
+	TypeEntityHistory                         = "EntityHistory"
+	TypeEntityType                            = "EntityType"
+	TypeEntityTypeHistory                     = "EntityTypeHistory"
+	TypeEvent                                 = "Event"
+	TypeEventHistory                          = "EventHistory"
+	TypeFeature                               = "Feature"
+	TypeFeatureHistory                        = "FeatureHistory"
+	TypeFile                                  = "File"
+	TypeFileHistory                           = "FileHistory"
+	TypeGroup                                 = "Group"
+	TypeGroupHistory                          = "GroupHistory"
+	TypeGroupMembership                       = "GroupMembership"
+	TypeGroupMembershipHistory                = "GroupMembershipHistory"
+	TypeGroupSetting                          = "GroupSetting"
+	TypeGroupSettingHistory                   = "GroupSettingHistory"
+	TypeHush                                  = "Hush"
+	TypeHushHistory                           = "HushHistory"
+	TypeIntegration                           = "Integration"
+	TypeIntegrationHistory                    = "IntegrationHistory"
+	TypeInvite                                = "Invite"
+	TypeNote                                  = "Note"
+	TypeNoteHistory                           = "NoteHistory"
+	TypeOauthProvider                         = "OauthProvider"
+	TypeOauthProviderHistory                  = "OauthProviderHistory"
+	TypeOhAuthTooToken                        = "OhAuthTooToken"
+	TypeOrgMembership                         = "OrgMembership"
+	TypeOrgMembershipHistory                  = "OrgMembershipHistory"
+	TypeOrganization                          = "Organization"
+	TypeOrganizationHistory                   = "OrganizationHistory"
+	TypeOrganizationSetting                   = "OrganizationSetting"
+	TypeOrganizationSettingHistory            = "OrganizationSettingHistory"
+	TypePasswordResetToken                    = "PasswordResetToken"
+	TypePersonalAccessToken                   = "PersonalAccessToken"
+	TypePhoneNumber                           = "PhoneNumber"
+	TypePhoneNumberHistory                    = "PhoneNumberHistory"
+	TypePostalAddress                         = "PostalAddress"
+	TypePostalAddressHistory                  = "PostalAddressHistory"
+	TypeSubscriber                            = "Subscriber"
+	TypeTFASetting                            = "TFASetting"
+	TypeTemplate                              = "Template"
+	TypeTemplateHistory                       = "TemplateHistory"
+	TypeUser                                  = "User"
+	TypeUserHistory                           = "UserHistory"
+	TypeUserSetting                           = "UserSetting"
+	TypeUserSettingHistory                    = "UserSettingHistory"
+	TypeVendor                                = "Vendor"
+	TypeVendorHistory                         = "VendorHistory"
+	TypeVendorProfile                         = "VendorProfile"
+	TypeVendorProfileHistory                  = "VendorProfileHistory"
+	TypeVendorProfilePaymentPreference        = "VendorProfilePaymentPreference"
+	TypeVendorProfilePaymentPreferenceHistory = "VendorProfilePaymentPreferenceHistory"
+	TypeVendorProfilePhoneNumber              = "VendorProfilePhoneNumber"
+	TypeVendorProfilePhoneNumberHistory       = "VendorProfilePhoneNumberHistory"
+	TypeVendorProfilePostalAddress            = "VendorProfilePostalAddress"
+	TypeVendorProfilePostalAddressHistory     = "VendorProfilePostalAddressHistory"
+	TypeWebauthn                              = "Webauthn"
+	TypeWebhook                               = "Webhook"
+	TypeWebhookHistory                        = "WebhookHistory"
 )
 
 // APITokenMutation represents an operation that mutates the APIToken nodes in the graph.
@@ -61949,122 +61953,125 @@ func (m *OrgMembershipHistoryMutation) ResetEdge(name string) error {
 // OrganizationMutation represents an operation that mutates the Organization nodes in the graph.
 type OrganizationMutation struct {
 	config
-	op                              Op
-	typ                             string
-	id                              *string
-	created_at                      *time.Time
-	updated_at                      *time.Time
-	created_by                      *string
-	updated_by                      *string
-	mapping_id                      *string
-	tags                            *[]string
-	appendtags                      []string
-	deleted_at                      *time.Time
-	deleted_by                      *string
-	name                            *string
-	display_name                    *string
-	description                     *string
-	personal_org                    *bool
-	avatar_remote_url               *string
-	dedicated_db                    *bool
-	clearedFields                   map[string]struct{}
-	parent                          *string
-	clearedparent                   bool
-	children                        map[string]struct{}
-	removedchildren                 map[string]struct{}
-	clearedchildren                 bool
-	groups                          map[string]struct{}
-	removedgroups                   map[string]struct{}
-	clearedgroups                   bool
-	templates                       map[string]struct{}
-	removedtemplates                map[string]struct{}
-	clearedtemplates                bool
-	integrations                    map[string]struct{}
-	removedintegrations             map[string]struct{}
-	clearedintegrations             bool
-	setting                         *string
-	clearedsetting                  bool
-	documentdata                    map[string]struct{}
-	removeddocumentdata             map[string]struct{}
-	cleareddocumentdata             bool
-	entitlements                    map[string]struct{}
-	removedentitlements             map[string]struct{}
-	clearedentitlements             bool
-	organization_entitlement        map[string]struct{}
-	removedorganization_entitlement map[string]struct{}
-	clearedorganization_entitlement bool
-	personal_access_tokens          map[string]struct{}
-	removedpersonal_access_tokens   map[string]struct{}
-	clearedpersonal_access_tokens   bool
-	api_tokens                      map[string]struct{}
-	removedapi_tokens               map[string]struct{}
-	clearedapi_tokens               bool
-	oauthprovider                   map[string]struct{}
-	removedoauthprovider            map[string]struct{}
-	clearedoauthprovider            bool
-	users                           map[string]struct{}
-	removedusers                    map[string]struct{}
-	clearedusers                    bool
-	invites                         map[string]struct{}
-	removedinvites                  map[string]struct{}
-	clearedinvites                  bool
-	subscribers                     map[string]struct{}
-	removedsubscribers              map[string]struct{}
-	clearedsubscribers              bool
-	webhooks                        map[string]struct{}
-	removedwebhooks                 map[string]struct{}
-	clearedwebhooks                 bool
-	events                          map[string]struct{}
-	removedevents                   map[string]struct{}
-	clearedevents                   bool
-	secrets                         map[string]struct{}
-	removedsecrets                  map[string]struct{}
-	clearedsecrets                  bool
-	features                        map[string]struct{}
-	removedfeatures                 map[string]struct{}
-	clearedfeatures                 bool
-	files                           map[string]struct{}
-	removedfiles                    map[string]struct{}
-	clearedfiles                    bool
-	entitlementplans                map[string]struct{}
-	removedentitlementplans         map[string]struct{}
-	clearedentitlementplans         bool
-	entitlementplanfeatures         map[string]struct{}
-	removedentitlementplanfeatures  map[string]struct{}
-	clearedentitlementplanfeatures  bool
-	entities                        map[string]struct{}
-	removedentities                 map[string]struct{}
-	clearedentities                 bool
-	entitytypes                     map[string]struct{}
-	removedentitytypes              map[string]struct{}
-	clearedentitytypes              bool
-	contacts                        map[string]struct{}
-	removedcontacts                 map[string]struct{}
-	clearedcontacts                 bool
-	contact_lists                   map[string]struct{}
-	removedcontact_lists            map[string]struct{}
-	clearedcontact_lists            bool
-	notes                           map[string]struct{}
-	removednotes                    map[string]struct{}
-	clearednotes                    bool
-	vendors                         map[string]struct{}
-	removedvendors                  map[string]struct{}
-	clearedvendors                  bool
-	vendor_profiles                 map[string]struct{}
-	removedvendor_profiles          map[string]struct{}
-	clearedvendor_profiles          bool
-	postal_addresses                map[string]struct{}
-	removedpostal_addresses         map[string]struct{}
-	clearedpostal_addresses         bool
-	phone_numbers                   map[string]struct{}
-	removedphone_numbers            map[string]struct{}
-	clearedphone_numbers            bool
-	members                         map[string]struct{}
-	removedmembers                  map[string]struct{}
-	clearedmembers                  bool
-	done                            bool
-	oldValue                        func(context.Context) (*Organization, error)
-	predicates                      []predicate.Organization
+	op                                        Op
+	typ                                       string
+	id                                        *string
+	created_at                                *time.Time
+	updated_at                                *time.Time
+	created_by                                *string
+	updated_by                                *string
+	mapping_id                                *string
+	tags                                      *[]string
+	appendtags                                []string
+	deleted_at                                *time.Time
+	deleted_by                                *string
+	name                                      *string
+	display_name                              *string
+	description                               *string
+	personal_org                              *bool
+	avatar_remote_url                         *string
+	dedicated_db                              *bool
+	clearedFields                             map[string]struct{}
+	parent                                    *string
+	clearedparent                             bool
+	children                                  map[string]struct{}
+	removedchildren                           map[string]struct{}
+	clearedchildren                           bool
+	groups                                    map[string]struct{}
+	removedgroups                             map[string]struct{}
+	clearedgroups                             bool
+	templates                                 map[string]struct{}
+	removedtemplates                          map[string]struct{}
+	clearedtemplates                          bool
+	integrations                              map[string]struct{}
+	removedintegrations                       map[string]struct{}
+	clearedintegrations                       bool
+	setting                                   *string
+	clearedsetting                            bool
+	documentdata                              map[string]struct{}
+	removeddocumentdata                       map[string]struct{}
+	cleareddocumentdata                       bool
+	entitlements                              map[string]struct{}
+	removedentitlements                       map[string]struct{}
+	clearedentitlements                       bool
+	organization_entitlement                  map[string]struct{}
+	removedorganization_entitlement           map[string]struct{}
+	clearedorganization_entitlement           bool
+	personal_access_tokens                    map[string]struct{}
+	removedpersonal_access_tokens             map[string]struct{}
+	clearedpersonal_access_tokens             bool
+	api_tokens                                map[string]struct{}
+	removedapi_tokens                         map[string]struct{}
+	clearedapi_tokens                         bool
+	oauthprovider                             map[string]struct{}
+	removedoauthprovider                      map[string]struct{}
+	clearedoauthprovider                      bool
+	users                                     map[string]struct{}
+	removedusers                              map[string]struct{}
+	clearedusers                              bool
+	invites                                   map[string]struct{}
+	removedinvites                            map[string]struct{}
+	clearedinvites                            bool
+	subscribers                               map[string]struct{}
+	removedsubscribers                        map[string]struct{}
+	clearedsubscribers                        bool
+	webhooks                                  map[string]struct{}
+	removedwebhooks                           map[string]struct{}
+	clearedwebhooks                           bool
+	events                                    map[string]struct{}
+	removedevents                             map[string]struct{}
+	clearedevents                             bool
+	secrets                                   map[string]struct{}
+	removedsecrets                            map[string]struct{}
+	clearedsecrets                            bool
+	features                                  map[string]struct{}
+	removedfeatures                           map[string]struct{}
+	clearedfeatures                           bool
+	files                                     map[string]struct{}
+	removedfiles                              map[string]struct{}
+	clearedfiles                              bool
+	entitlementplans                          map[string]struct{}
+	removedentitlementplans                   map[string]struct{}
+	clearedentitlementplans                   bool
+	entitlementplanfeatures                   map[string]struct{}
+	removedentitlementplanfeatures            map[string]struct{}
+	clearedentitlementplanfeatures            bool
+	entities                                  map[string]struct{}
+	removedentities                           map[string]struct{}
+	clearedentities                           bool
+	entitytypes                               map[string]struct{}
+	removedentitytypes                        map[string]struct{}
+	clearedentitytypes                        bool
+	contacts                                  map[string]struct{}
+	removedcontacts                           map[string]struct{}
+	clearedcontacts                           bool
+	contact_lists                             map[string]struct{}
+	removedcontact_lists                      map[string]struct{}
+	clearedcontact_lists                      bool
+	notes                                     map[string]struct{}
+	removednotes                              map[string]struct{}
+	clearednotes                              bool
+	vendors                                   map[string]struct{}
+	removedvendors                            map[string]struct{}
+	clearedvendors                            bool
+	vendor_profiles                           map[string]struct{}
+	removedvendor_profiles                    map[string]struct{}
+	clearedvendor_profiles                    bool
+	postal_addresses                          map[string]struct{}
+	removedpostal_addresses                   map[string]struct{}
+	clearedpostal_addresses                   bool
+	phone_numbers                             map[string]struct{}
+	removedphone_numbers                      map[string]struct{}
+	clearedphone_numbers                      bool
+	vendor_profile_payment_preferences        map[string]struct{}
+	removedvendor_profile_payment_preferences map[string]struct{}
+	clearedvendor_profile_payment_preferences bool
+	members                                   map[string]struct{}
+	removedmembers                            map[string]struct{}
+	clearedmembers                            bool
+	done                                      bool
+	oldValue                                  func(context.Context) (*Organization, error)
+	predicates                                []predicate.Organization
 }
 
 var _ ent.Mutation = (*OrganizationMutation)(nil)
@@ -64515,6 +64522,60 @@ func (m *OrganizationMutation) ResetPhoneNumbers() {
 	m.removedphone_numbers = nil
 }
 
+// AddVendorProfilePaymentPreferenceIDs adds the "vendor_profile_payment_preferences" edge to the VendorProfilePaymentPreference entity by ids.
+func (m *OrganizationMutation) AddVendorProfilePaymentPreferenceIDs(ids ...string) {
+	if m.vendor_profile_payment_preferences == nil {
+		m.vendor_profile_payment_preferences = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.vendor_profile_payment_preferences[ids[i]] = struct{}{}
+	}
+}
+
+// ClearVendorProfilePaymentPreferences clears the "vendor_profile_payment_preferences" edge to the VendorProfilePaymentPreference entity.
+func (m *OrganizationMutation) ClearVendorProfilePaymentPreferences() {
+	m.clearedvendor_profile_payment_preferences = true
+}
+
+// VendorProfilePaymentPreferencesCleared reports if the "vendor_profile_payment_preferences" edge to the VendorProfilePaymentPreference entity was cleared.
+func (m *OrganizationMutation) VendorProfilePaymentPreferencesCleared() bool {
+	return m.clearedvendor_profile_payment_preferences
+}
+
+// RemoveVendorProfilePaymentPreferenceIDs removes the "vendor_profile_payment_preferences" edge to the VendorProfilePaymentPreference entity by IDs.
+func (m *OrganizationMutation) RemoveVendorProfilePaymentPreferenceIDs(ids ...string) {
+	if m.removedvendor_profile_payment_preferences == nil {
+		m.removedvendor_profile_payment_preferences = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.vendor_profile_payment_preferences, ids[i])
+		m.removedvendor_profile_payment_preferences[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedVendorProfilePaymentPreferences returns the removed IDs of the "vendor_profile_payment_preferences" edge to the VendorProfilePaymentPreference entity.
+func (m *OrganizationMutation) RemovedVendorProfilePaymentPreferencesIDs() (ids []string) {
+	for id := range m.removedvendor_profile_payment_preferences {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// VendorProfilePaymentPreferencesIDs returns the "vendor_profile_payment_preferences" edge IDs in the mutation.
+func (m *OrganizationMutation) VendorProfilePaymentPreferencesIDs() (ids []string) {
+	for id := range m.vendor_profile_payment_preferences {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetVendorProfilePaymentPreferences resets all changes to the "vendor_profile_payment_preferences" edge.
+func (m *OrganizationMutation) ResetVendorProfilePaymentPreferences() {
+	m.vendor_profile_payment_preferences = nil
+	m.clearedvendor_profile_payment_preferences = false
+	m.removedvendor_profile_payment_preferences = nil
+}
+
 // AddMemberIDs adds the "members" edge to the OrgMembership entity by ids.
 func (m *OrganizationMutation) AddMemberIDs(ids ...string) {
 	if m.members == nil {
@@ -65009,7 +65070,7 @@ func (m *OrganizationMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *OrganizationMutation) AddedEdges() []string {
-	edges := make([]string, 0, 32)
+	edges := make([]string, 0, 33)
 	if m.parent != nil {
 		edges = append(edges, organization.EdgeParent)
 	}
@@ -65102,6 +65163,9 @@ func (m *OrganizationMutation) AddedEdges() []string {
 	}
 	if m.phone_numbers != nil {
 		edges = append(edges, organization.EdgePhoneNumbers)
+	}
+	if m.vendor_profile_payment_preferences != nil {
+		edges = append(edges, organization.EdgeVendorProfilePaymentPreferences)
 	}
 	if m.members != nil {
 		edges = append(edges, organization.EdgeMembers)
@@ -65295,6 +65359,12 @@ func (m *OrganizationMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case organization.EdgeVendorProfilePaymentPreferences:
+		ids := make([]ent.Value, 0, len(m.vendor_profile_payment_preferences))
+		for id := range m.vendor_profile_payment_preferences {
+			ids = append(ids, id)
+		}
+		return ids
 	case organization.EdgeMembers:
 		ids := make([]ent.Value, 0, len(m.members))
 		for id := range m.members {
@@ -65307,7 +65377,7 @@ func (m *OrganizationMutation) AddedIDs(name string) []ent.Value {
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *OrganizationMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 32)
+	edges := make([]string, 0, 33)
 	if m.removedchildren != nil {
 		edges = append(edges, organization.EdgeChildren)
 	}
@@ -65394,6 +65464,9 @@ func (m *OrganizationMutation) RemovedEdges() []string {
 	}
 	if m.removedphone_numbers != nil {
 		edges = append(edges, organization.EdgePhoneNumbers)
+	}
+	if m.removedvendor_profile_payment_preferences != nil {
+		edges = append(edges, organization.EdgeVendorProfilePaymentPreferences)
 	}
 	if m.removedmembers != nil {
 		edges = append(edges, organization.EdgeMembers)
@@ -65579,6 +65652,12 @@ func (m *OrganizationMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case organization.EdgeVendorProfilePaymentPreferences:
+		ids := make([]ent.Value, 0, len(m.removedvendor_profile_payment_preferences))
+		for id := range m.removedvendor_profile_payment_preferences {
+			ids = append(ids, id)
+		}
+		return ids
 	case organization.EdgeMembers:
 		ids := make([]ent.Value, 0, len(m.removedmembers))
 		for id := range m.removedmembers {
@@ -65591,7 +65670,7 @@ func (m *OrganizationMutation) RemovedIDs(name string) []ent.Value {
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *OrganizationMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 32)
+	edges := make([]string, 0, 33)
 	if m.clearedparent {
 		edges = append(edges, organization.EdgeParent)
 	}
@@ -65685,6 +65764,9 @@ func (m *OrganizationMutation) ClearedEdges() []string {
 	if m.clearedphone_numbers {
 		edges = append(edges, organization.EdgePhoneNumbers)
 	}
+	if m.clearedvendor_profile_payment_preferences {
+		edges = append(edges, organization.EdgeVendorProfilePaymentPreferences)
+	}
 	if m.clearedmembers {
 		edges = append(edges, organization.EdgeMembers)
 	}
@@ -65757,6 +65839,8 @@ func (m *OrganizationMutation) EdgeCleared(name string) bool {
 		return m.clearedpostal_addresses
 	case organization.EdgePhoneNumbers:
 		return m.clearedphone_numbers
+	case organization.EdgeVendorProfilePaymentPreferences:
+		return m.clearedvendor_profile_payment_preferences
 	case organization.EdgeMembers:
 		return m.clearedmembers
 	}
@@ -65873,6 +65957,9 @@ func (m *OrganizationMutation) ResetEdge(name string) error {
 		return nil
 	case organization.EdgePhoneNumbers:
 		m.ResetPhoneNumbers()
+		return nil
+	case organization.EdgeVendorProfilePaymentPreferences:
+		m.ResetVendorProfilePaymentPreferences()
 		return nil
 	case organization.EdgeMembers:
 		m.ResetMembers()
@@ -96126,6 +96213,9 @@ type VendorProfileMutation struct {
 	phone_numbers                          map[string]struct{}
 	removedphone_numbers                   map[string]struct{}
 	clearedphone_numbers                   bool
+	payment_preferences                    map[string]struct{}
+	removedpayment_preferences             map[string]struct{}
+	clearedpayment_preferences             bool
 	vendor                                 *string
 	clearedvendor                          bool
 	vendor_profile_postal_addresses        map[string]struct{}
@@ -97188,6 +97278,60 @@ func (m *VendorProfileMutation) ResetPhoneNumbers() {
 	m.removedphone_numbers = nil
 }
 
+// AddPaymentPreferenceIDs adds the "payment_preferences" edge to the VendorProfilePaymentPreference entity by ids.
+func (m *VendorProfileMutation) AddPaymentPreferenceIDs(ids ...string) {
+	if m.payment_preferences == nil {
+		m.payment_preferences = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.payment_preferences[ids[i]] = struct{}{}
+	}
+}
+
+// ClearPaymentPreferences clears the "payment_preferences" edge to the VendorProfilePaymentPreference entity.
+func (m *VendorProfileMutation) ClearPaymentPreferences() {
+	m.clearedpayment_preferences = true
+}
+
+// PaymentPreferencesCleared reports if the "payment_preferences" edge to the VendorProfilePaymentPreference entity was cleared.
+func (m *VendorProfileMutation) PaymentPreferencesCleared() bool {
+	return m.clearedpayment_preferences
+}
+
+// RemovePaymentPreferenceIDs removes the "payment_preferences" edge to the VendorProfilePaymentPreference entity by IDs.
+func (m *VendorProfileMutation) RemovePaymentPreferenceIDs(ids ...string) {
+	if m.removedpayment_preferences == nil {
+		m.removedpayment_preferences = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.payment_preferences, ids[i])
+		m.removedpayment_preferences[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedPaymentPreferences returns the removed IDs of the "payment_preferences" edge to the VendorProfilePaymentPreference entity.
+func (m *VendorProfileMutation) RemovedPaymentPreferencesIDs() (ids []string) {
+	for id := range m.removedpayment_preferences {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// PaymentPreferencesIDs returns the "payment_preferences" edge IDs in the mutation.
+func (m *VendorProfileMutation) PaymentPreferencesIDs() (ids []string) {
+	for id := range m.payment_preferences {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetPaymentPreferences resets all changes to the "payment_preferences" edge.
+func (m *VendorProfileMutation) ResetPaymentPreferences() {
+	m.payment_preferences = nil
+	m.clearedpayment_preferences = false
+	m.removedpayment_preferences = nil
+}
+
 // ClearVendor clears the "vendor" edge to the Vendor entity.
 func (m *VendorProfileMutation) ClearVendor() {
 	m.clearedvendor = true
@@ -97815,7 +97959,7 @@ func (m *VendorProfileMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *VendorProfileMutation) AddedEdges() []string {
-	edges := make([]string, 0, 6)
+	edges := make([]string, 0, 7)
 	if m.owner != nil {
 		edges = append(edges, vendorprofile.EdgeOwner)
 	}
@@ -97824,6 +97968,9 @@ func (m *VendorProfileMutation) AddedEdges() []string {
 	}
 	if m.phone_numbers != nil {
 		edges = append(edges, vendorprofile.EdgePhoneNumbers)
+	}
+	if m.payment_preferences != nil {
+		edges = append(edges, vendorprofile.EdgePaymentPreferences)
 	}
 	if m.vendor != nil {
 		edges = append(edges, vendorprofile.EdgeVendor)
@@ -97857,6 +98004,12 @@ func (m *VendorProfileMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case vendorprofile.EdgePaymentPreferences:
+		ids := make([]ent.Value, 0, len(m.payment_preferences))
+		for id := range m.payment_preferences {
+			ids = append(ids, id)
+		}
+		return ids
 	case vendorprofile.EdgeVendor:
 		if id := m.vendor; id != nil {
 			return []ent.Value{*id}
@@ -97879,12 +98032,15 @@ func (m *VendorProfileMutation) AddedIDs(name string) []ent.Value {
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *VendorProfileMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 6)
+	edges := make([]string, 0, 7)
 	if m.removedpostal_addresses != nil {
 		edges = append(edges, vendorprofile.EdgePostalAddresses)
 	}
 	if m.removedphone_numbers != nil {
 		edges = append(edges, vendorprofile.EdgePhoneNumbers)
+	}
+	if m.removedpayment_preferences != nil {
+		edges = append(edges, vendorprofile.EdgePaymentPreferences)
 	}
 	if m.removedvendor_profile_postal_addresses != nil {
 		edges = append(edges, vendorprofile.EdgeVendorProfilePostalAddresses)
@@ -97911,6 +98067,12 @@ func (m *VendorProfileMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case vendorprofile.EdgePaymentPreferences:
+		ids := make([]ent.Value, 0, len(m.removedpayment_preferences))
+		for id := range m.removedpayment_preferences {
+			ids = append(ids, id)
+		}
+		return ids
 	case vendorprofile.EdgeVendorProfilePostalAddresses:
 		ids := make([]ent.Value, 0, len(m.removedvendor_profile_postal_addresses))
 		for id := range m.removedvendor_profile_postal_addresses {
@@ -97929,7 +98091,7 @@ func (m *VendorProfileMutation) RemovedIDs(name string) []ent.Value {
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *VendorProfileMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 6)
+	edges := make([]string, 0, 7)
 	if m.clearedowner {
 		edges = append(edges, vendorprofile.EdgeOwner)
 	}
@@ -97938,6 +98100,9 @@ func (m *VendorProfileMutation) ClearedEdges() []string {
 	}
 	if m.clearedphone_numbers {
 		edges = append(edges, vendorprofile.EdgePhoneNumbers)
+	}
+	if m.clearedpayment_preferences {
+		edges = append(edges, vendorprofile.EdgePaymentPreferences)
 	}
 	if m.clearedvendor {
 		edges = append(edges, vendorprofile.EdgeVendor)
@@ -97961,6 +98126,8 @@ func (m *VendorProfileMutation) EdgeCleared(name string) bool {
 		return m.clearedpostal_addresses
 	case vendorprofile.EdgePhoneNumbers:
 		return m.clearedphone_numbers
+	case vendorprofile.EdgePaymentPreferences:
+		return m.clearedpayment_preferences
 	case vendorprofile.EdgeVendor:
 		return m.clearedvendor
 	case vendorprofile.EdgeVendorProfilePostalAddresses:
@@ -97997,6 +98164,9 @@ func (m *VendorProfileMutation) ResetEdge(name string) error {
 		return nil
 	case vendorprofile.EdgePhoneNumbers:
 		m.ResetPhoneNumbers()
+		return nil
+	case vendorprofile.EdgePaymentPreferences:
+		m.ResetPaymentPreferences()
 		return nil
 	case vendorprofile.EdgeVendor:
 		m.ResetVendor()
@@ -99672,6 +99842,2521 @@ func (m *VendorProfileHistoryMutation) ClearEdge(name string) error {
 // It returns an error if the edge is not defined in the schema.
 func (m *VendorProfileHistoryMutation) ResetEdge(name string) error {
 	return fmt.Errorf("unknown VendorProfileHistory edge %s", name)
+}
+
+// VendorProfilePaymentPreferenceMutation represents an operation that mutates the VendorProfilePaymentPreference nodes in the graph.
+type VendorProfilePaymentPreferenceMutation struct {
+	config
+	op                    Op
+	typ                   string
+	id                    *string
+	mapping_id            *string
+	created_at            *time.Time
+	updated_at            *time.Time
+	created_by            *string
+	updated_by            *string
+	deleted_at            *time.Time
+	deleted_by            *string
+	tags                  *[]string
+	appendtags            []string
+	preferred             *bool
+	method                *enums.PaymentMethod
+	clearedFields         map[string]struct{}
+	owner                 *string
+	clearedowner          bool
+	vendor_profile        *string
+	clearedvendor_profile bool
+	done                  bool
+	oldValue              func(context.Context) (*VendorProfilePaymentPreference, error)
+	predicates            []predicate.VendorProfilePaymentPreference
+}
+
+var _ ent.Mutation = (*VendorProfilePaymentPreferenceMutation)(nil)
+
+// vendorprofilepaymentpreferenceOption allows management of the mutation configuration using functional options.
+type vendorprofilepaymentpreferenceOption func(*VendorProfilePaymentPreferenceMutation)
+
+// newVendorProfilePaymentPreferenceMutation creates new mutation for the VendorProfilePaymentPreference entity.
+func newVendorProfilePaymentPreferenceMutation(c config, op Op, opts ...vendorprofilepaymentpreferenceOption) *VendorProfilePaymentPreferenceMutation {
+	m := &VendorProfilePaymentPreferenceMutation{
+		config:        c,
+		op:            op,
+		typ:           TypeVendorProfilePaymentPreference,
+		clearedFields: make(map[string]struct{}),
+	}
+	for _, opt := range opts {
+		opt(m)
+	}
+	return m
+}
+
+// withVendorProfilePaymentPreferenceID sets the ID field of the mutation.
+func withVendorProfilePaymentPreferenceID(id string) vendorprofilepaymentpreferenceOption {
+	return func(m *VendorProfilePaymentPreferenceMutation) {
+		var (
+			err   error
+			once  sync.Once
+			value *VendorProfilePaymentPreference
+		)
+		m.oldValue = func(ctx context.Context) (*VendorProfilePaymentPreference, error) {
+			once.Do(func() {
+				if m.done {
+					err = errors.New("querying old values post mutation is not allowed")
+				} else {
+					value, err = m.Client().VendorProfilePaymentPreference.Get(ctx, id)
+				}
+			})
+			return value, err
+		}
+		m.id = &id
+	}
+}
+
+// withVendorProfilePaymentPreference sets the old VendorProfilePaymentPreference of the mutation.
+func withVendorProfilePaymentPreference(node *VendorProfilePaymentPreference) vendorprofilepaymentpreferenceOption {
+	return func(m *VendorProfilePaymentPreferenceMutation) {
+		m.oldValue = func(context.Context) (*VendorProfilePaymentPreference, error) {
+			return node, nil
+		}
+		m.id = &node.ID
+	}
+}
+
+// Client returns a new `ent.Client` from the mutation. If the mutation was
+// executed in a transaction (ent.Tx), a transactional client is returned.
+func (m VendorProfilePaymentPreferenceMutation) Client() *Client {
+	client := &Client{config: m.config}
+	client.init()
+	return client
+}
+
+// Tx returns an `ent.Tx` for mutations that were executed in transactions;
+// it returns an error otherwise.
+func (m VendorProfilePaymentPreferenceMutation) Tx() (*Tx, error) {
+	if _, ok := m.driver.(*txDriver); !ok {
+		return nil, errors.New("generated: mutation is not running in a transaction")
+	}
+	tx := &Tx{config: m.config}
+	tx.init()
+	return tx, nil
+}
+
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of VendorProfilePaymentPreference entities.
+func (m *VendorProfilePaymentPreferenceMutation) SetID(id string) {
+	m.id = &id
+}
+
+// ID returns the ID value in the mutation. Note that the ID is only available
+// if it was provided to the builder or after it was returned from the database.
+func (m *VendorProfilePaymentPreferenceMutation) ID() (id string, exists bool) {
+	if m.id == nil {
+		return
+	}
+	return *m.id, true
+}
+
+// IDs queries the database and returns the entity ids that match the mutation's predicate.
+// That means, if the mutation is applied within a transaction with an isolation level such
+// as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
+// or updated by the mutation.
+func (m *VendorProfilePaymentPreferenceMutation) IDs(ctx context.Context) ([]string, error) {
+	switch {
+	case m.op.Is(OpUpdateOne | OpDeleteOne):
+		id, exists := m.ID()
+		if exists {
+			return []string{id}, nil
+		}
+		fallthrough
+	case m.op.Is(OpUpdate | OpDelete):
+		return m.Client().VendorProfilePaymentPreference.Query().Where(m.predicates...).IDs(ctx)
+	default:
+		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
+	}
+}
+
+// SetMappingID sets the "mapping_id" field.
+func (m *VendorProfilePaymentPreferenceMutation) SetMappingID(s string) {
+	m.mapping_id = &s
+}
+
+// MappingID returns the value of the "mapping_id" field in the mutation.
+func (m *VendorProfilePaymentPreferenceMutation) MappingID() (r string, exists bool) {
+	v := m.mapping_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldMappingID returns the old "mapping_id" field's value of the VendorProfilePaymentPreference entity.
+// If the VendorProfilePaymentPreference object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VendorProfilePaymentPreferenceMutation) OldMappingID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldMappingID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldMappingID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldMappingID: %w", err)
+	}
+	return oldValue.MappingID, nil
+}
+
+// ResetMappingID resets all changes to the "mapping_id" field.
+func (m *VendorProfilePaymentPreferenceMutation) ResetMappingID() {
+	m.mapping_id = nil
+}
+
+// SetCreatedAt sets the "created_at" field.
+func (m *VendorProfilePaymentPreferenceMutation) SetCreatedAt(t time.Time) {
+	m.created_at = &t
+}
+
+// CreatedAt returns the value of the "created_at" field in the mutation.
+func (m *VendorProfilePaymentPreferenceMutation) CreatedAt() (r time.Time, exists bool) {
+	v := m.created_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedAt returns the old "created_at" field's value of the VendorProfilePaymentPreference entity.
+// If the VendorProfilePaymentPreference object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VendorProfilePaymentPreferenceMutation) OldCreatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedAt: %w", err)
+	}
+	return oldValue.CreatedAt, nil
+}
+
+// ClearCreatedAt clears the value of the "created_at" field.
+func (m *VendorProfilePaymentPreferenceMutation) ClearCreatedAt() {
+	m.created_at = nil
+	m.clearedFields[vendorprofilepaymentpreference.FieldCreatedAt] = struct{}{}
+}
+
+// CreatedAtCleared returns if the "created_at" field was cleared in this mutation.
+func (m *VendorProfilePaymentPreferenceMutation) CreatedAtCleared() bool {
+	_, ok := m.clearedFields[vendorprofilepaymentpreference.FieldCreatedAt]
+	return ok
+}
+
+// ResetCreatedAt resets all changes to the "created_at" field.
+func (m *VendorProfilePaymentPreferenceMutation) ResetCreatedAt() {
+	m.created_at = nil
+	delete(m.clearedFields, vendorprofilepaymentpreference.FieldCreatedAt)
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (m *VendorProfilePaymentPreferenceMutation) SetUpdatedAt(t time.Time) {
+	m.updated_at = &t
+}
+
+// UpdatedAt returns the value of the "updated_at" field in the mutation.
+func (m *VendorProfilePaymentPreferenceMutation) UpdatedAt() (r time.Time, exists bool) {
+	v := m.updated_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedAt returns the old "updated_at" field's value of the VendorProfilePaymentPreference entity.
+// If the VendorProfilePaymentPreference object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VendorProfilePaymentPreferenceMutation) OldUpdatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedAt: %w", err)
+	}
+	return oldValue.UpdatedAt, nil
+}
+
+// ClearUpdatedAt clears the value of the "updated_at" field.
+func (m *VendorProfilePaymentPreferenceMutation) ClearUpdatedAt() {
+	m.updated_at = nil
+	m.clearedFields[vendorprofilepaymentpreference.FieldUpdatedAt] = struct{}{}
+}
+
+// UpdatedAtCleared returns if the "updated_at" field was cleared in this mutation.
+func (m *VendorProfilePaymentPreferenceMutation) UpdatedAtCleared() bool {
+	_, ok := m.clearedFields[vendorprofilepaymentpreference.FieldUpdatedAt]
+	return ok
+}
+
+// ResetUpdatedAt resets all changes to the "updated_at" field.
+func (m *VendorProfilePaymentPreferenceMutation) ResetUpdatedAt() {
+	m.updated_at = nil
+	delete(m.clearedFields, vendorprofilepaymentpreference.FieldUpdatedAt)
+}
+
+// SetCreatedBy sets the "created_by" field.
+func (m *VendorProfilePaymentPreferenceMutation) SetCreatedBy(s string) {
+	m.created_by = &s
+}
+
+// CreatedBy returns the value of the "created_by" field in the mutation.
+func (m *VendorProfilePaymentPreferenceMutation) CreatedBy() (r string, exists bool) {
+	v := m.created_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedBy returns the old "created_by" field's value of the VendorProfilePaymentPreference entity.
+// If the VendorProfilePaymentPreference object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VendorProfilePaymentPreferenceMutation) OldCreatedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedBy: %w", err)
+	}
+	return oldValue.CreatedBy, nil
+}
+
+// ClearCreatedBy clears the value of the "created_by" field.
+func (m *VendorProfilePaymentPreferenceMutation) ClearCreatedBy() {
+	m.created_by = nil
+	m.clearedFields[vendorprofilepaymentpreference.FieldCreatedBy] = struct{}{}
+}
+
+// CreatedByCleared returns if the "created_by" field was cleared in this mutation.
+func (m *VendorProfilePaymentPreferenceMutation) CreatedByCleared() bool {
+	_, ok := m.clearedFields[vendorprofilepaymentpreference.FieldCreatedBy]
+	return ok
+}
+
+// ResetCreatedBy resets all changes to the "created_by" field.
+func (m *VendorProfilePaymentPreferenceMutation) ResetCreatedBy() {
+	m.created_by = nil
+	delete(m.clearedFields, vendorprofilepaymentpreference.FieldCreatedBy)
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (m *VendorProfilePaymentPreferenceMutation) SetUpdatedBy(s string) {
+	m.updated_by = &s
+}
+
+// UpdatedBy returns the value of the "updated_by" field in the mutation.
+func (m *VendorProfilePaymentPreferenceMutation) UpdatedBy() (r string, exists bool) {
+	v := m.updated_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedBy returns the old "updated_by" field's value of the VendorProfilePaymentPreference entity.
+// If the VendorProfilePaymentPreference object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VendorProfilePaymentPreferenceMutation) OldUpdatedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedBy: %w", err)
+	}
+	return oldValue.UpdatedBy, nil
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (m *VendorProfilePaymentPreferenceMutation) ClearUpdatedBy() {
+	m.updated_by = nil
+	m.clearedFields[vendorprofilepaymentpreference.FieldUpdatedBy] = struct{}{}
+}
+
+// UpdatedByCleared returns if the "updated_by" field was cleared in this mutation.
+func (m *VendorProfilePaymentPreferenceMutation) UpdatedByCleared() bool {
+	_, ok := m.clearedFields[vendorprofilepaymentpreference.FieldUpdatedBy]
+	return ok
+}
+
+// ResetUpdatedBy resets all changes to the "updated_by" field.
+func (m *VendorProfilePaymentPreferenceMutation) ResetUpdatedBy() {
+	m.updated_by = nil
+	delete(m.clearedFields, vendorprofilepaymentpreference.FieldUpdatedBy)
+}
+
+// SetDeletedAt sets the "deleted_at" field.
+func (m *VendorProfilePaymentPreferenceMutation) SetDeletedAt(t time.Time) {
+	m.deleted_at = &t
+}
+
+// DeletedAt returns the value of the "deleted_at" field in the mutation.
+func (m *VendorProfilePaymentPreferenceMutation) DeletedAt() (r time.Time, exists bool) {
+	v := m.deleted_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDeletedAt returns the old "deleted_at" field's value of the VendorProfilePaymentPreference entity.
+// If the VendorProfilePaymentPreference object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VendorProfilePaymentPreferenceMutation) OldDeletedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDeletedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDeletedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDeletedAt: %w", err)
+	}
+	return oldValue.DeletedAt, nil
+}
+
+// ClearDeletedAt clears the value of the "deleted_at" field.
+func (m *VendorProfilePaymentPreferenceMutation) ClearDeletedAt() {
+	m.deleted_at = nil
+	m.clearedFields[vendorprofilepaymentpreference.FieldDeletedAt] = struct{}{}
+}
+
+// DeletedAtCleared returns if the "deleted_at" field was cleared in this mutation.
+func (m *VendorProfilePaymentPreferenceMutation) DeletedAtCleared() bool {
+	_, ok := m.clearedFields[vendorprofilepaymentpreference.FieldDeletedAt]
+	return ok
+}
+
+// ResetDeletedAt resets all changes to the "deleted_at" field.
+func (m *VendorProfilePaymentPreferenceMutation) ResetDeletedAt() {
+	m.deleted_at = nil
+	delete(m.clearedFields, vendorprofilepaymentpreference.FieldDeletedAt)
+}
+
+// SetDeletedBy sets the "deleted_by" field.
+func (m *VendorProfilePaymentPreferenceMutation) SetDeletedBy(s string) {
+	m.deleted_by = &s
+}
+
+// DeletedBy returns the value of the "deleted_by" field in the mutation.
+func (m *VendorProfilePaymentPreferenceMutation) DeletedBy() (r string, exists bool) {
+	v := m.deleted_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDeletedBy returns the old "deleted_by" field's value of the VendorProfilePaymentPreference entity.
+// If the VendorProfilePaymentPreference object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VendorProfilePaymentPreferenceMutation) OldDeletedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDeletedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDeletedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDeletedBy: %w", err)
+	}
+	return oldValue.DeletedBy, nil
+}
+
+// ClearDeletedBy clears the value of the "deleted_by" field.
+func (m *VendorProfilePaymentPreferenceMutation) ClearDeletedBy() {
+	m.deleted_by = nil
+	m.clearedFields[vendorprofilepaymentpreference.FieldDeletedBy] = struct{}{}
+}
+
+// DeletedByCleared returns if the "deleted_by" field was cleared in this mutation.
+func (m *VendorProfilePaymentPreferenceMutation) DeletedByCleared() bool {
+	_, ok := m.clearedFields[vendorprofilepaymentpreference.FieldDeletedBy]
+	return ok
+}
+
+// ResetDeletedBy resets all changes to the "deleted_by" field.
+func (m *VendorProfilePaymentPreferenceMutation) ResetDeletedBy() {
+	m.deleted_by = nil
+	delete(m.clearedFields, vendorprofilepaymentpreference.FieldDeletedBy)
+}
+
+// SetTags sets the "tags" field.
+func (m *VendorProfilePaymentPreferenceMutation) SetTags(s []string) {
+	m.tags = &s
+	m.appendtags = nil
+}
+
+// Tags returns the value of the "tags" field in the mutation.
+func (m *VendorProfilePaymentPreferenceMutation) Tags() (r []string, exists bool) {
+	v := m.tags
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldTags returns the old "tags" field's value of the VendorProfilePaymentPreference entity.
+// If the VendorProfilePaymentPreference object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VendorProfilePaymentPreferenceMutation) OldTags(ctx context.Context) (v []string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldTags is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldTags requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldTags: %w", err)
+	}
+	return oldValue.Tags, nil
+}
+
+// AppendTags adds s to the "tags" field.
+func (m *VendorProfilePaymentPreferenceMutation) AppendTags(s []string) {
+	m.appendtags = append(m.appendtags, s...)
+}
+
+// AppendedTags returns the list of values that were appended to the "tags" field in this mutation.
+func (m *VendorProfilePaymentPreferenceMutation) AppendedTags() ([]string, bool) {
+	if len(m.appendtags) == 0 {
+		return nil, false
+	}
+	return m.appendtags, true
+}
+
+// ClearTags clears the value of the "tags" field.
+func (m *VendorProfilePaymentPreferenceMutation) ClearTags() {
+	m.tags = nil
+	m.appendtags = nil
+	m.clearedFields[vendorprofilepaymentpreference.FieldTags] = struct{}{}
+}
+
+// TagsCleared returns if the "tags" field was cleared in this mutation.
+func (m *VendorProfilePaymentPreferenceMutation) TagsCleared() bool {
+	_, ok := m.clearedFields[vendorprofilepaymentpreference.FieldTags]
+	return ok
+}
+
+// ResetTags resets all changes to the "tags" field.
+func (m *VendorProfilePaymentPreferenceMutation) ResetTags() {
+	m.tags = nil
+	m.appendtags = nil
+	delete(m.clearedFields, vendorprofilepaymentpreference.FieldTags)
+}
+
+// SetOwnerID sets the "owner_id" field.
+func (m *VendorProfilePaymentPreferenceMutation) SetOwnerID(s string) {
+	m.owner = &s
+}
+
+// OwnerID returns the value of the "owner_id" field in the mutation.
+func (m *VendorProfilePaymentPreferenceMutation) OwnerID() (r string, exists bool) {
+	v := m.owner
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldOwnerID returns the old "owner_id" field's value of the VendorProfilePaymentPreference entity.
+// If the VendorProfilePaymentPreference object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VendorProfilePaymentPreferenceMutation) OldOwnerID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldOwnerID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldOwnerID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldOwnerID: %w", err)
+	}
+	return oldValue.OwnerID, nil
+}
+
+// ClearOwnerID clears the value of the "owner_id" field.
+func (m *VendorProfilePaymentPreferenceMutation) ClearOwnerID() {
+	m.owner = nil
+	m.clearedFields[vendorprofilepaymentpreference.FieldOwnerID] = struct{}{}
+}
+
+// OwnerIDCleared returns if the "owner_id" field was cleared in this mutation.
+func (m *VendorProfilePaymentPreferenceMutation) OwnerIDCleared() bool {
+	_, ok := m.clearedFields[vendorprofilepaymentpreference.FieldOwnerID]
+	return ok
+}
+
+// ResetOwnerID resets all changes to the "owner_id" field.
+func (m *VendorProfilePaymentPreferenceMutation) ResetOwnerID() {
+	m.owner = nil
+	delete(m.clearedFields, vendorprofilepaymentpreference.FieldOwnerID)
+}
+
+// SetVendorProfileID sets the "vendor_profile_id" field.
+func (m *VendorProfilePaymentPreferenceMutation) SetVendorProfileID(s string) {
+	m.vendor_profile = &s
+}
+
+// VendorProfileID returns the value of the "vendor_profile_id" field in the mutation.
+func (m *VendorProfilePaymentPreferenceMutation) VendorProfileID() (r string, exists bool) {
+	v := m.vendor_profile
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldVendorProfileID returns the old "vendor_profile_id" field's value of the VendorProfilePaymentPreference entity.
+// If the VendorProfilePaymentPreference object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VendorProfilePaymentPreferenceMutation) OldVendorProfileID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldVendorProfileID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldVendorProfileID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldVendorProfileID: %w", err)
+	}
+	return oldValue.VendorProfileID, nil
+}
+
+// ClearVendorProfileID clears the value of the "vendor_profile_id" field.
+func (m *VendorProfilePaymentPreferenceMutation) ClearVendorProfileID() {
+	m.vendor_profile = nil
+	m.clearedFields[vendorprofilepaymentpreference.FieldVendorProfileID] = struct{}{}
+}
+
+// VendorProfileIDCleared returns if the "vendor_profile_id" field was cleared in this mutation.
+func (m *VendorProfilePaymentPreferenceMutation) VendorProfileIDCleared() bool {
+	_, ok := m.clearedFields[vendorprofilepaymentpreference.FieldVendorProfileID]
+	return ok
+}
+
+// ResetVendorProfileID resets all changes to the "vendor_profile_id" field.
+func (m *VendorProfilePaymentPreferenceMutation) ResetVendorProfileID() {
+	m.vendor_profile = nil
+	delete(m.clearedFields, vendorprofilepaymentpreference.FieldVendorProfileID)
+}
+
+// SetPreferred sets the "preferred" field.
+func (m *VendorProfilePaymentPreferenceMutation) SetPreferred(b bool) {
+	m.preferred = &b
+}
+
+// Preferred returns the value of the "preferred" field in the mutation.
+func (m *VendorProfilePaymentPreferenceMutation) Preferred() (r bool, exists bool) {
+	v := m.preferred
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldPreferred returns the old "preferred" field's value of the VendorProfilePaymentPreference entity.
+// If the VendorProfilePaymentPreference object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VendorProfilePaymentPreferenceMutation) OldPreferred(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldPreferred is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldPreferred requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldPreferred: %w", err)
+	}
+	return oldValue.Preferred, nil
+}
+
+// ResetPreferred resets all changes to the "preferred" field.
+func (m *VendorProfilePaymentPreferenceMutation) ResetPreferred() {
+	m.preferred = nil
+}
+
+// SetMethod sets the "method" field.
+func (m *VendorProfilePaymentPreferenceMutation) SetMethod(em enums.PaymentMethod) {
+	m.method = &em
+}
+
+// Method returns the value of the "method" field in the mutation.
+func (m *VendorProfilePaymentPreferenceMutation) Method() (r enums.PaymentMethod, exists bool) {
+	v := m.method
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldMethod returns the old "method" field's value of the VendorProfilePaymentPreference entity.
+// If the VendorProfilePaymentPreference object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VendorProfilePaymentPreferenceMutation) OldMethod(ctx context.Context) (v enums.PaymentMethod, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldMethod is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldMethod requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldMethod: %w", err)
+	}
+	return oldValue.Method, nil
+}
+
+// ResetMethod resets all changes to the "method" field.
+func (m *VendorProfilePaymentPreferenceMutation) ResetMethod() {
+	m.method = nil
+}
+
+// ClearOwner clears the "owner" edge to the Organization entity.
+func (m *VendorProfilePaymentPreferenceMutation) ClearOwner() {
+	m.clearedowner = true
+	m.clearedFields[vendorprofilepaymentpreference.FieldOwnerID] = struct{}{}
+}
+
+// OwnerCleared reports if the "owner" edge to the Organization entity was cleared.
+func (m *VendorProfilePaymentPreferenceMutation) OwnerCleared() bool {
+	return m.OwnerIDCleared() || m.clearedowner
+}
+
+// OwnerIDs returns the "owner" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// OwnerID instead. It exists only for internal usage by the builders.
+func (m *VendorProfilePaymentPreferenceMutation) OwnerIDs() (ids []string) {
+	if id := m.owner; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetOwner resets all changes to the "owner" edge.
+func (m *VendorProfilePaymentPreferenceMutation) ResetOwner() {
+	m.owner = nil
+	m.clearedowner = false
+}
+
+// ClearVendorProfile clears the "vendor_profile" edge to the VendorProfile entity.
+func (m *VendorProfilePaymentPreferenceMutation) ClearVendorProfile() {
+	m.clearedvendor_profile = true
+	m.clearedFields[vendorprofilepaymentpreference.FieldVendorProfileID] = struct{}{}
+}
+
+// VendorProfileCleared reports if the "vendor_profile" edge to the VendorProfile entity was cleared.
+func (m *VendorProfilePaymentPreferenceMutation) VendorProfileCleared() bool {
+	return m.VendorProfileIDCleared() || m.clearedvendor_profile
+}
+
+// VendorProfileIDs returns the "vendor_profile" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// VendorProfileID instead. It exists only for internal usage by the builders.
+func (m *VendorProfilePaymentPreferenceMutation) VendorProfileIDs() (ids []string) {
+	if id := m.vendor_profile; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetVendorProfile resets all changes to the "vendor_profile" edge.
+func (m *VendorProfilePaymentPreferenceMutation) ResetVendorProfile() {
+	m.vendor_profile = nil
+	m.clearedvendor_profile = false
+}
+
+// Where appends a list predicates to the VendorProfilePaymentPreferenceMutation builder.
+func (m *VendorProfilePaymentPreferenceMutation) Where(ps ...predicate.VendorProfilePaymentPreference) {
+	m.predicates = append(m.predicates, ps...)
+}
+
+// WhereP appends storage-level predicates to the VendorProfilePaymentPreferenceMutation builder. Using this method,
+// users can use type-assertion to append predicates that do not depend on any generated package.
+func (m *VendorProfilePaymentPreferenceMutation) WhereP(ps ...func(*sql.Selector)) {
+	p := make([]predicate.VendorProfilePaymentPreference, len(ps))
+	for i := range ps {
+		p[i] = ps[i]
+	}
+	m.Where(p...)
+}
+
+// Op returns the operation name.
+func (m *VendorProfilePaymentPreferenceMutation) Op() Op {
+	return m.op
+}
+
+// SetOp allows setting the mutation operation.
+func (m *VendorProfilePaymentPreferenceMutation) SetOp(op Op) {
+	m.op = op
+}
+
+// Type returns the node type of this mutation (VendorProfilePaymentPreference).
+func (m *VendorProfilePaymentPreferenceMutation) Type() string {
+	return m.typ
+}
+
+// Fields returns all fields that were changed during this mutation. Note that in
+// order to get all numeric fields that were incremented/decremented, call
+// AddedFields().
+func (m *VendorProfilePaymentPreferenceMutation) Fields() []string {
+	fields := make([]string, 0, 12)
+	if m.mapping_id != nil {
+		fields = append(fields, vendorprofilepaymentpreference.FieldMappingID)
+	}
+	if m.created_at != nil {
+		fields = append(fields, vendorprofilepaymentpreference.FieldCreatedAt)
+	}
+	if m.updated_at != nil {
+		fields = append(fields, vendorprofilepaymentpreference.FieldUpdatedAt)
+	}
+	if m.created_by != nil {
+		fields = append(fields, vendorprofilepaymentpreference.FieldCreatedBy)
+	}
+	if m.updated_by != nil {
+		fields = append(fields, vendorprofilepaymentpreference.FieldUpdatedBy)
+	}
+	if m.deleted_at != nil {
+		fields = append(fields, vendorprofilepaymentpreference.FieldDeletedAt)
+	}
+	if m.deleted_by != nil {
+		fields = append(fields, vendorprofilepaymentpreference.FieldDeletedBy)
+	}
+	if m.tags != nil {
+		fields = append(fields, vendorprofilepaymentpreference.FieldTags)
+	}
+	if m.owner != nil {
+		fields = append(fields, vendorprofilepaymentpreference.FieldOwnerID)
+	}
+	if m.vendor_profile != nil {
+		fields = append(fields, vendorprofilepaymentpreference.FieldVendorProfileID)
+	}
+	if m.preferred != nil {
+		fields = append(fields, vendorprofilepaymentpreference.FieldPreferred)
+	}
+	if m.method != nil {
+		fields = append(fields, vendorprofilepaymentpreference.FieldMethod)
+	}
+	return fields
+}
+
+// Field returns the value of a field with the given name. The second boolean
+// return value indicates that this field was not set, or was not defined in the
+// schema.
+func (m *VendorProfilePaymentPreferenceMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case vendorprofilepaymentpreference.FieldMappingID:
+		return m.MappingID()
+	case vendorprofilepaymentpreference.FieldCreatedAt:
+		return m.CreatedAt()
+	case vendorprofilepaymentpreference.FieldUpdatedAt:
+		return m.UpdatedAt()
+	case vendorprofilepaymentpreference.FieldCreatedBy:
+		return m.CreatedBy()
+	case vendorprofilepaymentpreference.FieldUpdatedBy:
+		return m.UpdatedBy()
+	case vendorprofilepaymentpreference.FieldDeletedAt:
+		return m.DeletedAt()
+	case vendorprofilepaymentpreference.FieldDeletedBy:
+		return m.DeletedBy()
+	case vendorprofilepaymentpreference.FieldTags:
+		return m.Tags()
+	case vendorprofilepaymentpreference.FieldOwnerID:
+		return m.OwnerID()
+	case vendorprofilepaymentpreference.FieldVendorProfileID:
+		return m.VendorProfileID()
+	case vendorprofilepaymentpreference.FieldPreferred:
+		return m.Preferred()
+	case vendorprofilepaymentpreference.FieldMethod:
+		return m.Method()
+	}
+	return nil, false
+}
+
+// OldField returns the old value of the field from the database. An error is
+// returned if the mutation operation is not UpdateOne, or the query to the
+// database failed.
+func (m *VendorProfilePaymentPreferenceMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case vendorprofilepaymentpreference.FieldMappingID:
+		return m.OldMappingID(ctx)
+	case vendorprofilepaymentpreference.FieldCreatedAt:
+		return m.OldCreatedAt(ctx)
+	case vendorprofilepaymentpreference.FieldUpdatedAt:
+		return m.OldUpdatedAt(ctx)
+	case vendorprofilepaymentpreference.FieldCreatedBy:
+		return m.OldCreatedBy(ctx)
+	case vendorprofilepaymentpreference.FieldUpdatedBy:
+		return m.OldUpdatedBy(ctx)
+	case vendorprofilepaymentpreference.FieldDeletedAt:
+		return m.OldDeletedAt(ctx)
+	case vendorprofilepaymentpreference.FieldDeletedBy:
+		return m.OldDeletedBy(ctx)
+	case vendorprofilepaymentpreference.FieldTags:
+		return m.OldTags(ctx)
+	case vendorprofilepaymentpreference.FieldOwnerID:
+		return m.OldOwnerID(ctx)
+	case vendorprofilepaymentpreference.FieldVendorProfileID:
+		return m.OldVendorProfileID(ctx)
+	case vendorprofilepaymentpreference.FieldPreferred:
+		return m.OldPreferred(ctx)
+	case vendorprofilepaymentpreference.FieldMethod:
+		return m.OldMethod(ctx)
+	}
+	return nil, fmt.Errorf("unknown VendorProfilePaymentPreference field %s", name)
+}
+
+// SetField sets the value of a field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *VendorProfilePaymentPreferenceMutation) SetField(name string, value ent.Value) error {
+	switch name {
+	case vendorprofilepaymentpreference.FieldMappingID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetMappingID(v)
+		return nil
+	case vendorprofilepaymentpreference.FieldCreatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedAt(v)
+		return nil
+	case vendorprofilepaymentpreference.FieldUpdatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedAt(v)
+		return nil
+	case vendorprofilepaymentpreference.FieldCreatedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedBy(v)
+		return nil
+	case vendorprofilepaymentpreference.FieldUpdatedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedBy(v)
+		return nil
+	case vendorprofilepaymentpreference.FieldDeletedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDeletedAt(v)
+		return nil
+	case vendorprofilepaymentpreference.FieldDeletedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDeletedBy(v)
+		return nil
+	case vendorprofilepaymentpreference.FieldTags:
+		v, ok := value.([]string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetTags(v)
+		return nil
+	case vendorprofilepaymentpreference.FieldOwnerID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetOwnerID(v)
+		return nil
+	case vendorprofilepaymentpreference.FieldVendorProfileID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetVendorProfileID(v)
+		return nil
+	case vendorprofilepaymentpreference.FieldPreferred:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetPreferred(v)
+		return nil
+	case vendorprofilepaymentpreference.FieldMethod:
+		v, ok := value.(enums.PaymentMethod)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetMethod(v)
+		return nil
+	}
+	return fmt.Errorf("unknown VendorProfilePaymentPreference field %s", name)
+}
+
+// AddedFields returns all numeric fields that were incremented/decremented during
+// this mutation.
+func (m *VendorProfilePaymentPreferenceMutation) AddedFields() []string {
+	return nil
+}
+
+// AddedField returns the numeric value that was incremented/decremented on a field
+// with the given name. The second boolean return value indicates that this field
+// was not set, or was not defined in the schema.
+func (m *VendorProfilePaymentPreferenceMutation) AddedField(name string) (ent.Value, bool) {
+	return nil, false
+}
+
+// AddField adds the value to the field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *VendorProfilePaymentPreferenceMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	}
+	return fmt.Errorf("unknown VendorProfilePaymentPreference numeric field %s", name)
+}
+
+// ClearedFields returns all nullable fields that were cleared during this
+// mutation.
+func (m *VendorProfilePaymentPreferenceMutation) ClearedFields() []string {
+	var fields []string
+	if m.FieldCleared(vendorprofilepaymentpreference.FieldCreatedAt) {
+		fields = append(fields, vendorprofilepaymentpreference.FieldCreatedAt)
+	}
+	if m.FieldCleared(vendorprofilepaymentpreference.FieldUpdatedAt) {
+		fields = append(fields, vendorprofilepaymentpreference.FieldUpdatedAt)
+	}
+	if m.FieldCleared(vendorprofilepaymentpreference.FieldCreatedBy) {
+		fields = append(fields, vendorprofilepaymentpreference.FieldCreatedBy)
+	}
+	if m.FieldCleared(vendorprofilepaymentpreference.FieldUpdatedBy) {
+		fields = append(fields, vendorprofilepaymentpreference.FieldUpdatedBy)
+	}
+	if m.FieldCleared(vendorprofilepaymentpreference.FieldDeletedAt) {
+		fields = append(fields, vendorprofilepaymentpreference.FieldDeletedAt)
+	}
+	if m.FieldCleared(vendorprofilepaymentpreference.FieldDeletedBy) {
+		fields = append(fields, vendorprofilepaymentpreference.FieldDeletedBy)
+	}
+	if m.FieldCleared(vendorprofilepaymentpreference.FieldTags) {
+		fields = append(fields, vendorprofilepaymentpreference.FieldTags)
+	}
+	if m.FieldCleared(vendorprofilepaymentpreference.FieldOwnerID) {
+		fields = append(fields, vendorprofilepaymentpreference.FieldOwnerID)
+	}
+	if m.FieldCleared(vendorprofilepaymentpreference.FieldVendorProfileID) {
+		fields = append(fields, vendorprofilepaymentpreference.FieldVendorProfileID)
+	}
+	return fields
+}
+
+// FieldCleared returns a boolean indicating if a field with the given name was
+// cleared in this mutation.
+func (m *VendorProfilePaymentPreferenceMutation) FieldCleared(name string) bool {
+	_, ok := m.clearedFields[name]
+	return ok
+}
+
+// ClearField clears the value of the field with the given name. It returns an
+// error if the field is not defined in the schema.
+func (m *VendorProfilePaymentPreferenceMutation) ClearField(name string) error {
+	switch name {
+	case vendorprofilepaymentpreference.FieldCreatedAt:
+		m.ClearCreatedAt()
+		return nil
+	case vendorprofilepaymentpreference.FieldUpdatedAt:
+		m.ClearUpdatedAt()
+		return nil
+	case vendorprofilepaymentpreference.FieldCreatedBy:
+		m.ClearCreatedBy()
+		return nil
+	case vendorprofilepaymentpreference.FieldUpdatedBy:
+		m.ClearUpdatedBy()
+		return nil
+	case vendorprofilepaymentpreference.FieldDeletedAt:
+		m.ClearDeletedAt()
+		return nil
+	case vendorprofilepaymentpreference.FieldDeletedBy:
+		m.ClearDeletedBy()
+		return nil
+	case vendorprofilepaymentpreference.FieldTags:
+		m.ClearTags()
+		return nil
+	case vendorprofilepaymentpreference.FieldOwnerID:
+		m.ClearOwnerID()
+		return nil
+	case vendorprofilepaymentpreference.FieldVendorProfileID:
+		m.ClearVendorProfileID()
+		return nil
+	}
+	return fmt.Errorf("unknown VendorProfilePaymentPreference nullable field %s", name)
+}
+
+// ResetField resets all changes in the mutation for the field with the given name.
+// It returns an error if the field is not defined in the schema.
+func (m *VendorProfilePaymentPreferenceMutation) ResetField(name string) error {
+	switch name {
+	case vendorprofilepaymentpreference.FieldMappingID:
+		m.ResetMappingID()
+		return nil
+	case vendorprofilepaymentpreference.FieldCreatedAt:
+		m.ResetCreatedAt()
+		return nil
+	case vendorprofilepaymentpreference.FieldUpdatedAt:
+		m.ResetUpdatedAt()
+		return nil
+	case vendorprofilepaymentpreference.FieldCreatedBy:
+		m.ResetCreatedBy()
+		return nil
+	case vendorprofilepaymentpreference.FieldUpdatedBy:
+		m.ResetUpdatedBy()
+		return nil
+	case vendorprofilepaymentpreference.FieldDeletedAt:
+		m.ResetDeletedAt()
+		return nil
+	case vendorprofilepaymentpreference.FieldDeletedBy:
+		m.ResetDeletedBy()
+		return nil
+	case vendorprofilepaymentpreference.FieldTags:
+		m.ResetTags()
+		return nil
+	case vendorprofilepaymentpreference.FieldOwnerID:
+		m.ResetOwnerID()
+		return nil
+	case vendorprofilepaymentpreference.FieldVendorProfileID:
+		m.ResetVendorProfileID()
+		return nil
+	case vendorprofilepaymentpreference.FieldPreferred:
+		m.ResetPreferred()
+		return nil
+	case vendorprofilepaymentpreference.FieldMethod:
+		m.ResetMethod()
+		return nil
+	}
+	return fmt.Errorf("unknown VendorProfilePaymentPreference field %s", name)
+}
+
+// AddedEdges returns all edge names that were set/added in this mutation.
+func (m *VendorProfilePaymentPreferenceMutation) AddedEdges() []string {
+	edges := make([]string, 0, 2)
+	if m.owner != nil {
+		edges = append(edges, vendorprofilepaymentpreference.EdgeOwner)
+	}
+	if m.vendor_profile != nil {
+		edges = append(edges, vendorprofilepaymentpreference.EdgeVendorProfile)
+	}
+	return edges
+}
+
+// AddedIDs returns all IDs (to other nodes) that were added for the given edge
+// name in this mutation.
+func (m *VendorProfilePaymentPreferenceMutation) AddedIDs(name string) []ent.Value {
+	switch name {
+	case vendorprofilepaymentpreference.EdgeOwner:
+		if id := m.owner; id != nil {
+			return []ent.Value{*id}
+		}
+	case vendorprofilepaymentpreference.EdgeVendorProfile:
+		if id := m.vendor_profile; id != nil {
+			return []ent.Value{*id}
+		}
+	}
+	return nil
+}
+
+// RemovedEdges returns all edge names that were removed in this mutation.
+func (m *VendorProfilePaymentPreferenceMutation) RemovedEdges() []string {
+	edges := make([]string, 0, 2)
+	return edges
+}
+
+// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
+// the given name in this mutation.
+func (m *VendorProfilePaymentPreferenceMutation) RemovedIDs(name string) []ent.Value {
+	return nil
+}
+
+// ClearedEdges returns all edge names that were cleared in this mutation.
+func (m *VendorProfilePaymentPreferenceMutation) ClearedEdges() []string {
+	edges := make([]string, 0, 2)
+	if m.clearedowner {
+		edges = append(edges, vendorprofilepaymentpreference.EdgeOwner)
+	}
+	if m.clearedvendor_profile {
+		edges = append(edges, vendorprofilepaymentpreference.EdgeVendorProfile)
+	}
+	return edges
+}
+
+// EdgeCleared returns a boolean which indicates if the edge with the given name
+// was cleared in this mutation.
+func (m *VendorProfilePaymentPreferenceMutation) EdgeCleared(name string) bool {
+	switch name {
+	case vendorprofilepaymentpreference.EdgeOwner:
+		return m.clearedowner
+	case vendorprofilepaymentpreference.EdgeVendorProfile:
+		return m.clearedvendor_profile
+	}
+	return false
+}
+
+// ClearEdge clears the value of the edge with the given name. It returns an error
+// if that edge is not defined in the schema.
+func (m *VendorProfilePaymentPreferenceMutation) ClearEdge(name string) error {
+	switch name {
+	case vendorprofilepaymentpreference.EdgeOwner:
+		m.ClearOwner()
+		return nil
+	case vendorprofilepaymentpreference.EdgeVendorProfile:
+		m.ClearVendorProfile()
+		return nil
+	}
+	return fmt.Errorf("unknown VendorProfilePaymentPreference unique edge %s", name)
+}
+
+// ResetEdge resets all changes to the edge with the given name in this mutation.
+// It returns an error if the edge is not defined in the schema.
+func (m *VendorProfilePaymentPreferenceMutation) ResetEdge(name string) error {
+	switch name {
+	case vendorprofilepaymentpreference.EdgeOwner:
+		m.ResetOwner()
+		return nil
+	case vendorprofilepaymentpreference.EdgeVendorProfile:
+		m.ResetVendorProfile()
+		return nil
+	}
+	return fmt.Errorf("unknown VendorProfilePaymentPreference edge %s", name)
+}
+
+// VendorProfilePaymentPreferenceHistoryMutation represents an operation that mutates the VendorProfilePaymentPreferenceHistory nodes in the graph.
+type VendorProfilePaymentPreferenceHistoryMutation struct {
+	config
+	op                Op
+	typ               string
+	id                *string
+	history_time      *time.Time
+	ref               *string
+	operation         *enthistory.OpType
+	mapping_id        *string
+	created_at        *time.Time
+	updated_at        *time.Time
+	created_by        *string
+	updated_by        *string
+	deleted_at        *time.Time
+	deleted_by        *string
+	tags              *[]string
+	appendtags        []string
+	owner_id          *string
+	vendor_profile_id *string
+	preferred         *bool
+	method            *enums.PaymentMethod
+	clearedFields     map[string]struct{}
+	done              bool
+	oldValue          func(context.Context) (*VendorProfilePaymentPreferenceHistory, error)
+	predicates        []predicate.VendorProfilePaymentPreferenceHistory
+}
+
+var _ ent.Mutation = (*VendorProfilePaymentPreferenceHistoryMutation)(nil)
+
+// vendorprofilepaymentpreferencehistoryOption allows management of the mutation configuration using functional options.
+type vendorprofilepaymentpreferencehistoryOption func(*VendorProfilePaymentPreferenceHistoryMutation)
+
+// newVendorProfilePaymentPreferenceHistoryMutation creates new mutation for the VendorProfilePaymentPreferenceHistory entity.
+func newVendorProfilePaymentPreferenceHistoryMutation(c config, op Op, opts ...vendorprofilepaymentpreferencehistoryOption) *VendorProfilePaymentPreferenceHistoryMutation {
+	m := &VendorProfilePaymentPreferenceHistoryMutation{
+		config:        c,
+		op:            op,
+		typ:           TypeVendorProfilePaymentPreferenceHistory,
+		clearedFields: make(map[string]struct{}),
+	}
+	for _, opt := range opts {
+		opt(m)
+	}
+	return m
+}
+
+// withVendorProfilePaymentPreferenceHistoryID sets the ID field of the mutation.
+func withVendorProfilePaymentPreferenceHistoryID(id string) vendorprofilepaymentpreferencehistoryOption {
+	return func(m *VendorProfilePaymentPreferenceHistoryMutation) {
+		var (
+			err   error
+			once  sync.Once
+			value *VendorProfilePaymentPreferenceHistory
+		)
+		m.oldValue = func(ctx context.Context) (*VendorProfilePaymentPreferenceHistory, error) {
+			once.Do(func() {
+				if m.done {
+					err = errors.New("querying old values post mutation is not allowed")
+				} else {
+					value, err = m.Client().VendorProfilePaymentPreferenceHistory.Get(ctx, id)
+				}
+			})
+			return value, err
+		}
+		m.id = &id
+	}
+}
+
+// withVendorProfilePaymentPreferenceHistory sets the old VendorProfilePaymentPreferenceHistory of the mutation.
+func withVendorProfilePaymentPreferenceHistory(node *VendorProfilePaymentPreferenceHistory) vendorprofilepaymentpreferencehistoryOption {
+	return func(m *VendorProfilePaymentPreferenceHistoryMutation) {
+		m.oldValue = func(context.Context) (*VendorProfilePaymentPreferenceHistory, error) {
+			return node, nil
+		}
+		m.id = &node.ID
+	}
+}
+
+// Client returns a new `ent.Client` from the mutation. If the mutation was
+// executed in a transaction (ent.Tx), a transactional client is returned.
+func (m VendorProfilePaymentPreferenceHistoryMutation) Client() *Client {
+	client := &Client{config: m.config}
+	client.init()
+	return client
+}
+
+// Tx returns an `ent.Tx` for mutations that were executed in transactions;
+// it returns an error otherwise.
+func (m VendorProfilePaymentPreferenceHistoryMutation) Tx() (*Tx, error) {
+	if _, ok := m.driver.(*txDriver); !ok {
+		return nil, errors.New("generated: mutation is not running in a transaction")
+	}
+	tx := &Tx{config: m.config}
+	tx.init()
+	return tx, nil
+}
+
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of VendorProfilePaymentPreferenceHistory entities.
+func (m *VendorProfilePaymentPreferenceHistoryMutation) SetID(id string) {
+	m.id = &id
+}
+
+// ID returns the ID value in the mutation. Note that the ID is only available
+// if it was provided to the builder or after it was returned from the database.
+func (m *VendorProfilePaymentPreferenceHistoryMutation) ID() (id string, exists bool) {
+	if m.id == nil {
+		return
+	}
+	return *m.id, true
+}
+
+// IDs queries the database and returns the entity ids that match the mutation's predicate.
+// That means, if the mutation is applied within a transaction with an isolation level such
+// as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
+// or updated by the mutation.
+func (m *VendorProfilePaymentPreferenceHistoryMutation) IDs(ctx context.Context) ([]string, error) {
+	switch {
+	case m.op.Is(OpUpdateOne | OpDeleteOne):
+		id, exists := m.ID()
+		if exists {
+			return []string{id}, nil
+		}
+		fallthrough
+	case m.op.Is(OpUpdate | OpDelete):
+		return m.Client().VendorProfilePaymentPreferenceHistory.Query().Where(m.predicates...).IDs(ctx)
+	default:
+		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
+	}
+}
+
+// SetHistoryTime sets the "history_time" field.
+func (m *VendorProfilePaymentPreferenceHistoryMutation) SetHistoryTime(t time.Time) {
+	m.history_time = &t
+}
+
+// HistoryTime returns the value of the "history_time" field in the mutation.
+func (m *VendorProfilePaymentPreferenceHistoryMutation) HistoryTime() (r time.Time, exists bool) {
+	v := m.history_time
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldHistoryTime returns the old "history_time" field's value of the VendorProfilePaymentPreferenceHistory entity.
+// If the VendorProfilePaymentPreferenceHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VendorProfilePaymentPreferenceHistoryMutation) OldHistoryTime(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldHistoryTime is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldHistoryTime requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldHistoryTime: %w", err)
+	}
+	return oldValue.HistoryTime, nil
+}
+
+// ResetHistoryTime resets all changes to the "history_time" field.
+func (m *VendorProfilePaymentPreferenceHistoryMutation) ResetHistoryTime() {
+	m.history_time = nil
+}
+
+// SetRef sets the "ref" field.
+func (m *VendorProfilePaymentPreferenceHistoryMutation) SetRef(s string) {
+	m.ref = &s
+}
+
+// Ref returns the value of the "ref" field in the mutation.
+func (m *VendorProfilePaymentPreferenceHistoryMutation) Ref() (r string, exists bool) {
+	v := m.ref
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldRef returns the old "ref" field's value of the VendorProfilePaymentPreferenceHistory entity.
+// If the VendorProfilePaymentPreferenceHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VendorProfilePaymentPreferenceHistoryMutation) OldRef(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldRef is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldRef requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldRef: %w", err)
+	}
+	return oldValue.Ref, nil
+}
+
+// ClearRef clears the value of the "ref" field.
+func (m *VendorProfilePaymentPreferenceHistoryMutation) ClearRef() {
+	m.ref = nil
+	m.clearedFields[vendorprofilepaymentpreferencehistory.FieldRef] = struct{}{}
+}
+
+// RefCleared returns if the "ref" field was cleared in this mutation.
+func (m *VendorProfilePaymentPreferenceHistoryMutation) RefCleared() bool {
+	_, ok := m.clearedFields[vendorprofilepaymentpreferencehistory.FieldRef]
+	return ok
+}
+
+// ResetRef resets all changes to the "ref" field.
+func (m *VendorProfilePaymentPreferenceHistoryMutation) ResetRef() {
+	m.ref = nil
+	delete(m.clearedFields, vendorprofilepaymentpreferencehistory.FieldRef)
+}
+
+// SetOperation sets the "operation" field.
+func (m *VendorProfilePaymentPreferenceHistoryMutation) SetOperation(et enthistory.OpType) {
+	m.operation = &et
+}
+
+// Operation returns the value of the "operation" field in the mutation.
+func (m *VendorProfilePaymentPreferenceHistoryMutation) Operation() (r enthistory.OpType, exists bool) {
+	v := m.operation
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldOperation returns the old "operation" field's value of the VendorProfilePaymentPreferenceHistory entity.
+// If the VendorProfilePaymentPreferenceHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VendorProfilePaymentPreferenceHistoryMutation) OldOperation(ctx context.Context) (v enthistory.OpType, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldOperation is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldOperation requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldOperation: %w", err)
+	}
+	return oldValue.Operation, nil
+}
+
+// ResetOperation resets all changes to the "operation" field.
+func (m *VendorProfilePaymentPreferenceHistoryMutation) ResetOperation() {
+	m.operation = nil
+}
+
+// SetMappingID sets the "mapping_id" field.
+func (m *VendorProfilePaymentPreferenceHistoryMutation) SetMappingID(s string) {
+	m.mapping_id = &s
+}
+
+// MappingID returns the value of the "mapping_id" field in the mutation.
+func (m *VendorProfilePaymentPreferenceHistoryMutation) MappingID() (r string, exists bool) {
+	v := m.mapping_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldMappingID returns the old "mapping_id" field's value of the VendorProfilePaymentPreferenceHistory entity.
+// If the VendorProfilePaymentPreferenceHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VendorProfilePaymentPreferenceHistoryMutation) OldMappingID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldMappingID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldMappingID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldMappingID: %w", err)
+	}
+	return oldValue.MappingID, nil
+}
+
+// ResetMappingID resets all changes to the "mapping_id" field.
+func (m *VendorProfilePaymentPreferenceHistoryMutation) ResetMappingID() {
+	m.mapping_id = nil
+}
+
+// SetCreatedAt sets the "created_at" field.
+func (m *VendorProfilePaymentPreferenceHistoryMutation) SetCreatedAt(t time.Time) {
+	m.created_at = &t
+}
+
+// CreatedAt returns the value of the "created_at" field in the mutation.
+func (m *VendorProfilePaymentPreferenceHistoryMutation) CreatedAt() (r time.Time, exists bool) {
+	v := m.created_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedAt returns the old "created_at" field's value of the VendorProfilePaymentPreferenceHistory entity.
+// If the VendorProfilePaymentPreferenceHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VendorProfilePaymentPreferenceHistoryMutation) OldCreatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedAt: %w", err)
+	}
+	return oldValue.CreatedAt, nil
+}
+
+// ClearCreatedAt clears the value of the "created_at" field.
+func (m *VendorProfilePaymentPreferenceHistoryMutation) ClearCreatedAt() {
+	m.created_at = nil
+	m.clearedFields[vendorprofilepaymentpreferencehistory.FieldCreatedAt] = struct{}{}
+}
+
+// CreatedAtCleared returns if the "created_at" field was cleared in this mutation.
+func (m *VendorProfilePaymentPreferenceHistoryMutation) CreatedAtCleared() bool {
+	_, ok := m.clearedFields[vendorprofilepaymentpreferencehistory.FieldCreatedAt]
+	return ok
+}
+
+// ResetCreatedAt resets all changes to the "created_at" field.
+func (m *VendorProfilePaymentPreferenceHistoryMutation) ResetCreatedAt() {
+	m.created_at = nil
+	delete(m.clearedFields, vendorprofilepaymentpreferencehistory.FieldCreatedAt)
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (m *VendorProfilePaymentPreferenceHistoryMutation) SetUpdatedAt(t time.Time) {
+	m.updated_at = &t
+}
+
+// UpdatedAt returns the value of the "updated_at" field in the mutation.
+func (m *VendorProfilePaymentPreferenceHistoryMutation) UpdatedAt() (r time.Time, exists bool) {
+	v := m.updated_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedAt returns the old "updated_at" field's value of the VendorProfilePaymentPreferenceHistory entity.
+// If the VendorProfilePaymentPreferenceHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VendorProfilePaymentPreferenceHistoryMutation) OldUpdatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedAt: %w", err)
+	}
+	return oldValue.UpdatedAt, nil
+}
+
+// ClearUpdatedAt clears the value of the "updated_at" field.
+func (m *VendorProfilePaymentPreferenceHistoryMutation) ClearUpdatedAt() {
+	m.updated_at = nil
+	m.clearedFields[vendorprofilepaymentpreferencehistory.FieldUpdatedAt] = struct{}{}
+}
+
+// UpdatedAtCleared returns if the "updated_at" field was cleared in this mutation.
+func (m *VendorProfilePaymentPreferenceHistoryMutation) UpdatedAtCleared() bool {
+	_, ok := m.clearedFields[vendorprofilepaymentpreferencehistory.FieldUpdatedAt]
+	return ok
+}
+
+// ResetUpdatedAt resets all changes to the "updated_at" field.
+func (m *VendorProfilePaymentPreferenceHistoryMutation) ResetUpdatedAt() {
+	m.updated_at = nil
+	delete(m.clearedFields, vendorprofilepaymentpreferencehistory.FieldUpdatedAt)
+}
+
+// SetCreatedBy sets the "created_by" field.
+func (m *VendorProfilePaymentPreferenceHistoryMutation) SetCreatedBy(s string) {
+	m.created_by = &s
+}
+
+// CreatedBy returns the value of the "created_by" field in the mutation.
+func (m *VendorProfilePaymentPreferenceHistoryMutation) CreatedBy() (r string, exists bool) {
+	v := m.created_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedBy returns the old "created_by" field's value of the VendorProfilePaymentPreferenceHistory entity.
+// If the VendorProfilePaymentPreferenceHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VendorProfilePaymentPreferenceHistoryMutation) OldCreatedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedBy: %w", err)
+	}
+	return oldValue.CreatedBy, nil
+}
+
+// ClearCreatedBy clears the value of the "created_by" field.
+func (m *VendorProfilePaymentPreferenceHistoryMutation) ClearCreatedBy() {
+	m.created_by = nil
+	m.clearedFields[vendorprofilepaymentpreferencehistory.FieldCreatedBy] = struct{}{}
+}
+
+// CreatedByCleared returns if the "created_by" field was cleared in this mutation.
+func (m *VendorProfilePaymentPreferenceHistoryMutation) CreatedByCleared() bool {
+	_, ok := m.clearedFields[vendorprofilepaymentpreferencehistory.FieldCreatedBy]
+	return ok
+}
+
+// ResetCreatedBy resets all changes to the "created_by" field.
+func (m *VendorProfilePaymentPreferenceHistoryMutation) ResetCreatedBy() {
+	m.created_by = nil
+	delete(m.clearedFields, vendorprofilepaymentpreferencehistory.FieldCreatedBy)
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (m *VendorProfilePaymentPreferenceHistoryMutation) SetUpdatedBy(s string) {
+	m.updated_by = &s
+}
+
+// UpdatedBy returns the value of the "updated_by" field in the mutation.
+func (m *VendorProfilePaymentPreferenceHistoryMutation) UpdatedBy() (r string, exists bool) {
+	v := m.updated_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedBy returns the old "updated_by" field's value of the VendorProfilePaymentPreferenceHistory entity.
+// If the VendorProfilePaymentPreferenceHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VendorProfilePaymentPreferenceHistoryMutation) OldUpdatedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedBy: %w", err)
+	}
+	return oldValue.UpdatedBy, nil
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (m *VendorProfilePaymentPreferenceHistoryMutation) ClearUpdatedBy() {
+	m.updated_by = nil
+	m.clearedFields[vendorprofilepaymentpreferencehistory.FieldUpdatedBy] = struct{}{}
+}
+
+// UpdatedByCleared returns if the "updated_by" field was cleared in this mutation.
+func (m *VendorProfilePaymentPreferenceHistoryMutation) UpdatedByCleared() bool {
+	_, ok := m.clearedFields[vendorprofilepaymentpreferencehistory.FieldUpdatedBy]
+	return ok
+}
+
+// ResetUpdatedBy resets all changes to the "updated_by" field.
+func (m *VendorProfilePaymentPreferenceHistoryMutation) ResetUpdatedBy() {
+	m.updated_by = nil
+	delete(m.clearedFields, vendorprofilepaymentpreferencehistory.FieldUpdatedBy)
+}
+
+// SetDeletedAt sets the "deleted_at" field.
+func (m *VendorProfilePaymentPreferenceHistoryMutation) SetDeletedAt(t time.Time) {
+	m.deleted_at = &t
+}
+
+// DeletedAt returns the value of the "deleted_at" field in the mutation.
+func (m *VendorProfilePaymentPreferenceHistoryMutation) DeletedAt() (r time.Time, exists bool) {
+	v := m.deleted_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDeletedAt returns the old "deleted_at" field's value of the VendorProfilePaymentPreferenceHistory entity.
+// If the VendorProfilePaymentPreferenceHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VendorProfilePaymentPreferenceHistoryMutation) OldDeletedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDeletedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDeletedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDeletedAt: %w", err)
+	}
+	return oldValue.DeletedAt, nil
+}
+
+// ClearDeletedAt clears the value of the "deleted_at" field.
+func (m *VendorProfilePaymentPreferenceHistoryMutation) ClearDeletedAt() {
+	m.deleted_at = nil
+	m.clearedFields[vendorprofilepaymentpreferencehistory.FieldDeletedAt] = struct{}{}
+}
+
+// DeletedAtCleared returns if the "deleted_at" field was cleared in this mutation.
+func (m *VendorProfilePaymentPreferenceHistoryMutation) DeletedAtCleared() bool {
+	_, ok := m.clearedFields[vendorprofilepaymentpreferencehistory.FieldDeletedAt]
+	return ok
+}
+
+// ResetDeletedAt resets all changes to the "deleted_at" field.
+func (m *VendorProfilePaymentPreferenceHistoryMutation) ResetDeletedAt() {
+	m.deleted_at = nil
+	delete(m.clearedFields, vendorprofilepaymentpreferencehistory.FieldDeletedAt)
+}
+
+// SetDeletedBy sets the "deleted_by" field.
+func (m *VendorProfilePaymentPreferenceHistoryMutation) SetDeletedBy(s string) {
+	m.deleted_by = &s
+}
+
+// DeletedBy returns the value of the "deleted_by" field in the mutation.
+func (m *VendorProfilePaymentPreferenceHistoryMutation) DeletedBy() (r string, exists bool) {
+	v := m.deleted_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDeletedBy returns the old "deleted_by" field's value of the VendorProfilePaymentPreferenceHistory entity.
+// If the VendorProfilePaymentPreferenceHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VendorProfilePaymentPreferenceHistoryMutation) OldDeletedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDeletedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDeletedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDeletedBy: %w", err)
+	}
+	return oldValue.DeletedBy, nil
+}
+
+// ClearDeletedBy clears the value of the "deleted_by" field.
+func (m *VendorProfilePaymentPreferenceHistoryMutation) ClearDeletedBy() {
+	m.deleted_by = nil
+	m.clearedFields[vendorprofilepaymentpreferencehistory.FieldDeletedBy] = struct{}{}
+}
+
+// DeletedByCleared returns if the "deleted_by" field was cleared in this mutation.
+func (m *VendorProfilePaymentPreferenceHistoryMutation) DeletedByCleared() bool {
+	_, ok := m.clearedFields[vendorprofilepaymentpreferencehistory.FieldDeletedBy]
+	return ok
+}
+
+// ResetDeletedBy resets all changes to the "deleted_by" field.
+func (m *VendorProfilePaymentPreferenceHistoryMutation) ResetDeletedBy() {
+	m.deleted_by = nil
+	delete(m.clearedFields, vendorprofilepaymentpreferencehistory.FieldDeletedBy)
+}
+
+// SetTags sets the "tags" field.
+func (m *VendorProfilePaymentPreferenceHistoryMutation) SetTags(s []string) {
+	m.tags = &s
+	m.appendtags = nil
+}
+
+// Tags returns the value of the "tags" field in the mutation.
+func (m *VendorProfilePaymentPreferenceHistoryMutation) Tags() (r []string, exists bool) {
+	v := m.tags
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldTags returns the old "tags" field's value of the VendorProfilePaymentPreferenceHistory entity.
+// If the VendorProfilePaymentPreferenceHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VendorProfilePaymentPreferenceHistoryMutation) OldTags(ctx context.Context) (v []string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldTags is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldTags requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldTags: %w", err)
+	}
+	return oldValue.Tags, nil
+}
+
+// AppendTags adds s to the "tags" field.
+func (m *VendorProfilePaymentPreferenceHistoryMutation) AppendTags(s []string) {
+	m.appendtags = append(m.appendtags, s...)
+}
+
+// AppendedTags returns the list of values that were appended to the "tags" field in this mutation.
+func (m *VendorProfilePaymentPreferenceHistoryMutation) AppendedTags() ([]string, bool) {
+	if len(m.appendtags) == 0 {
+		return nil, false
+	}
+	return m.appendtags, true
+}
+
+// ClearTags clears the value of the "tags" field.
+func (m *VendorProfilePaymentPreferenceHistoryMutation) ClearTags() {
+	m.tags = nil
+	m.appendtags = nil
+	m.clearedFields[vendorprofilepaymentpreferencehistory.FieldTags] = struct{}{}
+}
+
+// TagsCleared returns if the "tags" field was cleared in this mutation.
+func (m *VendorProfilePaymentPreferenceHistoryMutation) TagsCleared() bool {
+	_, ok := m.clearedFields[vendorprofilepaymentpreferencehistory.FieldTags]
+	return ok
+}
+
+// ResetTags resets all changes to the "tags" field.
+func (m *VendorProfilePaymentPreferenceHistoryMutation) ResetTags() {
+	m.tags = nil
+	m.appendtags = nil
+	delete(m.clearedFields, vendorprofilepaymentpreferencehistory.FieldTags)
+}
+
+// SetOwnerID sets the "owner_id" field.
+func (m *VendorProfilePaymentPreferenceHistoryMutation) SetOwnerID(s string) {
+	m.owner_id = &s
+}
+
+// OwnerID returns the value of the "owner_id" field in the mutation.
+func (m *VendorProfilePaymentPreferenceHistoryMutation) OwnerID() (r string, exists bool) {
+	v := m.owner_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldOwnerID returns the old "owner_id" field's value of the VendorProfilePaymentPreferenceHistory entity.
+// If the VendorProfilePaymentPreferenceHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VendorProfilePaymentPreferenceHistoryMutation) OldOwnerID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldOwnerID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldOwnerID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldOwnerID: %w", err)
+	}
+	return oldValue.OwnerID, nil
+}
+
+// ClearOwnerID clears the value of the "owner_id" field.
+func (m *VendorProfilePaymentPreferenceHistoryMutation) ClearOwnerID() {
+	m.owner_id = nil
+	m.clearedFields[vendorprofilepaymentpreferencehistory.FieldOwnerID] = struct{}{}
+}
+
+// OwnerIDCleared returns if the "owner_id" field was cleared in this mutation.
+func (m *VendorProfilePaymentPreferenceHistoryMutation) OwnerIDCleared() bool {
+	_, ok := m.clearedFields[vendorprofilepaymentpreferencehistory.FieldOwnerID]
+	return ok
+}
+
+// ResetOwnerID resets all changes to the "owner_id" field.
+func (m *VendorProfilePaymentPreferenceHistoryMutation) ResetOwnerID() {
+	m.owner_id = nil
+	delete(m.clearedFields, vendorprofilepaymentpreferencehistory.FieldOwnerID)
+}
+
+// SetVendorProfileID sets the "vendor_profile_id" field.
+func (m *VendorProfilePaymentPreferenceHistoryMutation) SetVendorProfileID(s string) {
+	m.vendor_profile_id = &s
+}
+
+// VendorProfileID returns the value of the "vendor_profile_id" field in the mutation.
+func (m *VendorProfilePaymentPreferenceHistoryMutation) VendorProfileID() (r string, exists bool) {
+	v := m.vendor_profile_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldVendorProfileID returns the old "vendor_profile_id" field's value of the VendorProfilePaymentPreferenceHistory entity.
+// If the VendorProfilePaymentPreferenceHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VendorProfilePaymentPreferenceHistoryMutation) OldVendorProfileID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldVendorProfileID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldVendorProfileID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldVendorProfileID: %w", err)
+	}
+	return oldValue.VendorProfileID, nil
+}
+
+// ClearVendorProfileID clears the value of the "vendor_profile_id" field.
+func (m *VendorProfilePaymentPreferenceHistoryMutation) ClearVendorProfileID() {
+	m.vendor_profile_id = nil
+	m.clearedFields[vendorprofilepaymentpreferencehistory.FieldVendorProfileID] = struct{}{}
+}
+
+// VendorProfileIDCleared returns if the "vendor_profile_id" field was cleared in this mutation.
+func (m *VendorProfilePaymentPreferenceHistoryMutation) VendorProfileIDCleared() bool {
+	_, ok := m.clearedFields[vendorprofilepaymentpreferencehistory.FieldVendorProfileID]
+	return ok
+}
+
+// ResetVendorProfileID resets all changes to the "vendor_profile_id" field.
+func (m *VendorProfilePaymentPreferenceHistoryMutation) ResetVendorProfileID() {
+	m.vendor_profile_id = nil
+	delete(m.clearedFields, vendorprofilepaymentpreferencehistory.FieldVendorProfileID)
+}
+
+// SetPreferred sets the "preferred" field.
+func (m *VendorProfilePaymentPreferenceHistoryMutation) SetPreferred(b bool) {
+	m.preferred = &b
+}
+
+// Preferred returns the value of the "preferred" field in the mutation.
+func (m *VendorProfilePaymentPreferenceHistoryMutation) Preferred() (r bool, exists bool) {
+	v := m.preferred
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldPreferred returns the old "preferred" field's value of the VendorProfilePaymentPreferenceHistory entity.
+// If the VendorProfilePaymentPreferenceHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VendorProfilePaymentPreferenceHistoryMutation) OldPreferred(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldPreferred is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldPreferred requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldPreferred: %w", err)
+	}
+	return oldValue.Preferred, nil
+}
+
+// ResetPreferred resets all changes to the "preferred" field.
+func (m *VendorProfilePaymentPreferenceHistoryMutation) ResetPreferred() {
+	m.preferred = nil
+}
+
+// SetMethod sets the "method" field.
+func (m *VendorProfilePaymentPreferenceHistoryMutation) SetMethod(em enums.PaymentMethod) {
+	m.method = &em
+}
+
+// Method returns the value of the "method" field in the mutation.
+func (m *VendorProfilePaymentPreferenceHistoryMutation) Method() (r enums.PaymentMethod, exists bool) {
+	v := m.method
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldMethod returns the old "method" field's value of the VendorProfilePaymentPreferenceHistory entity.
+// If the VendorProfilePaymentPreferenceHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VendorProfilePaymentPreferenceHistoryMutation) OldMethod(ctx context.Context) (v enums.PaymentMethod, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldMethod is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldMethod requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldMethod: %w", err)
+	}
+	return oldValue.Method, nil
+}
+
+// ResetMethod resets all changes to the "method" field.
+func (m *VendorProfilePaymentPreferenceHistoryMutation) ResetMethod() {
+	m.method = nil
+}
+
+// Where appends a list predicates to the VendorProfilePaymentPreferenceHistoryMutation builder.
+func (m *VendorProfilePaymentPreferenceHistoryMutation) Where(ps ...predicate.VendorProfilePaymentPreferenceHistory) {
+	m.predicates = append(m.predicates, ps...)
+}
+
+// WhereP appends storage-level predicates to the VendorProfilePaymentPreferenceHistoryMutation builder. Using this method,
+// users can use type-assertion to append predicates that do not depend on any generated package.
+func (m *VendorProfilePaymentPreferenceHistoryMutation) WhereP(ps ...func(*sql.Selector)) {
+	p := make([]predicate.VendorProfilePaymentPreferenceHistory, len(ps))
+	for i := range ps {
+		p[i] = ps[i]
+	}
+	m.Where(p...)
+}
+
+// Op returns the operation name.
+func (m *VendorProfilePaymentPreferenceHistoryMutation) Op() Op {
+	return m.op
+}
+
+// SetOp allows setting the mutation operation.
+func (m *VendorProfilePaymentPreferenceHistoryMutation) SetOp(op Op) {
+	m.op = op
+}
+
+// Type returns the node type of this mutation (VendorProfilePaymentPreferenceHistory).
+func (m *VendorProfilePaymentPreferenceHistoryMutation) Type() string {
+	return m.typ
+}
+
+// Fields returns all fields that were changed during this mutation. Note that in
+// order to get all numeric fields that were incremented/decremented, call
+// AddedFields().
+func (m *VendorProfilePaymentPreferenceHistoryMutation) Fields() []string {
+	fields := make([]string, 0, 15)
+	if m.history_time != nil {
+		fields = append(fields, vendorprofilepaymentpreferencehistory.FieldHistoryTime)
+	}
+	if m.ref != nil {
+		fields = append(fields, vendorprofilepaymentpreferencehistory.FieldRef)
+	}
+	if m.operation != nil {
+		fields = append(fields, vendorprofilepaymentpreferencehistory.FieldOperation)
+	}
+	if m.mapping_id != nil {
+		fields = append(fields, vendorprofilepaymentpreferencehistory.FieldMappingID)
+	}
+	if m.created_at != nil {
+		fields = append(fields, vendorprofilepaymentpreferencehistory.FieldCreatedAt)
+	}
+	if m.updated_at != nil {
+		fields = append(fields, vendorprofilepaymentpreferencehistory.FieldUpdatedAt)
+	}
+	if m.created_by != nil {
+		fields = append(fields, vendorprofilepaymentpreferencehistory.FieldCreatedBy)
+	}
+	if m.updated_by != nil {
+		fields = append(fields, vendorprofilepaymentpreferencehistory.FieldUpdatedBy)
+	}
+	if m.deleted_at != nil {
+		fields = append(fields, vendorprofilepaymentpreferencehistory.FieldDeletedAt)
+	}
+	if m.deleted_by != nil {
+		fields = append(fields, vendorprofilepaymentpreferencehistory.FieldDeletedBy)
+	}
+	if m.tags != nil {
+		fields = append(fields, vendorprofilepaymentpreferencehistory.FieldTags)
+	}
+	if m.owner_id != nil {
+		fields = append(fields, vendorprofilepaymentpreferencehistory.FieldOwnerID)
+	}
+	if m.vendor_profile_id != nil {
+		fields = append(fields, vendorprofilepaymentpreferencehistory.FieldVendorProfileID)
+	}
+	if m.preferred != nil {
+		fields = append(fields, vendorprofilepaymentpreferencehistory.FieldPreferred)
+	}
+	if m.method != nil {
+		fields = append(fields, vendorprofilepaymentpreferencehistory.FieldMethod)
+	}
+	return fields
+}
+
+// Field returns the value of a field with the given name. The second boolean
+// return value indicates that this field was not set, or was not defined in the
+// schema.
+func (m *VendorProfilePaymentPreferenceHistoryMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case vendorprofilepaymentpreferencehistory.FieldHistoryTime:
+		return m.HistoryTime()
+	case vendorprofilepaymentpreferencehistory.FieldRef:
+		return m.Ref()
+	case vendorprofilepaymentpreferencehistory.FieldOperation:
+		return m.Operation()
+	case vendorprofilepaymentpreferencehistory.FieldMappingID:
+		return m.MappingID()
+	case vendorprofilepaymentpreferencehistory.FieldCreatedAt:
+		return m.CreatedAt()
+	case vendorprofilepaymentpreferencehistory.FieldUpdatedAt:
+		return m.UpdatedAt()
+	case vendorprofilepaymentpreferencehistory.FieldCreatedBy:
+		return m.CreatedBy()
+	case vendorprofilepaymentpreferencehistory.FieldUpdatedBy:
+		return m.UpdatedBy()
+	case vendorprofilepaymentpreferencehistory.FieldDeletedAt:
+		return m.DeletedAt()
+	case vendorprofilepaymentpreferencehistory.FieldDeletedBy:
+		return m.DeletedBy()
+	case vendorprofilepaymentpreferencehistory.FieldTags:
+		return m.Tags()
+	case vendorprofilepaymentpreferencehistory.FieldOwnerID:
+		return m.OwnerID()
+	case vendorprofilepaymentpreferencehistory.FieldVendorProfileID:
+		return m.VendorProfileID()
+	case vendorprofilepaymentpreferencehistory.FieldPreferred:
+		return m.Preferred()
+	case vendorprofilepaymentpreferencehistory.FieldMethod:
+		return m.Method()
+	}
+	return nil, false
+}
+
+// OldField returns the old value of the field from the database. An error is
+// returned if the mutation operation is not UpdateOne, or the query to the
+// database failed.
+func (m *VendorProfilePaymentPreferenceHistoryMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case vendorprofilepaymentpreferencehistory.FieldHistoryTime:
+		return m.OldHistoryTime(ctx)
+	case vendorprofilepaymentpreferencehistory.FieldRef:
+		return m.OldRef(ctx)
+	case vendorprofilepaymentpreferencehistory.FieldOperation:
+		return m.OldOperation(ctx)
+	case vendorprofilepaymentpreferencehistory.FieldMappingID:
+		return m.OldMappingID(ctx)
+	case vendorprofilepaymentpreferencehistory.FieldCreatedAt:
+		return m.OldCreatedAt(ctx)
+	case vendorprofilepaymentpreferencehistory.FieldUpdatedAt:
+		return m.OldUpdatedAt(ctx)
+	case vendorprofilepaymentpreferencehistory.FieldCreatedBy:
+		return m.OldCreatedBy(ctx)
+	case vendorprofilepaymentpreferencehistory.FieldUpdatedBy:
+		return m.OldUpdatedBy(ctx)
+	case vendorprofilepaymentpreferencehistory.FieldDeletedAt:
+		return m.OldDeletedAt(ctx)
+	case vendorprofilepaymentpreferencehistory.FieldDeletedBy:
+		return m.OldDeletedBy(ctx)
+	case vendorprofilepaymentpreferencehistory.FieldTags:
+		return m.OldTags(ctx)
+	case vendorprofilepaymentpreferencehistory.FieldOwnerID:
+		return m.OldOwnerID(ctx)
+	case vendorprofilepaymentpreferencehistory.FieldVendorProfileID:
+		return m.OldVendorProfileID(ctx)
+	case vendorprofilepaymentpreferencehistory.FieldPreferred:
+		return m.OldPreferred(ctx)
+	case vendorprofilepaymentpreferencehistory.FieldMethod:
+		return m.OldMethod(ctx)
+	}
+	return nil, fmt.Errorf("unknown VendorProfilePaymentPreferenceHistory field %s", name)
+}
+
+// SetField sets the value of a field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *VendorProfilePaymentPreferenceHistoryMutation) SetField(name string, value ent.Value) error {
+	switch name {
+	case vendorprofilepaymentpreferencehistory.FieldHistoryTime:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetHistoryTime(v)
+		return nil
+	case vendorprofilepaymentpreferencehistory.FieldRef:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetRef(v)
+		return nil
+	case vendorprofilepaymentpreferencehistory.FieldOperation:
+		v, ok := value.(enthistory.OpType)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetOperation(v)
+		return nil
+	case vendorprofilepaymentpreferencehistory.FieldMappingID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetMappingID(v)
+		return nil
+	case vendorprofilepaymentpreferencehistory.FieldCreatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedAt(v)
+		return nil
+	case vendorprofilepaymentpreferencehistory.FieldUpdatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedAt(v)
+		return nil
+	case vendorprofilepaymentpreferencehistory.FieldCreatedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedBy(v)
+		return nil
+	case vendorprofilepaymentpreferencehistory.FieldUpdatedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedBy(v)
+		return nil
+	case vendorprofilepaymentpreferencehistory.FieldDeletedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDeletedAt(v)
+		return nil
+	case vendorprofilepaymentpreferencehistory.FieldDeletedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDeletedBy(v)
+		return nil
+	case vendorprofilepaymentpreferencehistory.FieldTags:
+		v, ok := value.([]string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetTags(v)
+		return nil
+	case vendorprofilepaymentpreferencehistory.FieldOwnerID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetOwnerID(v)
+		return nil
+	case vendorprofilepaymentpreferencehistory.FieldVendorProfileID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetVendorProfileID(v)
+		return nil
+	case vendorprofilepaymentpreferencehistory.FieldPreferred:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetPreferred(v)
+		return nil
+	case vendorprofilepaymentpreferencehistory.FieldMethod:
+		v, ok := value.(enums.PaymentMethod)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetMethod(v)
+		return nil
+	}
+	return fmt.Errorf("unknown VendorProfilePaymentPreferenceHistory field %s", name)
+}
+
+// AddedFields returns all numeric fields that were incremented/decremented during
+// this mutation.
+func (m *VendorProfilePaymentPreferenceHistoryMutation) AddedFields() []string {
+	return nil
+}
+
+// AddedField returns the numeric value that was incremented/decremented on a field
+// with the given name. The second boolean return value indicates that this field
+// was not set, or was not defined in the schema.
+func (m *VendorProfilePaymentPreferenceHistoryMutation) AddedField(name string) (ent.Value, bool) {
+	return nil, false
+}
+
+// AddField adds the value to the field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *VendorProfilePaymentPreferenceHistoryMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	}
+	return fmt.Errorf("unknown VendorProfilePaymentPreferenceHistory numeric field %s", name)
+}
+
+// ClearedFields returns all nullable fields that were cleared during this
+// mutation.
+func (m *VendorProfilePaymentPreferenceHistoryMutation) ClearedFields() []string {
+	var fields []string
+	if m.FieldCleared(vendorprofilepaymentpreferencehistory.FieldRef) {
+		fields = append(fields, vendorprofilepaymentpreferencehistory.FieldRef)
+	}
+	if m.FieldCleared(vendorprofilepaymentpreferencehistory.FieldCreatedAt) {
+		fields = append(fields, vendorprofilepaymentpreferencehistory.FieldCreatedAt)
+	}
+	if m.FieldCleared(vendorprofilepaymentpreferencehistory.FieldUpdatedAt) {
+		fields = append(fields, vendorprofilepaymentpreferencehistory.FieldUpdatedAt)
+	}
+	if m.FieldCleared(vendorprofilepaymentpreferencehistory.FieldCreatedBy) {
+		fields = append(fields, vendorprofilepaymentpreferencehistory.FieldCreatedBy)
+	}
+	if m.FieldCleared(vendorprofilepaymentpreferencehistory.FieldUpdatedBy) {
+		fields = append(fields, vendorprofilepaymentpreferencehistory.FieldUpdatedBy)
+	}
+	if m.FieldCleared(vendorprofilepaymentpreferencehistory.FieldDeletedAt) {
+		fields = append(fields, vendorprofilepaymentpreferencehistory.FieldDeletedAt)
+	}
+	if m.FieldCleared(vendorprofilepaymentpreferencehistory.FieldDeletedBy) {
+		fields = append(fields, vendorprofilepaymentpreferencehistory.FieldDeletedBy)
+	}
+	if m.FieldCleared(vendorprofilepaymentpreferencehistory.FieldTags) {
+		fields = append(fields, vendorprofilepaymentpreferencehistory.FieldTags)
+	}
+	if m.FieldCleared(vendorprofilepaymentpreferencehistory.FieldOwnerID) {
+		fields = append(fields, vendorprofilepaymentpreferencehistory.FieldOwnerID)
+	}
+	if m.FieldCleared(vendorprofilepaymentpreferencehistory.FieldVendorProfileID) {
+		fields = append(fields, vendorprofilepaymentpreferencehistory.FieldVendorProfileID)
+	}
+	return fields
+}
+
+// FieldCleared returns a boolean indicating if a field with the given name was
+// cleared in this mutation.
+func (m *VendorProfilePaymentPreferenceHistoryMutation) FieldCleared(name string) bool {
+	_, ok := m.clearedFields[name]
+	return ok
+}
+
+// ClearField clears the value of the field with the given name. It returns an
+// error if the field is not defined in the schema.
+func (m *VendorProfilePaymentPreferenceHistoryMutation) ClearField(name string) error {
+	switch name {
+	case vendorprofilepaymentpreferencehistory.FieldRef:
+		m.ClearRef()
+		return nil
+	case vendorprofilepaymentpreferencehistory.FieldCreatedAt:
+		m.ClearCreatedAt()
+		return nil
+	case vendorprofilepaymentpreferencehistory.FieldUpdatedAt:
+		m.ClearUpdatedAt()
+		return nil
+	case vendorprofilepaymentpreferencehistory.FieldCreatedBy:
+		m.ClearCreatedBy()
+		return nil
+	case vendorprofilepaymentpreferencehistory.FieldUpdatedBy:
+		m.ClearUpdatedBy()
+		return nil
+	case vendorprofilepaymentpreferencehistory.FieldDeletedAt:
+		m.ClearDeletedAt()
+		return nil
+	case vendorprofilepaymentpreferencehistory.FieldDeletedBy:
+		m.ClearDeletedBy()
+		return nil
+	case vendorprofilepaymentpreferencehistory.FieldTags:
+		m.ClearTags()
+		return nil
+	case vendorprofilepaymentpreferencehistory.FieldOwnerID:
+		m.ClearOwnerID()
+		return nil
+	case vendorprofilepaymentpreferencehistory.FieldVendorProfileID:
+		m.ClearVendorProfileID()
+		return nil
+	}
+	return fmt.Errorf("unknown VendorProfilePaymentPreferenceHistory nullable field %s", name)
+}
+
+// ResetField resets all changes in the mutation for the field with the given name.
+// It returns an error if the field is not defined in the schema.
+func (m *VendorProfilePaymentPreferenceHistoryMutation) ResetField(name string) error {
+	switch name {
+	case vendorprofilepaymentpreferencehistory.FieldHistoryTime:
+		m.ResetHistoryTime()
+		return nil
+	case vendorprofilepaymentpreferencehistory.FieldRef:
+		m.ResetRef()
+		return nil
+	case vendorprofilepaymentpreferencehistory.FieldOperation:
+		m.ResetOperation()
+		return nil
+	case vendorprofilepaymentpreferencehistory.FieldMappingID:
+		m.ResetMappingID()
+		return nil
+	case vendorprofilepaymentpreferencehistory.FieldCreatedAt:
+		m.ResetCreatedAt()
+		return nil
+	case vendorprofilepaymentpreferencehistory.FieldUpdatedAt:
+		m.ResetUpdatedAt()
+		return nil
+	case vendorprofilepaymentpreferencehistory.FieldCreatedBy:
+		m.ResetCreatedBy()
+		return nil
+	case vendorprofilepaymentpreferencehistory.FieldUpdatedBy:
+		m.ResetUpdatedBy()
+		return nil
+	case vendorprofilepaymentpreferencehistory.FieldDeletedAt:
+		m.ResetDeletedAt()
+		return nil
+	case vendorprofilepaymentpreferencehistory.FieldDeletedBy:
+		m.ResetDeletedBy()
+		return nil
+	case vendorprofilepaymentpreferencehistory.FieldTags:
+		m.ResetTags()
+		return nil
+	case vendorprofilepaymentpreferencehistory.FieldOwnerID:
+		m.ResetOwnerID()
+		return nil
+	case vendorprofilepaymentpreferencehistory.FieldVendorProfileID:
+		m.ResetVendorProfileID()
+		return nil
+	case vendorprofilepaymentpreferencehistory.FieldPreferred:
+		m.ResetPreferred()
+		return nil
+	case vendorprofilepaymentpreferencehistory.FieldMethod:
+		m.ResetMethod()
+		return nil
+	}
+	return fmt.Errorf("unknown VendorProfilePaymentPreferenceHistory field %s", name)
+}
+
+// AddedEdges returns all edge names that were set/added in this mutation.
+func (m *VendorProfilePaymentPreferenceHistoryMutation) AddedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// AddedIDs returns all IDs (to other nodes) that were added for the given edge
+// name in this mutation.
+func (m *VendorProfilePaymentPreferenceHistoryMutation) AddedIDs(name string) []ent.Value {
+	return nil
+}
+
+// RemovedEdges returns all edge names that were removed in this mutation.
+func (m *VendorProfilePaymentPreferenceHistoryMutation) RemovedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
+// the given name in this mutation.
+func (m *VendorProfilePaymentPreferenceHistoryMutation) RemovedIDs(name string) []ent.Value {
+	return nil
+}
+
+// ClearedEdges returns all edge names that were cleared in this mutation.
+func (m *VendorProfilePaymentPreferenceHistoryMutation) ClearedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// EdgeCleared returns a boolean which indicates if the edge with the given name
+// was cleared in this mutation.
+func (m *VendorProfilePaymentPreferenceHistoryMutation) EdgeCleared(name string) bool {
+	return false
+}
+
+// ClearEdge clears the value of the edge with the given name. It returns an error
+// if that edge is not defined in the schema.
+func (m *VendorProfilePaymentPreferenceHistoryMutation) ClearEdge(name string) error {
+	return fmt.Errorf("unknown VendorProfilePaymentPreferenceHistory unique edge %s", name)
+}
+
+// ResetEdge resets all changes to the edge with the given name in this mutation.
+// It returns an error if the edge is not defined in the schema.
+func (m *VendorProfilePaymentPreferenceHistoryMutation) ResetEdge(name string) error {
+	return fmt.Errorf("unknown VendorProfilePaymentPreferenceHistory edge %s", name)
 }
 
 // VendorProfilePhoneNumberMutation represents an operation that mutates the VendorProfilePhoneNumber nodes in the graph.

@@ -75,6 +75,8 @@ import (
 	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorhistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofile"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofilehistory"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofilepaymentpreference"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofilepaymentpreferencehistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofilephonenumber"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofilephonenumberhistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofilepostaladdress"
@@ -1922,6 +1924,60 @@ func (f TraverseVendorProfileHistory) Traverse(ctx context.Context, q generated.
 	return fmt.Errorf("unexpected query type %T. expect *generated.VendorProfileHistoryQuery", q)
 }
 
+// The VendorProfilePaymentPreferenceFunc type is an adapter to allow the use of ordinary function as a Querier.
+type VendorProfilePaymentPreferenceFunc func(context.Context, *generated.VendorProfilePaymentPreferenceQuery) (generated.Value, error)
+
+// Query calls f(ctx, q).
+func (f VendorProfilePaymentPreferenceFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
+	if q, ok := q.(*generated.VendorProfilePaymentPreferenceQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *generated.VendorProfilePaymentPreferenceQuery", q)
+}
+
+// The TraverseVendorProfilePaymentPreference type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseVendorProfilePaymentPreference func(context.Context, *generated.VendorProfilePaymentPreferenceQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseVendorProfilePaymentPreference) Intercept(next generated.Querier) generated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseVendorProfilePaymentPreference) Traverse(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.VendorProfilePaymentPreferenceQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *generated.VendorProfilePaymentPreferenceQuery", q)
+}
+
+// The VendorProfilePaymentPreferenceHistoryFunc type is an adapter to allow the use of ordinary function as a Querier.
+type VendorProfilePaymentPreferenceHistoryFunc func(context.Context, *generated.VendorProfilePaymentPreferenceHistoryQuery) (generated.Value, error)
+
+// Query calls f(ctx, q).
+func (f VendorProfilePaymentPreferenceHistoryFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
+	if q, ok := q.(*generated.VendorProfilePaymentPreferenceHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *generated.VendorProfilePaymentPreferenceHistoryQuery", q)
+}
+
+// The TraverseVendorProfilePaymentPreferenceHistory type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseVendorProfilePaymentPreferenceHistory func(context.Context, *generated.VendorProfilePaymentPreferenceHistoryQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseVendorProfilePaymentPreferenceHistory) Intercept(next generated.Querier) generated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseVendorProfilePaymentPreferenceHistory) Traverse(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.VendorProfilePaymentPreferenceHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *generated.VendorProfilePaymentPreferenceHistoryQuery", q)
+}
+
 // The VendorProfilePhoneNumberFunc type is an adapter to allow the use of ordinary function as a Querier.
 type VendorProfilePhoneNumberFunc func(context.Context, *generated.VendorProfilePhoneNumberQuery) (generated.Value, error)
 
@@ -2246,6 +2302,10 @@ func NewQuery(q generated.Query) (Query, error) {
 		return &query[*generated.VendorProfileQuery, predicate.VendorProfile, vendorprofile.OrderOption]{typ: generated.TypeVendorProfile, tq: q}, nil
 	case *generated.VendorProfileHistoryQuery:
 		return &query[*generated.VendorProfileHistoryQuery, predicate.VendorProfileHistory, vendorprofilehistory.OrderOption]{typ: generated.TypeVendorProfileHistory, tq: q}, nil
+	case *generated.VendorProfilePaymentPreferenceQuery:
+		return &query[*generated.VendorProfilePaymentPreferenceQuery, predicate.VendorProfilePaymentPreference, vendorprofilepaymentpreference.OrderOption]{typ: generated.TypeVendorProfilePaymentPreference, tq: q}, nil
+	case *generated.VendorProfilePaymentPreferenceHistoryQuery:
+		return &query[*generated.VendorProfilePaymentPreferenceHistoryQuery, predicate.VendorProfilePaymentPreferenceHistory, vendorprofilepaymentpreferencehistory.OrderOption]{typ: generated.TypeVendorProfilePaymentPreferenceHistory, tq: q}, nil
 	case *generated.VendorProfilePhoneNumberQuery:
 		return &query[*generated.VendorProfilePhoneNumberQuery, predicate.VendorProfilePhoneNumber, vendorprofilephonenumber.OrderOption]{typ: generated.TypeVendorProfilePhoneNumber, tq: q}, nil
 	case *generated.VendorProfilePhoneNumberHistoryQuery:

@@ -69,6 +69,8 @@ type VendorProfileEdges struct {
 	PostalAddresses []*PostalAddress `json:"postal_addresses,omitempty"`
 	// PhoneNumbers holds the value of the phone_numbers edge.
 	PhoneNumbers []*PhoneNumber `json:"phone_numbers,omitempty"`
+	// PaymentPreferences holds the value of the payment_preferences edge.
+	PaymentPreferences []*VendorProfilePaymentPreference `json:"payment_preferences,omitempty"`
 	// Vendor holds the value of the vendor edge.
 	Vendor *Vendor `json:"vendor,omitempty"`
 	// VendorProfilePostalAddresses holds the value of the vendor_profile_postal_addresses edge.
@@ -77,12 +79,13 @@ type VendorProfileEdges struct {
 	VendorProfilePhoneNumbers []*VendorProfilePhoneNumber `json:"vendor_profile_phone_numbers,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [6]bool
+	loadedTypes [7]bool
 	// totalCount holds the count of the edges above.
-	totalCount [6]map[string]int
+	totalCount [7]map[string]int
 
 	namedPostalAddresses              map[string][]*PostalAddress
 	namedPhoneNumbers                 map[string][]*PhoneNumber
+	namedPaymentPreferences           map[string][]*VendorProfilePaymentPreference
 	namedVendorProfilePostalAddresses map[string][]*VendorProfilePostalAddress
 	namedVendorProfilePhoneNumbers    map[string][]*VendorProfilePhoneNumber
 }
@@ -116,12 +119,21 @@ func (e VendorProfileEdges) PhoneNumbersOrErr() ([]*PhoneNumber, error) {
 	return nil, &NotLoadedError{edge: "phone_numbers"}
 }
 
+// PaymentPreferencesOrErr returns the PaymentPreferences value or an error if the edge
+// was not loaded in eager-loading.
+func (e VendorProfileEdges) PaymentPreferencesOrErr() ([]*VendorProfilePaymentPreference, error) {
+	if e.loadedTypes[3] {
+		return e.PaymentPreferences, nil
+	}
+	return nil, &NotLoadedError{edge: "payment_preferences"}
+}
+
 // VendorOrErr returns the Vendor value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e VendorProfileEdges) VendorOrErr() (*Vendor, error) {
 	if e.Vendor != nil {
 		return e.Vendor, nil
-	} else if e.loadedTypes[3] {
+	} else if e.loadedTypes[4] {
 		return nil, &NotFoundError{label: vendor.Label}
 	}
 	return nil, &NotLoadedError{edge: "vendor"}
@@ -130,7 +142,7 @@ func (e VendorProfileEdges) VendorOrErr() (*Vendor, error) {
 // VendorProfilePostalAddressesOrErr returns the VendorProfilePostalAddresses value or an error if the edge
 // was not loaded in eager-loading.
 func (e VendorProfileEdges) VendorProfilePostalAddressesOrErr() ([]*VendorProfilePostalAddress, error) {
-	if e.loadedTypes[4] {
+	if e.loadedTypes[5] {
 		return e.VendorProfilePostalAddresses, nil
 	}
 	return nil, &NotLoadedError{edge: "vendor_profile_postal_addresses"}
@@ -139,7 +151,7 @@ func (e VendorProfileEdges) VendorProfilePostalAddressesOrErr() ([]*VendorProfil
 // VendorProfilePhoneNumbersOrErr returns the VendorProfilePhoneNumbers value or an error if the edge
 // was not loaded in eager-loading.
 func (e VendorProfileEdges) VendorProfilePhoneNumbersOrErr() ([]*VendorProfilePhoneNumber, error) {
-	if e.loadedTypes[5] {
+	if e.loadedTypes[6] {
 		return e.VendorProfilePhoneNumbers, nil
 	}
 	return nil, &NotLoadedError{edge: "vendor_profile_phone_numbers"}
@@ -309,6 +321,11 @@ func (vp *VendorProfile) QueryPhoneNumbers() *PhoneNumberQuery {
 	return NewVendorProfileClient(vp.config).QueryPhoneNumbers(vp)
 }
 
+// QueryPaymentPreferences queries the "payment_preferences" edge of the VendorProfile entity.
+func (vp *VendorProfile) QueryPaymentPreferences() *VendorProfilePaymentPreferenceQuery {
+	return NewVendorProfileClient(vp.config).QueryPaymentPreferences(vp)
+}
+
 // QueryVendor queries the "vendor" edge of the VendorProfile entity.
 func (vp *VendorProfile) QueryVendor() *VendorQuery {
 	return NewVendorProfileClient(vp.config).QueryVendor(vp)
@@ -445,6 +462,30 @@ func (vp *VendorProfile) appendNamedPhoneNumbers(name string, edges ...*PhoneNum
 		vp.Edges.namedPhoneNumbers[name] = []*PhoneNumber{}
 	} else {
 		vp.Edges.namedPhoneNumbers[name] = append(vp.Edges.namedPhoneNumbers[name], edges...)
+	}
+}
+
+// NamedPaymentPreferences returns the PaymentPreferences named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (vp *VendorProfile) NamedPaymentPreferences(name string) ([]*VendorProfilePaymentPreference, error) {
+	if vp.Edges.namedPaymentPreferences == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := vp.Edges.namedPaymentPreferences[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (vp *VendorProfile) appendNamedPaymentPreferences(name string, edges ...*VendorProfilePaymentPreference) {
+	if vp.Edges.namedPaymentPreferences == nil {
+		vp.Edges.namedPaymentPreferences = make(map[string][]*VendorProfilePaymentPreference)
+	}
+	if len(edges) == 0 {
+		vp.Edges.namedPaymentPreferences[name] = []*VendorProfilePaymentPreference{}
+	} else {
+		vp.Edges.namedPaymentPreferences[name] = append(vp.Edges.namedPaymentPreferences[name], edges...)
 	}
 }
 

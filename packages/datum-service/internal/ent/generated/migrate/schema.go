@@ -1914,9 +1914,14 @@ var (
 		},
 		Indexes: []*schema.Index{
 			{
-				Name:    "phonenumber_number",
+				Name:    "phonenumber_owner_id_region_code_short_code",
 				Unique:  true,
-				Columns: []*schema.Column{PhoneNumbersColumns[12]},
+				Columns: []*schema.Column{PhoneNumbersColumns[14], PhoneNumbersColumns[10], PhoneNumbersColumns[11]},
+			},
+			{
+				Name:    "phonenumber_owner_id_number",
+				Unique:  true,
+				Columns: []*schema.Column{PhoneNumbersColumns[14], PhoneNumbersColumns[12]},
 			},
 		},
 	}
@@ -2529,6 +2534,81 @@ var (
 				Name:    "vendorprofilehistory_history_time",
 				Unique:  false,
 				Columns: []*schema.Column{VendorProfileHistoryColumns[1]},
+			},
+		},
+	}
+	// VendorProfilePaymentPreferencesColumns holds the columns for the "vendor_profile_payment_preferences" table.
+	VendorProfilePaymentPreferencesColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "mapping_id", Type: field.TypeString, Unique: true},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+		{Name: "preferred", Type: field.TypeBool, Default: false},
+		{Name: "method", Type: field.TypeEnum, Enums: []string{"DOMESTIC_WIRE_TRANSFER", "INTERNATIONAL_WIRE_TRANSFER", "ACH", "CREDIT_CARD", "UNSPECIFIED"}, Default: "UNSPECIFIED"},
+		{Name: "owner_id", Type: field.TypeString, Nullable: true},
+		{Name: "vendor_profile_id", Type: field.TypeString, Nullable: true},
+	}
+	// VendorProfilePaymentPreferencesTable holds the schema information for the "vendor_profile_payment_preferences" table.
+	VendorProfilePaymentPreferencesTable = &schema.Table{
+		Name:       "vendor_profile_payment_preferences",
+		Columns:    VendorProfilePaymentPreferencesColumns,
+		PrimaryKey: []*schema.Column{VendorProfilePaymentPreferencesColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "vendor_profile_payment_preferences_organizations_vendor_profile_payment_preferences",
+				Columns:    []*schema.Column{VendorProfilePaymentPreferencesColumns[11]},
+				RefColumns: []*schema.Column{OrganizationsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "vendor_profile_payment_preferences_vendor_profiles_payment_preferences",
+				Columns:    []*schema.Column{VendorProfilePaymentPreferencesColumns[12]},
+				RefColumns: []*schema.Column{VendorProfilesColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
+		Indexes: []*schema.Index{
+			{
+				Name:    "vendorprofilepaymentpreference_vendor_profile_id_preferred",
+				Unique:  true,
+				Columns: []*schema.Column{VendorProfilePaymentPreferencesColumns[12], VendorProfilePaymentPreferencesColumns[9]},
+			},
+		},
+	}
+	// VendorProfilePaymentPreferenceHistoryColumns holds the columns for the "vendor_profile_payment_preference_history" table.
+	VendorProfilePaymentPreferenceHistoryColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "history_time", Type: field.TypeTime},
+		{Name: "ref", Type: field.TypeString, Nullable: true},
+		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
+		{Name: "mapping_id", Type: field.TypeString},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+		{Name: "owner_id", Type: field.TypeString, Nullable: true},
+		{Name: "vendor_profile_id", Type: field.TypeString, Nullable: true},
+		{Name: "preferred", Type: field.TypeBool, Default: false},
+		{Name: "method", Type: field.TypeEnum, Enums: []string{"DOMESTIC_WIRE_TRANSFER", "INTERNATIONAL_WIRE_TRANSFER", "ACH", "CREDIT_CARD", "UNSPECIFIED"}, Default: "UNSPECIFIED"},
+	}
+	// VendorProfilePaymentPreferenceHistoryTable holds the schema information for the "vendor_profile_payment_preference_history" table.
+	VendorProfilePaymentPreferenceHistoryTable = &schema.Table{
+		Name:       "vendor_profile_payment_preference_history",
+		Columns:    VendorProfilePaymentPreferenceHistoryColumns,
+		PrimaryKey: []*schema.Column{VendorProfilePaymentPreferenceHistoryColumns[0]},
+		Indexes: []*schema.Index{
+			{
+				Name:    "vendorprofilepaymentpreferencehistory_history_time",
+				Unique:  false,
+				Columns: []*schema.Column{VendorProfilePaymentPreferenceHistoryColumns[1]},
 			},
 		},
 	}
@@ -3511,6 +3591,8 @@ var (
 		VendorHistoryTable,
 		VendorProfilesTable,
 		VendorProfileHistoryTable,
+		VendorProfilePaymentPreferencesTable,
+		VendorProfilePaymentPreferenceHistoryTable,
 		VendorProfilePhoneNumbersTable,
 		VendorProfilePhoneNumberHistoryTable,
 		VendorProfilePostalAddressesTable,
@@ -3690,6 +3772,11 @@ func init() {
 	VendorProfilesTable.ForeignKeys[1].RefTable = VendorsTable
 	VendorProfileHistoryTable.Annotation = &entsql.Annotation{
 		Table: "vendor_profile_history",
+	}
+	VendorProfilePaymentPreferencesTable.ForeignKeys[0].RefTable = OrganizationsTable
+	VendorProfilePaymentPreferencesTable.ForeignKeys[1].RefTable = VendorProfilesTable
+	VendorProfilePaymentPreferenceHistoryTable.Annotation = &entsql.Annotation{
+		Table: "vendor_profile_payment_preference_history",
 	}
 	VendorProfilePhoneNumbersTable.ForeignKeys[0].RefTable = PhoneNumbersTable
 	VendorProfilePhoneNumbersTable.ForeignKeys[1].RefTable = VendorProfilesTable

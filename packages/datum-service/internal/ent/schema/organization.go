@@ -173,6 +173,8 @@ func (Organization) Edges() []ent.Edge {
 			Annotations(entx.CascadeAnnotationField("Owner")),
 		edge.To("phone_numbers", PhoneNumber.Type).
 			Annotations(entx.CascadeAnnotationField("Owner")),
+		edge.To("vendor_profile_payment_preferences", VendorProfilePaymentPreference.Type).
+			Annotations(entx.CascadeAnnotationField("Owner")),
 	}
 }
 

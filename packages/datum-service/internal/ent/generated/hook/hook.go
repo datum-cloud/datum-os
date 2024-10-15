@@ -801,6 +801,30 @@ func (f VendorProfileHistoryFunc) Mutate(ctx context.Context, m generated.Mutati
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.VendorProfileHistoryMutation", m)
 }
 
+// The VendorProfilePaymentPreferenceFunc type is an adapter to allow the use of ordinary
+// function as VendorProfilePaymentPreference mutator.
+type VendorProfilePaymentPreferenceFunc func(context.Context, *generated.VendorProfilePaymentPreferenceMutation) (generated.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f VendorProfilePaymentPreferenceFunc) Mutate(ctx context.Context, m generated.Mutation) (generated.Value, error) {
+	if mv, ok := m.(*generated.VendorProfilePaymentPreferenceMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.VendorProfilePaymentPreferenceMutation", m)
+}
+
+// The VendorProfilePaymentPreferenceHistoryFunc type is an adapter to allow the use of ordinary
+// function as VendorProfilePaymentPreferenceHistory mutator.
+type VendorProfilePaymentPreferenceHistoryFunc func(context.Context, *generated.VendorProfilePaymentPreferenceHistoryMutation) (generated.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f VendorProfilePaymentPreferenceHistoryFunc) Mutate(ctx context.Context, m generated.Mutation) (generated.Value, error) {
+	if mv, ok := m.(*generated.VendorProfilePaymentPreferenceHistoryMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.VendorProfilePaymentPreferenceHistoryMutation", m)
+}
+
 // The VendorProfilePhoneNumberFunc type is an adapter to allow the use of ordinary
 // function as VendorProfilePhoneNumber mutator.
 type VendorProfilePhoneNumberFunc func(context.Context, *generated.VendorProfilePhoneNumberMutation) (generated.Value, error)

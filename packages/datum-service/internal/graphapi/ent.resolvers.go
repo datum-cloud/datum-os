@@ -510,6 +510,28 @@ func (r *queryResolver) VendorProfileHistories(ctx context.Context, after *entgq
 		generated.WithVendorProfileHistoryFilter(where.Filter))
 }
 
+// VendorProfilePaymentPreferences is the resolver for the vendorProfilePaymentPreferences field.
+func (r *queryResolver) VendorProfilePaymentPreferences(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.VendorProfilePaymentPreferenceWhereInput) (*generated.VendorProfilePaymentPreferenceConnection, error) {
+	return withTransactionalMutation(ctx).VendorProfilePaymentPreference.Query().Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithVendorProfilePaymentPreferenceFilter(where.Filter))
+}
+
+// VendorProfilePaymentPreferenceHistories is the resolver for the vendorProfilePaymentPreferenceHistories field.
+func (r *queryResolver) VendorProfilePaymentPreferenceHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.VendorProfilePaymentPreferenceHistoryWhereInput) (*generated.VendorProfilePaymentPreferenceHistoryConnection, error) {
+	return withTransactionalMutation(ctx).VendorProfilePaymentPreferenceHistory.Query().Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithVendorProfilePaymentPreferenceHistoryFilter(where.Filter))
+}
+
 // VendorProfilePhoneNumbers is the resolver for the vendorProfilePhoneNumbers field.
 func (r *queryResolver) VendorProfilePhoneNumbers(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.VendorProfilePhoneNumberWhereInput) (*generated.VendorProfilePhoneNumberConnection, error) {
 	return withTransactionalMutation(ctx).VendorProfilePhoneNumber.Query().Paginate(

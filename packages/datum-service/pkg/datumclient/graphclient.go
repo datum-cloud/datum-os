@@ -295,6 +295,15 @@ type DatumGraphClient interface {
 	UpdateVendorProfile(ctx context.Context, updateVendorProfileID string, input UpdateVendorProfileInput, interceptors ...clientv2.RequestInterceptor) (*UpdateVendorProfile, error)
 	GetAllVendorProfileHistories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllVendorProfileHistories, error)
 	GetVendorProfileHistories(ctx context.Context, where *VendorProfileHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetVendorProfileHistories, error)
+	CreateBulkCSVVendorProfilePaymentPreference(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVVendorProfilePaymentPreference, error)
+	CreateBulkVendorProfilePaymentPreference(ctx context.Context, input []*CreateVendorProfilePaymentPreferenceInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkVendorProfilePaymentPreference, error)
+	CreateVendorProfilePaymentPreference(ctx context.Context, input CreateVendorProfilePaymentPreferenceInput, interceptors ...clientv2.RequestInterceptor) (*CreateVendorProfilePaymentPreference, error)
+	GetAllVendorProfilePaymentPreferences(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllVendorProfilePaymentPreferences, error)
+	GetVendorProfilePaymentPreferenceByID(ctx context.Context, vendorProfilePaymentPreferenceID string, interceptors ...clientv2.RequestInterceptor) (*GetVendorProfilePaymentPreferenceByID, error)
+	GetVendorProfilePaymentPreferences(ctx context.Context, where *VendorProfilePaymentPreferenceWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetVendorProfilePaymentPreferences, error)
+	UpdateVendorProfilePaymentPreference(ctx context.Context, updateVendorProfilePaymentPreferenceID string, input UpdateVendorProfilePaymentPreferenceInput, interceptors ...clientv2.RequestInterceptor) (*UpdateVendorProfilePaymentPreference, error)
+	GetAllVendorProfilePaymentPreferenceHistories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllVendorProfilePaymentPreferenceHistories, error)
+	GetVendorProfilePaymentPreferenceHistories(ctx context.Context, where *VendorProfilePaymentPreferenceHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetVendorProfilePaymentPreferenceHistories, error)
 	CreateBulkCSVVendorProfilePhoneNumber(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVVendorProfilePhoneNumber, error)
 	CreateBulkVendorProfilePhoneNumber(ctx context.Context, input []*CreateVendorProfilePhoneNumberInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkVendorProfilePhoneNumber, error)
 	CreateVendorProfilePhoneNumber(ctx context.Context, input CreateVendorProfilePhoneNumberInput, interceptors ...clientv2.RequestInterceptor) (*CreateVendorProfilePhoneNumber, error)
@@ -32285,6 +32294,846 @@ func (t *GetVendorProfileHistories_VendorProfileHistories) GetEdges() []*GetVend
 	return t.Edges
 }
 
+type CreateBulkCSVVendorProfilePaymentPreference_CreateBulkCSVVendorProfilePaymentPreference_VendorProfilePaymentPreferences struct {
+	CreatedAt       *time.Time          "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy       *string             "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID              string              "json:\"id\" graphql:\"id\""
+	Method          enums.PaymentMethod "json:\"method\" graphql:\"method\""
+	OwnerID         *string             "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Preferred       bool                "json:\"preferred\" graphql:\"preferred\""
+	Tags            []string            "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt       *time.Time          "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy       *string             "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	VendorProfileID *string             "json:\"vendorProfileID,omitempty\" graphql:\"vendorProfileID\""
+}
+
+func (t *CreateBulkCSVVendorProfilePaymentPreference_CreateBulkCSVVendorProfilePaymentPreference_VendorProfilePaymentPreferences) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkCSVVendorProfilePaymentPreference_CreateBulkCSVVendorProfilePaymentPreference_VendorProfilePaymentPreferences{}
+	}
+	return t.CreatedAt
+}
+func (t *CreateBulkCSVVendorProfilePaymentPreference_CreateBulkCSVVendorProfilePaymentPreference_VendorProfilePaymentPreferences) GetCreatedBy() *string {
+	if t == nil {
+		t = &CreateBulkCSVVendorProfilePaymentPreference_CreateBulkCSVVendorProfilePaymentPreference_VendorProfilePaymentPreferences{}
+	}
+	return t.CreatedBy
+}
+func (t *CreateBulkCSVVendorProfilePaymentPreference_CreateBulkCSVVendorProfilePaymentPreference_VendorProfilePaymentPreferences) GetID() string {
+	if t == nil {
+		t = &CreateBulkCSVVendorProfilePaymentPreference_CreateBulkCSVVendorProfilePaymentPreference_VendorProfilePaymentPreferences{}
+	}
+	return t.ID
+}
+func (t *CreateBulkCSVVendorProfilePaymentPreference_CreateBulkCSVVendorProfilePaymentPreference_VendorProfilePaymentPreferences) GetMethod() *enums.PaymentMethod {
+	if t == nil {
+		t = &CreateBulkCSVVendorProfilePaymentPreference_CreateBulkCSVVendorProfilePaymentPreference_VendorProfilePaymentPreferences{}
+	}
+	return &t.Method
+}
+func (t *CreateBulkCSVVendorProfilePaymentPreference_CreateBulkCSVVendorProfilePaymentPreference_VendorProfilePaymentPreferences) GetOwnerID() *string {
+	if t == nil {
+		t = &CreateBulkCSVVendorProfilePaymentPreference_CreateBulkCSVVendorProfilePaymentPreference_VendorProfilePaymentPreferences{}
+	}
+	return t.OwnerID
+}
+func (t *CreateBulkCSVVendorProfilePaymentPreference_CreateBulkCSVVendorProfilePaymentPreference_VendorProfilePaymentPreferences) GetPreferred() bool {
+	if t == nil {
+		t = &CreateBulkCSVVendorProfilePaymentPreference_CreateBulkCSVVendorProfilePaymentPreference_VendorProfilePaymentPreferences{}
+	}
+	return t.Preferred
+}
+func (t *CreateBulkCSVVendorProfilePaymentPreference_CreateBulkCSVVendorProfilePaymentPreference_VendorProfilePaymentPreferences) GetTags() []string {
+	if t == nil {
+		t = &CreateBulkCSVVendorProfilePaymentPreference_CreateBulkCSVVendorProfilePaymentPreference_VendorProfilePaymentPreferences{}
+	}
+	return t.Tags
+}
+func (t *CreateBulkCSVVendorProfilePaymentPreference_CreateBulkCSVVendorProfilePaymentPreference_VendorProfilePaymentPreferences) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkCSVVendorProfilePaymentPreference_CreateBulkCSVVendorProfilePaymentPreference_VendorProfilePaymentPreferences{}
+	}
+	return t.UpdatedAt
+}
+func (t *CreateBulkCSVVendorProfilePaymentPreference_CreateBulkCSVVendorProfilePaymentPreference_VendorProfilePaymentPreferences) GetUpdatedBy() *string {
+	if t == nil {
+		t = &CreateBulkCSVVendorProfilePaymentPreference_CreateBulkCSVVendorProfilePaymentPreference_VendorProfilePaymentPreferences{}
+	}
+	return t.UpdatedBy
+}
+func (t *CreateBulkCSVVendorProfilePaymentPreference_CreateBulkCSVVendorProfilePaymentPreference_VendorProfilePaymentPreferences) GetVendorProfileID() *string {
+	if t == nil {
+		t = &CreateBulkCSVVendorProfilePaymentPreference_CreateBulkCSVVendorProfilePaymentPreference_VendorProfilePaymentPreferences{}
+	}
+	return t.VendorProfileID
+}
+
+type CreateBulkCSVVendorProfilePaymentPreference_CreateBulkCSVVendorProfilePaymentPreference struct {
+	VendorProfilePaymentPreferences []*CreateBulkCSVVendorProfilePaymentPreference_CreateBulkCSVVendorProfilePaymentPreference_VendorProfilePaymentPreferences "json:\"vendorProfilePaymentPreferences,omitempty\" graphql:\"vendorProfilePaymentPreferences\""
+}
+
+func (t *CreateBulkCSVVendorProfilePaymentPreference_CreateBulkCSVVendorProfilePaymentPreference) GetVendorProfilePaymentPreferences() []*CreateBulkCSVVendorProfilePaymentPreference_CreateBulkCSVVendorProfilePaymentPreference_VendorProfilePaymentPreferences {
+	if t == nil {
+		t = &CreateBulkCSVVendorProfilePaymentPreference_CreateBulkCSVVendorProfilePaymentPreference{}
+	}
+	return t.VendorProfilePaymentPreferences
+}
+
+type CreateBulkVendorProfilePaymentPreference_CreateBulkVendorProfilePaymentPreference_VendorProfilePaymentPreferences struct {
+	CreatedAt       *time.Time          "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy       *string             "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID              string              "json:\"id\" graphql:\"id\""
+	Method          enums.PaymentMethod "json:\"method\" graphql:\"method\""
+	OwnerID         *string             "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Preferred       bool                "json:\"preferred\" graphql:\"preferred\""
+	Tags            []string            "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt       *time.Time          "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy       *string             "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	VendorProfileID *string             "json:\"vendorProfileID,omitempty\" graphql:\"vendorProfileID\""
+}
+
+func (t *CreateBulkVendorProfilePaymentPreference_CreateBulkVendorProfilePaymentPreference_VendorProfilePaymentPreferences) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkVendorProfilePaymentPreference_CreateBulkVendorProfilePaymentPreference_VendorProfilePaymentPreferences{}
+	}
+	return t.CreatedAt
+}
+func (t *CreateBulkVendorProfilePaymentPreference_CreateBulkVendorProfilePaymentPreference_VendorProfilePaymentPreferences) GetCreatedBy() *string {
+	if t == nil {
+		t = &CreateBulkVendorProfilePaymentPreference_CreateBulkVendorProfilePaymentPreference_VendorProfilePaymentPreferences{}
+	}
+	return t.CreatedBy
+}
+func (t *CreateBulkVendorProfilePaymentPreference_CreateBulkVendorProfilePaymentPreference_VendorProfilePaymentPreferences) GetID() string {
+	if t == nil {
+		t = &CreateBulkVendorProfilePaymentPreference_CreateBulkVendorProfilePaymentPreference_VendorProfilePaymentPreferences{}
+	}
+	return t.ID
+}
+func (t *CreateBulkVendorProfilePaymentPreference_CreateBulkVendorProfilePaymentPreference_VendorProfilePaymentPreferences) GetMethod() *enums.PaymentMethod {
+	if t == nil {
+		t = &CreateBulkVendorProfilePaymentPreference_CreateBulkVendorProfilePaymentPreference_VendorProfilePaymentPreferences{}
+	}
+	return &t.Method
+}
+func (t *CreateBulkVendorProfilePaymentPreference_CreateBulkVendorProfilePaymentPreference_VendorProfilePaymentPreferences) GetOwnerID() *string {
+	if t == nil {
+		t = &CreateBulkVendorProfilePaymentPreference_CreateBulkVendorProfilePaymentPreference_VendorProfilePaymentPreferences{}
+	}
+	return t.OwnerID
+}
+func (t *CreateBulkVendorProfilePaymentPreference_CreateBulkVendorProfilePaymentPreference_VendorProfilePaymentPreferences) GetPreferred() bool {
+	if t == nil {
+		t = &CreateBulkVendorProfilePaymentPreference_CreateBulkVendorProfilePaymentPreference_VendorProfilePaymentPreferences{}
+	}
+	return t.Preferred
+}
+func (t *CreateBulkVendorProfilePaymentPreference_CreateBulkVendorProfilePaymentPreference_VendorProfilePaymentPreferences) GetTags() []string {
+	if t == nil {
+		t = &CreateBulkVendorProfilePaymentPreference_CreateBulkVendorProfilePaymentPreference_VendorProfilePaymentPreferences{}
+	}
+	return t.Tags
+}
+func (t *CreateBulkVendorProfilePaymentPreference_CreateBulkVendorProfilePaymentPreference_VendorProfilePaymentPreferences) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkVendorProfilePaymentPreference_CreateBulkVendorProfilePaymentPreference_VendorProfilePaymentPreferences{}
+	}
+	return t.UpdatedAt
+}
+func (t *CreateBulkVendorProfilePaymentPreference_CreateBulkVendorProfilePaymentPreference_VendorProfilePaymentPreferences) GetUpdatedBy() *string {
+	if t == nil {
+		t = &CreateBulkVendorProfilePaymentPreference_CreateBulkVendorProfilePaymentPreference_VendorProfilePaymentPreferences{}
+	}
+	return t.UpdatedBy
+}
+func (t *CreateBulkVendorProfilePaymentPreference_CreateBulkVendorProfilePaymentPreference_VendorProfilePaymentPreferences) GetVendorProfileID() *string {
+	if t == nil {
+		t = &CreateBulkVendorProfilePaymentPreference_CreateBulkVendorProfilePaymentPreference_VendorProfilePaymentPreferences{}
+	}
+	return t.VendorProfileID
+}
+
+type CreateBulkVendorProfilePaymentPreference_CreateBulkVendorProfilePaymentPreference struct {
+	VendorProfilePaymentPreferences []*CreateBulkVendorProfilePaymentPreference_CreateBulkVendorProfilePaymentPreference_VendorProfilePaymentPreferences "json:\"vendorProfilePaymentPreferences,omitempty\" graphql:\"vendorProfilePaymentPreferences\""
+}
+
+func (t *CreateBulkVendorProfilePaymentPreference_CreateBulkVendorProfilePaymentPreference) GetVendorProfilePaymentPreferences() []*CreateBulkVendorProfilePaymentPreference_CreateBulkVendorProfilePaymentPreference_VendorProfilePaymentPreferences {
+	if t == nil {
+		t = &CreateBulkVendorProfilePaymentPreference_CreateBulkVendorProfilePaymentPreference{}
+	}
+	return t.VendorProfilePaymentPreferences
+}
+
+type CreateVendorProfilePaymentPreference_CreateVendorProfilePaymentPreference_VendorProfilePaymentPreference struct {
+	CreatedAt       *time.Time          "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy       *string             "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID              string              "json:\"id\" graphql:\"id\""
+	Method          enums.PaymentMethod "json:\"method\" graphql:\"method\""
+	OwnerID         *string             "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Preferred       bool                "json:\"preferred\" graphql:\"preferred\""
+	Tags            []string            "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt       *time.Time          "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy       *string             "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	VendorProfileID *string             "json:\"vendorProfileID,omitempty\" graphql:\"vendorProfileID\""
+}
+
+func (t *CreateVendorProfilePaymentPreference_CreateVendorProfilePaymentPreference_VendorProfilePaymentPreference) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &CreateVendorProfilePaymentPreference_CreateVendorProfilePaymentPreference_VendorProfilePaymentPreference{}
+	}
+	return t.CreatedAt
+}
+func (t *CreateVendorProfilePaymentPreference_CreateVendorProfilePaymentPreference_VendorProfilePaymentPreference) GetCreatedBy() *string {
+	if t == nil {
+		t = &CreateVendorProfilePaymentPreference_CreateVendorProfilePaymentPreference_VendorProfilePaymentPreference{}
+	}
+	return t.CreatedBy
+}
+func (t *CreateVendorProfilePaymentPreference_CreateVendorProfilePaymentPreference_VendorProfilePaymentPreference) GetID() string {
+	if t == nil {
+		t = &CreateVendorProfilePaymentPreference_CreateVendorProfilePaymentPreference_VendorProfilePaymentPreference{}
+	}
+	return t.ID
+}
+func (t *CreateVendorProfilePaymentPreference_CreateVendorProfilePaymentPreference_VendorProfilePaymentPreference) GetMethod() *enums.PaymentMethod {
+	if t == nil {
+		t = &CreateVendorProfilePaymentPreference_CreateVendorProfilePaymentPreference_VendorProfilePaymentPreference{}
+	}
+	return &t.Method
+}
+func (t *CreateVendorProfilePaymentPreference_CreateVendorProfilePaymentPreference_VendorProfilePaymentPreference) GetOwnerID() *string {
+	if t == nil {
+		t = &CreateVendorProfilePaymentPreference_CreateVendorProfilePaymentPreference_VendorProfilePaymentPreference{}
+	}
+	return t.OwnerID
+}
+func (t *CreateVendorProfilePaymentPreference_CreateVendorProfilePaymentPreference_VendorProfilePaymentPreference) GetPreferred() bool {
+	if t == nil {
+		t = &CreateVendorProfilePaymentPreference_CreateVendorProfilePaymentPreference_VendorProfilePaymentPreference{}
+	}
+	return t.Preferred
+}
+func (t *CreateVendorProfilePaymentPreference_CreateVendorProfilePaymentPreference_VendorProfilePaymentPreference) GetTags() []string {
+	if t == nil {
+		t = &CreateVendorProfilePaymentPreference_CreateVendorProfilePaymentPreference_VendorProfilePaymentPreference{}
+	}
+	return t.Tags
+}
+func (t *CreateVendorProfilePaymentPreference_CreateVendorProfilePaymentPreference_VendorProfilePaymentPreference) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &CreateVendorProfilePaymentPreference_CreateVendorProfilePaymentPreference_VendorProfilePaymentPreference{}
+	}
+	return t.UpdatedAt
+}
+func (t *CreateVendorProfilePaymentPreference_CreateVendorProfilePaymentPreference_VendorProfilePaymentPreference) GetUpdatedBy() *string {
+	if t == nil {
+		t = &CreateVendorProfilePaymentPreference_CreateVendorProfilePaymentPreference_VendorProfilePaymentPreference{}
+	}
+	return t.UpdatedBy
+}
+func (t *CreateVendorProfilePaymentPreference_CreateVendorProfilePaymentPreference_VendorProfilePaymentPreference) GetVendorProfileID() *string {
+	if t == nil {
+		t = &CreateVendorProfilePaymentPreference_CreateVendorProfilePaymentPreference_VendorProfilePaymentPreference{}
+	}
+	return t.VendorProfileID
+}
+
+type CreateVendorProfilePaymentPreference_CreateVendorProfilePaymentPreference struct {
+	VendorProfilePaymentPreference CreateVendorProfilePaymentPreference_CreateVendorProfilePaymentPreference_VendorProfilePaymentPreference "json:\"vendorProfilePaymentPreference\" graphql:\"vendorProfilePaymentPreference\""
+}
+
+func (t *CreateVendorProfilePaymentPreference_CreateVendorProfilePaymentPreference) GetVendorProfilePaymentPreference() *CreateVendorProfilePaymentPreference_CreateVendorProfilePaymentPreference_VendorProfilePaymentPreference {
+	if t == nil {
+		t = &CreateVendorProfilePaymentPreference_CreateVendorProfilePaymentPreference{}
+	}
+	return &t.VendorProfilePaymentPreference
+}
+
+type GetAllVendorProfilePaymentPreferences_VendorProfilePaymentPreferences_Edges_Node struct {
+	CreatedAt       *time.Time          "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy       *string             "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID              string              "json:\"id\" graphql:\"id\""
+	Method          enums.PaymentMethod "json:\"method\" graphql:\"method\""
+	OwnerID         *string             "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Preferred       bool                "json:\"preferred\" graphql:\"preferred\""
+	Tags            []string            "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt       *time.Time          "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy       *string             "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	VendorProfileID *string             "json:\"vendorProfileID,omitempty\" graphql:\"vendorProfileID\""
+}
+
+func (t *GetAllVendorProfilePaymentPreferences_VendorProfilePaymentPreferences_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllVendorProfilePaymentPreferences_VendorProfilePaymentPreferences_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetAllVendorProfilePaymentPreferences_VendorProfilePaymentPreferences_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetAllVendorProfilePaymentPreferences_VendorProfilePaymentPreferences_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetAllVendorProfilePaymentPreferences_VendorProfilePaymentPreferences_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetAllVendorProfilePaymentPreferences_VendorProfilePaymentPreferences_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetAllVendorProfilePaymentPreferences_VendorProfilePaymentPreferences_Edges_Node) GetMethod() *enums.PaymentMethod {
+	if t == nil {
+		t = &GetAllVendorProfilePaymentPreferences_VendorProfilePaymentPreferences_Edges_Node{}
+	}
+	return &t.Method
+}
+func (t *GetAllVendorProfilePaymentPreferences_VendorProfilePaymentPreferences_Edges_Node) GetOwnerID() *string {
+	if t == nil {
+		t = &GetAllVendorProfilePaymentPreferences_VendorProfilePaymentPreferences_Edges_Node{}
+	}
+	return t.OwnerID
+}
+func (t *GetAllVendorProfilePaymentPreferences_VendorProfilePaymentPreferences_Edges_Node) GetPreferred() bool {
+	if t == nil {
+		t = &GetAllVendorProfilePaymentPreferences_VendorProfilePaymentPreferences_Edges_Node{}
+	}
+	return t.Preferred
+}
+func (t *GetAllVendorProfilePaymentPreferences_VendorProfilePaymentPreferences_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &GetAllVendorProfilePaymentPreferences_VendorProfilePaymentPreferences_Edges_Node{}
+	}
+	return t.Tags
+}
+func (t *GetAllVendorProfilePaymentPreferences_VendorProfilePaymentPreferences_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllVendorProfilePaymentPreferences_VendorProfilePaymentPreferences_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetAllVendorProfilePaymentPreferences_VendorProfilePaymentPreferences_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetAllVendorProfilePaymentPreferences_VendorProfilePaymentPreferences_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+func (t *GetAllVendorProfilePaymentPreferences_VendorProfilePaymentPreferences_Edges_Node) GetVendorProfileID() *string {
+	if t == nil {
+		t = &GetAllVendorProfilePaymentPreferences_VendorProfilePaymentPreferences_Edges_Node{}
+	}
+	return t.VendorProfileID
+}
+
+type GetAllVendorProfilePaymentPreferences_VendorProfilePaymentPreferences_Edges struct {
+	Node *GetAllVendorProfilePaymentPreferences_VendorProfilePaymentPreferences_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetAllVendorProfilePaymentPreferences_VendorProfilePaymentPreferences_Edges) GetNode() *GetAllVendorProfilePaymentPreferences_VendorProfilePaymentPreferences_Edges_Node {
+	if t == nil {
+		t = &GetAllVendorProfilePaymentPreferences_VendorProfilePaymentPreferences_Edges{}
+	}
+	return t.Node
+}
+
+type GetAllVendorProfilePaymentPreferences_VendorProfilePaymentPreferences struct {
+	Edges []*GetAllVendorProfilePaymentPreferences_VendorProfilePaymentPreferences_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+}
+
+func (t *GetAllVendorProfilePaymentPreferences_VendorProfilePaymentPreferences) GetEdges() []*GetAllVendorProfilePaymentPreferences_VendorProfilePaymentPreferences_Edges {
+	if t == nil {
+		t = &GetAllVendorProfilePaymentPreferences_VendorProfilePaymentPreferences{}
+	}
+	return t.Edges
+}
+
+type GetVendorProfilePaymentPreferenceByID_VendorProfilePaymentPreference struct {
+	CreatedAt       *time.Time          "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy       *string             "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID              string              "json:\"id\" graphql:\"id\""
+	Method          enums.PaymentMethod "json:\"method\" graphql:\"method\""
+	OwnerID         *string             "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Preferred       bool                "json:\"preferred\" graphql:\"preferred\""
+	Tags            []string            "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt       *time.Time          "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy       *string             "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	VendorProfileID *string             "json:\"vendorProfileID,omitempty\" graphql:\"vendorProfileID\""
+}
+
+func (t *GetVendorProfilePaymentPreferenceByID_VendorProfilePaymentPreference) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetVendorProfilePaymentPreferenceByID_VendorProfilePaymentPreference{}
+	}
+	return t.CreatedAt
+}
+func (t *GetVendorProfilePaymentPreferenceByID_VendorProfilePaymentPreference) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetVendorProfilePaymentPreferenceByID_VendorProfilePaymentPreference{}
+	}
+	return t.CreatedBy
+}
+func (t *GetVendorProfilePaymentPreferenceByID_VendorProfilePaymentPreference) GetID() string {
+	if t == nil {
+		t = &GetVendorProfilePaymentPreferenceByID_VendorProfilePaymentPreference{}
+	}
+	return t.ID
+}
+func (t *GetVendorProfilePaymentPreferenceByID_VendorProfilePaymentPreference) GetMethod() *enums.PaymentMethod {
+	if t == nil {
+		t = &GetVendorProfilePaymentPreferenceByID_VendorProfilePaymentPreference{}
+	}
+	return &t.Method
+}
+func (t *GetVendorProfilePaymentPreferenceByID_VendorProfilePaymentPreference) GetOwnerID() *string {
+	if t == nil {
+		t = &GetVendorProfilePaymentPreferenceByID_VendorProfilePaymentPreference{}
+	}
+	return t.OwnerID
+}
+func (t *GetVendorProfilePaymentPreferenceByID_VendorProfilePaymentPreference) GetPreferred() bool {
+	if t == nil {
+		t = &GetVendorProfilePaymentPreferenceByID_VendorProfilePaymentPreference{}
+	}
+	return t.Preferred
+}
+func (t *GetVendorProfilePaymentPreferenceByID_VendorProfilePaymentPreference) GetTags() []string {
+	if t == nil {
+		t = &GetVendorProfilePaymentPreferenceByID_VendorProfilePaymentPreference{}
+	}
+	return t.Tags
+}
+func (t *GetVendorProfilePaymentPreferenceByID_VendorProfilePaymentPreference) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetVendorProfilePaymentPreferenceByID_VendorProfilePaymentPreference{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetVendorProfilePaymentPreferenceByID_VendorProfilePaymentPreference) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetVendorProfilePaymentPreferenceByID_VendorProfilePaymentPreference{}
+	}
+	return t.UpdatedBy
+}
+func (t *GetVendorProfilePaymentPreferenceByID_VendorProfilePaymentPreference) GetVendorProfileID() *string {
+	if t == nil {
+		t = &GetVendorProfilePaymentPreferenceByID_VendorProfilePaymentPreference{}
+	}
+	return t.VendorProfileID
+}
+
+type GetVendorProfilePaymentPreferences_VendorProfilePaymentPreferences_Edges_Node struct {
+	CreatedAt       *time.Time          "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy       *string             "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID              string              "json:\"id\" graphql:\"id\""
+	Method          enums.PaymentMethod "json:\"method\" graphql:\"method\""
+	OwnerID         *string             "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Preferred       bool                "json:\"preferred\" graphql:\"preferred\""
+	Tags            []string            "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt       *time.Time          "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy       *string             "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	VendorProfileID *string             "json:\"vendorProfileID,omitempty\" graphql:\"vendorProfileID\""
+}
+
+func (t *GetVendorProfilePaymentPreferences_VendorProfilePaymentPreferences_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetVendorProfilePaymentPreferences_VendorProfilePaymentPreferences_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetVendorProfilePaymentPreferences_VendorProfilePaymentPreferences_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetVendorProfilePaymentPreferences_VendorProfilePaymentPreferences_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetVendorProfilePaymentPreferences_VendorProfilePaymentPreferences_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetVendorProfilePaymentPreferences_VendorProfilePaymentPreferences_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetVendorProfilePaymentPreferences_VendorProfilePaymentPreferences_Edges_Node) GetMethod() *enums.PaymentMethod {
+	if t == nil {
+		t = &GetVendorProfilePaymentPreferences_VendorProfilePaymentPreferences_Edges_Node{}
+	}
+	return &t.Method
+}
+func (t *GetVendorProfilePaymentPreferences_VendorProfilePaymentPreferences_Edges_Node) GetOwnerID() *string {
+	if t == nil {
+		t = &GetVendorProfilePaymentPreferences_VendorProfilePaymentPreferences_Edges_Node{}
+	}
+	return t.OwnerID
+}
+func (t *GetVendorProfilePaymentPreferences_VendorProfilePaymentPreferences_Edges_Node) GetPreferred() bool {
+	if t == nil {
+		t = &GetVendorProfilePaymentPreferences_VendorProfilePaymentPreferences_Edges_Node{}
+	}
+	return t.Preferred
+}
+func (t *GetVendorProfilePaymentPreferences_VendorProfilePaymentPreferences_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &GetVendorProfilePaymentPreferences_VendorProfilePaymentPreferences_Edges_Node{}
+	}
+	return t.Tags
+}
+func (t *GetVendorProfilePaymentPreferences_VendorProfilePaymentPreferences_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetVendorProfilePaymentPreferences_VendorProfilePaymentPreferences_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetVendorProfilePaymentPreferences_VendorProfilePaymentPreferences_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetVendorProfilePaymentPreferences_VendorProfilePaymentPreferences_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+func (t *GetVendorProfilePaymentPreferences_VendorProfilePaymentPreferences_Edges_Node) GetVendorProfileID() *string {
+	if t == nil {
+		t = &GetVendorProfilePaymentPreferences_VendorProfilePaymentPreferences_Edges_Node{}
+	}
+	return t.VendorProfileID
+}
+
+type GetVendorProfilePaymentPreferences_VendorProfilePaymentPreferences_Edges struct {
+	Node *GetVendorProfilePaymentPreferences_VendorProfilePaymentPreferences_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetVendorProfilePaymentPreferences_VendorProfilePaymentPreferences_Edges) GetNode() *GetVendorProfilePaymentPreferences_VendorProfilePaymentPreferences_Edges_Node {
+	if t == nil {
+		t = &GetVendorProfilePaymentPreferences_VendorProfilePaymentPreferences_Edges{}
+	}
+	return t.Node
+}
+
+type GetVendorProfilePaymentPreferences_VendorProfilePaymentPreferences struct {
+	Edges []*GetVendorProfilePaymentPreferences_VendorProfilePaymentPreferences_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+}
+
+func (t *GetVendorProfilePaymentPreferences_VendorProfilePaymentPreferences) GetEdges() []*GetVendorProfilePaymentPreferences_VendorProfilePaymentPreferences_Edges {
+	if t == nil {
+		t = &GetVendorProfilePaymentPreferences_VendorProfilePaymentPreferences{}
+	}
+	return t.Edges
+}
+
+type UpdateVendorProfilePaymentPreference_UpdateVendorProfilePaymentPreference_VendorProfilePaymentPreference struct {
+	CreatedAt       *time.Time          "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy       *string             "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID              string              "json:\"id\" graphql:\"id\""
+	Method          enums.PaymentMethod "json:\"method\" graphql:\"method\""
+	OwnerID         *string             "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Preferred       bool                "json:\"preferred\" graphql:\"preferred\""
+	Tags            []string            "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt       *time.Time          "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy       *string             "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	VendorProfileID *string             "json:\"vendorProfileID,omitempty\" graphql:\"vendorProfileID\""
+}
+
+func (t *UpdateVendorProfilePaymentPreference_UpdateVendorProfilePaymentPreference_VendorProfilePaymentPreference) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateVendorProfilePaymentPreference_UpdateVendorProfilePaymentPreference_VendorProfilePaymentPreference{}
+	}
+	return t.CreatedAt
+}
+func (t *UpdateVendorProfilePaymentPreference_UpdateVendorProfilePaymentPreference_VendorProfilePaymentPreference) GetCreatedBy() *string {
+	if t == nil {
+		t = &UpdateVendorProfilePaymentPreference_UpdateVendorProfilePaymentPreference_VendorProfilePaymentPreference{}
+	}
+	return t.CreatedBy
+}
+func (t *UpdateVendorProfilePaymentPreference_UpdateVendorProfilePaymentPreference_VendorProfilePaymentPreference) GetID() string {
+	if t == nil {
+		t = &UpdateVendorProfilePaymentPreference_UpdateVendorProfilePaymentPreference_VendorProfilePaymentPreference{}
+	}
+	return t.ID
+}
+func (t *UpdateVendorProfilePaymentPreference_UpdateVendorProfilePaymentPreference_VendorProfilePaymentPreference) GetMethod() *enums.PaymentMethod {
+	if t == nil {
+		t = &UpdateVendorProfilePaymentPreference_UpdateVendorProfilePaymentPreference_VendorProfilePaymentPreference{}
+	}
+	return &t.Method
+}
+func (t *UpdateVendorProfilePaymentPreference_UpdateVendorProfilePaymentPreference_VendorProfilePaymentPreference) GetOwnerID() *string {
+	if t == nil {
+		t = &UpdateVendorProfilePaymentPreference_UpdateVendorProfilePaymentPreference_VendorProfilePaymentPreference{}
+	}
+	return t.OwnerID
+}
+func (t *UpdateVendorProfilePaymentPreference_UpdateVendorProfilePaymentPreference_VendorProfilePaymentPreference) GetPreferred() bool {
+	if t == nil {
+		t = &UpdateVendorProfilePaymentPreference_UpdateVendorProfilePaymentPreference_VendorProfilePaymentPreference{}
+	}
+	return t.Preferred
+}
+func (t *UpdateVendorProfilePaymentPreference_UpdateVendorProfilePaymentPreference_VendorProfilePaymentPreference) GetTags() []string {
+	if t == nil {
+		t = &UpdateVendorProfilePaymentPreference_UpdateVendorProfilePaymentPreference_VendorProfilePaymentPreference{}
+	}
+	return t.Tags
+}
+func (t *UpdateVendorProfilePaymentPreference_UpdateVendorProfilePaymentPreference_VendorProfilePaymentPreference) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateVendorProfilePaymentPreference_UpdateVendorProfilePaymentPreference_VendorProfilePaymentPreference{}
+	}
+	return t.UpdatedAt
+}
+func (t *UpdateVendorProfilePaymentPreference_UpdateVendorProfilePaymentPreference_VendorProfilePaymentPreference) GetUpdatedBy() *string {
+	if t == nil {
+		t = &UpdateVendorProfilePaymentPreference_UpdateVendorProfilePaymentPreference_VendorProfilePaymentPreference{}
+	}
+	return t.UpdatedBy
+}
+func (t *UpdateVendorProfilePaymentPreference_UpdateVendorProfilePaymentPreference_VendorProfilePaymentPreference) GetVendorProfileID() *string {
+	if t == nil {
+		t = &UpdateVendorProfilePaymentPreference_UpdateVendorProfilePaymentPreference_VendorProfilePaymentPreference{}
+	}
+	return t.VendorProfileID
+}
+
+type UpdateVendorProfilePaymentPreference_UpdateVendorProfilePaymentPreference struct {
+	VendorProfilePaymentPreference UpdateVendorProfilePaymentPreference_UpdateVendorProfilePaymentPreference_VendorProfilePaymentPreference "json:\"vendorProfilePaymentPreference\" graphql:\"vendorProfilePaymentPreference\""
+}
+
+func (t *UpdateVendorProfilePaymentPreference_UpdateVendorProfilePaymentPreference) GetVendorProfilePaymentPreference() *UpdateVendorProfilePaymentPreference_UpdateVendorProfilePaymentPreference_VendorProfilePaymentPreference {
+	if t == nil {
+		t = &UpdateVendorProfilePaymentPreference_UpdateVendorProfilePaymentPreference{}
+	}
+	return &t.VendorProfilePaymentPreference
+}
+
+type GetAllVendorProfilePaymentPreferenceHistories_VendorProfilePaymentPreferenceHistories_Edges_Node struct {
+	CreatedAt       *time.Time          "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy       *string             "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	HistoryTime     time.Time           "json:\"historyTime\" graphql:\"historyTime\""
+	ID              string              "json:\"id\" graphql:\"id\""
+	Method          enums.PaymentMethod "json:\"method\" graphql:\"method\""
+	Operation       enthistory.OpType   "json:\"operation\" graphql:\"operation\""
+	OwnerID         *string             "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Preferred       bool                "json:\"preferred\" graphql:\"preferred\""
+	Ref             *string             "json:\"ref,omitempty\" graphql:\"ref\""
+	Tags            []string            "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt       *time.Time          "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy       *string             "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	VendorProfileID *string             "json:\"vendorProfileID,omitempty\" graphql:\"vendorProfileID\""
+}
+
+func (t *GetAllVendorProfilePaymentPreferenceHistories_VendorProfilePaymentPreferenceHistories_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllVendorProfilePaymentPreferenceHistories_VendorProfilePaymentPreferenceHistories_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetAllVendorProfilePaymentPreferenceHistories_VendorProfilePaymentPreferenceHistories_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetAllVendorProfilePaymentPreferenceHistories_VendorProfilePaymentPreferenceHistories_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetAllVendorProfilePaymentPreferenceHistories_VendorProfilePaymentPreferenceHistories_Edges_Node) GetHistoryTime() *time.Time {
+	if t == nil {
+		t = &GetAllVendorProfilePaymentPreferenceHistories_VendorProfilePaymentPreferenceHistories_Edges_Node{}
+	}
+	return &t.HistoryTime
+}
+func (t *GetAllVendorProfilePaymentPreferenceHistories_VendorProfilePaymentPreferenceHistories_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetAllVendorProfilePaymentPreferenceHistories_VendorProfilePaymentPreferenceHistories_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetAllVendorProfilePaymentPreferenceHistories_VendorProfilePaymentPreferenceHistories_Edges_Node) GetMethod() *enums.PaymentMethod {
+	if t == nil {
+		t = &GetAllVendorProfilePaymentPreferenceHistories_VendorProfilePaymentPreferenceHistories_Edges_Node{}
+	}
+	return &t.Method
+}
+func (t *GetAllVendorProfilePaymentPreferenceHistories_VendorProfilePaymentPreferenceHistories_Edges_Node) GetOperation() *enthistory.OpType {
+	if t == nil {
+		t = &GetAllVendorProfilePaymentPreferenceHistories_VendorProfilePaymentPreferenceHistories_Edges_Node{}
+	}
+	return &t.Operation
+}
+func (t *GetAllVendorProfilePaymentPreferenceHistories_VendorProfilePaymentPreferenceHistories_Edges_Node) GetOwnerID() *string {
+	if t == nil {
+		t = &GetAllVendorProfilePaymentPreferenceHistories_VendorProfilePaymentPreferenceHistories_Edges_Node{}
+	}
+	return t.OwnerID
+}
+func (t *GetAllVendorProfilePaymentPreferenceHistories_VendorProfilePaymentPreferenceHistories_Edges_Node) GetPreferred() bool {
+	if t == nil {
+		t = &GetAllVendorProfilePaymentPreferenceHistories_VendorProfilePaymentPreferenceHistories_Edges_Node{}
+	}
+	return t.Preferred
+}
+func (t *GetAllVendorProfilePaymentPreferenceHistories_VendorProfilePaymentPreferenceHistories_Edges_Node) GetRef() *string {
+	if t == nil {
+		t = &GetAllVendorProfilePaymentPreferenceHistories_VendorProfilePaymentPreferenceHistories_Edges_Node{}
+	}
+	return t.Ref
+}
+func (t *GetAllVendorProfilePaymentPreferenceHistories_VendorProfilePaymentPreferenceHistories_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &GetAllVendorProfilePaymentPreferenceHistories_VendorProfilePaymentPreferenceHistories_Edges_Node{}
+	}
+	return t.Tags
+}
+func (t *GetAllVendorProfilePaymentPreferenceHistories_VendorProfilePaymentPreferenceHistories_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllVendorProfilePaymentPreferenceHistories_VendorProfilePaymentPreferenceHistories_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetAllVendorProfilePaymentPreferenceHistories_VendorProfilePaymentPreferenceHistories_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetAllVendorProfilePaymentPreferenceHistories_VendorProfilePaymentPreferenceHistories_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+func (t *GetAllVendorProfilePaymentPreferenceHistories_VendorProfilePaymentPreferenceHistories_Edges_Node) GetVendorProfileID() *string {
+	if t == nil {
+		t = &GetAllVendorProfilePaymentPreferenceHistories_VendorProfilePaymentPreferenceHistories_Edges_Node{}
+	}
+	return t.VendorProfileID
+}
+
+type GetAllVendorProfilePaymentPreferenceHistories_VendorProfilePaymentPreferenceHistories_Edges struct {
+	Node *GetAllVendorProfilePaymentPreferenceHistories_VendorProfilePaymentPreferenceHistories_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetAllVendorProfilePaymentPreferenceHistories_VendorProfilePaymentPreferenceHistories_Edges) GetNode() *GetAllVendorProfilePaymentPreferenceHistories_VendorProfilePaymentPreferenceHistories_Edges_Node {
+	if t == nil {
+		t = &GetAllVendorProfilePaymentPreferenceHistories_VendorProfilePaymentPreferenceHistories_Edges{}
+	}
+	return t.Node
+}
+
+type GetAllVendorProfilePaymentPreferenceHistories_VendorProfilePaymentPreferenceHistories struct {
+	Edges []*GetAllVendorProfilePaymentPreferenceHistories_VendorProfilePaymentPreferenceHistories_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+}
+
+func (t *GetAllVendorProfilePaymentPreferenceHistories_VendorProfilePaymentPreferenceHistories) GetEdges() []*GetAllVendorProfilePaymentPreferenceHistories_VendorProfilePaymentPreferenceHistories_Edges {
+	if t == nil {
+		t = &GetAllVendorProfilePaymentPreferenceHistories_VendorProfilePaymentPreferenceHistories{}
+	}
+	return t.Edges
+}
+
+type GetVendorProfilePaymentPreferenceHistories_VendorProfilePaymentPreferenceHistories_Edges_Node struct {
+	CreatedAt       *time.Time          "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy       *string             "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	HistoryTime     time.Time           "json:\"historyTime\" graphql:\"historyTime\""
+	ID              string              "json:\"id\" graphql:\"id\""
+	Method          enums.PaymentMethod "json:\"method\" graphql:\"method\""
+	Operation       enthistory.OpType   "json:\"operation\" graphql:\"operation\""
+	OwnerID         *string             "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Preferred       bool                "json:\"preferred\" graphql:\"preferred\""
+	Ref             *string             "json:\"ref,omitempty\" graphql:\"ref\""
+	Tags            []string            "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt       *time.Time          "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy       *string             "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	VendorProfileID *string             "json:\"vendorProfileID,omitempty\" graphql:\"vendorProfileID\""
+}
+
+func (t *GetVendorProfilePaymentPreferenceHistories_VendorProfilePaymentPreferenceHistories_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetVendorProfilePaymentPreferenceHistories_VendorProfilePaymentPreferenceHistories_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetVendorProfilePaymentPreferenceHistories_VendorProfilePaymentPreferenceHistories_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetVendorProfilePaymentPreferenceHistories_VendorProfilePaymentPreferenceHistories_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetVendorProfilePaymentPreferenceHistories_VendorProfilePaymentPreferenceHistories_Edges_Node) GetHistoryTime() *time.Time {
+	if t == nil {
+		t = &GetVendorProfilePaymentPreferenceHistories_VendorProfilePaymentPreferenceHistories_Edges_Node{}
+	}
+	return &t.HistoryTime
+}
+func (t *GetVendorProfilePaymentPreferenceHistories_VendorProfilePaymentPreferenceHistories_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetVendorProfilePaymentPreferenceHistories_VendorProfilePaymentPreferenceHistories_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetVendorProfilePaymentPreferenceHistories_VendorProfilePaymentPreferenceHistories_Edges_Node) GetMethod() *enums.PaymentMethod {
+	if t == nil {
+		t = &GetVendorProfilePaymentPreferenceHistories_VendorProfilePaymentPreferenceHistories_Edges_Node{}
+	}
+	return &t.Method
+}
+func (t *GetVendorProfilePaymentPreferenceHistories_VendorProfilePaymentPreferenceHistories_Edges_Node) GetOperation() *enthistory.OpType {
+	if t == nil {
+		t = &GetVendorProfilePaymentPreferenceHistories_VendorProfilePaymentPreferenceHistories_Edges_Node{}
+	}
+	return &t.Operation
+}
+func (t *GetVendorProfilePaymentPreferenceHistories_VendorProfilePaymentPreferenceHistories_Edges_Node) GetOwnerID() *string {
+	if t == nil {
+		t = &GetVendorProfilePaymentPreferenceHistories_VendorProfilePaymentPreferenceHistories_Edges_Node{}
+	}
+	return t.OwnerID
+}
+func (t *GetVendorProfilePaymentPreferenceHistories_VendorProfilePaymentPreferenceHistories_Edges_Node) GetPreferred() bool {
+	if t == nil {
+		t = &GetVendorProfilePaymentPreferenceHistories_VendorProfilePaymentPreferenceHistories_Edges_Node{}
+	}
+	return t.Preferred
+}
+func (t *GetVendorProfilePaymentPreferenceHistories_VendorProfilePaymentPreferenceHistories_Edges_Node) GetRef() *string {
+	if t == nil {
+		t = &GetVendorProfilePaymentPreferenceHistories_VendorProfilePaymentPreferenceHistories_Edges_Node{}
+	}
+	return t.Ref
+}
+func (t *GetVendorProfilePaymentPreferenceHistories_VendorProfilePaymentPreferenceHistories_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &GetVendorProfilePaymentPreferenceHistories_VendorProfilePaymentPreferenceHistories_Edges_Node{}
+	}
+	return t.Tags
+}
+func (t *GetVendorProfilePaymentPreferenceHistories_VendorProfilePaymentPreferenceHistories_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetVendorProfilePaymentPreferenceHistories_VendorProfilePaymentPreferenceHistories_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetVendorProfilePaymentPreferenceHistories_VendorProfilePaymentPreferenceHistories_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetVendorProfilePaymentPreferenceHistories_VendorProfilePaymentPreferenceHistories_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+func (t *GetVendorProfilePaymentPreferenceHistories_VendorProfilePaymentPreferenceHistories_Edges_Node) GetVendorProfileID() *string {
+	if t == nil {
+		t = &GetVendorProfilePaymentPreferenceHistories_VendorProfilePaymentPreferenceHistories_Edges_Node{}
+	}
+	return t.VendorProfileID
+}
+
+type GetVendorProfilePaymentPreferenceHistories_VendorProfilePaymentPreferenceHistories_Edges struct {
+	Node *GetVendorProfilePaymentPreferenceHistories_VendorProfilePaymentPreferenceHistories_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetVendorProfilePaymentPreferenceHistories_VendorProfilePaymentPreferenceHistories_Edges) GetNode() *GetVendorProfilePaymentPreferenceHistories_VendorProfilePaymentPreferenceHistories_Edges_Node {
+	if t == nil {
+		t = &GetVendorProfilePaymentPreferenceHistories_VendorProfilePaymentPreferenceHistories_Edges{}
+	}
+	return t.Node
+}
+
+type GetVendorProfilePaymentPreferenceHistories_VendorProfilePaymentPreferenceHistories struct {
+	Edges []*GetVendorProfilePaymentPreferenceHistories_VendorProfilePaymentPreferenceHistories_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+}
+
+func (t *GetVendorProfilePaymentPreferenceHistories_VendorProfilePaymentPreferenceHistories) GetEdges() []*GetVendorProfilePaymentPreferenceHistories_VendorProfilePaymentPreferenceHistories_Edges {
+	if t == nil {
+		t = &GetVendorProfilePaymentPreferenceHistories_VendorProfilePaymentPreferenceHistories{}
+	}
+	return t.Edges
+}
+
 type CreateBulkCSVVendorProfilePhoneNumber_CreateBulkCSVVendorProfilePhoneNumber_VendorProfilePhoneNumbers struct {
 	CreatedAt       *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy       *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
@@ -37653,6 +38502,105 @@ func (t *GetVendorProfileHistories) GetVendorProfileHistories() *GetVendorProfil
 		t = &GetVendorProfileHistories{}
 	}
 	return &t.VendorProfileHistories
+}
+
+type CreateBulkCSVVendorProfilePaymentPreference struct {
+	CreateBulkCSVVendorProfilePaymentPreference CreateBulkCSVVendorProfilePaymentPreference_CreateBulkCSVVendorProfilePaymentPreference "json:\"createBulkCSVVendorProfilePaymentPreference\" graphql:\"createBulkCSVVendorProfilePaymentPreference\""
+}
+
+func (t *CreateBulkCSVVendorProfilePaymentPreference) GetCreateBulkCSVVendorProfilePaymentPreference() *CreateBulkCSVVendorProfilePaymentPreference_CreateBulkCSVVendorProfilePaymentPreference {
+	if t == nil {
+		t = &CreateBulkCSVVendorProfilePaymentPreference{}
+	}
+	return &t.CreateBulkCSVVendorProfilePaymentPreference
+}
+
+type CreateBulkVendorProfilePaymentPreference struct {
+	CreateBulkVendorProfilePaymentPreference CreateBulkVendorProfilePaymentPreference_CreateBulkVendorProfilePaymentPreference "json:\"createBulkVendorProfilePaymentPreference\" graphql:\"createBulkVendorProfilePaymentPreference\""
+}
+
+func (t *CreateBulkVendorProfilePaymentPreference) GetCreateBulkVendorProfilePaymentPreference() *CreateBulkVendorProfilePaymentPreference_CreateBulkVendorProfilePaymentPreference {
+	if t == nil {
+		t = &CreateBulkVendorProfilePaymentPreference{}
+	}
+	return &t.CreateBulkVendorProfilePaymentPreference
+}
+
+type CreateVendorProfilePaymentPreference struct {
+	CreateVendorProfilePaymentPreference CreateVendorProfilePaymentPreference_CreateVendorProfilePaymentPreference "json:\"createVendorProfilePaymentPreference\" graphql:\"createVendorProfilePaymentPreference\""
+}
+
+func (t *CreateVendorProfilePaymentPreference) GetCreateVendorProfilePaymentPreference() *CreateVendorProfilePaymentPreference_CreateVendorProfilePaymentPreference {
+	if t == nil {
+		t = &CreateVendorProfilePaymentPreference{}
+	}
+	return &t.CreateVendorProfilePaymentPreference
+}
+
+type GetAllVendorProfilePaymentPreferences struct {
+	VendorProfilePaymentPreferences GetAllVendorProfilePaymentPreferences_VendorProfilePaymentPreferences "json:\"vendorProfilePaymentPreferences\" graphql:\"vendorProfilePaymentPreferences\""
+}
+
+func (t *GetAllVendorProfilePaymentPreferences) GetVendorProfilePaymentPreferences() *GetAllVendorProfilePaymentPreferences_VendorProfilePaymentPreferences {
+	if t == nil {
+		t = &GetAllVendorProfilePaymentPreferences{}
+	}
+	return &t.VendorProfilePaymentPreferences
+}
+
+type GetVendorProfilePaymentPreferenceByID struct {
+	VendorProfilePaymentPreference GetVendorProfilePaymentPreferenceByID_VendorProfilePaymentPreference "json:\"vendorProfilePaymentPreference\" graphql:\"vendorProfilePaymentPreference\""
+}
+
+func (t *GetVendorProfilePaymentPreferenceByID) GetVendorProfilePaymentPreference() *GetVendorProfilePaymentPreferenceByID_VendorProfilePaymentPreference {
+	if t == nil {
+		t = &GetVendorProfilePaymentPreferenceByID{}
+	}
+	return &t.VendorProfilePaymentPreference
+}
+
+type GetVendorProfilePaymentPreferences struct {
+	VendorProfilePaymentPreferences GetVendorProfilePaymentPreferences_VendorProfilePaymentPreferences "json:\"vendorProfilePaymentPreferences\" graphql:\"vendorProfilePaymentPreferences\""
+}
+
+func (t *GetVendorProfilePaymentPreferences) GetVendorProfilePaymentPreferences() *GetVendorProfilePaymentPreferences_VendorProfilePaymentPreferences {
+	if t == nil {
+		t = &GetVendorProfilePaymentPreferences{}
+	}
+	return &t.VendorProfilePaymentPreferences
+}
+
+type UpdateVendorProfilePaymentPreference struct {
+	UpdateVendorProfilePaymentPreference UpdateVendorProfilePaymentPreference_UpdateVendorProfilePaymentPreference "json:\"updateVendorProfilePaymentPreference\" graphql:\"updateVendorProfilePaymentPreference\""
+}
+
+func (t *UpdateVendorProfilePaymentPreference) GetUpdateVendorProfilePaymentPreference() *UpdateVendorProfilePaymentPreference_UpdateVendorProfilePaymentPreference {
+	if t == nil {
+		t = &UpdateVendorProfilePaymentPreference{}
+	}
+	return &t.UpdateVendorProfilePaymentPreference
+}
+
+type GetAllVendorProfilePaymentPreferenceHistories struct {
+	VendorProfilePaymentPreferenceHistories GetAllVendorProfilePaymentPreferenceHistories_VendorProfilePaymentPreferenceHistories "json:\"vendorProfilePaymentPreferenceHistories\" graphql:\"vendorProfilePaymentPreferenceHistories\""
+}
+
+func (t *GetAllVendorProfilePaymentPreferenceHistories) GetVendorProfilePaymentPreferenceHistories() *GetAllVendorProfilePaymentPreferenceHistories_VendorProfilePaymentPreferenceHistories {
+	if t == nil {
+		t = &GetAllVendorProfilePaymentPreferenceHistories{}
+	}
+	return &t.VendorProfilePaymentPreferenceHistories
+}
+
+type GetVendorProfilePaymentPreferenceHistories struct {
+	VendorProfilePaymentPreferenceHistories GetVendorProfilePaymentPreferenceHistories_VendorProfilePaymentPreferenceHistories "json:\"vendorProfilePaymentPreferenceHistories\" graphql:\"vendorProfilePaymentPreferenceHistories\""
+}
+
+func (t *GetVendorProfilePaymentPreferenceHistories) GetVendorProfilePaymentPreferenceHistories() *GetVendorProfilePaymentPreferenceHistories_VendorProfilePaymentPreferenceHistories {
+	if t == nil {
+		t = &GetVendorProfilePaymentPreferenceHistories{}
+	}
+	return &t.VendorProfilePaymentPreferenceHistories
 }
 
 type CreateBulkCSVVendorProfilePhoneNumber struct {
@@ -49006,6 +49954,330 @@ func (c *Client) GetVendorProfileHistories(ctx context.Context, where *VendorPro
 	return &res, nil
 }
 
+const CreateBulkCSVVendorProfilePaymentPreferenceDocument = `mutation CreateBulkCSVVendorProfilePaymentPreference ($input: Upload!) {
+	createBulkCSVVendorProfilePaymentPreference(input: $input) {
+		vendorProfilePaymentPreferences {
+			createdAt
+			createdBy
+			id
+			method
+			ownerID
+			preferred
+			tags
+			updatedAt
+			updatedBy
+			vendorProfileID
+		}
+	}
+}
+`
+
+func (c *Client) CreateBulkCSVVendorProfilePaymentPreference(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVVendorProfilePaymentPreference, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res CreateBulkCSVVendorProfilePaymentPreference
+	if err := c.Client.Post(ctx, "CreateBulkCSVVendorProfilePaymentPreference", CreateBulkCSVVendorProfilePaymentPreferenceDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const CreateBulkVendorProfilePaymentPreferenceDocument = `mutation CreateBulkVendorProfilePaymentPreference ($input: [CreateVendorProfilePaymentPreferenceInput!]) {
+	createBulkVendorProfilePaymentPreference(input: $input) {
+		vendorProfilePaymentPreferences {
+			createdAt
+			createdBy
+			id
+			method
+			ownerID
+			preferred
+			tags
+			updatedAt
+			updatedBy
+			vendorProfileID
+		}
+	}
+}
+`
+
+func (c *Client) CreateBulkVendorProfilePaymentPreference(ctx context.Context, input []*CreateVendorProfilePaymentPreferenceInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkVendorProfilePaymentPreference, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res CreateBulkVendorProfilePaymentPreference
+	if err := c.Client.Post(ctx, "CreateBulkVendorProfilePaymentPreference", CreateBulkVendorProfilePaymentPreferenceDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const CreateVendorProfilePaymentPreferenceDocument = `mutation CreateVendorProfilePaymentPreference ($input: CreateVendorProfilePaymentPreferenceInput!) {
+	createVendorProfilePaymentPreference(input: $input) {
+		vendorProfilePaymentPreference {
+			createdAt
+			createdBy
+			id
+			method
+			ownerID
+			preferred
+			tags
+			updatedAt
+			updatedBy
+			vendorProfileID
+		}
+	}
+}
+`
+
+func (c *Client) CreateVendorProfilePaymentPreference(ctx context.Context, input CreateVendorProfilePaymentPreferenceInput, interceptors ...clientv2.RequestInterceptor) (*CreateVendorProfilePaymentPreference, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res CreateVendorProfilePaymentPreference
+	if err := c.Client.Post(ctx, "CreateVendorProfilePaymentPreference", CreateVendorProfilePaymentPreferenceDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetAllVendorProfilePaymentPreferencesDocument = `query GetAllVendorProfilePaymentPreferences {
+	vendorProfilePaymentPreferences {
+		edges {
+			node {
+				createdAt
+				createdBy
+				id
+				method
+				ownerID
+				preferred
+				tags
+				updatedAt
+				updatedBy
+				vendorProfileID
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetAllVendorProfilePaymentPreferences(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllVendorProfilePaymentPreferences, error) {
+	vars := map[string]any{}
+
+	var res GetAllVendorProfilePaymentPreferences
+	if err := c.Client.Post(ctx, "GetAllVendorProfilePaymentPreferences", GetAllVendorProfilePaymentPreferencesDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetVendorProfilePaymentPreferenceByIDDocument = `query GetVendorProfilePaymentPreferenceByID ($vendorProfilePaymentPreferenceId: ID!) {
+	vendorProfilePaymentPreference(id: $vendorProfilePaymentPreferenceId) {
+		createdAt
+		createdBy
+		id
+		method
+		ownerID
+		preferred
+		tags
+		updatedAt
+		updatedBy
+		vendorProfileID
+	}
+}
+`
+
+func (c *Client) GetVendorProfilePaymentPreferenceByID(ctx context.Context, vendorProfilePaymentPreferenceID string, interceptors ...clientv2.RequestInterceptor) (*GetVendorProfilePaymentPreferenceByID, error) {
+	vars := map[string]any{
+		"vendorProfilePaymentPreferenceId": vendorProfilePaymentPreferenceID,
+	}
+
+	var res GetVendorProfilePaymentPreferenceByID
+	if err := c.Client.Post(ctx, "GetVendorProfilePaymentPreferenceByID", GetVendorProfilePaymentPreferenceByIDDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetVendorProfilePaymentPreferencesDocument = `query GetVendorProfilePaymentPreferences ($where: VendorProfilePaymentPreferenceWhereInput) {
+	vendorProfilePaymentPreferences(where: $where) {
+		edges {
+			node {
+				createdAt
+				createdBy
+				id
+				method
+				ownerID
+				preferred
+				tags
+				updatedAt
+				updatedBy
+				vendorProfileID
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetVendorProfilePaymentPreferences(ctx context.Context, where *VendorProfilePaymentPreferenceWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetVendorProfilePaymentPreferences, error) {
+	vars := map[string]any{
+		"where": where,
+	}
+
+	var res GetVendorProfilePaymentPreferences
+	if err := c.Client.Post(ctx, "GetVendorProfilePaymentPreferences", GetVendorProfilePaymentPreferencesDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const UpdateVendorProfilePaymentPreferenceDocument = `mutation UpdateVendorProfilePaymentPreference ($updateVendorProfilePaymentPreferenceId: ID!, $input: UpdateVendorProfilePaymentPreferenceInput!) {
+	updateVendorProfilePaymentPreference(id: $updateVendorProfilePaymentPreferenceId, input: $input) {
+		vendorProfilePaymentPreference {
+			createdAt
+			createdBy
+			id
+			method
+			ownerID
+			preferred
+			tags
+			updatedAt
+			updatedBy
+			vendorProfileID
+		}
+	}
+}
+`
+
+func (c *Client) UpdateVendorProfilePaymentPreference(ctx context.Context, updateVendorProfilePaymentPreferenceID string, input UpdateVendorProfilePaymentPreferenceInput, interceptors ...clientv2.RequestInterceptor) (*UpdateVendorProfilePaymentPreference, error) {
+	vars := map[string]any{
+		"updateVendorProfilePaymentPreferenceId": updateVendorProfilePaymentPreferenceID,
+		"input":                                  input,
+	}
+
+	var res UpdateVendorProfilePaymentPreference
+	if err := c.Client.Post(ctx, "UpdateVendorProfilePaymentPreference", UpdateVendorProfilePaymentPreferenceDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetAllVendorProfilePaymentPreferenceHistoriesDocument = `query GetAllVendorProfilePaymentPreferenceHistories {
+	vendorProfilePaymentPreferenceHistories {
+		edges {
+			node {
+				createdAt
+				createdBy
+				historyTime
+				id
+				method
+				operation
+				ownerID
+				preferred
+				ref
+				tags
+				updatedAt
+				updatedBy
+				vendorProfileID
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetAllVendorProfilePaymentPreferenceHistories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllVendorProfilePaymentPreferenceHistories, error) {
+	vars := map[string]any{}
+
+	var res GetAllVendorProfilePaymentPreferenceHistories
+	if err := c.Client.Post(ctx, "GetAllVendorProfilePaymentPreferenceHistories", GetAllVendorProfilePaymentPreferenceHistoriesDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetVendorProfilePaymentPreferenceHistoriesDocument = `query GetVendorProfilePaymentPreferenceHistories ($where: VendorProfilePaymentPreferenceHistoryWhereInput) {
+	vendorProfilePaymentPreferenceHistories(where: $where) {
+		edges {
+			node {
+				createdAt
+				createdBy
+				historyTime
+				id
+				method
+				operation
+				ownerID
+				preferred
+				ref
+				tags
+				updatedAt
+				updatedBy
+				vendorProfileID
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetVendorProfilePaymentPreferenceHistories(ctx context.Context, where *VendorProfilePaymentPreferenceHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetVendorProfilePaymentPreferenceHistories, error) {
+	vars := map[string]any{
+		"where": where,
+	}
+
+	var res GetVendorProfilePaymentPreferenceHistories
+	if err := c.Client.Post(ctx, "GetVendorProfilePaymentPreferenceHistories", GetVendorProfilePaymentPreferenceHistoriesDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
 const CreateBulkCSVVendorProfilePhoneNumberDocument = `mutation CreateBulkCSVVendorProfilePhoneNumber ($input: Upload!) {
 	createBulkCSVVendorProfilePhoneNumber(input: $input) {
 		vendorProfilePhoneNumbers {
@@ -49947,311 +51219,320 @@ func (c *Client) GetWebhookHistories(ctx context.Context, where *WebhookHistoryW
 }
 
 var DocumentOperationNames = map[string]string{
-	CreateAPITokenDocument:                            "CreateAPIToken",
-	UpdateAPITokenDocument:                            "UpdateAPIToken",
-	GetAllAPITokensDocument:                           "GetAllAPITokens",
-	GetAPITokenByIDDocument:                           "GetAPITokenByID",
-	DeleteAPITokenDocument:                            "DeleteAPIToken",
-	CreateBulkCSVContactDocument:                      "CreateBulkCSVContact",
-	CreateBulkContactDocument:                         "CreateBulkContact",
-	CreateContactDocument:                             "CreateContact",
-	DeleteContactDocument:                             "DeleteContact",
-	GetAllContactsDocument:                            "GetAllContacts",
-	GetContactByIDDocument:                            "GetContactByID",
-	GetContactsDocument:                               "GetContacts",
-	UpdateContactDocument:                             "UpdateContact",
-	GetAllContactHistoriesDocument:                    "GetAllContactHistories",
-	GetContactHistoriesDocument:                       "GetContactHistories",
-	CreateBulkCSVContactListDocument:                  "CreateBulkCSVContactList",
-	CreateBulkContactListDocument:                     "CreateBulkContactList",
-	CreateContactListDocument:                         "CreateContactList",
-	GetAllContactListsDocument:                        "GetAllContactLists",
-	GetContactListByIDDocument:                        "GetContactListByID",
-	GetContactListsDocument:                           "GetContactLists",
-	UpdateContactListDocument:                         "UpdateContactList",
-	GetAllContactListHistoriesDocument:                "GetAllContactListHistories",
-	GetContactListHistoriesDocument:                   "GetContactListHistories",
-	CreateBulkCSVContactListMembershipDocument:        "CreateBulkCSVContactListMembership",
-	CreateBulkContactListMembershipDocument:           "CreateBulkContactListMembership",
-	CreateContactListMembershipDocument:               "CreateContactListMembership",
-	GetAllContactListMembershipsDocument:              "GetAllContactListMemberships",
-	GetContactListMembershipByIDDocument:              "GetContactListMembershipByID",
-	GetContactListMembershipsDocument:                 "GetContactListMemberships",
-	UpdateContactListMembershipDocument:               "UpdateContactListMembership",
-	GetAllContactListMembershipHistoriesDocument:      "GetAllContactListMembershipHistories",
-	GetContactListMembershipHistoriesDocument:         "GetContactListMembershipHistories",
-	CreateDocumentDataDocument:                        "CreateDocumentData",
-	DeleteDocumentDataDocument:                        "DeleteDocumentData",
-	GetDocumentDataByIDDocument:                       "GetDocumentDataByID",
-	UpdateDocumentDataDocument:                        "UpdateDocumentData",
-	GetAllDocumentDataHistoriesDocument:               "GetAllDocumentDataHistories",
-	GetDocumentDataHistoriesDocument:                  "GetDocumentDataHistories",
-	CreateBulkCSVEntitlementDocument:                  "CreateBulkCSVEntitlement",
-	CreateBulkEntitlementDocument:                     "CreateBulkEntitlement",
-	CreateEntitlementDocument:                         "CreateEntitlement",
-	DeleteEntitlementDocument:                         "DeleteEntitlement",
-	GetAllEntitlementsDocument:                        "GetAllEntitlements",
-	GetEntitlementByIDDocument:                        "GetEntitlementByID",
-	GetEntitlementsDocument:                           "GetEntitlements",
-	UpdateEntitlementDocument:                         "UpdateEntitlement",
-	GetAllEntitlementHistoriesDocument:                "GetAllEntitlementHistories",
-	GetEntitlementHistoriesDocument:                   "GetEntitlementHistories",
-	CreateBulkCSVEntitlementPlanDocument:              "CreateBulkCSVEntitlementPlan",
-	CreateBulkEntitlementPlanDocument:                 "CreateBulkEntitlementPlan",
-	CreateEntitlementPlanDocument:                     "CreateEntitlementPlan",
-	DeleteEntitlementPlanDocument:                     "DeleteEntitlementPlan",
-	GetAllEntitlementPlansDocument:                    "GetAllEntitlementPlans",
-	GetEntitlementPlanByIDDocument:                    "GetEntitlementPlanByID",
-	GetEntitlementPlansDocument:                       "GetEntitlementPlans",
-	UpdateEntitlementPlanDocument:                     "UpdateEntitlementPlan",
-	GetAllEntitlementPlanFeaturesDocument:             "GetAllEntitlementPlanFeatures",
-	GetEntitlementPlanFeatureByIDDocument:             "GetEntitlementPlanFeatureByID",
-	GetEntitlementPlanFeaturesDocument:                "GetEntitlementPlanFeatures",
-	CreateEntitlementPlanFeatureDocument:              "CreateEntitlementPlanFeature",
-	CreateBulkCSVEntitlementPlanFeatureDocument:       "CreateBulkCSVEntitlementPlanFeature",
-	CreateBulkEntitlementPlanFeatureDocument:          "CreateBulkEntitlementPlanFeature",
-	UpdateEntitlementPlanFeatureDocument:              "UpdateEntitlementPlanFeature",
-	DeleteEntitlementPlanFeatureDocument:              "DeleteEntitlementPlanFeature",
-	GetAllEntitlementPlanFeatureHistoriesDocument:     "GetAllEntitlementPlanFeatureHistories",
-	GetEntitlementPlanFeatureHistoriesDocument:        "GetEntitlementPlanFeatureHistories",
-	GetAllEntitlementPlanHistoriesDocument:            "GetAllEntitlementPlanHistories",
-	GetEntitlementPlanHistoriesDocument:               "GetEntitlementPlanHistories",
-	CreateBulkCSVEntityDocument:                       "CreateBulkCSVEntity",
-	CreateBulkEntityDocument:                          "CreateBulkEntity",
-	CreateEntityDocument:                              "CreateEntity",
-	DeleteEntityDocument:                              "DeleteEntity",
-	GetAllEntitiesDocument:                            "GetAllEntities",
-	GetEntitiesDocument:                               "GetEntities",
-	GetEntityByIDDocument:                             "GetEntityByID",
-	UpdateEntityDocument:                              "UpdateEntity",
-	GetAllEntityHistoriesDocument:                     "GetAllEntityHistories",
-	GetEntityHistoriesDocument:                        "GetEntityHistories",
-	CreateBulkCSVEntityTypeDocument:                   "CreateBulkCSVEntityType",
-	CreateBulkEntityTypeDocument:                      "CreateBulkEntityType",
-	CreateEntityTypeDocument:                          "CreateEntityType",
-	DeleteEntityTypeDocument:                          "DeleteEntityType",
-	GetAllEntityTypesDocument:                         "GetAllEntityTypes",
-	GetEntityTypeByIDDocument:                         "GetEntityTypeByID",
-	GetEntityTypesDocument:                            "GetEntityTypes",
-	UpdateEntityTypeDocument:                          "UpdateEntityType",
-	GetAllEntityTypeHistoriesDocument:                 "GetAllEntityTypeHistories",
-	GetEntityTypeHistoriesDocument:                    "GetEntityTypeHistories",
-	GetEventsDocument:                                 "GetEvents",
-	GetEventByIDDocument:                              "GetEventByID",
-	GetAllEventsDocument:                              "GetAllEvents",
-	CreateEventDocument:                               "CreateEvent",
-	CreateBulkEventDocument:                           "CreateBulkEvent",
-	CreateBulkCSVEventDocument:                        "CreateBulkCSVEvent",
-	UpdateEventDocument:                               "UpdateEvent",
-	DeleteEventDocument:                               "DeleteEvent",
-	GetAllEventHistoriesDocument:                      "GetAllEventHistories",
-	GetEventHistoriesDocument:                         "GetEventHistories",
-	CreateBulkCSVFeatureDocument:                      "CreateBulkCSVFeature",
-	CreateBulkFeatureDocument:                         "CreateBulkFeature",
-	CreateFeatureDocument:                             "CreateFeature",
-	DeleteFeatureDocument:                             "DeleteFeature",
-	GetAllFeaturesDocument:                            "GetAllFeatures",
-	GetFeatureByIDDocument:                            "GetFeatureByID",
-	GetFeaturesDocument:                               "GetFeatures",
-	UpdateFeatureDocument:                             "UpdateFeature",
-	GetAllFeatureHistoriesDocument:                    "GetAllFeatureHistories",
-	GetFeatureHistoriesDocument:                       "GetFeatureHistories",
-	CreateBulkCSVFileDocument:                         "CreateBulkCSVFile",
-	CreateBulkFileDocument:                            "CreateBulkFile",
-	CreateFileDocument:                                "CreateFile",
-	DeleteFileDocument:                                "DeleteFile",
-	GetAllFilesDocument:                               "GetAllFiles",
-	GetFilesDocument:                                  "GetFiles",
-	UpdateFileDocument:                                "UpdateFile",
-	GetAllFileHistoriesDocument:                       "GetAllFileHistories",
-	GetFileHistoriesDocument:                          "GetFileHistories",
-	CreateBulkCSVGroupDocument:                        "CreateBulkCSVGroup",
-	CreateBulkGroupDocument:                           "CreateBulkGroup",
-	CreateGroupDocument:                               "CreateGroup",
-	DeleteGroupDocument:                               "DeleteGroup",
-	GetAllGroupsDocument:                              "GetAllGroups",
-	GetGroupByIDDocument:                              "GetGroupByID",
-	GetGroupsDocument:                                 "GetGroups",
-	UpdateGroupDocument:                               "UpdateGroup",
-	GetAllGroupHistoriesDocument:                      "GetAllGroupHistories",
-	GetGroupHistoriesDocument:                         "GetGroupHistories",
-	AddUserToGroupWithRoleDocument:                    "AddUserToGroupWithRole",
-	CreateBulkCSVGroupMembersDocument:                 "CreateBulkCSVGroupMembers",
-	CreateBulkGroupMembersDocument:                    "CreateBulkGroupMembers",
-	GetGroupMembersByGroupIDDocument:                  "GetGroupMembersByGroupID",
-	RemoveUserFromGroupDocument:                       "RemoveUserFromGroup",
-	UpdateUserRoleInGroupDocument:                     "UpdateUserRoleInGroup",
-	GetAllGroupMembershipHistoriesDocument:            "GetAllGroupMembershipHistories",
-	GetGroupMembershipHistoriesDocument:               "GetGroupMembershipHistories",
-	GetAllGroupSettingsDocument:                       "GetAllGroupSettings",
-	GetGroupSettingByIDDocument:                       "GetGroupSettingByID",
-	GetGroupSettingsDocument:                          "GetGroupSettings",
-	UpdateGroupSettingDocument:                        "UpdateGroupSetting",
-	GetAllGroupSettingHistoriesDocument:               "GetAllGroupSettingHistories",
-	GetGroupSettingHistoriesDocument:                  "GetGroupSettingHistories",
-	CreateBulkCSVHushDocument:                         "CreateBulkCSVHush",
-	CreateBulkHushDocument:                            "CreateBulkHush",
-	CreateHushDocument:                                "CreateHush",
-	GetAllHushesDocument:                              "GetAllHushes",
-	GetHushByIDDocument:                               "GetHushByID",
-	GetHushesDocument:                                 "GetHushes",
-	UpdateHushDocument:                                "UpdateHush",
-	GetAllHushHistoriesDocument:                       "GetAllHushHistories",
-	GetHushHistoriesDocument:                          "GetHushHistories",
-	CreateBulkCSVIntegrationDocument:                  "CreateBulkCSVIntegration",
-	CreateBulkIntegrationDocument:                     "CreateBulkIntegration",
-	CreateIntegrationDocument:                         "CreateIntegration",
-	DeleteIntegrationDocument:                         "DeleteIntegration",
-	GetAllIntegrationsDocument:                        "GetAllIntegrations",
-	GetIntegrationByIDDocument:                        "GetIntegrationByID",
-	GetIntegrationsDocument:                           "GetIntegrations",
-	UpdateIntegrationDocument:                         "UpdateIntegration",
-	GetAllIntegrationHistoriesDocument:                "GetAllIntegrationHistories",
-	GetIntegrationHistoriesDocument:                   "GetIntegrationHistories",
-	CreateBulkCSVInviteDocument:                       "CreateBulkCSVInvite",
-	CreateBulkInviteDocument:                          "CreateBulkInvite",
-	CreateInviteDocument:                              "CreateInvite",
-	DeleteInviteDocument:                              "DeleteInvite",
-	GetInviteByIDDocument:                             "GetInviteByID",
-	GetAllInvitesDocument:                             "GetAllInvites",
-	InvitesByOrgIDDocument:                            "InvitesByOrgID",
-	GetAllNoteHistoriesDocument:                       "GetAllNoteHistories",
-	GetNoteHistoriesDocument:                          "GetNoteHistories",
-	GetAllOauthProviderHistoriesDocument:              "GetAllOauthProviderHistories",
-	GetOauthProviderHistoriesDocument:                 "GetOauthProviderHistories",
-	CreateBulkCSVOhAuthTooTokenDocument:               "CreateBulkCSVOhAuthTooToken",
-	CreateBulkOhAuthTooTokenDocument:                  "CreateBulkOhAuthTooToken",
-	CreateOhAuthTooTokenDocument:                      "CreateOhAuthTooToken",
-	DeleteOhAuthTooTokenDocument:                      "DeleteOhAuthTooToken",
-	GetOhAuthTooTokensDocument:                        "GetOhAuthTooTokens",
-	UpdateOhAuthTooTokenDocument:                      "UpdateOhAuthTooToken",
-	CreateBulkCSVOrganizationDocument:                 "CreateBulkCSVOrganization",
-	CreateBulkOrganizationDocument:                    "CreateBulkOrganization",
-	CreateOrganizationDocument:                        "CreateOrganization",
-	DeleteOrganizationDocument:                        "DeleteOrganization",
-	GetAllOrganizationsDocument:                       "GetAllOrganizations",
-	GetOrganizationByIDDocument:                       "GetOrganizationByID",
-	GetOrganizationsDocument:                          "GetOrganizations",
-	UpdateOrganizationDocument:                        "UpdateOrganization",
-	GetAllOrganizationHistoriesDocument:               "GetAllOrganizationHistories",
-	GetOrganizationHistoriesDocument:                  "GetOrganizationHistories",
-	GetAllOrganizationSettingsDocument:                "GetAllOrganizationSettings",
-	GetOrganizationSettingByIDDocument:                "GetOrganizationSettingByID",
-	GetOrganizationSettingsDocument:                   "GetOrganizationSettings",
-	UpdateOrganizationSettingDocument:                 "UpdateOrganizationSetting",
-	GetAllOrganizationSettingHistoriesDocument:        "GetAllOrganizationSettingHistories",
-	GetOrganizationSettingHistoriesDocument:           "GetOrganizationSettingHistories",
-	AddUserToOrgWithRoleDocument:                      "AddUserToOrgWithRole",
-	CreateBulkCSVOrgMembersDocument:                   "CreateBulkCSVOrgMembers",
-	CreateBulkOrgMembersDocument:                      "CreateBulkOrgMembers",
-	GetOrgMembersByOrgIDDocument:                      "GetOrgMembersByOrgID",
-	RemoveUserFromOrgDocument:                         "RemoveUserFromOrg",
-	UpdateUserRoleInOrgDocument:                       "UpdateUserRoleInOrg",
-	GetAllOrgMembershipHistoriesDocument:              "GetAllOrgMembershipHistories",
-	GetOrgMembershipHistoriesDocument:                 "GetOrgMembershipHistories",
-	CreateBulkCSVPersonalAccessTokenDocument:          "CreateBulkCSVPersonalAccessToken",
-	CreateBulkPersonalAccessTokenDocument:             "CreateBulkPersonalAccessToken",
-	CreatePersonalAccessTokenDocument:                 "CreatePersonalAccessToken",
-	DeletePersonalAccessTokenDocument:                 "DeletePersonalAccessToken",
-	GetAllPersonalAccessTokensDocument:                "GetAllPersonalAccessTokens",
-	GetPersonalAccessTokenByIDDocument:                "GetPersonalAccessTokenByID",
-	UpdatePersonalAccessTokenDocument:                 "UpdatePersonalAccessToken",
-	CreateBulkCSVPhoneNumberDocument:                  "CreateBulkCSVPhoneNumber",
-	CreateBulkPhoneNumberDocument:                     "CreateBulkPhoneNumber",
-	CreatePhoneNumberDocument:                         "CreatePhoneNumber",
-	GetAllPhoneNumbersDocument:                        "GetAllPhoneNumbers",
-	GetPhoneNumberByIDDocument:                        "GetPhoneNumberByID",
-	GetPhoneNumbersDocument:                           "GetPhoneNumbers",
-	UpdatePhoneNumberDocument:                         "UpdatePhoneNumber",
-	GetAllPhoneNumberHistoriesDocument:                "GetAllPhoneNumberHistories",
-	GetPhoneNumberHistoriesDocument:                   "GetPhoneNumberHistories",
-	CreateBulkCSVPostalAddressDocument:                "CreateBulkCSVPostalAddress",
-	CreateBulkPostalAddressDocument:                   "CreateBulkPostalAddress",
-	CreatePostalAddressDocument:                       "CreatePostalAddress",
-	GetAllPostalAddressesDocument:                     "GetAllPostalAddresses",
-	GetPostalAddressByIDDocument:                      "GetPostalAddressByID",
-	GetPostalAddressesDocument:                        "GetPostalAddresses",
-	UpdatePostalAddressDocument:                       "UpdatePostalAddress",
-	GetAllPostalAddressHistoriesDocument:              "GetAllPostalAddressHistories",
-	GetPostalAddressHistoriesDocument:                 "GetPostalAddressHistories",
-	SearchDocument:                                    "Search",
-	CreateBulkCSVSubscriberDocument:                   "CreateBulkCSVSubscriber",
-	CreateBulkSubscriberDocument:                      "CreateBulkSubscriber",
-	CreateSubscriberDocument:                          "CreateSubscriber",
-	DeleteSubscriberDocument:                          "DeleteSubscriber",
-	GetAllSubscribersDocument:                         "GetAllSubscribers",
-	GetSubscriberByEmailDocument:                      "GetSubscriberByEmail",
-	GetSubscribersDocument:                            "GetSubscribers",
-	UpdateSubscriberDocument:                          "UpdateSubscriber",
-	CreateBulkCSVTemplateDocument:                     "CreateBulkCSVTemplate",
-	CreateBulkTemplateDocument:                        "CreateBulkTemplate",
-	CreateTemplateDocument:                            "CreateTemplate",
-	GetAllTemplatesDocument:                           "GetAllTemplates",
-	GetTemplateByIDDocument:                           "GetTemplateByID",
-	UpdateTemplateDocument:                            "UpdateTemplate",
-	GetAllTemplateHistoriesDocument:                   "GetAllTemplateHistories",
-	GetTemplateHistoriesDocument:                      "GetTemplateHistories",
-	CreateTFASettingDocument:                          "CreateTFASetting",
-	GetAllTFASettingsDocument:                         "GetAllTFASettings",
-	GetTFASettingDocument:                             "GetTFASetting",
-	UpdateTFASettingDocument:                          "UpdateTFASetting",
-	CreateUserDocument:                                "CreateUser",
-	DeleteUserDocument:                                "DeleteUser",
-	GetAllUsersDocument:                               "GetAllUsers",
-	GetUserByIDDocument:                               "GetUserByID",
-	GetUserByIDWithOrgsDocument:                       "GetUserByIDWithOrgs",
-	UpdateUserDocument:                                "UpdateUser",
-	GetAllUserHistoriesDocument:                       "GetAllUserHistories",
-	GetUserHistoriesDocument:                          "GetUserHistories",
-	GetAllUserSettingsDocument:                        "GetAllUserSettings",
-	GetUserSettingByIDDocument:                        "GetUserSettingByID",
-	GetUserSettingsDocument:                           "GetUserSettings",
-	UpdateUserSettingDocument:                         "UpdateUserSetting",
-	GetAllUserSettingHistoriesDocument:                "GetAllUserSettingHistories",
-	GetUserSettingHistoriesDocument:                   "GetUserSettingHistories",
-	CreateBulkCSVVendorDocument:                       "CreateBulkCSVVendor",
-	CreateBulkVendorDocument:                          "CreateBulkVendor",
-	CreateVendorDocument:                              "CreateVendor",
-	GetAllVendorsDocument:                             "GetAllVendors",
-	GetVendorByIDDocument:                             "GetVendorByID",
-	GetVendorsDocument:                                "GetVendors",
-	UpdateVendorDocument:                              "UpdateVendor",
-	GetAllVendorHistoriesDocument:                     "GetAllVendorHistories",
-	GetVendorHistoriesDocument:                        "GetVendorHistories",
-	CreateBulkCSVVendorProfileDocument:                "CreateBulkCSVVendorProfile",
-	CreateBulkVendorProfileDocument:                   "CreateBulkVendorProfile",
-	CreateVendorProfileDocument:                       "CreateVendorProfile",
-	GetAllVendorProfilesDocument:                      "GetAllVendorProfiles",
-	GetVendorProfileByIDDocument:                      "GetVendorProfileByID",
-	GetVendorProfilesDocument:                         "GetVendorProfiles",
-	UpdateVendorProfileDocument:                       "UpdateVendorProfile",
-	GetAllVendorProfileHistoriesDocument:              "GetAllVendorProfileHistories",
-	GetVendorProfileHistoriesDocument:                 "GetVendorProfileHistories",
-	CreateBulkCSVVendorProfilePhoneNumberDocument:     "CreateBulkCSVVendorProfilePhoneNumber",
-	CreateBulkVendorProfilePhoneNumberDocument:        "CreateBulkVendorProfilePhoneNumber",
-	CreateVendorProfilePhoneNumberDocument:            "CreateVendorProfilePhoneNumber",
-	GetAllVendorProfilePhoneNumbersDocument:           "GetAllVendorProfilePhoneNumbers",
-	GetVendorProfilePhoneNumberByIDDocument:           "GetVendorProfilePhoneNumberByID",
-	GetVendorProfilePhoneNumbersDocument:              "GetVendorProfilePhoneNumbers",
-	UpdateVendorProfilePhoneNumberDocument:            "UpdateVendorProfilePhoneNumber",
-	GetAllVendorProfilePhoneNumberHistoriesDocument:   "GetAllVendorProfilePhoneNumberHistories",
-	GetVendorProfilePhoneNumberHistoriesDocument:      "GetVendorProfilePhoneNumberHistories",
-	CreateBulkCSVVendorProfilePostalAddressDocument:   "CreateBulkCSVVendorProfilePostalAddress",
-	CreateBulkVendorProfilePostalAddressDocument:      "CreateBulkVendorProfilePostalAddress",
-	CreateVendorProfilePostalAddressDocument:          "CreateVendorProfilePostalAddress",
-	GetAllVendorProfilePostalAddressesDocument:        "GetAllVendorProfilePostalAddresses",
-	GetVendorProfilePostalAddressByIDDocument:         "GetVendorProfilePostalAddressByID",
-	GetVendorProfilePostalAddressesDocument:           "GetVendorProfilePostalAddresses",
-	UpdateVendorProfilePostalAddressDocument:          "UpdateVendorProfilePostalAddress",
-	GetAllVendorProfilePostalAddressHistoriesDocument: "GetAllVendorProfilePostalAddressHistories",
-	GetVendorProfilePostalAddressHistoriesDocument:    "GetVendorProfilePostalAddressHistories",
-	GetWebhookByIDDocument:                            "GetWebhookByID",
-	GetAllWebhooksDocument:                            "GetAllWebhooks",
-	CreateWebhookDocument:                             "CreateWebhook",
-	CreateBulkWebhookDocument:                         "CreateBulkWebhook",
-	CreateBulkCSVWebhookDocument:                      "CreateBulkCSVWebhook",
-	UpdateWebhookDocument:                             "UpdateWebhook",
-	DeleteWebhookDocument:                             "DeleteWebhook",
-	GetAllWebhookHistoriesDocument:                    "GetAllWebhookHistories",
-	GetWebhookHistoriesDocument:                       "GetWebhookHistories",
+	CreateAPITokenDocument:                                "CreateAPIToken",
+	UpdateAPITokenDocument:                                "UpdateAPIToken",
+	GetAllAPITokensDocument:                               "GetAllAPITokens",
+	GetAPITokenByIDDocument:                               "GetAPITokenByID",
+	DeleteAPITokenDocument:                                "DeleteAPIToken",
+	CreateBulkCSVContactDocument:                          "CreateBulkCSVContact",
+	CreateBulkContactDocument:                             "CreateBulkContact",
+	CreateContactDocument:                                 "CreateContact",
+	DeleteContactDocument:                                 "DeleteContact",
+	GetAllContactsDocument:                                "GetAllContacts",
+	GetContactByIDDocument:                                "GetContactByID",
+	GetContactsDocument:                                   "GetContacts",
+	UpdateContactDocument:                                 "UpdateContact",
+	GetAllContactHistoriesDocument:                        "GetAllContactHistories",
+	GetContactHistoriesDocument:                           "GetContactHistories",
+	CreateBulkCSVContactListDocument:                      "CreateBulkCSVContactList",
+	CreateBulkContactListDocument:                         "CreateBulkContactList",
+	CreateContactListDocument:                             "CreateContactList",
+	GetAllContactListsDocument:                            "GetAllContactLists",
+	GetContactListByIDDocument:                            "GetContactListByID",
+	GetContactListsDocument:                               "GetContactLists",
+	UpdateContactListDocument:                             "UpdateContactList",
+	GetAllContactListHistoriesDocument:                    "GetAllContactListHistories",
+	GetContactListHistoriesDocument:                       "GetContactListHistories",
+	CreateBulkCSVContactListMembershipDocument:            "CreateBulkCSVContactListMembership",
+	CreateBulkContactListMembershipDocument:               "CreateBulkContactListMembership",
+	CreateContactListMembershipDocument:                   "CreateContactListMembership",
+	GetAllContactListMembershipsDocument:                  "GetAllContactListMemberships",
+	GetContactListMembershipByIDDocument:                  "GetContactListMembershipByID",
+	GetContactListMembershipsDocument:                     "GetContactListMemberships",
+	UpdateContactListMembershipDocument:                   "UpdateContactListMembership",
+	GetAllContactListMembershipHistoriesDocument:          "GetAllContactListMembershipHistories",
+	GetContactListMembershipHistoriesDocument:             "GetContactListMembershipHistories",
+	CreateDocumentDataDocument:                            "CreateDocumentData",
+	DeleteDocumentDataDocument:                            "DeleteDocumentData",
+	GetDocumentDataByIDDocument:                           "GetDocumentDataByID",
+	UpdateDocumentDataDocument:                            "UpdateDocumentData",
+	GetAllDocumentDataHistoriesDocument:                   "GetAllDocumentDataHistories",
+	GetDocumentDataHistoriesDocument:                      "GetDocumentDataHistories",
+	CreateBulkCSVEntitlementDocument:                      "CreateBulkCSVEntitlement",
+	CreateBulkEntitlementDocument:                         "CreateBulkEntitlement",
+	CreateEntitlementDocument:                             "CreateEntitlement",
+	DeleteEntitlementDocument:                             "DeleteEntitlement",
+	GetAllEntitlementsDocument:                            "GetAllEntitlements",
+	GetEntitlementByIDDocument:                            "GetEntitlementByID",
+	GetEntitlementsDocument:                               "GetEntitlements",
+	UpdateEntitlementDocument:                             "UpdateEntitlement",
+	GetAllEntitlementHistoriesDocument:                    "GetAllEntitlementHistories",
+	GetEntitlementHistoriesDocument:                       "GetEntitlementHistories",
+	CreateBulkCSVEntitlementPlanDocument:                  "CreateBulkCSVEntitlementPlan",
+	CreateBulkEntitlementPlanDocument:                     "CreateBulkEntitlementPlan",
+	CreateEntitlementPlanDocument:                         "CreateEntitlementPlan",
+	DeleteEntitlementPlanDocument:                         "DeleteEntitlementPlan",
+	GetAllEntitlementPlansDocument:                        "GetAllEntitlementPlans",
+	GetEntitlementPlanByIDDocument:                        "GetEntitlementPlanByID",
+	GetEntitlementPlansDocument:                           "GetEntitlementPlans",
+	UpdateEntitlementPlanDocument:                         "UpdateEntitlementPlan",
+	GetAllEntitlementPlanFeaturesDocument:                 "GetAllEntitlementPlanFeatures",
+	GetEntitlementPlanFeatureByIDDocument:                 "GetEntitlementPlanFeatureByID",
+	GetEntitlementPlanFeaturesDocument:                    "GetEntitlementPlanFeatures",
+	CreateEntitlementPlanFeatureDocument:                  "CreateEntitlementPlanFeature",
+	CreateBulkCSVEntitlementPlanFeatureDocument:           "CreateBulkCSVEntitlementPlanFeature",
+	CreateBulkEntitlementPlanFeatureDocument:              "CreateBulkEntitlementPlanFeature",
+	UpdateEntitlementPlanFeatureDocument:                  "UpdateEntitlementPlanFeature",
+	DeleteEntitlementPlanFeatureDocument:                  "DeleteEntitlementPlanFeature",
+	GetAllEntitlementPlanFeatureHistoriesDocument:         "GetAllEntitlementPlanFeatureHistories",
+	GetEntitlementPlanFeatureHistoriesDocument:            "GetEntitlementPlanFeatureHistories",
+	GetAllEntitlementPlanHistoriesDocument:                "GetAllEntitlementPlanHistories",
+	GetEntitlementPlanHistoriesDocument:                   "GetEntitlementPlanHistories",
+	CreateBulkCSVEntityDocument:                           "CreateBulkCSVEntity",
+	CreateBulkEntityDocument:                              "CreateBulkEntity",
+	CreateEntityDocument:                                  "CreateEntity",
+	DeleteEntityDocument:                                  "DeleteEntity",
+	GetAllEntitiesDocument:                                "GetAllEntities",
+	GetEntitiesDocument:                                   "GetEntities",
+	GetEntityByIDDocument:                                 "GetEntityByID",
+	UpdateEntityDocument:                                  "UpdateEntity",
+	GetAllEntityHistoriesDocument:                         "GetAllEntityHistories",
+	GetEntityHistoriesDocument:                            "GetEntityHistories",
+	CreateBulkCSVEntityTypeDocument:                       "CreateBulkCSVEntityType",
+	CreateBulkEntityTypeDocument:                          "CreateBulkEntityType",
+	CreateEntityTypeDocument:                              "CreateEntityType",
+	DeleteEntityTypeDocument:                              "DeleteEntityType",
+	GetAllEntityTypesDocument:                             "GetAllEntityTypes",
+	GetEntityTypeByIDDocument:                             "GetEntityTypeByID",
+	GetEntityTypesDocument:                                "GetEntityTypes",
+	UpdateEntityTypeDocument:                              "UpdateEntityType",
+	GetAllEntityTypeHistoriesDocument:                     "GetAllEntityTypeHistories",
+	GetEntityTypeHistoriesDocument:                        "GetEntityTypeHistories",
+	GetEventsDocument:                                     "GetEvents",
+	GetEventByIDDocument:                                  "GetEventByID",
+	GetAllEventsDocument:                                  "GetAllEvents",
+	CreateEventDocument:                                   "CreateEvent",
+	CreateBulkEventDocument:                               "CreateBulkEvent",
+	CreateBulkCSVEventDocument:                            "CreateBulkCSVEvent",
+	UpdateEventDocument:                                   "UpdateEvent",
+	DeleteEventDocument:                                   "DeleteEvent",
+	GetAllEventHistoriesDocument:                          "GetAllEventHistories",
+	GetEventHistoriesDocument:                             "GetEventHistories",
+	CreateBulkCSVFeatureDocument:                          "CreateBulkCSVFeature",
+	CreateBulkFeatureDocument:                             "CreateBulkFeature",
+	CreateFeatureDocument:                                 "CreateFeature",
+	DeleteFeatureDocument:                                 "DeleteFeature",
+	GetAllFeaturesDocument:                                "GetAllFeatures",
+	GetFeatureByIDDocument:                                "GetFeatureByID",
+	GetFeaturesDocument:                                   "GetFeatures",
+	UpdateFeatureDocument:                                 "UpdateFeature",
+	GetAllFeatureHistoriesDocument:                        "GetAllFeatureHistories",
+	GetFeatureHistoriesDocument:                           "GetFeatureHistories",
+	CreateBulkCSVFileDocument:                             "CreateBulkCSVFile",
+	CreateBulkFileDocument:                                "CreateBulkFile",
+	CreateFileDocument:                                    "CreateFile",
+	DeleteFileDocument:                                    "DeleteFile",
+	GetAllFilesDocument:                                   "GetAllFiles",
+	GetFilesDocument:                                      "GetFiles",
+	UpdateFileDocument:                                    "UpdateFile",
+	GetAllFileHistoriesDocument:                           "GetAllFileHistories",
+	GetFileHistoriesDocument:                              "GetFileHistories",
+	CreateBulkCSVGroupDocument:                            "CreateBulkCSVGroup",
+	CreateBulkGroupDocument:                               "CreateBulkGroup",
+	CreateGroupDocument:                                   "CreateGroup",
+	DeleteGroupDocument:                                   "DeleteGroup",
+	GetAllGroupsDocument:                                  "GetAllGroups",
+	GetGroupByIDDocument:                                  "GetGroupByID",
+	GetGroupsDocument:                                     "GetGroups",
+	UpdateGroupDocument:                                   "UpdateGroup",
+	GetAllGroupHistoriesDocument:                          "GetAllGroupHistories",
+	GetGroupHistoriesDocument:                             "GetGroupHistories",
+	AddUserToGroupWithRoleDocument:                        "AddUserToGroupWithRole",
+	CreateBulkCSVGroupMembersDocument:                     "CreateBulkCSVGroupMembers",
+	CreateBulkGroupMembersDocument:                        "CreateBulkGroupMembers",
+	GetGroupMembersByGroupIDDocument:                      "GetGroupMembersByGroupID",
+	RemoveUserFromGroupDocument:                           "RemoveUserFromGroup",
+	UpdateUserRoleInGroupDocument:                         "UpdateUserRoleInGroup",
+	GetAllGroupMembershipHistoriesDocument:                "GetAllGroupMembershipHistories",
+	GetGroupMembershipHistoriesDocument:                   "GetGroupMembershipHistories",
+	GetAllGroupSettingsDocument:                           "GetAllGroupSettings",
+	GetGroupSettingByIDDocument:                           "GetGroupSettingByID",
+	GetGroupSettingsDocument:                              "GetGroupSettings",
+	UpdateGroupSettingDocument:                            "UpdateGroupSetting",
+	GetAllGroupSettingHistoriesDocument:                   "GetAllGroupSettingHistories",
+	GetGroupSettingHistoriesDocument:                      "GetGroupSettingHistories",
+	CreateBulkCSVHushDocument:                             "CreateBulkCSVHush",
+	CreateBulkHushDocument:                                "CreateBulkHush",
+	CreateHushDocument:                                    "CreateHush",
+	GetAllHushesDocument:                                  "GetAllHushes",
+	GetHushByIDDocument:                                   "GetHushByID",
+	GetHushesDocument:                                     "GetHushes",
+	UpdateHushDocument:                                    "UpdateHush",
+	GetAllHushHistoriesDocument:                           "GetAllHushHistories",
+	GetHushHistoriesDocument:                              "GetHushHistories",
+	CreateBulkCSVIntegrationDocument:                      "CreateBulkCSVIntegration",
+	CreateBulkIntegrationDocument:                         "CreateBulkIntegration",
+	CreateIntegrationDocument:                             "CreateIntegration",
+	DeleteIntegrationDocument:                             "DeleteIntegration",
+	GetAllIntegrationsDocument:                            "GetAllIntegrations",
+	GetIntegrationByIDDocument:                            "GetIntegrationByID",
+	GetIntegrationsDocument:                               "GetIntegrations",
+	UpdateIntegrationDocument:                             "UpdateIntegration",
+	GetAllIntegrationHistoriesDocument:                    "GetAllIntegrationHistories",
+	GetIntegrationHistoriesDocument:                       "GetIntegrationHistories",
+	CreateBulkCSVInviteDocument:                           "CreateBulkCSVInvite",
+	CreateBulkInviteDocument:                              "CreateBulkInvite",
+	CreateInviteDocument:                                  "CreateInvite",
+	DeleteInviteDocument:                                  "DeleteInvite",
+	GetInviteByIDDocument:                                 "GetInviteByID",
+	GetAllInvitesDocument:                                 "GetAllInvites",
+	InvitesByOrgIDDocument:                                "InvitesByOrgID",
+	GetAllNoteHistoriesDocument:                           "GetAllNoteHistories",
+	GetNoteHistoriesDocument:                              "GetNoteHistories",
+	GetAllOauthProviderHistoriesDocument:                  "GetAllOauthProviderHistories",
+	GetOauthProviderHistoriesDocument:                     "GetOauthProviderHistories",
+	CreateBulkCSVOhAuthTooTokenDocument:                   "CreateBulkCSVOhAuthTooToken",
+	CreateBulkOhAuthTooTokenDocument:                      "CreateBulkOhAuthTooToken",
+	CreateOhAuthTooTokenDocument:                          "CreateOhAuthTooToken",
+	DeleteOhAuthTooTokenDocument:                          "DeleteOhAuthTooToken",
+	GetOhAuthTooTokensDocument:                            "GetOhAuthTooTokens",
+	UpdateOhAuthTooTokenDocument:                          "UpdateOhAuthTooToken",
+	CreateBulkCSVOrganizationDocument:                     "CreateBulkCSVOrganization",
+	CreateBulkOrganizationDocument:                        "CreateBulkOrganization",
+	CreateOrganizationDocument:                            "CreateOrganization",
+	DeleteOrganizationDocument:                            "DeleteOrganization",
+	GetAllOrganizationsDocument:                           "GetAllOrganizations",
+	GetOrganizationByIDDocument:                           "GetOrganizationByID",
+	GetOrganizationsDocument:                              "GetOrganizations",
+	UpdateOrganizationDocument:                            "UpdateOrganization",
+	GetAllOrganizationHistoriesDocument:                   "GetAllOrganizationHistories",
+	GetOrganizationHistoriesDocument:                      "GetOrganizationHistories",
+	GetAllOrganizationSettingsDocument:                    "GetAllOrganizationSettings",
+	GetOrganizationSettingByIDDocument:                    "GetOrganizationSettingByID",
+	GetOrganizationSettingsDocument:                       "GetOrganizationSettings",
+	UpdateOrganizationSettingDocument:                     "UpdateOrganizationSetting",
+	GetAllOrganizationSettingHistoriesDocument:            "GetAllOrganizationSettingHistories",
+	GetOrganizationSettingHistoriesDocument:               "GetOrganizationSettingHistories",
+	AddUserToOrgWithRoleDocument:                          "AddUserToOrgWithRole",
+	CreateBulkCSVOrgMembersDocument:                       "CreateBulkCSVOrgMembers",
+	CreateBulkOrgMembersDocument:                          "CreateBulkOrgMembers",
+	GetOrgMembersByOrgIDDocument:                          "GetOrgMembersByOrgID",
+	RemoveUserFromOrgDocument:                             "RemoveUserFromOrg",
+	UpdateUserRoleInOrgDocument:                           "UpdateUserRoleInOrg",
+	GetAllOrgMembershipHistoriesDocument:                  "GetAllOrgMembershipHistories",
+	GetOrgMembershipHistoriesDocument:                     "GetOrgMembershipHistories",
+	CreateBulkCSVPersonalAccessTokenDocument:              "CreateBulkCSVPersonalAccessToken",
+	CreateBulkPersonalAccessTokenDocument:                 "CreateBulkPersonalAccessToken",
+	CreatePersonalAccessTokenDocument:                     "CreatePersonalAccessToken",
+	DeletePersonalAccessTokenDocument:                     "DeletePersonalAccessToken",
+	GetAllPersonalAccessTokensDocument:                    "GetAllPersonalAccessTokens",
+	GetPersonalAccessTokenByIDDocument:                    "GetPersonalAccessTokenByID",
+	UpdatePersonalAccessTokenDocument:                     "UpdatePersonalAccessToken",
+	CreateBulkCSVPhoneNumberDocument:                      "CreateBulkCSVPhoneNumber",
+	CreateBulkPhoneNumberDocument:                         "CreateBulkPhoneNumber",
+	CreatePhoneNumberDocument:                             "CreatePhoneNumber",
+	GetAllPhoneNumbersDocument:                            "GetAllPhoneNumbers",
+	GetPhoneNumberByIDDocument:                            "GetPhoneNumberByID",
+	GetPhoneNumbersDocument:                               "GetPhoneNumbers",
+	UpdatePhoneNumberDocument:                             "UpdatePhoneNumber",
+	GetAllPhoneNumberHistoriesDocument:                    "GetAllPhoneNumberHistories",
+	GetPhoneNumberHistoriesDocument:                       "GetPhoneNumberHistories",
+	CreateBulkCSVPostalAddressDocument:                    "CreateBulkCSVPostalAddress",
+	CreateBulkPostalAddressDocument:                       "CreateBulkPostalAddress",
+	CreatePostalAddressDocument:                           "CreatePostalAddress",
+	GetAllPostalAddressesDocument:                         "GetAllPostalAddresses",
+	GetPostalAddressByIDDocument:                          "GetPostalAddressByID",
+	GetPostalAddressesDocument:                            "GetPostalAddresses",
+	UpdatePostalAddressDocument:                           "UpdatePostalAddress",
+	GetAllPostalAddressHistoriesDocument:                  "GetAllPostalAddressHistories",
+	GetPostalAddressHistoriesDocument:                     "GetPostalAddressHistories",
+	SearchDocument:                                        "Search",
+	CreateBulkCSVSubscriberDocument:                       "CreateBulkCSVSubscriber",
+	CreateBulkSubscriberDocument:                          "CreateBulkSubscriber",
+	CreateSubscriberDocument:                              "CreateSubscriber",
+	DeleteSubscriberDocument:                              "DeleteSubscriber",
+	GetAllSubscribersDocument:                             "GetAllSubscribers",
+	GetSubscriberByEmailDocument:                          "GetSubscriberByEmail",
+	GetSubscribersDocument:                                "GetSubscribers",
+	UpdateSubscriberDocument:                              "UpdateSubscriber",
+	CreateBulkCSVTemplateDocument:                         "CreateBulkCSVTemplate",
+	CreateBulkTemplateDocument:                            "CreateBulkTemplate",
+	CreateTemplateDocument:                                "CreateTemplate",
+	GetAllTemplatesDocument:                               "GetAllTemplates",
+	GetTemplateByIDDocument:                               "GetTemplateByID",
+	UpdateTemplateDocument:                                "UpdateTemplate",
+	GetAllTemplateHistoriesDocument:                       "GetAllTemplateHistories",
+	GetTemplateHistoriesDocument:                          "GetTemplateHistories",
+	CreateTFASettingDocument:                              "CreateTFASetting",
+	GetAllTFASettingsDocument:                             "GetAllTFASettings",
+	GetTFASettingDocument:                                 "GetTFASetting",
+	UpdateTFASettingDocument:                              "UpdateTFASetting",
+	CreateUserDocument:                                    "CreateUser",
+	DeleteUserDocument:                                    "DeleteUser",
+	GetAllUsersDocument:                                   "GetAllUsers",
+	GetUserByIDDocument:                                   "GetUserByID",
+	GetUserByIDWithOrgsDocument:                           "GetUserByIDWithOrgs",
+	UpdateUserDocument:                                    "UpdateUser",
+	GetAllUserHistoriesDocument:                           "GetAllUserHistories",
+	GetUserHistoriesDocument:                              "GetUserHistories",
+	GetAllUserSettingsDocument:                            "GetAllUserSettings",
+	GetUserSettingByIDDocument:                            "GetUserSettingByID",
+	GetUserSettingsDocument:                               "GetUserSettings",
+	UpdateUserSettingDocument:                             "UpdateUserSetting",
+	GetAllUserSettingHistoriesDocument:                    "GetAllUserSettingHistories",
+	GetUserSettingHistoriesDocument:                       "GetUserSettingHistories",
+	CreateBulkCSVVendorDocument:                           "CreateBulkCSVVendor",
+	CreateBulkVendorDocument:                              "CreateBulkVendor",
+	CreateVendorDocument:                                  "CreateVendor",
+	GetAllVendorsDocument:                                 "GetAllVendors",
+	GetVendorByIDDocument:                                 "GetVendorByID",
+	GetVendorsDocument:                                    "GetVendors",
+	UpdateVendorDocument:                                  "UpdateVendor",
+	GetAllVendorHistoriesDocument:                         "GetAllVendorHistories",
+	GetVendorHistoriesDocument:                            "GetVendorHistories",
+	CreateBulkCSVVendorProfileDocument:                    "CreateBulkCSVVendorProfile",
+	CreateBulkVendorProfileDocument:                       "CreateBulkVendorProfile",
+	CreateVendorProfileDocument:                           "CreateVendorProfile",
+	GetAllVendorProfilesDocument:                          "GetAllVendorProfiles",
+	GetVendorProfileByIDDocument:                          "GetVendorProfileByID",
+	GetVendorProfilesDocument:                             "GetVendorProfiles",
+	UpdateVendorProfileDocument:                           "UpdateVendorProfile",
+	GetAllVendorProfileHistoriesDocument:                  "GetAllVendorProfileHistories",
+	GetVendorProfileHistoriesDocument:                     "GetVendorProfileHistories",
+	CreateBulkCSVVendorProfilePaymentPreferenceDocument:   "CreateBulkCSVVendorProfilePaymentPreference",
+	CreateBulkVendorProfilePaymentPreferenceDocument:      "CreateBulkVendorProfilePaymentPreference",
+	CreateVendorProfilePaymentPreferenceDocument:          "CreateVendorProfilePaymentPreference",
+	GetAllVendorProfilePaymentPreferencesDocument:         "GetAllVendorProfilePaymentPreferences",
+	GetVendorProfilePaymentPreferenceByIDDocument:         "GetVendorProfilePaymentPreferenceByID",
+	GetVendorProfilePaymentPreferencesDocument:            "GetVendorProfilePaymentPreferences",
+	UpdateVendorProfilePaymentPreferenceDocument:          "UpdateVendorProfilePaymentPreference",
+	GetAllVendorProfilePaymentPreferenceHistoriesDocument: "GetAllVendorProfilePaymentPreferenceHistories",
+	GetVendorProfilePaymentPreferenceHistoriesDocument:    "GetVendorProfilePaymentPreferenceHistories",
+	CreateBulkCSVVendorProfilePhoneNumberDocument:         "CreateBulkCSVVendorProfilePhoneNumber",
+	CreateBulkVendorProfilePhoneNumberDocument:            "CreateBulkVendorProfilePhoneNumber",
+	CreateVendorProfilePhoneNumberDocument:                "CreateVendorProfilePhoneNumber",
+	GetAllVendorProfilePhoneNumbersDocument:               "GetAllVendorProfilePhoneNumbers",
+	GetVendorProfilePhoneNumberByIDDocument:               "GetVendorProfilePhoneNumberByID",
+	GetVendorProfilePhoneNumbersDocument:                  "GetVendorProfilePhoneNumbers",
+	UpdateVendorProfilePhoneNumberDocument:                "UpdateVendorProfilePhoneNumber",
+	GetAllVendorProfilePhoneNumberHistoriesDocument:       "GetAllVendorProfilePhoneNumberHistories",
+	GetVendorProfilePhoneNumberHistoriesDocument:          "GetVendorProfilePhoneNumberHistories",
+	CreateBulkCSVVendorProfilePostalAddressDocument:       "CreateBulkCSVVendorProfilePostalAddress",
+	CreateBulkVendorProfilePostalAddressDocument:          "CreateBulkVendorProfilePostalAddress",
+	CreateVendorProfilePostalAddressDocument:              "CreateVendorProfilePostalAddress",
+	GetAllVendorProfilePostalAddressesDocument:            "GetAllVendorProfilePostalAddresses",
+	GetVendorProfilePostalAddressByIDDocument:             "GetVendorProfilePostalAddressByID",
+	GetVendorProfilePostalAddressesDocument:               "GetVendorProfilePostalAddresses",
+	UpdateVendorProfilePostalAddressDocument:              "UpdateVendorProfilePostalAddress",
+	GetAllVendorProfilePostalAddressHistoriesDocument:     "GetAllVendorProfilePostalAddressHistories",
+	GetVendorProfilePostalAddressHistoriesDocument:        "GetVendorProfilePostalAddressHistories",
+	GetWebhookByIDDocument:                                "GetWebhookByID",
+	GetAllWebhooksDocument:                                "GetAllWebhooks",
+	CreateWebhookDocument:                                 "CreateWebhook",
+	CreateBulkWebhookDocument:                             "CreateBulkWebhook",
+	CreateBulkCSVWebhookDocument:                          "CreateBulkCSVWebhook",
+	UpdateWebhookDocument:                                 "UpdateWebhook",
+	DeleteWebhookDocument:                                 "DeleteWebhook",
+	GetAllWebhookHistoriesDocument:                        "GetAllWebhookHistories",
+	GetWebhookHistoriesDocument:                           "GetWebhookHistories",
 }

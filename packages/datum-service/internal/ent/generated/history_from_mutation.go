@@ -6902,6 +6902,224 @@ func (m *VendorProfileMutation) CreateHistoryFromDelete(ctx context.Context) err
 	return nil
 }
 
+func (m *VendorProfilePaymentPreferenceMutation) CreateHistoryFromCreate(ctx context.Context) error {
+	client := m.Client()
+
+	id, ok := m.ID()
+	if !ok {
+		return idNotFoundError
+	}
+
+	create := client.VendorProfilePaymentPreferenceHistory.Create()
+
+	create = create.
+		SetOperation(EntOpToHistoryOp(m.Op())).
+		SetHistoryTime(time.Now()).
+		SetRef(id)
+
+	if mappingID, exists := m.MappingID(); exists {
+		create = create.SetMappingID(mappingID)
+	}
+
+	if createdAt, exists := m.CreatedAt(); exists {
+		create = create.SetCreatedAt(createdAt)
+	}
+
+	if updatedAt, exists := m.UpdatedAt(); exists {
+		create = create.SetUpdatedAt(updatedAt)
+	}
+
+	if createdBy, exists := m.CreatedBy(); exists {
+		create = create.SetCreatedBy(createdBy)
+	}
+
+	if updatedBy, exists := m.UpdatedBy(); exists {
+		create = create.SetUpdatedBy(updatedBy)
+	}
+
+	if deletedAt, exists := m.DeletedAt(); exists {
+		create = create.SetDeletedAt(deletedAt)
+	}
+
+	if deletedBy, exists := m.DeletedBy(); exists {
+		create = create.SetDeletedBy(deletedBy)
+	}
+
+	if tags, exists := m.Tags(); exists {
+		create = create.SetTags(tags)
+	}
+
+	if ownerID, exists := m.OwnerID(); exists {
+		create = create.SetOwnerID(ownerID)
+	}
+
+	if vendorProfileID, exists := m.VendorProfileID(); exists {
+		create = create.SetVendorProfileID(vendorProfileID)
+	}
+
+	if preferred, exists := m.Preferred(); exists {
+		create = create.SetPreferred(preferred)
+	}
+
+	if method, exists := m.Method(); exists {
+		create = create.SetMethod(method)
+	}
+
+	_, err := create.Save(ctx)
+
+	return err
+}
+
+func (m *VendorProfilePaymentPreferenceMutation) CreateHistoryFromUpdate(ctx context.Context) error {
+	// check for soft delete operation and delete instead
+	if entx.CheckIsSoftDelete(ctx) {
+		return m.CreateHistoryFromDelete(ctx)
+	}
+	client := m.Client()
+
+	ids, err := m.IDs(ctx)
+	if err != nil {
+		return fmt.Errorf("getting ids: %w", err)
+	}
+
+	for _, id := range ids {
+		vendorprofilepaymentpreference, err := client.VendorProfilePaymentPreference.Get(ctx, id)
+		if err != nil {
+			return err
+		}
+
+		create := client.VendorProfilePaymentPreferenceHistory.Create()
+
+		create = create.
+			SetOperation(EntOpToHistoryOp(m.Op())).
+			SetHistoryTime(time.Now()).
+			SetRef(id)
+
+		if mappingID, exists := m.MappingID(); exists {
+			create = create.SetMappingID(mappingID)
+		} else {
+			create = create.SetMappingID(vendorprofilepaymentpreference.MappingID)
+		}
+
+		if createdAt, exists := m.CreatedAt(); exists {
+			create = create.SetCreatedAt(createdAt)
+		} else {
+			create = create.SetCreatedAt(vendorprofilepaymentpreference.CreatedAt)
+		}
+
+		if updatedAt, exists := m.UpdatedAt(); exists {
+			create = create.SetUpdatedAt(updatedAt)
+		} else {
+			create = create.SetUpdatedAt(vendorprofilepaymentpreference.UpdatedAt)
+		}
+
+		if createdBy, exists := m.CreatedBy(); exists {
+			create = create.SetCreatedBy(createdBy)
+		} else {
+			create = create.SetCreatedBy(vendorprofilepaymentpreference.CreatedBy)
+		}
+
+		if updatedBy, exists := m.UpdatedBy(); exists {
+			create = create.SetUpdatedBy(updatedBy)
+		} else {
+			create = create.SetUpdatedBy(vendorprofilepaymentpreference.UpdatedBy)
+		}
+
+		if deletedAt, exists := m.DeletedAt(); exists {
+			create = create.SetDeletedAt(deletedAt)
+		} else {
+			create = create.SetDeletedAt(vendorprofilepaymentpreference.DeletedAt)
+		}
+
+		if deletedBy, exists := m.DeletedBy(); exists {
+			create = create.SetDeletedBy(deletedBy)
+		} else {
+			create = create.SetDeletedBy(vendorprofilepaymentpreference.DeletedBy)
+		}
+
+		if tags, exists := m.Tags(); exists {
+			create = create.SetTags(tags)
+		} else {
+			create = create.SetTags(vendorprofilepaymentpreference.Tags)
+		}
+
+		if ownerID, exists := m.OwnerID(); exists {
+			create = create.SetOwnerID(ownerID)
+		} else {
+			create = create.SetOwnerID(vendorprofilepaymentpreference.OwnerID)
+		}
+
+		if vendorProfileID, exists := m.VendorProfileID(); exists {
+			create = create.SetVendorProfileID(vendorProfileID)
+		} else {
+			create = create.SetVendorProfileID(vendorprofilepaymentpreference.VendorProfileID)
+		}
+
+		if preferred, exists := m.Preferred(); exists {
+			create = create.SetPreferred(preferred)
+		} else {
+			create = create.SetPreferred(vendorprofilepaymentpreference.Preferred)
+		}
+
+		if method, exists := m.Method(); exists {
+			create = create.SetMethod(method)
+		} else {
+			create = create.SetMethod(vendorprofilepaymentpreference.Method)
+		}
+
+		if _, err := create.Save(ctx); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *VendorProfilePaymentPreferenceMutation) CreateHistoryFromDelete(ctx context.Context) error {
+	// check for soft delete operation and skip so it happens on update
+	if entx.CheckIsSoftDelete(ctx) {
+		return nil
+	}
+	client := m.Client()
+
+	ids, err := m.IDs(ctx)
+	if err != nil {
+		return fmt.Errorf("getting ids: %w", err)
+	}
+
+	for _, id := range ids {
+		vendorprofilepaymentpreference, err := client.VendorProfilePaymentPreference.Get(ctx, id)
+		if err != nil {
+			return err
+		}
+
+		create := client.VendorProfilePaymentPreferenceHistory.Create()
+
+		_, err = create.
+			SetOperation(EntOpToHistoryOp(m.Op())).
+			SetHistoryTime(time.Now()).
+			SetRef(id).
+			SetMappingID(vendorprofilepaymentpreference.MappingID).
+			SetCreatedAt(vendorprofilepaymentpreference.CreatedAt).
+			SetUpdatedAt(vendorprofilepaymentpreference.UpdatedAt).
+			SetCreatedBy(vendorprofilepaymentpreference.CreatedBy).
+			SetUpdatedBy(vendorprofilepaymentpreference.UpdatedBy).
+			SetDeletedAt(vendorprofilepaymentpreference.DeletedAt).
+			SetDeletedBy(vendorprofilepaymentpreference.DeletedBy).
+			SetTags(vendorprofilepaymentpreference.Tags).
+			SetOwnerID(vendorprofilepaymentpreference.OwnerID).
+			SetVendorProfileID(vendorprofilepaymentpreference.VendorProfileID).
+			SetPreferred(vendorprofilepaymentpreference.Preferred).
+			SetMethod(vendorprofilepaymentpreference.Method).
+			Save(ctx)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *VendorProfilePhoneNumberMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	client := m.Client()
 

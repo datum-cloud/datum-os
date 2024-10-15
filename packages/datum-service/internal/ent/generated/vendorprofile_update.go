@@ -17,6 +17,7 @@ import (
 	"github.com/datum-cloud/datum-os/internal/ent/generated/postaladdress"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/predicate"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofile"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofilepaymentpreference"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofilephonenumber"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofilepostaladdress"
 	"github.com/datum-cloud/datum-os/pkg/enums"
@@ -310,6 +311,21 @@ func (vpu *VendorProfileUpdate) AddPhoneNumbers(p ...*PhoneNumber) *VendorProfil
 	return vpu.AddPhoneNumberIDs(ids...)
 }
 
+// AddPaymentPreferenceIDs adds the "payment_preferences" edge to the VendorProfilePaymentPreference entity by IDs.
+func (vpu *VendorProfileUpdate) AddPaymentPreferenceIDs(ids ...string) *VendorProfileUpdate {
+	vpu.mutation.AddPaymentPreferenceIDs(ids...)
+	return vpu
+}
+
+// AddPaymentPreferences adds the "payment_preferences" edges to the VendorProfilePaymentPreference entity.
+func (vpu *VendorProfileUpdate) AddPaymentPreferences(v ...*VendorProfilePaymentPreference) *VendorProfileUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return vpu.AddPaymentPreferenceIDs(ids...)
+}
+
 // AddVendorProfilePostalAddressIDs adds the "vendor_profile_postal_addresses" edge to the VendorProfilePostalAddress entity by IDs.
 func (vpu *VendorProfileUpdate) AddVendorProfilePostalAddressIDs(ids ...string) *VendorProfileUpdate {
 	vpu.mutation.AddVendorProfilePostalAddressIDs(ids...)
@@ -391,6 +407,27 @@ func (vpu *VendorProfileUpdate) RemovePhoneNumbers(p ...*PhoneNumber) *VendorPro
 		ids[i] = p[i].ID
 	}
 	return vpu.RemovePhoneNumberIDs(ids...)
+}
+
+// ClearPaymentPreferences clears all "payment_preferences" edges to the VendorProfilePaymentPreference entity.
+func (vpu *VendorProfileUpdate) ClearPaymentPreferences() *VendorProfileUpdate {
+	vpu.mutation.ClearPaymentPreferences()
+	return vpu
+}
+
+// RemovePaymentPreferenceIDs removes the "payment_preferences" edge to VendorProfilePaymentPreference entities by IDs.
+func (vpu *VendorProfileUpdate) RemovePaymentPreferenceIDs(ids ...string) *VendorProfileUpdate {
+	vpu.mutation.RemovePaymentPreferenceIDs(ids...)
+	return vpu
+}
+
+// RemovePaymentPreferences removes "payment_preferences" edges to VendorProfilePaymentPreference entities.
+func (vpu *VendorProfileUpdate) RemovePaymentPreferences(v ...*VendorProfilePaymentPreference) *VendorProfileUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return vpu.RemovePaymentPreferenceIDs(ids...)
 }
 
 // ClearVendorProfilePostalAddresses clears all "vendor_profile_postal_addresses" edges to the VendorProfilePostalAddress entity.
@@ -772,6 +809,54 @@ func (vpu *VendorProfileUpdate) sqlSave(ctx context.Context) (n int, err error) 
 		edge.Target.Fields = specE.Fields
 		if specE.ID.Value != nil {
 			edge.Target.Fields = append(edge.Target.Fields, specE.ID)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if vpu.mutation.PaymentPreferencesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   vendorprofile.PaymentPreferencesTable,
+			Columns: []string{vendorprofile.PaymentPreferencesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(vendorprofilepaymentpreference.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = vpu.schemaConfig.VendorProfilePaymentPreference
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := vpu.mutation.RemovedPaymentPreferencesIDs(); len(nodes) > 0 && !vpu.mutation.PaymentPreferencesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   vendorprofile.PaymentPreferencesTable,
+			Columns: []string{vendorprofile.PaymentPreferencesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(vendorprofilepaymentpreference.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = vpu.schemaConfig.VendorProfilePaymentPreference
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := vpu.mutation.PaymentPreferencesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   vendorprofile.PaymentPreferencesTable,
+			Columns: []string{vendorprofile.PaymentPreferencesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(vendorprofilepaymentpreference.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = vpu.schemaConfig.VendorProfilePaymentPreference
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
@@ -1166,6 +1251,21 @@ func (vpuo *VendorProfileUpdateOne) AddPhoneNumbers(p ...*PhoneNumber) *VendorPr
 	return vpuo.AddPhoneNumberIDs(ids...)
 }
 
+// AddPaymentPreferenceIDs adds the "payment_preferences" edge to the VendorProfilePaymentPreference entity by IDs.
+func (vpuo *VendorProfileUpdateOne) AddPaymentPreferenceIDs(ids ...string) *VendorProfileUpdateOne {
+	vpuo.mutation.AddPaymentPreferenceIDs(ids...)
+	return vpuo
+}
+
+// AddPaymentPreferences adds the "payment_preferences" edges to the VendorProfilePaymentPreference entity.
+func (vpuo *VendorProfileUpdateOne) AddPaymentPreferences(v ...*VendorProfilePaymentPreference) *VendorProfileUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return vpuo.AddPaymentPreferenceIDs(ids...)
+}
+
 // AddVendorProfilePostalAddressIDs adds the "vendor_profile_postal_addresses" edge to the VendorProfilePostalAddress entity by IDs.
 func (vpuo *VendorProfileUpdateOne) AddVendorProfilePostalAddressIDs(ids ...string) *VendorProfileUpdateOne {
 	vpuo.mutation.AddVendorProfilePostalAddressIDs(ids...)
@@ -1247,6 +1347,27 @@ func (vpuo *VendorProfileUpdateOne) RemovePhoneNumbers(p ...*PhoneNumber) *Vendo
 		ids[i] = p[i].ID
 	}
 	return vpuo.RemovePhoneNumberIDs(ids...)
+}
+
+// ClearPaymentPreferences clears all "payment_preferences" edges to the VendorProfilePaymentPreference entity.
+func (vpuo *VendorProfileUpdateOne) ClearPaymentPreferences() *VendorProfileUpdateOne {
+	vpuo.mutation.ClearPaymentPreferences()
+	return vpuo
+}
+
+// RemovePaymentPreferenceIDs removes the "payment_preferences" edge to VendorProfilePaymentPreference entities by IDs.
+func (vpuo *VendorProfileUpdateOne) RemovePaymentPreferenceIDs(ids ...string) *VendorProfileUpdateOne {
+	vpuo.mutation.RemovePaymentPreferenceIDs(ids...)
+	return vpuo
+}
+
+// RemovePaymentPreferences removes "payment_preferences" edges to VendorProfilePaymentPreference entities.
+func (vpuo *VendorProfileUpdateOne) RemovePaymentPreferences(v ...*VendorProfilePaymentPreference) *VendorProfileUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return vpuo.RemovePaymentPreferenceIDs(ids...)
 }
 
 // ClearVendorProfilePostalAddresses clears all "vendor_profile_postal_addresses" edges to the VendorProfilePostalAddress entity.
@@ -1658,6 +1779,54 @@ func (vpuo *VendorProfileUpdateOne) sqlSave(ctx context.Context) (_node *VendorP
 		edge.Target.Fields = specE.Fields
 		if specE.ID.Value != nil {
 			edge.Target.Fields = append(edge.Target.Fields, specE.ID)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if vpuo.mutation.PaymentPreferencesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   vendorprofile.PaymentPreferencesTable,
+			Columns: []string{vendorprofile.PaymentPreferencesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(vendorprofilepaymentpreference.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = vpuo.schemaConfig.VendorProfilePaymentPreference
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := vpuo.mutation.RemovedPaymentPreferencesIDs(); len(nodes) > 0 && !vpuo.mutation.PaymentPreferencesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   vendorprofile.PaymentPreferencesTable,
+			Columns: []string{vendorprofile.PaymentPreferencesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(vendorprofilepaymentpreference.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = vpuo.schemaConfig.VendorProfilePaymentPreference
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := vpuo.mutation.PaymentPreferencesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   vendorprofile.PaymentPreferencesTable,
+			Columns: []string{vendorprofile.PaymentPreferencesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(vendorprofilepaymentpreference.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = vpuo.schemaConfig.VendorProfilePaymentPreference
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}

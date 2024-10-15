@@ -1349,6 +1349,18 @@ func (o *Organization) PhoneNumbers(ctx context.Context) (result []*PhoneNumber,
 	return result, err
 }
 
+func (o *Organization) VendorProfilePaymentPreferences(ctx context.Context) (result []*VendorProfilePaymentPreference, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = o.NamedVendorProfilePaymentPreferences(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = o.Edges.VendorProfilePaymentPreferencesOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = o.QueryVendorProfilePaymentPreferences().All(ctx)
+	}
+	return result, err
+}
+
 func (o *Organization) Members(ctx context.Context) (result []*OrgMembership, err error) {
 	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
 		result, err = o.NamedMembers(graphql.GetFieldContext(ctx).Field.Alias)
@@ -1717,6 +1729,18 @@ func (vp *VendorProfile) PhoneNumbers(ctx context.Context) (result []*PhoneNumbe
 	return result, err
 }
 
+func (vp *VendorProfile) PaymentPreferences(ctx context.Context) (result []*VendorProfilePaymentPreference, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = vp.NamedPaymentPreferences(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = vp.Edges.PaymentPreferencesOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = vp.QueryPaymentPreferences().All(ctx)
+	}
+	return result, err
+}
+
 func (vp *VendorProfile) Vendor(ctx context.Context) (*Vendor, error) {
 	result, err := vp.Edges.VendorOrErr()
 	if IsNotLoaded(err) {
@@ -1747,6 +1771,22 @@ func (vp *VendorProfile) VendorProfilePhoneNumbers(ctx context.Context) (result 
 		result, err = vp.QueryVendorProfilePhoneNumbers().All(ctx)
 	}
 	return result, err
+}
+
+func (vppp *VendorProfilePaymentPreference) Owner(ctx context.Context) (*Organization, error) {
+	result, err := vppp.Edges.OwnerOrErr()
+	if IsNotLoaded(err) {
+		result, err = vppp.QueryOwner().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (vppp *VendorProfilePaymentPreference) VendorProfile(ctx context.Context) (*VendorProfile, error) {
+	result, err := vppp.Edges.VendorProfileOrErr()
+	if IsNotLoaded(err) {
+		result, err = vppp.QueryVendorProfile().Only(ctx)
+	}
+	return result, MaskNotFound(err)
 }
 
 func (vppn *VendorProfilePhoneNumber) PhoneNumber(ctx context.Context) (*PhoneNumber, error) {

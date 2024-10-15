@@ -43,6 +43,7 @@ import (
 	"github.com/datum-cloud/datum-os/internal/ent/generated/user"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/vendor"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofile"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofilepaymentpreference"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/webhook"
 
 	"github.com/datum-cloud/datum-os/internal/ent/generated/internal"
@@ -51,74 +52,76 @@ import (
 // OrganizationQuery is the builder for querying Organization entities.
 type OrganizationQuery struct {
 	config
-	ctx                              *QueryContext
-	order                            []organization.OrderOption
-	inters                           []Interceptor
-	predicates                       []predicate.Organization
-	withParent                       *OrganizationQuery
-	withChildren                     *OrganizationQuery
-	withGroups                       *GroupQuery
-	withTemplates                    *TemplateQuery
-	withIntegrations                 *IntegrationQuery
-	withSetting                      *OrganizationSettingQuery
-	withDocumentdata                 *DocumentDataQuery
-	withEntitlements                 *EntitlementQuery
-	withOrganizationEntitlement      *EntitlementQuery
-	withPersonalAccessTokens         *PersonalAccessTokenQuery
-	withAPITokens                    *APITokenQuery
-	withOauthprovider                *OauthProviderQuery
-	withUsers                        *UserQuery
-	withInvites                      *InviteQuery
-	withSubscribers                  *SubscriberQuery
-	withWebhooks                     *WebhookQuery
-	withEvents                       *EventQuery
-	withSecrets                      *HushQuery
-	withFeatures                     *FeatureQuery
-	withFiles                        *FileQuery
-	withEntitlementplans             *EntitlementPlanQuery
-	withEntitlementplanfeatures      *EntitlementPlanFeatureQuery
-	withEntities                     *EntityQuery
-	withEntitytypes                  *EntityTypeQuery
-	withContacts                     *ContactQuery
-	withContactLists                 *ContactListQuery
-	withNotes                        *NoteQuery
-	withVendors                      *VendorQuery
-	withVendorProfiles               *VendorProfileQuery
-	withPostalAddresses              *PostalAddressQuery
-	withPhoneNumbers                 *PhoneNumberQuery
-	withMembers                      *OrgMembershipQuery
-	modifiers                        []func(*sql.Selector)
-	loadTotal                        []func(context.Context, []*Organization) error
-	withNamedChildren                map[string]*OrganizationQuery
-	withNamedGroups                  map[string]*GroupQuery
-	withNamedTemplates               map[string]*TemplateQuery
-	withNamedIntegrations            map[string]*IntegrationQuery
-	withNamedDocumentdata            map[string]*DocumentDataQuery
-	withNamedEntitlements            map[string]*EntitlementQuery
-	withNamedOrganizationEntitlement map[string]*EntitlementQuery
-	withNamedPersonalAccessTokens    map[string]*PersonalAccessTokenQuery
-	withNamedAPITokens               map[string]*APITokenQuery
-	withNamedOauthprovider           map[string]*OauthProviderQuery
-	withNamedUsers                   map[string]*UserQuery
-	withNamedInvites                 map[string]*InviteQuery
-	withNamedSubscribers             map[string]*SubscriberQuery
-	withNamedWebhooks                map[string]*WebhookQuery
-	withNamedEvents                  map[string]*EventQuery
-	withNamedSecrets                 map[string]*HushQuery
-	withNamedFeatures                map[string]*FeatureQuery
-	withNamedFiles                   map[string]*FileQuery
-	withNamedEntitlementplans        map[string]*EntitlementPlanQuery
-	withNamedEntitlementplanfeatures map[string]*EntitlementPlanFeatureQuery
-	withNamedEntities                map[string]*EntityQuery
-	withNamedEntitytypes             map[string]*EntityTypeQuery
-	withNamedContacts                map[string]*ContactQuery
-	withNamedContactLists            map[string]*ContactListQuery
-	withNamedNotes                   map[string]*NoteQuery
-	withNamedVendors                 map[string]*VendorQuery
-	withNamedVendorProfiles          map[string]*VendorProfileQuery
-	withNamedPostalAddresses         map[string]*PostalAddressQuery
-	withNamedPhoneNumbers            map[string]*PhoneNumberQuery
-	withNamedMembers                 map[string]*OrgMembershipQuery
+	ctx                                      *QueryContext
+	order                                    []organization.OrderOption
+	inters                                   []Interceptor
+	predicates                               []predicate.Organization
+	withParent                               *OrganizationQuery
+	withChildren                             *OrganizationQuery
+	withGroups                               *GroupQuery
+	withTemplates                            *TemplateQuery
+	withIntegrations                         *IntegrationQuery
+	withSetting                              *OrganizationSettingQuery
+	withDocumentdata                         *DocumentDataQuery
+	withEntitlements                         *EntitlementQuery
+	withOrganizationEntitlement              *EntitlementQuery
+	withPersonalAccessTokens                 *PersonalAccessTokenQuery
+	withAPITokens                            *APITokenQuery
+	withOauthprovider                        *OauthProviderQuery
+	withUsers                                *UserQuery
+	withInvites                              *InviteQuery
+	withSubscribers                          *SubscriberQuery
+	withWebhooks                             *WebhookQuery
+	withEvents                               *EventQuery
+	withSecrets                              *HushQuery
+	withFeatures                             *FeatureQuery
+	withFiles                                *FileQuery
+	withEntitlementplans                     *EntitlementPlanQuery
+	withEntitlementplanfeatures              *EntitlementPlanFeatureQuery
+	withEntities                             *EntityQuery
+	withEntitytypes                          *EntityTypeQuery
+	withContacts                             *ContactQuery
+	withContactLists                         *ContactListQuery
+	withNotes                                *NoteQuery
+	withVendors                              *VendorQuery
+	withVendorProfiles                       *VendorProfileQuery
+	withPostalAddresses                      *PostalAddressQuery
+	withPhoneNumbers                         *PhoneNumberQuery
+	withVendorProfilePaymentPreferences      *VendorProfilePaymentPreferenceQuery
+	withMembers                              *OrgMembershipQuery
+	modifiers                                []func(*sql.Selector)
+	loadTotal                                []func(context.Context, []*Organization) error
+	withNamedChildren                        map[string]*OrganizationQuery
+	withNamedGroups                          map[string]*GroupQuery
+	withNamedTemplates                       map[string]*TemplateQuery
+	withNamedIntegrations                    map[string]*IntegrationQuery
+	withNamedDocumentdata                    map[string]*DocumentDataQuery
+	withNamedEntitlements                    map[string]*EntitlementQuery
+	withNamedOrganizationEntitlement         map[string]*EntitlementQuery
+	withNamedPersonalAccessTokens            map[string]*PersonalAccessTokenQuery
+	withNamedAPITokens                       map[string]*APITokenQuery
+	withNamedOauthprovider                   map[string]*OauthProviderQuery
+	withNamedUsers                           map[string]*UserQuery
+	withNamedInvites                         map[string]*InviteQuery
+	withNamedSubscribers                     map[string]*SubscriberQuery
+	withNamedWebhooks                        map[string]*WebhookQuery
+	withNamedEvents                          map[string]*EventQuery
+	withNamedSecrets                         map[string]*HushQuery
+	withNamedFeatures                        map[string]*FeatureQuery
+	withNamedFiles                           map[string]*FileQuery
+	withNamedEntitlementplans                map[string]*EntitlementPlanQuery
+	withNamedEntitlementplanfeatures         map[string]*EntitlementPlanFeatureQuery
+	withNamedEntities                        map[string]*EntityQuery
+	withNamedEntitytypes                     map[string]*EntityTypeQuery
+	withNamedContacts                        map[string]*ContactQuery
+	withNamedContactLists                    map[string]*ContactListQuery
+	withNamedNotes                           map[string]*NoteQuery
+	withNamedVendors                         map[string]*VendorQuery
+	withNamedVendorProfiles                  map[string]*VendorProfileQuery
+	withNamedPostalAddresses                 map[string]*PostalAddressQuery
+	withNamedPhoneNumbers                    map[string]*PhoneNumberQuery
+	withNamedVendorProfilePaymentPreferences map[string]*VendorProfilePaymentPreferenceQuery
+	withNamedMembers                         map[string]*OrgMembershipQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -930,6 +933,31 @@ func (oq *OrganizationQuery) QueryPhoneNumbers() *PhoneNumberQuery {
 	return query
 }
 
+// QueryVendorProfilePaymentPreferences chains the current query on the "vendor_profile_payment_preferences" edge.
+func (oq *OrganizationQuery) QueryVendorProfilePaymentPreferences() *VendorProfilePaymentPreferenceQuery {
+	query := (&VendorProfilePaymentPreferenceClient{config: oq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := oq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := oq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, selector),
+			sqlgraph.To(vendorprofilepaymentpreference.Table, vendorprofilepaymentpreference.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.VendorProfilePaymentPreferencesTable, organization.VendorProfilePaymentPreferencesColumn),
+		)
+		schemaConfig := oq.schemaConfig
+		step.To.Schema = schemaConfig.VendorProfilePaymentPreference
+		step.Edge.Schema = schemaConfig.VendorProfilePaymentPreference
+		fromU = sqlgraph.SetNeighbors(oq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // QueryMembers chains the current query on the "members" edge.
 func (oq *OrganizationQuery) QueryMembers() *OrgMembershipQuery {
 	query := (&OrgMembershipClient{config: oq.config}).Query()
@@ -1142,43 +1170,44 @@ func (oq *OrganizationQuery) Clone() *OrganizationQuery {
 		return nil
 	}
 	return &OrganizationQuery{
-		config:                      oq.config,
-		ctx:                         oq.ctx.Clone(),
-		order:                       append([]organization.OrderOption{}, oq.order...),
-		inters:                      append([]Interceptor{}, oq.inters...),
-		predicates:                  append([]predicate.Organization{}, oq.predicates...),
-		withParent:                  oq.withParent.Clone(),
-		withChildren:                oq.withChildren.Clone(),
-		withGroups:                  oq.withGroups.Clone(),
-		withTemplates:               oq.withTemplates.Clone(),
-		withIntegrations:            oq.withIntegrations.Clone(),
-		withSetting:                 oq.withSetting.Clone(),
-		withDocumentdata:            oq.withDocumentdata.Clone(),
-		withEntitlements:            oq.withEntitlements.Clone(),
-		withOrganizationEntitlement: oq.withOrganizationEntitlement.Clone(),
-		withPersonalAccessTokens:    oq.withPersonalAccessTokens.Clone(),
-		withAPITokens:               oq.withAPITokens.Clone(),
-		withOauthprovider:           oq.withOauthprovider.Clone(),
-		withUsers:                   oq.withUsers.Clone(),
-		withInvites:                 oq.withInvites.Clone(),
-		withSubscribers:             oq.withSubscribers.Clone(),
-		withWebhooks:                oq.withWebhooks.Clone(),
-		withEvents:                  oq.withEvents.Clone(),
-		withSecrets:                 oq.withSecrets.Clone(),
-		withFeatures:                oq.withFeatures.Clone(),
-		withFiles:                   oq.withFiles.Clone(),
-		withEntitlementplans:        oq.withEntitlementplans.Clone(),
-		withEntitlementplanfeatures: oq.withEntitlementplanfeatures.Clone(),
-		withEntities:                oq.withEntities.Clone(),
-		withEntitytypes:             oq.withEntitytypes.Clone(),
-		withContacts:                oq.withContacts.Clone(),
-		withContactLists:            oq.withContactLists.Clone(),
-		withNotes:                   oq.withNotes.Clone(),
-		withVendors:                 oq.withVendors.Clone(),
-		withVendorProfiles:          oq.withVendorProfiles.Clone(),
-		withPostalAddresses:         oq.withPostalAddresses.Clone(),
-		withPhoneNumbers:            oq.withPhoneNumbers.Clone(),
-		withMembers:                 oq.withMembers.Clone(),
+		config:                              oq.config,
+		ctx:                                 oq.ctx.Clone(),
+		order:                               append([]organization.OrderOption{}, oq.order...),
+		inters:                              append([]Interceptor{}, oq.inters...),
+		predicates:                          append([]predicate.Organization{}, oq.predicates...),
+		withParent:                          oq.withParent.Clone(),
+		withChildren:                        oq.withChildren.Clone(),
+		withGroups:                          oq.withGroups.Clone(),
+		withTemplates:                       oq.withTemplates.Clone(),
+		withIntegrations:                    oq.withIntegrations.Clone(),
+		withSetting:                         oq.withSetting.Clone(),
+		withDocumentdata:                    oq.withDocumentdata.Clone(),
+		withEntitlements:                    oq.withEntitlements.Clone(),
+		withOrganizationEntitlement:         oq.withOrganizationEntitlement.Clone(),
+		withPersonalAccessTokens:            oq.withPersonalAccessTokens.Clone(),
+		withAPITokens:                       oq.withAPITokens.Clone(),
+		withOauthprovider:                   oq.withOauthprovider.Clone(),
+		withUsers:                           oq.withUsers.Clone(),
+		withInvites:                         oq.withInvites.Clone(),
+		withSubscribers:                     oq.withSubscribers.Clone(),
+		withWebhooks:                        oq.withWebhooks.Clone(),
+		withEvents:                          oq.withEvents.Clone(),
+		withSecrets:                         oq.withSecrets.Clone(),
+		withFeatures:                        oq.withFeatures.Clone(),
+		withFiles:                           oq.withFiles.Clone(),
+		withEntitlementplans:                oq.withEntitlementplans.Clone(),
+		withEntitlementplanfeatures:         oq.withEntitlementplanfeatures.Clone(),
+		withEntities:                        oq.withEntities.Clone(),
+		withEntitytypes:                     oq.withEntitytypes.Clone(),
+		withContacts:                        oq.withContacts.Clone(),
+		withContactLists:                    oq.withContactLists.Clone(),
+		withNotes:                           oq.withNotes.Clone(),
+		withVendors:                         oq.withVendors.Clone(),
+		withVendorProfiles:                  oq.withVendorProfiles.Clone(),
+		withPostalAddresses:                 oq.withPostalAddresses.Clone(),
+		withPhoneNumbers:                    oq.withPhoneNumbers.Clone(),
+		withVendorProfilePaymentPreferences: oq.withVendorProfilePaymentPreferences.Clone(),
+		withMembers:                         oq.withMembers.Clone(),
 		// clone intermediate query.
 		sql:  oq.sql.Clone(),
 		path: oq.path,
@@ -1526,6 +1555,17 @@ func (oq *OrganizationQuery) WithPhoneNumbers(opts ...func(*PhoneNumberQuery)) *
 	return oq
 }
 
+// WithVendorProfilePaymentPreferences tells the query-builder to eager-load the nodes that are connected to
+// the "vendor_profile_payment_preferences" edge. The optional arguments are used to configure the query builder of the edge.
+func (oq *OrganizationQuery) WithVendorProfilePaymentPreferences(opts ...func(*VendorProfilePaymentPreferenceQuery)) *OrganizationQuery {
+	query := (&VendorProfilePaymentPreferenceClient{config: oq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	oq.withVendorProfilePaymentPreferences = query
+	return oq
+}
+
 // WithMembers tells the query-builder to eager-load the nodes that are connected to
 // the "members" edge. The optional arguments are used to configure the query builder of the edge.
 func (oq *OrganizationQuery) WithMembers(opts ...func(*OrgMembershipQuery)) *OrganizationQuery {
@@ -1621,7 +1661,7 @@ func (oq *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 	var (
 		nodes       = []*Organization{}
 		_spec       = oq.querySpec()
-		loadedTypes = [32]bool{
+		loadedTypes = [33]bool{
 			oq.withParent != nil,
 			oq.withChildren != nil,
 			oq.withGroups != nil,
@@ -1653,6 +1693,7 @@ func (oq *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			oq.withVendorProfiles != nil,
 			oq.withPostalAddresses != nil,
 			oq.withPhoneNumbers != nil,
+			oq.withVendorProfilePaymentPreferences != nil,
 			oq.withMembers != nil,
 		}
 	)
@@ -1902,6 +1943,15 @@ func (oq *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			return nil, err
 		}
 	}
+	if query := oq.withVendorProfilePaymentPreferences; query != nil {
+		if err := oq.loadVendorProfilePaymentPreferences(ctx, query, nodes,
+			func(n *Organization) { n.Edges.VendorProfilePaymentPreferences = []*VendorProfilePaymentPreference{} },
+			func(n *Organization, e *VendorProfilePaymentPreference) {
+				n.Edges.VendorProfilePaymentPreferences = append(n.Edges.VendorProfilePaymentPreferences, e)
+			}); err != nil {
+			return nil, err
+		}
+	}
 	if query := oq.withMembers; query != nil {
 		if err := oq.loadMembers(ctx, query, nodes,
 			func(n *Organization) { n.Edges.Members = []*OrgMembership{} },
@@ -2109,6 +2159,15 @@ func (oq *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 		if err := oq.loadPhoneNumbers(ctx, query, nodes,
 			func(n *Organization) { n.appendNamedPhoneNumbers(name) },
 			func(n *Organization, e *PhoneNumber) { n.appendNamedPhoneNumbers(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range oq.withNamedVendorProfilePaymentPreferences {
+		if err := oq.loadVendorProfilePaymentPreferences(ctx, query, nodes,
+			func(n *Organization) { n.appendNamedVendorProfilePaymentPreferences(name) },
+			func(n *Organization, e *VendorProfilePaymentPreference) {
+				n.appendNamedVendorProfilePaymentPreferences(name, e)
+			}); err != nil {
 			return nil, err
 		}
 	}
@@ -3217,6 +3276,36 @@ func (oq *OrganizationQuery) loadPhoneNumbers(ctx context.Context, query *PhoneN
 	}
 	return nil
 }
+func (oq *OrganizationQuery) loadVendorProfilePaymentPreferences(ctx context.Context, query *VendorProfilePaymentPreferenceQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *VendorProfilePaymentPreference)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Organization)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(vendorprofilepaymentpreference.FieldOwnerID)
+	}
+	query.Where(predicate.VendorProfilePaymentPreference(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(organization.VendorProfilePaymentPreferencesColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.OwnerID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "owner_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
 func (oq *OrganizationQuery) loadMembers(ctx context.Context, query *OrgMembershipQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *OrgMembership)) error {
 	fks := make([]driver.Value, 0, len(nodes))
 	nodeids := make(map[string]*Organization)
@@ -3743,6 +3832,20 @@ func (oq *OrganizationQuery) WithNamedPhoneNumbers(name string, opts ...func(*Ph
 		oq.withNamedPhoneNumbers = make(map[string]*PhoneNumberQuery)
 	}
 	oq.withNamedPhoneNumbers[name] = query
+	return oq
+}
+
+// WithNamedVendorProfilePaymentPreferences tells the query-builder to eager-load the nodes that are connected to the "vendor_profile_payment_preferences"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (oq *OrganizationQuery) WithNamedVendorProfilePaymentPreferences(name string, opts ...func(*VendorProfilePaymentPreferenceQuery)) *OrganizationQuery {
+	query := (&VendorProfilePaymentPreferenceClient{config: oq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if oq.withNamedVendorProfilePaymentPreferences == nil {
+		oq.withNamedVendorProfilePaymentPreferences = make(map[string]*VendorProfilePaymentPreferenceQuery)
+	}
+	oq.withNamedVendorProfilePaymentPreferences[name] = query
 	return oq
 }
 

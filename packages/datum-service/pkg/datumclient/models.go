@@ -2137,37 +2137,38 @@ type CreateOrganizationInput struct {
 	// URL of the user's remote avatar
 	AvatarRemoteURL *string `json:"avatarRemoteURL,omitempty"`
 	// Whether the organization has a dedicated database
-	DedicatedDb                *bool                           `json:"dedicatedDb,omitempty"`
-	ParentID                   *string                         `json:"parentID,omitempty"`
-	GroupIDs                   []string                        `json:"groupIDs,omitempty"`
-	TemplateIDs                []string                        `json:"templateIDs,omitempty"`
-	IntegrationIDs             []string                        `json:"integrationIDs,omitempty"`
-	SettingID                  *string                         `json:"settingID,omitempty"`
-	DocumentdatumIDs           []string                        `json:"documentdatumIDs,omitempty"`
-	EntitlementIDs             []string                        `json:"entitlementIDs,omitempty"`
-	OrganizationEntitlementIDs []string                        `json:"organizationEntitlementIDs,omitempty"`
-	PersonalAccessTokenIDs     []string                        `json:"personalAccessTokenIDs,omitempty"`
-	APITokenIDs                []string                        `json:"apiTokenIDs,omitempty"`
-	OauthproviderIDs           []string                        `json:"oauthproviderIDs,omitempty"`
-	UserIDs                    []string                        `json:"userIDs,omitempty"`
-	InviteIDs                  []string                        `json:"inviteIDs,omitempty"`
-	SubscriberIDs              []string                        `json:"subscriberIDs,omitempty"`
-	WebhookIDs                 []string                        `json:"webhookIDs,omitempty"`
-	EventIDs                   []string                        `json:"eventIDs,omitempty"`
-	SecretIDs                  []string                        `json:"secretIDs,omitempty"`
-	FeatureIDs                 []string                        `json:"featureIDs,omitempty"`
-	FileIDs                    []string                        `json:"fileIDs,omitempty"`
-	EntitlementplanIDs         []string                        `json:"entitlementplanIDs,omitempty"`
-	EntityIDs                  []string                        `json:"entityIDs,omitempty"`
-	EntitytypeIDs              []string                        `json:"entitytypeIDs,omitempty"`
-	ContactIDs                 []string                        `json:"contactIDs,omitempty"`
-	ContactListIDs             []string                        `json:"contactListIDs,omitempty"`
-	NoteIDs                    []string                        `json:"noteIDs,omitempty"`
-	VendorIDs                  []string                        `json:"vendorIDs,omitempty"`
-	VendorProfileIDs           []string                        `json:"vendorProfileIDs,omitempty"`
-	PostalAddressIDs           []string                        `json:"postalAddressIDs,omitempty"`
-	PhoneNumberIDs             []string                        `json:"phoneNumberIDs,omitempty"`
-	CreateOrgSettings          *CreateOrganizationSettingInput `json:"createOrgSettings,omitempty"`
+	DedicatedDb                       *bool                           `json:"dedicatedDb,omitempty"`
+	ParentID                          *string                         `json:"parentID,omitempty"`
+	GroupIDs                          []string                        `json:"groupIDs,omitempty"`
+	TemplateIDs                       []string                        `json:"templateIDs,omitempty"`
+	IntegrationIDs                    []string                        `json:"integrationIDs,omitempty"`
+	SettingID                         *string                         `json:"settingID,omitempty"`
+	DocumentdatumIDs                  []string                        `json:"documentdatumIDs,omitempty"`
+	EntitlementIDs                    []string                        `json:"entitlementIDs,omitempty"`
+	OrganizationEntitlementIDs        []string                        `json:"organizationEntitlementIDs,omitempty"`
+	PersonalAccessTokenIDs            []string                        `json:"personalAccessTokenIDs,omitempty"`
+	APITokenIDs                       []string                        `json:"apiTokenIDs,omitempty"`
+	OauthproviderIDs                  []string                        `json:"oauthproviderIDs,omitempty"`
+	UserIDs                           []string                        `json:"userIDs,omitempty"`
+	InviteIDs                         []string                        `json:"inviteIDs,omitempty"`
+	SubscriberIDs                     []string                        `json:"subscriberIDs,omitempty"`
+	WebhookIDs                        []string                        `json:"webhookIDs,omitempty"`
+	EventIDs                          []string                        `json:"eventIDs,omitempty"`
+	SecretIDs                         []string                        `json:"secretIDs,omitempty"`
+	FeatureIDs                        []string                        `json:"featureIDs,omitempty"`
+	FileIDs                           []string                        `json:"fileIDs,omitempty"`
+	EntitlementplanIDs                []string                        `json:"entitlementplanIDs,omitempty"`
+	EntityIDs                         []string                        `json:"entityIDs,omitempty"`
+	EntitytypeIDs                     []string                        `json:"entitytypeIDs,omitempty"`
+	ContactIDs                        []string                        `json:"contactIDs,omitempty"`
+	ContactListIDs                    []string                        `json:"contactListIDs,omitempty"`
+	NoteIDs                           []string                        `json:"noteIDs,omitempty"`
+	VendorIDs                         []string                        `json:"vendorIDs,omitempty"`
+	VendorProfileIDs                  []string                        `json:"vendorProfileIDs,omitempty"`
+	PostalAddressIDs                  []string                        `json:"postalAddressIDs,omitempty"`
+	PhoneNumberIDs                    []string                        `json:"phoneNumberIDs,omitempty"`
+	VendorProfilePaymentPreferenceIDs []string                        `json:"vendorProfilePaymentPreferenceIDs,omitempty"`
+	CreateOrgSettings                 *CreateOrganizationSettingInput `json:"createOrgSettings,omitempty"`
 }
 
 // CreateOrganizationSettingInput is used for create OrganizationSetting object.
@@ -2394,11 +2395,25 @@ type CreateVendorProfileInput struct {
 	// The tax ID of the Corporation or Person
 	TaxID *string `json:"taxID,omitempty"`
 	// The type of tax ID (e.g. EIN, SSN, TIN, etc.)
-	TaxIDType        *enums.TaxIDType `json:"taxIDType,omitempty"`
-	OwnerID          *string          `json:"ownerID,omitempty"`
-	PostalAddressIDs []string         `json:"postalAddressIDs,omitempty"`
-	PhoneNumberIDs   []string         `json:"phoneNumberIDs,omitempty"`
-	VendorID         *string          `json:"vendorID,omitempty"`
+	TaxIDType            *enums.TaxIDType `json:"taxIDType,omitempty"`
+	OwnerID              *string          `json:"ownerID,omitempty"`
+	PostalAddressIDs     []string         `json:"postalAddressIDs,omitempty"`
+	PhoneNumberIDs       []string         `json:"phoneNumberIDs,omitempty"`
+	PaymentPreferenceIDs []string         `json:"paymentPreferenceIDs,omitempty"`
+	VendorID             *string          `json:"vendorID,omitempty"`
+}
+
+// CreateVendorProfilePaymentPreferenceInput is used for create VendorProfilePaymentPreference object.
+// Input was generated by ent.
+type CreateVendorProfilePaymentPreferenceInput struct {
+	// tags associated with the object
+	Tags []string `json:"tags,omitempty"`
+	// Whether this is the preferred payment method.
+	Preferred *bool `json:"preferred,omitempty"`
+	// The payment method. (e.g. DOMESTIC_WIRE_TRANSFER, INTERNATIONAL_WIRE_TRANSFER, ACH, CREDIT_CARD)
+	Method          *enums.PaymentMethod `json:"method,omitempty"`
+	OwnerID         *string              `json:"ownerID,omitempty"`
+	VendorProfileID *string              `json:"vendorProfileID,omitempty"`
 }
 
 // CreateVendorProfilePhoneNumberInput is used for create VendorProfilePhoneNumber object.
@@ -10775,39 +10790,40 @@ type Organization struct {
 	// URL of the user's remote avatar
 	AvatarRemoteURL *string `json:"avatarRemoteURL,omitempty"`
 	// Whether the organization has a dedicated database
-	DedicatedDb             bool                      `json:"dedicatedDb"`
-	Parent                  *Organization             `json:"parent,omitempty"`
-	Children                *OrganizationConnection   `json:"children"`
-	Groups                  []*Group                  `json:"groups,omitempty"`
-	Templates               []*Template               `json:"templates,omitempty"`
-	Integrations            []*Integration            `json:"integrations,omitempty"`
-	Setting                 *OrganizationSetting      `json:"setting,omitempty"`
-	Documentdata            []*DocumentData           `json:"documentdata,omitempty"`
-	Entitlements            []*Entitlement            `json:"entitlements,omitempty"`
-	OrganizationEntitlement []*Entitlement            `json:"organizationEntitlement,omitempty"`
-	PersonalAccessTokens    []*PersonalAccessToken    `json:"personalAccessTokens,omitempty"`
-	APITokens               []*APIToken               `json:"apiTokens,omitempty"`
-	Oauthprovider           []*OauthProvider          `json:"oauthprovider,omitempty"`
-	Users                   []*User                   `json:"users,omitempty"`
-	Invites                 []*Invite                 `json:"invites,omitempty"`
-	Subscribers             []*Subscriber             `json:"subscribers,omitempty"`
-	Webhooks                []*Webhook                `json:"webhooks,omitempty"`
-	Events                  []*Event                  `json:"events,omitempty"`
-	Secrets                 []*Hush                   `json:"secrets,omitempty"`
-	Features                []*Feature                `json:"features,omitempty"`
-	Files                   []*File                   `json:"files,omitempty"`
-	Entitlementplans        []*EntitlementPlan        `json:"entitlementplans,omitempty"`
-	Entitlementplanfeatures []*EntitlementPlanFeature `json:"entitlementplanfeatures,omitempty"`
-	Entities                []*Entity                 `json:"entities,omitempty"`
-	Entitytypes             []*EntityType             `json:"entitytypes,omitempty"`
-	Contacts                []*Contact                `json:"contacts,omitempty"`
-	ContactLists            []*ContactList            `json:"contactLists,omitempty"`
-	Notes                   []*Note                   `json:"notes,omitempty"`
-	Vendors                 []*Vendor                 `json:"vendors,omitempty"`
-	VendorProfiles          []*VendorProfile          `json:"vendorProfiles,omitempty"`
-	PostalAddresses         []*PostalAddress          `json:"postalAddresses,omitempty"`
-	PhoneNumbers            []*PhoneNumber            `json:"phoneNumbers,omitempty"`
-	Members                 []*OrgMembership          `json:"members,omitempty"`
+	DedicatedDb                     bool                              `json:"dedicatedDb"`
+	Parent                          *Organization                     `json:"parent,omitempty"`
+	Children                        *OrganizationConnection           `json:"children"`
+	Groups                          []*Group                          `json:"groups,omitempty"`
+	Templates                       []*Template                       `json:"templates,omitempty"`
+	Integrations                    []*Integration                    `json:"integrations,omitempty"`
+	Setting                         *OrganizationSetting              `json:"setting,omitempty"`
+	Documentdata                    []*DocumentData                   `json:"documentdata,omitempty"`
+	Entitlements                    []*Entitlement                    `json:"entitlements,omitempty"`
+	OrganizationEntitlement         []*Entitlement                    `json:"organizationEntitlement,omitempty"`
+	PersonalAccessTokens            []*PersonalAccessToken            `json:"personalAccessTokens,omitempty"`
+	APITokens                       []*APIToken                       `json:"apiTokens,omitempty"`
+	Oauthprovider                   []*OauthProvider                  `json:"oauthprovider,omitempty"`
+	Users                           []*User                           `json:"users,omitempty"`
+	Invites                         []*Invite                         `json:"invites,omitempty"`
+	Subscribers                     []*Subscriber                     `json:"subscribers,omitempty"`
+	Webhooks                        []*Webhook                        `json:"webhooks,omitempty"`
+	Events                          []*Event                          `json:"events,omitempty"`
+	Secrets                         []*Hush                           `json:"secrets,omitempty"`
+	Features                        []*Feature                        `json:"features,omitempty"`
+	Files                           []*File                           `json:"files,omitempty"`
+	Entitlementplans                []*EntitlementPlan                `json:"entitlementplans,omitempty"`
+	Entitlementplanfeatures         []*EntitlementPlanFeature         `json:"entitlementplanfeatures,omitempty"`
+	Entities                        []*Entity                         `json:"entities,omitempty"`
+	Entitytypes                     []*EntityType                     `json:"entitytypes,omitempty"`
+	Contacts                        []*Contact                        `json:"contacts,omitempty"`
+	ContactLists                    []*ContactList                    `json:"contactLists,omitempty"`
+	Notes                           []*Note                           `json:"notes,omitempty"`
+	Vendors                         []*Vendor                         `json:"vendors,omitempty"`
+	VendorProfiles                  []*VendorProfile                  `json:"vendorProfiles,omitempty"`
+	PostalAddresses                 []*PostalAddress                  `json:"postalAddresses,omitempty"`
+	PhoneNumbers                    []*PhoneNumber                    `json:"phoneNumbers,omitempty"`
+	VendorProfilePaymentPreferences []*VendorProfilePaymentPreference `json:"vendorProfilePaymentPreferences,omitempty"`
+	Members                         []*OrgMembership                  `json:"members,omitempty"`
 }
 
 func (Organization) IsNode() {}
@@ -11909,6 +11925,9 @@ type OrganizationWhereInput struct {
 	// phone_numbers edge predicates
 	HasPhoneNumbers     *bool                    `json:"hasPhoneNumbers,omitempty"`
 	HasPhoneNumbersWith []*PhoneNumberWhereInput `json:"hasPhoneNumbersWith,omitempty"`
+	// vendor_profile_payment_preferences edge predicates
+	HasVendorProfilePaymentPreferences     *bool                                       `json:"hasVendorProfilePaymentPreferences,omitempty"`
+	HasVendorProfilePaymentPreferencesWith []*VendorProfilePaymentPreferenceWhereInput `json:"hasVendorProfilePaymentPreferencesWith,omitempty"`
 	// members edge predicates
 	HasMembers     *bool                      `json:"hasMembers,omitempty"`
 	HasMembersWith []*OrgMembershipWhereInput `json:"hasMembersWith,omitempty"`
@@ -14840,93 +14859,96 @@ type UpdateOrganizationInput struct {
 	Description      *string `json:"description,omitempty"`
 	ClearDescription *bool   `json:"clearDescription,omitempty"`
 	// URL of the user's remote avatar
-	AvatarRemoteURL                  *string                         `json:"avatarRemoteURL,omitempty"`
-	ClearAvatarRemoteURL             *bool                           `json:"clearAvatarRemoteURL,omitempty"`
-	AddGroupIDs                      []string                        `json:"addGroupIDs,omitempty"`
-	RemoveGroupIDs                   []string                        `json:"removeGroupIDs,omitempty"`
-	ClearGroups                      *bool                           `json:"clearGroups,omitempty"`
-	AddTemplateIDs                   []string                        `json:"addTemplateIDs,omitempty"`
-	RemoveTemplateIDs                []string                        `json:"removeTemplateIDs,omitempty"`
-	ClearTemplates                   *bool                           `json:"clearTemplates,omitempty"`
-	AddIntegrationIDs                []string                        `json:"addIntegrationIDs,omitempty"`
-	RemoveIntegrationIDs             []string                        `json:"removeIntegrationIDs,omitempty"`
-	ClearIntegrations                *bool                           `json:"clearIntegrations,omitempty"`
-	SettingID                        *string                         `json:"settingID,omitempty"`
-	ClearSetting                     *bool                           `json:"clearSetting,omitempty"`
-	AddDocumentdatumIDs              []string                        `json:"addDocumentdatumIDs,omitempty"`
-	RemoveDocumentdatumIDs           []string                        `json:"removeDocumentdatumIDs,omitempty"`
-	ClearDocumentdata                *bool                           `json:"clearDocumentdata,omitempty"`
-	AddEntitlementIDs                []string                        `json:"addEntitlementIDs,omitempty"`
-	RemoveEntitlementIDs             []string                        `json:"removeEntitlementIDs,omitempty"`
-	ClearEntitlements                *bool                           `json:"clearEntitlements,omitempty"`
-	AddOrganizationEntitlementIDs    []string                        `json:"addOrganizationEntitlementIDs,omitempty"`
-	RemoveOrganizationEntitlementIDs []string                        `json:"removeOrganizationEntitlementIDs,omitempty"`
-	ClearOrganizationEntitlement     *bool                           `json:"clearOrganizationEntitlement,omitempty"`
-	AddPersonalAccessTokenIDs        []string                        `json:"addPersonalAccessTokenIDs,omitempty"`
-	RemovePersonalAccessTokenIDs     []string                        `json:"removePersonalAccessTokenIDs,omitempty"`
-	ClearPersonalAccessTokens        *bool                           `json:"clearPersonalAccessTokens,omitempty"`
-	AddAPITokenIDs                   []string                        `json:"addAPITokenIDs,omitempty"`
-	RemoveAPITokenIDs                []string                        `json:"removeAPITokenIDs,omitempty"`
-	ClearAPITokens                   *bool                           `json:"clearAPITokens,omitempty"`
-	AddOauthproviderIDs              []string                        `json:"addOauthproviderIDs,omitempty"`
-	RemoveOauthproviderIDs           []string                        `json:"removeOauthproviderIDs,omitempty"`
-	ClearOauthprovider               *bool                           `json:"clearOauthprovider,omitempty"`
-	AddUserIDs                       []string                        `json:"addUserIDs,omitempty"`
-	RemoveUserIDs                    []string                        `json:"removeUserIDs,omitempty"`
-	ClearUsers                       *bool                           `json:"clearUsers,omitempty"`
-	AddInviteIDs                     []string                        `json:"addInviteIDs,omitempty"`
-	RemoveInviteIDs                  []string                        `json:"removeInviteIDs,omitempty"`
-	ClearInvites                     *bool                           `json:"clearInvites,omitempty"`
-	AddSubscriberIDs                 []string                        `json:"addSubscriberIDs,omitempty"`
-	RemoveSubscriberIDs              []string                        `json:"removeSubscriberIDs,omitempty"`
-	ClearSubscribers                 *bool                           `json:"clearSubscribers,omitempty"`
-	AddWebhookIDs                    []string                        `json:"addWebhookIDs,omitempty"`
-	RemoveWebhookIDs                 []string                        `json:"removeWebhookIDs,omitempty"`
-	ClearWebhooks                    *bool                           `json:"clearWebhooks,omitempty"`
-	AddEventIDs                      []string                        `json:"addEventIDs,omitempty"`
-	RemoveEventIDs                   []string                        `json:"removeEventIDs,omitempty"`
-	ClearEvents                      *bool                           `json:"clearEvents,omitempty"`
-	AddSecretIDs                     []string                        `json:"addSecretIDs,omitempty"`
-	RemoveSecretIDs                  []string                        `json:"removeSecretIDs,omitempty"`
-	ClearSecrets                     *bool                           `json:"clearSecrets,omitempty"`
-	AddFeatureIDs                    []string                        `json:"addFeatureIDs,omitempty"`
-	RemoveFeatureIDs                 []string                        `json:"removeFeatureIDs,omitempty"`
-	ClearFeatures                    *bool                           `json:"clearFeatures,omitempty"`
-	AddFileIDs                       []string                        `json:"addFileIDs,omitempty"`
-	RemoveFileIDs                    []string                        `json:"removeFileIDs,omitempty"`
-	ClearFiles                       *bool                           `json:"clearFiles,omitempty"`
-	AddEntitlementplanIDs            []string                        `json:"addEntitlementplanIDs,omitempty"`
-	RemoveEntitlementplanIDs         []string                        `json:"removeEntitlementplanIDs,omitempty"`
-	ClearEntitlementplans            *bool                           `json:"clearEntitlementplans,omitempty"`
-	AddEntityIDs                     []string                        `json:"addEntityIDs,omitempty"`
-	RemoveEntityIDs                  []string                        `json:"removeEntityIDs,omitempty"`
-	ClearEntities                    *bool                           `json:"clearEntities,omitempty"`
-	AddEntitytypeIDs                 []string                        `json:"addEntitytypeIDs,omitempty"`
-	RemoveEntitytypeIDs              []string                        `json:"removeEntitytypeIDs,omitempty"`
-	ClearEntitytypes                 *bool                           `json:"clearEntitytypes,omitempty"`
-	AddContactIDs                    []string                        `json:"addContactIDs,omitempty"`
-	RemoveContactIDs                 []string                        `json:"removeContactIDs,omitempty"`
-	ClearContacts                    *bool                           `json:"clearContacts,omitempty"`
-	AddContactListIDs                []string                        `json:"addContactListIDs,omitempty"`
-	RemoveContactListIDs             []string                        `json:"removeContactListIDs,omitempty"`
-	ClearContactLists                *bool                           `json:"clearContactLists,omitempty"`
-	AddNoteIDs                       []string                        `json:"addNoteIDs,omitempty"`
-	RemoveNoteIDs                    []string                        `json:"removeNoteIDs,omitempty"`
-	ClearNotes                       *bool                           `json:"clearNotes,omitempty"`
-	AddVendorIDs                     []string                        `json:"addVendorIDs,omitempty"`
-	RemoveVendorIDs                  []string                        `json:"removeVendorIDs,omitempty"`
-	ClearVendors                     *bool                           `json:"clearVendors,omitempty"`
-	AddVendorProfileIDs              []string                        `json:"addVendorProfileIDs,omitempty"`
-	RemoveVendorProfileIDs           []string                        `json:"removeVendorProfileIDs,omitempty"`
-	ClearVendorProfiles              *bool                           `json:"clearVendorProfiles,omitempty"`
-	AddPostalAddressIDs              []string                        `json:"addPostalAddressIDs,omitempty"`
-	RemovePostalAddressIDs           []string                        `json:"removePostalAddressIDs,omitempty"`
-	ClearPostalAddresses             *bool                           `json:"clearPostalAddresses,omitempty"`
-	AddPhoneNumberIDs                []string                        `json:"addPhoneNumberIDs,omitempty"`
-	RemovePhoneNumberIDs             []string                        `json:"removePhoneNumberIDs,omitempty"`
-	ClearPhoneNumbers                *bool                           `json:"clearPhoneNumbers,omitempty"`
-	AddOrgMembers                    []*CreateOrgMembershipInput     `json:"addOrgMembers,omitempty"`
-	UpdateOrgSettings                *UpdateOrganizationSettingInput `json:"updateOrgSettings,omitempty"`
+	AvatarRemoteURL                         *string                         `json:"avatarRemoteURL,omitempty"`
+	ClearAvatarRemoteURL                    *bool                           `json:"clearAvatarRemoteURL,omitempty"`
+	AddGroupIDs                             []string                        `json:"addGroupIDs,omitempty"`
+	RemoveGroupIDs                          []string                        `json:"removeGroupIDs,omitempty"`
+	ClearGroups                             *bool                           `json:"clearGroups,omitempty"`
+	AddTemplateIDs                          []string                        `json:"addTemplateIDs,omitempty"`
+	RemoveTemplateIDs                       []string                        `json:"removeTemplateIDs,omitempty"`
+	ClearTemplates                          *bool                           `json:"clearTemplates,omitempty"`
+	AddIntegrationIDs                       []string                        `json:"addIntegrationIDs,omitempty"`
+	RemoveIntegrationIDs                    []string                        `json:"removeIntegrationIDs,omitempty"`
+	ClearIntegrations                       *bool                           `json:"clearIntegrations,omitempty"`
+	SettingID                               *string                         `json:"settingID,omitempty"`
+	ClearSetting                            *bool                           `json:"clearSetting,omitempty"`
+	AddDocumentdatumIDs                     []string                        `json:"addDocumentdatumIDs,omitempty"`
+	RemoveDocumentdatumIDs                  []string                        `json:"removeDocumentdatumIDs,omitempty"`
+	ClearDocumentdata                       *bool                           `json:"clearDocumentdata,omitempty"`
+	AddEntitlementIDs                       []string                        `json:"addEntitlementIDs,omitempty"`
+	RemoveEntitlementIDs                    []string                        `json:"removeEntitlementIDs,omitempty"`
+	ClearEntitlements                       *bool                           `json:"clearEntitlements,omitempty"`
+	AddOrganizationEntitlementIDs           []string                        `json:"addOrganizationEntitlementIDs,omitempty"`
+	RemoveOrganizationEntitlementIDs        []string                        `json:"removeOrganizationEntitlementIDs,omitempty"`
+	ClearOrganizationEntitlement            *bool                           `json:"clearOrganizationEntitlement,omitempty"`
+	AddPersonalAccessTokenIDs               []string                        `json:"addPersonalAccessTokenIDs,omitempty"`
+	RemovePersonalAccessTokenIDs            []string                        `json:"removePersonalAccessTokenIDs,omitempty"`
+	ClearPersonalAccessTokens               *bool                           `json:"clearPersonalAccessTokens,omitempty"`
+	AddAPITokenIDs                          []string                        `json:"addAPITokenIDs,omitempty"`
+	RemoveAPITokenIDs                       []string                        `json:"removeAPITokenIDs,omitempty"`
+	ClearAPITokens                          *bool                           `json:"clearAPITokens,omitempty"`
+	AddOauthproviderIDs                     []string                        `json:"addOauthproviderIDs,omitempty"`
+	RemoveOauthproviderIDs                  []string                        `json:"removeOauthproviderIDs,omitempty"`
+	ClearOauthprovider                      *bool                           `json:"clearOauthprovider,omitempty"`
+	AddUserIDs                              []string                        `json:"addUserIDs,omitempty"`
+	RemoveUserIDs                           []string                        `json:"removeUserIDs,omitempty"`
+	ClearUsers                              *bool                           `json:"clearUsers,omitempty"`
+	AddInviteIDs                            []string                        `json:"addInviteIDs,omitempty"`
+	RemoveInviteIDs                         []string                        `json:"removeInviteIDs,omitempty"`
+	ClearInvites                            *bool                           `json:"clearInvites,omitempty"`
+	AddSubscriberIDs                        []string                        `json:"addSubscriberIDs,omitempty"`
+	RemoveSubscriberIDs                     []string                        `json:"removeSubscriberIDs,omitempty"`
+	ClearSubscribers                        *bool                           `json:"clearSubscribers,omitempty"`
+	AddWebhookIDs                           []string                        `json:"addWebhookIDs,omitempty"`
+	RemoveWebhookIDs                        []string                        `json:"removeWebhookIDs,omitempty"`
+	ClearWebhooks                           *bool                           `json:"clearWebhooks,omitempty"`
+	AddEventIDs                             []string                        `json:"addEventIDs,omitempty"`
+	RemoveEventIDs                          []string                        `json:"removeEventIDs,omitempty"`
+	ClearEvents                             *bool                           `json:"clearEvents,omitempty"`
+	AddSecretIDs                            []string                        `json:"addSecretIDs,omitempty"`
+	RemoveSecretIDs                         []string                        `json:"removeSecretIDs,omitempty"`
+	ClearSecrets                            *bool                           `json:"clearSecrets,omitempty"`
+	AddFeatureIDs                           []string                        `json:"addFeatureIDs,omitempty"`
+	RemoveFeatureIDs                        []string                        `json:"removeFeatureIDs,omitempty"`
+	ClearFeatures                           *bool                           `json:"clearFeatures,omitempty"`
+	AddFileIDs                              []string                        `json:"addFileIDs,omitempty"`
+	RemoveFileIDs                           []string                        `json:"removeFileIDs,omitempty"`
+	ClearFiles                              *bool                           `json:"clearFiles,omitempty"`
+	AddEntitlementplanIDs                   []string                        `json:"addEntitlementplanIDs,omitempty"`
+	RemoveEntitlementplanIDs                []string                        `json:"removeEntitlementplanIDs,omitempty"`
+	ClearEntitlementplans                   *bool                           `json:"clearEntitlementplans,omitempty"`
+	AddEntityIDs                            []string                        `json:"addEntityIDs,omitempty"`
+	RemoveEntityIDs                         []string                        `json:"removeEntityIDs,omitempty"`
+	ClearEntities                           *bool                           `json:"clearEntities,omitempty"`
+	AddEntitytypeIDs                        []string                        `json:"addEntitytypeIDs,omitempty"`
+	RemoveEntitytypeIDs                     []string                        `json:"removeEntitytypeIDs,omitempty"`
+	ClearEntitytypes                        *bool                           `json:"clearEntitytypes,omitempty"`
+	AddContactIDs                           []string                        `json:"addContactIDs,omitempty"`
+	RemoveContactIDs                        []string                        `json:"removeContactIDs,omitempty"`
+	ClearContacts                           *bool                           `json:"clearContacts,omitempty"`
+	AddContactListIDs                       []string                        `json:"addContactListIDs,omitempty"`
+	RemoveContactListIDs                    []string                        `json:"removeContactListIDs,omitempty"`
+	ClearContactLists                       *bool                           `json:"clearContactLists,omitempty"`
+	AddNoteIDs                              []string                        `json:"addNoteIDs,omitempty"`
+	RemoveNoteIDs                           []string                        `json:"removeNoteIDs,omitempty"`
+	ClearNotes                              *bool                           `json:"clearNotes,omitempty"`
+	AddVendorIDs                            []string                        `json:"addVendorIDs,omitempty"`
+	RemoveVendorIDs                         []string                        `json:"removeVendorIDs,omitempty"`
+	ClearVendors                            *bool                           `json:"clearVendors,omitempty"`
+	AddVendorProfileIDs                     []string                        `json:"addVendorProfileIDs,omitempty"`
+	RemoveVendorProfileIDs                  []string                        `json:"removeVendorProfileIDs,omitempty"`
+	ClearVendorProfiles                     *bool                           `json:"clearVendorProfiles,omitempty"`
+	AddPostalAddressIDs                     []string                        `json:"addPostalAddressIDs,omitempty"`
+	RemovePostalAddressIDs                  []string                        `json:"removePostalAddressIDs,omitempty"`
+	ClearPostalAddresses                    *bool                           `json:"clearPostalAddresses,omitempty"`
+	AddPhoneNumberIDs                       []string                        `json:"addPhoneNumberIDs,omitempty"`
+	RemovePhoneNumberIDs                    []string                        `json:"removePhoneNumberIDs,omitempty"`
+	ClearPhoneNumbers                       *bool                           `json:"clearPhoneNumbers,omitempty"`
+	AddVendorProfilePaymentPreferenceIDs    []string                        `json:"addVendorProfilePaymentPreferenceIDs,omitempty"`
+	RemoveVendorProfilePaymentPreferenceIDs []string                        `json:"removeVendorProfilePaymentPreferenceIDs,omitempty"`
+	ClearVendorProfilePaymentPreferences    *bool                           `json:"clearVendorProfilePaymentPreferences,omitempty"`
+	AddOrgMembers                           []*CreateOrgMembershipInput     `json:"addOrgMembers,omitempty"`
+	UpdateOrgSettings                       *UpdateOrganizationSettingInput `json:"updateOrgSettings,omitempty"`
 }
 
 // UpdateOrganizationSettingInput is used for update OrganizationSetting object.
@@ -15266,15 +15288,35 @@ type UpdateVendorProfileInput struct {
 	TaxID      *string `json:"taxID,omitempty"`
 	ClearTaxID *bool   `json:"clearTaxID,omitempty"`
 	// The type of tax ID (e.g. EIN, SSN, TIN, etc.)
-	TaxIDType              *enums.TaxIDType `json:"taxIDType,omitempty"`
-	OwnerID                *string          `json:"ownerID,omitempty"`
-	ClearOwner             *bool            `json:"clearOwner,omitempty"`
-	AddPostalAddressIDs    []string         `json:"addPostalAddressIDs,omitempty"`
-	RemovePostalAddressIDs []string         `json:"removePostalAddressIDs,omitempty"`
-	ClearPostalAddresses   *bool            `json:"clearPostalAddresses,omitempty"`
-	AddPhoneNumberIDs      []string         `json:"addPhoneNumberIDs,omitempty"`
-	RemovePhoneNumberIDs   []string         `json:"removePhoneNumberIDs,omitempty"`
-	ClearPhoneNumbers      *bool            `json:"clearPhoneNumbers,omitempty"`
+	TaxIDType                  *enums.TaxIDType `json:"taxIDType,omitempty"`
+	OwnerID                    *string          `json:"ownerID,omitempty"`
+	ClearOwner                 *bool            `json:"clearOwner,omitempty"`
+	AddPostalAddressIDs        []string         `json:"addPostalAddressIDs,omitempty"`
+	RemovePostalAddressIDs     []string         `json:"removePostalAddressIDs,omitempty"`
+	ClearPostalAddresses       *bool            `json:"clearPostalAddresses,omitempty"`
+	AddPhoneNumberIDs          []string         `json:"addPhoneNumberIDs,omitempty"`
+	RemovePhoneNumberIDs       []string         `json:"removePhoneNumberIDs,omitempty"`
+	ClearPhoneNumbers          *bool            `json:"clearPhoneNumbers,omitempty"`
+	AddPaymentPreferenceIDs    []string         `json:"addPaymentPreferenceIDs,omitempty"`
+	RemovePaymentPreferenceIDs []string         `json:"removePaymentPreferenceIDs,omitempty"`
+	ClearPaymentPreferences    *bool            `json:"clearPaymentPreferences,omitempty"`
+}
+
+// UpdateVendorProfilePaymentPreferenceInput is used for update VendorProfilePaymentPreference object.
+// Input was generated by ent.
+type UpdateVendorProfilePaymentPreferenceInput struct {
+	// tags associated with the object
+	Tags       []string `json:"tags,omitempty"`
+	AppendTags []string `json:"appendTags,omitempty"`
+	ClearTags  *bool    `json:"clearTags,omitempty"`
+	// Whether this is the preferred payment method.
+	Preferred *bool `json:"preferred,omitempty"`
+	// The payment method. (e.g. DOMESTIC_WIRE_TRANSFER, INTERNATIONAL_WIRE_TRANSFER, ACH, CREDIT_CARD)
+	Method             *enums.PaymentMethod `json:"method,omitempty"`
+	OwnerID            *string              `json:"ownerID,omitempty"`
+	ClearOwner         *bool                `json:"clearOwner,omitempty"`
+	VendorProfileID    *string              `json:"vendorProfileID,omitempty"`
+	ClearVendorProfile *bool                `json:"clearVendorProfile,omitempty"`
 }
 
 // UpdateVendorProfilePhoneNumberInput is used for update VendorProfilePhoneNumber object.
@@ -16811,13 +16853,14 @@ type VendorProfile struct {
 	// The URL of the website of the Corporation or Person
 	WebsiteURI *string `json:"websiteURI,omitempty"`
 	// The type of tax ID (e.g. EIN, SSN, TIN, etc.)
-	TaxIDType                    enums.TaxIDType               `json:"taxIDType"`
-	Owner                        *Organization                 `json:"owner,omitempty"`
-	PostalAddresses              []*PostalAddress              `json:"postalAddresses,omitempty"`
-	PhoneNumbers                 []*PhoneNumber                `json:"phoneNumbers,omitempty"`
-	Vendor                       *Vendor                       `json:"vendor,omitempty"`
-	VendorProfilePostalAddresses []*VendorProfilePostalAddress `json:"vendorProfilePostalAddresses,omitempty"`
-	VendorProfilePhoneNumbers    []*VendorProfilePhoneNumber   `json:"vendorProfilePhoneNumbers,omitempty"`
+	TaxIDType                    enums.TaxIDType                   `json:"taxIDType"`
+	Owner                        *Organization                     `json:"owner,omitempty"`
+	PostalAddresses              []*PostalAddress                  `json:"postalAddresses,omitempty"`
+	PhoneNumbers                 []*PhoneNumber                    `json:"phoneNumbers,omitempty"`
+	PaymentPreferences           []*VendorProfilePaymentPreference `json:"paymentPreferences,omitempty"`
+	Vendor                       *Vendor                           `json:"vendor,omitempty"`
+	VendorProfilePostalAddresses []*VendorProfilePostalAddress     `json:"vendorProfilePostalAddresses,omitempty"`
+	VendorProfilePhoneNumbers    []*VendorProfilePhoneNumber       `json:"vendorProfilePhoneNumbers,omitempty"`
 }
 
 func (VendorProfile) IsNode() {}
@@ -17152,6 +17195,431 @@ type VendorProfileOrder struct {
 	Direction OrderDirection `json:"direction"`
 	// The field by which to order VendorProfiles.
 	Field VendorProfileOrderField `json:"field"`
+}
+
+type VendorProfilePaymentPreference struct {
+	ID        string     `json:"id"`
+	CreatedAt *time.Time `json:"createdAt,omitempty"`
+	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
+	CreatedBy *string    `json:"createdBy,omitempty"`
+	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	DeletedAt *time.Time `json:"deletedAt,omitempty"`
+	DeletedBy *string    `json:"deletedBy,omitempty"`
+	// tags associated with the object
+	Tags []string `json:"tags,omitempty"`
+	// The organization id that owns the object
+	OwnerID *string `json:"ownerID,omitempty"`
+	// The ID of the vendor profile.
+	VendorProfileID *string `json:"vendorProfileID,omitempty"`
+	// Whether this is the preferred payment method.
+	Preferred bool `json:"preferred"`
+	// The payment method. (e.g. DOMESTIC_WIRE_TRANSFER, INTERNATIONAL_WIRE_TRANSFER, ACH, CREDIT_CARD)
+	Method        enums.PaymentMethod `json:"method"`
+	Owner         *Organization       `json:"owner,omitempty"`
+	VendorProfile *VendorProfile      `json:"vendorProfile,omitempty"`
+}
+
+func (VendorProfilePaymentPreference) IsNode() {}
+
+// Return response for createBulkVendorProfilePaymentPreference mutation
+type VendorProfilePaymentPreferenceBulkCreatePayload struct {
+	// Created vendorProfilePaymentPreferences
+	VendorProfilePaymentPreferences []*VendorProfilePaymentPreference `json:"vendorProfilePaymentPreferences,omitempty"`
+}
+
+// A connection to a list of items.
+type VendorProfilePaymentPreferenceConnection struct {
+	// A list of edges.
+	Edges []*VendorProfilePaymentPreferenceEdge `json:"edges,omitempty"`
+	// Information to aid in pagination.
+	PageInfo *PageInfo `json:"pageInfo"`
+	// Identifies the total count of items in the connection.
+	TotalCount int64 `json:"totalCount"`
+}
+
+// Return response for createVendorProfilePaymentPreference mutation
+type VendorProfilePaymentPreferenceCreatePayload struct {
+	// Created vendorProfilePaymentPreference
+	VendorProfilePaymentPreference *VendorProfilePaymentPreference `json:"vendorProfilePaymentPreference"`
+}
+
+// Return response for deleteVendorProfilePaymentPreference mutation
+type VendorProfilePaymentPreferenceDeletePayload struct {
+	// Deleted vendorProfilePaymentPreference ID
+	DeletedID string `json:"deletedID"`
+}
+
+// An edge in a connection.
+type VendorProfilePaymentPreferenceEdge struct {
+	// The item at the end of the edge.
+	Node *VendorProfilePaymentPreference `json:"node,omitempty"`
+	// A cursor for use in pagination.
+	Cursor string `json:"cursor"`
+}
+
+type VendorProfilePaymentPreferenceHistory struct {
+	ID          string            `json:"id"`
+	HistoryTime time.Time         `json:"historyTime"`
+	Ref         *string           `json:"ref,omitempty"`
+	Operation   enthistory.OpType `json:"operation"`
+	CreatedAt   *time.Time        `json:"createdAt,omitempty"`
+	UpdatedAt   *time.Time        `json:"updatedAt,omitempty"`
+	CreatedBy   *string           `json:"createdBy,omitempty"`
+	UpdatedBy   *string           `json:"updatedBy,omitempty"`
+	DeletedAt   *time.Time        `json:"deletedAt,omitempty"`
+	DeletedBy   *string           `json:"deletedBy,omitempty"`
+	// tags associated with the object
+	Tags []string `json:"tags,omitempty"`
+	// The organization id that owns the object
+	OwnerID *string `json:"ownerID,omitempty"`
+	// The ID of the vendor profile.
+	VendorProfileID *string `json:"vendorProfileID,omitempty"`
+	// Whether this is the preferred payment method.
+	Preferred bool `json:"preferred"`
+	// The payment method. (e.g. DOMESTIC_WIRE_TRANSFER, INTERNATIONAL_WIRE_TRANSFER, ACH, CREDIT_CARD)
+	Method enums.PaymentMethod `json:"method"`
+}
+
+func (VendorProfilePaymentPreferenceHistory) IsNode() {}
+
+// A connection to a list of items.
+type VendorProfilePaymentPreferenceHistoryConnection struct {
+	// A list of edges.
+	Edges []*VendorProfilePaymentPreferenceHistoryEdge `json:"edges,omitempty"`
+	// Information to aid in pagination.
+	PageInfo *PageInfo `json:"pageInfo"`
+	// Identifies the total count of items in the connection.
+	TotalCount int64 `json:"totalCount"`
+}
+
+// An edge in a connection.
+type VendorProfilePaymentPreferenceHistoryEdge struct {
+	// The item at the end of the edge.
+	Node *VendorProfilePaymentPreferenceHistory `json:"node,omitempty"`
+	// A cursor for use in pagination.
+	Cursor string `json:"cursor"`
+}
+
+// VendorProfilePaymentPreferenceHistoryWhereInput is used for filtering VendorProfilePaymentPreferenceHistory objects.
+// Input was generated by ent.
+type VendorProfilePaymentPreferenceHistoryWhereInput struct {
+	Not *VendorProfilePaymentPreferenceHistoryWhereInput   `json:"not,omitempty"`
+	And []*VendorProfilePaymentPreferenceHistoryWhereInput `json:"and,omitempty"`
+	Or  []*VendorProfilePaymentPreferenceHistoryWhereInput `json:"or,omitempty"`
+	// id field predicates
+	ID             *string  `json:"id,omitempty"`
+	IDNeq          *string  `json:"idNEQ,omitempty"`
+	IDIn           []string `json:"idIn,omitempty"`
+	IDNotIn        []string `json:"idNotIn,omitempty"`
+	IDGt           *string  `json:"idGT,omitempty"`
+	IDGte          *string  `json:"idGTE,omitempty"`
+	IDLt           *string  `json:"idLT,omitempty"`
+	IDLte          *string  `json:"idLTE,omitempty"`
+	IDEqualFold    *string  `json:"idEqualFold,omitempty"`
+	IDContainsFold *string  `json:"idContainsFold,omitempty"`
+	// history_time field predicates
+	HistoryTime      *time.Time   `json:"historyTime,omitempty"`
+	HistoryTimeNeq   *time.Time   `json:"historyTimeNEQ,omitempty"`
+	HistoryTimeIn    []*time.Time `json:"historyTimeIn,omitempty"`
+	HistoryTimeNotIn []*time.Time `json:"historyTimeNotIn,omitempty"`
+	HistoryTimeGt    *time.Time   `json:"historyTimeGT,omitempty"`
+	HistoryTimeGte   *time.Time   `json:"historyTimeGTE,omitempty"`
+	HistoryTimeLt    *time.Time   `json:"historyTimeLT,omitempty"`
+	HistoryTimeLte   *time.Time   `json:"historyTimeLTE,omitempty"`
+	// ref field predicates
+	Ref             *string  `json:"ref,omitempty"`
+	RefNeq          *string  `json:"refNEQ,omitempty"`
+	RefIn           []string `json:"refIn,omitempty"`
+	RefNotIn        []string `json:"refNotIn,omitempty"`
+	RefGt           *string  `json:"refGT,omitempty"`
+	RefGte          *string  `json:"refGTE,omitempty"`
+	RefLt           *string  `json:"refLT,omitempty"`
+	RefLte          *string  `json:"refLTE,omitempty"`
+	RefContains     *string  `json:"refContains,omitempty"`
+	RefHasPrefix    *string  `json:"refHasPrefix,omitempty"`
+	RefHasSuffix    *string  `json:"refHasSuffix,omitempty"`
+	RefIsNil        *bool    `json:"refIsNil,omitempty"`
+	RefNotNil       *bool    `json:"refNotNil,omitempty"`
+	RefEqualFold    *string  `json:"refEqualFold,omitempty"`
+	RefContainsFold *string  `json:"refContainsFold,omitempty"`
+	// operation field predicates
+	Operation      *enthistory.OpType  `json:"operation,omitempty"`
+	OperationNeq   *enthistory.OpType  `json:"operationNEQ,omitempty"`
+	OperationIn    []enthistory.OpType `json:"operationIn,omitempty"`
+	OperationNotIn []enthistory.OpType `json:"operationNotIn,omitempty"`
+	// created_at field predicates
+	CreatedAt       *time.Time   `json:"createdAt,omitempty"`
+	CreatedAtNeq    *time.Time   `json:"createdAtNEQ,omitempty"`
+	CreatedAtIn     []*time.Time `json:"createdAtIn,omitempty"`
+	CreatedAtNotIn  []*time.Time `json:"createdAtNotIn,omitempty"`
+	CreatedAtGt     *time.Time   `json:"createdAtGT,omitempty"`
+	CreatedAtGte    *time.Time   `json:"createdAtGTE,omitempty"`
+	CreatedAtLt     *time.Time   `json:"createdAtLT,omitempty"`
+	CreatedAtLte    *time.Time   `json:"createdAtLTE,omitempty"`
+	CreatedAtIsNil  *bool        `json:"createdAtIsNil,omitempty"`
+	CreatedAtNotNil *bool        `json:"createdAtNotNil,omitempty"`
+	// updated_at field predicates
+	UpdatedAt       *time.Time   `json:"updatedAt,omitempty"`
+	UpdatedAtNeq    *time.Time   `json:"updatedAtNEQ,omitempty"`
+	UpdatedAtIn     []*time.Time `json:"updatedAtIn,omitempty"`
+	UpdatedAtNotIn  []*time.Time `json:"updatedAtNotIn,omitempty"`
+	UpdatedAtGt     *time.Time   `json:"updatedAtGT,omitempty"`
+	UpdatedAtGte    *time.Time   `json:"updatedAtGTE,omitempty"`
+	UpdatedAtLt     *time.Time   `json:"updatedAtLT,omitempty"`
+	UpdatedAtLte    *time.Time   `json:"updatedAtLTE,omitempty"`
+	UpdatedAtIsNil  *bool        `json:"updatedAtIsNil,omitempty"`
+	UpdatedAtNotNil *bool        `json:"updatedAtNotNil,omitempty"`
+	// created_by field predicates
+	CreatedBy             *string  `json:"createdBy,omitempty"`
+	CreatedByNeq          *string  `json:"createdByNEQ,omitempty"`
+	CreatedByIn           []string `json:"createdByIn,omitempty"`
+	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
+	CreatedByGt           *string  `json:"createdByGT,omitempty"`
+	CreatedByGte          *string  `json:"createdByGTE,omitempty"`
+	CreatedByLt           *string  `json:"createdByLT,omitempty"`
+	CreatedByLte          *string  `json:"createdByLTE,omitempty"`
+	CreatedByContains     *string  `json:"createdByContains,omitempty"`
+	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
+	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
+	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
+	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
+	CreatedByEqualFold    *string  `json:"createdByEqualFold,omitempty"`
+	CreatedByContainsFold *string  `json:"createdByContainsFold,omitempty"`
+	// updated_by field predicates
+	UpdatedBy             *string  `json:"updatedBy,omitempty"`
+	UpdatedByNeq          *string  `json:"updatedByNEQ,omitempty"`
+	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
+	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
+	UpdatedByGt           *string  `json:"updatedByGT,omitempty"`
+	UpdatedByGte          *string  `json:"updatedByGTE,omitempty"`
+	UpdatedByLt           *string  `json:"updatedByLT,omitempty"`
+	UpdatedByLte          *string  `json:"updatedByLTE,omitempty"`
+	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
+	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
+	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
+	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
+	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
+	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// deleted_at field predicates
+	DeletedAt       *time.Time   `json:"deletedAt,omitempty"`
+	DeletedAtNeq    *time.Time   `json:"deletedAtNEQ,omitempty"`
+	DeletedAtIn     []*time.Time `json:"deletedAtIn,omitempty"`
+	DeletedAtNotIn  []*time.Time `json:"deletedAtNotIn,omitempty"`
+	DeletedAtGt     *time.Time   `json:"deletedAtGT,omitempty"`
+	DeletedAtGte    *time.Time   `json:"deletedAtGTE,omitempty"`
+	DeletedAtLt     *time.Time   `json:"deletedAtLT,omitempty"`
+	DeletedAtLte    *time.Time   `json:"deletedAtLTE,omitempty"`
+	DeletedAtIsNil  *bool        `json:"deletedAtIsNil,omitempty"`
+	DeletedAtNotNil *bool        `json:"deletedAtNotNil,omitempty"`
+	// deleted_by field predicates
+	DeletedBy             *string  `json:"deletedBy,omitempty"`
+	DeletedByNeq          *string  `json:"deletedByNEQ,omitempty"`
+	DeletedByIn           []string `json:"deletedByIn,omitempty"`
+	DeletedByNotIn        []string `json:"deletedByNotIn,omitempty"`
+	DeletedByGt           *string  `json:"deletedByGT,omitempty"`
+	DeletedByGte          *string  `json:"deletedByGTE,omitempty"`
+	DeletedByLt           *string  `json:"deletedByLT,omitempty"`
+	DeletedByLte          *string  `json:"deletedByLTE,omitempty"`
+	DeletedByContains     *string  `json:"deletedByContains,omitempty"`
+	DeletedByHasPrefix    *string  `json:"deletedByHasPrefix,omitempty"`
+	DeletedByHasSuffix    *string  `json:"deletedByHasSuffix,omitempty"`
+	DeletedByIsNil        *bool    `json:"deletedByIsNil,omitempty"`
+	DeletedByNotNil       *bool    `json:"deletedByNotNil,omitempty"`
+	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
+	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
+	// owner_id field predicates
+	OwnerID             *string  `json:"ownerID,omitempty"`
+	OwnerIDNeq          *string  `json:"ownerIDNEQ,omitempty"`
+	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
+	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
+	OwnerIDGt           *string  `json:"ownerIDGT,omitempty"`
+	OwnerIDGte          *string  `json:"ownerIDGTE,omitempty"`
+	OwnerIDLt           *string  `json:"ownerIDLT,omitempty"`
+	OwnerIDLte          *string  `json:"ownerIDLTE,omitempty"`
+	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
+	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
+	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
+	OwnerIDIsNil        *bool    `json:"ownerIDIsNil,omitempty"`
+	OwnerIDNotNil       *bool    `json:"ownerIDNotNil,omitempty"`
+	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
+	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
+	// vendor_profile_id field predicates
+	VendorProfileID             *string  `json:"vendorProfileID,omitempty"`
+	VendorProfileIDNeq          *string  `json:"vendorProfileIDNEQ,omitempty"`
+	VendorProfileIDIn           []string `json:"vendorProfileIDIn,omitempty"`
+	VendorProfileIDNotIn        []string `json:"vendorProfileIDNotIn,omitempty"`
+	VendorProfileIDGt           *string  `json:"vendorProfileIDGT,omitempty"`
+	VendorProfileIDGte          *string  `json:"vendorProfileIDGTE,omitempty"`
+	VendorProfileIDLt           *string  `json:"vendorProfileIDLT,omitempty"`
+	VendorProfileIDLte          *string  `json:"vendorProfileIDLTE,omitempty"`
+	VendorProfileIDContains     *string  `json:"vendorProfileIDContains,omitempty"`
+	VendorProfileIDHasPrefix    *string  `json:"vendorProfileIDHasPrefix,omitempty"`
+	VendorProfileIDHasSuffix    *string  `json:"vendorProfileIDHasSuffix,omitempty"`
+	VendorProfileIDIsNil        *bool    `json:"vendorProfileIDIsNil,omitempty"`
+	VendorProfileIDNotNil       *bool    `json:"vendorProfileIDNotNil,omitempty"`
+	VendorProfileIDEqualFold    *string  `json:"vendorProfileIDEqualFold,omitempty"`
+	VendorProfileIDContainsFold *string  `json:"vendorProfileIDContainsFold,omitempty"`
+	// preferred field predicates
+	Preferred    *bool `json:"preferred,omitempty"`
+	PreferredNeq *bool `json:"preferredNEQ,omitempty"`
+	// method field predicates
+	Method      *enums.PaymentMethod  `json:"method,omitempty"`
+	MethodNeq   *enums.PaymentMethod  `json:"methodNEQ,omitempty"`
+	MethodIn    []enums.PaymentMethod `json:"methodIn,omitempty"`
+	MethodNotIn []enums.PaymentMethod `json:"methodNotIn,omitempty"`
+}
+
+// Return response for updateVendorProfilePaymentPreference mutation
+type VendorProfilePaymentPreferenceUpdatePayload struct {
+	// Updated vendorProfilePaymentPreference
+	VendorProfilePaymentPreference *VendorProfilePaymentPreference `json:"vendorProfilePaymentPreference"`
+}
+
+// VendorProfilePaymentPreferenceWhereInput is used for filtering VendorProfilePaymentPreference objects.
+// Input was generated by ent.
+type VendorProfilePaymentPreferenceWhereInput struct {
+	Not *VendorProfilePaymentPreferenceWhereInput   `json:"not,omitempty"`
+	And []*VendorProfilePaymentPreferenceWhereInput `json:"and,omitempty"`
+	Or  []*VendorProfilePaymentPreferenceWhereInput `json:"or,omitempty"`
+	// id field predicates
+	ID             *string  `json:"id,omitempty"`
+	IDNeq          *string  `json:"idNEQ,omitempty"`
+	IDIn           []string `json:"idIn,omitempty"`
+	IDNotIn        []string `json:"idNotIn,omitempty"`
+	IDGt           *string  `json:"idGT,omitempty"`
+	IDGte          *string  `json:"idGTE,omitempty"`
+	IDLt           *string  `json:"idLT,omitempty"`
+	IDLte          *string  `json:"idLTE,omitempty"`
+	IDEqualFold    *string  `json:"idEqualFold,omitempty"`
+	IDContainsFold *string  `json:"idContainsFold,omitempty"`
+	// created_at field predicates
+	CreatedAt       *time.Time   `json:"createdAt,omitempty"`
+	CreatedAtNeq    *time.Time   `json:"createdAtNEQ,omitempty"`
+	CreatedAtIn     []*time.Time `json:"createdAtIn,omitempty"`
+	CreatedAtNotIn  []*time.Time `json:"createdAtNotIn,omitempty"`
+	CreatedAtGt     *time.Time   `json:"createdAtGT,omitempty"`
+	CreatedAtGte    *time.Time   `json:"createdAtGTE,omitempty"`
+	CreatedAtLt     *time.Time   `json:"createdAtLT,omitempty"`
+	CreatedAtLte    *time.Time   `json:"createdAtLTE,omitempty"`
+	CreatedAtIsNil  *bool        `json:"createdAtIsNil,omitempty"`
+	CreatedAtNotNil *bool        `json:"createdAtNotNil,omitempty"`
+	// updated_at field predicates
+	UpdatedAt       *time.Time   `json:"updatedAt,omitempty"`
+	UpdatedAtNeq    *time.Time   `json:"updatedAtNEQ,omitempty"`
+	UpdatedAtIn     []*time.Time `json:"updatedAtIn,omitempty"`
+	UpdatedAtNotIn  []*time.Time `json:"updatedAtNotIn,omitempty"`
+	UpdatedAtGt     *time.Time   `json:"updatedAtGT,omitempty"`
+	UpdatedAtGte    *time.Time   `json:"updatedAtGTE,omitempty"`
+	UpdatedAtLt     *time.Time   `json:"updatedAtLT,omitempty"`
+	UpdatedAtLte    *time.Time   `json:"updatedAtLTE,omitempty"`
+	UpdatedAtIsNil  *bool        `json:"updatedAtIsNil,omitempty"`
+	UpdatedAtNotNil *bool        `json:"updatedAtNotNil,omitempty"`
+	// created_by field predicates
+	CreatedBy             *string  `json:"createdBy,omitempty"`
+	CreatedByNeq          *string  `json:"createdByNEQ,omitempty"`
+	CreatedByIn           []string `json:"createdByIn,omitempty"`
+	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
+	CreatedByGt           *string  `json:"createdByGT,omitempty"`
+	CreatedByGte          *string  `json:"createdByGTE,omitempty"`
+	CreatedByLt           *string  `json:"createdByLT,omitempty"`
+	CreatedByLte          *string  `json:"createdByLTE,omitempty"`
+	CreatedByContains     *string  `json:"createdByContains,omitempty"`
+	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
+	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
+	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
+	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
+	CreatedByEqualFold    *string  `json:"createdByEqualFold,omitempty"`
+	CreatedByContainsFold *string  `json:"createdByContainsFold,omitempty"`
+	// updated_by field predicates
+	UpdatedBy             *string  `json:"updatedBy,omitempty"`
+	UpdatedByNeq          *string  `json:"updatedByNEQ,omitempty"`
+	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
+	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
+	UpdatedByGt           *string  `json:"updatedByGT,omitempty"`
+	UpdatedByGte          *string  `json:"updatedByGTE,omitempty"`
+	UpdatedByLt           *string  `json:"updatedByLT,omitempty"`
+	UpdatedByLte          *string  `json:"updatedByLTE,omitempty"`
+	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
+	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
+	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
+	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
+	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
+	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// deleted_at field predicates
+	DeletedAt       *time.Time   `json:"deletedAt,omitempty"`
+	DeletedAtNeq    *time.Time   `json:"deletedAtNEQ,omitempty"`
+	DeletedAtIn     []*time.Time `json:"deletedAtIn,omitempty"`
+	DeletedAtNotIn  []*time.Time `json:"deletedAtNotIn,omitempty"`
+	DeletedAtGt     *time.Time   `json:"deletedAtGT,omitempty"`
+	DeletedAtGte    *time.Time   `json:"deletedAtGTE,omitempty"`
+	DeletedAtLt     *time.Time   `json:"deletedAtLT,omitempty"`
+	DeletedAtLte    *time.Time   `json:"deletedAtLTE,omitempty"`
+	DeletedAtIsNil  *bool        `json:"deletedAtIsNil,omitempty"`
+	DeletedAtNotNil *bool        `json:"deletedAtNotNil,omitempty"`
+	// deleted_by field predicates
+	DeletedBy             *string  `json:"deletedBy,omitempty"`
+	DeletedByNeq          *string  `json:"deletedByNEQ,omitempty"`
+	DeletedByIn           []string `json:"deletedByIn,omitempty"`
+	DeletedByNotIn        []string `json:"deletedByNotIn,omitempty"`
+	DeletedByGt           *string  `json:"deletedByGT,omitempty"`
+	DeletedByGte          *string  `json:"deletedByGTE,omitempty"`
+	DeletedByLt           *string  `json:"deletedByLT,omitempty"`
+	DeletedByLte          *string  `json:"deletedByLTE,omitempty"`
+	DeletedByContains     *string  `json:"deletedByContains,omitempty"`
+	DeletedByHasPrefix    *string  `json:"deletedByHasPrefix,omitempty"`
+	DeletedByHasSuffix    *string  `json:"deletedByHasSuffix,omitempty"`
+	DeletedByIsNil        *bool    `json:"deletedByIsNil,omitempty"`
+	DeletedByNotNil       *bool    `json:"deletedByNotNil,omitempty"`
+	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
+	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
+	// owner_id field predicates
+	OwnerID             *string  `json:"ownerID,omitempty"`
+	OwnerIDNeq          *string  `json:"ownerIDNEQ,omitempty"`
+	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
+	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
+	OwnerIDGt           *string  `json:"ownerIDGT,omitempty"`
+	OwnerIDGte          *string  `json:"ownerIDGTE,omitempty"`
+	OwnerIDLt           *string  `json:"ownerIDLT,omitempty"`
+	OwnerIDLte          *string  `json:"ownerIDLTE,omitempty"`
+	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
+	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
+	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
+	OwnerIDIsNil        *bool    `json:"ownerIDIsNil,omitempty"`
+	OwnerIDNotNil       *bool    `json:"ownerIDNotNil,omitempty"`
+	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
+	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
+	// vendor_profile_id field predicates
+	VendorProfileID             *string  `json:"vendorProfileID,omitempty"`
+	VendorProfileIDNeq          *string  `json:"vendorProfileIDNEQ,omitempty"`
+	VendorProfileIDIn           []string `json:"vendorProfileIDIn,omitempty"`
+	VendorProfileIDNotIn        []string `json:"vendorProfileIDNotIn,omitempty"`
+	VendorProfileIDGt           *string  `json:"vendorProfileIDGT,omitempty"`
+	VendorProfileIDGte          *string  `json:"vendorProfileIDGTE,omitempty"`
+	VendorProfileIDLt           *string  `json:"vendorProfileIDLT,omitempty"`
+	VendorProfileIDLte          *string  `json:"vendorProfileIDLTE,omitempty"`
+	VendorProfileIDContains     *string  `json:"vendorProfileIDContains,omitempty"`
+	VendorProfileIDHasPrefix    *string  `json:"vendorProfileIDHasPrefix,omitempty"`
+	VendorProfileIDHasSuffix    *string  `json:"vendorProfileIDHasSuffix,omitempty"`
+	VendorProfileIDIsNil        *bool    `json:"vendorProfileIDIsNil,omitempty"`
+	VendorProfileIDNotNil       *bool    `json:"vendorProfileIDNotNil,omitempty"`
+	VendorProfileIDEqualFold    *string  `json:"vendorProfileIDEqualFold,omitempty"`
+	VendorProfileIDContainsFold *string  `json:"vendorProfileIDContainsFold,omitempty"`
+	// preferred field predicates
+	Preferred    *bool `json:"preferred,omitempty"`
+	PreferredNeq *bool `json:"preferredNEQ,omitempty"`
+	// method field predicates
+	Method      *enums.PaymentMethod  `json:"method,omitempty"`
+	MethodNeq   *enums.PaymentMethod  `json:"methodNEQ,omitempty"`
+	MethodIn    []enums.PaymentMethod `json:"methodIn,omitempty"`
+	MethodNotIn []enums.PaymentMethod `json:"methodNotIn,omitempty"`
+	// owner edge predicates
+	HasOwner     *bool                     `json:"hasOwner,omitempty"`
+	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
+	// vendor_profile edge predicates
+	HasVendorProfile     *bool                      `json:"hasVendorProfile,omitempty"`
+	HasVendorProfileWith []*VendorProfileWhereInput `json:"hasVendorProfileWith,omitempty"`
 }
 
 type VendorProfilePhoneNumber struct {
@@ -18082,6 +18550,9 @@ type VendorProfileWhereInput struct {
 	// phone_numbers edge predicates
 	HasPhoneNumbers     *bool                    `json:"hasPhoneNumbers,omitempty"`
 	HasPhoneNumbersWith []*PhoneNumberWhereInput `json:"hasPhoneNumbersWith,omitempty"`
+	// payment_preferences edge predicates
+	HasPaymentPreferences     *bool                                       `json:"hasPaymentPreferences,omitempty"`
+	HasPaymentPreferencesWith []*VendorProfilePaymentPreferenceWhereInput `json:"hasPaymentPreferencesWith,omitempty"`
 	// vendor edge predicates
 	HasVendor     *bool               `json:"hasVendor,omitempty"`
 	HasVendorWith []*VendorWhereInput `json:"hasVendorWith,omitempty"`

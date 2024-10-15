@@ -72,6 +72,8 @@ import (
 	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorhistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofile"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofilehistory"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofilepaymentpreference"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofilepaymentpreferencehistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofilephonenumber"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofilephonenumberhistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofilepostaladdress"
@@ -405,6 +407,16 @@ var vendorprofilehistoryImplementors = []string{"VendorProfileHistory", "Node"}
 
 // IsNode implements the Node interface check for GQLGen.
 func (*VendorProfileHistory) IsNode() {}
+
+var vendorprofilepaymentpreferenceImplementors = []string{"VendorProfilePaymentPreference", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*VendorProfilePaymentPreference) IsNode() {}
+
+var vendorprofilepaymentpreferencehistoryImplementors = []string{"VendorProfilePaymentPreferenceHistory", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*VendorProfilePaymentPreferenceHistory) IsNode() {}
 
 var vendorprofilephonenumberImplementors = []string{"VendorProfilePhoneNumber", "Node"}
 
@@ -1066,6 +1078,24 @@ func (c *Client) noder(ctx context.Context, table string, id string) (Noder, err
 			Where(vendorprofilehistory.ID(id))
 		if fc := graphql.GetFieldContext(ctx); fc != nil {
 			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, vendorprofilehistoryImplementors...); err != nil {
+				return nil, err
+			}
+		}
+		return query.Only(ctx)
+	case vendorprofilepaymentpreference.Table:
+		query := c.VendorProfilePaymentPreference.Query().
+			Where(vendorprofilepaymentpreference.ID(id))
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, vendorprofilepaymentpreferenceImplementors...); err != nil {
+				return nil, err
+			}
+		}
+		return query.Only(ctx)
+	case vendorprofilepaymentpreferencehistory.Table:
+		query := c.VendorProfilePaymentPreferenceHistory.Query().
+			Where(vendorprofilepaymentpreferencehistory.ID(id))
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, vendorprofilepaymentpreferencehistoryImplementors...); err != nil {
 				return nil, err
 			}
 		}
@@ -2209,6 +2239,38 @@ func (c *Client) noders(ctx context.Context, table string, ids []string) ([]Node
 		query := c.VendorProfileHistory.Query().
 			Where(vendorprofilehistory.IDIn(ids...))
 		query, err := query.CollectFields(ctx, vendorprofilehistoryImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case vendorprofilepaymentpreference.Table:
+		query := c.VendorProfilePaymentPreference.Query().
+			Where(vendorprofilepaymentpreference.IDIn(ids...))
+		query, err := query.CollectFields(ctx, vendorprofilepaymentpreferenceImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case vendorprofilepaymentpreferencehistory.Table:
+		query := c.VendorProfilePaymentPreferenceHistory.Query().
+			Where(vendorprofilepaymentpreferencehistory.IDIn(ids...))
+		query, err := query.CollectFields(ctx, vendorprofilepaymentpreferencehistoryImplementors...)
 		if err != nil {
 			return nil, err
 		}

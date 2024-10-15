@@ -119,44 +119,47 @@ type OrganizationEdges struct {
 	PostalAddresses []*PostalAddress `json:"postal_addresses,omitempty"`
 	// PhoneNumbers holds the value of the phone_numbers edge.
 	PhoneNumbers []*PhoneNumber `json:"phone_numbers,omitempty"`
+	// VendorProfilePaymentPreferences holds the value of the vendor_profile_payment_preferences edge.
+	VendorProfilePaymentPreferences []*VendorProfilePaymentPreference `json:"vendor_profile_payment_preferences,omitempty"`
 	// Members holds the value of the members edge.
 	Members []*OrgMembership `json:"members,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [32]bool
+	loadedTypes [33]bool
 	// totalCount holds the count of the edges above.
-	totalCount [32]map[string]int
+	totalCount [33]map[string]int
 
-	namedChildren                map[string][]*Organization
-	namedGroups                  map[string][]*Group
-	namedTemplates               map[string][]*Template
-	namedIntegrations            map[string][]*Integration
-	namedDocumentdata            map[string][]*DocumentData
-	namedEntitlements            map[string][]*Entitlement
-	namedOrganizationEntitlement map[string][]*Entitlement
-	namedPersonalAccessTokens    map[string][]*PersonalAccessToken
-	namedAPITokens               map[string][]*APIToken
-	namedOauthprovider           map[string][]*OauthProvider
-	namedUsers                   map[string][]*User
-	namedInvites                 map[string][]*Invite
-	namedSubscribers             map[string][]*Subscriber
-	namedWebhooks                map[string][]*Webhook
-	namedEvents                  map[string][]*Event
-	namedSecrets                 map[string][]*Hush
-	namedFeatures                map[string][]*Feature
-	namedFiles                   map[string][]*File
-	namedEntitlementplans        map[string][]*EntitlementPlan
-	namedEntitlementplanfeatures map[string][]*EntitlementPlanFeature
-	namedEntities                map[string][]*Entity
-	namedEntitytypes             map[string][]*EntityType
-	namedContacts                map[string][]*Contact
-	namedContactLists            map[string][]*ContactList
-	namedNotes                   map[string][]*Note
-	namedVendors                 map[string][]*Vendor
-	namedVendorProfiles          map[string][]*VendorProfile
-	namedPostalAddresses         map[string][]*PostalAddress
-	namedPhoneNumbers            map[string][]*PhoneNumber
-	namedMembers                 map[string][]*OrgMembership
+	namedChildren                        map[string][]*Organization
+	namedGroups                          map[string][]*Group
+	namedTemplates                       map[string][]*Template
+	namedIntegrations                    map[string][]*Integration
+	namedDocumentdata                    map[string][]*DocumentData
+	namedEntitlements                    map[string][]*Entitlement
+	namedOrganizationEntitlement         map[string][]*Entitlement
+	namedPersonalAccessTokens            map[string][]*PersonalAccessToken
+	namedAPITokens                       map[string][]*APIToken
+	namedOauthprovider                   map[string][]*OauthProvider
+	namedUsers                           map[string][]*User
+	namedInvites                         map[string][]*Invite
+	namedSubscribers                     map[string][]*Subscriber
+	namedWebhooks                        map[string][]*Webhook
+	namedEvents                          map[string][]*Event
+	namedSecrets                         map[string][]*Hush
+	namedFeatures                        map[string][]*Feature
+	namedFiles                           map[string][]*File
+	namedEntitlementplans                map[string][]*EntitlementPlan
+	namedEntitlementplanfeatures         map[string][]*EntitlementPlanFeature
+	namedEntities                        map[string][]*Entity
+	namedEntitytypes                     map[string][]*EntityType
+	namedContacts                        map[string][]*Contact
+	namedContactLists                    map[string][]*ContactList
+	namedNotes                           map[string][]*Note
+	namedVendors                         map[string][]*Vendor
+	namedVendorProfiles                  map[string][]*VendorProfile
+	namedPostalAddresses                 map[string][]*PostalAddress
+	namedPhoneNumbers                    map[string][]*PhoneNumber
+	namedVendorProfilePaymentPreferences map[string][]*VendorProfilePaymentPreference
+	namedMembers                         map[string][]*OrgMembership
 }
 
 // ParentOrErr returns the Parent value or an error if the edge
@@ -442,10 +445,19 @@ func (e OrganizationEdges) PhoneNumbersOrErr() ([]*PhoneNumber, error) {
 	return nil, &NotLoadedError{edge: "phone_numbers"}
 }
 
+// VendorProfilePaymentPreferencesOrErr returns the VendorProfilePaymentPreferences value or an error if the edge
+// was not loaded in eager-loading.
+func (e OrganizationEdges) VendorProfilePaymentPreferencesOrErr() ([]*VendorProfilePaymentPreference, error) {
+	if e.loadedTypes[31] {
+		return e.VendorProfilePaymentPreferences, nil
+	}
+	return nil, &NotLoadedError{edge: "vendor_profile_payment_preferences"}
+}
+
 // MembersOrErr returns the Members value or an error if the edge
 // was not loaded in eager-loading.
 func (e OrganizationEdges) MembersOrErr() ([]*OrgMembership, error) {
-	if e.loadedTypes[31] {
+	if e.loadedTypes[32] {
 		return e.Members, nil
 	}
 	return nil, &NotLoadedError{edge: "members"}
@@ -744,6 +756,11 @@ func (o *Organization) QueryPostalAddresses() *PostalAddressQuery {
 // QueryPhoneNumbers queries the "phone_numbers" edge of the Organization entity.
 func (o *Organization) QueryPhoneNumbers() *PhoneNumberQuery {
 	return NewOrganizationClient(o.config).QueryPhoneNumbers(o)
+}
+
+// QueryVendorProfilePaymentPreferences queries the "vendor_profile_payment_preferences" edge of the Organization entity.
+func (o *Organization) QueryVendorProfilePaymentPreferences() *VendorProfilePaymentPreferenceQuery {
+	return NewOrganizationClient(o.config).QueryVendorProfilePaymentPreferences(o)
 }
 
 // QueryMembers queries the "members" edge of the Organization entity.
@@ -1517,6 +1534,30 @@ func (o *Organization) appendNamedPhoneNumbers(name string, edges ...*PhoneNumbe
 		o.Edges.namedPhoneNumbers[name] = []*PhoneNumber{}
 	} else {
 		o.Edges.namedPhoneNumbers[name] = append(o.Edges.namedPhoneNumbers[name], edges...)
+	}
+}
+
+// NamedVendorProfilePaymentPreferences returns the VendorProfilePaymentPreferences named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (o *Organization) NamedVendorProfilePaymentPreferences(name string) ([]*VendorProfilePaymentPreference, error) {
+	if o.Edges.namedVendorProfilePaymentPreferences == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := o.Edges.namedVendorProfilePaymentPreferences[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (o *Organization) appendNamedVendorProfilePaymentPreferences(name string, edges ...*VendorProfilePaymentPreference) {
+	if o.Edges.namedVendorProfilePaymentPreferences == nil {
+		o.Edges.namedVendorProfilePaymentPreferences = make(map[string][]*VendorProfilePaymentPreference)
+	}
+	if len(edges) == 0 {
+		o.Edges.namedVendorProfilePaymentPreferences[name] = []*VendorProfilePaymentPreference{}
+	} else {
+		o.Edges.namedVendorProfilePaymentPreferences[name] = append(o.Edges.namedVendorProfilePaymentPreferences[name], edges...)
 	}
 }
 

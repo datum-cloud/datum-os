@@ -616,6 +616,25 @@ func (r *mutationResolver) bulkCreateVendorProfile(ctx context.Context, input []
 	}, nil
 }
 
+// bulkCreateVendorProfilePaymentPreference uses the CreateBulk function to create multiple VendorProfilePaymentPreference entities
+func (r *mutationResolver) bulkCreateVendorProfilePaymentPreference(ctx context.Context, input []*generated.CreateVendorProfilePaymentPreferenceInput) (*VendorProfilePaymentPreferenceBulkCreatePayload, error) {
+	c := withTransactionalMutation(ctx)
+	builders := make([]*generated.VendorProfilePaymentPreferenceCreate, len(input))
+	for i, data := range input {
+		builders[i] = c.VendorProfilePaymentPreference.Create().SetInput(*data)
+	}
+
+	res, err := c.VendorProfilePaymentPreference.CreateBulk(builders...).Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionCreate, object: "vendorprofilepaymentpreference"}, r.logger)
+	}
+
+	// return response
+	return &VendorProfilePaymentPreferenceBulkCreatePayload{
+		VendorProfilePaymentPreferences: res,
+	}, nil
+}
+
 // bulkCreateVendorProfilePhoneNumber uses the CreateBulk function to create multiple VendorProfilePhoneNumber entities
 func (r *mutationResolver) bulkCreateVendorProfilePhoneNumber(ctx context.Context, input []*generated.CreateVendorProfilePhoneNumberInput) (*VendorProfilePhoneNumberBulkCreatePayload, error) {
 	c := withTransactionalMutation(ctx)

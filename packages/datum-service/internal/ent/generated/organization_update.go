@@ -42,6 +42,7 @@ import (
 	"github.com/datum-cloud/datum-os/internal/ent/generated/user"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/vendor"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofile"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofilepaymentpreference"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/webhook"
 
 	"github.com/datum-cloud/datum-os/internal/ent/generated/internal"
@@ -686,6 +687,21 @@ func (ou *OrganizationUpdate) AddPhoneNumbers(p ...*PhoneNumber) *OrganizationUp
 	return ou.AddPhoneNumberIDs(ids...)
 }
 
+// AddVendorProfilePaymentPreferenceIDs adds the "vendor_profile_payment_preferences" edge to the VendorProfilePaymentPreference entity by IDs.
+func (ou *OrganizationUpdate) AddVendorProfilePaymentPreferenceIDs(ids ...string) *OrganizationUpdate {
+	ou.mutation.AddVendorProfilePaymentPreferenceIDs(ids...)
+	return ou
+}
+
+// AddVendorProfilePaymentPreferences adds the "vendor_profile_payment_preferences" edges to the VendorProfilePaymentPreference entity.
+func (ou *OrganizationUpdate) AddVendorProfilePaymentPreferences(v ...*VendorProfilePaymentPreference) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return ou.AddVendorProfilePaymentPreferenceIDs(ids...)
+}
+
 // AddMemberIDs adds the "members" edge to the OrgMembership entity by IDs.
 func (ou *OrganizationUpdate) AddMemberIDs(ids ...string) *OrganizationUpdate {
 	ou.mutation.AddMemberIDs(ids...)
@@ -1319,6 +1335,27 @@ func (ou *OrganizationUpdate) RemovePhoneNumbers(p ...*PhoneNumber) *Organizatio
 		ids[i] = p[i].ID
 	}
 	return ou.RemovePhoneNumberIDs(ids...)
+}
+
+// ClearVendorProfilePaymentPreferences clears all "vendor_profile_payment_preferences" edges to the VendorProfilePaymentPreference entity.
+func (ou *OrganizationUpdate) ClearVendorProfilePaymentPreferences() *OrganizationUpdate {
+	ou.mutation.ClearVendorProfilePaymentPreferences()
+	return ou
+}
+
+// RemoveVendorProfilePaymentPreferenceIDs removes the "vendor_profile_payment_preferences" edge to VendorProfilePaymentPreference entities by IDs.
+func (ou *OrganizationUpdate) RemoveVendorProfilePaymentPreferenceIDs(ids ...string) *OrganizationUpdate {
+	ou.mutation.RemoveVendorProfilePaymentPreferenceIDs(ids...)
+	return ou
+}
+
+// RemoveVendorProfilePaymentPreferences removes "vendor_profile_payment_preferences" edges to VendorProfilePaymentPreference entities.
+func (ou *OrganizationUpdate) RemoveVendorProfilePaymentPreferences(v ...*VendorProfilePaymentPreference) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return ou.RemoveVendorProfilePaymentPreferenceIDs(ids...)
 }
 
 // ClearMembers clears all "members" edges to the OrgMembership entity.
@@ -2925,6 +2962,54 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if ou.mutation.VendorProfilePaymentPreferencesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.VendorProfilePaymentPreferencesTable,
+			Columns: []string{organization.VendorProfilePaymentPreferencesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(vendorprofilepaymentpreference.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ou.schemaConfig.VendorProfilePaymentPreference
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ou.mutation.RemovedVendorProfilePaymentPreferencesIDs(); len(nodes) > 0 && !ou.mutation.VendorProfilePaymentPreferencesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.VendorProfilePaymentPreferencesTable,
+			Columns: []string{organization.VendorProfilePaymentPreferencesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(vendorprofilepaymentpreference.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ou.schemaConfig.VendorProfilePaymentPreference
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ou.mutation.VendorProfilePaymentPreferencesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.VendorProfilePaymentPreferencesTable,
+			Columns: []string{organization.VendorProfilePaymentPreferencesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(vendorprofilepaymentpreference.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ou.schemaConfig.VendorProfilePaymentPreference
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if ou.mutation.MembersCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -3621,6 +3706,21 @@ func (ouo *OrganizationUpdateOne) AddPhoneNumbers(p ...*PhoneNumber) *Organizati
 	return ouo.AddPhoneNumberIDs(ids...)
 }
 
+// AddVendorProfilePaymentPreferenceIDs adds the "vendor_profile_payment_preferences" edge to the VendorProfilePaymentPreference entity by IDs.
+func (ouo *OrganizationUpdateOne) AddVendorProfilePaymentPreferenceIDs(ids ...string) *OrganizationUpdateOne {
+	ouo.mutation.AddVendorProfilePaymentPreferenceIDs(ids...)
+	return ouo
+}
+
+// AddVendorProfilePaymentPreferences adds the "vendor_profile_payment_preferences" edges to the VendorProfilePaymentPreference entity.
+func (ouo *OrganizationUpdateOne) AddVendorProfilePaymentPreferences(v ...*VendorProfilePaymentPreference) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return ouo.AddVendorProfilePaymentPreferenceIDs(ids...)
+}
+
 // AddMemberIDs adds the "members" edge to the OrgMembership entity by IDs.
 func (ouo *OrganizationUpdateOne) AddMemberIDs(ids ...string) *OrganizationUpdateOne {
 	ouo.mutation.AddMemberIDs(ids...)
@@ -4254,6 +4354,27 @@ func (ouo *OrganizationUpdateOne) RemovePhoneNumbers(p ...*PhoneNumber) *Organiz
 		ids[i] = p[i].ID
 	}
 	return ouo.RemovePhoneNumberIDs(ids...)
+}
+
+// ClearVendorProfilePaymentPreferences clears all "vendor_profile_payment_preferences" edges to the VendorProfilePaymentPreference entity.
+func (ouo *OrganizationUpdateOne) ClearVendorProfilePaymentPreferences() *OrganizationUpdateOne {
+	ouo.mutation.ClearVendorProfilePaymentPreferences()
+	return ouo
+}
+
+// RemoveVendorProfilePaymentPreferenceIDs removes the "vendor_profile_payment_preferences" edge to VendorProfilePaymentPreference entities by IDs.
+func (ouo *OrganizationUpdateOne) RemoveVendorProfilePaymentPreferenceIDs(ids ...string) *OrganizationUpdateOne {
+	ouo.mutation.RemoveVendorProfilePaymentPreferenceIDs(ids...)
+	return ouo
+}
+
+// RemoveVendorProfilePaymentPreferences removes "vendor_profile_payment_preferences" edges to VendorProfilePaymentPreference entities.
+func (ouo *OrganizationUpdateOne) RemoveVendorProfilePaymentPreferences(v ...*VendorProfilePaymentPreference) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return ouo.RemoveVendorProfilePaymentPreferenceIDs(ids...)
 }
 
 // ClearMembers clears all "members" edges to the OrgMembership entity.
@@ -5885,6 +6006,54 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 			},
 		}
 		edge.Schema = ouo.schemaConfig.PhoneNumber
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if ouo.mutation.VendorProfilePaymentPreferencesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.VendorProfilePaymentPreferencesTable,
+			Columns: []string{organization.VendorProfilePaymentPreferencesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(vendorprofilepaymentpreference.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ouo.schemaConfig.VendorProfilePaymentPreference
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ouo.mutation.RemovedVendorProfilePaymentPreferencesIDs(); len(nodes) > 0 && !ouo.mutation.VendorProfilePaymentPreferencesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.VendorProfilePaymentPreferencesTable,
+			Columns: []string{organization.VendorProfilePaymentPreferencesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(vendorprofilepaymentpreference.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ouo.schemaConfig.VendorProfilePaymentPreference
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ouo.mutation.VendorProfilePaymentPreferencesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.VendorProfilePaymentPreferencesTable,
+			Columns: []string{organization.VendorProfilePaymentPreferencesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(vendorprofilepaymentpreference.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ouo.schemaConfig.VendorProfilePaymentPreference
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

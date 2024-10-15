@@ -41,6 +41,7 @@ import (
 	"github.com/datum-cloud/datum-os/internal/ent/generated/usersettinghistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorhistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofilehistory"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofilepaymentpreferencehistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofilephonenumberhistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofilepostaladdresshistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/webhookhistory"
@@ -2049,6 +2050,69 @@ func (vph *VendorProfileHistory) Diff(history *VendorProfileHistory) (*HistoryDi
 	return nil, IdenticalHistoryError
 }
 
+func (vppph *VendorProfilePaymentPreferenceHistory) changes(new *VendorProfilePaymentPreferenceHistory) []Change {
+	var changes []Change
+	if !reflect.DeepEqual(vppph.MappingID, new.MappingID) {
+		changes = append(changes, NewChange(vendorprofilepaymentpreferencehistory.FieldMappingID, vppph.MappingID, new.MappingID))
+	}
+	if !reflect.DeepEqual(vppph.CreatedAt, new.CreatedAt) {
+		changes = append(changes, NewChange(vendorprofilepaymentpreferencehistory.FieldCreatedAt, vppph.CreatedAt, new.CreatedAt))
+	}
+	if !reflect.DeepEqual(vppph.UpdatedAt, new.UpdatedAt) {
+		changes = append(changes, NewChange(vendorprofilepaymentpreferencehistory.FieldUpdatedAt, vppph.UpdatedAt, new.UpdatedAt))
+	}
+	if !reflect.DeepEqual(vppph.CreatedBy, new.CreatedBy) {
+		changes = append(changes, NewChange(vendorprofilepaymentpreferencehistory.FieldCreatedBy, vppph.CreatedBy, new.CreatedBy))
+	}
+	if !reflect.DeepEqual(vppph.DeletedAt, new.DeletedAt) {
+		changes = append(changes, NewChange(vendorprofilepaymentpreferencehistory.FieldDeletedAt, vppph.DeletedAt, new.DeletedAt))
+	}
+	if !reflect.DeepEqual(vppph.DeletedBy, new.DeletedBy) {
+		changes = append(changes, NewChange(vendorprofilepaymentpreferencehistory.FieldDeletedBy, vppph.DeletedBy, new.DeletedBy))
+	}
+	if !reflect.DeepEqual(vppph.Tags, new.Tags) {
+		changes = append(changes, NewChange(vendorprofilepaymentpreferencehistory.FieldTags, vppph.Tags, new.Tags))
+	}
+	if !reflect.DeepEqual(vppph.OwnerID, new.OwnerID) {
+		changes = append(changes, NewChange(vendorprofilepaymentpreferencehistory.FieldOwnerID, vppph.OwnerID, new.OwnerID))
+	}
+	if !reflect.DeepEqual(vppph.VendorProfileID, new.VendorProfileID) {
+		changes = append(changes, NewChange(vendorprofilepaymentpreferencehistory.FieldVendorProfileID, vppph.VendorProfileID, new.VendorProfileID))
+	}
+	if !reflect.DeepEqual(vppph.Preferred, new.Preferred) {
+		changes = append(changes, NewChange(vendorprofilepaymentpreferencehistory.FieldPreferred, vppph.Preferred, new.Preferred))
+	}
+	if !reflect.DeepEqual(vppph.Method, new.Method) {
+		changes = append(changes, NewChange(vendorprofilepaymentpreferencehistory.FieldMethod, vppph.Method, new.Method))
+	}
+	return changes
+}
+
+func (vppph *VendorProfilePaymentPreferenceHistory) Diff(history *VendorProfilePaymentPreferenceHistory) (*HistoryDiff[VendorProfilePaymentPreferenceHistory], error) {
+	if vppph.Ref != history.Ref {
+		return nil, MismatchedRefError
+	}
+
+	vppphUnix, historyUnix := vppph.HistoryTime.Unix(), history.HistoryTime.Unix()
+	vppphOlder := vppphUnix < historyUnix || (vppphUnix == historyUnix && vppph.ID < history.ID)
+	historyOlder := vppphUnix > historyUnix || (vppphUnix == historyUnix && vppph.ID > history.ID)
+
+	if vppphOlder {
+		return &HistoryDiff[VendorProfilePaymentPreferenceHistory]{
+			Old:     vppph,
+			New:     history,
+			Changes: vppph.changes(history),
+		}, nil
+	} else if historyOlder {
+		return &HistoryDiff[VendorProfilePaymentPreferenceHistory]{
+			Old:     history,
+			New:     vppph,
+			Changes: history.changes(vppph),
+		}, nil
+	}
+	return nil, IdenticalHistoryError
+}
+
 func (vppnh *VendorProfilePhoneNumberHistory) changes(new *VendorProfilePhoneNumberHistory) []Change {
 	var changes []Change
 	if !reflect.DeepEqual(vppnh.CreatedAt, new.CreatedAt) {
@@ -2452,6 +2516,12 @@ func (c *Client) Audit(ctx context.Context) ([][]string, error) {
 	}
 	records = append(records, record...)
 
+	record, err = auditVendorProfilePaymentPreferenceHistory(ctx, c.config)
+	if err != nil {
+		return nil, err
+	}
+	records = append(records, record...)
+
 	record, err = auditVendorProfilePhoneNumberHistory(ctx, c.config)
 	if err != nil {
 		return nil, err
@@ -2734,6 +2804,15 @@ func (c *Client) AuditWithFilter(ctx context.Context, tableName string) ([][]str
 
 	if tableName == "" || tableName == strings.TrimSuffix("VendorProfileHistory", "History") {
 		record, err = auditVendorProfileHistory(ctx, c.config)
+		if err != nil {
+			return nil, err
+		}
+
+		records = append(records, record...)
+	}
+
+	if tableName == "" || tableName == strings.TrimSuffix("VendorProfilePaymentPreferenceHistory", "History") {
+		record, err = auditVendorProfilePaymentPreferenceHistory(ctx, c.config)
 		if err != nil {
 			return nil, err
 		}
@@ -4327,6 +4406,59 @@ func auditVendorProfileHistory(ctx context.Context, config config) ([][]string, 
 			default:
 				if i == 0 {
 					record.Changes = (&VendorProfileHistory{}).changes(curr)
+				} else {
+					record.Changes = histories[i-1].changes(curr)
+				}
+			}
+			records = append(records, record.toRow())
+		}
+	}
+	return records, nil
+}
+
+type vendorprofilepaymentpreferencehistoryref struct {
+	Ref string
+}
+
+func auditVendorProfilePaymentPreferenceHistory(ctx context.Context, config config) ([][]string, error) {
+	var records = [][]string{}
+	var refs []vendorprofilepaymentpreferencehistoryref
+	client := NewVendorProfilePaymentPreferenceHistoryClient(config)
+	err := client.Query().
+		Unique(true).
+		Order(vendorprofilepaymentpreferencehistory.ByRef()).
+		Select(vendorprofilepaymentpreferencehistory.FieldRef).
+		Scan(ctx, &refs)
+
+	if err != nil {
+		return nil, err
+	}
+	for _, currRef := range refs {
+		histories, err := client.Query().
+			Where(vendorprofilepaymentpreferencehistory.Ref(currRef.Ref)).
+			Order(vendorprofilepaymentpreferencehistory.ByHistoryTime()).
+			All(ctx)
+		if err != nil {
+			return nil, err
+		}
+
+		for i := 0; i < len(histories); i++ {
+			curr := histories[i]
+			record := record{
+				Table:       "VendorProfilePaymentPreferenceHistory",
+				RefId:       curr.Ref,
+				HistoryTime: curr.HistoryTime,
+				Operation:   curr.Operation,
+				UpdatedBy:   curr.UpdatedBy,
+			}
+			switch curr.Operation {
+			case enthistory.OpTypeInsert:
+				record.Changes = (&VendorProfilePaymentPreferenceHistory{}).changes(curr)
+			case enthistory.OpTypeDelete:
+				record.Changes = curr.changes(&VendorProfilePaymentPreferenceHistory{})
+			default:
+				if i == 0 {
+					record.Changes = (&VendorProfilePaymentPreferenceHistory{}).changes(curr)
 				} else {
 					record.Changes = histories[i-1].changes(curr)
 				}

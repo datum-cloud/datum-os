@@ -1695,6 +1695,54 @@ func (f VendorProfileHistoryMutationRuleFunc) EvalMutation(ctx context.Context, 
 	return Denyf("generated/privacy: unexpected mutation type %T, expect *generated.VendorProfileHistoryMutation", m)
 }
 
+// The VendorProfilePaymentPreferenceQueryRuleFunc type is an adapter to allow the use of ordinary
+// functions as a query rule.
+type VendorProfilePaymentPreferenceQueryRuleFunc func(context.Context, *generated.VendorProfilePaymentPreferenceQuery) error
+
+// EvalQuery return f(ctx, q).
+func (f VendorProfilePaymentPreferenceQueryRuleFunc) EvalQuery(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.VendorProfilePaymentPreferenceQuery); ok {
+		return f(ctx, q)
+	}
+	return Denyf("generated/privacy: unexpected query type %T, expect *generated.VendorProfilePaymentPreferenceQuery", q)
+}
+
+// The VendorProfilePaymentPreferenceMutationRuleFunc type is an adapter to allow the use of ordinary
+// functions as a mutation rule.
+type VendorProfilePaymentPreferenceMutationRuleFunc func(context.Context, *generated.VendorProfilePaymentPreferenceMutation) error
+
+// EvalMutation calls f(ctx, m).
+func (f VendorProfilePaymentPreferenceMutationRuleFunc) EvalMutation(ctx context.Context, m generated.Mutation) error {
+	if m, ok := m.(*generated.VendorProfilePaymentPreferenceMutation); ok {
+		return f(ctx, m)
+	}
+	return Denyf("generated/privacy: unexpected mutation type %T, expect *generated.VendorProfilePaymentPreferenceMutation", m)
+}
+
+// The VendorProfilePaymentPreferenceHistoryQueryRuleFunc type is an adapter to allow the use of ordinary
+// functions as a query rule.
+type VendorProfilePaymentPreferenceHistoryQueryRuleFunc func(context.Context, *generated.VendorProfilePaymentPreferenceHistoryQuery) error
+
+// EvalQuery return f(ctx, q).
+func (f VendorProfilePaymentPreferenceHistoryQueryRuleFunc) EvalQuery(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.VendorProfilePaymentPreferenceHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return Denyf("generated/privacy: unexpected query type %T, expect *generated.VendorProfilePaymentPreferenceHistoryQuery", q)
+}
+
+// The VendorProfilePaymentPreferenceHistoryMutationRuleFunc type is an adapter to allow the use of ordinary
+// functions as a mutation rule.
+type VendorProfilePaymentPreferenceHistoryMutationRuleFunc func(context.Context, *generated.VendorProfilePaymentPreferenceHistoryMutation) error
+
+// EvalMutation calls f(ctx, m).
+func (f VendorProfilePaymentPreferenceHistoryMutationRuleFunc) EvalMutation(ctx context.Context, m generated.Mutation) error {
+	if m, ok := m.(*generated.VendorProfilePaymentPreferenceHistoryMutation); ok {
+		return f(ctx, m)
+	}
+	return Denyf("generated/privacy: unexpected mutation type %T, expect *generated.VendorProfilePaymentPreferenceHistoryMutation", m)
+}
+
 // The VendorProfilePhoneNumberQueryRuleFunc type is an adapter to allow the use of ordinary
 // functions as a query rule.
 type VendorProfilePhoneNumberQueryRuleFunc func(context.Context, *generated.VendorProfilePhoneNumberQuery) error
@@ -2030,6 +2078,10 @@ func queryFilter(q generated.Query) (Filter, error) {
 		return q.Filter(), nil
 	case *generated.VendorProfileHistoryQuery:
 		return q.Filter(), nil
+	case *generated.VendorProfilePaymentPreferenceQuery:
+		return q.Filter(), nil
+	case *generated.VendorProfilePaymentPreferenceHistoryQuery:
+		return q.Filter(), nil
 	case *generated.VendorProfilePhoneNumberQuery:
 		return q.Filter(), nil
 	case *generated.VendorProfilePhoneNumberHistoryQuery:
@@ -2182,6 +2234,10 @@ func mutationFilter(m generated.Mutation) (Filter, error) {
 	case *generated.VendorProfileMutation:
 		return m.Filter(), nil
 	case *generated.VendorProfileHistoryMutation:
+		return m.Filter(), nil
+	case *generated.VendorProfilePaymentPreferenceMutation:
+		return m.Filter(), nil
+	case *generated.VendorProfilePaymentPreferenceHistoryMutation:
 		return m.Filter(), nil
 	case *generated.VendorProfilePhoneNumberMutation:
 		return m.Filter(), nil

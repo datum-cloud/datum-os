@@ -1,0 +1,103 @@
+extend type Query {
+    """
+    Look up vendorProfilePaymentPreference by ID
+    """
+     vendorProfilePaymentPreference(
+        """
+        ID of the vendorProfilePaymentPreference
+        """
+        id: ID!
+    ):  VendorProfilePaymentPreference!
+}
+
+extend type Mutation{
+    """
+    Create a new vendorProfilePaymentPreference
+    """
+    createVendorProfilePaymentPreference(
+        """
+        values of the vendorProfilePaymentPreference
+        """
+        input: CreateVendorProfilePaymentPreferenceInput!
+    ): VendorProfilePaymentPreferenceCreatePayload!
+    """
+    Create multiple new vendorProfilePaymentPreferences
+    """
+    createBulkVendorProfilePaymentPreference(
+        """
+        values of the vendorProfilePaymentPreference
+        """
+        input: [CreateVendorProfilePaymentPreferenceInput!]
+    ): VendorProfilePaymentPreferenceBulkCreatePayload!
+    """
+    Create multiple new vendorProfilePaymentPreferences via file upload
+    """
+    createBulkCSVVendorProfilePaymentPreference(
+        """
+        csv file containing values of the vendorProfilePaymentPreference
+        """
+        input: Upload!
+    ): VendorProfilePaymentPreferenceBulkCreatePayload!
+    """
+    Update an existing vendorProfilePaymentPreference
+    """
+    updateVendorProfilePaymentPreference(
+        """
+        ID of the vendorProfilePaymentPreference
+        """
+        id: ID!
+        """
+        New values for the vendorProfilePaymentPreference
+        """
+        input: UpdateVendorProfilePaymentPreferenceInput!
+    ): VendorProfilePaymentPreferenceUpdatePayload!
+    """
+    Delete an existing vendorProfilePaymentPreference
+    """
+    deleteVendorProfilePaymentPreference(
+        """
+        ID of the vendorProfilePaymentPreference
+        """
+        id: ID!
+    ): VendorProfilePaymentPreferenceDeletePayload!
+}
+
+"""
+Return response for createVendorProfilePaymentPreference mutation
+"""
+type VendorProfilePaymentPreferenceCreatePayload {
+    """
+    Created vendorProfilePaymentPreference
+    """
+    vendorProfilePaymentPreference: VendorProfilePaymentPreference!
+}
+
+"""
+Return response for updateVendorProfilePaymentPreference mutation
+"""
+type VendorProfilePaymentPreferenceUpdatePayload {
+    """
+    Updated vendorProfilePaymentPreference
+    """
+    vendorProfilePaymentPreference: VendorProfilePaymentPreference!
+}
+
+"""
+Return response for deleteVendorProfilePaymentPreference mutation
+"""
+type VendorProfilePaymentPreferenceDeletePayload {
+    """
+    Deleted vendorProfilePaymentPreference ID
+    """
+    deletedID: ID!
+}
+
+"""
+Return response for createBulkVendorProfilePaymentPreference mutation
+"""
+type VendorProfilePaymentPreferenceBulkCreatePayload {
+    """
+    Created vendorProfilePaymentPreferences
+    """
+    vendorProfilePaymentPreferences: [VendorProfilePaymentPreference!]
+}

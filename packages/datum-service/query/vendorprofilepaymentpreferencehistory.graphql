@@ -1,0 +1,45 @@
+
+
+query GetAllVendorProfilePaymentPreferenceHistories {
+  vendorProfilePaymentPreferenceHistories {
+    edges {
+      node {
+        createdAt
+        createdBy
+        historyTime
+        id
+        method
+        operation
+        ownerID
+        preferred
+        ref
+        tags
+        updatedAt
+        updatedBy
+        vendorProfileID
+      }
+    }
+  }
+}
+
+query GetVendorProfilePaymentPreferenceHistories($where: VendorProfilePaymentPreferenceHistoryWhereInput) {
+  vendorProfilePaymentPreferenceHistories(where: $where) {
+    edges {
+      node {
+        createdAt
+        createdBy
+        historyTime
+        id
+        method
+        operation
+        ownerID
+        preferred
+        ref
+        tags
+        updatedAt
+        updatedBy
+        vendorProfileID
+      }
+    }
+  }
+}

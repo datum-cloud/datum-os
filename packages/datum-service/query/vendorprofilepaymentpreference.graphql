@@ -1,0 +1,119 @@
+
+mutation CreateBulkCSVVendorProfilePaymentPreference($input: Upload!) {
+  createBulkCSVVendorProfilePaymentPreference(input: $input) {
+    vendorProfilePaymentPreferences {
+      createdAt
+      createdBy
+      id
+      method
+      ownerID
+      preferred
+      tags
+      updatedAt
+      updatedBy
+      vendorProfileID
+    }
+  }
+}
+
+mutation CreateBulkVendorProfilePaymentPreference($input: [CreateVendorProfilePaymentPreferenceInput!]) {
+  createBulkVendorProfilePaymentPreference(input: $input) {
+    vendorProfilePaymentPreferences {
+      createdAt
+      createdBy
+      id
+      method
+      ownerID
+      preferred
+      tags
+      updatedAt
+      updatedBy
+      vendorProfileID
+    }
+  }
+}
+
+mutation CreateVendorProfilePaymentPreference($input: CreateVendorProfilePaymentPreferenceInput!) {
+  createVendorProfilePaymentPreference(input: $input) {
+    vendorProfilePaymentPreference {
+      createdAt
+      createdBy
+      id
+      method
+      ownerID
+      preferred
+      tags
+      updatedAt
+      updatedBy
+      vendorProfileID
+    }
+  }
+}
+
+query GetAllVendorProfilePaymentPreferences {
+  vendorProfilePaymentPreferences {
+    edges {
+      node {
+        createdAt
+        createdBy
+        id
+        method
+        ownerID
+        preferred
+        tags
+        updatedAt
+        updatedBy
+        vendorProfileID
+      }
+    }
+  }
+}
+query GetVendorProfilePaymentPreferenceByID($vendorProfilePaymentPreferenceId: ID!) {
+  vendorProfilePaymentPreference(id: $vendorProfilePaymentPreferenceId) {
+    createdAt
+    createdBy
+    id
+    method
+    ownerID
+    preferred
+    tags
+    updatedAt
+    updatedBy
+    vendorProfileID
+  }
+}
+
+query GetVendorProfilePaymentPreferences($where: VendorProfilePaymentPreferenceWhereInput) {
+  vendorProfilePaymentPreferences(where: $where) {
+    edges {
+      node {
+        createdAt
+        createdBy
+        id
+        method
+        ownerID
+        preferred
+        tags
+        updatedAt
+        updatedBy
+        vendorProfileID
+      }
+    }
+  }
+}
+mutation UpdateVendorProfilePaymentPreference($updateVendorProfilePaymentPreferenceId: ID!, $input: UpdateVendorProfilePaymentPreferenceInput!) {
+  updateVendorProfilePaymentPreference(id: $updateVendorProfilePaymentPreferenceId, input: $input) {
+    vendorProfilePaymentPreference {
+      createdAt
+      createdBy
+      id
+      method
+      ownerID
+      preferred
+      tags
+      updatedAt
+      updatedBy
+      vendorProfileID
+    }
+  }
+}

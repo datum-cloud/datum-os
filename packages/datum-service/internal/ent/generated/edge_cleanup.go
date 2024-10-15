@@ -36,6 +36,7 @@ import (
 	"github.com/datum-cloud/datum-os/internal/ent/generated/usersetting"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/vendor"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofile"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofilepaymentpreference"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/webauthn"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/webhook"
 )
@@ -527,6 +528,13 @@ func OrganizationEdgeCleanup(ctx context.Context, id string) error {
 		}
 	}
 
+	if exists, err := FromContext(ctx).VendorProfilePaymentPreference.Query().Where((vendorprofilepaymentpreference.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
+		if vendorprofilepaymentpreferenceCount, err := FromContext(ctx).VendorProfilePaymentPreference.Delete().Where(vendorprofilepaymentpreference.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
+			FromContext(ctx).Logger.Debugw("deleting vendorprofilepaymentpreference", "count", vendorprofilepaymentpreferenceCount, "err", err)
+			return err
+		}
+	}
+
 	if exists, err := FromContext(ctx).OrgMembership.Query().Where((orgmembership.HasOrganizationWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if orgmembershipCount, err := FromContext(ctx).OrgMembership.Delete().Where(orgmembership.HasOrganizationWith(organization.ID(id))).Exec(ctx); err != nil {
 			FromContext(ctx).Logger.Debugw("deleting orgmembership", "count", orgmembershipCount, "err", err)
@@ -750,6 +758,20 @@ func VendorProfileEdgeCleanup(ctx context.Context, id string) error {
 func VendorProfileHistoryEdgeCleanup(ctx context.Context, id string) error {
 	// If a user has access to delete the object, they have access to delete all edges
 	ctx = privacy.DecisionContext(ctx, privacy.Allowf("cleanup vendorprofilehistory edge"))
+
+	return nil
+}
+
+func VendorProfilePaymentPreferenceEdgeCleanup(ctx context.Context, id string) error {
+	// If a user has access to delete the object, they have access to delete all edges
+	ctx = privacy.DecisionContext(ctx, privacy.Allowf("cleanup vendorprofilepaymentpreference edge"))
+
+	return nil
+}
+
+func VendorProfilePaymentPreferenceHistoryEdgeCleanup(ctx context.Context, id string) error {
+	// If a user has access to delete the object, they have access to delete all edges
+	ctx = privacy.DecisionContext(ctx, privacy.Allowf("cleanup vendorprofilepaymentpreferencehistory edge"))
 
 	return nil
 }

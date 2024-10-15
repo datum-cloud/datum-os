@@ -3033,42 +3033,43 @@ func (c *OrgMembershipUpdateOne) SetInput(i UpdateOrgMembershipInput) *OrgMember
 
 // CreateOrganizationInput represents a mutation input for creating organizations.
 type CreateOrganizationInput struct {
-	Tags                       []string
-	Name                       string
-	DisplayName                *string
-	Description                *string
-	PersonalOrg                *bool
-	AvatarRemoteURL            *string
-	DedicatedDb                *bool
-	ParentID                   *string
-	GroupIDs                   []string
-	TemplateIDs                []string
-	IntegrationIDs             []string
-	SettingID                  *string
-	DocumentdatumIDs           []string
-	EntitlementIDs             []string
-	OrganizationEntitlementIDs []string
-	PersonalAccessTokenIDs     []string
-	APITokenIDs                []string
-	OauthproviderIDs           []string
-	UserIDs                    []string
-	InviteIDs                  []string
-	SubscriberIDs              []string
-	WebhookIDs                 []string
-	EventIDs                   []string
-	SecretIDs                  []string
-	FeatureIDs                 []string
-	FileIDs                    []string
-	EntitlementplanIDs         []string
-	EntityIDs                  []string
-	EntitytypeIDs              []string
-	ContactIDs                 []string
-	ContactListIDs             []string
-	NoteIDs                    []string
-	VendorIDs                  []string
-	VendorProfileIDs           []string
-	PostalAddressIDs           []string
-	PhoneNumberIDs             []string
+	Tags                              []string
+	Name                              string
+	DisplayName                       *string
+	Description                       *string
+	PersonalOrg                       *bool
+	AvatarRemoteURL                   *string
+	DedicatedDb                       *bool
+	ParentID                          *string
+	GroupIDs                          []string
+	TemplateIDs                       []string
+	IntegrationIDs                    []string
+	SettingID                         *string
+	DocumentdatumIDs                  []string
+	EntitlementIDs                    []string
+	OrganizationEntitlementIDs        []string
+	PersonalAccessTokenIDs            []string
+	APITokenIDs                       []string
+	OauthproviderIDs                  []string
+	UserIDs                           []string
+	InviteIDs                         []string
+	SubscriberIDs                     []string
+	WebhookIDs                        []string
+	EventIDs                          []string
+	SecretIDs                         []string
+	FeatureIDs                        []string
+	FileIDs                           []string
+	EntitlementplanIDs                []string
+	EntityIDs                         []string
+	EntitytypeIDs                     []string
+	ContactIDs                        []string
+	ContactListIDs                    []string
+	NoteIDs                           []string
+	VendorIDs                         []string
+	VendorProfileIDs                  []string
+	PostalAddressIDs                  []string
+	PhoneNumberIDs                    []string
+	VendorProfilePaymentPreferenceIDs []string
 }
 
 // Mutate applies the CreateOrganizationInput on the OrganizationMutation builder.
@@ -3179,6 +3180,9 @@ func (i *CreateOrganizationInput) Mutate(m *OrganizationMutation) {
 	if v := i.PhoneNumberIDs; len(v) > 0 {
 		m.AddPhoneNumberIDs(v...)
 	}
+	if v := i.VendorProfilePaymentPreferenceIDs; len(v) > 0 {
+		m.AddVendorProfilePaymentPreferenceIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the CreateOrganizationInput on the OrganizationCreate builder.
@@ -3189,98 +3193,101 @@ func (c *OrganizationCreate) SetInput(i CreateOrganizationInput) *OrganizationCr
 
 // UpdateOrganizationInput represents a mutation input for updating organizations.
 type UpdateOrganizationInput struct {
-	ClearTags                        bool
-	Tags                             []string
-	AppendTags                       []string
-	Name                             *string
-	DisplayName                      *string
-	ClearDescription                 bool
-	Description                      *string
-	ClearAvatarRemoteURL             bool
-	AvatarRemoteURL                  *string
-	ClearGroups                      bool
-	AddGroupIDs                      []string
-	RemoveGroupIDs                   []string
-	ClearTemplates                   bool
-	AddTemplateIDs                   []string
-	RemoveTemplateIDs                []string
-	ClearIntegrations                bool
-	AddIntegrationIDs                []string
-	RemoveIntegrationIDs             []string
-	ClearSetting                     bool
-	SettingID                        *string
-	ClearDocumentdata                bool
-	AddDocumentdatumIDs              []string
-	RemoveDocumentdatumIDs           []string
-	ClearEntitlements                bool
-	AddEntitlementIDs                []string
-	RemoveEntitlementIDs             []string
-	ClearOrganizationEntitlement     bool
-	AddOrganizationEntitlementIDs    []string
-	RemoveOrganizationEntitlementIDs []string
-	ClearPersonalAccessTokens        bool
-	AddPersonalAccessTokenIDs        []string
-	RemovePersonalAccessTokenIDs     []string
-	ClearAPITokens                   bool
-	AddAPITokenIDs                   []string
-	RemoveAPITokenIDs                []string
-	ClearOauthprovider               bool
-	AddOauthproviderIDs              []string
-	RemoveOauthproviderIDs           []string
-	ClearUsers                       bool
-	AddUserIDs                       []string
-	RemoveUserIDs                    []string
-	ClearInvites                     bool
-	AddInviteIDs                     []string
-	RemoveInviteIDs                  []string
-	ClearSubscribers                 bool
-	AddSubscriberIDs                 []string
-	RemoveSubscriberIDs              []string
-	ClearWebhooks                    bool
-	AddWebhookIDs                    []string
-	RemoveWebhookIDs                 []string
-	ClearEvents                      bool
-	AddEventIDs                      []string
-	RemoveEventIDs                   []string
-	ClearSecrets                     bool
-	AddSecretIDs                     []string
-	RemoveSecretIDs                  []string
-	ClearFeatures                    bool
-	AddFeatureIDs                    []string
-	RemoveFeatureIDs                 []string
-	ClearFiles                       bool
-	AddFileIDs                       []string
-	RemoveFileIDs                    []string
-	ClearEntitlementplans            bool
-	AddEntitlementplanIDs            []string
-	RemoveEntitlementplanIDs         []string
-	ClearEntities                    bool
-	AddEntityIDs                     []string
-	RemoveEntityIDs                  []string
-	ClearEntitytypes                 bool
-	AddEntitytypeIDs                 []string
-	RemoveEntitytypeIDs              []string
-	ClearContacts                    bool
-	AddContactIDs                    []string
-	RemoveContactIDs                 []string
-	ClearContactLists                bool
-	AddContactListIDs                []string
-	RemoveContactListIDs             []string
-	ClearNotes                       bool
-	AddNoteIDs                       []string
-	RemoveNoteIDs                    []string
-	ClearVendors                     bool
-	AddVendorIDs                     []string
-	RemoveVendorIDs                  []string
-	ClearVendorProfiles              bool
-	AddVendorProfileIDs              []string
-	RemoveVendorProfileIDs           []string
-	ClearPostalAddresses             bool
-	AddPostalAddressIDs              []string
-	RemovePostalAddressIDs           []string
-	ClearPhoneNumbers                bool
-	AddPhoneNumberIDs                []string
-	RemovePhoneNumberIDs             []string
+	ClearTags                               bool
+	Tags                                    []string
+	AppendTags                              []string
+	Name                                    *string
+	DisplayName                             *string
+	ClearDescription                        bool
+	Description                             *string
+	ClearAvatarRemoteURL                    bool
+	AvatarRemoteURL                         *string
+	ClearGroups                             bool
+	AddGroupIDs                             []string
+	RemoveGroupIDs                          []string
+	ClearTemplates                          bool
+	AddTemplateIDs                          []string
+	RemoveTemplateIDs                       []string
+	ClearIntegrations                       bool
+	AddIntegrationIDs                       []string
+	RemoveIntegrationIDs                    []string
+	ClearSetting                            bool
+	SettingID                               *string
+	ClearDocumentdata                       bool
+	AddDocumentdatumIDs                     []string
+	RemoveDocumentdatumIDs                  []string
+	ClearEntitlements                       bool
+	AddEntitlementIDs                       []string
+	RemoveEntitlementIDs                    []string
+	ClearOrganizationEntitlement            bool
+	AddOrganizationEntitlementIDs           []string
+	RemoveOrganizationEntitlementIDs        []string
+	ClearPersonalAccessTokens               bool
+	AddPersonalAccessTokenIDs               []string
+	RemovePersonalAccessTokenIDs            []string
+	ClearAPITokens                          bool
+	AddAPITokenIDs                          []string
+	RemoveAPITokenIDs                       []string
+	ClearOauthprovider                      bool
+	AddOauthproviderIDs                     []string
+	RemoveOauthproviderIDs                  []string
+	ClearUsers                              bool
+	AddUserIDs                              []string
+	RemoveUserIDs                           []string
+	ClearInvites                            bool
+	AddInviteIDs                            []string
+	RemoveInviteIDs                         []string
+	ClearSubscribers                        bool
+	AddSubscriberIDs                        []string
+	RemoveSubscriberIDs                     []string
+	ClearWebhooks                           bool
+	AddWebhookIDs                           []string
+	RemoveWebhookIDs                        []string
+	ClearEvents                             bool
+	AddEventIDs                             []string
+	RemoveEventIDs                          []string
+	ClearSecrets                            bool
+	AddSecretIDs                            []string
+	RemoveSecretIDs                         []string
+	ClearFeatures                           bool
+	AddFeatureIDs                           []string
+	RemoveFeatureIDs                        []string
+	ClearFiles                              bool
+	AddFileIDs                              []string
+	RemoveFileIDs                           []string
+	ClearEntitlementplans                   bool
+	AddEntitlementplanIDs                   []string
+	RemoveEntitlementplanIDs                []string
+	ClearEntities                           bool
+	AddEntityIDs                            []string
+	RemoveEntityIDs                         []string
+	ClearEntitytypes                        bool
+	AddEntitytypeIDs                        []string
+	RemoveEntitytypeIDs                     []string
+	ClearContacts                           bool
+	AddContactIDs                           []string
+	RemoveContactIDs                        []string
+	ClearContactLists                       bool
+	AddContactListIDs                       []string
+	RemoveContactListIDs                    []string
+	ClearNotes                              bool
+	AddNoteIDs                              []string
+	RemoveNoteIDs                           []string
+	ClearVendors                            bool
+	AddVendorIDs                            []string
+	RemoveVendorIDs                         []string
+	ClearVendorProfiles                     bool
+	AddVendorProfileIDs                     []string
+	RemoveVendorProfileIDs                  []string
+	ClearPostalAddresses                    bool
+	AddPostalAddressIDs                     []string
+	RemovePostalAddressIDs                  []string
+	ClearPhoneNumbers                       bool
+	AddPhoneNumberIDs                       []string
+	RemovePhoneNumberIDs                    []string
+	ClearVendorProfilePaymentPreferences    bool
+	AddVendorProfilePaymentPreferenceIDs    []string
+	RemoveVendorProfilePaymentPreferenceIDs []string
 }
 
 // Mutate applies the UpdateOrganizationInput on the OrganizationMutation builder.
@@ -3560,6 +3567,15 @@ func (i *UpdateOrganizationInput) Mutate(m *OrganizationMutation) {
 	}
 	if v := i.RemovePhoneNumberIDs; len(v) > 0 {
 		m.RemovePhoneNumberIDs(v...)
+	}
+	if i.ClearVendorProfilePaymentPreferences {
+		m.ClearVendorProfilePaymentPreferences()
+	}
+	if v := i.AddVendorProfilePaymentPreferenceIDs; len(v) > 0 {
+		m.AddVendorProfilePaymentPreferenceIDs(v...)
+	}
+	if v := i.RemoveVendorProfilePaymentPreferenceIDs; len(v) > 0 {
+		m.RemoveVendorProfilePaymentPreferenceIDs(v...)
 	}
 }
 
@@ -5089,18 +5105,19 @@ func (c *VendorUpdateOne) SetInput(i UpdateVendorInput) *VendorUpdateOne {
 
 // CreateVendorProfileInput represents a mutation input for creating vendorprofiles.
 type CreateVendorProfileInput struct {
-	Tags             []string
-	Name             string
-	CorporationType  *string
-	CorporationDba   *string
-	Description      *string
-	WebsiteURI       *string
-	TaxID            *string
-	TaxIDType        *enums.TaxIDType
-	OwnerID          *string
-	PostalAddressIDs []string
-	PhoneNumberIDs   []string
-	VendorID         *string
+	Tags                 []string
+	Name                 string
+	CorporationType      *string
+	CorporationDba       *string
+	Description          *string
+	WebsiteURI           *string
+	TaxID                *string
+	TaxIDType            *enums.TaxIDType
+	OwnerID              *string
+	PostalAddressIDs     []string
+	PhoneNumberIDs       []string
+	PaymentPreferenceIDs []string
+	VendorID             *string
 }
 
 // Mutate applies the CreateVendorProfileInput on the VendorProfileMutation builder.
@@ -5136,6 +5153,9 @@ func (i *CreateVendorProfileInput) Mutate(m *VendorProfileMutation) {
 	if v := i.PhoneNumberIDs; len(v) > 0 {
 		m.AddPhoneNumberIDs(v...)
 	}
+	if v := i.PaymentPreferenceIDs; len(v) > 0 {
+		m.AddPaymentPreferenceIDs(v...)
+	}
 	if v := i.VendorID; v != nil {
 		m.SetVendorID(*v)
 	}
@@ -5149,29 +5169,32 @@ func (c *VendorProfileCreate) SetInput(i CreateVendorProfileInput) *VendorProfil
 
 // UpdateVendorProfileInput represents a mutation input for updating vendorprofiles.
 type UpdateVendorProfileInput struct {
-	ClearTags              bool
-	Tags                   []string
-	AppendTags             []string
-	Name                   *string
-	ClearCorporationType   bool
-	CorporationType        *string
-	ClearCorporationDba    bool
-	CorporationDba         *string
-	ClearDescription       bool
-	Description            *string
-	ClearWebsiteURI        bool
-	WebsiteURI             *string
-	ClearTaxID             bool
-	TaxID                  *string
-	TaxIDType              *enums.TaxIDType
-	ClearOwner             bool
-	OwnerID                *string
-	ClearPostalAddresses   bool
-	AddPostalAddressIDs    []string
-	RemovePostalAddressIDs []string
-	ClearPhoneNumbers      bool
-	AddPhoneNumberIDs      []string
-	RemovePhoneNumberIDs   []string
+	ClearTags                  bool
+	Tags                       []string
+	AppendTags                 []string
+	Name                       *string
+	ClearCorporationType       bool
+	CorporationType            *string
+	ClearCorporationDba        bool
+	CorporationDba             *string
+	ClearDescription           bool
+	Description                *string
+	ClearWebsiteURI            bool
+	WebsiteURI                 *string
+	ClearTaxID                 bool
+	TaxID                      *string
+	TaxIDType                  *enums.TaxIDType
+	ClearOwner                 bool
+	OwnerID                    *string
+	ClearPostalAddresses       bool
+	AddPostalAddressIDs        []string
+	RemovePostalAddressIDs     []string
+	ClearPhoneNumbers          bool
+	AddPhoneNumberIDs          []string
+	RemovePhoneNumberIDs       []string
+	ClearPaymentPreferences    bool
+	AddPaymentPreferenceIDs    []string
+	RemovePaymentPreferenceIDs []string
 }
 
 // Mutate applies the UpdateVendorProfileInput on the VendorProfileMutation builder.
@@ -5245,6 +5268,15 @@ func (i *UpdateVendorProfileInput) Mutate(m *VendorProfileMutation) {
 	if v := i.RemovePhoneNumberIDs; len(v) > 0 {
 		m.RemovePhoneNumberIDs(v...)
 	}
+	if i.ClearPaymentPreferences {
+		m.ClearPaymentPreferences()
+	}
+	if v := i.AddPaymentPreferenceIDs; len(v) > 0 {
+		m.AddPaymentPreferenceIDs(v...)
+	}
+	if v := i.RemovePaymentPreferenceIDs; len(v) > 0 {
+		m.RemovePaymentPreferenceIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the UpdateVendorProfileInput on the VendorProfileUpdate builder.
@@ -5255,6 +5287,96 @@ func (c *VendorProfileUpdate) SetInput(i UpdateVendorProfileInput) *VendorProfil
 
 // SetInput applies the change-set in the UpdateVendorProfileInput on the VendorProfileUpdateOne builder.
 func (c *VendorProfileUpdateOne) SetInput(i UpdateVendorProfileInput) *VendorProfileUpdateOne {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// CreateVendorProfilePaymentPreferenceInput represents a mutation input for creating vendorprofilepaymentpreferences.
+type CreateVendorProfilePaymentPreferenceInput struct {
+	Tags            []string
+	Preferred       *bool
+	Method          *enums.PaymentMethod
+	OwnerID         *string
+	VendorProfileID *string
+}
+
+// Mutate applies the CreateVendorProfilePaymentPreferenceInput on the VendorProfilePaymentPreferenceMutation builder.
+func (i *CreateVendorProfilePaymentPreferenceInput) Mutate(m *VendorProfilePaymentPreferenceMutation) {
+	if v := i.Tags; v != nil {
+		m.SetTags(v)
+	}
+	if v := i.Preferred; v != nil {
+		m.SetPreferred(*v)
+	}
+	if v := i.Method; v != nil {
+		m.SetMethod(*v)
+	}
+	if v := i.OwnerID; v != nil {
+		m.SetOwnerID(*v)
+	}
+	if v := i.VendorProfileID; v != nil {
+		m.SetVendorProfileID(*v)
+	}
+}
+
+// SetInput applies the change-set in the CreateVendorProfilePaymentPreferenceInput on the VendorProfilePaymentPreferenceCreate builder.
+func (c *VendorProfilePaymentPreferenceCreate) SetInput(i CreateVendorProfilePaymentPreferenceInput) *VendorProfilePaymentPreferenceCreate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// UpdateVendorProfilePaymentPreferenceInput represents a mutation input for updating vendorprofilepaymentpreferences.
+type UpdateVendorProfilePaymentPreferenceInput struct {
+	ClearTags          bool
+	Tags               []string
+	AppendTags         []string
+	Preferred          *bool
+	Method             *enums.PaymentMethod
+	ClearOwner         bool
+	OwnerID            *string
+	ClearVendorProfile bool
+	VendorProfileID    *string
+}
+
+// Mutate applies the UpdateVendorProfilePaymentPreferenceInput on the VendorProfilePaymentPreferenceMutation builder.
+func (i *UpdateVendorProfilePaymentPreferenceInput) Mutate(m *VendorProfilePaymentPreferenceMutation) {
+	if i.ClearTags {
+		m.ClearTags()
+	}
+	if v := i.Tags; v != nil {
+		m.SetTags(v)
+	}
+	if i.AppendTags != nil {
+		m.AppendTags(i.Tags)
+	}
+	if v := i.Preferred; v != nil {
+		m.SetPreferred(*v)
+	}
+	if v := i.Method; v != nil {
+		m.SetMethod(*v)
+	}
+	if i.ClearOwner {
+		m.ClearOwner()
+	}
+	if v := i.OwnerID; v != nil {
+		m.SetOwnerID(*v)
+	}
+	if i.ClearVendorProfile {
+		m.ClearVendorProfile()
+	}
+	if v := i.VendorProfileID; v != nil {
+		m.SetVendorProfileID(*v)
+	}
+}
+
+// SetInput applies the change-set in the UpdateVendorProfilePaymentPreferenceInput on the VendorProfilePaymentPreferenceUpdate builder.
+func (c *VendorProfilePaymentPreferenceUpdate) SetInput(i UpdateVendorProfilePaymentPreferenceInput) *VendorProfilePaymentPreferenceUpdate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// SetInput applies the change-set in the UpdateVendorProfilePaymentPreferenceInput on the VendorProfilePaymentPreferenceUpdateOne builder.
+func (c *VendorProfilePaymentPreferenceUpdateOne) SetInput(i UpdateVendorProfilePaymentPreferenceInput) *VendorProfilePaymentPreferenceUpdateOne {
 	i.Mutate(c.Mutation())
 	return c
 }

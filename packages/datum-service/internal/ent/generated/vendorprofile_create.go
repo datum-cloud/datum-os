@@ -15,6 +15,7 @@ import (
 	"github.com/datum-cloud/datum-os/internal/ent/generated/postaladdress"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/vendor"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofile"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofilepaymentpreference"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofilephonenumber"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofilepostaladdress"
 	"github.com/datum-cloud/datum-os/pkg/enums"
@@ -296,6 +297,21 @@ func (vpc *VendorProfileCreate) AddPhoneNumbers(p ...*PhoneNumber) *VendorProfil
 		ids[i] = p[i].ID
 	}
 	return vpc.AddPhoneNumberIDs(ids...)
+}
+
+// AddPaymentPreferenceIDs adds the "payment_preferences" edge to the VendorProfilePaymentPreference entity by IDs.
+func (vpc *VendorProfileCreate) AddPaymentPreferenceIDs(ids ...string) *VendorProfileCreate {
+	vpc.mutation.AddPaymentPreferenceIDs(ids...)
+	return vpc
+}
+
+// AddPaymentPreferences adds the "payment_preferences" edges to the VendorProfilePaymentPreference entity.
+func (vpc *VendorProfileCreate) AddPaymentPreferences(v ...*VendorProfilePaymentPreference) *VendorProfileCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return vpc.AddPaymentPreferenceIDs(ids...)
 }
 
 // SetVendor sets the "vendor" edge to the Vendor entity.
@@ -619,6 +635,23 @@ func (vpc *VendorProfileCreate) createSpec() (*VendorProfile, *sqlgraph.CreateSp
 		edge.Target.Fields = specE.Fields
 		if specE.ID.Value != nil {
 			edge.Target.Fields = append(edge.Target.Fields, specE.ID)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := vpc.mutation.PaymentPreferencesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   vendorprofile.PaymentPreferencesTable,
+			Columns: []string{vendorprofile.PaymentPreferencesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(vendorprofilepaymentpreference.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = vpc.schemaConfig.VendorProfilePaymentPreference
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}

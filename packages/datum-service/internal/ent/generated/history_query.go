@@ -37,6 +37,7 @@ import (
 	"github.com/datum-cloud/datum-os/internal/ent/generated/usersettinghistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorhistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofilehistory"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofilepaymentpreferencehistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofilephonenumberhistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofilepostaladdresshistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/webhookhistory"
@@ -1373,6 +1374,52 @@ func (vphq *VendorProfileHistoryQuery) AsOf(ctx context.Context, time time.Time)
 	return vphq.
 		Where(vendorprofilehistory.HistoryTimeLTE(time)).
 		Order(vendorprofilehistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (vppp *VendorProfilePaymentPreference) History() *VendorProfilePaymentPreferenceHistoryQuery {
+	historyClient := NewVendorProfilePaymentPreferenceHistoryClient(vppp.config)
+	return historyClient.Query().Where(vendorprofilepaymentpreferencehistory.Ref(vppp.ID))
+}
+
+func (vppph *VendorProfilePaymentPreferenceHistory) Next(ctx context.Context) (*VendorProfilePaymentPreferenceHistory, error) {
+	client := NewVendorProfilePaymentPreferenceHistoryClient(vppph.config)
+	return client.Query().
+		Where(
+			vendorprofilepaymentpreferencehistory.Ref(vppph.Ref),
+			vendorprofilepaymentpreferencehistory.HistoryTimeGT(vppph.HistoryTime),
+		).
+		Order(vendorprofilepaymentpreferencehistory.ByHistoryTime()).
+		First(ctx)
+}
+
+func (vppph *VendorProfilePaymentPreferenceHistory) Prev(ctx context.Context) (*VendorProfilePaymentPreferenceHistory, error) {
+	client := NewVendorProfilePaymentPreferenceHistoryClient(vppph.config)
+	return client.Query().
+		Where(
+			vendorprofilepaymentpreferencehistory.Ref(vppph.Ref),
+			vendorprofilepaymentpreferencehistory.HistoryTimeLT(vppph.HistoryTime),
+		).
+		Order(vendorprofilepaymentpreferencehistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (vppphq *VendorProfilePaymentPreferenceHistoryQuery) Earliest(ctx context.Context) (*VendorProfilePaymentPreferenceHistory, error) {
+	return vppphq.
+		Order(vendorprofilepaymentpreferencehistory.ByHistoryTime()).
+		First(ctx)
+}
+
+func (vppphq *VendorProfilePaymentPreferenceHistoryQuery) Latest(ctx context.Context) (*VendorProfilePaymentPreferenceHistory, error) {
+	return vppphq.
+		Order(vendorprofilepaymentpreferencehistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (vppphq *VendorProfilePaymentPreferenceHistoryQuery) AsOf(ctx context.Context, time time.Time) (*VendorProfilePaymentPreferenceHistory, error) {
+	return vppphq.
+		Where(vendorprofilepaymentpreferencehistory.HistoryTimeLTE(time)).
+		Order(vendorprofilepaymentpreferencehistory.ByHistoryTime(sql.OrderDesc())).
 		First(ctx)
 }
 

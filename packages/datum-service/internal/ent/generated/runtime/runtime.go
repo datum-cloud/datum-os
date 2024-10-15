@@ -72,6 +72,8 @@ import (
 	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorhistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofile"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofilehistory"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofilepaymentpreference"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofilepaymentpreferencehistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofilephonenumber"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofilephonenumberhistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofilepostaladdress"
@@ -3800,6 +3802,103 @@ func init() {
 	vendorprofilehistoryDescID := vendorprofilehistoryFields[9].Descriptor()
 	// vendorprofilehistory.DefaultID holds the default value on creation for the id field.
 	vendorprofilehistory.DefaultID = vendorprofilehistoryDescID.Default.(func() string)
+	vendorprofilepaymentpreferenceMixin := schema.VendorProfilePaymentPreference{}.Mixin()
+	vendorprofilepaymentpreference.Policy = privacy.NewPolicies(schema.VendorProfilePaymentPreference{})
+	vendorprofilepaymentpreference.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := vendorprofilepaymentpreference.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+	vendorprofilepaymentpreferenceMixinHooks1 := vendorprofilepaymentpreferenceMixin[1].Hooks()
+	vendorprofilepaymentpreferenceMixinHooks2 := vendorprofilepaymentpreferenceMixin[2].Hooks()
+	vendorprofilepaymentpreferenceMixinHooks4 := vendorprofilepaymentpreferenceMixin[4].Hooks()
+
+	vendorprofilepaymentpreference.Hooks[1] = vendorprofilepaymentpreferenceMixinHooks1[0]
+
+	vendorprofilepaymentpreference.Hooks[2] = vendorprofilepaymentpreferenceMixinHooks2[0]
+
+	vendorprofilepaymentpreference.Hooks[3] = vendorprofilepaymentpreferenceMixinHooks4[0]
+	vendorprofilepaymentpreferenceMixinInters2 := vendorprofilepaymentpreferenceMixin[2].Interceptors()
+	vendorprofilepaymentpreferenceMixinInters4 := vendorprofilepaymentpreferenceMixin[4].Interceptors()
+	vendorprofilepaymentpreference.Interceptors[0] = vendorprofilepaymentpreferenceMixinInters2[0]
+	vendorprofilepaymentpreference.Interceptors[1] = vendorprofilepaymentpreferenceMixinInters4[0]
+	vendorprofilepaymentpreferenceMixinFields0 := vendorprofilepaymentpreferenceMixin[0].Fields()
+	_ = vendorprofilepaymentpreferenceMixinFields0
+	vendorprofilepaymentpreferenceMixinFields1 := vendorprofilepaymentpreferenceMixin[1].Fields()
+	_ = vendorprofilepaymentpreferenceMixinFields1
+	vendorprofilepaymentpreferenceMixinFields3 := vendorprofilepaymentpreferenceMixin[3].Fields()
+	_ = vendorprofilepaymentpreferenceMixinFields3
+	vendorprofilepaymentpreferenceMixinFields4 := vendorprofilepaymentpreferenceMixin[4].Fields()
+	_ = vendorprofilepaymentpreferenceMixinFields4
+	vendorprofilepaymentpreferenceFields := schema.VendorProfilePaymentPreference{}.Fields()
+	_ = vendorprofilepaymentpreferenceFields
+	// vendorprofilepaymentpreferenceDescMappingID is the schema descriptor for mapping_id field.
+	vendorprofilepaymentpreferenceDescMappingID := vendorprofilepaymentpreferenceMixinFields0[1].Descriptor()
+	// vendorprofilepaymentpreference.DefaultMappingID holds the default value on creation for the mapping_id field.
+	vendorprofilepaymentpreference.DefaultMappingID = vendorprofilepaymentpreferenceDescMappingID.Default.(func() string)
+	// vendorprofilepaymentpreferenceDescCreatedAt is the schema descriptor for created_at field.
+	vendorprofilepaymentpreferenceDescCreatedAt := vendorprofilepaymentpreferenceMixinFields1[0].Descriptor()
+	// vendorprofilepaymentpreference.DefaultCreatedAt holds the default value on creation for the created_at field.
+	vendorprofilepaymentpreference.DefaultCreatedAt = vendorprofilepaymentpreferenceDescCreatedAt.Default.(func() time.Time)
+	// vendorprofilepaymentpreferenceDescUpdatedAt is the schema descriptor for updated_at field.
+	vendorprofilepaymentpreferenceDescUpdatedAt := vendorprofilepaymentpreferenceMixinFields1[1].Descriptor()
+	// vendorprofilepaymentpreference.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	vendorprofilepaymentpreference.DefaultUpdatedAt = vendorprofilepaymentpreferenceDescUpdatedAt.Default.(func() time.Time)
+	// vendorprofilepaymentpreference.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	vendorprofilepaymentpreference.UpdateDefaultUpdatedAt = vendorprofilepaymentpreferenceDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// vendorprofilepaymentpreferenceDescTags is the schema descriptor for tags field.
+	vendorprofilepaymentpreferenceDescTags := vendorprofilepaymentpreferenceMixinFields3[0].Descriptor()
+	// vendorprofilepaymentpreference.DefaultTags holds the default value on creation for the tags field.
+	vendorprofilepaymentpreference.DefaultTags = vendorprofilepaymentpreferenceDescTags.Default.([]string)
+	// vendorprofilepaymentpreferenceDescOwnerID is the schema descriptor for owner_id field.
+	vendorprofilepaymentpreferenceDescOwnerID := vendorprofilepaymentpreferenceMixinFields4[0].Descriptor()
+	// vendorprofilepaymentpreference.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
+	vendorprofilepaymentpreference.OwnerIDValidator = vendorprofilepaymentpreferenceDescOwnerID.Validators[0].(func(string) error)
+	// vendorprofilepaymentpreferenceDescPreferred is the schema descriptor for preferred field.
+	vendorprofilepaymentpreferenceDescPreferred := vendorprofilepaymentpreferenceFields[1].Descriptor()
+	// vendorprofilepaymentpreference.DefaultPreferred holds the default value on creation for the preferred field.
+	vendorprofilepaymentpreference.DefaultPreferred = vendorprofilepaymentpreferenceDescPreferred.Default.(bool)
+	// vendorprofilepaymentpreferenceDescID is the schema descriptor for id field.
+	vendorprofilepaymentpreferenceDescID := vendorprofilepaymentpreferenceMixinFields0[0].Descriptor()
+	// vendorprofilepaymentpreference.DefaultID holds the default value on creation for the id field.
+	vendorprofilepaymentpreference.DefaultID = vendorprofilepaymentpreferenceDescID.Default.(func() string)
+	vendorprofilepaymentpreferencehistoryInters := schema.VendorProfilePaymentPreferenceHistory{}.Interceptors()
+	vendorprofilepaymentpreferencehistory.Interceptors[0] = vendorprofilepaymentpreferencehistoryInters[0]
+	vendorprofilepaymentpreferencehistoryFields := schema.VendorProfilePaymentPreferenceHistory{}.Fields()
+	_ = vendorprofilepaymentpreferencehistoryFields
+	// vendorprofilepaymentpreferencehistoryDescHistoryTime is the schema descriptor for history_time field.
+	vendorprofilepaymentpreferencehistoryDescHistoryTime := vendorprofilepaymentpreferencehistoryFields[0].Descriptor()
+	// vendorprofilepaymentpreferencehistory.DefaultHistoryTime holds the default value on creation for the history_time field.
+	vendorprofilepaymentpreferencehistory.DefaultHistoryTime = vendorprofilepaymentpreferencehistoryDescHistoryTime.Default.(func() time.Time)
+	// vendorprofilepaymentpreferencehistoryDescMappingID is the schema descriptor for mapping_id field.
+	vendorprofilepaymentpreferencehistoryDescMappingID := vendorprofilepaymentpreferencehistoryFields[4].Descriptor()
+	// vendorprofilepaymentpreferencehistory.DefaultMappingID holds the default value on creation for the mapping_id field.
+	vendorprofilepaymentpreferencehistory.DefaultMappingID = vendorprofilepaymentpreferencehistoryDescMappingID.Default.(func() string)
+	// vendorprofilepaymentpreferencehistoryDescCreatedAt is the schema descriptor for created_at field.
+	vendorprofilepaymentpreferencehistoryDescCreatedAt := vendorprofilepaymentpreferencehistoryFields[5].Descriptor()
+	// vendorprofilepaymentpreferencehistory.DefaultCreatedAt holds the default value on creation for the created_at field.
+	vendorprofilepaymentpreferencehistory.DefaultCreatedAt = vendorprofilepaymentpreferencehistoryDescCreatedAt.Default.(func() time.Time)
+	// vendorprofilepaymentpreferencehistoryDescUpdatedAt is the schema descriptor for updated_at field.
+	vendorprofilepaymentpreferencehistoryDescUpdatedAt := vendorprofilepaymentpreferencehistoryFields[6].Descriptor()
+	// vendorprofilepaymentpreferencehistory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	vendorprofilepaymentpreferencehistory.DefaultUpdatedAt = vendorprofilepaymentpreferencehistoryDescUpdatedAt.Default.(func() time.Time)
+	// vendorprofilepaymentpreferencehistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	vendorprofilepaymentpreferencehistory.UpdateDefaultUpdatedAt = vendorprofilepaymentpreferencehistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// vendorprofilepaymentpreferencehistoryDescTags is the schema descriptor for tags field.
+	vendorprofilepaymentpreferencehistoryDescTags := vendorprofilepaymentpreferencehistoryFields[11].Descriptor()
+	// vendorprofilepaymentpreferencehistory.DefaultTags holds the default value on creation for the tags field.
+	vendorprofilepaymentpreferencehistory.DefaultTags = vendorprofilepaymentpreferencehistoryDescTags.Default.([]string)
+	// vendorprofilepaymentpreferencehistoryDescPreferred is the schema descriptor for preferred field.
+	vendorprofilepaymentpreferencehistoryDescPreferred := vendorprofilepaymentpreferencehistoryFields[14].Descriptor()
+	// vendorprofilepaymentpreferencehistory.DefaultPreferred holds the default value on creation for the preferred field.
+	vendorprofilepaymentpreferencehistory.DefaultPreferred = vendorprofilepaymentpreferencehistoryDescPreferred.Default.(bool)
+	// vendorprofilepaymentpreferencehistoryDescID is the schema descriptor for id field.
+	vendorprofilepaymentpreferencehistoryDescID := vendorprofilepaymentpreferencehistoryFields[3].Descriptor()
+	// vendorprofilepaymentpreferencehistory.DefaultID holds the default value on creation for the id field.
+	vendorprofilepaymentpreferencehistory.DefaultID = vendorprofilepaymentpreferencehistoryDescID.Default.(func() string)
 	vendorprofilephonenumberMixin := schema.VendorProfilePhoneNumber{}.Mixin()
 	vendorprofilephonenumber.Policy = privacy.NewPolicies(schema.VendorProfilePhoneNumber{})
 	vendorprofilephonenumber.Hooks[0] = func(next ent.Mutator) ent.Mutator {

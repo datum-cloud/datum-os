@@ -78,6 +78,8 @@ import (
 	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorhistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofile"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofilehistory"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofilepaymentpreference"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofilepaymentpreferencehistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofilephonenumber"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofilephonenumberhistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofilepostaladdress"
@@ -17588,6 +17590,504 @@ func (vph *VendorProfileHistory) ToEdge(order *VendorProfileHistoryOrder) *Vendo
 	return &VendorProfileHistoryEdge{
 		Node:   vph,
 		Cursor: order.Field.toCursor(vph),
+	}
+}
+
+// VendorProfilePaymentPreferenceEdge is the edge representation of VendorProfilePaymentPreference.
+type VendorProfilePaymentPreferenceEdge struct {
+	Node   *VendorProfilePaymentPreference `json:"node"`
+	Cursor Cursor                          `json:"cursor"`
+}
+
+// VendorProfilePaymentPreferenceConnection is the connection containing edges to VendorProfilePaymentPreference.
+type VendorProfilePaymentPreferenceConnection struct {
+	Edges      []*VendorProfilePaymentPreferenceEdge `json:"edges"`
+	PageInfo   PageInfo                              `json:"pageInfo"`
+	TotalCount int                                   `json:"totalCount"`
+}
+
+func (c *VendorProfilePaymentPreferenceConnection) build(nodes []*VendorProfilePaymentPreference, pager *vendorprofilepaymentpreferencePager, after *Cursor, first *int, before *Cursor, last *int) {
+	c.PageInfo.HasNextPage = before != nil
+	c.PageInfo.HasPreviousPage = after != nil
+	if first != nil && *first+1 == len(nodes) {
+		c.PageInfo.HasNextPage = true
+		nodes = nodes[:len(nodes)-1]
+	} else if last != nil && *last+1 == len(nodes) {
+		c.PageInfo.HasPreviousPage = true
+		nodes = nodes[:len(nodes)-1]
+	}
+	var nodeAt func(int) *VendorProfilePaymentPreference
+	if last != nil {
+		n := len(nodes) - 1
+		nodeAt = func(i int) *VendorProfilePaymentPreference {
+			return nodes[n-i]
+		}
+	} else {
+		nodeAt = func(i int) *VendorProfilePaymentPreference {
+			return nodes[i]
+		}
+	}
+	c.Edges = make([]*VendorProfilePaymentPreferenceEdge, len(nodes))
+	for i := range nodes {
+		node := nodeAt(i)
+		c.Edges[i] = &VendorProfilePaymentPreferenceEdge{
+			Node:   node,
+			Cursor: pager.toCursor(node),
+		}
+	}
+	if l := len(c.Edges); l > 0 {
+		c.PageInfo.StartCursor = &c.Edges[0].Cursor
+		c.PageInfo.EndCursor = &c.Edges[l-1].Cursor
+	}
+	if c.TotalCount == 0 {
+		c.TotalCount = len(nodes)
+	}
+}
+
+// VendorProfilePaymentPreferencePaginateOption enables pagination customization.
+type VendorProfilePaymentPreferencePaginateOption func(*vendorprofilepaymentpreferencePager) error
+
+// WithVendorProfilePaymentPreferenceOrder configures pagination ordering.
+func WithVendorProfilePaymentPreferenceOrder(order *VendorProfilePaymentPreferenceOrder) VendorProfilePaymentPreferencePaginateOption {
+	if order == nil {
+		order = DefaultVendorProfilePaymentPreferenceOrder
+	}
+	o := *order
+	return func(pager *vendorprofilepaymentpreferencePager) error {
+		if err := o.Direction.Validate(); err != nil {
+			return err
+		}
+		if o.Field == nil {
+			o.Field = DefaultVendorProfilePaymentPreferenceOrder.Field
+		}
+		pager.order = &o
+		return nil
+	}
+}
+
+// WithVendorProfilePaymentPreferenceFilter configures pagination filter.
+func WithVendorProfilePaymentPreferenceFilter(filter func(*VendorProfilePaymentPreferenceQuery) (*VendorProfilePaymentPreferenceQuery, error)) VendorProfilePaymentPreferencePaginateOption {
+	return func(pager *vendorprofilepaymentpreferencePager) error {
+		if filter == nil {
+			return errors.New("VendorProfilePaymentPreferenceQuery filter cannot be nil")
+		}
+		pager.filter = filter
+		return nil
+	}
+}
+
+type vendorprofilepaymentpreferencePager struct {
+	reverse bool
+	order   *VendorProfilePaymentPreferenceOrder
+	filter  func(*VendorProfilePaymentPreferenceQuery) (*VendorProfilePaymentPreferenceQuery, error)
+}
+
+func newVendorProfilePaymentPreferencePager(opts []VendorProfilePaymentPreferencePaginateOption, reverse bool) (*vendorprofilepaymentpreferencePager, error) {
+	pager := &vendorprofilepaymentpreferencePager{reverse: reverse}
+	for _, opt := range opts {
+		if err := opt(pager); err != nil {
+			return nil, err
+		}
+	}
+	if pager.order == nil {
+		pager.order = DefaultVendorProfilePaymentPreferenceOrder
+	}
+	return pager, nil
+}
+
+func (p *vendorprofilepaymentpreferencePager) applyFilter(query *VendorProfilePaymentPreferenceQuery) (*VendorProfilePaymentPreferenceQuery, error) {
+	if p.filter != nil {
+		return p.filter(query)
+	}
+	return query, nil
+}
+
+func (p *vendorprofilepaymentpreferencePager) toCursor(vppp *VendorProfilePaymentPreference) Cursor {
+	return p.order.Field.toCursor(vppp)
+}
+
+func (p *vendorprofilepaymentpreferencePager) applyCursors(query *VendorProfilePaymentPreferenceQuery, after, before *Cursor) (*VendorProfilePaymentPreferenceQuery, error) {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	for _, predicate := range entgql.CursorsPredicate(after, before, DefaultVendorProfilePaymentPreferenceOrder.Field.column, p.order.Field.column, direction) {
+		query = query.Where(predicate)
+	}
+	return query, nil
+}
+
+func (p *vendorprofilepaymentpreferencePager) applyOrder(query *VendorProfilePaymentPreferenceQuery) *VendorProfilePaymentPreferenceQuery {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	query = query.Order(p.order.Field.toTerm(direction.OrderTermOption()))
+	if p.order.Field != DefaultVendorProfilePaymentPreferenceOrder.Field {
+		query = query.Order(DefaultVendorProfilePaymentPreferenceOrder.Field.toTerm(direction.OrderTermOption()))
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(p.order.Field.column)
+	}
+	return query
+}
+
+func (p *vendorprofilepaymentpreferencePager) orderExpr(query *VendorProfilePaymentPreferenceQuery) sql.Querier {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(p.order.Field.column)
+	}
+	return sql.ExprFunc(func(b *sql.Builder) {
+		b.Ident(p.order.Field.column).Pad().WriteString(string(direction))
+		if p.order.Field != DefaultVendorProfilePaymentPreferenceOrder.Field {
+			b.Comma().Ident(DefaultVendorProfilePaymentPreferenceOrder.Field.column).Pad().WriteString(string(direction))
+		}
+	})
+}
+
+// Paginate executes the query and returns a relay based cursor connection to VendorProfilePaymentPreference.
+func (vppp *VendorProfilePaymentPreferenceQuery) Paginate(
+	ctx context.Context, after *Cursor, first *int,
+	before *Cursor, last *int, opts ...VendorProfilePaymentPreferencePaginateOption,
+) (*VendorProfilePaymentPreferenceConnection, error) {
+	if err := validateFirstLast(first, last); err != nil {
+		return nil, err
+	}
+	pager, err := newVendorProfilePaymentPreferencePager(opts, last != nil)
+	if err != nil {
+		return nil, err
+	}
+	if vppp, err = pager.applyFilter(vppp); err != nil {
+		return nil, err
+	}
+	conn := &VendorProfilePaymentPreferenceConnection{Edges: []*VendorProfilePaymentPreferenceEdge{}}
+	ignoredEdges := !hasCollectedField(ctx, edgesField)
+	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+		hasPagination := after != nil || first != nil || before != nil || last != nil
+		if hasPagination || ignoredEdges {
+			c := vppp.Clone()
+			c.ctx.Fields = nil
+			if conn.TotalCount, err = c.Count(ctx); err != nil {
+				return nil, err
+			}
+			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
+			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
+		}
+	}
+	if ignoredEdges || (first != nil && *first == 0) || (last != nil && *last == 0) {
+		return conn, nil
+	}
+	if vppp, err = pager.applyCursors(vppp, after, before); err != nil {
+		return nil, err
+	}
+	limit := paginateLimit(first, last)
+	if limit != 0 {
+		vppp.Limit(limit)
+	}
+	if field := collectedField(ctx, edgesField, nodeField); field != nil {
+		if err := vppp.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
+			return nil, err
+		}
+	}
+	vppp = pager.applyOrder(vppp)
+	nodes, err := vppp.All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	conn.build(nodes, pager, after, first, before, last)
+	return conn, nil
+}
+
+// VendorProfilePaymentPreferenceOrderField defines the ordering field of VendorProfilePaymentPreference.
+type VendorProfilePaymentPreferenceOrderField struct {
+	// Value extracts the ordering value from the given VendorProfilePaymentPreference.
+	Value    func(*VendorProfilePaymentPreference) (ent.Value, error)
+	column   string // field or computed.
+	toTerm   func(...sql.OrderTermOption) vendorprofilepaymentpreference.OrderOption
+	toCursor func(*VendorProfilePaymentPreference) Cursor
+}
+
+// VendorProfilePaymentPreferenceOrder defines the ordering of VendorProfilePaymentPreference.
+type VendorProfilePaymentPreferenceOrder struct {
+	Direction OrderDirection                            `json:"direction"`
+	Field     *VendorProfilePaymentPreferenceOrderField `json:"field"`
+}
+
+// DefaultVendorProfilePaymentPreferenceOrder is the default ordering of VendorProfilePaymentPreference.
+var DefaultVendorProfilePaymentPreferenceOrder = &VendorProfilePaymentPreferenceOrder{
+	Direction: entgql.OrderDirectionAsc,
+	Field: &VendorProfilePaymentPreferenceOrderField{
+		Value: func(vppp *VendorProfilePaymentPreference) (ent.Value, error) {
+			return vppp.ID, nil
+		},
+		column: vendorprofilepaymentpreference.FieldID,
+		toTerm: vendorprofilepaymentpreference.ByID,
+		toCursor: func(vppp *VendorProfilePaymentPreference) Cursor {
+			return Cursor{ID: vppp.ID}
+		},
+	},
+}
+
+// ToEdge converts VendorProfilePaymentPreference into VendorProfilePaymentPreferenceEdge.
+func (vppp *VendorProfilePaymentPreference) ToEdge(order *VendorProfilePaymentPreferenceOrder) *VendorProfilePaymentPreferenceEdge {
+	if order == nil {
+		order = DefaultVendorProfilePaymentPreferenceOrder
+	}
+	return &VendorProfilePaymentPreferenceEdge{
+		Node:   vppp,
+		Cursor: order.Field.toCursor(vppp),
+	}
+}
+
+// VendorProfilePaymentPreferenceHistoryEdge is the edge representation of VendorProfilePaymentPreferenceHistory.
+type VendorProfilePaymentPreferenceHistoryEdge struct {
+	Node   *VendorProfilePaymentPreferenceHistory `json:"node"`
+	Cursor Cursor                                 `json:"cursor"`
+}
+
+// VendorProfilePaymentPreferenceHistoryConnection is the connection containing edges to VendorProfilePaymentPreferenceHistory.
+type VendorProfilePaymentPreferenceHistoryConnection struct {
+	Edges      []*VendorProfilePaymentPreferenceHistoryEdge `json:"edges"`
+	PageInfo   PageInfo                                     `json:"pageInfo"`
+	TotalCount int                                          `json:"totalCount"`
+}
+
+func (c *VendorProfilePaymentPreferenceHistoryConnection) build(nodes []*VendorProfilePaymentPreferenceHistory, pager *vendorprofilepaymentpreferencehistoryPager, after *Cursor, first *int, before *Cursor, last *int) {
+	c.PageInfo.HasNextPage = before != nil
+	c.PageInfo.HasPreviousPage = after != nil
+	if first != nil && *first+1 == len(nodes) {
+		c.PageInfo.HasNextPage = true
+		nodes = nodes[:len(nodes)-1]
+	} else if last != nil && *last+1 == len(nodes) {
+		c.PageInfo.HasPreviousPage = true
+		nodes = nodes[:len(nodes)-1]
+	}
+	var nodeAt func(int) *VendorProfilePaymentPreferenceHistory
+	if last != nil {
+		n := len(nodes) - 1
+		nodeAt = func(i int) *VendorProfilePaymentPreferenceHistory {
+			return nodes[n-i]
+		}
+	} else {
+		nodeAt = func(i int) *VendorProfilePaymentPreferenceHistory {
+			return nodes[i]
+		}
+	}
+	c.Edges = make([]*VendorProfilePaymentPreferenceHistoryEdge, len(nodes))
+	for i := range nodes {
+		node := nodeAt(i)
+		c.Edges[i] = &VendorProfilePaymentPreferenceHistoryEdge{
+			Node:   node,
+			Cursor: pager.toCursor(node),
+		}
+	}
+	if l := len(c.Edges); l > 0 {
+		c.PageInfo.StartCursor = &c.Edges[0].Cursor
+		c.PageInfo.EndCursor = &c.Edges[l-1].Cursor
+	}
+	if c.TotalCount == 0 {
+		c.TotalCount = len(nodes)
+	}
+}
+
+// VendorProfilePaymentPreferenceHistoryPaginateOption enables pagination customization.
+type VendorProfilePaymentPreferenceHistoryPaginateOption func(*vendorprofilepaymentpreferencehistoryPager) error
+
+// WithVendorProfilePaymentPreferenceHistoryOrder configures pagination ordering.
+func WithVendorProfilePaymentPreferenceHistoryOrder(order *VendorProfilePaymentPreferenceHistoryOrder) VendorProfilePaymentPreferenceHistoryPaginateOption {
+	if order == nil {
+		order = DefaultVendorProfilePaymentPreferenceHistoryOrder
+	}
+	o := *order
+	return func(pager *vendorprofilepaymentpreferencehistoryPager) error {
+		if err := o.Direction.Validate(); err != nil {
+			return err
+		}
+		if o.Field == nil {
+			o.Field = DefaultVendorProfilePaymentPreferenceHistoryOrder.Field
+		}
+		pager.order = &o
+		return nil
+	}
+}
+
+// WithVendorProfilePaymentPreferenceHistoryFilter configures pagination filter.
+func WithVendorProfilePaymentPreferenceHistoryFilter(filter func(*VendorProfilePaymentPreferenceHistoryQuery) (*VendorProfilePaymentPreferenceHistoryQuery, error)) VendorProfilePaymentPreferenceHistoryPaginateOption {
+	return func(pager *vendorprofilepaymentpreferencehistoryPager) error {
+		if filter == nil {
+			return errors.New("VendorProfilePaymentPreferenceHistoryQuery filter cannot be nil")
+		}
+		pager.filter = filter
+		return nil
+	}
+}
+
+type vendorprofilepaymentpreferencehistoryPager struct {
+	reverse bool
+	order   *VendorProfilePaymentPreferenceHistoryOrder
+	filter  func(*VendorProfilePaymentPreferenceHistoryQuery) (*VendorProfilePaymentPreferenceHistoryQuery, error)
+}
+
+func newVendorProfilePaymentPreferenceHistoryPager(opts []VendorProfilePaymentPreferenceHistoryPaginateOption, reverse bool) (*vendorprofilepaymentpreferencehistoryPager, error) {
+	pager := &vendorprofilepaymentpreferencehistoryPager{reverse: reverse}
+	for _, opt := range opts {
+		if err := opt(pager); err != nil {
+			return nil, err
+		}
+	}
+	if pager.order == nil {
+		pager.order = DefaultVendorProfilePaymentPreferenceHistoryOrder
+	}
+	return pager, nil
+}
+
+func (p *vendorprofilepaymentpreferencehistoryPager) applyFilter(query *VendorProfilePaymentPreferenceHistoryQuery) (*VendorProfilePaymentPreferenceHistoryQuery, error) {
+	if p.filter != nil {
+		return p.filter(query)
+	}
+	return query, nil
+}
+
+func (p *vendorprofilepaymentpreferencehistoryPager) toCursor(vppph *VendorProfilePaymentPreferenceHistory) Cursor {
+	return p.order.Field.toCursor(vppph)
+}
+
+func (p *vendorprofilepaymentpreferencehistoryPager) applyCursors(query *VendorProfilePaymentPreferenceHistoryQuery, after, before *Cursor) (*VendorProfilePaymentPreferenceHistoryQuery, error) {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	for _, predicate := range entgql.CursorsPredicate(after, before, DefaultVendorProfilePaymentPreferenceHistoryOrder.Field.column, p.order.Field.column, direction) {
+		query = query.Where(predicate)
+	}
+	return query, nil
+}
+
+func (p *vendorprofilepaymentpreferencehistoryPager) applyOrder(query *VendorProfilePaymentPreferenceHistoryQuery) *VendorProfilePaymentPreferenceHistoryQuery {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	query = query.Order(p.order.Field.toTerm(direction.OrderTermOption()))
+	if p.order.Field != DefaultVendorProfilePaymentPreferenceHistoryOrder.Field {
+		query = query.Order(DefaultVendorProfilePaymentPreferenceHistoryOrder.Field.toTerm(direction.OrderTermOption()))
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(p.order.Field.column)
+	}
+	return query
+}
+
+func (p *vendorprofilepaymentpreferencehistoryPager) orderExpr(query *VendorProfilePaymentPreferenceHistoryQuery) sql.Querier {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(p.order.Field.column)
+	}
+	return sql.ExprFunc(func(b *sql.Builder) {
+		b.Ident(p.order.Field.column).Pad().WriteString(string(direction))
+		if p.order.Field != DefaultVendorProfilePaymentPreferenceHistoryOrder.Field {
+			b.Comma().Ident(DefaultVendorProfilePaymentPreferenceHistoryOrder.Field.column).Pad().WriteString(string(direction))
+		}
+	})
+}
+
+// Paginate executes the query and returns a relay based cursor connection to VendorProfilePaymentPreferenceHistory.
+func (vppph *VendorProfilePaymentPreferenceHistoryQuery) Paginate(
+	ctx context.Context, after *Cursor, first *int,
+	before *Cursor, last *int, opts ...VendorProfilePaymentPreferenceHistoryPaginateOption,
+) (*VendorProfilePaymentPreferenceHistoryConnection, error) {
+	if err := validateFirstLast(first, last); err != nil {
+		return nil, err
+	}
+	pager, err := newVendorProfilePaymentPreferenceHistoryPager(opts, last != nil)
+	if err != nil {
+		return nil, err
+	}
+	if vppph, err = pager.applyFilter(vppph); err != nil {
+		return nil, err
+	}
+	conn := &VendorProfilePaymentPreferenceHistoryConnection{Edges: []*VendorProfilePaymentPreferenceHistoryEdge{}}
+	ignoredEdges := !hasCollectedField(ctx, edgesField)
+	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+		hasPagination := after != nil || first != nil || before != nil || last != nil
+		if hasPagination || ignoredEdges {
+			c := vppph.Clone()
+			c.ctx.Fields = nil
+			if conn.TotalCount, err = c.Count(ctx); err != nil {
+				return nil, err
+			}
+			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
+			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
+		}
+	}
+	if ignoredEdges || (first != nil && *first == 0) || (last != nil && *last == 0) {
+		return conn, nil
+	}
+	if vppph, err = pager.applyCursors(vppph, after, before); err != nil {
+		return nil, err
+	}
+	limit := paginateLimit(first, last)
+	if limit != 0 {
+		vppph.Limit(limit)
+	}
+	if field := collectedField(ctx, edgesField, nodeField); field != nil {
+		if err := vppph.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
+			return nil, err
+		}
+	}
+	vppph = pager.applyOrder(vppph)
+	nodes, err := vppph.All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	conn.build(nodes, pager, after, first, before, last)
+	return conn, nil
+}
+
+// VendorProfilePaymentPreferenceHistoryOrderField defines the ordering field of VendorProfilePaymentPreferenceHistory.
+type VendorProfilePaymentPreferenceHistoryOrderField struct {
+	// Value extracts the ordering value from the given VendorProfilePaymentPreferenceHistory.
+	Value    func(*VendorProfilePaymentPreferenceHistory) (ent.Value, error)
+	column   string // field or computed.
+	toTerm   func(...sql.OrderTermOption) vendorprofilepaymentpreferencehistory.OrderOption
+	toCursor func(*VendorProfilePaymentPreferenceHistory) Cursor
+}
+
+// VendorProfilePaymentPreferenceHistoryOrder defines the ordering of VendorProfilePaymentPreferenceHistory.
+type VendorProfilePaymentPreferenceHistoryOrder struct {
+	Direction OrderDirection                                   `json:"direction"`
+	Field     *VendorProfilePaymentPreferenceHistoryOrderField `json:"field"`
+}
+
+// DefaultVendorProfilePaymentPreferenceHistoryOrder is the default ordering of VendorProfilePaymentPreferenceHistory.
+var DefaultVendorProfilePaymentPreferenceHistoryOrder = &VendorProfilePaymentPreferenceHistoryOrder{
+	Direction: entgql.OrderDirectionAsc,
+	Field: &VendorProfilePaymentPreferenceHistoryOrderField{
+		Value: func(vppph *VendorProfilePaymentPreferenceHistory) (ent.Value, error) {
+			return vppph.ID, nil
+		},
+		column: vendorprofilepaymentpreferencehistory.FieldID,
+		toTerm: vendorprofilepaymentpreferencehistory.ByID,
+		toCursor: func(vppph *VendorProfilePaymentPreferenceHistory) Cursor {
+			return Cursor{ID: vppph.ID}
+		},
+	},
+}
+
+// ToEdge converts VendorProfilePaymentPreferenceHistory into VendorProfilePaymentPreferenceHistoryEdge.
+func (vppph *VendorProfilePaymentPreferenceHistory) ToEdge(order *VendorProfilePaymentPreferenceHistoryOrder) *VendorProfilePaymentPreferenceHistoryEdge {
+	if order == nil {
+		order = DefaultVendorProfilePaymentPreferenceHistoryOrder
+	}
+	return &VendorProfilePaymentPreferenceHistoryEdge{
+		Node:   vppph,
+		Cursor: order.Field.toCursor(vppph),
 	}
 }
 

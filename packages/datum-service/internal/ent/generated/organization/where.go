@@ -1871,6 +1871,35 @@ func HasPhoneNumbersWith(preds ...predicate.PhoneNumber) predicate.Organization 
 	})
 }
 
+// HasVendorProfilePaymentPreferences applies the HasEdge predicate on the "vendor_profile_payment_preferences" edge.
+func HasVendorProfilePaymentPreferences() predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, VendorProfilePaymentPreferencesTable, VendorProfilePaymentPreferencesColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.VendorProfilePaymentPreference
+		step.Edge.Schema = schemaConfig.VendorProfilePaymentPreference
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasVendorProfilePaymentPreferencesWith applies the HasEdge predicate on the "vendor_profile_payment_preferences" edge with a given conditions (other predicates).
+func HasVendorProfilePaymentPreferencesWith(preds ...predicate.VendorProfilePaymentPreference) predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := newVendorProfilePaymentPreferencesStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.VendorProfilePaymentPreference
+		step.Edge.Schema = schemaConfig.VendorProfilePaymentPreference
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasMembers applies the HasEdge predicate on the "members" edge.
 func HasMembers() predicate.Organization {
 	return predicate.Organization(func(s *sql.Selector) {

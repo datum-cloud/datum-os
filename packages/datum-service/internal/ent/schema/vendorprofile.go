@@ -88,6 +88,7 @@ func (VendorProfile) Edges() []ent.Edge {
 			Through("vendor_profile_postal_addresses", VendorProfilePostalAddress.Type),
 		edge.To("phone_numbers", PhoneNumber.Type).
 			Through("vendor_profile_phone_numbers", VendorProfilePhoneNumber.Type),
+		edge.To("payment_preferences", VendorProfilePaymentPreference.Type),
 		edge.From("vendor", Vendor.Type).
 			Ref("profile").Unique().Field("vendor_id").Immutable(),
 	}

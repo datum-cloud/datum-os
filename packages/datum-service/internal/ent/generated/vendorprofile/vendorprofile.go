@@ -58,6 +58,8 @@ const (
 	EdgePostalAddresses = "postal_addresses"
 	// EdgePhoneNumbers holds the string denoting the phone_numbers edge name in mutations.
 	EdgePhoneNumbers = "phone_numbers"
+	// EdgePaymentPreferences holds the string denoting the payment_preferences edge name in mutations.
+	EdgePaymentPreferences = "payment_preferences"
 	// EdgeVendor holds the string denoting the vendor edge name in mutations.
 	EdgeVendor = "vendor"
 	// EdgeVendorProfilePostalAddresses holds the string denoting the vendor_profile_postal_addresses edge name in mutations.
@@ -83,6 +85,13 @@ const (
 	// PhoneNumbersInverseTable is the table name for the PhoneNumber entity.
 	// It exists in this package in order to avoid circular dependency with the "phonenumber" package.
 	PhoneNumbersInverseTable = "phone_numbers"
+	// PaymentPreferencesTable is the table that holds the payment_preferences relation/edge.
+	PaymentPreferencesTable = "vendor_profile_payment_preferences"
+	// PaymentPreferencesInverseTable is the table name for the VendorProfilePaymentPreference entity.
+	// It exists in this package in order to avoid circular dependency with the "vendorprofilepaymentpreference" package.
+	PaymentPreferencesInverseTable = "vendor_profile_payment_preferences"
+	// PaymentPreferencesColumn is the table column denoting the payment_preferences relation/edge.
+	PaymentPreferencesColumn = "vendor_profile_id"
 	// VendorTable is the table that holds the vendor relation/edge.
 	VendorTable = "vendor_profiles"
 	// VendorInverseTable is the table name for the Vendor entity.
@@ -319,6 +328,20 @@ func ByPhoneNumbers(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
+// ByPaymentPreferencesCount orders the results by payment_preferences count.
+func ByPaymentPreferencesCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newPaymentPreferencesStep(), opts...)
+	}
+}
+
+// ByPaymentPreferences orders the results by payment_preferences terms.
+func ByPaymentPreferences(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newPaymentPreferencesStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByVendorField orders the results by vendor field.
 func ByVendorField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -372,6 +395,13 @@ func newPhoneNumbersStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(PhoneNumbersInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2M, false, PhoneNumbersTable, PhoneNumbersPrimaryKey...),
+	)
+}
+func newPaymentPreferencesStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(PaymentPreferencesInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, PaymentPreferencesTable, PaymentPreferencesColumn),
 	)
 }
 func newVendorStep() *sqlgraph.Step {

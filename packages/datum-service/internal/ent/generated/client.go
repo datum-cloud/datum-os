@@ -82,6 +82,8 @@ import (
 	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorhistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofile"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofilehistory"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofilepaymentpreference"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofilepaymentpreferencehistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofilephonenumber"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofilephonenumberhistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofilepostaladdress"
@@ -240,6 +242,10 @@ type Client struct {
 	VendorProfile *VendorProfileClient
 	// VendorProfileHistory is the client for interacting with the VendorProfileHistory builders.
 	VendorProfileHistory *VendorProfileHistoryClient
+	// VendorProfilePaymentPreference is the client for interacting with the VendorProfilePaymentPreference builders.
+	VendorProfilePaymentPreference *VendorProfilePaymentPreferenceClient
+	// VendorProfilePaymentPreferenceHistory is the client for interacting with the VendorProfilePaymentPreferenceHistory builders.
+	VendorProfilePaymentPreferenceHistory *VendorProfilePaymentPreferenceHistoryClient
 	// VendorProfilePhoneNumber is the client for interacting with the VendorProfilePhoneNumber builders.
 	VendorProfilePhoneNumber *VendorProfilePhoneNumberClient
 	// VendorProfilePhoneNumberHistory is the client for interacting with the VendorProfilePhoneNumberHistory builders.
@@ -336,6 +342,8 @@ func (c *Client) init() {
 	c.VendorHistory = NewVendorHistoryClient(c.config)
 	c.VendorProfile = NewVendorProfileClient(c.config)
 	c.VendorProfileHistory = NewVendorProfileHistoryClient(c.config)
+	c.VendorProfilePaymentPreference = NewVendorProfilePaymentPreferenceClient(c.config)
+	c.VendorProfilePaymentPreferenceHistory = NewVendorProfilePaymentPreferenceHistoryClient(c.config)
 	c.VendorProfilePhoneNumber = NewVendorProfilePhoneNumberClient(c.config)
 	c.VendorProfilePhoneNumberHistory = NewVendorProfilePhoneNumberHistoryClient(c.config)
 	c.VendorProfilePostalAddress = NewVendorProfilePostalAddressClient(c.config)
@@ -531,81 +539,83 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 	cfg := c.config
 	cfg.driver = tx
 	return &Tx{
-		ctx:                               ctx,
-		config:                            cfg,
-		APIToken:                          NewAPITokenClient(cfg),
-		Contact:                           NewContactClient(cfg),
-		ContactHistory:                    NewContactHistoryClient(cfg),
-		ContactList:                       NewContactListClient(cfg),
-		ContactListHistory:                NewContactListHistoryClient(cfg),
-		ContactListMembership:             NewContactListMembershipClient(cfg),
-		ContactListMembershipHistory:      NewContactListMembershipHistoryClient(cfg),
-		DocumentData:                      NewDocumentDataClient(cfg),
-		DocumentDataHistory:               NewDocumentDataHistoryClient(cfg),
-		EmailVerificationToken:            NewEmailVerificationTokenClient(cfg),
-		Entitlement:                       NewEntitlementClient(cfg),
-		EntitlementHistory:                NewEntitlementHistoryClient(cfg),
-		EntitlementPlan:                   NewEntitlementPlanClient(cfg),
-		EntitlementPlanFeature:            NewEntitlementPlanFeatureClient(cfg),
-		EntitlementPlanFeatureHistory:     NewEntitlementPlanFeatureHistoryClient(cfg),
-		EntitlementPlanHistory:            NewEntitlementPlanHistoryClient(cfg),
-		Entity:                            NewEntityClient(cfg),
-		EntityHistory:                     NewEntityHistoryClient(cfg),
-		EntityType:                        NewEntityTypeClient(cfg),
-		EntityTypeHistory:                 NewEntityTypeHistoryClient(cfg),
-		Event:                             NewEventClient(cfg),
-		EventHistory:                      NewEventHistoryClient(cfg),
-		Feature:                           NewFeatureClient(cfg),
-		FeatureHistory:                    NewFeatureHistoryClient(cfg),
-		File:                              NewFileClient(cfg),
-		FileHistory:                       NewFileHistoryClient(cfg),
-		Group:                             NewGroupClient(cfg),
-		GroupHistory:                      NewGroupHistoryClient(cfg),
-		GroupMembership:                   NewGroupMembershipClient(cfg),
-		GroupMembershipHistory:            NewGroupMembershipHistoryClient(cfg),
-		GroupSetting:                      NewGroupSettingClient(cfg),
-		GroupSettingHistory:               NewGroupSettingHistoryClient(cfg),
-		Hush:                              NewHushClient(cfg),
-		HushHistory:                       NewHushHistoryClient(cfg),
-		Integration:                       NewIntegrationClient(cfg),
-		IntegrationHistory:                NewIntegrationHistoryClient(cfg),
-		Invite:                            NewInviteClient(cfg),
-		Note:                              NewNoteClient(cfg),
-		NoteHistory:                       NewNoteHistoryClient(cfg),
-		OauthProvider:                     NewOauthProviderClient(cfg),
-		OauthProviderHistory:              NewOauthProviderHistoryClient(cfg),
-		OhAuthTooToken:                    NewOhAuthTooTokenClient(cfg),
-		OrgMembership:                     NewOrgMembershipClient(cfg),
-		OrgMembershipHistory:              NewOrgMembershipHistoryClient(cfg),
-		Organization:                      NewOrganizationClient(cfg),
-		OrganizationHistory:               NewOrganizationHistoryClient(cfg),
-		OrganizationSetting:               NewOrganizationSettingClient(cfg),
-		OrganizationSettingHistory:        NewOrganizationSettingHistoryClient(cfg),
-		PasswordResetToken:                NewPasswordResetTokenClient(cfg),
-		PersonalAccessToken:               NewPersonalAccessTokenClient(cfg),
-		PhoneNumber:                       NewPhoneNumberClient(cfg),
-		PhoneNumberHistory:                NewPhoneNumberHistoryClient(cfg),
-		PostalAddress:                     NewPostalAddressClient(cfg),
-		PostalAddressHistory:              NewPostalAddressHistoryClient(cfg),
-		Subscriber:                        NewSubscriberClient(cfg),
-		TFASetting:                        NewTFASettingClient(cfg),
-		Template:                          NewTemplateClient(cfg),
-		TemplateHistory:                   NewTemplateHistoryClient(cfg),
-		User:                              NewUserClient(cfg),
-		UserHistory:                       NewUserHistoryClient(cfg),
-		UserSetting:                       NewUserSettingClient(cfg),
-		UserSettingHistory:                NewUserSettingHistoryClient(cfg),
-		Vendor:                            NewVendorClient(cfg),
-		VendorHistory:                     NewVendorHistoryClient(cfg),
-		VendorProfile:                     NewVendorProfileClient(cfg),
-		VendorProfileHistory:              NewVendorProfileHistoryClient(cfg),
-		VendorProfilePhoneNumber:          NewVendorProfilePhoneNumberClient(cfg),
-		VendorProfilePhoneNumberHistory:   NewVendorProfilePhoneNumberHistoryClient(cfg),
-		VendorProfilePostalAddress:        NewVendorProfilePostalAddressClient(cfg),
-		VendorProfilePostalAddressHistory: NewVendorProfilePostalAddressHistoryClient(cfg),
-		Webauthn:                          NewWebauthnClient(cfg),
-		Webhook:                           NewWebhookClient(cfg),
-		WebhookHistory:                    NewWebhookHistoryClient(cfg),
+		ctx:                                   ctx,
+		config:                                cfg,
+		APIToken:                              NewAPITokenClient(cfg),
+		Contact:                               NewContactClient(cfg),
+		ContactHistory:                        NewContactHistoryClient(cfg),
+		ContactList:                           NewContactListClient(cfg),
+		ContactListHistory:                    NewContactListHistoryClient(cfg),
+		ContactListMembership:                 NewContactListMembershipClient(cfg),
+		ContactListMembershipHistory:          NewContactListMembershipHistoryClient(cfg),
+		DocumentData:                          NewDocumentDataClient(cfg),
+		DocumentDataHistory:                   NewDocumentDataHistoryClient(cfg),
+		EmailVerificationToken:                NewEmailVerificationTokenClient(cfg),
+		Entitlement:                           NewEntitlementClient(cfg),
+		EntitlementHistory:                    NewEntitlementHistoryClient(cfg),
+		EntitlementPlan:                       NewEntitlementPlanClient(cfg),
+		EntitlementPlanFeature:                NewEntitlementPlanFeatureClient(cfg),
+		EntitlementPlanFeatureHistory:         NewEntitlementPlanFeatureHistoryClient(cfg),
+		EntitlementPlanHistory:                NewEntitlementPlanHistoryClient(cfg),
+		Entity:                                NewEntityClient(cfg),
+		EntityHistory:                         NewEntityHistoryClient(cfg),
+		EntityType:                            NewEntityTypeClient(cfg),
+		EntityTypeHistory:                     NewEntityTypeHistoryClient(cfg),
+		Event:                                 NewEventClient(cfg),
+		EventHistory:                          NewEventHistoryClient(cfg),
+		Feature:                               NewFeatureClient(cfg),
+		FeatureHistory:                        NewFeatureHistoryClient(cfg),
+		File:                                  NewFileClient(cfg),
+		FileHistory:                           NewFileHistoryClient(cfg),
+		Group:                                 NewGroupClient(cfg),
+		GroupHistory:                          NewGroupHistoryClient(cfg),
+		GroupMembership:                       NewGroupMembershipClient(cfg),
+		GroupMembershipHistory:                NewGroupMembershipHistoryClient(cfg),
+		GroupSetting:                          NewGroupSettingClient(cfg),
+		GroupSettingHistory:                   NewGroupSettingHistoryClient(cfg),
+		Hush:                                  NewHushClient(cfg),
+		HushHistory:                           NewHushHistoryClient(cfg),
+		Integration:                           NewIntegrationClient(cfg),
+		IntegrationHistory:                    NewIntegrationHistoryClient(cfg),
+		Invite:                                NewInviteClient(cfg),
+		Note:                                  NewNoteClient(cfg),
+		NoteHistory:                           NewNoteHistoryClient(cfg),
+		OauthProvider:                         NewOauthProviderClient(cfg),
+		OauthProviderHistory:                  NewOauthProviderHistoryClient(cfg),
+		OhAuthTooToken:                        NewOhAuthTooTokenClient(cfg),
+		OrgMembership:                         NewOrgMembershipClient(cfg),
+		OrgMembershipHistory:                  NewOrgMembershipHistoryClient(cfg),
+		Organization:                          NewOrganizationClient(cfg),
+		OrganizationHistory:                   NewOrganizationHistoryClient(cfg),
+		OrganizationSetting:                   NewOrganizationSettingClient(cfg),
+		OrganizationSettingHistory:            NewOrganizationSettingHistoryClient(cfg),
+		PasswordResetToken:                    NewPasswordResetTokenClient(cfg),
+		PersonalAccessToken:                   NewPersonalAccessTokenClient(cfg),
+		PhoneNumber:                           NewPhoneNumberClient(cfg),
+		PhoneNumberHistory:                    NewPhoneNumberHistoryClient(cfg),
+		PostalAddress:                         NewPostalAddressClient(cfg),
+		PostalAddressHistory:                  NewPostalAddressHistoryClient(cfg),
+		Subscriber:                            NewSubscriberClient(cfg),
+		TFASetting:                            NewTFASettingClient(cfg),
+		Template:                              NewTemplateClient(cfg),
+		TemplateHistory:                       NewTemplateHistoryClient(cfg),
+		User:                                  NewUserClient(cfg),
+		UserHistory:                           NewUserHistoryClient(cfg),
+		UserSetting:                           NewUserSettingClient(cfg),
+		UserSettingHistory:                    NewUserSettingHistoryClient(cfg),
+		Vendor:                                NewVendorClient(cfg),
+		VendorHistory:                         NewVendorHistoryClient(cfg),
+		VendorProfile:                         NewVendorProfileClient(cfg),
+		VendorProfileHistory:                  NewVendorProfileHistoryClient(cfg),
+		VendorProfilePaymentPreference:        NewVendorProfilePaymentPreferenceClient(cfg),
+		VendorProfilePaymentPreferenceHistory: NewVendorProfilePaymentPreferenceHistoryClient(cfg),
+		VendorProfilePhoneNumber:              NewVendorProfilePhoneNumberClient(cfg),
+		VendorProfilePhoneNumberHistory:       NewVendorProfilePhoneNumberHistoryClient(cfg),
+		VendorProfilePostalAddress:            NewVendorProfilePostalAddressClient(cfg),
+		VendorProfilePostalAddressHistory:     NewVendorProfilePostalAddressHistoryClient(cfg),
+		Webauthn:                              NewWebauthnClient(cfg),
+		Webhook:                               NewWebhookClient(cfg),
+		WebhookHistory:                        NewWebhookHistoryClient(cfg),
 	}, nil
 }
 
@@ -623,81 +633,83 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 	cfg := c.config
 	cfg.driver = &txDriver{tx: tx, drv: c.driver}
 	return &Tx{
-		ctx:                               ctx,
-		config:                            cfg,
-		APIToken:                          NewAPITokenClient(cfg),
-		Contact:                           NewContactClient(cfg),
-		ContactHistory:                    NewContactHistoryClient(cfg),
-		ContactList:                       NewContactListClient(cfg),
-		ContactListHistory:                NewContactListHistoryClient(cfg),
-		ContactListMembership:             NewContactListMembershipClient(cfg),
-		ContactListMembershipHistory:      NewContactListMembershipHistoryClient(cfg),
-		DocumentData:                      NewDocumentDataClient(cfg),
-		DocumentDataHistory:               NewDocumentDataHistoryClient(cfg),
-		EmailVerificationToken:            NewEmailVerificationTokenClient(cfg),
-		Entitlement:                       NewEntitlementClient(cfg),
-		EntitlementHistory:                NewEntitlementHistoryClient(cfg),
-		EntitlementPlan:                   NewEntitlementPlanClient(cfg),
-		EntitlementPlanFeature:            NewEntitlementPlanFeatureClient(cfg),
-		EntitlementPlanFeatureHistory:     NewEntitlementPlanFeatureHistoryClient(cfg),
-		EntitlementPlanHistory:            NewEntitlementPlanHistoryClient(cfg),
-		Entity:                            NewEntityClient(cfg),
-		EntityHistory:                     NewEntityHistoryClient(cfg),
-		EntityType:                        NewEntityTypeClient(cfg),
-		EntityTypeHistory:                 NewEntityTypeHistoryClient(cfg),
-		Event:                             NewEventClient(cfg),
-		EventHistory:                      NewEventHistoryClient(cfg),
-		Feature:                           NewFeatureClient(cfg),
-		FeatureHistory:                    NewFeatureHistoryClient(cfg),
-		File:                              NewFileClient(cfg),
-		FileHistory:                       NewFileHistoryClient(cfg),
-		Group:                             NewGroupClient(cfg),
-		GroupHistory:                      NewGroupHistoryClient(cfg),
-		GroupMembership:                   NewGroupMembershipClient(cfg),
-		GroupMembershipHistory:            NewGroupMembershipHistoryClient(cfg),
-		GroupSetting:                      NewGroupSettingClient(cfg),
-		GroupSettingHistory:               NewGroupSettingHistoryClient(cfg),
-		Hush:                              NewHushClient(cfg),
-		HushHistory:                       NewHushHistoryClient(cfg),
-		Integration:                       NewIntegrationClient(cfg),
-		IntegrationHistory:                NewIntegrationHistoryClient(cfg),
-		Invite:                            NewInviteClient(cfg),
-		Note:                              NewNoteClient(cfg),
-		NoteHistory:                       NewNoteHistoryClient(cfg),
-		OauthProvider:                     NewOauthProviderClient(cfg),
-		OauthProviderHistory:              NewOauthProviderHistoryClient(cfg),
-		OhAuthTooToken:                    NewOhAuthTooTokenClient(cfg),
-		OrgMembership:                     NewOrgMembershipClient(cfg),
-		OrgMembershipHistory:              NewOrgMembershipHistoryClient(cfg),
-		Organization:                      NewOrganizationClient(cfg),
-		OrganizationHistory:               NewOrganizationHistoryClient(cfg),
-		OrganizationSetting:               NewOrganizationSettingClient(cfg),
-		OrganizationSettingHistory:        NewOrganizationSettingHistoryClient(cfg),
-		PasswordResetToken:                NewPasswordResetTokenClient(cfg),
-		PersonalAccessToken:               NewPersonalAccessTokenClient(cfg),
-		PhoneNumber:                       NewPhoneNumberClient(cfg),
-		PhoneNumberHistory:                NewPhoneNumberHistoryClient(cfg),
-		PostalAddress:                     NewPostalAddressClient(cfg),
-		PostalAddressHistory:              NewPostalAddressHistoryClient(cfg),
-		Subscriber:                        NewSubscriberClient(cfg),
-		TFASetting:                        NewTFASettingClient(cfg),
-		Template:                          NewTemplateClient(cfg),
-		TemplateHistory:                   NewTemplateHistoryClient(cfg),
-		User:                              NewUserClient(cfg),
-		UserHistory:                       NewUserHistoryClient(cfg),
-		UserSetting:                       NewUserSettingClient(cfg),
-		UserSettingHistory:                NewUserSettingHistoryClient(cfg),
-		Vendor:                            NewVendorClient(cfg),
-		VendorHistory:                     NewVendorHistoryClient(cfg),
-		VendorProfile:                     NewVendorProfileClient(cfg),
-		VendorProfileHistory:              NewVendorProfileHistoryClient(cfg),
-		VendorProfilePhoneNumber:          NewVendorProfilePhoneNumberClient(cfg),
-		VendorProfilePhoneNumberHistory:   NewVendorProfilePhoneNumberHistoryClient(cfg),
-		VendorProfilePostalAddress:        NewVendorProfilePostalAddressClient(cfg),
-		VendorProfilePostalAddressHistory: NewVendorProfilePostalAddressHistoryClient(cfg),
-		Webauthn:                          NewWebauthnClient(cfg),
-		Webhook:                           NewWebhookClient(cfg),
-		WebhookHistory:                    NewWebhookHistoryClient(cfg),
+		ctx:                                   ctx,
+		config:                                cfg,
+		APIToken:                              NewAPITokenClient(cfg),
+		Contact:                               NewContactClient(cfg),
+		ContactHistory:                        NewContactHistoryClient(cfg),
+		ContactList:                           NewContactListClient(cfg),
+		ContactListHistory:                    NewContactListHistoryClient(cfg),
+		ContactListMembership:                 NewContactListMembershipClient(cfg),
+		ContactListMembershipHistory:          NewContactListMembershipHistoryClient(cfg),
+		DocumentData:                          NewDocumentDataClient(cfg),
+		DocumentDataHistory:                   NewDocumentDataHistoryClient(cfg),
+		EmailVerificationToken:                NewEmailVerificationTokenClient(cfg),
+		Entitlement:                           NewEntitlementClient(cfg),
+		EntitlementHistory:                    NewEntitlementHistoryClient(cfg),
+		EntitlementPlan:                       NewEntitlementPlanClient(cfg),
+		EntitlementPlanFeature:                NewEntitlementPlanFeatureClient(cfg),
+		EntitlementPlanFeatureHistory:         NewEntitlementPlanFeatureHistoryClient(cfg),
+		EntitlementPlanHistory:                NewEntitlementPlanHistoryClient(cfg),
+		Entity:                                NewEntityClient(cfg),
+		EntityHistory:                         NewEntityHistoryClient(cfg),
+		EntityType:                            NewEntityTypeClient(cfg),
+		EntityTypeHistory:                     NewEntityTypeHistoryClient(cfg),
+		Event:                                 NewEventClient(cfg),
+		EventHistory:                          NewEventHistoryClient(cfg),
+		Feature:                               NewFeatureClient(cfg),
+		FeatureHistory:                        NewFeatureHistoryClient(cfg),
+		File:                                  NewFileClient(cfg),
+		FileHistory:                           NewFileHistoryClient(cfg),
+		Group:                                 NewGroupClient(cfg),
+		GroupHistory:                          NewGroupHistoryClient(cfg),
+		GroupMembership:                       NewGroupMembershipClient(cfg),
+		GroupMembershipHistory:                NewGroupMembershipHistoryClient(cfg),
+		GroupSetting:                          NewGroupSettingClient(cfg),
+		GroupSettingHistory:                   NewGroupSettingHistoryClient(cfg),
+		Hush:                                  NewHushClient(cfg),
+		HushHistory:                           NewHushHistoryClient(cfg),
+		Integration:                           NewIntegrationClient(cfg),
+		IntegrationHistory:                    NewIntegrationHistoryClient(cfg),
+		Invite:                                NewInviteClient(cfg),
+		Note:                                  NewNoteClient(cfg),
+		NoteHistory:                           NewNoteHistoryClient(cfg),
+		OauthProvider:                         NewOauthProviderClient(cfg),
+		OauthProviderHistory:                  NewOauthProviderHistoryClient(cfg),
+		OhAuthTooToken:                        NewOhAuthTooTokenClient(cfg),
+		OrgMembership:                         NewOrgMembershipClient(cfg),
+		OrgMembershipHistory:                  NewOrgMembershipHistoryClient(cfg),
+		Organization:                          NewOrganizationClient(cfg),
+		OrganizationHistory:                   NewOrganizationHistoryClient(cfg),
+		OrganizationSetting:                   NewOrganizationSettingClient(cfg),
+		OrganizationSettingHistory:            NewOrganizationSettingHistoryClient(cfg),
+		PasswordResetToken:                    NewPasswordResetTokenClient(cfg),
+		PersonalAccessToken:                   NewPersonalAccessTokenClient(cfg),
+		PhoneNumber:                           NewPhoneNumberClient(cfg),
+		PhoneNumberHistory:                    NewPhoneNumberHistoryClient(cfg),
+		PostalAddress:                         NewPostalAddressClient(cfg),
+		PostalAddressHistory:                  NewPostalAddressHistoryClient(cfg),
+		Subscriber:                            NewSubscriberClient(cfg),
+		TFASetting:                            NewTFASettingClient(cfg),
+		Template:                              NewTemplateClient(cfg),
+		TemplateHistory:                       NewTemplateHistoryClient(cfg),
+		User:                                  NewUserClient(cfg),
+		UserHistory:                           NewUserHistoryClient(cfg),
+		UserSetting:                           NewUserSettingClient(cfg),
+		UserSettingHistory:                    NewUserSettingHistoryClient(cfg),
+		Vendor:                                NewVendorClient(cfg),
+		VendorHistory:                         NewVendorHistoryClient(cfg),
+		VendorProfile:                         NewVendorProfileClient(cfg),
+		VendorProfileHistory:                  NewVendorProfileHistoryClient(cfg),
+		VendorProfilePaymentPreference:        NewVendorProfilePaymentPreferenceClient(cfg),
+		VendorProfilePaymentPreferenceHistory: NewVendorProfilePaymentPreferenceHistoryClient(cfg),
+		VendorProfilePhoneNumber:              NewVendorProfilePhoneNumberClient(cfg),
+		VendorProfilePhoneNumberHistory:       NewVendorProfilePhoneNumberHistoryClient(cfg),
+		VendorProfilePostalAddress:            NewVendorProfilePostalAddressClient(cfg),
+		VendorProfilePostalAddressHistory:     NewVendorProfilePostalAddressHistoryClient(cfg),
+		Webauthn:                              NewWebauthnClient(cfg),
+		Webhook:                               NewWebhookClient(cfg),
+		WebhookHistory:                        NewWebhookHistoryClient(cfg),
 	}, nil
 }
 
@@ -744,6 +756,7 @@ func (c *Client) Use(hooks ...Hook) {
 		c.PostalAddressHistory, c.Subscriber, c.TFASetting, c.Template,
 		c.TemplateHistory, c.User, c.UserHistory, c.UserSetting, c.UserSettingHistory,
 		c.Vendor, c.VendorHistory, c.VendorProfile, c.VendorProfileHistory,
+		c.VendorProfilePaymentPreference, c.VendorProfilePaymentPreferenceHistory,
 		c.VendorProfilePhoneNumber, c.VendorProfilePhoneNumberHistory,
 		c.VendorProfilePostalAddress, c.VendorProfilePostalAddressHistory, c.Webauthn,
 		c.Webhook, c.WebhookHistory,
@@ -773,6 +786,7 @@ func (c *Client) Intercept(interceptors ...Interceptor) {
 		c.PostalAddressHistory, c.Subscriber, c.TFASetting, c.Template,
 		c.TemplateHistory, c.User, c.UserHistory, c.UserSetting, c.UserSettingHistory,
 		c.Vendor, c.VendorHistory, c.VendorProfile, c.VendorProfileHistory,
+		c.VendorProfilePaymentPreference, c.VendorProfilePaymentPreferenceHistory,
 		c.VendorProfilePhoneNumber, c.VendorProfilePhoneNumberHistory,
 		c.VendorProfilePostalAddress, c.VendorProfilePostalAddressHistory, c.Webauthn,
 		c.Webhook, c.WebhookHistory,
@@ -916,6 +930,10 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.VendorProfile.mutate(ctx, m)
 	case *VendorProfileHistoryMutation:
 		return c.VendorProfileHistory.mutate(ctx, m)
+	case *VendorProfilePaymentPreferenceMutation:
+		return c.VendorProfilePaymentPreference.mutate(ctx, m)
+	case *VendorProfilePaymentPreferenceHistoryMutation:
+		return c.VendorProfilePaymentPreferenceHistory.mutate(ctx, m)
 	case *VendorProfilePhoneNumberMutation:
 		return c.VendorProfilePhoneNumber.mutate(ctx, m)
 	case *VendorProfilePhoneNumberHistoryMutation:
@@ -9311,6 +9329,25 @@ func (c *OrganizationClient) QueryPhoneNumbers(o *Organization) *PhoneNumberQuer
 	return query
 }
 
+// QueryVendorProfilePaymentPreferences queries the vendor_profile_payment_preferences edge of a Organization.
+func (c *OrganizationClient) QueryVendorProfilePaymentPreferences(o *Organization) *VendorProfilePaymentPreferenceQuery {
+	query := (&VendorProfilePaymentPreferenceClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := o.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, id),
+			sqlgraph.To(vendorprofilepaymentpreference.Table, vendorprofilepaymentpreference.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.VendorProfilePaymentPreferencesTable, organization.VendorProfilePaymentPreferencesColumn),
+		)
+		schemaConfig := o.schemaConfig
+		step.To.Schema = schemaConfig.VendorProfilePaymentPreference
+		step.Edge.Schema = schemaConfig.VendorProfilePaymentPreference
+		fromV = sqlgraph.Neighbors(o.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryMembers queries the members edge of a Organization.
 func (c *OrganizationClient) QueryMembers(o *Organization) *OrgMembershipQuery {
 	query := (&OrgMembershipClient{config: c.config}).Query()
@@ -12747,6 +12784,25 @@ func (c *VendorProfileClient) QueryPhoneNumbers(vp *VendorProfile) *PhoneNumberQ
 	return query
 }
 
+// QueryPaymentPreferences queries the payment_preferences edge of a VendorProfile.
+func (c *VendorProfileClient) QueryPaymentPreferences(vp *VendorProfile) *VendorProfilePaymentPreferenceQuery {
+	query := (&VendorProfilePaymentPreferenceClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := vp.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(vendorprofile.Table, vendorprofile.FieldID, id),
+			sqlgraph.To(vendorprofilepaymentpreference.Table, vendorprofilepaymentpreference.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, vendorprofile.PaymentPreferencesTable, vendorprofile.PaymentPreferencesColumn),
+		)
+		schemaConfig := vp.schemaConfig
+		step.To.Schema = schemaConfig.VendorProfilePaymentPreference
+		step.Edge.Schema = schemaConfig.VendorProfilePaymentPreference
+		fromV = sqlgraph.Neighbors(vp.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryVendor queries the vendor edge of a VendorProfile.
 func (c *VendorProfileClient) QueryVendor(vp *VendorProfile) *VendorQuery {
 	query := (&VendorClient{config: c.config}).Query()
@@ -12962,6 +13018,313 @@ func (c *VendorProfileHistoryClient) mutate(ctx context.Context, m *VendorProfil
 		return (&VendorProfileHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
 	default:
 		return nil, fmt.Errorf("generated: unknown VendorProfileHistory mutation op: %q", m.Op())
+	}
+}
+
+// VendorProfilePaymentPreferenceClient is a client for the VendorProfilePaymentPreference schema.
+type VendorProfilePaymentPreferenceClient struct {
+	config
+}
+
+// NewVendorProfilePaymentPreferenceClient returns a client for the VendorProfilePaymentPreference from the given config.
+func NewVendorProfilePaymentPreferenceClient(c config) *VendorProfilePaymentPreferenceClient {
+	return &VendorProfilePaymentPreferenceClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `vendorprofilepaymentpreference.Hooks(f(g(h())))`.
+func (c *VendorProfilePaymentPreferenceClient) Use(hooks ...Hook) {
+	c.hooks.VendorProfilePaymentPreference = append(c.hooks.VendorProfilePaymentPreference, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `vendorprofilepaymentpreference.Intercept(f(g(h())))`.
+func (c *VendorProfilePaymentPreferenceClient) Intercept(interceptors ...Interceptor) {
+	c.inters.VendorProfilePaymentPreference = append(c.inters.VendorProfilePaymentPreference, interceptors...)
+}
+
+// Create returns a builder for creating a VendorProfilePaymentPreference entity.
+func (c *VendorProfilePaymentPreferenceClient) Create() *VendorProfilePaymentPreferenceCreate {
+	mutation := newVendorProfilePaymentPreferenceMutation(c.config, OpCreate)
+	return &VendorProfilePaymentPreferenceCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of VendorProfilePaymentPreference entities.
+func (c *VendorProfilePaymentPreferenceClient) CreateBulk(builders ...*VendorProfilePaymentPreferenceCreate) *VendorProfilePaymentPreferenceCreateBulk {
+	return &VendorProfilePaymentPreferenceCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *VendorProfilePaymentPreferenceClient) MapCreateBulk(slice any, setFunc func(*VendorProfilePaymentPreferenceCreate, int)) *VendorProfilePaymentPreferenceCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &VendorProfilePaymentPreferenceCreateBulk{err: fmt.Errorf("calling to VendorProfilePaymentPreferenceClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*VendorProfilePaymentPreferenceCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &VendorProfilePaymentPreferenceCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for VendorProfilePaymentPreference.
+func (c *VendorProfilePaymentPreferenceClient) Update() *VendorProfilePaymentPreferenceUpdate {
+	mutation := newVendorProfilePaymentPreferenceMutation(c.config, OpUpdate)
+	return &VendorProfilePaymentPreferenceUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *VendorProfilePaymentPreferenceClient) UpdateOne(vppp *VendorProfilePaymentPreference) *VendorProfilePaymentPreferenceUpdateOne {
+	mutation := newVendorProfilePaymentPreferenceMutation(c.config, OpUpdateOne, withVendorProfilePaymentPreference(vppp))
+	return &VendorProfilePaymentPreferenceUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *VendorProfilePaymentPreferenceClient) UpdateOneID(id string) *VendorProfilePaymentPreferenceUpdateOne {
+	mutation := newVendorProfilePaymentPreferenceMutation(c.config, OpUpdateOne, withVendorProfilePaymentPreferenceID(id))
+	return &VendorProfilePaymentPreferenceUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for VendorProfilePaymentPreference.
+func (c *VendorProfilePaymentPreferenceClient) Delete() *VendorProfilePaymentPreferenceDelete {
+	mutation := newVendorProfilePaymentPreferenceMutation(c.config, OpDelete)
+	return &VendorProfilePaymentPreferenceDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *VendorProfilePaymentPreferenceClient) DeleteOne(vppp *VendorProfilePaymentPreference) *VendorProfilePaymentPreferenceDeleteOne {
+	return c.DeleteOneID(vppp.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *VendorProfilePaymentPreferenceClient) DeleteOneID(id string) *VendorProfilePaymentPreferenceDeleteOne {
+	builder := c.Delete().Where(vendorprofilepaymentpreference.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &VendorProfilePaymentPreferenceDeleteOne{builder}
+}
+
+// Query returns a query builder for VendorProfilePaymentPreference.
+func (c *VendorProfilePaymentPreferenceClient) Query() *VendorProfilePaymentPreferenceQuery {
+	return &VendorProfilePaymentPreferenceQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeVendorProfilePaymentPreference},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a VendorProfilePaymentPreference entity by its id.
+func (c *VendorProfilePaymentPreferenceClient) Get(ctx context.Context, id string) (*VendorProfilePaymentPreference, error) {
+	return c.Query().Where(vendorprofilepaymentpreference.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *VendorProfilePaymentPreferenceClient) GetX(ctx context.Context, id string) *VendorProfilePaymentPreference {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryOwner queries the owner edge of a VendorProfilePaymentPreference.
+func (c *VendorProfilePaymentPreferenceClient) QueryOwner(vppp *VendorProfilePaymentPreference) *OrganizationQuery {
+	query := (&OrganizationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := vppp.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(vendorprofilepaymentpreference.Table, vendorprofilepaymentpreference.FieldID, id),
+			sqlgraph.To(organization.Table, organization.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, vendorprofilepaymentpreference.OwnerTable, vendorprofilepaymentpreference.OwnerColumn),
+		)
+		schemaConfig := vppp.schemaConfig
+		step.To.Schema = schemaConfig.Organization
+		step.Edge.Schema = schemaConfig.VendorProfilePaymentPreference
+		fromV = sqlgraph.Neighbors(vppp.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryVendorProfile queries the vendor_profile edge of a VendorProfilePaymentPreference.
+func (c *VendorProfilePaymentPreferenceClient) QueryVendorProfile(vppp *VendorProfilePaymentPreference) *VendorProfileQuery {
+	query := (&VendorProfileClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := vppp.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(vendorprofilepaymentpreference.Table, vendorprofilepaymentpreference.FieldID, id),
+			sqlgraph.To(vendorprofile.Table, vendorprofile.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, vendorprofilepaymentpreference.VendorProfileTable, vendorprofilepaymentpreference.VendorProfileColumn),
+		)
+		schemaConfig := vppp.schemaConfig
+		step.To.Schema = schemaConfig.VendorProfile
+		step.Edge.Schema = schemaConfig.VendorProfilePaymentPreference
+		fromV = sqlgraph.Neighbors(vppp.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *VendorProfilePaymentPreferenceClient) Hooks() []Hook {
+	hooks := c.hooks.VendorProfilePaymentPreference
+	return append(hooks[:len(hooks):len(hooks)], vendorprofilepaymentpreference.Hooks[:]...)
+}
+
+// Interceptors returns the client interceptors.
+func (c *VendorProfilePaymentPreferenceClient) Interceptors() []Interceptor {
+	inters := c.inters.VendorProfilePaymentPreference
+	return append(inters[:len(inters):len(inters)], vendorprofilepaymentpreference.Interceptors[:]...)
+}
+
+func (c *VendorProfilePaymentPreferenceClient) mutate(ctx context.Context, m *VendorProfilePaymentPreferenceMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&VendorProfilePaymentPreferenceCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&VendorProfilePaymentPreferenceUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&VendorProfilePaymentPreferenceUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&VendorProfilePaymentPreferenceDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("generated: unknown VendorProfilePaymentPreference mutation op: %q", m.Op())
+	}
+}
+
+// VendorProfilePaymentPreferenceHistoryClient is a client for the VendorProfilePaymentPreferenceHistory schema.
+type VendorProfilePaymentPreferenceHistoryClient struct {
+	config
+}
+
+// NewVendorProfilePaymentPreferenceHistoryClient returns a client for the VendorProfilePaymentPreferenceHistory from the given config.
+func NewVendorProfilePaymentPreferenceHistoryClient(c config) *VendorProfilePaymentPreferenceHistoryClient {
+	return &VendorProfilePaymentPreferenceHistoryClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `vendorprofilepaymentpreferencehistory.Hooks(f(g(h())))`.
+func (c *VendorProfilePaymentPreferenceHistoryClient) Use(hooks ...Hook) {
+	c.hooks.VendorProfilePaymentPreferenceHistory = append(c.hooks.VendorProfilePaymentPreferenceHistory, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `vendorprofilepaymentpreferencehistory.Intercept(f(g(h())))`.
+func (c *VendorProfilePaymentPreferenceHistoryClient) Intercept(interceptors ...Interceptor) {
+	c.inters.VendorProfilePaymentPreferenceHistory = append(c.inters.VendorProfilePaymentPreferenceHistory, interceptors...)
+}
+
+// Create returns a builder for creating a VendorProfilePaymentPreferenceHistory entity.
+func (c *VendorProfilePaymentPreferenceHistoryClient) Create() *VendorProfilePaymentPreferenceHistoryCreate {
+	mutation := newVendorProfilePaymentPreferenceHistoryMutation(c.config, OpCreate)
+	return &VendorProfilePaymentPreferenceHistoryCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of VendorProfilePaymentPreferenceHistory entities.
+func (c *VendorProfilePaymentPreferenceHistoryClient) CreateBulk(builders ...*VendorProfilePaymentPreferenceHistoryCreate) *VendorProfilePaymentPreferenceHistoryCreateBulk {
+	return &VendorProfilePaymentPreferenceHistoryCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *VendorProfilePaymentPreferenceHistoryClient) MapCreateBulk(slice any, setFunc func(*VendorProfilePaymentPreferenceHistoryCreate, int)) *VendorProfilePaymentPreferenceHistoryCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &VendorProfilePaymentPreferenceHistoryCreateBulk{err: fmt.Errorf("calling to VendorProfilePaymentPreferenceHistoryClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*VendorProfilePaymentPreferenceHistoryCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &VendorProfilePaymentPreferenceHistoryCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for VendorProfilePaymentPreferenceHistory.
+func (c *VendorProfilePaymentPreferenceHistoryClient) Update() *VendorProfilePaymentPreferenceHistoryUpdate {
+	mutation := newVendorProfilePaymentPreferenceHistoryMutation(c.config, OpUpdate)
+	return &VendorProfilePaymentPreferenceHistoryUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *VendorProfilePaymentPreferenceHistoryClient) UpdateOne(vppph *VendorProfilePaymentPreferenceHistory) *VendorProfilePaymentPreferenceHistoryUpdateOne {
+	mutation := newVendorProfilePaymentPreferenceHistoryMutation(c.config, OpUpdateOne, withVendorProfilePaymentPreferenceHistory(vppph))
+	return &VendorProfilePaymentPreferenceHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *VendorProfilePaymentPreferenceHistoryClient) UpdateOneID(id string) *VendorProfilePaymentPreferenceHistoryUpdateOne {
+	mutation := newVendorProfilePaymentPreferenceHistoryMutation(c.config, OpUpdateOne, withVendorProfilePaymentPreferenceHistoryID(id))
+	return &VendorProfilePaymentPreferenceHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for VendorProfilePaymentPreferenceHistory.
+func (c *VendorProfilePaymentPreferenceHistoryClient) Delete() *VendorProfilePaymentPreferenceHistoryDelete {
+	mutation := newVendorProfilePaymentPreferenceHistoryMutation(c.config, OpDelete)
+	return &VendorProfilePaymentPreferenceHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *VendorProfilePaymentPreferenceHistoryClient) DeleteOne(vppph *VendorProfilePaymentPreferenceHistory) *VendorProfilePaymentPreferenceHistoryDeleteOne {
+	return c.DeleteOneID(vppph.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *VendorProfilePaymentPreferenceHistoryClient) DeleteOneID(id string) *VendorProfilePaymentPreferenceHistoryDeleteOne {
+	builder := c.Delete().Where(vendorprofilepaymentpreferencehistory.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &VendorProfilePaymentPreferenceHistoryDeleteOne{builder}
+}
+
+// Query returns a query builder for VendorProfilePaymentPreferenceHistory.
+func (c *VendorProfilePaymentPreferenceHistoryClient) Query() *VendorProfilePaymentPreferenceHistoryQuery {
+	return &VendorProfilePaymentPreferenceHistoryQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeVendorProfilePaymentPreferenceHistory},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a VendorProfilePaymentPreferenceHistory entity by its id.
+func (c *VendorProfilePaymentPreferenceHistoryClient) Get(ctx context.Context, id string) (*VendorProfilePaymentPreferenceHistory, error) {
+	return c.Query().Where(vendorprofilepaymentpreferencehistory.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *VendorProfilePaymentPreferenceHistoryClient) GetX(ctx context.Context, id string) *VendorProfilePaymentPreferenceHistory {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *VendorProfilePaymentPreferenceHistoryClient) Hooks() []Hook {
+	return c.hooks.VendorProfilePaymentPreferenceHistory
+}
+
+// Interceptors returns the client interceptors.
+func (c *VendorProfilePaymentPreferenceHistoryClient) Interceptors() []Interceptor {
+	inters := c.inters.VendorProfilePaymentPreferenceHistory
+	return append(inters[:len(inters):len(inters)], vendorprofilepaymentpreferencehistory.Interceptors[:]...)
+}
+
+func (c *VendorProfilePaymentPreferenceHistoryClient) mutate(ctx context.Context, m *VendorProfilePaymentPreferenceHistoryMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&VendorProfilePaymentPreferenceHistoryCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&VendorProfilePaymentPreferenceHistoryUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&VendorProfilePaymentPreferenceHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&VendorProfilePaymentPreferenceHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("generated: unknown VendorProfilePaymentPreferenceHistory mutation op: %q", m.Op())
 	}
 }
 
@@ -14115,7 +14478,8 @@ type (
 		PersonalAccessToken, PhoneNumber, PhoneNumberHistory, PostalAddress,
 		PostalAddressHistory, Subscriber, TFASetting, Template, TemplateHistory, User,
 		UserHistory, UserSetting, UserSettingHistory, Vendor, VendorHistory,
-		VendorProfile, VendorProfileHistory, VendorProfilePhoneNumber,
+		VendorProfile, VendorProfileHistory, VendorProfilePaymentPreference,
+		VendorProfilePaymentPreferenceHistory, VendorProfilePhoneNumber,
 		VendorProfilePhoneNumberHistory, VendorProfilePostalAddress,
 		VendorProfilePostalAddressHistory, Webauthn, Webhook, WebhookHistory []ent.Hook
 	}
@@ -14134,7 +14498,8 @@ type (
 		PersonalAccessToken, PhoneNumber, PhoneNumberHistory, PostalAddress,
 		PostalAddressHistory, Subscriber, TFASetting, Template, TemplateHistory, User,
 		UserHistory, UserSetting, UserSettingHistory, Vendor, VendorHistory,
-		VendorProfile, VendorProfileHistory, VendorProfilePhoneNumber,
+		VendorProfile, VendorProfileHistory, VendorProfilePaymentPreference,
+		VendorProfilePaymentPreferenceHistory, VendorProfilePhoneNumber,
 		VendorProfilePhoneNumberHistory, VendorProfilePostalAddress,
 		VendorProfilePostalAddressHistory, Webauthn, Webhook,
 		WebhookHistory []ent.Interceptor

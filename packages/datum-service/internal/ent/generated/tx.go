@@ -144,6 +144,10 @@ type Tx struct {
 	VendorProfile *VendorProfileClient
 	// VendorProfileHistory is the client for interacting with the VendorProfileHistory builders.
 	VendorProfileHistory *VendorProfileHistoryClient
+	// VendorProfilePaymentPreference is the client for interacting with the VendorProfilePaymentPreference builders.
+	VendorProfilePaymentPreference *VendorProfilePaymentPreferenceClient
+	// VendorProfilePaymentPreferenceHistory is the client for interacting with the VendorProfilePaymentPreferenceHistory builders.
+	VendorProfilePaymentPreferenceHistory *VendorProfilePaymentPreferenceHistoryClient
 	// VendorProfilePhoneNumber is the client for interacting with the VendorProfilePhoneNumber builders.
 	VendorProfilePhoneNumber *VendorProfilePhoneNumberClient
 	// VendorProfilePhoneNumberHistory is the client for interacting with the VendorProfilePhoneNumberHistory builders.
@@ -355,6 +359,8 @@ func (tx *Tx) init() {
 	tx.VendorHistory = NewVendorHistoryClient(tx.config)
 	tx.VendorProfile = NewVendorProfileClient(tx.config)
 	tx.VendorProfileHistory = NewVendorProfileHistoryClient(tx.config)
+	tx.VendorProfilePaymentPreference = NewVendorProfilePaymentPreferenceClient(tx.config)
+	tx.VendorProfilePaymentPreferenceHistory = NewVendorProfilePaymentPreferenceHistoryClient(tx.config)
 	tx.VendorProfilePhoneNumber = NewVendorProfilePhoneNumberClient(tx.config)
 	tx.VendorProfilePhoneNumberHistory = NewVendorProfilePhoneNumberHistoryClient(tx.config)
 	tx.VendorProfilePostalAddress = NewVendorProfilePostalAddressClient(tx.config)

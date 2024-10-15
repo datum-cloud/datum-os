@@ -19,6 +19,7 @@ import (
 	"github.com/datum-cloud/datum-os/internal/ent/generated/predicate"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/vendor"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofile"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofilepaymentpreference"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofilephonenumber"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofilepostaladdress"
 
@@ -35,6 +36,7 @@ type VendorProfileQuery struct {
 	withOwner                             *OrganizationQuery
 	withPostalAddresses                   *PostalAddressQuery
 	withPhoneNumbers                      *PhoneNumberQuery
+	withPaymentPreferences                *VendorProfilePaymentPreferenceQuery
 	withVendor                            *VendorQuery
 	withVendorProfilePostalAddresses      *VendorProfilePostalAddressQuery
 	withVendorProfilePhoneNumbers         *VendorProfilePhoneNumberQuery
@@ -42,6 +44,7 @@ type VendorProfileQuery struct {
 	loadTotal                             []func(context.Context, []*VendorProfile) error
 	withNamedPostalAddresses              map[string]*PostalAddressQuery
 	withNamedPhoneNumbers                 map[string]*PhoneNumberQuery
+	withNamedPaymentPreferences           map[string]*VendorProfilePaymentPreferenceQuery
 	withNamedVendorProfilePostalAddresses map[string]*VendorProfilePostalAddressQuery
 	withNamedVendorProfilePhoneNumbers    map[string]*VendorProfilePhoneNumberQuery
 	// intermediate query (i.e. traversal path).
@@ -149,6 +152,31 @@ func (vpq *VendorProfileQuery) QueryPhoneNumbers() *PhoneNumberQuery {
 		schemaConfig := vpq.schemaConfig
 		step.To.Schema = schemaConfig.PhoneNumber
 		step.Edge.Schema = schemaConfig.VendorProfilePhoneNumber
+		fromU = sqlgraph.SetNeighbors(vpq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryPaymentPreferences chains the current query on the "payment_preferences" edge.
+func (vpq *VendorProfileQuery) QueryPaymentPreferences() *VendorProfilePaymentPreferenceQuery {
+	query := (&VendorProfilePaymentPreferenceClient{config: vpq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := vpq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := vpq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(vendorprofile.Table, vendorprofile.FieldID, selector),
+			sqlgraph.To(vendorprofilepaymentpreference.Table, vendorprofilepaymentpreference.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, vendorprofile.PaymentPreferencesTable, vendorprofile.PaymentPreferencesColumn),
+		)
+		schemaConfig := vpq.schemaConfig
+		step.To.Schema = schemaConfig.VendorProfilePaymentPreference
+		step.Edge.Schema = schemaConfig.VendorProfilePaymentPreference
 		fromU = sqlgraph.SetNeighbors(vpq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -425,6 +453,7 @@ func (vpq *VendorProfileQuery) Clone() *VendorProfileQuery {
 		withOwner:                        vpq.withOwner.Clone(),
 		withPostalAddresses:              vpq.withPostalAddresses.Clone(),
 		withPhoneNumbers:                 vpq.withPhoneNumbers.Clone(),
+		withPaymentPreferences:           vpq.withPaymentPreferences.Clone(),
 		withVendor:                       vpq.withVendor.Clone(),
 		withVendorProfilePostalAddresses: vpq.withVendorProfilePostalAddresses.Clone(),
 		withVendorProfilePhoneNumbers:    vpq.withVendorProfilePhoneNumbers.Clone(),
@@ -464,6 +493,17 @@ func (vpq *VendorProfileQuery) WithPhoneNumbers(opts ...func(*PhoneNumberQuery))
 		opt(query)
 	}
 	vpq.withPhoneNumbers = query
+	return vpq
+}
+
+// WithPaymentPreferences tells the query-builder to eager-load the nodes that are connected to
+// the "payment_preferences" edge. The optional arguments are used to configure the query builder of the edge.
+func (vpq *VendorProfileQuery) WithPaymentPreferences(opts ...func(*VendorProfilePaymentPreferenceQuery)) *VendorProfileQuery {
+	query := (&VendorProfilePaymentPreferenceClient{config: vpq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	vpq.withPaymentPreferences = query
 	return vpq
 }
 
@@ -584,10 +624,11 @@ func (vpq *VendorProfileQuery) sqlAll(ctx context.Context, hooks ...queryHook) (
 	var (
 		nodes       = []*VendorProfile{}
 		_spec       = vpq.querySpec()
-		loadedTypes = [6]bool{
+		loadedTypes = [7]bool{
 			vpq.withOwner != nil,
 			vpq.withPostalAddresses != nil,
 			vpq.withPhoneNumbers != nil,
+			vpq.withPaymentPreferences != nil,
 			vpq.withVendor != nil,
 			vpq.withVendorProfilePostalAddresses != nil,
 			vpq.withVendorProfilePhoneNumbers != nil,
@@ -636,6 +677,15 @@ func (vpq *VendorProfileQuery) sqlAll(ctx context.Context, hooks ...queryHook) (
 			return nil, err
 		}
 	}
+	if query := vpq.withPaymentPreferences; query != nil {
+		if err := vpq.loadPaymentPreferences(ctx, query, nodes,
+			func(n *VendorProfile) { n.Edges.PaymentPreferences = []*VendorProfilePaymentPreference{} },
+			func(n *VendorProfile, e *VendorProfilePaymentPreference) {
+				n.Edges.PaymentPreferences = append(n.Edges.PaymentPreferences, e)
+			}); err != nil {
+			return nil, err
+		}
+	}
 	if query := vpq.withVendor; query != nil {
 		if err := vpq.loadVendor(ctx, query, nodes, nil,
 			func(n *VendorProfile, e *Vendor) { n.Edges.Vendor = e }); err != nil {
@@ -671,6 +721,13 @@ func (vpq *VendorProfileQuery) sqlAll(ctx context.Context, hooks ...queryHook) (
 		if err := vpq.loadPhoneNumbers(ctx, query, nodes,
 			func(n *VendorProfile) { n.appendNamedPhoneNumbers(name) },
 			func(n *VendorProfile, e *PhoneNumber) { n.appendNamedPhoneNumbers(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range vpq.withNamedPaymentPreferences {
+		if err := vpq.loadPaymentPreferences(ctx, query, nodes,
+			func(n *VendorProfile) { n.appendNamedPaymentPreferences(name) },
+			func(n *VendorProfile, e *VendorProfilePaymentPreference) { n.appendNamedPaymentPreferences(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -848,6 +905,36 @@ func (vpq *VendorProfileQuery) loadPhoneNumbers(ctx context.Context, query *Phon
 		for kn := range nodes {
 			assign(kn, n)
 		}
+	}
+	return nil
+}
+func (vpq *VendorProfileQuery) loadPaymentPreferences(ctx context.Context, query *VendorProfilePaymentPreferenceQuery, nodes []*VendorProfile, init func(*VendorProfile), assign func(*VendorProfile, *VendorProfilePaymentPreference)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*VendorProfile)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(vendorprofilepaymentpreference.FieldVendorProfileID)
+	}
+	query.Where(predicate.VendorProfilePaymentPreference(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(vendorprofile.PaymentPreferencesColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.VendorProfileID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "vendor_profile_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
 	}
 	return nil
 }
@@ -1061,6 +1148,20 @@ func (vpq *VendorProfileQuery) WithNamedPhoneNumbers(name string, opts ...func(*
 		vpq.withNamedPhoneNumbers = make(map[string]*PhoneNumberQuery)
 	}
 	vpq.withNamedPhoneNumbers[name] = query
+	return vpq
+}
+
+// WithNamedPaymentPreferences tells the query-builder to eager-load the nodes that are connected to the "payment_preferences"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (vpq *VendorProfileQuery) WithNamedPaymentPreferences(name string, opts ...func(*VendorProfilePaymentPreferenceQuery)) *VendorProfileQuery {
+	query := (&VendorProfilePaymentPreferenceClient{config: vpq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if vpq.withNamedPaymentPreferences == nil {
+		vpq.withNamedPaymentPreferences = make(map[string]*VendorProfilePaymentPreferenceQuery)
+	}
+	vpq.withNamedPaymentPreferences[name] = query
 	return vpq
 }
 

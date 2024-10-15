@@ -73,6 +73,8 @@ import (
 	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorhistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofile"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofilehistory"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofilepaymentpreference"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofilepaymentpreferencehistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofilephonenumber"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofilephonenumberhistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofilepostaladdress"
@@ -33142,6 +33144,10 @@ type OrganizationWhereInput struct {
 	HasPhoneNumbers     *bool                    `json:"hasPhoneNumbers,omitempty"`
 	HasPhoneNumbersWith []*PhoneNumberWhereInput `json:"hasPhoneNumbersWith,omitempty"`
 
+	// "vendor_profile_payment_preferences" edge predicates.
+	HasVendorProfilePaymentPreferences     *bool                                       `json:"hasVendorProfilePaymentPreferences,omitempty"`
+	HasVendorProfilePaymentPreferencesWith []*VendorProfilePaymentPreferenceWhereInput `json:"hasVendorProfilePaymentPreferencesWith,omitempty"`
+
 	// "members" edge predicates.
 	HasMembers     *bool                      `json:"hasMembers,omitempty"`
 	HasMembersWith []*OrgMembershipWhereInput `json:"hasMembersWith,omitempty"`
@@ -34172,6 +34178,24 @@ func (i *OrganizationWhereInput) P() (predicate.Organization, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, organization.HasPhoneNumbersWith(with...))
+	}
+	if i.HasVendorProfilePaymentPreferences != nil {
+		p := organization.HasVendorProfilePaymentPreferences()
+		if !*i.HasVendorProfilePaymentPreferences {
+			p = organization.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasVendorProfilePaymentPreferencesWith) > 0 {
+		with := make([]predicate.VendorProfilePaymentPreference, 0, len(i.HasVendorProfilePaymentPreferencesWith))
+		for _, w := range i.HasVendorProfilePaymentPreferencesWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasVendorProfilePaymentPreferencesWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, organization.HasVendorProfilePaymentPreferencesWith(with...))
 	}
 	if i.HasMembers != nil {
 		p := organization.HasMembers()
@@ -49564,6 +49588,10 @@ type VendorProfileWhereInput struct {
 	HasPhoneNumbers     *bool                    `json:"hasPhoneNumbers,omitempty"`
 	HasPhoneNumbersWith []*PhoneNumberWhereInput `json:"hasPhoneNumbersWith,omitempty"`
 
+	// "payment_preferences" edge predicates.
+	HasPaymentPreferences     *bool                                       `json:"hasPaymentPreferences,omitempty"`
+	HasPaymentPreferencesWith []*VendorProfilePaymentPreferenceWhereInput `json:"hasPaymentPreferencesWith,omitempty"`
+
 	// "vendor" edge predicates.
 	HasVendor     *bool               `json:"hasVendor,omitempty"`
 	HasVendorWith []*VendorWhereInput `json:"hasVendorWith,omitempty"`
@@ -50278,6 +50306,24 @@ func (i *VendorProfileWhereInput) P() (predicate.VendorProfile, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, vendorprofile.HasPhoneNumbersWith(with...))
+	}
+	if i.HasPaymentPreferences != nil {
+		p := vendorprofile.HasPaymentPreferences()
+		if !*i.HasPaymentPreferences {
+			p = vendorprofile.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasPaymentPreferencesWith) > 0 {
+		with := make([]predicate.VendorProfilePaymentPreference, 0, len(i.HasPaymentPreferencesWith))
+		for _, w := range i.HasPaymentPreferencesWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasPaymentPreferencesWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, vendorprofile.HasPaymentPreferencesWith(with...))
 	}
 	if i.HasVendor != nil {
 		p := vendorprofile.HasVendor()
@@ -51342,6 +51388,1356 @@ func (i *VendorProfileHistoryWhereInput) P() (predicate.VendorProfileHistory, er
 		return predicates[0], nil
 	default:
 		return vendorprofilehistory.And(predicates...), nil
+	}
+}
+
+// VendorProfilePaymentPreferenceWhereInput represents a where input for filtering VendorProfilePaymentPreference queries.
+type VendorProfilePaymentPreferenceWhereInput struct {
+	Predicates []predicate.VendorProfilePaymentPreference  `json:"-"`
+	Not        *VendorProfilePaymentPreferenceWhereInput   `json:"not,omitempty"`
+	Or         []*VendorProfilePaymentPreferenceWhereInput `json:"or,omitempty"`
+	And        []*VendorProfilePaymentPreferenceWhereInput `json:"and,omitempty"`
+
+	// "id" field predicates.
+	ID             *string  `json:"id,omitempty"`
+	IDNEQ          *string  `json:"idNEQ,omitempty"`
+	IDIn           []string `json:"idIn,omitempty"`
+	IDNotIn        []string `json:"idNotIn,omitempty"`
+	IDGT           *string  `json:"idGT,omitempty"`
+	IDGTE          *string  `json:"idGTE,omitempty"`
+	IDLT           *string  `json:"idLT,omitempty"`
+	IDLTE          *string  `json:"idLTE,omitempty"`
+	IDEqualFold    *string  `json:"idEqualFold,omitempty"`
+	IDContainsFold *string  `json:"idContainsFold,omitempty"`
+
+	// "created_at" field predicates.
+	CreatedAt       *time.Time  `json:"createdAt,omitempty"`
+	CreatedAtNEQ    *time.Time  `json:"createdAtNEQ,omitempty"`
+	CreatedAtIn     []time.Time `json:"createdAtIn,omitempty"`
+	CreatedAtNotIn  []time.Time `json:"createdAtNotIn,omitempty"`
+	CreatedAtGT     *time.Time  `json:"createdAtGT,omitempty"`
+	CreatedAtGTE    *time.Time  `json:"createdAtGTE,omitempty"`
+	CreatedAtLT     *time.Time  `json:"createdAtLT,omitempty"`
+	CreatedAtLTE    *time.Time  `json:"createdAtLTE,omitempty"`
+	CreatedAtIsNil  bool        `json:"createdAtIsNil,omitempty"`
+	CreatedAtNotNil bool        `json:"createdAtNotNil,omitempty"`
+
+	// "updated_at" field predicates.
+	UpdatedAt       *time.Time  `json:"updatedAt,omitempty"`
+	UpdatedAtNEQ    *time.Time  `json:"updatedAtNEQ,omitempty"`
+	UpdatedAtIn     []time.Time `json:"updatedAtIn,omitempty"`
+	UpdatedAtNotIn  []time.Time `json:"updatedAtNotIn,omitempty"`
+	UpdatedAtGT     *time.Time  `json:"updatedAtGT,omitempty"`
+	UpdatedAtGTE    *time.Time  `json:"updatedAtGTE,omitempty"`
+	UpdatedAtLT     *time.Time  `json:"updatedAtLT,omitempty"`
+	UpdatedAtLTE    *time.Time  `json:"updatedAtLTE,omitempty"`
+	UpdatedAtIsNil  bool        `json:"updatedAtIsNil,omitempty"`
+	UpdatedAtNotNil bool        `json:"updatedAtNotNil,omitempty"`
+
+	// "created_by" field predicates.
+	CreatedBy             *string  `json:"createdBy,omitempty"`
+	CreatedByNEQ          *string  `json:"createdByNEQ,omitempty"`
+	CreatedByIn           []string `json:"createdByIn,omitempty"`
+	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
+	CreatedByGT           *string  `json:"createdByGT,omitempty"`
+	CreatedByGTE          *string  `json:"createdByGTE,omitempty"`
+	CreatedByLT           *string  `json:"createdByLT,omitempty"`
+	CreatedByLTE          *string  `json:"createdByLTE,omitempty"`
+	CreatedByContains     *string  `json:"createdByContains,omitempty"`
+	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
+	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
+	CreatedByIsNil        bool     `json:"createdByIsNil,omitempty"`
+	CreatedByNotNil       bool     `json:"createdByNotNil,omitempty"`
+	CreatedByEqualFold    *string  `json:"createdByEqualFold,omitempty"`
+	CreatedByContainsFold *string  `json:"createdByContainsFold,omitempty"`
+
+	// "updated_by" field predicates.
+	UpdatedBy             *string  `json:"updatedBy,omitempty"`
+	UpdatedByNEQ          *string  `json:"updatedByNEQ,omitempty"`
+	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
+	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
+	UpdatedByGT           *string  `json:"updatedByGT,omitempty"`
+	UpdatedByGTE          *string  `json:"updatedByGTE,omitempty"`
+	UpdatedByLT           *string  `json:"updatedByLT,omitempty"`
+	UpdatedByLTE          *string  `json:"updatedByLTE,omitempty"`
+	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
+	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
+	UpdatedByIsNil        bool     `json:"updatedByIsNil,omitempty"`
+	UpdatedByNotNil       bool     `json:"updatedByNotNil,omitempty"`
+	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
+	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+
+	// "deleted_at" field predicates.
+	DeletedAt       *time.Time  `json:"deletedAt,omitempty"`
+	DeletedAtNEQ    *time.Time  `json:"deletedAtNEQ,omitempty"`
+	DeletedAtIn     []time.Time `json:"deletedAtIn,omitempty"`
+	DeletedAtNotIn  []time.Time `json:"deletedAtNotIn,omitempty"`
+	DeletedAtGT     *time.Time  `json:"deletedAtGT,omitempty"`
+	DeletedAtGTE    *time.Time  `json:"deletedAtGTE,omitempty"`
+	DeletedAtLT     *time.Time  `json:"deletedAtLT,omitempty"`
+	DeletedAtLTE    *time.Time  `json:"deletedAtLTE,omitempty"`
+	DeletedAtIsNil  bool        `json:"deletedAtIsNil,omitempty"`
+	DeletedAtNotNil bool        `json:"deletedAtNotNil,omitempty"`
+
+	// "deleted_by" field predicates.
+	DeletedBy             *string  `json:"deletedBy,omitempty"`
+	DeletedByNEQ          *string  `json:"deletedByNEQ,omitempty"`
+	DeletedByIn           []string `json:"deletedByIn,omitempty"`
+	DeletedByNotIn        []string `json:"deletedByNotIn,omitempty"`
+	DeletedByGT           *string  `json:"deletedByGT,omitempty"`
+	DeletedByGTE          *string  `json:"deletedByGTE,omitempty"`
+	DeletedByLT           *string  `json:"deletedByLT,omitempty"`
+	DeletedByLTE          *string  `json:"deletedByLTE,omitempty"`
+	DeletedByContains     *string  `json:"deletedByContains,omitempty"`
+	DeletedByHasPrefix    *string  `json:"deletedByHasPrefix,omitempty"`
+	DeletedByHasSuffix    *string  `json:"deletedByHasSuffix,omitempty"`
+	DeletedByIsNil        bool     `json:"deletedByIsNil,omitempty"`
+	DeletedByNotNil       bool     `json:"deletedByNotNil,omitempty"`
+	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
+	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
+
+	// "owner_id" field predicates.
+	OwnerID             *string  `json:"ownerID,omitempty"`
+	OwnerIDNEQ          *string  `json:"ownerIDNEQ,omitempty"`
+	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
+	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
+	OwnerIDGT           *string  `json:"ownerIDGT,omitempty"`
+	OwnerIDGTE          *string  `json:"ownerIDGTE,omitempty"`
+	OwnerIDLT           *string  `json:"ownerIDLT,omitempty"`
+	OwnerIDLTE          *string  `json:"ownerIDLTE,omitempty"`
+	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
+	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
+	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
+	OwnerIDIsNil        bool     `json:"ownerIDIsNil,omitempty"`
+	OwnerIDNotNil       bool     `json:"ownerIDNotNil,omitempty"`
+	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
+	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
+
+	// "vendor_profile_id" field predicates.
+	VendorProfileID             *string  `json:"vendorProfileID,omitempty"`
+	VendorProfileIDNEQ          *string  `json:"vendorProfileIDNEQ,omitempty"`
+	VendorProfileIDIn           []string `json:"vendorProfileIDIn,omitempty"`
+	VendorProfileIDNotIn        []string `json:"vendorProfileIDNotIn,omitempty"`
+	VendorProfileIDGT           *string  `json:"vendorProfileIDGT,omitempty"`
+	VendorProfileIDGTE          *string  `json:"vendorProfileIDGTE,omitempty"`
+	VendorProfileIDLT           *string  `json:"vendorProfileIDLT,omitempty"`
+	VendorProfileIDLTE          *string  `json:"vendorProfileIDLTE,omitempty"`
+	VendorProfileIDContains     *string  `json:"vendorProfileIDContains,omitempty"`
+	VendorProfileIDHasPrefix    *string  `json:"vendorProfileIDHasPrefix,omitempty"`
+	VendorProfileIDHasSuffix    *string  `json:"vendorProfileIDHasSuffix,omitempty"`
+	VendorProfileIDIsNil        bool     `json:"vendorProfileIDIsNil,omitempty"`
+	VendorProfileIDNotNil       bool     `json:"vendorProfileIDNotNil,omitempty"`
+	VendorProfileIDEqualFold    *string  `json:"vendorProfileIDEqualFold,omitempty"`
+	VendorProfileIDContainsFold *string  `json:"vendorProfileIDContainsFold,omitempty"`
+
+	// "preferred" field predicates.
+	Preferred    *bool `json:"preferred,omitempty"`
+	PreferredNEQ *bool `json:"preferredNEQ,omitempty"`
+
+	// "method" field predicates.
+	Method      *enums.PaymentMethod  `json:"method,omitempty"`
+	MethodNEQ   *enums.PaymentMethod  `json:"methodNEQ,omitempty"`
+	MethodIn    []enums.PaymentMethod `json:"methodIn,omitempty"`
+	MethodNotIn []enums.PaymentMethod `json:"methodNotIn,omitempty"`
+
+	// "owner" edge predicates.
+	HasOwner     *bool                     `json:"hasOwner,omitempty"`
+	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
+
+	// "vendor_profile" edge predicates.
+	HasVendorProfile     *bool                      `json:"hasVendorProfile,omitempty"`
+	HasVendorProfileWith []*VendorProfileWhereInput `json:"hasVendorProfileWith,omitempty"`
+}
+
+// AddPredicates adds custom predicates to the where input to be used during the filtering phase.
+func (i *VendorProfilePaymentPreferenceWhereInput) AddPredicates(predicates ...predicate.VendorProfilePaymentPreference) {
+	i.Predicates = append(i.Predicates, predicates...)
+}
+
+// Filter applies the VendorProfilePaymentPreferenceWhereInput filter on the VendorProfilePaymentPreferenceQuery builder.
+func (i *VendorProfilePaymentPreferenceWhereInput) Filter(q *VendorProfilePaymentPreferenceQuery) (*VendorProfilePaymentPreferenceQuery, error) {
+	if i == nil {
+		return q, nil
+	}
+	p, err := i.P()
+	if err != nil {
+		if err == ErrEmptyVendorProfilePaymentPreferenceWhereInput {
+			return q, nil
+		}
+		return nil, err
+	}
+	return q.Where(p), nil
+}
+
+// ErrEmptyVendorProfilePaymentPreferenceWhereInput is returned in case the VendorProfilePaymentPreferenceWhereInput is empty.
+var ErrEmptyVendorProfilePaymentPreferenceWhereInput = errors.New("generated: empty predicate VendorProfilePaymentPreferenceWhereInput")
+
+// P returns a predicate for filtering vendorprofilepaymentpreferences.
+// An error is returned if the input is empty or invalid.
+func (i *VendorProfilePaymentPreferenceWhereInput) P() (predicate.VendorProfilePaymentPreference, error) {
+	var predicates []predicate.VendorProfilePaymentPreference
+	if i.Not != nil {
+		p, err := i.Not.P()
+		if err != nil {
+			return nil, fmt.Errorf("%w: field 'not'", err)
+		}
+		predicates = append(predicates, vendorprofilepaymentpreference.Not(p))
+	}
+	switch n := len(i.Or); {
+	case n == 1:
+		p, err := i.Or[0].P()
+		if err != nil {
+			return nil, fmt.Errorf("%w: field 'or'", err)
+		}
+		predicates = append(predicates, p)
+	case n > 1:
+		or := make([]predicate.VendorProfilePaymentPreference, 0, n)
+		for _, w := range i.Or {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'or'", err)
+			}
+			or = append(or, p)
+		}
+		predicates = append(predicates, vendorprofilepaymentpreference.Or(or...))
+	}
+	switch n := len(i.And); {
+	case n == 1:
+		p, err := i.And[0].P()
+		if err != nil {
+			return nil, fmt.Errorf("%w: field 'and'", err)
+		}
+		predicates = append(predicates, p)
+	case n > 1:
+		and := make([]predicate.VendorProfilePaymentPreference, 0, n)
+		for _, w := range i.And {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'and'", err)
+			}
+			and = append(and, p)
+		}
+		predicates = append(predicates, vendorprofilepaymentpreference.And(and...))
+	}
+	predicates = append(predicates, i.Predicates...)
+	if i.ID != nil {
+		predicates = append(predicates, vendorprofilepaymentpreference.IDEQ(*i.ID))
+	}
+	if i.IDNEQ != nil {
+		predicates = append(predicates, vendorprofilepaymentpreference.IDNEQ(*i.IDNEQ))
+	}
+	if len(i.IDIn) > 0 {
+		predicates = append(predicates, vendorprofilepaymentpreference.IDIn(i.IDIn...))
+	}
+	if len(i.IDNotIn) > 0 {
+		predicates = append(predicates, vendorprofilepaymentpreference.IDNotIn(i.IDNotIn...))
+	}
+	if i.IDGT != nil {
+		predicates = append(predicates, vendorprofilepaymentpreference.IDGT(*i.IDGT))
+	}
+	if i.IDGTE != nil {
+		predicates = append(predicates, vendorprofilepaymentpreference.IDGTE(*i.IDGTE))
+	}
+	if i.IDLT != nil {
+		predicates = append(predicates, vendorprofilepaymentpreference.IDLT(*i.IDLT))
+	}
+	if i.IDLTE != nil {
+		predicates = append(predicates, vendorprofilepaymentpreference.IDLTE(*i.IDLTE))
+	}
+	if i.IDEqualFold != nil {
+		predicates = append(predicates, vendorprofilepaymentpreference.IDEqualFold(*i.IDEqualFold))
+	}
+	if i.IDContainsFold != nil {
+		predicates = append(predicates, vendorprofilepaymentpreference.IDContainsFold(*i.IDContainsFold))
+	}
+	if i.CreatedAt != nil {
+		predicates = append(predicates, vendorprofilepaymentpreference.CreatedAtEQ(*i.CreatedAt))
+	}
+	if i.CreatedAtNEQ != nil {
+		predicates = append(predicates, vendorprofilepaymentpreference.CreatedAtNEQ(*i.CreatedAtNEQ))
+	}
+	if len(i.CreatedAtIn) > 0 {
+		predicates = append(predicates, vendorprofilepaymentpreference.CreatedAtIn(i.CreatedAtIn...))
+	}
+	if len(i.CreatedAtNotIn) > 0 {
+		predicates = append(predicates, vendorprofilepaymentpreference.CreatedAtNotIn(i.CreatedAtNotIn...))
+	}
+	if i.CreatedAtGT != nil {
+		predicates = append(predicates, vendorprofilepaymentpreference.CreatedAtGT(*i.CreatedAtGT))
+	}
+	if i.CreatedAtGTE != nil {
+		predicates = append(predicates, vendorprofilepaymentpreference.CreatedAtGTE(*i.CreatedAtGTE))
+	}
+	if i.CreatedAtLT != nil {
+		predicates = append(predicates, vendorprofilepaymentpreference.CreatedAtLT(*i.CreatedAtLT))
+	}
+	if i.CreatedAtLTE != nil {
+		predicates = append(predicates, vendorprofilepaymentpreference.CreatedAtLTE(*i.CreatedAtLTE))
+	}
+	if i.CreatedAtIsNil {
+		predicates = append(predicates, vendorprofilepaymentpreference.CreatedAtIsNil())
+	}
+	if i.CreatedAtNotNil {
+		predicates = append(predicates, vendorprofilepaymentpreference.CreatedAtNotNil())
+	}
+	if i.UpdatedAt != nil {
+		predicates = append(predicates, vendorprofilepaymentpreference.UpdatedAtEQ(*i.UpdatedAt))
+	}
+	if i.UpdatedAtNEQ != nil {
+		predicates = append(predicates, vendorprofilepaymentpreference.UpdatedAtNEQ(*i.UpdatedAtNEQ))
+	}
+	if len(i.UpdatedAtIn) > 0 {
+		predicates = append(predicates, vendorprofilepaymentpreference.UpdatedAtIn(i.UpdatedAtIn...))
+	}
+	if len(i.UpdatedAtNotIn) > 0 {
+		predicates = append(predicates, vendorprofilepaymentpreference.UpdatedAtNotIn(i.UpdatedAtNotIn...))
+	}
+	if i.UpdatedAtGT != nil {
+		predicates = append(predicates, vendorprofilepaymentpreference.UpdatedAtGT(*i.UpdatedAtGT))
+	}
+	if i.UpdatedAtGTE != nil {
+		predicates = append(predicates, vendorprofilepaymentpreference.UpdatedAtGTE(*i.UpdatedAtGTE))
+	}
+	if i.UpdatedAtLT != nil {
+		predicates = append(predicates, vendorprofilepaymentpreference.UpdatedAtLT(*i.UpdatedAtLT))
+	}
+	if i.UpdatedAtLTE != nil {
+		predicates = append(predicates, vendorprofilepaymentpreference.UpdatedAtLTE(*i.UpdatedAtLTE))
+	}
+	if i.UpdatedAtIsNil {
+		predicates = append(predicates, vendorprofilepaymentpreference.UpdatedAtIsNil())
+	}
+	if i.UpdatedAtNotNil {
+		predicates = append(predicates, vendorprofilepaymentpreference.UpdatedAtNotNil())
+	}
+	if i.CreatedBy != nil {
+		predicates = append(predicates, vendorprofilepaymentpreference.CreatedByEQ(*i.CreatedBy))
+	}
+	if i.CreatedByNEQ != nil {
+		predicates = append(predicates, vendorprofilepaymentpreference.CreatedByNEQ(*i.CreatedByNEQ))
+	}
+	if len(i.CreatedByIn) > 0 {
+		predicates = append(predicates, vendorprofilepaymentpreference.CreatedByIn(i.CreatedByIn...))
+	}
+	if len(i.CreatedByNotIn) > 0 {
+		predicates = append(predicates, vendorprofilepaymentpreference.CreatedByNotIn(i.CreatedByNotIn...))
+	}
+	if i.CreatedByGT != nil {
+		predicates = append(predicates, vendorprofilepaymentpreference.CreatedByGT(*i.CreatedByGT))
+	}
+	if i.CreatedByGTE != nil {
+		predicates = append(predicates, vendorprofilepaymentpreference.CreatedByGTE(*i.CreatedByGTE))
+	}
+	if i.CreatedByLT != nil {
+		predicates = append(predicates, vendorprofilepaymentpreference.CreatedByLT(*i.CreatedByLT))
+	}
+	if i.CreatedByLTE != nil {
+		predicates = append(predicates, vendorprofilepaymentpreference.CreatedByLTE(*i.CreatedByLTE))
+	}
+	if i.CreatedByContains != nil {
+		predicates = append(predicates, vendorprofilepaymentpreference.CreatedByContains(*i.CreatedByContains))
+	}
+	if i.CreatedByHasPrefix != nil {
+		predicates = append(predicates, vendorprofilepaymentpreference.CreatedByHasPrefix(*i.CreatedByHasPrefix))
+	}
+	if i.CreatedByHasSuffix != nil {
+		predicates = append(predicates, vendorprofilepaymentpreference.CreatedByHasSuffix(*i.CreatedByHasSuffix))
+	}
+	if i.CreatedByIsNil {
+		predicates = append(predicates, vendorprofilepaymentpreference.CreatedByIsNil())
+	}
+	if i.CreatedByNotNil {
+		predicates = append(predicates, vendorprofilepaymentpreference.CreatedByNotNil())
+	}
+	if i.CreatedByEqualFold != nil {
+		predicates = append(predicates, vendorprofilepaymentpreference.CreatedByEqualFold(*i.CreatedByEqualFold))
+	}
+	if i.CreatedByContainsFold != nil {
+		predicates = append(predicates, vendorprofilepaymentpreference.CreatedByContainsFold(*i.CreatedByContainsFold))
+	}
+	if i.UpdatedBy != nil {
+		predicates = append(predicates, vendorprofilepaymentpreference.UpdatedByEQ(*i.UpdatedBy))
+	}
+	if i.UpdatedByNEQ != nil {
+		predicates = append(predicates, vendorprofilepaymentpreference.UpdatedByNEQ(*i.UpdatedByNEQ))
+	}
+	if len(i.UpdatedByIn) > 0 {
+		predicates = append(predicates, vendorprofilepaymentpreference.UpdatedByIn(i.UpdatedByIn...))
+	}
+	if len(i.UpdatedByNotIn) > 0 {
+		predicates = append(predicates, vendorprofilepaymentpreference.UpdatedByNotIn(i.UpdatedByNotIn...))
+	}
+	if i.UpdatedByGT != nil {
+		predicates = append(predicates, vendorprofilepaymentpreference.UpdatedByGT(*i.UpdatedByGT))
+	}
+	if i.UpdatedByGTE != nil {
+		predicates = append(predicates, vendorprofilepaymentpreference.UpdatedByGTE(*i.UpdatedByGTE))
+	}
+	if i.UpdatedByLT != nil {
+		predicates = append(predicates, vendorprofilepaymentpreference.UpdatedByLT(*i.UpdatedByLT))
+	}
+	if i.UpdatedByLTE != nil {
+		predicates = append(predicates, vendorprofilepaymentpreference.UpdatedByLTE(*i.UpdatedByLTE))
+	}
+	if i.UpdatedByContains != nil {
+		predicates = append(predicates, vendorprofilepaymentpreference.UpdatedByContains(*i.UpdatedByContains))
+	}
+	if i.UpdatedByHasPrefix != nil {
+		predicates = append(predicates, vendorprofilepaymentpreference.UpdatedByHasPrefix(*i.UpdatedByHasPrefix))
+	}
+	if i.UpdatedByHasSuffix != nil {
+		predicates = append(predicates, vendorprofilepaymentpreference.UpdatedByHasSuffix(*i.UpdatedByHasSuffix))
+	}
+	if i.UpdatedByIsNil {
+		predicates = append(predicates, vendorprofilepaymentpreference.UpdatedByIsNil())
+	}
+	if i.UpdatedByNotNil {
+		predicates = append(predicates, vendorprofilepaymentpreference.UpdatedByNotNil())
+	}
+	if i.UpdatedByEqualFold != nil {
+		predicates = append(predicates, vendorprofilepaymentpreference.UpdatedByEqualFold(*i.UpdatedByEqualFold))
+	}
+	if i.UpdatedByContainsFold != nil {
+		predicates = append(predicates, vendorprofilepaymentpreference.UpdatedByContainsFold(*i.UpdatedByContainsFold))
+	}
+	if i.DeletedAt != nil {
+		predicates = append(predicates, vendorprofilepaymentpreference.DeletedAtEQ(*i.DeletedAt))
+	}
+	if i.DeletedAtNEQ != nil {
+		predicates = append(predicates, vendorprofilepaymentpreference.DeletedAtNEQ(*i.DeletedAtNEQ))
+	}
+	if len(i.DeletedAtIn) > 0 {
+		predicates = append(predicates, vendorprofilepaymentpreference.DeletedAtIn(i.DeletedAtIn...))
+	}
+	if len(i.DeletedAtNotIn) > 0 {
+		predicates = append(predicates, vendorprofilepaymentpreference.DeletedAtNotIn(i.DeletedAtNotIn...))
+	}
+	if i.DeletedAtGT != nil {
+		predicates = append(predicates, vendorprofilepaymentpreference.DeletedAtGT(*i.DeletedAtGT))
+	}
+	if i.DeletedAtGTE != nil {
+		predicates = append(predicates, vendorprofilepaymentpreference.DeletedAtGTE(*i.DeletedAtGTE))
+	}
+	if i.DeletedAtLT != nil {
+		predicates = append(predicates, vendorprofilepaymentpreference.DeletedAtLT(*i.DeletedAtLT))
+	}
+	if i.DeletedAtLTE != nil {
+		predicates = append(predicates, vendorprofilepaymentpreference.DeletedAtLTE(*i.DeletedAtLTE))
+	}
+	if i.DeletedAtIsNil {
+		predicates = append(predicates, vendorprofilepaymentpreference.DeletedAtIsNil())
+	}
+	if i.DeletedAtNotNil {
+		predicates = append(predicates, vendorprofilepaymentpreference.DeletedAtNotNil())
+	}
+	if i.DeletedBy != nil {
+		predicates = append(predicates, vendorprofilepaymentpreference.DeletedByEQ(*i.DeletedBy))
+	}
+	if i.DeletedByNEQ != nil {
+		predicates = append(predicates, vendorprofilepaymentpreference.DeletedByNEQ(*i.DeletedByNEQ))
+	}
+	if len(i.DeletedByIn) > 0 {
+		predicates = append(predicates, vendorprofilepaymentpreference.DeletedByIn(i.DeletedByIn...))
+	}
+	if len(i.DeletedByNotIn) > 0 {
+		predicates = append(predicates, vendorprofilepaymentpreference.DeletedByNotIn(i.DeletedByNotIn...))
+	}
+	if i.DeletedByGT != nil {
+		predicates = append(predicates, vendorprofilepaymentpreference.DeletedByGT(*i.DeletedByGT))
+	}
+	if i.DeletedByGTE != nil {
+		predicates = append(predicates, vendorprofilepaymentpreference.DeletedByGTE(*i.DeletedByGTE))
+	}
+	if i.DeletedByLT != nil {
+		predicates = append(predicates, vendorprofilepaymentpreference.DeletedByLT(*i.DeletedByLT))
+	}
+	if i.DeletedByLTE != nil {
+		predicates = append(predicates, vendorprofilepaymentpreference.DeletedByLTE(*i.DeletedByLTE))
+	}
+	if i.DeletedByContains != nil {
+		predicates = append(predicates, vendorprofilepaymentpreference.DeletedByContains(*i.DeletedByContains))
+	}
+	if i.DeletedByHasPrefix != nil {
+		predicates = append(predicates, vendorprofilepaymentpreference.DeletedByHasPrefix(*i.DeletedByHasPrefix))
+	}
+	if i.DeletedByHasSuffix != nil {
+		predicates = append(predicates, vendorprofilepaymentpreference.DeletedByHasSuffix(*i.DeletedByHasSuffix))
+	}
+	if i.DeletedByIsNil {
+		predicates = append(predicates, vendorprofilepaymentpreference.DeletedByIsNil())
+	}
+	if i.DeletedByNotNil {
+		predicates = append(predicates, vendorprofilepaymentpreference.DeletedByNotNil())
+	}
+	if i.DeletedByEqualFold != nil {
+		predicates = append(predicates, vendorprofilepaymentpreference.DeletedByEqualFold(*i.DeletedByEqualFold))
+	}
+	if i.DeletedByContainsFold != nil {
+		predicates = append(predicates, vendorprofilepaymentpreference.DeletedByContainsFold(*i.DeletedByContainsFold))
+	}
+	if i.OwnerID != nil {
+		predicates = append(predicates, vendorprofilepaymentpreference.OwnerIDEQ(*i.OwnerID))
+	}
+	if i.OwnerIDNEQ != nil {
+		predicates = append(predicates, vendorprofilepaymentpreference.OwnerIDNEQ(*i.OwnerIDNEQ))
+	}
+	if len(i.OwnerIDIn) > 0 {
+		predicates = append(predicates, vendorprofilepaymentpreference.OwnerIDIn(i.OwnerIDIn...))
+	}
+	if len(i.OwnerIDNotIn) > 0 {
+		predicates = append(predicates, vendorprofilepaymentpreference.OwnerIDNotIn(i.OwnerIDNotIn...))
+	}
+	if i.OwnerIDGT != nil {
+		predicates = append(predicates, vendorprofilepaymentpreference.OwnerIDGT(*i.OwnerIDGT))
+	}
+	if i.OwnerIDGTE != nil {
+		predicates = append(predicates, vendorprofilepaymentpreference.OwnerIDGTE(*i.OwnerIDGTE))
+	}
+	if i.OwnerIDLT != nil {
+		predicates = append(predicates, vendorprofilepaymentpreference.OwnerIDLT(*i.OwnerIDLT))
+	}
+	if i.OwnerIDLTE != nil {
+		predicates = append(predicates, vendorprofilepaymentpreference.OwnerIDLTE(*i.OwnerIDLTE))
+	}
+	if i.OwnerIDContains != nil {
+		predicates = append(predicates, vendorprofilepaymentpreference.OwnerIDContains(*i.OwnerIDContains))
+	}
+	if i.OwnerIDHasPrefix != nil {
+		predicates = append(predicates, vendorprofilepaymentpreference.OwnerIDHasPrefix(*i.OwnerIDHasPrefix))
+	}
+	if i.OwnerIDHasSuffix != nil {
+		predicates = append(predicates, vendorprofilepaymentpreference.OwnerIDHasSuffix(*i.OwnerIDHasSuffix))
+	}
+	if i.OwnerIDIsNil {
+		predicates = append(predicates, vendorprofilepaymentpreference.OwnerIDIsNil())
+	}
+	if i.OwnerIDNotNil {
+		predicates = append(predicates, vendorprofilepaymentpreference.OwnerIDNotNil())
+	}
+	if i.OwnerIDEqualFold != nil {
+		predicates = append(predicates, vendorprofilepaymentpreference.OwnerIDEqualFold(*i.OwnerIDEqualFold))
+	}
+	if i.OwnerIDContainsFold != nil {
+		predicates = append(predicates, vendorprofilepaymentpreference.OwnerIDContainsFold(*i.OwnerIDContainsFold))
+	}
+	if i.VendorProfileID != nil {
+		predicates = append(predicates, vendorprofilepaymentpreference.VendorProfileIDEQ(*i.VendorProfileID))
+	}
+	if i.VendorProfileIDNEQ != nil {
+		predicates = append(predicates, vendorprofilepaymentpreference.VendorProfileIDNEQ(*i.VendorProfileIDNEQ))
+	}
+	if len(i.VendorProfileIDIn) > 0 {
+		predicates = append(predicates, vendorprofilepaymentpreference.VendorProfileIDIn(i.VendorProfileIDIn...))
+	}
+	if len(i.VendorProfileIDNotIn) > 0 {
+		predicates = append(predicates, vendorprofilepaymentpreference.VendorProfileIDNotIn(i.VendorProfileIDNotIn...))
+	}
+	if i.VendorProfileIDGT != nil {
+		predicates = append(predicates, vendorprofilepaymentpreference.VendorProfileIDGT(*i.VendorProfileIDGT))
+	}
+	if i.VendorProfileIDGTE != nil {
+		predicates = append(predicates, vendorprofilepaymentpreference.VendorProfileIDGTE(*i.VendorProfileIDGTE))
+	}
+	if i.VendorProfileIDLT != nil {
+		predicates = append(predicates, vendorprofilepaymentpreference.VendorProfileIDLT(*i.VendorProfileIDLT))
+	}
+	if i.VendorProfileIDLTE != nil {
+		predicates = append(predicates, vendorprofilepaymentpreference.VendorProfileIDLTE(*i.VendorProfileIDLTE))
+	}
+	if i.VendorProfileIDContains != nil {
+		predicates = append(predicates, vendorprofilepaymentpreference.VendorProfileIDContains(*i.VendorProfileIDContains))
+	}
+	if i.VendorProfileIDHasPrefix != nil {
+		predicates = append(predicates, vendorprofilepaymentpreference.VendorProfileIDHasPrefix(*i.VendorProfileIDHasPrefix))
+	}
+	if i.VendorProfileIDHasSuffix != nil {
+		predicates = append(predicates, vendorprofilepaymentpreference.VendorProfileIDHasSuffix(*i.VendorProfileIDHasSuffix))
+	}
+	if i.VendorProfileIDIsNil {
+		predicates = append(predicates, vendorprofilepaymentpreference.VendorProfileIDIsNil())
+	}
+	if i.VendorProfileIDNotNil {
+		predicates = append(predicates, vendorprofilepaymentpreference.VendorProfileIDNotNil())
+	}
+	if i.VendorProfileIDEqualFold != nil {
+		predicates = append(predicates, vendorprofilepaymentpreference.VendorProfileIDEqualFold(*i.VendorProfileIDEqualFold))
+	}
+	if i.VendorProfileIDContainsFold != nil {
+		predicates = append(predicates, vendorprofilepaymentpreference.VendorProfileIDContainsFold(*i.VendorProfileIDContainsFold))
+	}
+	if i.Preferred != nil {
+		predicates = append(predicates, vendorprofilepaymentpreference.PreferredEQ(*i.Preferred))
+	}
+	if i.PreferredNEQ != nil {
+		predicates = append(predicates, vendorprofilepaymentpreference.PreferredNEQ(*i.PreferredNEQ))
+	}
+	if i.Method != nil {
+		predicates = append(predicates, vendorprofilepaymentpreference.MethodEQ(*i.Method))
+	}
+	if i.MethodNEQ != nil {
+		predicates = append(predicates, vendorprofilepaymentpreference.MethodNEQ(*i.MethodNEQ))
+	}
+	if len(i.MethodIn) > 0 {
+		predicates = append(predicates, vendorprofilepaymentpreference.MethodIn(i.MethodIn...))
+	}
+	if len(i.MethodNotIn) > 0 {
+		predicates = append(predicates, vendorprofilepaymentpreference.MethodNotIn(i.MethodNotIn...))
+	}
+
+	if i.HasOwner != nil {
+		p := vendorprofilepaymentpreference.HasOwner()
+		if !*i.HasOwner {
+			p = vendorprofilepaymentpreference.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasOwnerWith) > 0 {
+		with := make([]predicate.Organization, 0, len(i.HasOwnerWith))
+		for _, w := range i.HasOwnerWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasOwnerWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, vendorprofilepaymentpreference.HasOwnerWith(with...))
+	}
+	if i.HasVendorProfile != nil {
+		p := vendorprofilepaymentpreference.HasVendorProfile()
+		if !*i.HasVendorProfile {
+			p = vendorprofilepaymentpreference.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasVendorProfileWith) > 0 {
+		with := make([]predicate.VendorProfile, 0, len(i.HasVendorProfileWith))
+		for _, w := range i.HasVendorProfileWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasVendorProfileWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, vendorprofilepaymentpreference.HasVendorProfileWith(with...))
+	}
+	switch len(predicates) {
+	case 0:
+		return nil, ErrEmptyVendorProfilePaymentPreferenceWhereInput
+	case 1:
+		return predicates[0], nil
+	default:
+		return vendorprofilepaymentpreference.And(predicates...), nil
+	}
+}
+
+// VendorProfilePaymentPreferenceHistoryWhereInput represents a where input for filtering VendorProfilePaymentPreferenceHistory queries.
+type VendorProfilePaymentPreferenceHistoryWhereInput struct {
+	Predicates []predicate.VendorProfilePaymentPreferenceHistory  `json:"-"`
+	Not        *VendorProfilePaymentPreferenceHistoryWhereInput   `json:"not,omitempty"`
+	Or         []*VendorProfilePaymentPreferenceHistoryWhereInput `json:"or,omitempty"`
+	And        []*VendorProfilePaymentPreferenceHistoryWhereInput `json:"and,omitempty"`
+
+	// "id" field predicates.
+	ID             *string  `json:"id,omitempty"`
+	IDNEQ          *string  `json:"idNEQ,omitempty"`
+	IDIn           []string `json:"idIn,omitempty"`
+	IDNotIn        []string `json:"idNotIn,omitempty"`
+	IDGT           *string  `json:"idGT,omitempty"`
+	IDGTE          *string  `json:"idGTE,omitempty"`
+	IDLT           *string  `json:"idLT,omitempty"`
+	IDLTE          *string  `json:"idLTE,omitempty"`
+	IDEqualFold    *string  `json:"idEqualFold,omitempty"`
+	IDContainsFold *string  `json:"idContainsFold,omitempty"`
+
+	// "history_time" field predicates.
+	HistoryTime      *time.Time  `json:"historyTime,omitempty"`
+	HistoryTimeNEQ   *time.Time  `json:"historyTimeNEQ,omitempty"`
+	HistoryTimeIn    []time.Time `json:"historyTimeIn,omitempty"`
+	HistoryTimeNotIn []time.Time `json:"historyTimeNotIn,omitempty"`
+	HistoryTimeGT    *time.Time  `json:"historyTimeGT,omitempty"`
+	HistoryTimeGTE   *time.Time  `json:"historyTimeGTE,omitempty"`
+	HistoryTimeLT    *time.Time  `json:"historyTimeLT,omitempty"`
+	HistoryTimeLTE   *time.Time  `json:"historyTimeLTE,omitempty"`
+
+	// "ref" field predicates.
+	Ref             *string  `json:"ref,omitempty"`
+	RefNEQ          *string  `json:"refNEQ,omitempty"`
+	RefIn           []string `json:"refIn,omitempty"`
+	RefNotIn        []string `json:"refNotIn,omitempty"`
+	RefGT           *string  `json:"refGT,omitempty"`
+	RefGTE          *string  `json:"refGTE,omitempty"`
+	RefLT           *string  `json:"refLT,omitempty"`
+	RefLTE          *string  `json:"refLTE,omitempty"`
+	RefContains     *string  `json:"refContains,omitempty"`
+	RefHasPrefix    *string  `json:"refHasPrefix,omitempty"`
+	RefHasSuffix    *string  `json:"refHasSuffix,omitempty"`
+	RefIsNil        bool     `json:"refIsNil,omitempty"`
+	RefNotNil       bool     `json:"refNotNil,omitempty"`
+	RefEqualFold    *string  `json:"refEqualFold,omitempty"`
+	RefContainsFold *string  `json:"refContainsFold,omitempty"`
+
+	// "operation" field predicates.
+	Operation      *enthistory.OpType  `json:"operation,omitempty"`
+	OperationNEQ   *enthistory.OpType  `json:"operationNEQ,omitempty"`
+	OperationIn    []enthistory.OpType `json:"operationIn,omitempty"`
+	OperationNotIn []enthistory.OpType `json:"operationNotIn,omitempty"`
+
+	// "created_at" field predicates.
+	CreatedAt       *time.Time  `json:"createdAt,omitempty"`
+	CreatedAtNEQ    *time.Time  `json:"createdAtNEQ,omitempty"`
+	CreatedAtIn     []time.Time `json:"createdAtIn,omitempty"`
+	CreatedAtNotIn  []time.Time `json:"createdAtNotIn,omitempty"`
+	CreatedAtGT     *time.Time  `json:"createdAtGT,omitempty"`
+	CreatedAtGTE    *time.Time  `json:"createdAtGTE,omitempty"`
+	CreatedAtLT     *time.Time  `json:"createdAtLT,omitempty"`
+	CreatedAtLTE    *time.Time  `json:"createdAtLTE,omitempty"`
+	CreatedAtIsNil  bool        `json:"createdAtIsNil,omitempty"`
+	CreatedAtNotNil bool        `json:"createdAtNotNil,omitempty"`
+
+	// "updated_at" field predicates.
+	UpdatedAt       *time.Time  `json:"updatedAt,omitempty"`
+	UpdatedAtNEQ    *time.Time  `json:"updatedAtNEQ,omitempty"`
+	UpdatedAtIn     []time.Time `json:"updatedAtIn,omitempty"`
+	UpdatedAtNotIn  []time.Time `json:"updatedAtNotIn,omitempty"`
+	UpdatedAtGT     *time.Time  `json:"updatedAtGT,omitempty"`
+	UpdatedAtGTE    *time.Time  `json:"updatedAtGTE,omitempty"`
+	UpdatedAtLT     *time.Time  `json:"updatedAtLT,omitempty"`
+	UpdatedAtLTE    *time.Time  `json:"updatedAtLTE,omitempty"`
+	UpdatedAtIsNil  bool        `json:"updatedAtIsNil,omitempty"`
+	UpdatedAtNotNil bool        `json:"updatedAtNotNil,omitempty"`
+
+	// "created_by" field predicates.
+	CreatedBy             *string  `json:"createdBy,omitempty"`
+	CreatedByNEQ          *string  `json:"createdByNEQ,omitempty"`
+	CreatedByIn           []string `json:"createdByIn,omitempty"`
+	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
+	CreatedByGT           *string  `json:"createdByGT,omitempty"`
+	CreatedByGTE          *string  `json:"createdByGTE,omitempty"`
+	CreatedByLT           *string  `json:"createdByLT,omitempty"`
+	CreatedByLTE          *string  `json:"createdByLTE,omitempty"`
+	CreatedByContains     *string  `json:"createdByContains,omitempty"`
+	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
+	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
+	CreatedByIsNil        bool     `json:"createdByIsNil,omitempty"`
+	CreatedByNotNil       bool     `json:"createdByNotNil,omitempty"`
+	CreatedByEqualFold    *string  `json:"createdByEqualFold,omitempty"`
+	CreatedByContainsFold *string  `json:"createdByContainsFold,omitempty"`
+
+	// "updated_by" field predicates.
+	UpdatedBy             *string  `json:"updatedBy,omitempty"`
+	UpdatedByNEQ          *string  `json:"updatedByNEQ,omitempty"`
+	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
+	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
+	UpdatedByGT           *string  `json:"updatedByGT,omitempty"`
+	UpdatedByGTE          *string  `json:"updatedByGTE,omitempty"`
+	UpdatedByLT           *string  `json:"updatedByLT,omitempty"`
+	UpdatedByLTE          *string  `json:"updatedByLTE,omitempty"`
+	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
+	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
+	UpdatedByIsNil        bool     `json:"updatedByIsNil,omitempty"`
+	UpdatedByNotNil       bool     `json:"updatedByNotNil,omitempty"`
+	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
+	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+
+	// "deleted_at" field predicates.
+	DeletedAt       *time.Time  `json:"deletedAt,omitempty"`
+	DeletedAtNEQ    *time.Time  `json:"deletedAtNEQ,omitempty"`
+	DeletedAtIn     []time.Time `json:"deletedAtIn,omitempty"`
+	DeletedAtNotIn  []time.Time `json:"deletedAtNotIn,omitempty"`
+	DeletedAtGT     *time.Time  `json:"deletedAtGT,omitempty"`
+	DeletedAtGTE    *time.Time  `json:"deletedAtGTE,omitempty"`
+	DeletedAtLT     *time.Time  `json:"deletedAtLT,omitempty"`
+	DeletedAtLTE    *time.Time  `json:"deletedAtLTE,omitempty"`
+	DeletedAtIsNil  bool        `json:"deletedAtIsNil,omitempty"`
+	DeletedAtNotNil bool        `json:"deletedAtNotNil,omitempty"`
+
+	// "deleted_by" field predicates.
+	DeletedBy             *string  `json:"deletedBy,omitempty"`
+	DeletedByNEQ          *string  `json:"deletedByNEQ,omitempty"`
+	DeletedByIn           []string `json:"deletedByIn,omitempty"`
+	DeletedByNotIn        []string `json:"deletedByNotIn,omitempty"`
+	DeletedByGT           *string  `json:"deletedByGT,omitempty"`
+	DeletedByGTE          *string  `json:"deletedByGTE,omitempty"`
+	DeletedByLT           *string  `json:"deletedByLT,omitempty"`
+	DeletedByLTE          *string  `json:"deletedByLTE,omitempty"`
+	DeletedByContains     *string  `json:"deletedByContains,omitempty"`
+	DeletedByHasPrefix    *string  `json:"deletedByHasPrefix,omitempty"`
+	DeletedByHasSuffix    *string  `json:"deletedByHasSuffix,omitempty"`
+	DeletedByIsNil        bool     `json:"deletedByIsNil,omitempty"`
+	DeletedByNotNil       bool     `json:"deletedByNotNil,omitempty"`
+	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
+	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
+
+	// "owner_id" field predicates.
+	OwnerID             *string  `json:"ownerID,omitempty"`
+	OwnerIDNEQ          *string  `json:"ownerIDNEQ,omitempty"`
+	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
+	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
+	OwnerIDGT           *string  `json:"ownerIDGT,omitempty"`
+	OwnerIDGTE          *string  `json:"ownerIDGTE,omitempty"`
+	OwnerIDLT           *string  `json:"ownerIDLT,omitempty"`
+	OwnerIDLTE          *string  `json:"ownerIDLTE,omitempty"`
+	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
+	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
+	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
+	OwnerIDIsNil        bool     `json:"ownerIDIsNil,omitempty"`
+	OwnerIDNotNil       bool     `json:"ownerIDNotNil,omitempty"`
+	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
+	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
+
+	// "vendor_profile_id" field predicates.
+	VendorProfileID             *string  `json:"vendorProfileID,omitempty"`
+	VendorProfileIDNEQ          *string  `json:"vendorProfileIDNEQ,omitempty"`
+	VendorProfileIDIn           []string `json:"vendorProfileIDIn,omitempty"`
+	VendorProfileIDNotIn        []string `json:"vendorProfileIDNotIn,omitempty"`
+	VendorProfileIDGT           *string  `json:"vendorProfileIDGT,omitempty"`
+	VendorProfileIDGTE          *string  `json:"vendorProfileIDGTE,omitempty"`
+	VendorProfileIDLT           *string  `json:"vendorProfileIDLT,omitempty"`
+	VendorProfileIDLTE          *string  `json:"vendorProfileIDLTE,omitempty"`
+	VendorProfileIDContains     *string  `json:"vendorProfileIDContains,omitempty"`
+	VendorProfileIDHasPrefix    *string  `json:"vendorProfileIDHasPrefix,omitempty"`
+	VendorProfileIDHasSuffix    *string  `json:"vendorProfileIDHasSuffix,omitempty"`
+	VendorProfileIDIsNil        bool     `json:"vendorProfileIDIsNil,omitempty"`
+	VendorProfileIDNotNil       bool     `json:"vendorProfileIDNotNil,omitempty"`
+	VendorProfileIDEqualFold    *string  `json:"vendorProfileIDEqualFold,omitempty"`
+	VendorProfileIDContainsFold *string  `json:"vendorProfileIDContainsFold,omitempty"`
+
+	// "preferred" field predicates.
+	Preferred    *bool `json:"preferred,omitempty"`
+	PreferredNEQ *bool `json:"preferredNEQ,omitempty"`
+
+	// "method" field predicates.
+	Method      *enums.PaymentMethod  `json:"method,omitempty"`
+	MethodNEQ   *enums.PaymentMethod  `json:"methodNEQ,omitempty"`
+	MethodIn    []enums.PaymentMethod `json:"methodIn,omitempty"`
+	MethodNotIn []enums.PaymentMethod `json:"methodNotIn,omitempty"`
+}
+
+// AddPredicates adds custom predicates to the where input to be used during the filtering phase.
+func (i *VendorProfilePaymentPreferenceHistoryWhereInput) AddPredicates(predicates ...predicate.VendorProfilePaymentPreferenceHistory) {
+	i.Predicates = append(i.Predicates, predicates...)
+}
+
+// Filter applies the VendorProfilePaymentPreferenceHistoryWhereInput filter on the VendorProfilePaymentPreferenceHistoryQuery builder.
+func (i *VendorProfilePaymentPreferenceHistoryWhereInput) Filter(q *VendorProfilePaymentPreferenceHistoryQuery) (*VendorProfilePaymentPreferenceHistoryQuery, error) {
+	if i == nil {
+		return q, nil
+	}
+	p, err := i.P()
+	if err != nil {
+		if err == ErrEmptyVendorProfilePaymentPreferenceHistoryWhereInput {
+			return q, nil
+		}
+		return nil, err
+	}
+	return q.Where(p), nil
+}
+
+// ErrEmptyVendorProfilePaymentPreferenceHistoryWhereInput is returned in case the VendorProfilePaymentPreferenceHistoryWhereInput is empty.
+var ErrEmptyVendorProfilePaymentPreferenceHistoryWhereInput = errors.New("generated: empty predicate VendorProfilePaymentPreferenceHistoryWhereInput")
+
+// P returns a predicate for filtering vendorprofilepaymentpreferencehistories.
+// An error is returned if the input is empty or invalid.
+func (i *VendorProfilePaymentPreferenceHistoryWhereInput) P() (predicate.VendorProfilePaymentPreferenceHistory, error) {
+	var predicates []predicate.VendorProfilePaymentPreferenceHistory
+	if i.Not != nil {
+		p, err := i.Not.P()
+		if err != nil {
+			return nil, fmt.Errorf("%w: field 'not'", err)
+		}
+		predicates = append(predicates, vendorprofilepaymentpreferencehistory.Not(p))
+	}
+	switch n := len(i.Or); {
+	case n == 1:
+		p, err := i.Or[0].P()
+		if err != nil {
+			return nil, fmt.Errorf("%w: field 'or'", err)
+		}
+		predicates = append(predicates, p)
+	case n > 1:
+		or := make([]predicate.VendorProfilePaymentPreferenceHistory, 0, n)
+		for _, w := range i.Or {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'or'", err)
+			}
+			or = append(or, p)
+		}
+		predicates = append(predicates, vendorprofilepaymentpreferencehistory.Or(or...))
+	}
+	switch n := len(i.And); {
+	case n == 1:
+		p, err := i.And[0].P()
+		if err != nil {
+			return nil, fmt.Errorf("%w: field 'and'", err)
+		}
+		predicates = append(predicates, p)
+	case n > 1:
+		and := make([]predicate.VendorProfilePaymentPreferenceHistory, 0, n)
+		for _, w := range i.And {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'and'", err)
+			}
+			and = append(and, p)
+		}
+		predicates = append(predicates, vendorprofilepaymentpreferencehistory.And(and...))
+	}
+	predicates = append(predicates, i.Predicates...)
+	if i.ID != nil {
+		predicates = append(predicates, vendorprofilepaymentpreferencehistory.IDEQ(*i.ID))
+	}
+	if i.IDNEQ != nil {
+		predicates = append(predicates, vendorprofilepaymentpreferencehistory.IDNEQ(*i.IDNEQ))
+	}
+	if len(i.IDIn) > 0 {
+		predicates = append(predicates, vendorprofilepaymentpreferencehistory.IDIn(i.IDIn...))
+	}
+	if len(i.IDNotIn) > 0 {
+		predicates = append(predicates, vendorprofilepaymentpreferencehistory.IDNotIn(i.IDNotIn...))
+	}
+	if i.IDGT != nil {
+		predicates = append(predicates, vendorprofilepaymentpreferencehistory.IDGT(*i.IDGT))
+	}
+	if i.IDGTE != nil {
+		predicates = append(predicates, vendorprofilepaymentpreferencehistory.IDGTE(*i.IDGTE))
+	}
+	if i.IDLT != nil {
+		predicates = append(predicates, vendorprofilepaymentpreferencehistory.IDLT(*i.IDLT))
+	}
+	if i.IDLTE != nil {
+		predicates = append(predicates, vendorprofilepaymentpreferencehistory.IDLTE(*i.IDLTE))
+	}
+	if i.IDEqualFold != nil {
+		predicates = append(predicates, vendorprofilepaymentpreferencehistory.IDEqualFold(*i.IDEqualFold))
+	}
+	if i.IDContainsFold != nil {
+		predicates = append(predicates, vendorprofilepaymentpreferencehistory.IDContainsFold(*i.IDContainsFold))
+	}
+	if i.HistoryTime != nil {
+		predicates = append(predicates, vendorprofilepaymentpreferencehistory.HistoryTimeEQ(*i.HistoryTime))
+	}
+	if i.HistoryTimeNEQ != nil {
+		predicates = append(predicates, vendorprofilepaymentpreferencehistory.HistoryTimeNEQ(*i.HistoryTimeNEQ))
+	}
+	if len(i.HistoryTimeIn) > 0 {
+		predicates = append(predicates, vendorprofilepaymentpreferencehistory.HistoryTimeIn(i.HistoryTimeIn...))
+	}
+	if len(i.HistoryTimeNotIn) > 0 {
+		predicates = append(predicates, vendorprofilepaymentpreferencehistory.HistoryTimeNotIn(i.HistoryTimeNotIn...))
+	}
+	if i.HistoryTimeGT != nil {
+		predicates = append(predicates, vendorprofilepaymentpreferencehistory.HistoryTimeGT(*i.HistoryTimeGT))
+	}
+	if i.HistoryTimeGTE != nil {
+		predicates = append(predicates, vendorprofilepaymentpreferencehistory.HistoryTimeGTE(*i.HistoryTimeGTE))
+	}
+	if i.HistoryTimeLT != nil {
+		predicates = append(predicates, vendorprofilepaymentpreferencehistory.HistoryTimeLT(*i.HistoryTimeLT))
+	}
+	if i.HistoryTimeLTE != nil {
+		predicates = append(predicates, vendorprofilepaymentpreferencehistory.HistoryTimeLTE(*i.HistoryTimeLTE))
+	}
+	if i.Ref != nil {
+		predicates = append(predicates, vendorprofilepaymentpreferencehistory.RefEQ(*i.Ref))
+	}
+	if i.RefNEQ != nil {
+		predicates = append(predicates, vendorprofilepaymentpreferencehistory.RefNEQ(*i.RefNEQ))
+	}
+	if len(i.RefIn) > 0 {
+		predicates = append(predicates, vendorprofilepaymentpreferencehistory.RefIn(i.RefIn...))
+	}
+	if len(i.RefNotIn) > 0 {
+		predicates = append(predicates, vendorprofilepaymentpreferencehistory.RefNotIn(i.RefNotIn...))
+	}
+	if i.RefGT != nil {
+		predicates = append(predicates, vendorprofilepaymentpreferencehistory.RefGT(*i.RefGT))
+	}
+	if i.RefGTE != nil {
+		predicates = append(predicates, vendorprofilepaymentpreferencehistory.RefGTE(*i.RefGTE))
+	}
+	if i.RefLT != nil {
+		predicates = append(predicates, vendorprofilepaymentpreferencehistory.RefLT(*i.RefLT))
+	}
+	if i.RefLTE != nil {
+		predicates = append(predicates, vendorprofilepaymentpreferencehistory.RefLTE(*i.RefLTE))
+	}
+	if i.RefContains != nil {
+		predicates = append(predicates, vendorprofilepaymentpreferencehistory.RefContains(*i.RefContains))
+	}
+	if i.RefHasPrefix != nil {
+		predicates = append(predicates, vendorprofilepaymentpreferencehistory.RefHasPrefix(*i.RefHasPrefix))
+	}
+	if i.RefHasSuffix != nil {
+		predicates = append(predicates, vendorprofilepaymentpreferencehistory.RefHasSuffix(*i.RefHasSuffix))
+	}
+	if i.RefIsNil {
+		predicates = append(predicates, vendorprofilepaymentpreferencehistory.RefIsNil())
+	}
+	if i.RefNotNil {
+		predicates = append(predicates, vendorprofilepaymentpreferencehistory.RefNotNil())
+	}
+	if i.RefEqualFold != nil {
+		predicates = append(predicates, vendorprofilepaymentpreferencehistory.RefEqualFold(*i.RefEqualFold))
+	}
+	if i.RefContainsFold != nil {
+		predicates = append(predicates, vendorprofilepaymentpreferencehistory.RefContainsFold(*i.RefContainsFold))
+	}
+	if i.Operation != nil {
+		predicates = append(predicates, vendorprofilepaymentpreferencehistory.OperationEQ(*i.Operation))
+	}
+	if i.OperationNEQ != nil {
+		predicates = append(predicates, vendorprofilepaymentpreferencehistory.OperationNEQ(*i.OperationNEQ))
+	}
+	if len(i.OperationIn) > 0 {
+		predicates = append(predicates, vendorprofilepaymentpreferencehistory.OperationIn(i.OperationIn...))
+	}
+	if len(i.OperationNotIn) > 0 {
+		predicates = append(predicates, vendorprofilepaymentpreferencehistory.OperationNotIn(i.OperationNotIn...))
+	}
+	if i.CreatedAt != nil {
+		predicates = append(predicates, vendorprofilepaymentpreferencehistory.CreatedAtEQ(*i.CreatedAt))
+	}
+	if i.CreatedAtNEQ != nil {
+		predicates = append(predicates, vendorprofilepaymentpreferencehistory.CreatedAtNEQ(*i.CreatedAtNEQ))
+	}
+	if len(i.CreatedAtIn) > 0 {
+		predicates = append(predicates, vendorprofilepaymentpreferencehistory.CreatedAtIn(i.CreatedAtIn...))
+	}
+	if len(i.CreatedAtNotIn) > 0 {
+		predicates = append(predicates, vendorprofilepaymentpreferencehistory.CreatedAtNotIn(i.CreatedAtNotIn...))
+	}
+	if i.CreatedAtGT != nil {
+		predicates = append(predicates, vendorprofilepaymentpreferencehistory.CreatedAtGT(*i.CreatedAtGT))
+	}
+	if i.CreatedAtGTE != nil {
+		predicates = append(predicates, vendorprofilepaymentpreferencehistory.CreatedAtGTE(*i.CreatedAtGTE))
+	}
+	if i.CreatedAtLT != nil {
+		predicates = append(predicates, vendorprofilepaymentpreferencehistory.CreatedAtLT(*i.CreatedAtLT))
+	}
+	if i.CreatedAtLTE != nil {
+		predicates = append(predicates, vendorprofilepaymentpreferencehistory.CreatedAtLTE(*i.CreatedAtLTE))
+	}
+	if i.CreatedAtIsNil {
+		predicates = append(predicates, vendorprofilepaymentpreferencehistory.CreatedAtIsNil())
+	}
+	if i.CreatedAtNotNil {
+		predicates = append(predicates, vendorprofilepaymentpreferencehistory.CreatedAtNotNil())
+	}
+	if i.UpdatedAt != nil {
+		predicates = append(predicates, vendorprofilepaymentpreferencehistory.UpdatedAtEQ(*i.UpdatedAt))
+	}
+	if i.UpdatedAtNEQ != nil {
+		predicates = append(predicates, vendorprofilepaymentpreferencehistory.UpdatedAtNEQ(*i.UpdatedAtNEQ))
+	}
+	if len(i.UpdatedAtIn) > 0 {
+		predicates = append(predicates, vendorprofilepaymentpreferencehistory.UpdatedAtIn(i.UpdatedAtIn...))
+	}
+	if len(i.UpdatedAtNotIn) > 0 {
+		predicates = append(predicates, vendorprofilepaymentpreferencehistory.UpdatedAtNotIn(i.UpdatedAtNotIn...))
+	}
+	if i.UpdatedAtGT != nil {
+		predicates = append(predicates, vendorprofilepaymentpreferencehistory.UpdatedAtGT(*i.UpdatedAtGT))
+	}
+	if i.UpdatedAtGTE != nil {
+		predicates = append(predicates, vendorprofilepaymentpreferencehistory.UpdatedAtGTE(*i.UpdatedAtGTE))
+	}
+	if i.UpdatedAtLT != nil {
+		predicates = append(predicates, vendorprofilepaymentpreferencehistory.UpdatedAtLT(*i.UpdatedAtLT))
+	}
+	if i.UpdatedAtLTE != nil {
+		predicates = append(predicates, vendorprofilepaymentpreferencehistory.UpdatedAtLTE(*i.UpdatedAtLTE))
+	}
+	if i.UpdatedAtIsNil {
+		predicates = append(predicates, vendorprofilepaymentpreferencehistory.UpdatedAtIsNil())
+	}
+	if i.UpdatedAtNotNil {
+		predicates = append(predicates, vendorprofilepaymentpreferencehistory.UpdatedAtNotNil())
+	}
+	if i.CreatedBy != nil {
+		predicates = append(predicates, vendorprofilepaymentpreferencehistory.CreatedByEQ(*i.CreatedBy))
+	}
+	if i.CreatedByNEQ != nil {
+		predicates = append(predicates, vendorprofilepaymentpreferencehistory.CreatedByNEQ(*i.CreatedByNEQ))
+	}
+	if len(i.CreatedByIn) > 0 {
+		predicates = append(predicates, vendorprofilepaymentpreferencehistory.CreatedByIn(i.CreatedByIn...))
+	}
+	if len(i.CreatedByNotIn) > 0 {
+		predicates = append(predicates, vendorprofilepaymentpreferencehistory.CreatedByNotIn(i.CreatedByNotIn...))
+	}
+	if i.CreatedByGT != nil {
+		predicates = append(predicates, vendorprofilepaymentpreferencehistory.CreatedByGT(*i.CreatedByGT))
+	}
+	if i.CreatedByGTE != nil {
+		predicates = append(predicates, vendorprofilepaymentpreferencehistory.CreatedByGTE(*i.CreatedByGTE))
+	}
+	if i.CreatedByLT != nil {
+		predicates = append(predicates, vendorprofilepaymentpreferencehistory.CreatedByLT(*i.CreatedByLT))
+	}
+	if i.CreatedByLTE != nil {
+		predicates = append(predicates, vendorprofilepaymentpreferencehistory.CreatedByLTE(*i.CreatedByLTE))
+	}
+	if i.CreatedByContains != nil {
+		predicates = append(predicates, vendorprofilepaymentpreferencehistory.CreatedByContains(*i.CreatedByContains))
+	}
+	if i.CreatedByHasPrefix != nil {
+		predicates = append(predicates, vendorprofilepaymentpreferencehistory.CreatedByHasPrefix(*i.CreatedByHasPrefix))
+	}
+	if i.CreatedByHasSuffix != nil {
+		predicates = append(predicates, vendorprofilepaymentpreferencehistory.CreatedByHasSuffix(*i.CreatedByHasSuffix))
+	}
+	if i.CreatedByIsNil {
+		predicates = append(predicates, vendorprofilepaymentpreferencehistory.CreatedByIsNil())
+	}
+	if i.CreatedByNotNil {
+		predicates = append(predicates, vendorprofilepaymentpreferencehistory.CreatedByNotNil())
+	}
+	if i.CreatedByEqualFold != nil {
+		predicates = append(predicates, vendorprofilepaymentpreferencehistory.CreatedByEqualFold(*i.CreatedByEqualFold))
+	}
+	if i.CreatedByContainsFold != nil {
+		predicates = append(predicates, vendorprofilepaymentpreferencehistory.CreatedByContainsFold(*i.CreatedByContainsFold))
+	}
+	if i.UpdatedBy != nil {
+		predicates = append(predicates, vendorprofilepaymentpreferencehistory.UpdatedByEQ(*i.UpdatedBy))
+	}
+	if i.UpdatedByNEQ != nil {
+		predicates = append(predicates, vendorprofilepaymentpreferencehistory.UpdatedByNEQ(*i.UpdatedByNEQ))
+	}
+	if len(i.UpdatedByIn) > 0 {
+		predicates = append(predicates, vendorprofilepaymentpreferencehistory.UpdatedByIn(i.UpdatedByIn...))
+	}
+	if len(i.UpdatedByNotIn) > 0 {
+		predicates = append(predicates, vendorprofilepaymentpreferencehistory.UpdatedByNotIn(i.UpdatedByNotIn...))
+	}
+	if i.UpdatedByGT != nil {
+		predicates = append(predicates, vendorprofilepaymentpreferencehistory.UpdatedByGT(*i.UpdatedByGT))
+	}
+	if i.UpdatedByGTE != nil {
+		predicates = append(predicates, vendorprofilepaymentpreferencehistory.UpdatedByGTE(*i.UpdatedByGTE))
+	}
+	if i.UpdatedByLT != nil {
+		predicates = append(predicates, vendorprofilepaymentpreferencehistory.UpdatedByLT(*i.UpdatedByLT))
+	}
+	if i.UpdatedByLTE != nil {
+		predicates = append(predicates, vendorprofilepaymentpreferencehistory.UpdatedByLTE(*i.UpdatedByLTE))
+	}
+	if i.UpdatedByContains != nil {
+		predicates = append(predicates, vendorprofilepaymentpreferencehistory.UpdatedByContains(*i.UpdatedByContains))
+	}
+	if i.UpdatedByHasPrefix != nil {
+		predicates = append(predicates, vendorprofilepaymentpreferencehistory.UpdatedByHasPrefix(*i.UpdatedByHasPrefix))
+	}
+	if i.UpdatedByHasSuffix != nil {
+		predicates = append(predicates, vendorprofilepaymentpreferencehistory.UpdatedByHasSuffix(*i.UpdatedByHasSuffix))
+	}
+	if i.UpdatedByIsNil {
+		predicates = append(predicates, vendorprofilepaymentpreferencehistory.UpdatedByIsNil())
+	}
+	if i.UpdatedByNotNil {
+		predicates = append(predicates, vendorprofilepaymentpreferencehistory.UpdatedByNotNil())
+	}
+	if i.UpdatedByEqualFold != nil {
+		predicates = append(predicates, vendorprofilepaymentpreferencehistory.UpdatedByEqualFold(*i.UpdatedByEqualFold))
+	}
+	if i.UpdatedByContainsFold != nil {
+		predicates = append(predicates, vendorprofilepaymentpreferencehistory.UpdatedByContainsFold(*i.UpdatedByContainsFold))
+	}
+	if i.DeletedAt != nil {
+		predicates = append(predicates, vendorprofilepaymentpreferencehistory.DeletedAtEQ(*i.DeletedAt))
+	}
+	if i.DeletedAtNEQ != nil {
+		predicates = append(predicates, vendorprofilepaymentpreferencehistory.DeletedAtNEQ(*i.DeletedAtNEQ))
+	}
+	if len(i.DeletedAtIn) > 0 {
+		predicates = append(predicates, vendorprofilepaymentpreferencehistory.DeletedAtIn(i.DeletedAtIn...))
+	}
+	if len(i.DeletedAtNotIn) > 0 {
+		predicates = append(predicates, vendorprofilepaymentpreferencehistory.DeletedAtNotIn(i.DeletedAtNotIn...))
+	}
+	if i.DeletedAtGT != nil {
+		predicates = append(predicates, vendorprofilepaymentpreferencehistory.DeletedAtGT(*i.DeletedAtGT))
+	}
+	if i.DeletedAtGTE != nil {
+		predicates = append(predicates, vendorprofilepaymentpreferencehistory.DeletedAtGTE(*i.DeletedAtGTE))
+	}
+	if i.DeletedAtLT != nil {
+		predicates = append(predicates, vendorprofilepaymentpreferencehistory.DeletedAtLT(*i.DeletedAtLT))
+	}
+	if i.DeletedAtLTE != nil {
+		predicates = append(predicates, vendorprofilepaymentpreferencehistory.DeletedAtLTE(*i.DeletedAtLTE))
+	}
+	if i.DeletedAtIsNil {
+		predicates = append(predicates, vendorprofilepaymentpreferencehistory.DeletedAtIsNil())
+	}
+	if i.DeletedAtNotNil {
+		predicates = append(predicates, vendorprofilepaymentpreferencehistory.DeletedAtNotNil())
+	}
+	if i.DeletedBy != nil {
+		predicates = append(predicates, vendorprofilepaymentpreferencehistory.DeletedByEQ(*i.DeletedBy))
+	}
+	if i.DeletedByNEQ != nil {
+		predicates = append(predicates, vendorprofilepaymentpreferencehistory.DeletedByNEQ(*i.DeletedByNEQ))
+	}
+	if len(i.DeletedByIn) > 0 {
+		predicates = append(predicates, vendorprofilepaymentpreferencehistory.DeletedByIn(i.DeletedByIn...))
+	}
+	if len(i.DeletedByNotIn) > 0 {
+		predicates = append(predicates, vendorprofilepaymentpreferencehistory.DeletedByNotIn(i.DeletedByNotIn...))
+	}
+	if i.DeletedByGT != nil {
+		predicates = append(predicates, vendorprofilepaymentpreferencehistory.DeletedByGT(*i.DeletedByGT))
+	}
+	if i.DeletedByGTE != nil {
+		predicates = append(predicates, vendorprofilepaymentpreferencehistory.DeletedByGTE(*i.DeletedByGTE))
+	}
+	if i.DeletedByLT != nil {
+		predicates = append(predicates, vendorprofilepaymentpreferencehistory.DeletedByLT(*i.DeletedByLT))
+	}
+	if i.DeletedByLTE != nil {
+		predicates = append(predicates, vendorprofilepaymentpreferencehistory.DeletedByLTE(*i.DeletedByLTE))
+	}
+	if i.DeletedByContains != nil {
+		predicates = append(predicates, vendorprofilepaymentpreferencehistory.DeletedByContains(*i.DeletedByContains))
+	}
+	if i.DeletedByHasPrefix != nil {
+		predicates = append(predicates, vendorprofilepaymentpreferencehistory.DeletedByHasPrefix(*i.DeletedByHasPrefix))
+	}
+	if i.DeletedByHasSuffix != nil {
+		predicates = append(predicates, vendorprofilepaymentpreferencehistory.DeletedByHasSuffix(*i.DeletedByHasSuffix))
+	}
+	if i.DeletedByIsNil {
+		predicates = append(predicates, vendorprofilepaymentpreferencehistory.DeletedByIsNil())
+	}
+	if i.DeletedByNotNil {
+		predicates = append(predicates, vendorprofilepaymentpreferencehistory.DeletedByNotNil())
+	}
+	if i.DeletedByEqualFold != nil {
+		predicates = append(predicates, vendorprofilepaymentpreferencehistory.DeletedByEqualFold(*i.DeletedByEqualFold))
+	}
+	if i.DeletedByContainsFold != nil {
+		predicates = append(predicates, vendorprofilepaymentpreferencehistory.DeletedByContainsFold(*i.DeletedByContainsFold))
+	}
+	if i.OwnerID != nil {
+		predicates = append(predicates, vendorprofilepaymentpreferencehistory.OwnerIDEQ(*i.OwnerID))
+	}
+	if i.OwnerIDNEQ != nil {
+		predicates = append(predicates, vendorprofilepaymentpreferencehistory.OwnerIDNEQ(*i.OwnerIDNEQ))
+	}
+	if len(i.OwnerIDIn) > 0 {
+		predicates = append(predicates, vendorprofilepaymentpreferencehistory.OwnerIDIn(i.OwnerIDIn...))
+	}
+	if len(i.OwnerIDNotIn) > 0 {
+		predicates = append(predicates, vendorprofilepaymentpreferencehistory.OwnerIDNotIn(i.OwnerIDNotIn...))
+	}
+	if i.OwnerIDGT != nil {
+		predicates = append(predicates, vendorprofilepaymentpreferencehistory.OwnerIDGT(*i.OwnerIDGT))
+	}
+	if i.OwnerIDGTE != nil {
+		predicates = append(predicates, vendorprofilepaymentpreferencehistory.OwnerIDGTE(*i.OwnerIDGTE))
+	}
+	if i.OwnerIDLT != nil {
+		predicates = append(predicates, vendorprofilepaymentpreferencehistory.OwnerIDLT(*i.OwnerIDLT))
+	}
+	if i.OwnerIDLTE != nil {
+		predicates = append(predicates, vendorprofilepaymentpreferencehistory.OwnerIDLTE(*i.OwnerIDLTE))
+	}
+	if i.OwnerIDContains != nil {
+		predicates = append(predicates, vendorprofilepaymentpreferencehistory.OwnerIDContains(*i.OwnerIDContains))
+	}
+	if i.OwnerIDHasPrefix != nil {
+		predicates = append(predicates, vendorprofilepaymentpreferencehistory.OwnerIDHasPrefix(*i.OwnerIDHasPrefix))
+	}
+	if i.OwnerIDHasSuffix != nil {
+		predicates = append(predicates, vendorprofilepaymentpreferencehistory.OwnerIDHasSuffix(*i.OwnerIDHasSuffix))
+	}
+	if i.OwnerIDIsNil {
+		predicates = append(predicates, vendorprofilepaymentpreferencehistory.OwnerIDIsNil())
+	}
+	if i.OwnerIDNotNil {
+		predicates = append(predicates, vendorprofilepaymentpreferencehistory.OwnerIDNotNil())
+	}
+	if i.OwnerIDEqualFold != nil {
+		predicates = append(predicates, vendorprofilepaymentpreferencehistory.OwnerIDEqualFold(*i.OwnerIDEqualFold))
+	}
+	if i.OwnerIDContainsFold != nil {
+		predicates = append(predicates, vendorprofilepaymentpreferencehistory.OwnerIDContainsFold(*i.OwnerIDContainsFold))
+	}
+	if i.VendorProfileID != nil {
+		predicates = append(predicates, vendorprofilepaymentpreferencehistory.VendorProfileIDEQ(*i.VendorProfileID))
+	}
+	if i.VendorProfileIDNEQ != nil {
+		predicates = append(predicates, vendorprofilepaymentpreferencehistory.VendorProfileIDNEQ(*i.VendorProfileIDNEQ))
+	}
+	if len(i.VendorProfileIDIn) > 0 {
+		predicates = append(predicates, vendorprofilepaymentpreferencehistory.VendorProfileIDIn(i.VendorProfileIDIn...))
+	}
+	if len(i.VendorProfileIDNotIn) > 0 {
+		predicates = append(predicates, vendorprofilepaymentpreferencehistory.VendorProfileIDNotIn(i.VendorProfileIDNotIn...))
+	}
+	if i.VendorProfileIDGT != nil {
+		predicates = append(predicates, vendorprofilepaymentpreferencehistory.VendorProfileIDGT(*i.VendorProfileIDGT))
+	}
+	if i.VendorProfileIDGTE != nil {
+		predicates = append(predicates, vendorprofilepaymentpreferencehistory.VendorProfileIDGTE(*i.VendorProfileIDGTE))
+	}
+	if i.VendorProfileIDLT != nil {
+		predicates = append(predicates, vendorprofilepaymentpreferencehistory.VendorProfileIDLT(*i.VendorProfileIDLT))
+	}
+	if i.VendorProfileIDLTE != nil {
+		predicates = append(predicates, vendorprofilepaymentpreferencehistory.VendorProfileIDLTE(*i.VendorProfileIDLTE))
+	}
+	if i.VendorProfileIDContains != nil {
+		predicates = append(predicates, vendorprofilepaymentpreferencehistory.VendorProfileIDContains(*i.VendorProfileIDContains))
+	}
+	if i.VendorProfileIDHasPrefix != nil {
+		predicates = append(predicates, vendorprofilepaymentpreferencehistory.VendorProfileIDHasPrefix(*i.VendorProfileIDHasPrefix))
+	}
+	if i.VendorProfileIDHasSuffix != nil {
+		predicates = append(predicates, vendorprofilepaymentpreferencehistory.VendorProfileIDHasSuffix(*i.VendorProfileIDHasSuffix))
+	}
+	if i.VendorProfileIDIsNil {
+		predicates = append(predicates, vendorprofilepaymentpreferencehistory.VendorProfileIDIsNil())
+	}
+	if i.VendorProfileIDNotNil {
+		predicates = append(predicates, vendorprofilepaymentpreferencehistory.VendorProfileIDNotNil())
+	}
+	if i.VendorProfileIDEqualFold != nil {
+		predicates = append(predicates, vendorprofilepaymentpreferencehistory.VendorProfileIDEqualFold(*i.VendorProfileIDEqualFold))
+	}
+	if i.VendorProfileIDContainsFold != nil {
+		predicates = append(predicates, vendorprofilepaymentpreferencehistory.VendorProfileIDContainsFold(*i.VendorProfileIDContainsFold))
+	}
+	if i.Preferred != nil {
+		predicates = append(predicates, vendorprofilepaymentpreferencehistory.PreferredEQ(*i.Preferred))
+	}
+	if i.PreferredNEQ != nil {
+		predicates = append(predicates, vendorprofilepaymentpreferencehistory.PreferredNEQ(*i.PreferredNEQ))
+	}
+	if i.Method != nil {
+		predicates = append(predicates, vendorprofilepaymentpreferencehistory.MethodEQ(*i.Method))
+	}
+	if i.MethodNEQ != nil {
+		predicates = append(predicates, vendorprofilepaymentpreferencehistory.MethodNEQ(*i.MethodNEQ))
+	}
+	if len(i.MethodIn) > 0 {
+		predicates = append(predicates, vendorprofilepaymentpreferencehistory.MethodIn(i.MethodIn...))
+	}
+	if len(i.MethodNotIn) > 0 {
+		predicates = append(predicates, vendorprofilepaymentpreferencehistory.MethodNotIn(i.MethodNotIn...))
+	}
+
+	switch len(predicates) {
+	case 0:
+		return nil, ErrEmptyVendorProfilePaymentPreferenceHistoryWhereInput
+	case 1:
+		return predicates[0], nil
+	default:
+		return vendorprofilepaymentpreferencehistory.And(predicates...), nil
 	}
 }
 

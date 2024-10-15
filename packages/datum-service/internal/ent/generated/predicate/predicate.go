@@ -204,6 +204,12 @@ type VendorProfile func(*sql.Selector)
 // VendorProfileHistory is the predicate function for vendorprofilehistory builders.
 type VendorProfileHistory func(*sql.Selector)
 
+// VendorProfilePaymentPreference is the predicate function for vendorprofilepaymentpreference builders.
+type VendorProfilePaymentPreference func(*sql.Selector)
+
+// VendorProfilePaymentPreferenceHistory is the predicate function for vendorprofilepaymentpreferencehistory builders.
+type VendorProfilePaymentPreferenceHistory func(*sql.Selector)
+
 // VendorProfilePhoneNumber is the predicate function for vendorprofilephonenumber builders.
 type VendorProfilePhoneNumber func(*sql.Selector)
 

@@ -866,6 +866,30 @@ type VendorProfileDeletePayload struct {
 	DeletedID string `json:"deletedID"`
 }
 
+// Return response for createBulkVendorProfilePaymentPreference mutation
+type VendorProfilePaymentPreferenceBulkCreatePayload struct {
+	// Created vendorProfilePaymentPreferences
+	VendorProfilePaymentPreferences []*generated.VendorProfilePaymentPreference `json:"vendorProfilePaymentPreferences,omitempty"`
+}
+
+// Return response for createVendorProfilePaymentPreference mutation
+type VendorProfilePaymentPreferenceCreatePayload struct {
+	// Created vendorProfilePaymentPreference
+	VendorProfilePaymentPreference *generated.VendorProfilePaymentPreference `json:"vendorProfilePaymentPreference"`
+}
+
+// Return response for deleteVendorProfilePaymentPreference mutation
+type VendorProfilePaymentPreferenceDeletePayload struct {
+	// Deleted vendorProfilePaymentPreference ID
+	DeletedID string `json:"deletedID"`
+}
+
+// Return response for updateVendorProfilePaymentPreference mutation
+type VendorProfilePaymentPreferenceUpdatePayload struct {
+	// Updated vendorProfilePaymentPreference
+	VendorProfilePaymentPreference *generated.VendorProfilePaymentPreference `json:"vendorProfilePaymentPreference"`
+}
+
 // Return response for createBulkVendorProfilePhoneNumber mutation
 type VendorProfilePhoneNumberBulkCreatePayload struct {
 	// Created vendorProfilePhoneNumbers

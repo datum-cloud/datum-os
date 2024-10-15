@@ -95,6 +95,9 @@ func (c *Client) WithHistory() {
 	for _, hook := range enthistory.HistoryHooks[*VendorProfileMutation]() {
 		c.VendorProfile.Use(hook)
 	}
+	for _, hook := range enthistory.HistoryHooks[*VendorProfilePaymentPreferenceMutation]() {
+		c.VendorProfilePaymentPreference.Use(hook)
+	}
 	for _, hook := range enthistory.HistoryHooks[*VendorProfilePhoneNumberMutation]() {
 		c.VendorProfilePhoneNumber.Use(hook)
 	}

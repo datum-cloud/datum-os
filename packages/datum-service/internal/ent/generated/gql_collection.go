@@ -74,6 +74,8 @@ import (
 	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorhistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofile"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofilehistory"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofilepaymentpreference"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofilepaymentpreferencehistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofilephonenumber"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofilephonenumberhistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofilepostaladdress"
@@ -7576,6 +7578,19 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 				*wq = *query
 			})
 
+		case "vendorProfilePaymentPreferences":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&VendorProfilePaymentPreferenceClient{config: o.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, vendorprofilepaymentpreferenceImplementors)...); err != nil {
+				return err
+			}
+			o.WithNamedVendorProfilePaymentPreferences(alias, func(wq *VendorProfilePaymentPreferenceQuery) {
+				*wq = *query
+			})
+
 		case "members":
 			var (
 				alias = field.Alias
@@ -10908,6 +10923,19 @@ func (vp *VendorProfileQuery) collectField(ctx context.Context, oneNode bool, op
 				*wq = *query
 			})
 
+		case "paymentPreferences":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&VendorProfilePaymentPreferenceClient{config: vp.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, vendorprofilepaymentpreferenceImplementors)...); err != nil {
+				return err
+			}
+			vp.WithNamedPaymentPreferences(alias, func(wq *VendorProfilePaymentPreferenceQuery) {
+				*wq = *query
+			})
+
 		case "vendor":
 			var (
 				alias = field.Alias
@@ -11256,6 +11284,285 @@ func newVendorProfileHistoryPaginateArgs(rv map[string]any) *vendorprofilehistor
 	}
 	if v, ok := rv[whereField].(*VendorProfileHistoryWhereInput); ok {
 		args.opts = append(args.opts, WithVendorProfileHistoryFilter(v.Filter))
+	}
+	return args
+}
+
+// CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
+func (vppp *VendorProfilePaymentPreferenceQuery) CollectFields(ctx context.Context, satisfies ...string) (*VendorProfilePaymentPreferenceQuery, error) {
+	fc := graphql.GetFieldContext(ctx)
+	if fc == nil {
+		return vppp, nil
+	}
+	if err := vppp.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+		return nil, err
+	}
+	return vppp, nil
+}
+
+func (vppp *VendorProfilePaymentPreferenceQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+	path = append([]string(nil), path...)
+	var (
+		unknownSeen    bool
+		fieldSeen      = make(map[string]struct{}, len(vendorprofilepaymentpreference.Columns))
+		selectedFields = []string{vendorprofilepaymentpreference.FieldID}
+	)
+	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
+		switch field.Name {
+
+		case "owner":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&OrganizationClient{config: vppp.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, organizationImplementors)...); err != nil {
+				return err
+			}
+			vppp.withOwner = query
+			if _, ok := fieldSeen[vendorprofilepaymentpreference.FieldOwnerID]; !ok {
+				selectedFields = append(selectedFields, vendorprofilepaymentpreference.FieldOwnerID)
+				fieldSeen[vendorprofilepaymentpreference.FieldOwnerID] = struct{}{}
+			}
+
+		case "vendorProfile":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&VendorProfileClient{config: vppp.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, vendorprofileImplementors)...); err != nil {
+				return err
+			}
+			vppp.withVendorProfile = query
+			if _, ok := fieldSeen[vendorprofilepaymentpreference.FieldVendorProfileID]; !ok {
+				selectedFields = append(selectedFields, vendorprofilepaymentpreference.FieldVendorProfileID)
+				fieldSeen[vendorprofilepaymentpreference.FieldVendorProfileID] = struct{}{}
+			}
+		case "createdAt":
+			if _, ok := fieldSeen[vendorprofilepaymentpreference.FieldCreatedAt]; !ok {
+				selectedFields = append(selectedFields, vendorprofilepaymentpreference.FieldCreatedAt)
+				fieldSeen[vendorprofilepaymentpreference.FieldCreatedAt] = struct{}{}
+			}
+		case "updatedAt":
+			if _, ok := fieldSeen[vendorprofilepaymentpreference.FieldUpdatedAt]; !ok {
+				selectedFields = append(selectedFields, vendorprofilepaymentpreference.FieldUpdatedAt)
+				fieldSeen[vendorprofilepaymentpreference.FieldUpdatedAt] = struct{}{}
+			}
+		case "createdBy":
+			if _, ok := fieldSeen[vendorprofilepaymentpreference.FieldCreatedBy]; !ok {
+				selectedFields = append(selectedFields, vendorprofilepaymentpreference.FieldCreatedBy)
+				fieldSeen[vendorprofilepaymentpreference.FieldCreatedBy] = struct{}{}
+			}
+		case "updatedBy":
+			if _, ok := fieldSeen[vendorprofilepaymentpreference.FieldUpdatedBy]; !ok {
+				selectedFields = append(selectedFields, vendorprofilepaymentpreference.FieldUpdatedBy)
+				fieldSeen[vendorprofilepaymentpreference.FieldUpdatedBy] = struct{}{}
+			}
+		case "deletedAt":
+			if _, ok := fieldSeen[vendorprofilepaymentpreference.FieldDeletedAt]; !ok {
+				selectedFields = append(selectedFields, vendorprofilepaymentpreference.FieldDeletedAt)
+				fieldSeen[vendorprofilepaymentpreference.FieldDeletedAt] = struct{}{}
+			}
+		case "deletedBy":
+			if _, ok := fieldSeen[vendorprofilepaymentpreference.FieldDeletedBy]; !ok {
+				selectedFields = append(selectedFields, vendorprofilepaymentpreference.FieldDeletedBy)
+				fieldSeen[vendorprofilepaymentpreference.FieldDeletedBy] = struct{}{}
+			}
+		case "tags":
+			if _, ok := fieldSeen[vendorprofilepaymentpreference.FieldTags]; !ok {
+				selectedFields = append(selectedFields, vendorprofilepaymentpreference.FieldTags)
+				fieldSeen[vendorprofilepaymentpreference.FieldTags] = struct{}{}
+			}
+		case "ownerID":
+			if _, ok := fieldSeen[vendorprofilepaymentpreference.FieldOwnerID]; !ok {
+				selectedFields = append(selectedFields, vendorprofilepaymentpreference.FieldOwnerID)
+				fieldSeen[vendorprofilepaymentpreference.FieldOwnerID] = struct{}{}
+			}
+		case "vendorProfileID":
+			if _, ok := fieldSeen[vendorprofilepaymentpreference.FieldVendorProfileID]; !ok {
+				selectedFields = append(selectedFields, vendorprofilepaymentpreference.FieldVendorProfileID)
+				fieldSeen[vendorprofilepaymentpreference.FieldVendorProfileID] = struct{}{}
+			}
+		case "preferred":
+			if _, ok := fieldSeen[vendorprofilepaymentpreference.FieldPreferred]; !ok {
+				selectedFields = append(selectedFields, vendorprofilepaymentpreference.FieldPreferred)
+				fieldSeen[vendorprofilepaymentpreference.FieldPreferred] = struct{}{}
+			}
+		case "method":
+			if _, ok := fieldSeen[vendorprofilepaymentpreference.FieldMethod]; !ok {
+				selectedFields = append(selectedFields, vendorprofilepaymentpreference.FieldMethod)
+				fieldSeen[vendorprofilepaymentpreference.FieldMethod] = struct{}{}
+			}
+		case "id":
+		case "__typename":
+		default:
+			unknownSeen = true
+		}
+	}
+	if !unknownSeen {
+		vppp.Select(selectedFields...)
+	}
+	return nil
+}
+
+type vendorprofilepaymentpreferencePaginateArgs struct {
+	first, last   *int
+	after, before *Cursor
+	opts          []VendorProfilePaymentPreferencePaginateOption
+}
+
+func newVendorProfilePaymentPreferencePaginateArgs(rv map[string]any) *vendorprofilepaymentpreferencePaginateArgs {
+	args := &vendorprofilepaymentpreferencePaginateArgs{}
+	if rv == nil {
+		return args
+	}
+	if v := rv[firstField]; v != nil {
+		args.first = v.(*int)
+	}
+	if v := rv[lastField]; v != nil {
+		args.last = v.(*int)
+	}
+	if v := rv[afterField]; v != nil {
+		args.after = v.(*Cursor)
+	}
+	if v := rv[beforeField]; v != nil {
+		args.before = v.(*Cursor)
+	}
+	if v, ok := rv[whereField].(*VendorProfilePaymentPreferenceWhereInput); ok {
+		args.opts = append(args.opts, WithVendorProfilePaymentPreferenceFilter(v.Filter))
+	}
+	return args
+}
+
+// CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
+func (vppph *VendorProfilePaymentPreferenceHistoryQuery) CollectFields(ctx context.Context, satisfies ...string) (*VendorProfilePaymentPreferenceHistoryQuery, error) {
+	fc := graphql.GetFieldContext(ctx)
+	if fc == nil {
+		return vppph, nil
+	}
+	if err := vppph.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+		return nil, err
+	}
+	return vppph, nil
+}
+
+func (vppph *VendorProfilePaymentPreferenceHistoryQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+	path = append([]string(nil), path...)
+	var (
+		unknownSeen    bool
+		fieldSeen      = make(map[string]struct{}, len(vendorprofilepaymentpreferencehistory.Columns))
+		selectedFields = []string{vendorprofilepaymentpreferencehistory.FieldID}
+	)
+	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
+		switch field.Name {
+		case "historyTime":
+			if _, ok := fieldSeen[vendorprofilepaymentpreferencehistory.FieldHistoryTime]; !ok {
+				selectedFields = append(selectedFields, vendorprofilepaymentpreferencehistory.FieldHistoryTime)
+				fieldSeen[vendorprofilepaymentpreferencehistory.FieldHistoryTime] = struct{}{}
+			}
+		case "ref":
+			if _, ok := fieldSeen[vendorprofilepaymentpreferencehistory.FieldRef]; !ok {
+				selectedFields = append(selectedFields, vendorprofilepaymentpreferencehistory.FieldRef)
+				fieldSeen[vendorprofilepaymentpreferencehistory.FieldRef] = struct{}{}
+			}
+		case "operation":
+			if _, ok := fieldSeen[vendorprofilepaymentpreferencehistory.FieldOperation]; !ok {
+				selectedFields = append(selectedFields, vendorprofilepaymentpreferencehistory.FieldOperation)
+				fieldSeen[vendorprofilepaymentpreferencehistory.FieldOperation] = struct{}{}
+			}
+		case "createdAt":
+			if _, ok := fieldSeen[vendorprofilepaymentpreferencehistory.FieldCreatedAt]; !ok {
+				selectedFields = append(selectedFields, vendorprofilepaymentpreferencehistory.FieldCreatedAt)
+				fieldSeen[vendorprofilepaymentpreferencehistory.FieldCreatedAt] = struct{}{}
+			}
+		case "updatedAt":
+			if _, ok := fieldSeen[vendorprofilepaymentpreferencehistory.FieldUpdatedAt]; !ok {
+				selectedFields = append(selectedFields, vendorprofilepaymentpreferencehistory.FieldUpdatedAt)
+				fieldSeen[vendorprofilepaymentpreferencehistory.FieldUpdatedAt] = struct{}{}
+			}
+		case "createdBy":
+			if _, ok := fieldSeen[vendorprofilepaymentpreferencehistory.FieldCreatedBy]; !ok {
+				selectedFields = append(selectedFields, vendorprofilepaymentpreferencehistory.FieldCreatedBy)
+				fieldSeen[vendorprofilepaymentpreferencehistory.FieldCreatedBy] = struct{}{}
+			}
+		case "updatedBy":
+			if _, ok := fieldSeen[vendorprofilepaymentpreferencehistory.FieldUpdatedBy]; !ok {
+				selectedFields = append(selectedFields, vendorprofilepaymentpreferencehistory.FieldUpdatedBy)
+				fieldSeen[vendorprofilepaymentpreferencehistory.FieldUpdatedBy] = struct{}{}
+			}
+		case "deletedAt":
+			if _, ok := fieldSeen[vendorprofilepaymentpreferencehistory.FieldDeletedAt]; !ok {
+				selectedFields = append(selectedFields, vendorprofilepaymentpreferencehistory.FieldDeletedAt)
+				fieldSeen[vendorprofilepaymentpreferencehistory.FieldDeletedAt] = struct{}{}
+			}
+		case "deletedBy":
+			if _, ok := fieldSeen[vendorprofilepaymentpreferencehistory.FieldDeletedBy]; !ok {
+				selectedFields = append(selectedFields, vendorprofilepaymentpreferencehistory.FieldDeletedBy)
+				fieldSeen[vendorprofilepaymentpreferencehistory.FieldDeletedBy] = struct{}{}
+			}
+		case "tags":
+			if _, ok := fieldSeen[vendorprofilepaymentpreferencehistory.FieldTags]; !ok {
+				selectedFields = append(selectedFields, vendorprofilepaymentpreferencehistory.FieldTags)
+				fieldSeen[vendorprofilepaymentpreferencehistory.FieldTags] = struct{}{}
+			}
+		case "ownerID":
+			if _, ok := fieldSeen[vendorprofilepaymentpreferencehistory.FieldOwnerID]; !ok {
+				selectedFields = append(selectedFields, vendorprofilepaymentpreferencehistory.FieldOwnerID)
+				fieldSeen[vendorprofilepaymentpreferencehistory.FieldOwnerID] = struct{}{}
+			}
+		case "vendorProfileID":
+			if _, ok := fieldSeen[vendorprofilepaymentpreferencehistory.FieldVendorProfileID]; !ok {
+				selectedFields = append(selectedFields, vendorprofilepaymentpreferencehistory.FieldVendorProfileID)
+				fieldSeen[vendorprofilepaymentpreferencehistory.FieldVendorProfileID] = struct{}{}
+			}
+		case "preferred":
+			if _, ok := fieldSeen[vendorprofilepaymentpreferencehistory.FieldPreferred]; !ok {
+				selectedFields = append(selectedFields, vendorprofilepaymentpreferencehistory.FieldPreferred)
+				fieldSeen[vendorprofilepaymentpreferencehistory.FieldPreferred] = struct{}{}
+			}
+		case "method":
+			if _, ok := fieldSeen[vendorprofilepaymentpreferencehistory.FieldMethod]; !ok {
+				selectedFields = append(selectedFields, vendorprofilepaymentpreferencehistory.FieldMethod)
+				fieldSeen[vendorprofilepaymentpreferencehistory.FieldMethod] = struct{}{}
+			}
+		case "id":
+		case "__typename":
+		default:
+			unknownSeen = true
+		}
+	}
+	if !unknownSeen {
+		vppph.Select(selectedFields...)
+	}
+	return nil
+}
+
+type vendorprofilepaymentpreferencehistoryPaginateArgs struct {
+	first, last   *int
+	after, before *Cursor
+	opts          []VendorProfilePaymentPreferenceHistoryPaginateOption
+}
+
+func newVendorProfilePaymentPreferenceHistoryPaginateArgs(rv map[string]any) *vendorprofilepaymentpreferencehistoryPaginateArgs {
+	args := &vendorprofilepaymentpreferencehistoryPaginateArgs{}
+	if rv == nil {
+		return args
+	}
+	if v := rv[firstField]; v != nil {
+		args.first = v.(*int)
+	}
+	if v := rv[lastField]; v != nil {
+		args.last = v.(*int)
+	}
+	if v := rv[afterField]; v != nil {
+		args.after = v.(*Cursor)
+	}
+	if v := rv[beforeField]; v != nil {
+		args.before = v.(*Cursor)
+	}
+	if v, ok := rv[whereField].(*VendorProfilePaymentPreferenceHistoryWhereInput); ok {
+		args.opts = append(args.opts, WithVendorProfilePaymentPreferenceHistoryFilter(v.Filter))
 	}
 	return args
 }
