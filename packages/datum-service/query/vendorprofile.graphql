@@ -2,14 +2,16 @@
 mutation CreateBulkCSVVendorProfile($input: Upload!) {
   createBulkCSVVendorProfile(input: $input) {
     vendorProfiles {
+      corporationDba
+      corporationType
       createdAt
       createdBy
-      dbaName
       description
       id
       name
       ownerID
       tags
+      taxIDType
       updatedAt
       updatedBy
       vendorID
@@ -21,14 +23,16 @@ mutation CreateBulkCSVVendorProfile($input: Upload!) {
 mutation CreateBulkVendorProfile($input: [CreateVendorProfileInput!]) {
   createBulkVendorProfile(input: $input) {
     vendorProfiles {
+      corporationDba
+      corporationType
       createdAt
       createdBy
-      dbaName
       description
       id
       name
       ownerID
       tags
+      taxIDType
       updatedAt
       updatedBy
       vendorID
@@ -40,14 +44,16 @@ mutation CreateBulkVendorProfile($input: [CreateVendorProfileInput!]) {
 mutation CreateVendorProfile($input: CreateVendorProfileInput!) {
   createVendorProfile(input: $input) {
     vendorProfile {
+      corporationDba
+      corporationType
       createdAt
       createdBy
-      dbaName
       description
       id
       name
       ownerID
       tags
+      taxIDType
       updatedAt
       updatedBy
       vendorID
@@ -60,14 +66,16 @@ query GetAllVendorProfiles {
   vendorProfiles {
     edges {
       node {
+        corporationDba
+        corporationType
         createdAt
         createdBy
-        dbaName
         description
         id
         name
         ownerID
         tags
+        taxIDType
         updatedAt
         updatedBy
         vendorID
@@ -78,14 +86,16 @@ query GetAllVendorProfiles {
 }
 query GetVendorProfileByID($vendorProfileId: ID!) {
   vendorProfile(id: $vendorProfileId) {
+    corporationDba
+    corporationType
     createdAt
     createdBy
-    dbaName
     description
     id
     name
     ownerID
     tags
+    taxIDType
     updatedAt
     updatedBy
     vendorID
@@ -97,14 +107,16 @@ query GetVendorProfiles($where: VendorProfileWhereInput) {
   vendorProfiles(where: $where) {
     edges {
       node {
+        corporationDba
+        corporationType
         createdAt
         createdBy
-        dbaName
         description
         id
         name
         ownerID
         tags
+        taxIDType
         updatedAt
         updatedBy
         vendorID
@@ -116,14 +128,16 @@ query GetVendorProfiles($where: VendorProfileWhereInput) {
 mutation UpdateVendorProfile($updateVendorProfileId: ID!, $input: UpdateVendorProfileInput!) {
   updateVendorProfile(id: $updateVendorProfileId, input: $input) {
     vendorProfile {
+      corporationDba
+      corporationType
       createdAt
       createdBy
-      dbaName
       description
       id
       name
       ownerID
       tags
+      taxIDType
       updatedAt
       updatedBy
       vendorID

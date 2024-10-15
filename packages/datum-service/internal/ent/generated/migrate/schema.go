@@ -797,8 +797,10 @@ var (
 		{Name: "metadata", Type: field.TypeJSON, Nullable: true},
 		{Name: "contact_list_events", Type: field.TypeString, Nullable: true},
 		{Name: "contact_list_membership_events", Type: field.TypeString, Nullable: true},
+		{Name: "phone_number_events", Type: field.TypeString, Nullable: true},
 		{Name: "postal_address_events", Type: field.TypeString, Nullable: true},
 		{Name: "vendor_events", Type: field.TypeString, Nullable: true},
+		{Name: "vendor_profile_phone_number_events", Type: field.TypeString, Nullable: true},
 		{Name: "vendor_profile_postal_address_events", Type: field.TypeString, Nullable: true},
 	}
 	// EventsTable holds the schema information for the "events" table.
@@ -820,20 +822,32 @@ var (
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "events_postal_addresses_events",
+				Symbol:     "events_phone_numbers_events",
 				Columns:    []*schema.Column{EventsColumns[13]},
+				RefColumns: []*schema.Column{PhoneNumbersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "events_postal_addresses_events",
+				Columns:    []*schema.Column{EventsColumns[14]},
 				RefColumns: []*schema.Column{PostalAddressesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "events_vendors_events",
-				Columns:    []*schema.Column{EventsColumns[14]},
+				Columns:    []*schema.Column{EventsColumns[15]},
 				RefColumns: []*schema.Column{VendorsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
+				Symbol:     "events_vendor_profile_phone_numbers_events",
+				Columns:    []*schema.Column{EventsColumns[16]},
+				RefColumns: []*schema.Column{VendorProfilePhoneNumbersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
 				Symbol:     "events_vendor_profile_postal_addresses_events",
-				Columns:    []*schema.Column{EventsColumns[15]},
+				Columns:    []*schema.Column{EventsColumns[17]},
 				RefColumns: []*schema.Column{VendorProfilePostalAddressesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -1867,6 +1881,79 @@ var (
 			},
 		},
 	}
+	// PhoneNumbersColumns holds the columns for the "phone_numbers" table.
+	PhoneNumbersColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "mapping_id", Type: field.TypeString, Unique: true},
+		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+		{Name: "kind", Type: field.TypeString, Default: "UNSPECIFIED"},
+		{Name: "region_code", Type: field.TypeString, Nullable: true, Size: 3},
+		{Name: "short_code", Type: field.TypeString, Nullable: true},
+		{Name: "number", Type: field.TypeString, Nullable: true},
+		{Name: "extension", Type: field.TypeString, Nullable: true},
+		{Name: "owner_id", Type: field.TypeString, Nullable: true},
+	}
+	// PhoneNumbersTable holds the schema information for the "phone_numbers" table.
+	PhoneNumbersTable = &schema.Table{
+		Name:       "phone_numbers",
+		Columns:    PhoneNumbersColumns,
+		PrimaryKey: []*schema.Column{PhoneNumbersColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "phone_numbers_organizations_phone_numbers",
+				Columns:    []*schema.Column{PhoneNumbersColumns[14]},
+				RefColumns: []*schema.Column{OrganizationsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
+		Indexes: []*schema.Index{
+			{
+				Name:    "phonenumber_number",
+				Unique:  true,
+				Columns: []*schema.Column{PhoneNumbersColumns[12]},
+			},
+		},
+	}
+	// PhoneNumberHistoryColumns holds the columns for the "phone_number_history" table.
+	PhoneNumberHistoryColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "history_time", Type: field.TypeTime},
+		{Name: "ref", Type: field.TypeString, Nullable: true},
+		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "mapping_id", Type: field.TypeString},
+		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+		{Name: "owner_id", Type: field.TypeString, Nullable: true},
+		{Name: "kind", Type: field.TypeString, Default: "UNSPECIFIED"},
+		{Name: "region_code", Type: field.TypeString, Nullable: true, Size: 3},
+		{Name: "short_code", Type: field.TypeString, Nullable: true},
+		{Name: "number", Type: field.TypeString, Nullable: true},
+		{Name: "extension", Type: field.TypeString, Nullable: true},
+	}
+	// PhoneNumberHistoryTable holds the schema information for the "phone_number_history" table.
+	PhoneNumberHistoryTable = &schema.Table{
+		Name:       "phone_number_history",
+		Columns:    PhoneNumberHistoryColumns,
+		PrimaryKey: []*schema.Column{PhoneNumberHistoryColumns[0]},
+		Indexes: []*schema.Index{
+			{
+				Name:    "phonenumberhistory_history_time",
+				Unique:  false,
+				Columns: []*schema.Column{PhoneNumberHistoryColumns[1]},
+			},
+		},
+	}
 	// PostalAddressesColumns holds the columns for the "postal_addresses" table.
 	PostalAddressesColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeString},
@@ -2372,9 +2459,12 @@ var (
 		{Name: "mapping_id", Type: field.TypeString, Unique: true},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "name", Type: field.TypeString, Size: 255},
-		{Name: "dba_name", Type: field.TypeString, Nullable: true, Size: 255},
+		{Name: "corporation_type", Type: field.TypeString, Nullable: true, Size: 64},
+		{Name: "corporation_dba", Type: field.TypeString, Nullable: true, Size: 64},
 		{Name: "description", Type: field.TypeString, Nullable: true},
 		{Name: "website_uri", Type: field.TypeString, Nullable: true, Size: 2048},
+		{Name: "tax_id", Type: field.TypeString, Nullable: true, Size: 32},
+		{Name: "tax_id_type", Type: field.TypeEnum, Enums: []string{"UNSPECIFIED", "SSN", "EIN", "ATIN", "ITIN"}, Default: "UNSPECIFIED"},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "vendor_id", Type: field.TypeString, Unique: true, Nullable: true},
 	}
@@ -2386,13 +2476,13 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "vendor_profiles_organizations_vendor_profiles",
-				Columns:    []*schema.Column{VendorProfilesColumns[13]},
+				Columns:    []*schema.Column{VendorProfilesColumns[16]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "vendor_profiles_vendors_profile",
-				Columns:    []*schema.Column{VendorProfilesColumns[14]},
+				Columns:    []*schema.Column{VendorProfilesColumns[17]},
 				RefColumns: []*schema.Column{VendorsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -2401,7 +2491,7 @@ var (
 			{
 				Name:    "vendorprofile_vendor_id",
 				Unique:  true,
-				Columns: []*schema.Column{VendorProfilesColumns[14]},
+				Columns: []*schema.Column{VendorProfilesColumns[17]},
 			},
 		},
 	}
@@ -2422,9 +2512,12 @@ var (
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "vendor_id", Type: field.TypeString, Nullable: true},
 		{Name: "name", Type: field.TypeString, Size: 255},
-		{Name: "dba_name", Type: field.TypeString, Nullable: true, Size: 255},
+		{Name: "corporation_type", Type: field.TypeString, Nullable: true, Size: 64},
+		{Name: "corporation_dba", Type: field.TypeString, Nullable: true, Size: 64},
 		{Name: "description", Type: field.TypeString, Nullable: true},
 		{Name: "website_uri", Type: field.TypeString, Nullable: true, Size: 2048},
+		{Name: "tax_id", Type: field.TypeString, Nullable: true, Size: 32},
+		{Name: "tax_id_type", Type: field.TypeEnum, Enums: []string{"UNSPECIFIED", "SSN", "EIN", "ATIN", "ITIN"}, Default: "UNSPECIFIED"},
 	}
 	// VendorProfileHistoryTable holds the schema information for the "vendor_profile_history" table.
 	VendorProfileHistoryTable = &schema.Table{
@@ -2436,6 +2529,75 @@ var (
 				Name:    "vendorprofilehistory_history_time",
 				Unique:  false,
 				Columns: []*schema.Column{VendorProfileHistoryColumns[1]},
+			},
+		},
+	}
+	// VendorProfilePhoneNumbersColumns holds the columns for the "vendor_profile_phone_numbers" table.
+	VendorProfilePhoneNumbersColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "mapping_id", Type: field.TypeString, Unique: true},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "phone_number_id", Type: field.TypeString},
+		{Name: "vendor_profile_id", Type: field.TypeString},
+	}
+	// VendorProfilePhoneNumbersTable holds the schema information for the "vendor_profile_phone_numbers" table.
+	VendorProfilePhoneNumbersTable = &schema.Table{
+		Name:       "vendor_profile_phone_numbers",
+		Columns:    VendorProfilePhoneNumbersColumns,
+		PrimaryKey: []*schema.Column{VendorProfilePhoneNumbersColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "vendor_profile_phone_numbers_phone_numbers_phone_number",
+				Columns:    []*schema.Column{VendorProfilePhoneNumbersColumns[8]},
+				RefColumns: []*schema.Column{PhoneNumbersColumns[0]},
+				OnDelete:   schema.NoAction,
+			},
+			{
+				Symbol:     "vendor_profile_phone_numbers_vendor_profiles_profile",
+				Columns:    []*schema.Column{VendorProfilePhoneNumbersColumns[9]},
+				RefColumns: []*schema.Column{VendorProfilesColumns[0]},
+				OnDelete:   schema.NoAction,
+			},
+		},
+		Indexes: []*schema.Index{
+			{
+				Name:    "vendorprofilephonenumber_vendor_profile_id_phone_number_id",
+				Unique:  true,
+				Columns: []*schema.Column{VendorProfilePhoneNumbersColumns[9], VendorProfilePhoneNumbersColumns[8]},
+			},
+		},
+	}
+	// VendorProfilePhoneNumberHistoryColumns holds the columns for the "vendor_profile_phone_number_history" table.
+	VendorProfilePhoneNumberHistoryColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "history_time", Type: field.TypeTime},
+		{Name: "ref", Type: field.TypeString, Nullable: true},
+		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "mapping_id", Type: field.TypeString},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "vendor_profile_id", Type: field.TypeString},
+		{Name: "phone_number_id", Type: field.TypeString},
+	}
+	// VendorProfilePhoneNumberHistoryTable holds the schema information for the "vendor_profile_phone_number_history" table.
+	VendorProfilePhoneNumberHistoryTable = &schema.Table{
+		Name:       "vendor_profile_phone_number_history",
+		Columns:    VendorProfilePhoneNumberHistoryColumns,
+		PrimaryKey: []*schema.Column{VendorProfilePhoneNumberHistoryColumns[0]},
+		Indexes: []*schema.Index{
+			{
+				Name:    "vendorprofilephonenumberhistory_history_time",
+				Unique:  false,
+				Columns: []*schema.Column{VendorProfilePhoneNumberHistoryColumns[1]},
 			},
 		},
 	}
@@ -3333,6 +3495,8 @@ var (
 		OrganizationSettingHistoryTable,
 		PasswordResetTokensTable,
 		PersonalAccessTokensTable,
+		PhoneNumbersTable,
+		PhoneNumberHistoryTable,
 		PostalAddressesTable,
 		PostalAddressHistoryTable,
 		SubscribersTable,
@@ -3347,6 +3511,8 @@ var (
 		VendorHistoryTable,
 		VendorProfilesTable,
 		VendorProfileHistoryTable,
+		VendorProfilePhoneNumbersTable,
+		VendorProfilePhoneNumberHistoryTable,
 		VendorProfilePostalAddressesTable,
 		VendorProfilePostalAddressHistoryTable,
 		WebauthnsTable,
@@ -3430,9 +3596,11 @@ func init() {
 	}
 	EventsTable.ForeignKeys[0].RefTable = ContactListsTable
 	EventsTable.ForeignKeys[1].RefTable = ContactListMembershipsTable
-	EventsTable.ForeignKeys[2].RefTable = PostalAddressesTable
-	EventsTable.ForeignKeys[3].RefTable = VendorsTable
-	EventsTable.ForeignKeys[4].RefTable = VendorProfilePostalAddressesTable
+	EventsTable.ForeignKeys[2].RefTable = PhoneNumbersTable
+	EventsTable.ForeignKeys[3].RefTable = PostalAddressesTable
+	EventsTable.ForeignKeys[4].RefTable = VendorsTable
+	EventsTable.ForeignKeys[5].RefTable = VendorProfilePhoneNumbersTable
+	EventsTable.ForeignKeys[6].RefTable = VendorProfilePostalAddressesTable
 	EventHistoryTable.Annotation = &entsql.Annotation{
 		Table: "event_history",
 	}
@@ -3491,6 +3659,10 @@ func init() {
 	}
 	PasswordResetTokensTable.ForeignKeys[0].RefTable = UsersTable
 	PersonalAccessTokensTable.ForeignKeys[0].RefTable = UsersTable
+	PhoneNumbersTable.ForeignKeys[0].RefTable = OrganizationsTable
+	PhoneNumberHistoryTable.Annotation = &entsql.Annotation{
+		Table: "phone_number_history",
+	}
 	PostalAddressesTable.ForeignKeys[0].RefTable = EntitiesTable
 	PostalAddressesTable.ForeignKeys[1].RefTable = OrganizationsTable
 	PostalAddressHistoryTable.Annotation = &entsql.Annotation{
@@ -3518,6 +3690,11 @@ func init() {
 	VendorProfilesTable.ForeignKeys[1].RefTable = VendorsTable
 	VendorProfileHistoryTable.Annotation = &entsql.Annotation{
 		Table: "vendor_profile_history",
+	}
+	VendorProfilePhoneNumbersTable.ForeignKeys[0].RefTable = PhoneNumbersTable
+	VendorProfilePhoneNumbersTable.ForeignKeys[1].RefTable = VendorProfilesTable
+	VendorProfilePhoneNumberHistoryTable.Annotation = &entsql.Annotation{
+		Table: "vendor_profile_phone_number_history",
 	}
 	VendorProfilePostalAddressesTable.ForeignKeys[0].RefTable = PostalAddressesTable
 	VendorProfilePostalAddressesTable.ForeignKeys[1].RefTable = VendorProfilesTable

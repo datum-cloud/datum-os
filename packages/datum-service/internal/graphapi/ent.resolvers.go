@@ -6,10 +6,21 @@ package graphapi
 
 import (
 	"context"
+	"fmt"
 
 	"entgo.io/contrib/entgql"
 	"github.com/datum-cloud/datum-os/internal/ent/generated"
 )
+
+// Kind is the resolver for the kind field.
+func (r *phoneNumberResolver) Kind(ctx context.Context, obj *generated.PhoneNumber) (string, error) {
+	panic(fmt.Errorf("not implemented: Kind - kind"))
+}
+
+// Kind is the resolver for the kind field.
+func (r *phoneNumberHistoryResolver) Kind(ctx context.Context, obj *generated.PhoneNumberHistory) (string, error) {
+	panic(fmt.Errorf("not implemented: Kind - kind"))
+}
 
 // Node is the resolver for the node field.
 func (r *queryResolver) Node(ctx context.Context, id string) (generated.Noder, error) {
@@ -375,6 +386,28 @@ func (r *queryResolver) PersonalAccessTokens(ctx context.Context, after *entgql.
 	return withTransactionalMutation(ctx).PersonalAccessToken.Query().Paginate(ctx, after, first, before, last, generated.WithPersonalAccessTokenFilter(where.Filter))
 }
 
+// PhoneNumbers is the resolver for the phoneNumbers field.
+func (r *queryResolver) PhoneNumbers(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.PhoneNumberWhereInput) (*generated.PhoneNumberConnection, error) {
+	return withTransactionalMutation(ctx).PhoneNumber.Query().Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithPhoneNumberFilter(where.Filter))
+}
+
+// PhoneNumberHistories is the resolver for the phoneNumberHistories field.
+func (r *queryResolver) PhoneNumberHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.PhoneNumberHistoryWhereInput) (*generated.PhoneNumberHistoryConnection, error) {
+	return withTransactionalMutation(ctx).PhoneNumberHistory.Query().Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithPhoneNumberHistoryFilter(where.Filter))
+}
+
 // PostalAddresses is the resolver for the postalAddresses field.
 func (r *queryResolver) PostalAddresses(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.PostalAddressOrder, where *generated.PostalAddressWhereInput) (*generated.PostalAddressConnection, error) {
 	return withTransactionalMutation(ctx).PostalAddress.Query().Paginate(
@@ -487,6 +520,28 @@ func (r *queryResolver) VendorProfileHistories(ctx context.Context, after *entgq
 		generated.WithVendorProfileHistoryFilter(where.Filter))
 }
 
+// VendorProfilePhoneNumbers is the resolver for the vendorProfilePhoneNumbers field.
+func (r *queryResolver) VendorProfilePhoneNumbers(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.VendorProfilePhoneNumberWhereInput) (*generated.VendorProfilePhoneNumberConnection, error) {
+	return withTransactionalMutation(ctx).VendorProfilePhoneNumber.Query().Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithVendorProfilePhoneNumberFilter(where.Filter))
+}
+
+// VendorProfilePhoneNumberHistories is the resolver for the vendorProfilePhoneNumberHistories field.
+func (r *queryResolver) VendorProfilePhoneNumberHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.VendorProfilePhoneNumberHistoryWhereInput) (*generated.VendorProfilePhoneNumberHistoryConnection, error) {
+	return withTransactionalMutation(ctx).VendorProfilePhoneNumberHistory.Query().Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithVendorProfilePhoneNumberHistoryFilter(where.Filter))
+}
+
 // VendorProfilePostalAddresses is the resolver for the vendorProfilePostalAddresses field.
 func (r *queryResolver) VendorProfilePostalAddresses(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.VendorProfilePostalAddressWhereInput) (*generated.VendorProfilePostalAddressConnection, error) {
 	return withTransactionalMutation(ctx).VendorProfilePostalAddress.Query().Paginate(
@@ -519,6 +574,154 @@ func (r *queryResolver) WebhookHistories(ctx context.Context, after *entgql.Curs
 	return withTransactionalMutation(ctx).WebhookHistory.Query().Paginate(ctx, after, first, before, last, generated.WithWebhookHistoryOrder(orderBy), generated.WithWebhookHistoryFilter(where.Filter))
 }
 
+// Kind is the resolver for the kind field.
+func (r *createPhoneNumberInputResolver) Kind(ctx context.Context, obj *generated.CreatePhoneNumberInput, data *string) error {
+	panic(fmt.Errorf("not implemented: Kind - kind"))
+}
+
+// Kind is the resolver for the kind field.
+func (r *phoneNumberHistoryWhereInputResolver) Kind(ctx context.Context, obj *generated.PhoneNumberHistoryWhereInput, data *string) error {
+	panic(fmt.Errorf("not implemented: Kind - kind"))
+}
+
+// KindNeq is the resolver for the kindNEQ field.
+func (r *phoneNumberHistoryWhereInputResolver) KindNeq(ctx context.Context, obj *generated.PhoneNumberHistoryWhereInput, data *string) error {
+	panic(fmt.Errorf("not implemented: KindNeq - kindNEQ"))
+}
+
+// KindIn is the resolver for the kindIn field.
+func (r *phoneNumberHistoryWhereInputResolver) KindIn(ctx context.Context, obj *generated.PhoneNumberHistoryWhereInput, data []string) error {
+	panic(fmt.Errorf("not implemented: KindIn - kindIn"))
+}
+
+// KindNotIn is the resolver for the kindNotIn field.
+func (r *phoneNumberHistoryWhereInputResolver) KindNotIn(ctx context.Context, obj *generated.PhoneNumberHistoryWhereInput, data []string) error {
+	panic(fmt.Errorf("not implemented: KindNotIn - kindNotIn"))
+}
+
+// KindGt is the resolver for the kindGT field.
+func (r *phoneNumberHistoryWhereInputResolver) KindGt(ctx context.Context, obj *generated.PhoneNumberHistoryWhereInput, data *string) error {
+	panic(fmt.Errorf("not implemented: KindGt - kindGT"))
+}
+
+// KindGte is the resolver for the kindGTE field.
+func (r *phoneNumberHistoryWhereInputResolver) KindGte(ctx context.Context, obj *generated.PhoneNumberHistoryWhereInput, data *string) error {
+	panic(fmt.Errorf("not implemented: KindGte - kindGTE"))
+}
+
+// KindLt is the resolver for the kindLT field.
+func (r *phoneNumberHistoryWhereInputResolver) KindLt(ctx context.Context, obj *generated.PhoneNumberHistoryWhereInput, data *string) error {
+	panic(fmt.Errorf("not implemented: KindLt - kindLT"))
+}
+
+// KindLte is the resolver for the kindLTE field.
+func (r *phoneNumberHistoryWhereInputResolver) KindLte(ctx context.Context, obj *generated.PhoneNumberHistoryWhereInput, data *string) error {
+	panic(fmt.Errorf("not implemented: KindLte - kindLTE"))
+}
+
+// KindContains is the resolver for the kindContains field.
+func (r *phoneNumberHistoryWhereInputResolver) KindContains(ctx context.Context, obj *generated.PhoneNumberHistoryWhereInput, data *string) error {
+	panic(fmt.Errorf("not implemented: KindContains - kindContains"))
+}
+
+// KindHasPrefix is the resolver for the kindHasPrefix field.
+func (r *phoneNumberHistoryWhereInputResolver) KindHasPrefix(ctx context.Context, obj *generated.PhoneNumberHistoryWhereInput, data *string) error {
+	panic(fmt.Errorf("not implemented: KindHasPrefix - kindHasPrefix"))
+}
+
+// KindHasSuffix is the resolver for the kindHasSuffix field.
+func (r *phoneNumberHistoryWhereInputResolver) KindHasSuffix(ctx context.Context, obj *generated.PhoneNumberHistoryWhereInput, data *string) error {
+	panic(fmt.Errorf("not implemented: KindHasSuffix - kindHasSuffix"))
+}
+
+// KindEqualFold is the resolver for the kindEqualFold field.
+func (r *phoneNumberHistoryWhereInputResolver) KindEqualFold(ctx context.Context, obj *generated.PhoneNumberHistoryWhereInput, data *string) error {
+	panic(fmt.Errorf("not implemented: KindEqualFold - kindEqualFold"))
+}
+
+// KindContainsFold is the resolver for the kindContainsFold field.
+func (r *phoneNumberHistoryWhereInputResolver) KindContainsFold(ctx context.Context, obj *generated.PhoneNumberHistoryWhereInput, data *string) error {
+	panic(fmt.Errorf("not implemented: KindContainsFold - kindContainsFold"))
+}
+
+// Kind is the resolver for the kind field.
+func (r *phoneNumberWhereInputResolver) Kind(ctx context.Context, obj *generated.PhoneNumberWhereInput, data *string) error {
+	panic(fmt.Errorf("not implemented: Kind - kind"))
+}
+
+// KindNeq is the resolver for the kindNEQ field.
+func (r *phoneNumberWhereInputResolver) KindNeq(ctx context.Context, obj *generated.PhoneNumberWhereInput, data *string) error {
+	panic(fmt.Errorf("not implemented: KindNeq - kindNEQ"))
+}
+
+// KindIn is the resolver for the kindIn field.
+func (r *phoneNumberWhereInputResolver) KindIn(ctx context.Context, obj *generated.PhoneNumberWhereInput, data []string) error {
+	panic(fmt.Errorf("not implemented: KindIn - kindIn"))
+}
+
+// KindNotIn is the resolver for the kindNotIn field.
+func (r *phoneNumberWhereInputResolver) KindNotIn(ctx context.Context, obj *generated.PhoneNumberWhereInput, data []string) error {
+	panic(fmt.Errorf("not implemented: KindNotIn - kindNotIn"))
+}
+
+// KindGt is the resolver for the kindGT field.
+func (r *phoneNumberWhereInputResolver) KindGt(ctx context.Context, obj *generated.PhoneNumberWhereInput, data *string) error {
+	panic(fmt.Errorf("not implemented: KindGt - kindGT"))
+}
+
+// KindGte is the resolver for the kindGTE field.
+func (r *phoneNumberWhereInputResolver) KindGte(ctx context.Context, obj *generated.PhoneNumberWhereInput, data *string) error {
+	panic(fmt.Errorf("not implemented: KindGte - kindGTE"))
+}
+
+// KindLt is the resolver for the kindLT field.
+func (r *phoneNumberWhereInputResolver) KindLt(ctx context.Context, obj *generated.PhoneNumberWhereInput, data *string) error {
+	panic(fmt.Errorf("not implemented: KindLt - kindLT"))
+}
+
+// KindLte is the resolver for the kindLTE field.
+func (r *phoneNumberWhereInputResolver) KindLte(ctx context.Context, obj *generated.PhoneNumberWhereInput, data *string) error {
+	panic(fmt.Errorf("not implemented: KindLte - kindLTE"))
+}
+
+// KindContains is the resolver for the kindContains field.
+func (r *phoneNumberWhereInputResolver) KindContains(ctx context.Context, obj *generated.PhoneNumberWhereInput, data *string) error {
+	panic(fmt.Errorf("not implemented: KindContains - kindContains"))
+}
+
+// KindHasPrefix is the resolver for the kindHasPrefix field.
+func (r *phoneNumberWhereInputResolver) KindHasPrefix(ctx context.Context, obj *generated.PhoneNumberWhereInput, data *string) error {
+	panic(fmt.Errorf("not implemented: KindHasPrefix - kindHasPrefix"))
+}
+
+// KindHasSuffix is the resolver for the kindHasSuffix field.
+func (r *phoneNumberWhereInputResolver) KindHasSuffix(ctx context.Context, obj *generated.PhoneNumberWhereInput, data *string) error {
+	panic(fmt.Errorf("not implemented: KindHasSuffix - kindHasSuffix"))
+}
+
+// KindEqualFold is the resolver for the kindEqualFold field.
+func (r *phoneNumberWhereInputResolver) KindEqualFold(ctx context.Context, obj *generated.PhoneNumberWhereInput, data *string) error {
+	panic(fmt.Errorf("not implemented: KindEqualFold - kindEqualFold"))
+}
+
+// KindContainsFold is the resolver for the kindContainsFold field.
+func (r *phoneNumberWhereInputResolver) KindContainsFold(ctx context.Context, obj *generated.PhoneNumberWhereInput, data *string) error {
+	panic(fmt.Errorf("not implemented: KindContainsFold - kindContainsFold"))
+}
+
+// Kind is the resolver for the kind field.
+func (r *updatePhoneNumberInputResolver) Kind(ctx context.Context, obj *generated.UpdatePhoneNumberInput, data *string) error {
+	panic(fmt.Errorf("not implemented: Kind - kind"))
+}
+
+// PhoneNumber returns PhoneNumberResolver implementation.
+func (r *Resolver) PhoneNumber() PhoneNumberResolver { return &phoneNumberResolver{r} }
+
+// PhoneNumberHistory returns PhoneNumberHistoryResolver implementation.
+func (r *Resolver) PhoneNumberHistory() PhoneNumberHistoryResolver {
+	return &phoneNumberHistoryResolver{r}
+}
+
 // Query returns QueryResolver implementation.
 func (r *Resolver) Query() QueryResolver { return &queryResolver{r} }
 
@@ -535,6 +738,21 @@ func (r *Resolver) CreateOrganizationInput() CreateOrganizationInputResolver {
 	return &createOrganizationInputResolver{r}
 }
 
+// CreatePhoneNumberInput returns CreatePhoneNumberInputResolver implementation.
+func (r *Resolver) CreatePhoneNumberInput() CreatePhoneNumberInputResolver {
+	return &createPhoneNumberInputResolver{r}
+}
+
+// PhoneNumberHistoryWhereInput returns PhoneNumberHistoryWhereInputResolver implementation.
+func (r *Resolver) PhoneNumberHistoryWhereInput() PhoneNumberHistoryWhereInputResolver {
+	return &phoneNumberHistoryWhereInputResolver{r}
+}
+
+// PhoneNumberWhereInput returns PhoneNumberWhereInputResolver implementation.
+func (r *Resolver) PhoneNumberWhereInput() PhoneNumberWhereInputResolver {
+	return &phoneNumberWhereInputResolver{r}
+}
+
 // UpdateEntityInput returns UpdateEntityInputResolver implementation.
 func (r *Resolver) UpdateEntityInput() UpdateEntityInputResolver {
 	return &updateEntityInputResolver{r}
@@ -548,16 +766,27 @@ func (r *Resolver) UpdateOrganizationInput() UpdateOrganizationInputResolver {
 	return &updateOrganizationInputResolver{r}
 }
 
+// UpdatePhoneNumberInput returns UpdatePhoneNumberInputResolver implementation.
+func (r *Resolver) UpdatePhoneNumberInput() UpdatePhoneNumberInputResolver {
+	return &updatePhoneNumberInputResolver{r}
+}
+
 // UpdateTFASettingInput returns UpdateTFASettingInputResolver implementation.
 func (r *Resolver) UpdateTFASettingInput() UpdateTFASettingInputResolver {
 	return &updateTFASettingInputResolver{r}
 }
 
+type phoneNumberResolver struct{ *Resolver }
+type phoneNumberHistoryResolver struct{ *Resolver }
 type queryResolver struct{ *Resolver }
 type createEntityInputResolver struct{ *Resolver }
 type createGroupInputResolver struct{ *Resolver }
 type createOrganizationInputResolver struct{ *Resolver }
+type createPhoneNumberInputResolver struct{ *Resolver }
+type phoneNumberHistoryWhereInputResolver struct{ *Resolver }
+type phoneNumberWhereInputResolver struct{ *Resolver }
 type updateEntityInputResolver struct{ *Resolver }
 type updateGroupInputResolver struct{ *Resolver }
 type updateOrganizationInputResolver struct{ *Resolver }
+type updatePhoneNumberInputResolver struct{ *Resolver }
 type updateTFASettingInputResolver struct{ *Resolver }

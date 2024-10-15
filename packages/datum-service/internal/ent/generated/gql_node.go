@@ -56,6 +56,8 @@ import (
 	"github.com/datum-cloud/datum-os/internal/ent/generated/orgmembership"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/orgmembershiphistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/personalaccesstoken"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/phonenumber"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/phonenumberhistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/postaladdress"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/postaladdresshistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/subscriber"
@@ -70,6 +72,8 @@ import (
 	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorhistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofile"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofilehistory"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofilephonenumber"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofilephonenumberhistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofilepostaladdress"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofilepostaladdresshistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/webhook"
@@ -322,6 +326,16 @@ var personalaccesstokenImplementors = []string{"PersonalAccessToken", "Node"}
 // IsNode implements the Node interface check for GQLGen.
 func (*PersonalAccessToken) IsNode() {}
 
+var phonenumberImplementors = []string{"PhoneNumber", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*PhoneNumber) IsNode() {}
+
+var phonenumberhistoryImplementors = []string{"PhoneNumberHistory", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*PhoneNumberHistory) IsNode() {}
+
 var postaladdressImplementors = []string{"PostalAddress", "Node"}
 
 // IsNode implements the Node interface check for GQLGen.
@@ -391,6 +405,16 @@ var vendorprofilehistoryImplementors = []string{"VendorProfileHistory", "Node"}
 
 // IsNode implements the Node interface check for GQLGen.
 func (*VendorProfileHistory) IsNode() {}
+
+var vendorprofilephonenumberImplementors = []string{"VendorProfilePhoneNumber", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*VendorProfilePhoneNumber) IsNode() {}
+
+var vendorprofilephonenumberhistoryImplementors = []string{"VendorProfilePhoneNumberHistory", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*VendorProfilePhoneNumberHistory) IsNode() {}
 
 var vendorprofilepostaladdressImplementors = []string{"VendorProfilePostalAddress", "Node"}
 
@@ -902,6 +926,24 @@ func (c *Client) noder(ctx context.Context, table string, id string) (Noder, err
 			}
 		}
 		return query.Only(ctx)
+	case phonenumber.Table:
+		query := c.PhoneNumber.Query().
+			Where(phonenumber.ID(id))
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, phonenumberImplementors...); err != nil {
+				return nil, err
+			}
+		}
+		return query.Only(ctx)
+	case phonenumberhistory.Table:
+		query := c.PhoneNumberHistory.Query().
+			Where(phonenumberhistory.ID(id))
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, phonenumberhistoryImplementors...); err != nil {
+				return nil, err
+			}
+		}
+		return query.Only(ctx)
 	case postaladdress.Table:
 		query := c.PostalAddress.Query().
 			Where(postaladdress.ID(id))
@@ -1024,6 +1066,24 @@ func (c *Client) noder(ctx context.Context, table string, id string) (Noder, err
 			Where(vendorprofilehistory.ID(id))
 		if fc := graphql.GetFieldContext(ctx); fc != nil {
 			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, vendorprofilehistoryImplementors...); err != nil {
+				return nil, err
+			}
+		}
+		return query.Only(ctx)
+	case vendorprofilephonenumber.Table:
+		query := c.VendorProfilePhoneNumber.Query().
+			Where(vendorprofilephonenumber.ID(id))
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, vendorprofilephonenumberImplementors...); err != nil {
+				return nil, err
+			}
+		}
+		return query.Only(ctx)
+	case vendorprofilephonenumberhistory.Table:
+		query := c.VendorProfilePhoneNumberHistory.Query().
+			Where(vendorprofilephonenumberhistory.ID(id))
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, vendorprofilephonenumberhistoryImplementors...); err != nil {
 				return nil, err
 			}
 		}
@@ -1905,6 +1965,38 @@ func (c *Client) noders(ctx context.Context, table string, ids []string) ([]Node
 				*noder = node
 			}
 		}
+	case phonenumber.Table:
+		query := c.PhoneNumber.Query().
+			Where(phonenumber.IDIn(ids...))
+		query, err := query.CollectFields(ctx, phonenumberImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case phonenumberhistory.Table:
+		query := c.PhoneNumberHistory.Query().
+			Where(phonenumberhistory.IDIn(ids...))
+		query, err := query.CollectFields(ctx, phonenumberhistoryImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
 	case postaladdress.Table:
 		query := c.PostalAddress.Query().
 			Where(postaladdress.IDIn(ids...))
@@ -2117,6 +2209,38 @@ func (c *Client) noders(ctx context.Context, table string, ids []string) ([]Node
 		query := c.VendorProfileHistory.Query().
 			Where(vendorprofilehistory.IDIn(ids...))
 		query, err := query.CollectFields(ctx, vendorprofilehistoryImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case vendorprofilephonenumber.Table:
+		query := c.VendorProfilePhoneNumber.Query().
+			Where(vendorprofilephonenumber.IDIn(ids...))
+		query, err := query.CollectFields(ctx, vendorprofilephonenumberImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case vendorprofilephonenumberhistory.Table:
+		query := c.VendorProfilePhoneNumberHistory.Query().
+			Where(vendorprofilephonenumberhistory.IDIn(ids...))
+		query, err := query.CollectFields(ctx, vendorprofilephonenumberhistoryImplementors...)
 		if err != nil {
 			return nil, err
 		}

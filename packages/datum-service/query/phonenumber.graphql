@@ -1,0 +1,133 @@
+
+mutation CreateBulkCSVPhoneNumber($input: Upload!) {
+  createBulkCSVPhoneNumber(input: $input) {
+    phoneNumbers {
+      createdAt
+      createdBy
+      extension
+      id
+      kind
+      number
+      ownerID
+      regionCode
+      shortCode
+      tags
+      updatedAt
+      updatedBy
+    }
+  }
+}
+
+mutation CreateBulkPhoneNumber($input: [CreatePhoneNumberInput!]) {
+  createBulkPhoneNumber(input: $input) {
+    phoneNumbers {
+      createdAt
+      createdBy
+      extension
+      id
+      kind
+      number
+      ownerID
+      regionCode
+      shortCode
+      tags
+      updatedAt
+      updatedBy
+    }
+  }
+}
+
+mutation CreatePhoneNumber($input: CreatePhoneNumberInput!) {
+  createPhoneNumber(input: $input) {
+    phoneNumber {
+      createdAt
+      createdBy
+      extension
+      id
+      kind
+      number
+      ownerID
+      regionCode
+      shortCode
+      tags
+      updatedAt
+      updatedBy
+    }
+  }
+}
+
+query GetAllPhoneNumbers {
+  phoneNumbers {
+    edges {
+      node {
+        createdAt
+        createdBy
+        extension
+        id
+        kind
+        number
+        ownerID
+        regionCode
+        shortCode
+        tags
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}
+query GetPhoneNumberByID($phoneNumberId: ID!) {
+  phoneNumber(id: $phoneNumberId) {
+    createdAt
+    createdBy
+    extension
+    id
+    kind
+    number
+    ownerID
+    regionCode
+    shortCode
+    tags
+    updatedAt
+    updatedBy
+  }
+}
+
+query GetPhoneNumbers($where: PhoneNumberWhereInput) {
+  phoneNumbers(where: $where) {
+    edges {
+      node {
+        createdAt
+        createdBy
+        extension
+        id
+        kind
+        number
+        ownerID
+        regionCode
+        shortCode
+        tags
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}
+mutation UpdatePhoneNumber($updatePhoneNumberId: ID!, $input: UpdatePhoneNumberInput!) {
+  updatePhoneNumber(id: $updatePhoneNumberId, input: $input) {
+    phoneNumber {
+      createdAt
+      createdBy
+      extension
+      id
+      kind
+      number
+      ownerID
+      regionCode
+      shortCode
+      tags
+      updatedAt
+      updatedBy
+    }
+  }
+}

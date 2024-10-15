@@ -62,6 +62,8 @@ import (
 	"github.com/datum-cloud/datum-os/internal/ent/generated/orgmembershiphistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/passwordresettoken"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/personalaccesstoken"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/phonenumber"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/phonenumberhistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/postaladdress"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/postaladdresshistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/subscriber"
@@ -76,6 +78,8 @@ import (
 	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorhistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofile"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofilehistory"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofilephonenumber"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofilephonenumberhistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofilepostaladdress"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofilepostaladdresshistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/webauthn"
@@ -191,6 +195,8 @@ func checkColumn(table, column string) error {
 			organizationsettinghistory.Table:        organizationsettinghistory.ValidColumn,
 			passwordresettoken.Table:                passwordresettoken.ValidColumn,
 			personalaccesstoken.Table:               personalaccesstoken.ValidColumn,
+			phonenumber.Table:                       phonenumber.ValidColumn,
+			phonenumberhistory.Table:                phonenumberhistory.ValidColumn,
 			postaladdress.Table:                     postaladdress.ValidColumn,
 			postaladdresshistory.Table:              postaladdresshistory.ValidColumn,
 			subscriber.Table:                        subscriber.ValidColumn,
@@ -205,6 +211,8 @@ func checkColumn(table, column string) error {
 			vendorhistory.Table:                     vendorhistory.ValidColumn,
 			vendorprofile.Table:                     vendorprofile.ValidColumn,
 			vendorprofilehistory.Table:              vendorprofilehistory.ValidColumn,
+			vendorprofilephonenumber.Table:          vendorprofilephonenumber.ValidColumn,
+			vendorprofilephonenumberhistory.Table:   vendorprofilephonenumberhistory.ValidColumn,
 			vendorprofilepostaladdress.Table:        vendorprofilepostaladdress.ValidColumn,
 			vendorprofilepostaladdresshistory.Table: vendorprofilepostaladdresshistory.ValidColumn,
 			webauthn.Table:                          webauthn.ValidColumn,

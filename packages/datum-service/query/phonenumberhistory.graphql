@@ -1,0 +1,49 @@
+
+
+query GetAllPhoneNumberHistories {
+  phoneNumberHistories {
+    edges {
+      node {
+        createdAt
+        createdBy
+        extension
+        historyTime
+        id
+        kind
+        number
+        operation
+        ownerID
+        ref
+        regionCode
+        shortCode
+        tags
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}
+
+query GetPhoneNumberHistories($where: PhoneNumberHistoryWhereInput) {
+  phoneNumberHistories(where: $where) {
+    edges {
+      node {
+        createdAt
+        createdBy
+        extension
+        historyTime
+        id
+        kind
+        number
+        operation
+        ownerID
+        ref
+        regionCode
+        shortCode
+        tags
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}

@@ -14,10 +14,12 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/organization"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/phonenumber"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/postaladdress"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/predicate"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/vendor"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofile"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofilephonenumber"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofilepostaladdress"
 
 	"github.com/datum-cloud/datum-os/internal/ent/generated/internal"
@@ -32,12 +34,16 @@ type VendorProfileQuery struct {
 	predicates                            []predicate.VendorProfile
 	withOwner                             *OrganizationQuery
 	withPostalAddresses                   *PostalAddressQuery
+	withPhoneNumbers                      *PhoneNumberQuery
 	withVendor                            *VendorQuery
 	withVendorProfilePostalAddresses      *VendorProfilePostalAddressQuery
+	withVendorProfilePhoneNumbers         *VendorProfilePhoneNumberQuery
 	modifiers                             []func(*sql.Selector)
 	loadTotal                             []func(context.Context, []*VendorProfile) error
 	withNamedPostalAddresses              map[string]*PostalAddressQuery
+	withNamedPhoneNumbers                 map[string]*PhoneNumberQuery
 	withNamedVendorProfilePostalAddresses map[string]*VendorProfilePostalAddressQuery
+	withNamedVendorProfilePhoneNumbers    map[string]*VendorProfilePhoneNumberQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -124,6 +130,31 @@ func (vpq *VendorProfileQuery) QueryPostalAddresses() *PostalAddressQuery {
 	return query
 }
 
+// QueryPhoneNumbers chains the current query on the "phone_numbers" edge.
+func (vpq *VendorProfileQuery) QueryPhoneNumbers() *PhoneNumberQuery {
+	query := (&PhoneNumberClient{config: vpq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := vpq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := vpq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(vendorprofile.Table, vendorprofile.FieldID, selector),
+			sqlgraph.To(phonenumber.Table, phonenumber.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, vendorprofile.PhoneNumbersTable, vendorprofile.PhoneNumbersPrimaryKey...),
+		)
+		schemaConfig := vpq.schemaConfig
+		step.To.Schema = schemaConfig.PhoneNumber
+		step.Edge.Schema = schemaConfig.VendorProfilePhoneNumber
+		fromU = sqlgraph.SetNeighbors(vpq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // QueryVendor chains the current query on the "vendor" edge.
 func (vpq *VendorProfileQuery) QueryVendor() *VendorQuery {
 	query := (&VendorClient{config: vpq.config}).Query()
@@ -168,6 +199,31 @@ func (vpq *VendorProfileQuery) QueryVendorProfilePostalAddresses() *VendorProfil
 		schemaConfig := vpq.schemaConfig
 		step.To.Schema = schemaConfig.VendorProfilePostalAddress
 		step.Edge.Schema = schemaConfig.VendorProfilePostalAddress
+		fromU = sqlgraph.SetNeighbors(vpq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryVendorProfilePhoneNumbers chains the current query on the "vendor_profile_phone_numbers" edge.
+func (vpq *VendorProfileQuery) QueryVendorProfilePhoneNumbers() *VendorProfilePhoneNumberQuery {
+	query := (&VendorProfilePhoneNumberClient{config: vpq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := vpq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := vpq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(vendorprofile.Table, vendorprofile.FieldID, selector),
+			sqlgraph.To(vendorprofilephonenumber.Table, vendorprofilephonenumber.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, true, vendorprofile.VendorProfilePhoneNumbersTable, vendorprofile.VendorProfilePhoneNumbersColumn),
+		)
+		schemaConfig := vpq.schemaConfig
+		step.To.Schema = schemaConfig.VendorProfilePhoneNumber
+		step.Edge.Schema = schemaConfig.VendorProfilePhoneNumber
 		fromU = sqlgraph.SetNeighbors(vpq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -368,8 +424,10 @@ func (vpq *VendorProfileQuery) Clone() *VendorProfileQuery {
 		predicates:                       append([]predicate.VendorProfile{}, vpq.predicates...),
 		withOwner:                        vpq.withOwner.Clone(),
 		withPostalAddresses:              vpq.withPostalAddresses.Clone(),
+		withPhoneNumbers:                 vpq.withPhoneNumbers.Clone(),
 		withVendor:                       vpq.withVendor.Clone(),
 		withVendorProfilePostalAddresses: vpq.withVendorProfilePostalAddresses.Clone(),
+		withVendorProfilePhoneNumbers:    vpq.withVendorProfilePhoneNumbers.Clone(),
 		// clone intermediate query.
 		sql:  vpq.sql.Clone(),
 		path: vpq.path,
@@ -398,6 +456,17 @@ func (vpq *VendorProfileQuery) WithPostalAddresses(opts ...func(*PostalAddressQu
 	return vpq
 }
 
+// WithPhoneNumbers tells the query-builder to eager-load the nodes that are connected to
+// the "phone_numbers" edge. The optional arguments are used to configure the query builder of the edge.
+func (vpq *VendorProfileQuery) WithPhoneNumbers(opts ...func(*PhoneNumberQuery)) *VendorProfileQuery {
+	query := (&PhoneNumberClient{config: vpq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	vpq.withPhoneNumbers = query
+	return vpq
+}
+
 // WithVendor tells the query-builder to eager-load the nodes that are connected to
 // the "vendor" edge. The optional arguments are used to configure the query builder of the edge.
 func (vpq *VendorProfileQuery) WithVendor(opts ...func(*VendorQuery)) *VendorProfileQuery {
@@ -417,6 +486,17 @@ func (vpq *VendorProfileQuery) WithVendorProfilePostalAddresses(opts ...func(*Ve
 		opt(query)
 	}
 	vpq.withVendorProfilePostalAddresses = query
+	return vpq
+}
+
+// WithVendorProfilePhoneNumbers tells the query-builder to eager-load the nodes that are connected to
+// the "vendor_profile_phone_numbers" edge. The optional arguments are used to configure the query builder of the edge.
+func (vpq *VendorProfileQuery) WithVendorProfilePhoneNumbers(opts ...func(*VendorProfilePhoneNumberQuery)) *VendorProfileQuery {
+	query := (&VendorProfilePhoneNumberClient{config: vpq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	vpq.withVendorProfilePhoneNumbers = query
 	return vpq
 }
 
@@ -504,11 +584,13 @@ func (vpq *VendorProfileQuery) sqlAll(ctx context.Context, hooks ...queryHook) (
 	var (
 		nodes       = []*VendorProfile{}
 		_spec       = vpq.querySpec()
-		loadedTypes = [4]bool{
+		loadedTypes = [6]bool{
 			vpq.withOwner != nil,
 			vpq.withPostalAddresses != nil,
+			vpq.withPhoneNumbers != nil,
 			vpq.withVendor != nil,
 			vpq.withVendorProfilePostalAddresses != nil,
+			vpq.withVendorProfilePhoneNumbers != nil,
 		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
@@ -547,6 +629,13 @@ func (vpq *VendorProfileQuery) sqlAll(ctx context.Context, hooks ...queryHook) (
 			return nil, err
 		}
 	}
+	if query := vpq.withPhoneNumbers; query != nil {
+		if err := vpq.loadPhoneNumbers(ctx, query, nodes,
+			func(n *VendorProfile) { n.Edges.PhoneNumbers = []*PhoneNumber{} },
+			func(n *VendorProfile, e *PhoneNumber) { n.Edges.PhoneNumbers = append(n.Edges.PhoneNumbers, e) }); err != nil {
+			return nil, err
+		}
+	}
 	if query := vpq.withVendor; query != nil {
 		if err := vpq.loadVendor(ctx, query, nodes, nil,
 			func(n *VendorProfile, e *Vendor) { n.Edges.Vendor = e }); err != nil {
@@ -562,10 +651,26 @@ func (vpq *VendorProfileQuery) sqlAll(ctx context.Context, hooks ...queryHook) (
 			return nil, err
 		}
 	}
+	if query := vpq.withVendorProfilePhoneNumbers; query != nil {
+		if err := vpq.loadVendorProfilePhoneNumbers(ctx, query, nodes,
+			func(n *VendorProfile) { n.Edges.VendorProfilePhoneNumbers = []*VendorProfilePhoneNumber{} },
+			func(n *VendorProfile, e *VendorProfilePhoneNumber) {
+				n.Edges.VendorProfilePhoneNumbers = append(n.Edges.VendorProfilePhoneNumbers, e)
+			}); err != nil {
+			return nil, err
+		}
+	}
 	for name, query := range vpq.withNamedPostalAddresses {
 		if err := vpq.loadPostalAddresses(ctx, query, nodes,
 			func(n *VendorProfile) { n.appendNamedPostalAddresses(name) },
 			func(n *VendorProfile, e *PostalAddress) { n.appendNamedPostalAddresses(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range vpq.withNamedPhoneNumbers {
+		if err := vpq.loadPhoneNumbers(ctx, query, nodes,
+			func(n *VendorProfile) { n.appendNamedPhoneNumbers(name) },
+			func(n *VendorProfile, e *PhoneNumber) { n.appendNamedPhoneNumbers(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -575,6 +680,13 @@ func (vpq *VendorProfileQuery) sqlAll(ctx context.Context, hooks ...queryHook) (
 			func(n *VendorProfile, e *VendorProfilePostalAddress) {
 				n.appendNamedVendorProfilePostalAddresses(name, e)
 			}); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range vpq.withNamedVendorProfilePhoneNumbers {
+		if err := vpq.loadVendorProfilePhoneNumbers(ctx, query, nodes,
+			func(n *VendorProfile) { n.appendNamedVendorProfilePhoneNumbers(name) },
+			func(n *VendorProfile, e *VendorProfilePhoneNumber) { n.appendNamedVendorProfilePhoneNumbers(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -677,6 +789,68 @@ func (vpq *VendorProfileQuery) loadPostalAddresses(ctx context.Context, query *P
 	}
 	return nil
 }
+func (vpq *VendorProfileQuery) loadPhoneNumbers(ctx context.Context, query *PhoneNumberQuery, nodes []*VendorProfile, init func(*VendorProfile), assign func(*VendorProfile, *PhoneNumber)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*VendorProfile)
+	nids := make(map[string]map[*VendorProfile]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(vendorprofile.PhoneNumbersTable)
+		joinT.Schema(vpq.schemaConfig.VendorProfilePhoneNumber)
+		s.Join(joinT).On(s.C(phonenumber.FieldID), joinT.C(vendorprofile.PhoneNumbersPrimaryKey[1]))
+		s.Where(sql.InValues(joinT.C(vendorprofile.PhoneNumbersPrimaryKey[0]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(vendorprofile.PhoneNumbersPrimaryKey[0]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*VendorProfile]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*PhoneNumber](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "phone_numbers" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
 func (vpq *VendorProfileQuery) loadVendor(ctx context.Context, query *VendorQuery, nodes []*VendorProfile, init func(*VendorProfile), assign func(*VendorProfile, *Vendor)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*VendorProfile)
@@ -721,6 +895,36 @@ func (vpq *VendorProfileQuery) loadVendorProfilePostalAddresses(ctx context.Cont
 	}
 	query.Where(predicate.VendorProfilePostalAddress(func(s *sql.Selector) {
 		s.Where(sql.InValues(s.C(vendorprofile.VendorProfilePostalAddressesColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.VendorProfileID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "vendor_profile_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (vpq *VendorProfileQuery) loadVendorProfilePhoneNumbers(ctx context.Context, query *VendorProfilePhoneNumberQuery, nodes []*VendorProfile, init func(*VendorProfile), assign func(*VendorProfile, *VendorProfilePhoneNumber)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*VendorProfile)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(vendorprofilephonenumber.FieldVendorProfileID)
+	}
+	query.Where(predicate.VendorProfilePhoneNumber(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(vendorprofile.VendorProfilePhoneNumbersColumn), fks...))
 	}))
 	neighbors, err := query.All(ctx)
 	if err != nil {
@@ -846,6 +1050,20 @@ func (vpq *VendorProfileQuery) WithNamedPostalAddresses(name string, opts ...fun
 	return vpq
 }
 
+// WithNamedPhoneNumbers tells the query-builder to eager-load the nodes that are connected to the "phone_numbers"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (vpq *VendorProfileQuery) WithNamedPhoneNumbers(name string, opts ...func(*PhoneNumberQuery)) *VendorProfileQuery {
+	query := (&PhoneNumberClient{config: vpq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if vpq.withNamedPhoneNumbers == nil {
+		vpq.withNamedPhoneNumbers = make(map[string]*PhoneNumberQuery)
+	}
+	vpq.withNamedPhoneNumbers[name] = query
+	return vpq
+}
+
 // WithNamedVendorProfilePostalAddresses tells the query-builder to eager-load the nodes that are connected to the "vendor_profile_postal_addresses"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
 func (vpq *VendorProfileQuery) WithNamedVendorProfilePostalAddresses(name string, opts ...func(*VendorProfilePostalAddressQuery)) *VendorProfileQuery {
@@ -857,6 +1075,20 @@ func (vpq *VendorProfileQuery) WithNamedVendorProfilePostalAddresses(name string
 		vpq.withNamedVendorProfilePostalAddresses = make(map[string]*VendorProfilePostalAddressQuery)
 	}
 	vpq.withNamedVendorProfilePostalAddresses[name] = query
+	return vpq
+}
+
+// WithNamedVendorProfilePhoneNumbers tells the query-builder to eager-load the nodes that are connected to the "vendor_profile_phone_numbers"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (vpq *VendorProfileQuery) WithNamedVendorProfilePhoneNumbers(name string, opts ...func(*VendorProfilePhoneNumberQuery)) *VendorProfileQuery {
+	query := (&VendorProfilePhoneNumberClient{config: vpq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if vpq.withNamedVendorProfilePhoneNumbers == nil {
+		vpq.withNamedVendorProfilePhoneNumbers = make(map[string]*VendorProfilePhoneNumberQuery)
+	}
+	vpq.withNamedVendorProfilePhoneNumbers[name] = query
 	return vpq
 }
 

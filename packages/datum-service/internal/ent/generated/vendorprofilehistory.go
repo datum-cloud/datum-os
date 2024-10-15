@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofilehistory"
 	"github.com/datum-cloud/datum-os/pkg/enthistory"
+	"github.com/datum-cloud/datum-os/pkg/enums"
 )
 
 // VendorProfileHistory is the model entity for the VendorProfileHistory schema.
@@ -47,12 +48,18 @@ type VendorProfileHistory struct {
 	VendorID string `json:"vendor_id,omitempty"`
 	// The name of the Corporation or Person
 	Name string `json:"name,omitempty"`
+	// The type of corporation (e.g. LLC, S-Corp, C-Corp, Other)
+	CorporationType string `json:"corporation_type,omitempty"`
 	// The Doing Business As (DBA) name of the Corporation
-	DbaName string `json:"dba_name,omitempty"`
+	CorporationDba string `json:"corporation_dba,omitempty"`
 	// The description of the Corporation or Person and the services they provide
 	Description string `json:"description,omitempty"`
 	// The URL of the website of the Corporation or Person
-	WebsiteURI   string `json:"website_uri,omitempty"`
+	WebsiteURI string `json:"website_uri,omitempty"`
+	// The tax ID of the Corporation or Person
+	TaxID string `json:"-"`
+	// The type of tax ID (e.g. EIN, SSN, TIN, etc.)
+	TaxIDType    enums.TaxIDType `json:"tax_id_type,omitempty"`
 	selectValues sql.SelectValues
 }
 
@@ -65,7 +72,7 @@ func (*VendorProfileHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case vendorprofilehistory.FieldOperation:
 			values[i] = new(enthistory.OpType)
-		case vendorprofilehistory.FieldID, vendorprofilehistory.FieldRef, vendorprofilehistory.FieldCreatedBy, vendorprofilehistory.FieldUpdatedBy, vendorprofilehistory.FieldDeletedBy, vendorprofilehistory.FieldMappingID, vendorprofilehistory.FieldOwnerID, vendorprofilehistory.FieldVendorID, vendorprofilehistory.FieldName, vendorprofilehistory.FieldDbaName, vendorprofilehistory.FieldDescription, vendorprofilehistory.FieldWebsiteURI:
+		case vendorprofilehistory.FieldID, vendorprofilehistory.FieldRef, vendorprofilehistory.FieldCreatedBy, vendorprofilehistory.FieldUpdatedBy, vendorprofilehistory.FieldDeletedBy, vendorprofilehistory.FieldMappingID, vendorprofilehistory.FieldOwnerID, vendorprofilehistory.FieldVendorID, vendorprofilehistory.FieldName, vendorprofilehistory.FieldCorporationType, vendorprofilehistory.FieldCorporationDba, vendorprofilehistory.FieldDescription, vendorprofilehistory.FieldWebsiteURI, vendorprofilehistory.FieldTaxID, vendorprofilehistory.FieldTaxIDType:
 			values[i] = new(sql.NullString)
 		case vendorprofilehistory.FieldHistoryTime, vendorprofilehistory.FieldCreatedAt, vendorprofilehistory.FieldUpdatedAt, vendorprofilehistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -176,11 +183,17 @@ func (vph *VendorProfileHistory) assignValues(columns []string, values []any) er
 			} else if value.Valid {
 				vph.Name = value.String
 			}
-		case vendorprofilehistory.FieldDbaName:
+		case vendorprofilehistory.FieldCorporationType:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field dba_name", values[i])
+				return fmt.Errorf("unexpected type %T for field corporation_type", values[i])
 			} else if value.Valid {
-				vph.DbaName = value.String
+				vph.CorporationType = value.String
+			}
+		case vendorprofilehistory.FieldCorporationDba:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field corporation_dba", values[i])
+			} else if value.Valid {
+				vph.CorporationDba = value.String
 			}
 		case vendorprofilehistory.FieldDescription:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -193,6 +206,18 @@ func (vph *VendorProfileHistory) assignValues(columns []string, values []any) er
 				return fmt.Errorf("unexpected type %T for field website_uri", values[i])
 			} else if value.Valid {
 				vph.WebsiteURI = value.String
+			}
+		case vendorprofilehistory.FieldTaxID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field tax_id", values[i])
+			} else if value.Valid {
+				vph.TaxID = value.String
+			}
+		case vendorprofilehistory.FieldTaxIDType:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field tax_id_type", values[i])
+			} else if value.Valid {
+				vph.TaxIDType = enums.TaxIDType(value.String)
 			}
 		default:
 			vph.selectValues.Set(columns[i], values[i])
@@ -272,14 +297,22 @@ func (vph *VendorProfileHistory) String() string {
 	builder.WriteString("name=")
 	builder.WriteString(vph.Name)
 	builder.WriteString(", ")
-	builder.WriteString("dba_name=")
-	builder.WriteString(vph.DbaName)
+	builder.WriteString("corporation_type=")
+	builder.WriteString(vph.CorporationType)
+	builder.WriteString(", ")
+	builder.WriteString("corporation_dba=")
+	builder.WriteString(vph.CorporationDba)
 	builder.WriteString(", ")
 	builder.WriteString("description=")
 	builder.WriteString(vph.Description)
 	builder.WriteString(", ")
 	builder.WriteString("website_uri=")
 	builder.WriteString(vph.WebsiteURI)
+	builder.WriteString(", ")
+	builder.WriteString("tax_id=<sensitive>")
+	builder.WriteString(", ")
+	builder.WriteString("tax_id_type=")
+	builder.WriteString(fmt.Sprintf("%v", vph.TaxIDType))
 	builder.WriteByte(')')
 	return builder.String()
 }

@@ -56,6 +56,8 @@ import (
 	"github.com/datum-cloud/datum-os/internal/ent/generated/orgmembershiphistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/passwordresettoken"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/personalaccesstoken"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/phonenumber"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/phonenumberhistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/postaladdress"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/postaladdresshistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/subscriber"
@@ -70,12 +72,15 @@ import (
 	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorhistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofile"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofilehistory"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofilephonenumber"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofilephonenumberhistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofilepostaladdress"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofilepostaladdresshistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/webauthn"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/webhook"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/webhookhistory"
 	"github.com/datum-cloud/datum-os/internal/ent/schema"
+	"github.com/datum-cloud/datum-os/pkg/enums"
 
 	"entgo.io/ent"
 	"entgo.io/ent/privacy"
@@ -2798,6 +2803,111 @@ func init() {
 	personalaccesstokenDescID := personalaccesstokenMixinFields2[0].Descriptor()
 	// personalaccesstoken.DefaultID holds the default value on creation for the id field.
 	personalaccesstoken.DefaultID = personalaccesstokenDescID.Default.(func() string)
+	phonenumberMixin := schema.PhoneNumber{}.Mixin()
+	phonenumber.Policy = privacy.NewPolicies(schema.PhoneNumber{})
+	phonenumber.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := phonenumber.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+	phonenumberMixinHooks0 := phonenumberMixin[0].Hooks()
+	phonenumberMixinHooks1 := phonenumberMixin[1].Hooks()
+	phonenumberMixinHooks4 := phonenumberMixin[4].Hooks()
+
+	phonenumber.Hooks[1] = phonenumberMixinHooks0[0]
+
+	phonenumber.Hooks[2] = phonenumberMixinHooks1[0]
+
+	phonenumber.Hooks[3] = phonenumberMixinHooks4[0]
+	phonenumberMixinInters1 := phonenumberMixin[1].Interceptors()
+	phonenumberMixinInters4 := phonenumberMixin[4].Interceptors()
+	phonenumber.Interceptors[0] = phonenumberMixinInters1[0]
+	phonenumber.Interceptors[1] = phonenumberMixinInters4[0]
+	phonenumberMixinFields0 := phonenumberMixin[0].Fields()
+	_ = phonenumberMixinFields0
+	phonenumberMixinFields2 := phonenumberMixin[2].Fields()
+	_ = phonenumberMixinFields2
+	phonenumberMixinFields3 := phonenumberMixin[3].Fields()
+	_ = phonenumberMixinFields3
+	phonenumberMixinFields4 := phonenumberMixin[4].Fields()
+	_ = phonenumberMixinFields4
+	phonenumberFields := schema.PhoneNumber{}.Fields()
+	_ = phonenumberFields
+	// phonenumberDescCreatedAt is the schema descriptor for created_at field.
+	phonenumberDescCreatedAt := phonenumberMixinFields0[0].Descriptor()
+	// phonenumber.DefaultCreatedAt holds the default value on creation for the created_at field.
+	phonenumber.DefaultCreatedAt = phonenumberDescCreatedAt.Default.(func() time.Time)
+	// phonenumberDescUpdatedAt is the schema descriptor for updated_at field.
+	phonenumberDescUpdatedAt := phonenumberMixinFields0[1].Descriptor()
+	// phonenumber.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	phonenumber.DefaultUpdatedAt = phonenumberDescUpdatedAt.Default.(func() time.Time)
+	// phonenumber.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	phonenumber.UpdateDefaultUpdatedAt = phonenumberDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// phonenumberDescMappingID is the schema descriptor for mapping_id field.
+	phonenumberDescMappingID := phonenumberMixinFields2[1].Descriptor()
+	// phonenumber.DefaultMappingID holds the default value on creation for the mapping_id field.
+	phonenumber.DefaultMappingID = phonenumberDescMappingID.Default.(func() string)
+	// phonenumberDescTags is the schema descriptor for tags field.
+	phonenumberDescTags := phonenumberMixinFields3[0].Descriptor()
+	// phonenumber.DefaultTags holds the default value on creation for the tags field.
+	phonenumber.DefaultTags = phonenumberDescTags.Default.([]string)
+	// phonenumberDescOwnerID is the schema descriptor for owner_id field.
+	phonenumberDescOwnerID := phonenumberMixinFields4[0].Descriptor()
+	// phonenumber.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
+	phonenumber.OwnerIDValidator = phonenumberDescOwnerID.Validators[0].(func(string) error)
+	// phonenumberDescKind is the schema descriptor for kind field.
+	phonenumberDescKind := phonenumberFields[0].Descriptor()
+	// phonenumber.DefaultKind holds the default value on creation for the kind field.
+	phonenumber.DefaultKind = enums.PhoneNumberType(phonenumberDescKind.Default.(string))
+	// phonenumberDescRegionCode is the schema descriptor for region_code field.
+	phonenumberDescRegionCode := phonenumberFields[1].Descriptor()
+	// phonenumber.RegionCodeValidator is a validator for the "region_code" field. It is called by the builders before save.
+	phonenumber.RegionCodeValidator = phonenumberDescRegionCode.Validators[0].(func(string) error)
+	// phonenumberDescNumber is the schema descriptor for number field.
+	phonenumberDescNumber := phonenumberFields[3].Descriptor()
+	// phonenumber.NumberValidator is a validator for the "number" field. It is called by the builders before save.
+	phonenumber.NumberValidator = phonenumberDescNumber.Validators[0].(func(string) error)
+	// phonenumberDescID is the schema descriptor for id field.
+	phonenumberDescID := phonenumberMixinFields2[0].Descriptor()
+	// phonenumber.DefaultID holds the default value on creation for the id field.
+	phonenumber.DefaultID = phonenumberDescID.Default.(func() string)
+	phonenumberhistoryInters := schema.PhoneNumberHistory{}.Interceptors()
+	phonenumberhistory.Interceptors[0] = phonenumberhistoryInters[0]
+	phonenumberhistoryFields := schema.PhoneNumberHistory{}.Fields()
+	_ = phonenumberhistoryFields
+	// phonenumberhistoryDescHistoryTime is the schema descriptor for history_time field.
+	phonenumberhistoryDescHistoryTime := phonenumberhistoryFields[0].Descriptor()
+	// phonenumberhistory.DefaultHistoryTime holds the default value on creation for the history_time field.
+	phonenumberhistory.DefaultHistoryTime = phonenumberhistoryDescHistoryTime.Default.(func() time.Time)
+	// phonenumberhistoryDescCreatedAt is the schema descriptor for created_at field.
+	phonenumberhistoryDescCreatedAt := phonenumberhistoryFields[3].Descriptor()
+	// phonenumberhistory.DefaultCreatedAt holds the default value on creation for the created_at field.
+	phonenumberhistory.DefaultCreatedAt = phonenumberhistoryDescCreatedAt.Default.(func() time.Time)
+	// phonenumberhistoryDescUpdatedAt is the schema descriptor for updated_at field.
+	phonenumberhistoryDescUpdatedAt := phonenumberhistoryFields[4].Descriptor()
+	// phonenumberhistory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	phonenumberhistory.DefaultUpdatedAt = phonenumberhistoryDescUpdatedAt.Default.(func() time.Time)
+	// phonenumberhistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	phonenumberhistory.UpdateDefaultUpdatedAt = phonenumberhistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// phonenumberhistoryDescMappingID is the schema descriptor for mapping_id field.
+	phonenumberhistoryDescMappingID := phonenumberhistoryFields[10].Descriptor()
+	// phonenumberhistory.DefaultMappingID holds the default value on creation for the mapping_id field.
+	phonenumberhistory.DefaultMappingID = phonenumberhistoryDescMappingID.Default.(func() string)
+	// phonenumberhistoryDescTags is the schema descriptor for tags field.
+	phonenumberhistoryDescTags := phonenumberhistoryFields[11].Descriptor()
+	// phonenumberhistory.DefaultTags holds the default value on creation for the tags field.
+	phonenumberhistory.DefaultTags = phonenumberhistoryDescTags.Default.([]string)
+	// phonenumberhistoryDescKind is the schema descriptor for kind field.
+	phonenumberhistoryDescKind := phonenumberhistoryFields[13].Descriptor()
+	// phonenumberhistory.DefaultKind holds the default value on creation for the kind field.
+	phonenumberhistory.DefaultKind = enums.PhoneNumberType(phonenumberhistoryDescKind.Default.(string))
+	// phonenumberhistoryDescID is the schema descriptor for id field.
+	phonenumberhistoryDescID := phonenumberhistoryFields[9].Descriptor()
+	// phonenumberhistory.DefaultID holds the default value on creation for the id field.
+	phonenumberhistory.DefaultID = phonenumberhistoryDescID.Default.(func() string)
 	postaladdressMixin := schema.PostalAddress{}.Mixin()
 	postaladdress.Policy = privacy.NewPolicies(schema.PostalAddress{})
 	postaladdress.Hooks[0] = func(next ent.Mutator) ent.Mutator {
@@ -3635,12 +3745,16 @@ func init() {
 			return nil
 		}
 	}()
-	// vendorprofileDescDbaName is the schema descriptor for dba_name field.
-	vendorprofileDescDbaName := vendorprofileFields[2].Descriptor()
-	// vendorprofile.DbaNameValidator is a validator for the "dba_name" field. It is called by the builders before save.
-	vendorprofile.DbaNameValidator = vendorprofileDescDbaName.Validators[0].(func(string) error)
+	// vendorprofileDescCorporationType is the schema descriptor for corporation_type field.
+	vendorprofileDescCorporationType := vendorprofileFields[2].Descriptor()
+	// vendorprofile.CorporationTypeValidator is a validator for the "corporation_type" field. It is called by the builders before save.
+	vendorprofile.CorporationTypeValidator = vendorprofileDescCorporationType.Validators[0].(func(string) error)
+	// vendorprofileDescCorporationDba is the schema descriptor for corporation_dba field.
+	vendorprofileDescCorporationDba := vendorprofileFields[3].Descriptor()
+	// vendorprofile.CorporationDbaValidator is a validator for the "corporation_dba" field. It is called by the builders before save.
+	vendorprofile.CorporationDbaValidator = vendorprofileDescCorporationDba.Validators[0].(func(string) error)
 	// vendorprofileDescWebsiteURI is the schema descriptor for website_uri field.
-	vendorprofileDescWebsiteURI := vendorprofileFields[4].Descriptor()
+	vendorprofileDescWebsiteURI := vendorprofileFields[5].Descriptor()
 	// vendorprofile.WebsiteURIValidator is a validator for the "website_uri" field. It is called by the builders before save.
 	vendorprofile.WebsiteURIValidator = func() func(string) error {
 		validators := vendorprofileDescWebsiteURI.Validators
@@ -3657,6 +3771,10 @@ func init() {
 			return nil
 		}
 	}()
+	// vendorprofileDescTaxID is the schema descriptor for tax_id field.
+	vendorprofileDescTaxID := vendorprofileFields[6].Descriptor()
+	// vendorprofile.TaxIDValidator is a validator for the "tax_id" field. It is called by the builders before save.
+	vendorprofile.TaxIDValidator = vendorprofileDescTaxID.Validators[0].(func(string) error)
 	// vendorprofileDescID is the schema descriptor for id field.
 	vendorprofileDescID := vendorprofileMixinFields2[0].Descriptor()
 	// vendorprofile.DefaultID holds the default value on creation for the id field.
@@ -3691,6 +3809,82 @@ func init() {
 	vendorprofilehistoryDescID := vendorprofilehistoryFields[9].Descriptor()
 	// vendorprofilehistory.DefaultID holds the default value on creation for the id field.
 	vendorprofilehistory.DefaultID = vendorprofilehistoryDescID.Default.(func() string)
+	vendorprofilephonenumberMixin := schema.VendorProfilePhoneNumber{}.Mixin()
+	vendorprofilephonenumber.Policy = privacy.NewPolicies(schema.VendorProfilePhoneNumber{})
+	vendorprofilephonenumber.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := vendorprofilephonenumber.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+	vendorprofilephonenumberMixinHooks0 := vendorprofilephonenumberMixin[0].Hooks()
+	vendorprofilephonenumberMixinHooks2 := vendorprofilephonenumberMixin[2].Hooks()
+
+	vendorprofilephonenumber.Hooks[1] = vendorprofilephonenumberMixinHooks0[0]
+
+	vendorprofilephonenumber.Hooks[2] = vendorprofilephonenumberMixinHooks2[0]
+	vendorprofilephonenumberMixinInters2 := vendorprofilephonenumberMixin[2].Interceptors()
+	vendorprofilephonenumber.Interceptors[0] = vendorprofilephonenumberMixinInters2[0]
+	vendorprofilephonenumberMixinFields0 := vendorprofilephonenumberMixin[0].Fields()
+	_ = vendorprofilephonenumberMixinFields0
+	vendorprofilephonenumberMixinFields1 := vendorprofilephonenumberMixin[1].Fields()
+	_ = vendorprofilephonenumberMixinFields1
+	vendorprofilephonenumberFields := schema.VendorProfilePhoneNumber{}.Fields()
+	_ = vendorprofilephonenumberFields
+	// vendorprofilephonenumberDescCreatedAt is the schema descriptor for created_at field.
+	vendorprofilephonenumberDescCreatedAt := vendorprofilephonenumberMixinFields0[0].Descriptor()
+	// vendorprofilephonenumber.DefaultCreatedAt holds the default value on creation for the created_at field.
+	vendorprofilephonenumber.DefaultCreatedAt = vendorprofilephonenumberDescCreatedAt.Default.(func() time.Time)
+	// vendorprofilephonenumberDescUpdatedAt is the schema descriptor for updated_at field.
+	vendorprofilephonenumberDescUpdatedAt := vendorprofilephonenumberMixinFields0[1].Descriptor()
+	// vendorprofilephonenumber.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	vendorprofilephonenumber.DefaultUpdatedAt = vendorprofilephonenumberDescUpdatedAt.Default.(func() time.Time)
+	// vendorprofilephonenumber.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	vendorprofilephonenumber.UpdateDefaultUpdatedAt = vendorprofilephonenumberDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// vendorprofilephonenumberDescMappingID is the schema descriptor for mapping_id field.
+	vendorprofilephonenumberDescMappingID := vendorprofilephonenumberMixinFields1[1].Descriptor()
+	// vendorprofilephonenumber.DefaultMappingID holds the default value on creation for the mapping_id field.
+	vendorprofilephonenumber.DefaultMappingID = vendorprofilephonenumberDescMappingID.Default.(func() string)
+	// vendorprofilephonenumberDescVendorProfileID is the schema descriptor for vendor_profile_id field.
+	vendorprofilephonenumberDescVendorProfileID := vendorprofilephonenumberFields[0].Descriptor()
+	// vendorprofilephonenumber.VendorProfileIDValidator is a validator for the "vendor_profile_id" field. It is called by the builders before save.
+	vendorprofilephonenumber.VendorProfileIDValidator = vendorprofilephonenumberDescVendorProfileID.Validators[0].(func(string) error)
+	// vendorprofilephonenumberDescPhoneNumberID is the schema descriptor for phone_number_id field.
+	vendorprofilephonenumberDescPhoneNumberID := vendorprofilephonenumberFields[1].Descriptor()
+	// vendorprofilephonenumber.PhoneNumberIDValidator is a validator for the "phone_number_id" field. It is called by the builders before save.
+	vendorprofilephonenumber.PhoneNumberIDValidator = vendorprofilephonenumberDescPhoneNumberID.Validators[0].(func(string) error)
+	// vendorprofilephonenumberDescID is the schema descriptor for id field.
+	vendorprofilephonenumberDescID := vendorprofilephonenumberMixinFields1[0].Descriptor()
+	// vendorprofilephonenumber.DefaultID holds the default value on creation for the id field.
+	vendorprofilephonenumber.DefaultID = vendorprofilephonenumberDescID.Default.(func() string)
+	vendorprofilephonenumberhistoryInters := schema.VendorProfilePhoneNumberHistory{}.Interceptors()
+	vendorprofilephonenumberhistory.Interceptors[0] = vendorprofilephonenumberhistoryInters[0]
+	vendorprofilephonenumberhistoryFields := schema.VendorProfilePhoneNumberHistory{}.Fields()
+	_ = vendorprofilephonenumberhistoryFields
+	// vendorprofilephonenumberhistoryDescHistoryTime is the schema descriptor for history_time field.
+	vendorprofilephonenumberhistoryDescHistoryTime := vendorprofilephonenumberhistoryFields[0].Descriptor()
+	// vendorprofilephonenumberhistory.DefaultHistoryTime holds the default value on creation for the history_time field.
+	vendorprofilephonenumberhistory.DefaultHistoryTime = vendorprofilephonenumberhistoryDescHistoryTime.Default.(func() time.Time)
+	// vendorprofilephonenumberhistoryDescCreatedAt is the schema descriptor for created_at field.
+	vendorprofilephonenumberhistoryDescCreatedAt := vendorprofilephonenumberhistoryFields[3].Descriptor()
+	// vendorprofilephonenumberhistory.DefaultCreatedAt holds the default value on creation for the created_at field.
+	vendorprofilephonenumberhistory.DefaultCreatedAt = vendorprofilephonenumberhistoryDescCreatedAt.Default.(func() time.Time)
+	// vendorprofilephonenumberhistoryDescUpdatedAt is the schema descriptor for updated_at field.
+	vendorprofilephonenumberhistoryDescUpdatedAt := vendorprofilephonenumberhistoryFields[4].Descriptor()
+	// vendorprofilephonenumberhistory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	vendorprofilephonenumberhistory.DefaultUpdatedAt = vendorprofilephonenumberhistoryDescUpdatedAt.Default.(func() time.Time)
+	// vendorprofilephonenumberhistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	vendorprofilephonenumberhistory.UpdateDefaultUpdatedAt = vendorprofilephonenumberhistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// vendorprofilephonenumberhistoryDescMappingID is the schema descriptor for mapping_id field.
+	vendorprofilephonenumberhistoryDescMappingID := vendorprofilephonenumberhistoryFields[8].Descriptor()
+	// vendorprofilephonenumberhistory.DefaultMappingID holds the default value on creation for the mapping_id field.
+	vendorprofilephonenumberhistory.DefaultMappingID = vendorprofilephonenumberhistoryDescMappingID.Default.(func() string)
+	// vendorprofilephonenumberhistoryDescID is the schema descriptor for id field.
+	vendorprofilephonenumberhistoryDescID := vendorprofilephonenumberhistoryFields[7].Descriptor()
+	// vendorprofilephonenumberhistory.DefaultID holds the default value on creation for the id field.
+	vendorprofilephonenumberhistory.DefaultID = vendorprofilephonenumberhistoryDescID.Default.(func() string)
 	vendorprofilepostaladdressMixin := schema.VendorProfilePostalAddress{}.Mixin()
 	vendorprofilepostaladdress.Policy = privacy.NewPolicies(schema.VendorProfilePostalAddress{})
 	vendorprofilepostaladdress.Hooks[0] = func(next ent.Mutator) ent.Mutator {

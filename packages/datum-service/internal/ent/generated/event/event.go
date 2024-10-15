@@ -171,8 +171,10 @@ var Columns = []string{
 var ForeignKeys = []string{
 	"contact_list_events",
 	"contact_list_membership_events",
+	"phone_number_events",
 	"postal_address_events",
 	"vendor_events",
+	"vendor_profile_phone_number_events",
 	"vendor_profile_postal_address_events",
 }
 

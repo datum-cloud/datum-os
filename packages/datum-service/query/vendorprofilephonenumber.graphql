@@ -1,0 +1,98 @@
+
+mutation CreateBulkCSVVendorProfilePhoneNumber($input: Upload!) {
+  createBulkCSVVendorProfilePhoneNumber(input: $input) {
+    vendorProfilePhoneNumbers {
+      createdAt
+      createdBy
+      id
+      phoneNumberID
+      updatedAt
+      updatedBy
+      vendorProfileID
+    }
+  }
+}
+
+mutation CreateBulkVendorProfilePhoneNumber($input: [CreateVendorProfilePhoneNumberInput!]) {
+  createBulkVendorProfilePhoneNumber(input: $input) {
+    vendorProfilePhoneNumbers {
+      createdAt
+      createdBy
+      id
+      phoneNumberID
+      updatedAt
+      updatedBy
+      vendorProfileID
+    }
+  }
+}
+
+mutation CreateVendorProfilePhoneNumber($input: CreateVendorProfilePhoneNumberInput!) {
+  createVendorProfilePhoneNumber(input: $input) {
+    vendorProfilePhoneNumber {
+      createdAt
+      createdBy
+      id
+      phoneNumberID
+      updatedAt
+      updatedBy
+      vendorProfileID
+    }
+  }
+}
+
+query GetAllVendorProfilePhoneNumbers {
+  vendorProfilePhoneNumbers {
+    edges {
+      node {
+        createdAt
+        createdBy
+        id
+        phoneNumberID
+        updatedAt
+        updatedBy
+        vendorProfileID
+      }
+    }
+  }
+}
+query GetVendorProfilePhoneNumberByID($vendorProfilePhoneNumberId: ID!) {
+  vendorProfilePhoneNumber(id: $vendorProfilePhoneNumberId) {
+    createdAt
+    createdBy
+    id
+    phoneNumberID
+    updatedAt
+    updatedBy
+    vendorProfileID
+  }
+}
+
+query GetVendorProfilePhoneNumbers($where: VendorProfilePhoneNumberWhereInput) {
+  vendorProfilePhoneNumbers(where: $where) {
+    edges {
+      node {
+        createdAt
+        createdBy
+        id
+        phoneNumberID
+        updatedAt
+        updatedBy
+        vendorProfileID
+      }
+    }
+  }
+}
+mutation UpdateVendorProfilePhoneNumber($updateVendorProfilePhoneNumberId: ID!, $input: UpdateVendorProfilePhoneNumberInput!) {
+  updateVendorProfilePhoneNumber(id: $updateVendorProfilePhoneNumberId, input: $input) {
+    vendorProfilePhoneNumber {
+      createdAt
+      createdBy
+      id
+      phoneNumberID
+      updatedAt
+      updatedBy
+      vendorProfileID
+    }
+  }
+}

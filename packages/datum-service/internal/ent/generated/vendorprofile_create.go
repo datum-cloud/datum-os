@@ -11,10 +11,13 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/organization"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/phonenumber"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/postaladdress"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/vendor"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofile"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofilephonenumber"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofilepostaladdress"
+	"github.com/datum-cloud/datum-os/pkg/enums"
 )
 
 // VendorProfileCreate is the builder for creating a VendorProfile entity.
@@ -162,16 +165,30 @@ func (vpc *VendorProfileCreate) SetName(s string) *VendorProfileCreate {
 	return vpc
 }
 
-// SetDbaName sets the "dba_name" field.
-func (vpc *VendorProfileCreate) SetDbaName(s string) *VendorProfileCreate {
-	vpc.mutation.SetDbaName(s)
+// SetCorporationType sets the "corporation_type" field.
+func (vpc *VendorProfileCreate) SetCorporationType(s string) *VendorProfileCreate {
+	vpc.mutation.SetCorporationType(s)
 	return vpc
 }
 
-// SetNillableDbaName sets the "dba_name" field if the given value is not nil.
-func (vpc *VendorProfileCreate) SetNillableDbaName(s *string) *VendorProfileCreate {
+// SetNillableCorporationType sets the "corporation_type" field if the given value is not nil.
+func (vpc *VendorProfileCreate) SetNillableCorporationType(s *string) *VendorProfileCreate {
 	if s != nil {
-		vpc.SetDbaName(*s)
+		vpc.SetCorporationType(*s)
+	}
+	return vpc
+}
+
+// SetCorporationDba sets the "corporation_dba" field.
+func (vpc *VendorProfileCreate) SetCorporationDba(s string) *VendorProfileCreate {
+	vpc.mutation.SetCorporationDba(s)
+	return vpc
+}
+
+// SetNillableCorporationDba sets the "corporation_dba" field if the given value is not nil.
+func (vpc *VendorProfileCreate) SetNillableCorporationDba(s *string) *VendorProfileCreate {
+	if s != nil {
+		vpc.SetCorporationDba(*s)
 	}
 	return vpc
 }
@@ -200,6 +217,34 @@ func (vpc *VendorProfileCreate) SetWebsiteURI(s string) *VendorProfileCreate {
 func (vpc *VendorProfileCreate) SetNillableWebsiteURI(s *string) *VendorProfileCreate {
 	if s != nil {
 		vpc.SetWebsiteURI(*s)
+	}
+	return vpc
+}
+
+// SetTaxID sets the "tax_id" field.
+func (vpc *VendorProfileCreate) SetTaxID(s string) *VendorProfileCreate {
+	vpc.mutation.SetTaxID(s)
+	return vpc
+}
+
+// SetNillableTaxID sets the "tax_id" field if the given value is not nil.
+func (vpc *VendorProfileCreate) SetNillableTaxID(s *string) *VendorProfileCreate {
+	if s != nil {
+		vpc.SetTaxID(*s)
+	}
+	return vpc
+}
+
+// SetTaxIDType sets the "tax_id_type" field.
+func (vpc *VendorProfileCreate) SetTaxIDType(eit enums.TaxIDType) *VendorProfileCreate {
+	vpc.mutation.SetTaxIDType(eit)
+	return vpc
+}
+
+// SetNillableTaxIDType sets the "tax_id_type" field if the given value is not nil.
+func (vpc *VendorProfileCreate) SetNillableTaxIDType(eit *enums.TaxIDType) *VendorProfileCreate {
+	if eit != nil {
+		vpc.SetTaxIDType(*eit)
 	}
 	return vpc
 }
@@ -238,6 +283,21 @@ func (vpc *VendorProfileCreate) AddPostalAddresses(p ...*PostalAddress) *VendorP
 	return vpc.AddPostalAddressIDs(ids...)
 }
 
+// AddPhoneNumberIDs adds the "phone_numbers" edge to the PhoneNumber entity by IDs.
+func (vpc *VendorProfileCreate) AddPhoneNumberIDs(ids ...string) *VendorProfileCreate {
+	vpc.mutation.AddPhoneNumberIDs(ids...)
+	return vpc
+}
+
+// AddPhoneNumbers adds the "phone_numbers" edges to the PhoneNumber entity.
+func (vpc *VendorProfileCreate) AddPhoneNumbers(p ...*PhoneNumber) *VendorProfileCreate {
+	ids := make([]string, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return vpc.AddPhoneNumberIDs(ids...)
+}
+
 // SetVendor sets the "vendor" edge to the Vendor entity.
 func (vpc *VendorProfileCreate) SetVendor(v *Vendor) *VendorProfileCreate {
 	return vpc.SetVendorID(v.ID)
@@ -256,6 +316,21 @@ func (vpc *VendorProfileCreate) AddVendorProfilePostalAddresses(v ...*VendorProf
 		ids[i] = v[i].ID
 	}
 	return vpc.AddVendorProfilePostalAddressIDs(ids...)
+}
+
+// AddVendorProfilePhoneNumberIDs adds the "vendor_profile_phone_numbers" edge to the VendorProfilePhoneNumber entity by IDs.
+func (vpc *VendorProfileCreate) AddVendorProfilePhoneNumberIDs(ids ...string) *VendorProfileCreate {
+	vpc.mutation.AddVendorProfilePhoneNumberIDs(ids...)
+	return vpc
+}
+
+// AddVendorProfilePhoneNumbers adds the "vendor_profile_phone_numbers" edges to the VendorProfilePhoneNumber entity.
+func (vpc *VendorProfileCreate) AddVendorProfilePhoneNumbers(v ...*VendorProfilePhoneNumber) *VendorProfileCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return vpc.AddVendorProfilePhoneNumberIDs(ids...)
 }
 
 // Mutation returns the VendorProfileMutation object of the builder.
@@ -320,6 +395,10 @@ func (vpc *VendorProfileCreate) defaults() error {
 		v := vendorprofile.DefaultTags
 		vpc.mutation.SetTags(v)
 	}
+	if _, ok := vpc.mutation.TaxIDType(); !ok {
+		v := vendorprofile.DefaultTaxIDType
+		vpc.mutation.SetTaxIDType(v)
+	}
 	if _, ok := vpc.mutation.ID(); !ok {
 		if vendorprofile.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized vendorprofile.DefaultID (forgotten import generated/runtime?)")
@@ -353,14 +432,32 @@ func (vpc *VendorProfileCreate) check() error {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "VendorProfile.name": %w`, err)}
 		}
 	}
-	if v, ok := vpc.mutation.DbaName(); ok {
-		if err := vendorprofile.DbaNameValidator(v); err != nil {
-			return &ValidationError{Name: "dba_name", err: fmt.Errorf(`generated: validator failed for field "VendorProfile.dba_name": %w`, err)}
+	if v, ok := vpc.mutation.CorporationType(); ok {
+		if err := vendorprofile.CorporationTypeValidator(v); err != nil {
+			return &ValidationError{Name: "corporation_type", err: fmt.Errorf(`generated: validator failed for field "VendorProfile.corporation_type": %w`, err)}
+		}
+	}
+	if v, ok := vpc.mutation.CorporationDba(); ok {
+		if err := vendorprofile.CorporationDbaValidator(v); err != nil {
+			return &ValidationError{Name: "corporation_dba", err: fmt.Errorf(`generated: validator failed for field "VendorProfile.corporation_dba": %w`, err)}
 		}
 	}
 	if v, ok := vpc.mutation.WebsiteURI(); ok {
 		if err := vendorprofile.WebsiteURIValidator(v); err != nil {
 			return &ValidationError{Name: "website_uri", err: fmt.Errorf(`generated: validator failed for field "VendorProfile.website_uri": %w`, err)}
+		}
+	}
+	if v, ok := vpc.mutation.TaxID(); ok {
+		if err := vendorprofile.TaxIDValidator(v); err != nil {
+			return &ValidationError{Name: "tax_id", err: fmt.Errorf(`generated: validator failed for field "VendorProfile.tax_id": %w`, err)}
+		}
+	}
+	if _, ok := vpc.mutation.TaxIDType(); !ok {
+		return &ValidationError{Name: "tax_id_type", err: errors.New(`generated: missing required field "VendorProfile.tax_id_type"`)}
+	}
+	if v, ok := vpc.mutation.TaxIDType(); ok {
+		if err := vendorprofile.TaxIDTypeValidator(v); err != nil {
+			return &ValidationError{Name: "tax_id_type", err: fmt.Errorf(`generated: validator failed for field "VendorProfile.tax_id_type": %w`, err)}
 		}
 	}
 	return nil
@@ -435,9 +532,13 @@ func (vpc *VendorProfileCreate) createSpec() (*VendorProfile, *sqlgraph.CreateSp
 		_spec.SetField(vendorprofile.FieldName, field.TypeString, value)
 		_node.Name = value
 	}
-	if value, ok := vpc.mutation.DbaName(); ok {
-		_spec.SetField(vendorprofile.FieldDbaName, field.TypeString, value)
-		_node.DbaName = value
+	if value, ok := vpc.mutation.CorporationType(); ok {
+		_spec.SetField(vendorprofile.FieldCorporationType, field.TypeString, value)
+		_node.CorporationType = value
+	}
+	if value, ok := vpc.mutation.CorporationDba(); ok {
+		_spec.SetField(vendorprofile.FieldCorporationDba, field.TypeString, value)
+		_node.CorporationDba = value
 	}
 	if value, ok := vpc.mutation.Description(); ok {
 		_spec.SetField(vendorprofile.FieldDescription, field.TypeString, value)
@@ -446,6 +547,14 @@ func (vpc *VendorProfileCreate) createSpec() (*VendorProfile, *sqlgraph.CreateSp
 	if value, ok := vpc.mutation.WebsiteURI(); ok {
 		_spec.SetField(vendorprofile.FieldWebsiteURI, field.TypeString, value)
 		_node.WebsiteURI = value
+	}
+	if value, ok := vpc.mutation.TaxID(); ok {
+		_spec.SetField(vendorprofile.FieldTaxID, field.TypeString, value)
+		_node.TaxID = value
+	}
+	if value, ok := vpc.mutation.TaxIDType(); ok {
+		_spec.SetField(vendorprofile.FieldTaxIDType, field.TypeEnum, value)
+		_node.TaxIDType = value
 	}
 	if nodes := vpc.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
@@ -489,6 +598,30 @@ func (vpc *VendorProfileCreate) createSpec() (*VendorProfile, *sqlgraph.CreateSp
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
+	if nodes := vpc.mutation.PhoneNumbersIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   vendorprofile.PhoneNumbersTable,
+			Columns: vendorprofile.PhoneNumbersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(phonenumber.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = vpc.schemaConfig.VendorProfilePhoneNumber
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		createE := &VendorProfilePhoneNumberCreate{config: vpc.config, mutation: newVendorProfilePhoneNumberMutation(vpc.config, OpCreate)}
+		_ = createE.defaults()
+		_, specE := createE.createSpec()
+		edge.Target.Fields = specE.Fields
+		if specE.ID.Value != nil {
+			edge.Target.Fields = append(edge.Target.Fields, specE.ID)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
 	if nodes := vpc.mutation.VendorIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2O,
@@ -519,6 +652,23 @@ func (vpc *VendorProfileCreate) createSpec() (*VendorProfile, *sqlgraph.CreateSp
 			},
 		}
 		edge.Schema = vpc.schemaConfig.VendorProfilePostalAddress
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := vpc.mutation.VendorProfilePhoneNumbersIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   vendorprofile.VendorProfilePhoneNumbersTable,
+			Columns: []string{vendorprofile.VendorProfilePhoneNumbersColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(vendorprofilephonenumber.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = vpc.schemaConfig.VendorProfilePhoneNumber
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

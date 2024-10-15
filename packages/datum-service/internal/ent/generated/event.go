@@ -43,8 +43,10 @@ type Event struct {
 	Edges                                EventEdges `json:"edges"`
 	contact_list_events                  *string
 	contact_list_membership_events       *string
+	phone_number_events                  *string
 	postal_address_events                *string
 	vendor_events                        *string
+	vendor_profile_phone_number_events   *string
 	vendor_profile_postal_address_events *string
 	selectValues                         sql.SelectValues
 }
@@ -266,11 +268,15 @@ func (*Event) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullString)
 		case event.ForeignKeys[1]: // contact_list_membership_events
 			values[i] = new(sql.NullString)
-		case event.ForeignKeys[2]: // postal_address_events
+		case event.ForeignKeys[2]: // phone_number_events
 			values[i] = new(sql.NullString)
-		case event.ForeignKeys[3]: // vendor_events
+		case event.ForeignKeys[3]: // postal_address_events
 			values[i] = new(sql.NullString)
-		case event.ForeignKeys[4]: // vendor_profile_postal_address_events
+		case event.ForeignKeys[4]: // vendor_events
+			values[i] = new(sql.NullString)
+		case event.ForeignKeys[5]: // vendor_profile_phone_number_events
+			values[i] = new(sql.NullString)
+		case event.ForeignKeys[6]: // vendor_profile_postal_address_events
 			values[i] = new(sql.NullString)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -373,19 +379,33 @@ func (e *Event) assignValues(columns []string, values []any) error {
 			}
 		case event.ForeignKeys[2]:
 			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field phone_number_events", values[i])
+			} else if value.Valid {
+				e.phone_number_events = new(string)
+				*e.phone_number_events = value.String
+			}
+		case event.ForeignKeys[3]:
+			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field postal_address_events", values[i])
 			} else if value.Valid {
 				e.postal_address_events = new(string)
 				*e.postal_address_events = value.String
 			}
-		case event.ForeignKeys[3]:
+		case event.ForeignKeys[4]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field vendor_events", values[i])
 			} else if value.Valid {
 				e.vendor_events = new(string)
 				*e.vendor_events = value.String
 			}
-		case event.ForeignKeys[4]:
+		case event.ForeignKeys[5]:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field vendor_profile_phone_number_events", values[i])
+			} else if value.Valid {
+				e.vendor_profile_phone_number_events = new(string)
+				*e.vendor_profile_phone_number_events = value.String
+			}
+		case event.ForeignKeys[6]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field vendor_profile_postal_address_events", values[i])
 			} else if value.Valid {

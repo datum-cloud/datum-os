@@ -62,6 +62,8 @@ import (
 	"github.com/datum-cloud/datum-os/internal/ent/generated/orgmembership"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/orgmembershiphistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/personalaccesstoken"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/phonenumber"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/phonenumberhistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/postaladdress"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/postaladdresshistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/subscriber"
@@ -76,6 +78,8 @@ import (
 	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorhistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofile"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofilehistory"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofilephonenumber"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofilephonenumberhistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofilepostaladdress"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofilepostaladdresshistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/webhook"
@@ -12989,6 +12993,504 @@ func (pat *PersonalAccessToken) ToEdge(order *PersonalAccessTokenOrder) *Persona
 	}
 }
 
+// PhoneNumberEdge is the edge representation of PhoneNumber.
+type PhoneNumberEdge struct {
+	Node   *PhoneNumber `json:"node"`
+	Cursor Cursor       `json:"cursor"`
+}
+
+// PhoneNumberConnection is the connection containing edges to PhoneNumber.
+type PhoneNumberConnection struct {
+	Edges      []*PhoneNumberEdge `json:"edges"`
+	PageInfo   PageInfo           `json:"pageInfo"`
+	TotalCount int                `json:"totalCount"`
+}
+
+func (c *PhoneNumberConnection) build(nodes []*PhoneNumber, pager *phonenumberPager, after *Cursor, first *int, before *Cursor, last *int) {
+	c.PageInfo.HasNextPage = before != nil
+	c.PageInfo.HasPreviousPage = after != nil
+	if first != nil && *first+1 == len(nodes) {
+		c.PageInfo.HasNextPage = true
+		nodes = nodes[:len(nodes)-1]
+	} else if last != nil && *last+1 == len(nodes) {
+		c.PageInfo.HasPreviousPage = true
+		nodes = nodes[:len(nodes)-1]
+	}
+	var nodeAt func(int) *PhoneNumber
+	if last != nil {
+		n := len(nodes) - 1
+		nodeAt = func(i int) *PhoneNumber {
+			return nodes[n-i]
+		}
+	} else {
+		nodeAt = func(i int) *PhoneNumber {
+			return nodes[i]
+		}
+	}
+	c.Edges = make([]*PhoneNumberEdge, len(nodes))
+	for i := range nodes {
+		node := nodeAt(i)
+		c.Edges[i] = &PhoneNumberEdge{
+			Node:   node,
+			Cursor: pager.toCursor(node),
+		}
+	}
+	if l := len(c.Edges); l > 0 {
+		c.PageInfo.StartCursor = &c.Edges[0].Cursor
+		c.PageInfo.EndCursor = &c.Edges[l-1].Cursor
+	}
+	if c.TotalCount == 0 {
+		c.TotalCount = len(nodes)
+	}
+}
+
+// PhoneNumberPaginateOption enables pagination customization.
+type PhoneNumberPaginateOption func(*phonenumberPager) error
+
+// WithPhoneNumberOrder configures pagination ordering.
+func WithPhoneNumberOrder(order *PhoneNumberOrder) PhoneNumberPaginateOption {
+	if order == nil {
+		order = DefaultPhoneNumberOrder
+	}
+	o := *order
+	return func(pager *phonenumberPager) error {
+		if err := o.Direction.Validate(); err != nil {
+			return err
+		}
+		if o.Field == nil {
+			o.Field = DefaultPhoneNumberOrder.Field
+		}
+		pager.order = &o
+		return nil
+	}
+}
+
+// WithPhoneNumberFilter configures pagination filter.
+func WithPhoneNumberFilter(filter func(*PhoneNumberQuery) (*PhoneNumberQuery, error)) PhoneNumberPaginateOption {
+	return func(pager *phonenumberPager) error {
+		if filter == nil {
+			return errors.New("PhoneNumberQuery filter cannot be nil")
+		}
+		pager.filter = filter
+		return nil
+	}
+}
+
+type phonenumberPager struct {
+	reverse bool
+	order   *PhoneNumberOrder
+	filter  func(*PhoneNumberQuery) (*PhoneNumberQuery, error)
+}
+
+func newPhoneNumberPager(opts []PhoneNumberPaginateOption, reverse bool) (*phonenumberPager, error) {
+	pager := &phonenumberPager{reverse: reverse}
+	for _, opt := range opts {
+		if err := opt(pager); err != nil {
+			return nil, err
+		}
+	}
+	if pager.order == nil {
+		pager.order = DefaultPhoneNumberOrder
+	}
+	return pager, nil
+}
+
+func (p *phonenumberPager) applyFilter(query *PhoneNumberQuery) (*PhoneNumberQuery, error) {
+	if p.filter != nil {
+		return p.filter(query)
+	}
+	return query, nil
+}
+
+func (p *phonenumberPager) toCursor(pn *PhoneNumber) Cursor {
+	return p.order.Field.toCursor(pn)
+}
+
+func (p *phonenumberPager) applyCursors(query *PhoneNumberQuery, after, before *Cursor) (*PhoneNumberQuery, error) {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	for _, predicate := range entgql.CursorsPredicate(after, before, DefaultPhoneNumberOrder.Field.column, p.order.Field.column, direction) {
+		query = query.Where(predicate)
+	}
+	return query, nil
+}
+
+func (p *phonenumberPager) applyOrder(query *PhoneNumberQuery) *PhoneNumberQuery {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	query = query.Order(p.order.Field.toTerm(direction.OrderTermOption()))
+	if p.order.Field != DefaultPhoneNumberOrder.Field {
+		query = query.Order(DefaultPhoneNumberOrder.Field.toTerm(direction.OrderTermOption()))
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(p.order.Field.column)
+	}
+	return query
+}
+
+func (p *phonenumberPager) orderExpr(query *PhoneNumberQuery) sql.Querier {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(p.order.Field.column)
+	}
+	return sql.ExprFunc(func(b *sql.Builder) {
+		b.Ident(p.order.Field.column).Pad().WriteString(string(direction))
+		if p.order.Field != DefaultPhoneNumberOrder.Field {
+			b.Comma().Ident(DefaultPhoneNumberOrder.Field.column).Pad().WriteString(string(direction))
+		}
+	})
+}
+
+// Paginate executes the query and returns a relay based cursor connection to PhoneNumber.
+func (pn *PhoneNumberQuery) Paginate(
+	ctx context.Context, after *Cursor, first *int,
+	before *Cursor, last *int, opts ...PhoneNumberPaginateOption,
+) (*PhoneNumberConnection, error) {
+	if err := validateFirstLast(first, last); err != nil {
+		return nil, err
+	}
+	pager, err := newPhoneNumberPager(opts, last != nil)
+	if err != nil {
+		return nil, err
+	}
+	if pn, err = pager.applyFilter(pn); err != nil {
+		return nil, err
+	}
+	conn := &PhoneNumberConnection{Edges: []*PhoneNumberEdge{}}
+	ignoredEdges := !hasCollectedField(ctx, edgesField)
+	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+		hasPagination := after != nil || first != nil || before != nil || last != nil
+		if hasPagination || ignoredEdges {
+			c := pn.Clone()
+			c.ctx.Fields = nil
+			if conn.TotalCount, err = c.Count(ctx); err != nil {
+				return nil, err
+			}
+			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
+			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
+		}
+	}
+	if ignoredEdges || (first != nil && *first == 0) || (last != nil && *last == 0) {
+		return conn, nil
+	}
+	if pn, err = pager.applyCursors(pn, after, before); err != nil {
+		return nil, err
+	}
+	limit := paginateLimit(first, last)
+	if limit != 0 {
+		pn.Limit(limit)
+	}
+	if field := collectedField(ctx, edgesField, nodeField); field != nil {
+		if err := pn.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
+			return nil, err
+		}
+	}
+	pn = pager.applyOrder(pn)
+	nodes, err := pn.All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	conn.build(nodes, pager, after, first, before, last)
+	return conn, nil
+}
+
+// PhoneNumberOrderField defines the ordering field of PhoneNumber.
+type PhoneNumberOrderField struct {
+	// Value extracts the ordering value from the given PhoneNumber.
+	Value    func(*PhoneNumber) (ent.Value, error)
+	column   string // field or computed.
+	toTerm   func(...sql.OrderTermOption) phonenumber.OrderOption
+	toCursor func(*PhoneNumber) Cursor
+}
+
+// PhoneNumberOrder defines the ordering of PhoneNumber.
+type PhoneNumberOrder struct {
+	Direction OrderDirection         `json:"direction"`
+	Field     *PhoneNumberOrderField `json:"field"`
+}
+
+// DefaultPhoneNumberOrder is the default ordering of PhoneNumber.
+var DefaultPhoneNumberOrder = &PhoneNumberOrder{
+	Direction: entgql.OrderDirectionAsc,
+	Field: &PhoneNumberOrderField{
+		Value: func(pn *PhoneNumber) (ent.Value, error) {
+			return pn.ID, nil
+		},
+		column: phonenumber.FieldID,
+		toTerm: phonenumber.ByID,
+		toCursor: func(pn *PhoneNumber) Cursor {
+			return Cursor{ID: pn.ID}
+		},
+	},
+}
+
+// ToEdge converts PhoneNumber into PhoneNumberEdge.
+func (pn *PhoneNumber) ToEdge(order *PhoneNumberOrder) *PhoneNumberEdge {
+	if order == nil {
+		order = DefaultPhoneNumberOrder
+	}
+	return &PhoneNumberEdge{
+		Node:   pn,
+		Cursor: order.Field.toCursor(pn),
+	}
+}
+
+// PhoneNumberHistoryEdge is the edge representation of PhoneNumberHistory.
+type PhoneNumberHistoryEdge struct {
+	Node   *PhoneNumberHistory `json:"node"`
+	Cursor Cursor              `json:"cursor"`
+}
+
+// PhoneNumberHistoryConnection is the connection containing edges to PhoneNumberHistory.
+type PhoneNumberHistoryConnection struct {
+	Edges      []*PhoneNumberHistoryEdge `json:"edges"`
+	PageInfo   PageInfo                  `json:"pageInfo"`
+	TotalCount int                       `json:"totalCount"`
+}
+
+func (c *PhoneNumberHistoryConnection) build(nodes []*PhoneNumberHistory, pager *phonenumberhistoryPager, after *Cursor, first *int, before *Cursor, last *int) {
+	c.PageInfo.HasNextPage = before != nil
+	c.PageInfo.HasPreviousPage = after != nil
+	if first != nil && *first+1 == len(nodes) {
+		c.PageInfo.HasNextPage = true
+		nodes = nodes[:len(nodes)-1]
+	} else if last != nil && *last+1 == len(nodes) {
+		c.PageInfo.HasPreviousPage = true
+		nodes = nodes[:len(nodes)-1]
+	}
+	var nodeAt func(int) *PhoneNumberHistory
+	if last != nil {
+		n := len(nodes) - 1
+		nodeAt = func(i int) *PhoneNumberHistory {
+			return nodes[n-i]
+		}
+	} else {
+		nodeAt = func(i int) *PhoneNumberHistory {
+			return nodes[i]
+		}
+	}
+	c.Edges = make([]*PhoneNumberHistoryEdge, len(nodes))
+	for i := range nodes {
+		node := nodeAt(i)
+		c.Edges[i] = &PhoneNumberHistoryEdge{
+			Node:   node,
+			Cursor: pager.toCursor(node),
+		}
+	}
+	if l := len(c.Edges); l > 0 {
+		c.PageInfo.StartCursor = &c.Edges[0].Cursor
+		c.PageInfo.EndCursor = &c.Edges[l-1].Cursor
+	}
+	if c.TotalCount == 0 {
+		c.TotalCount = len(nodes)
+	}
+}
+
+// PhoneNumberHistoryPaginateOption enables pagination customization.
+type PhoneNumberHistoryPaginateOption func(*phonenumberhistoryPager) error
+
+// WithPhoneNumberHistoryOrder configures pagination ordering.
+func WithPhoneNumberHistoryOrder(order *PhoneNumberHistoryOrder) PhoneNumberHistoryPaginateOption {
+	if order == nil {
+		order = DefaultPhoneNumberHistoryOrder
+	}
+	o := *order
+	return func(pager *phonenumberhistoryPager) error {
+		if err := o.Direction.Validate(); err != nil {
+			return err
+		}
+		if o.Field == nil {
+			o.Field = DefaultPhoneNumberHistoryOrder.Field
+		}
+		pager.order = &o
+		return nil
+	}
+}
+
+// WithPhoneNumberHistoryFilter configures pagination filter.
+func WithPhoneNumberHistoryFilter(filter func(*PhoneNumberHistoryQuery) (*PhoneNumberHistoryQuery, error)) PhoneNumberHistoryPaginateOption {
+	return func(pager *phonenumberhistoryPager) error {
+		if filter == nil {
+			return errors.New("PhoneNumberHistoryQuery filter cannot be nil")
+		}
+		pager.filter = filter
+		return nil
+	}
+}
+
+type phonenumberhistoryPager struct {
+	reverse bool
+	order   *PhoneNumberHistoryOrder
+	filter  func(*PhoneNumberHistoryQuery) (*PhoneNumberHistoryQuery, error)
+}
+
+func newPhoneNumberHistoryPager(opts []PhoneNumberHistoryPaginateOption, reverse bool) (*phonenumberhistoryPager, error) {
+	pager := &phonenumberhistoryPager{reverse: reverse}
+	for _, opt := range opts {
+		if err := opt(pager); err != nil {
+			return nil, err
+		}
+	}
+	if pager.order == nil {
+		pager.order = DefaultPhoneNumberHistoryOrder
+	}
+	return pager, nil
+}
+
+func (p *phonenumberhistoryPager) applyFilter(query *PhoneNumberHistoryQuery) (*PhoneNumberHistoryQuery, error) {
+	if p.filter != nil {
+		return p.filter(query)
+	}
+	return query, nil
+}
+
+func (p *phonenumberhistoryPager) toCursor(pnh *PhoneNumberHistory) Cursor {
+	return p.order.Field.toCursor(pnh)
+}
+
+func (p *phonenumberhistoryPager) applyCursors(query *PhoneNumberHistoryQuery, after, before *Cursor) (*PhoneNumberHistoryQuery, error) {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	for _, predicate := range entgql.CursorsPredicate(after, before, DefaultPhoneNumberHistoryOrder.Field.column, p.order.Field.column, direction) {
+		query = query.Where(predicate)
+	}
+	return query, nil
+}
+
+func (p *phonenumberhistoryPager) applyOrder(query *PhoneNumberHistoryQuery) *PhoneNumberHistoryQuery {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	query = query.Order(p.order.Field.toTerm(direction.OrderTermOption()))
+	if p.order.Field != DefaultPhoneNumberHistoryOrder.Field {
+		query = query.Order(DefaultPhoneNumberHistoryOrder.Field.toTerm(direction.OrderTermOption()))
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(p.order.Field.column)
+	}
+	return query
+}
+
+func (p *phonenumberhistoryPager) orderExpr(query *PhoneNumberHistoryQuery) sql.Querier {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(p.order.Field.column)
+	}
+	return sql.ExprFunc(func(b *sql.Builder) {
+		b.Ident(p.order.Field.column).Pad().WriteString(string(direction))
+		if p.order.Field != DefaultPhoneNumberHistoryOrder.Field {
+			b.Comma().Ident(DefaultPhoneNumberHistoryOrder.Field.column).Pad().WriteString(string(direction))
+		}
+	})
+}
+
+// Paginate executes the query and returns a relay based cursor connection to PhoneNumberHistory.
+func (pnh *PhoneNumberHistoryQuery) Paginate(
+	ctx context.Context, after *Cursor, first *int,
+	before *Cursor, last *int, opts ...PhoneNumberHistoryPaginateOption,
+) (*PhoneNumberHistoryConnection, error) {
+	if err := validateFirstLast(first, last); err != nil {
+		return nil, err
+	}
+	pager, err := newPhoneNumberHistoryPager(opts, last != nil)
+	if err != nil {
+		return nil, err
+	}
+	if pnh, err = pager.applyFilter(pnh); err != nil {
+		return nil, err
+	}
+	conn := &PhoneNumberHistoryConnection{Edges: []*PhoneNumberHistoryEdge{}}
+	ignoredEdges := !hasCollectedField(ctx, edgesField)
+	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+		hasPagination := after != nil || first != nil || before != nil || last != nil
+		if hasPagination || ignoredEdges {
+			c := pnh.Clone()
+			c.ctx.Fields = nil
+			if conn.TotalCount, err = c.Count(ctx); err != nil {
+				return nil, err
+			}
+			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
+			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
+		}
+	}
+	if ignoredEdges || (first != nil && *first == 0) || (last != nil && *last == 0) {
+		return conn, nil
+	}
+	if pnh, err = pager.applyCursors(pnh, after, before); err != nil {
+		return nil, err
+	}
+	limit := paginateLimit(first, last)
+	if limit != 0 {
+		pnh.Limit(limit)
+	}
+	if field := collectedField(ctx, edgesField, nodeField); field != nil {
+		if err := pnh.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
+			return nil, err
+		}
+	}
+	pnh = pager.applyOrder(pnh)
+	nodes, err := pnh.All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	conn.build(nodes, pager, after, first, before, last)
+	return conn, nil
+}
+
+// PhoneNumberHistoryOrderField defines the ordering field of PhoneNumberHistory.
+type PhoneNumberHistoryOrderField struct {
+	// Value extracts the ordering value from the given PhoneNumberHistory.
+	Value    func(*PhoneNumberHistory) (ent.Value, error)
+	column   string // field or computed.
+	toTerm   func(...sql.OrderTermOption) phonenumberhistory.OrderOption
+	toCursor func(*PhoneNumberHistory) Cursor
+}
+
+// PhoneNumberHistoryOrder defines the ordering of PhoneNumberHistory.
+type PhoneNumberHistoryOrder struct {
+	Direction OrderDirection                `json:"direction"`
+	Field     *PhoneNumberHistoryOrderField `json:"field"`
+}
+
+// DefaultPhoneNumberHistoryOrder is the default ordering of PhoneNumberHistory.
+var DefaultPhoneNumberHistoryOrder = &PhoneNumberHistoryOrder{
+	Direction: entgql.OrderDirectionAsc,
+	Field: &PhoneNumberHistoryOrderField{
+		Value: func(pnh *PhoneNumberHistory) (ent.Value, error) {
+			return pnh.ID, nil
+		},
+		column: phonenumberhistory.FieldID,
+		toTerm: phonenumberhistory.ByID,
+		toCursor: func(pnh *PhoneNumberHistory) Cursor {
+			return Cursor{ID: pnh.ID}
+		},
+	},
+}
+
+// ToEdge converts PhoneNumberHistory into PhoneNumberHistoryEdge.
+func (pnh *PhoneNumberHistory) ToEdge(order *PhoneNumberHistoryOrder) *PhoneNumberHistoryEdge {
+	if order == nil {
+		order = DefaultPhoneNumberHistoryOrder
+	}
+	return &PhoneNumberHistoryEdge{
+		Node:   pnh,
+		Cursor: order.Field.toCursor(pnh),
+	}
+}
+
 // PostalAddressEdge is the edge representation of PostalAddress.
 type PostalAddressEdge struct {
 	Node   *PostalAddress `json:"node"`
@@ -17086,6 +17588,504 @@ func (vph *VendorProfileHistory) ToEdge(order *VendorProfileHistoryOrder) *Vendo
 	return &VendorProfileHistoryEdge{
 		Node:   vph,
 		Cursor: order.Field.toCursor(vph),
+	}
+}
+
+// VendorProfilePhoneNumberEdge is the edge representation of VendorProfilePhoneNumber.
+type VendorProfilePhoneNumberEdge struct {
+	Node   *VendorProfilePhoneNumber `json:"node"`
+	Cursor Cursor                    `json:"cursor"`
+}
+
+// VendorProfilePhoneNumberConnection is the connection containing edges to VendorProfilePhoneNumber.
+type VendorProfilePhoneNumberConnection struct {
+	Edges      []*VendorProfilePhoneNumberEdge `json:"edges"`
+	PageInfo   PageInfo                        `json:"pageInfo"`
+	TotalCount int                             `json:"totalCount"`
+}
+
+func (c *VendorProfilePhoneNumberConnection) build(nodes []*VendorProfilePhoneNumber, pager *vendorprofilephonenumberPager, after *Cursor, first *int, before *Cursor, last *int) {
+	c.PageInfo.HasNextPage = before != nil
+	c.PageInfo.HasPreviousPage = after != nil
+	if first != nil && *first+1 == len(nodes) {
+		c.PageInfo.HasNextPage = true
+		nodes = nodes[:len(nodes)-1]
+	} else if last != nil && *last+1 == len(nodes) {
+		c.PageInfo.HasPreviousPage = true
+		nodes = nodes[:len(nodes)-1]
+	}
+	var nodeAt func(int) *VendorProfilePhoneNumber
+	if last != nil {
+		n := len(nodes) - 1
+		nodeAt = func(i int) *VendorProfilePhoneNumber {
+			return nodes[n-i]
+		}
+	} else {
+		nodeAt = func(i int) *VendorProfilePhoneNumber {
+			return nodes[i]
+		}
+	}
+	c.Edges = make([]*VendorProfilePhoneNumberEdge, len(nodes))
+	for i := range nodes {
+		node := nodeAt(i)
+		c.Edges[i] = &VendorProfilePhoneNumberEdge{
+			Node:   node,
+			Cursor: pager.toCursor(node),
+		}
+	}
+	if l := len(c.Edges); l > 0 {
+		c.PageInfo.StartCursor = &c.Edges[0].Cursor
+		c.PageInfo.EndCursor = &c.Edges[l-1].Cursor
+	}
+	if c.TotalCount == 0 {
+		c.TotalCount = len(nodes)
+	}
+}
+
+// VendorProfilePhoneNumberPaginateOption enables pagination customization.
+type VendorProfilePhoneNumberPaginateOption func(*vendorprofilephonenumberPager) error
+
+// WithVendorProfilePhoneNumberOrder configures pagination ordering.
+func WithVendorProfilePhoneNumberOrder(order *VendorProfilePhoneNumberOrder) VendorProfilePhoneNumberPaginateOption {
+	if order == nil {
+		order = DefaultVendorProfilePhoneNumberOrder
+	}
+	o := *order
+	return func(pager *vendorprofilephonenumberPager) error {
+		if err := o.Direction.Validate(); err != nil {
+			return err
+		}
+		if o.Field == nil {
+			o.Field = DefaultVendorProfilePhoneNumberOrder.Field
+		}
+		pager.order = &o
+		return nil
+	}
+}
+
+// WithVendorProfilePhoneNumberFilter configures pagination filter.
+func WithVendorProfilePhoneNumberFilter(filter func(*VendorProfilePhoneNumberQuery) (*VendorProfilePhoneNumberQuery, error)) VendorProfilePhoneNumberPaginateOption {
+	return func(pager *vendorprofilephonenumberPager) error {
+		if filter == nil {
+			return errors.New("VendorProfilePhoneNumberQuery filter cannot be nil")
+		}
+		pager.filter = filter
+		return nil
+	}
+}
+
+type vendorprofilephonenumberPager struct {
+	reverse bool
+	order   *VendorProfilePhoneNumberOrder
+	filter  func(*VendorProfilePhoneNumberQuery) (*VendorProfilePhoneNumberQuery, error)
+}
+
+func newVendorProfilePhoneNumberPager(opts []VendorProfilePhoneNumberPaginateOption, reverse bool) (*vendorprofilephonenumberPager, error) {
+	pager := &vendorprofilephonenumberPager{reverse: reverse}
+	for _, opt := range opts {
+		if err := opt(pager); err != nil {
+			return nil, err
+		}
+	}
+	if pager.order == nil {
+		pager.order = DefaultVendorProfilePhoneNumberOrder
+	}
+	return pager, nil
+}
+
+func (p *vendorprofilephonenumberPager) applyFilter(query *VendorProfilePhoneNumberQuery) (*VendorProfilePhoneNumberQuery, error) {
+	if p.filter != nil {
+		return p.filter(query)
+	}
+	return query, nil
+}
+
+func (p *vendorprofilephonenumberPager) toCursor(vppn *VendorProfilePhoneNumber) Cursor {
+	return p.order.Field.toCursor(vppn)
+}
+
+func (p *vendorprofilephonenumberPager) applyCursors(query *VendorProfilePhoneNumberQuery, after, before *Cursor) (*VendorProfilePhoneNumberQuery, error) {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	for _, predicate := range entgql.CursorsPredicate(after, before, DefaultVendorProfilePhoneNumberOrder.Field.column, p.order.Field.column, direction) {
+		query = query.Where(predicate)
+	}
+	return query, nil
+}
+
+func (p *vendorprofilephonenumberPager) applyOrder(query *VendorProfilePhoneNumberQuery) *VendorProfilePhoneNumberQuery {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	query = query.Order(p.order.Field.toTerm(direction.OrderTermOption()))
+	if p.order.Field != DefaultVendorProfilePhoneNumberOrder.Field {
+		query = query.Order(DefaultVendorProfilePhoneNumberOrder.Field.toTerm(direction.OrderTermOption()))
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(p.order.Field.column)
+	}
+	return query
+}
+
+func (p *vendorprofilephonenumberPager) orderExpr(query *VendorProfilePhoneNumberQuery) sql.Querier {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(p.order.Field.column)
+	}
+	return sql.ExprFunc(func(b *sql.Builder) {
+		b.Ident(p.order.Field.column).Pad().WriteString(string(direction))
+		if p.order.Field != DefaultVendorProfilePhoneNumberOrder.Field {
+			b.Comma().Ident(DefaultVendorProfilePhoneNumberOrder.Field.column).Pad().WriteString(string(direction))
+		}
+	})
+}
+
+// Paginate executes the query and returns a relay based cursor connection to VendorProfilePhoneNumber.
+func (vppn *VendorProfilePhoneNumberQuery) Paginate(
+	ctx context.Context, after *Cursor, first *int,
+	before *Cursor, last *int, opts ...VendorProfilePhoneNumberPaginateOption,
+) (*VendorProfilePhoneNumberConnection, error) {
+	if err := validateFirstLast(first, last); err != nil {
+		return nil, err
+	}
+	pager, err := newVendorProfilePhoneNumberPager(opts, last != nil)
+	if err != nil {
+		return nil, err
+	}
+	if vppn, err = pager.applyFilter(vppn); err != nil {
+		return nil, err
+	}
+	conn := &VendorProfilePhoneNumberConnection{Edges: []*VendorProfilePhoneNumberEdge{}}
+	ignoredEdges := !hasCollectedField(ctx, edgesField)
+	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+		hasPagination := after != nil || first != nil || before != nil || last != nil
+		if hasPagination || ignoredEdges {
+			c := vppn.Clone()
+			c.ctx.Fields = nil
+			if conn.TotalCount, err = c.Count(ctx); err != nil {
+				return nil, err
+			}
+			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
+			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
+		}
+	}
+	if ignoredEdges || (first != nil && *first == 0) || (last != nil && *last == 0) {
+		return conn, nil
+	}
+	if vppn, err = pager.applyCursors(vppn, after, before); err != nil {
+		return nil, err
+	}
+	limit := paginateLimit(first, last)
+	if limit != 0 {
+		vppn.Limit(limit)
+	}
+	if field := collectedField(ctx, edgesField, nodeField); field != nil {
+		if err := vppn.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
+			return nil, err
+		}
+	}
+	vppn = pager.applyOrder(vppn)
+	nodes, err := vppn.All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	conn.build(nodes, pager, after, first, before, last)
+	return conn, nil
+}
+
+// VendorProfilePhoneNumberOrderField defines the ordering field of VendorProfilePhoneNumber.
+type VendorProfilePhoneNumberOrderField struct {
+	// Value extracts the ordering value from the given VendorProfilePhoneNumber.
+	Value    func(*VendorProfilePhoneNumber) (ent.Value, error)
+	column   string // field or computed.
+	toTerm   func(...sql.OrderTermOption) vendorprofilephonenumber.OrderOption
+	toCursor func(*VendorProfilePhoneNumber) Cursor
+}
+
+// VendorProfilePhoneNumberOrder defines the ordering of VendorProfilePhoneNumber.
+type VendorProfilePhoneNumberOrder struct {
+	Direction OrderDirection                      `json:"direction"`
+	Field     *VendorProfilePhoneNumberOrderField `json:"field"`
+}
+
+// DefaultVendorProfilePhoneNumberOrder is the default ordering of VendorProfilePhoneNumber.
+var DefaultVendorProfilePhoneNumberOrder = &VendorProfilePhoneNumberOrder{
+	Direction: entgql.OrderDirectionAsc,
+	Field: &VendorProfilePhoneNumberOrderField{
+		Value: func(vppn *VendorProfilePhoneNumber) (ent.Value, error) {
+			return vppn.ID, nil
+		},
+		column: vendorprofilephonenumber.FieldID,
+		toTerm: vendorprofilephonenumber.ByID,
+		toCursor: func(vppn *VendorProfilePhoneNumber) Cursor {
+			return Cursor{ID: vppn.ID}
+		},
+	},
+}
+
+// ToEdge converts VendorProfilePhoneNumber into VendorProfilePhoneNumberEdge.
+func (vppn *VendorProfilePhoneNumber) ToEdge(order *VendorProfilePhoneNumberOrder) *VendorProfilePhoneNumberEdge {
+	if order == nil {
+		order = DefaultVendorProfilePhoneNumberOrder
+	}
+	return &VendorProfilePhoneNumberEdge{
+		Node:   vppn,
+		Cursor: order.Field.toCursor(vppn),
+	}
+}
+
+// VendorProfilePhoneNumberHistoryEdge is the edge representation of VendorProfilePhoneNumberHistory.
+type VendorProfilePhoneNumberHistoryEdge struct {
+	Node   *VendorProfilePhoneNumberHistory `json:"node"`
+	Cursor Cursor                           `json:"cursor"`
+}
+
+// VendorProfilePhoneNumberHistoryConnection is the connection containing edges to VendorProfilePhoneNumberHistory.
+type VendorProfilePhoneNumberHistoryConnection struct {
+	Edges      []*VendorProfilePhoneNumberHistoryEdge `json:"edges"`
+	PageInfo   PageInfo                               `json:"pageInfo"`
+	TotalCount int                                    `json:"totalCount"`
+}
+
+func (c *VendorProfilePhoneNumberHistoryConnection) build(nodes []*VendorProfilePhoneNumberHistory, pager *vendorprofilephonenumberhistoryPager, after *Cursor, first *int, before *Cursor, last *int) {
+	c.PageInfo.HasNextPage = before != nil
+	c.PageInfo.HasPreviousPage = after != nil
+	if first != nil && *first+1 == len(nodes) {
+		c.PageInfo.HasNextPage = true
+		nodes = nodes[:len(nodes)-1]
+	} else if last != nil && *last+1 == len(nodes) {
+		c.PageInfo.HasPreviousPage = true
+		nodes = nodes[:len(nodes)-1]
+	}
+	var nodeAt func(int) *VendorProfilePhoneNumberHistory
+	if last != nil {
+		n := len(nodes) - 1
+		nodeAt = func(i int) *VendorProfilePhoneNumberHistory {
+			return nodes[n-i]
+		}
+	} else {
+		nodeAt = func(i int) *VendorProfilePhoneNumberHistory {
+			return nodes[i]
+		}
+	}
+	c.Edges = make([]*VendorProfilePhoneNumberHistoryEdge, len(nodes))
+	for i := range nodes {
+		node := nodeAt(i)
+		c.Edges[i] = &VendorProfilePhoneNumberHistoryEdge{
+			Node:   node,
+			Cursor: pager.toCursor(node),
+		}
+	}
+	if l := len(c.Edges); l > 0 {
+		c.PageInfo.StartCursor = &c.Edges[0].Cursor
+		c.PageInfo.EndCursor = &c.Edges[l-1].Cursor
+	}
+	if c.TotalCount == 0 {
+		c.TotalCount = len(nodes)
+	}
+}
+
+// VendorProfilePhoneNumberHistoryPaginateOption enables pagination customization.
+type VendorProfilePhoneNumberHistoryPaginateOption func(*vendorprofilephonenumberhistoryPager) error
+
+// WithVendorProfilePhoneNumberHistoryOrder configures pagination ordering.
+func WithVendorProfilePhoneNumberHistoryOrder(order *VendorProfilePhoneNumberHistoryOrder) VendorProfilePhoneNumberHistoryPaginateOption {
+	if order == nil {
+		order = DefaultVendorProfilePhoneNumberHistoryOrder
+	}
+	o := *order
+	return func(pager *vendorprofilephonenumberhistoryPager) error {
+		if err := o.Direction.Validate(); err != nil {
+			return err
+		}
+		if o.Field == nil {
+			o.Field = DefaultVendorProfilePhoneNumberHistoryOrder.Field
+		}
+		pager.order = &o
+		return nil
+	}
+}
+
+// WithVendorProfilePhoneNumberHistoryFilter configures pagination filter.
+func WithVendorProfilePhoneNumberHistoryFilter(filter func(*VendorProfilePhoneNumberHistoryQuery) (*VendorProfilePhoneNumberHistoryQuery, error)) VendorProfilePhoneNumberHistoryPaginateOption {
+	return func(pager *vendorprofilephonenumberhistoryPager) error {
+		if filter == nil {
+			return errors.New("VendorProfilePhoneNumberHistoryQuery filter cannot be nil")
+		}
+		pager.filter = filter
+		return nil
+	}
+}
+
+type vendorprofilephonenumberhistoryPager struct {
+	reverse bool
+	order   *VendorProfilePhoneNumberHistoryOrder
+	filter  func(*VendorProfilePhoneNumberHistoryQuery) (*VendorProfilePhoneNumberHistoryQuery, error)
+}
+
+func newVendorProfilePhoneNumberHistoryPager(opts []VendorProfilePhoneNumberHistoryPaginateOption, reverse bool) (*vendorprofilephonenumberhistoryPager, error) {
+	pager := &vendorprofilephonenumberhistoryPager{reverse: reverse}
+	for _, opt := range opts {
+		if err := opt(pager); err != nil {
+			return nil, err
+		}
+	}
+	if pager.order == nil {
+		pager.order = DefaultVendorProfilePhoneNumberHistoryOrder
+	}
+	return pager, nil
+}
+
+func (p *vendorprofilephonenumberhistoryPager) applyFilter(query *VendorProfilePhoneNumberHistoryQuery) (*VendorProfilePhoneNumberHistoryQuery, error) {
+	if p.filter != nil {
+		return p.filter(query)
+	}
+	return query, nil
+}
+
+func (p *vendorprofilephonenumberhistoryPager) toCursor(vppnh *VendorProfilePhoneNumberHistory) Cursor {
+	return p.order.Field.toCursor(vppnh)
+}
+
+func (p *vendorprofilephonenumberhistoryPager) applyCursors(query *VendorProfilePhoneNumberHistoryQuery, after, before *Cursor) (*VendorProfilePhoneNumberHistoryQuery, error) {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	for _, predicate := range entgql.CursorsPredicate(after, before, DefaultVendorProfilePhoneNumberHistoryOrder.Field.column, p.order.Field.column, direction) {
+		query = query.Where(predicate)
+	}
+	return query, nil
+}
+
+func (p *vendorprofilephonenumberhistoryPager) applyOrder(query *VendorProfilePhoneNumberHistoryQuery) *VendorProfilePhoneNumberHistoryQuery {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	query = query.Order(p.order.Field.toTerm(direction.OrderTermOption()))
+	if p.order.Field != DefaultVendorProfilePhoneNumberHistoryOrder.Field {
+		query = query.Order(DefaultVendorProfilePhoneNumberHistoryOrder.Field.toTerm(direction.OrderTermOption()))
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(p.order.Field.column)
+	}
+	return query
+}
+
+func (p *vendorprofilephonenumberhistoryPager) orderExpr(query *VendorProfilePhoneNumberHistoryQuery) sql.Querier {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(p.order.Field.column)
+	}
+	return sql.ExprFunc(func(b *sql.Builder) {
+		b.Ident(p.order.Field.column).Pad().WriteString(string(direction))
+		if p.order.Field != DefaultVendorProfilePhoneNumberHistoryOrder.Field {
+			b.Comma().Ident(DefaultVendorProfilePhoneNumberHistoryOrder.Field.column).Pad().WriteString(string(direction))
+		}
+	})
+}
+
+// Paginate executes the query and returns a relay based cursor connection to VendorProfilePhoneNumberHistory.
+func (vppnh *VendorProfilePhoneNumberHistoryQuery) Paginate(
+	ctx context.Context, after *Cursor, first *int,
+	before *Cursor, last *int, opts ...VendorProfilePhoneNumberHistoryPaginateOption,
+) (*VendorProfilePhoneNumberHistoryConnection, error) {
+	if err := validateFirstLast(first, last); err != nil {
+		return nil, err
+	}
+	pager, err := newVendorProfilePhoneNumberHistoryPager(opts, last != nil)
+	if err != nil {
+		return nil, err
+	}
+	if vppnh, err = pager.applyFilter(vppnh); err != nil {
+		return nil, err
+	}
+	conn := &VendorProfilePhoneNumberHistoryConnection{Edges: []*VendorProfilePhoneNumberHistoryEdge{}}
+	ignoredEdges := !hasCollectedField(ctx, edgesField)
+	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+		hasPagination := after != nil || first != nil || before != nil || last != nil
+		if hasPagination || ignoredEdges {
+			c := vppnh.Clone()
+			c.ctx.Fields = nil
+			if conn.TotalCount, err = c.Count(ctx); err != nil {
+				return nil, err
+			}
+			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
+			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
+		}
+	}
+	if ignoredEdges || (first != nil && *first == 0) || (last != nil && *last == 0) {
+		return conn, nil
+	}
+	if vppnh, err = pager.applyCursors(vppnh, after, before); err != nil {
+		return nil, err
+	}
+	limit := paginateLimit(first, last)
+	if limit != 0 {
+		vppnh.Limit(limit)
+	}
+	if field := collectedField(ctx, edgesField, nodeField); field != nil {
+		if err := vppnh.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
+			return nil, err
+		}
+	}
+	vppnh = pager.applyOrder(vppnh)
+	nodes, err := vppnh.All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	conn.build(nodes, pager, after, first, before, last)
+	return conn, nil
+}
+
+// VendorProfilePhoneNumberHistoryOrderField defines the ordering field of VendorProfilePhoneNumberHistory.
+type VendorProfilePhoneNumberHistoryOrderField struct {
+	// Value extracts the ordering value from the given VendorProfilePhoneNumberHistory.
+	Value    func(*VendorProfilePhoneNumberHistory) (ent.Value, error)
+	column   string // field or computed.
+	toTerm   func(...sql.OrderTermOption) vendorprofilephonenumberhistory.OrderOption
+	toCursor func(*VendorProfilePhoneNumberHistory) Cursor
+}
+
+// VendorProfilePhoneNumberHistoryOrder defines the ordering of VendorProfilePhoneNumberHistory.
+type VendorProfilePhoneNumberHistoryOrder struct {
+	Direction OrderDirection                             `json:"direction"`
+	Field     *VendorProfilePhoneNumberHistoryOrderField `json:"field"`
+}
+
+// DefaultVendorProfilePhoneNumberHistoryOrder is the default ordering of VendorProfilePhoneNumberHistory.
+var DefaultVendorProfilePhoneNumberHistoryOrder = &VendorProfilePhoneNumberHistoryOrder{
+	Direction: entgql.OrderDirectionAsc,
+	Field: &VendorProfilePhoneNumberHistoryOrderField{
+		Value: func(vppnh *VendorProfilePhoneNumberHistory) (ent.Value, error) {
+			return vppnh.ID, nil
+		},
+		column: vendorprofilephonenumberhistory.FieldID,
+		toTerm: vendorprofilephonenumberhistory.ByID,
+		toCursor: func(vppnh *VendorProfilePhoneNumberHistory) Cursor {
+			return Cursor{ID: vppnh.ID}
+		},
+	},
+}
+
+// ToEdge converts VendorProfilePhoneNumberHistory into VendorProfilePhoneNumberHistoryEdge.
+func (vppnh *VendorProfilePhoneNumberHistory) ToEdge(order *VendorProfilePhoneNumberHistoryOrder) *VendorProfilePhoneNumberHistoryEdge {
+	if order == nil {
+		order = DefaultVendorProfilePhoneNumberHistoryOrder
+	}
+	return &VendorProfilePhoneNumberHistoryEdge{
+		Node:   vppnh,
+		Cursor: order.Field.toCursor(vppnh),
 	}
 }
 

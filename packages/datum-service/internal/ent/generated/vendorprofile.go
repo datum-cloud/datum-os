@@ -13,6 +13,7 @@ import (
 	"github.com/datum-cloud/datum-os/internal/ent/generated/organization"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/vendor"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofile"
+	"github.com/datum-cloud/datum-os/pkg/enums"
 )
 
 // VendorProfile is the model entity for the VendorProfile schema.
@@ -42,12 +43,18 @@ type VendorProfile struct {
 	VendorID string `json:"vendor_id,omitempty"`
 	// The name of the Corporation or Person
 	Name string `json:"name,omitempty"`
+	// The type of corporation (e.g. LLC, S-Corp, C-Corp, Other)
+	CorporationType string `json:"corporation_type,omitempty"`
 	// The Doing Business As (DBA) name of the Corporation
-	DbaName string `json:"dba_name,omitempty"`
+	CorporationDba string `json:"corporation_dba,omitempty"`
 	// The description of the Corporation or Person and the services they provide
 	Description string `json:"description,omitempty"`
 	// The URL of the website of the Corporation or Person
 	WebsiteURI string `json:"website_uri,omitempty"`
+	// The tax ID of the Corporation or Person
+	TaxID string `json:"-"`
+	// The type of tax ID (e.g. EIN, SSN, TIN, etc.)
+	TaxIDType enums.TaxIDType `json:"tax_id_type,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the VendorProfileQuery when eager-loading is set.
 	Edges        VendorProfileEdges `json:"edges"`
@@ -60,18 +67,24 @@ type VendorProfileEdges struct {
 	Owner *Organization `json:"owner,omitempty"`
 	// PostalAddresses holds the value of the postal_addresses edge.
 	PostalAddresses []*PostalAddress `json:"postal_addresses,omitempty"`
+	// PhoneNumbers holds the value of the phone_numbers edge.
+	PhoneNumbers []*PhoneNumber `json:"phone_numbers,omitempty"`
 	// Vendor holds the value of the vendor edge.
 	Vendor *Vendor `json:"vendor,omitempty"`
 	// VendorProfilePostalAddresses holds the value of the vendor_profile_postal_addresses edge.
 	VendorProfilePostalAddresses []*VendorProfilePostalAddress `json:"vendor_profile_postal_addresses,omitempty"`
+	// VendorProfilePhoneNumbers holds the value of the vendor_profile_phone_numbers edge.
+	VendorProfilePhoneNumbers []*VendorProfilePhoneNumber `json:"vendor_profile_phone_numbers,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [4]bool
+	loadedTypes [6]bool
 	// totalCount holds the count of the edges above.
-	totalCount [4]map[string]int
+	totalCount [6]map[string]int
 
 	namedPostalAddresses              map[string][]*PostalAddress
+	namedPhoneNumbers                 map[string][]*PhoneNumber
 	namedVendorProfilePostalAddresses map[string][]*VendorProfilePostalAddress
+	namedVendorProfilePhoneNumbers    map[string][]*VendorProfilePhoneNumber
 }
 
 // OwnerOrErr returns the Owner value or an error if the edge
@@ -94,12 +107,21 @@ func (e VendorProfileEdges) PostalAddressesOrErr() ([]*PostalAddress, error) {
 	return nil, &NotLoadedError{edge: "postal_addresses"}
 }
 
+// PhoneNumbersOrErr returns the PhoneNumbers value or an error if the edge
+// was not loaded in eager-loading.
+func (e VendorProfileEdges) PhoneNumbersOrErr() ([]*PhoneNumber, error) {
+	if e.loadedTypes[2] {
+		return e.PhoneNumbers, nil
+	}
+	return nil, &NotLoadedError{edge: "phone_numbers"}
+}
+
 // VendorOrErr returns the Vendor value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e VendorProfileEdges) VendorOrErr() (*Vendor, error) {
 	if e.Vendor != nil {
 		return e.Vendor, nil
-	} else if e.loadedTypes[2] {
+	} else if e.loadedTypes[3] {
 		return nil, &NotFoundError{label: vendor.Label}
 	}
 	return nil, &NotLoadedError{edge: "vendor"}
@@ -108,10 +130,19 @@ func (e VendorProfileEdges) VendorOrErr() (*Vendor, error) {
 // VendorProfilePostalAddressesOrErr returns the VendorProfilePostalAddresses value or an error if the edge
 // was not loaded in eager-loading.
 func (e VendorProfileEdges) VendorProfilePostalAddressesOrErr() ([]*VendorProfilePostalAddress, error) {
-	if e.loadedTypes[3] {
+	if e.loadedTypes[4] {
 		return e.VendorProfilePostalAddresses, nil
 	}
 	return nil, &NotLoadedError{edge: "vendor_profile_postal_addresses"}
+}
+
+// VendorProfilePhoneNumbersOrErr returns the VendorProfilePhoneNumbers value or an error if the edge
+// was not loaded in eager-loading.
+func (e VendorProfileEdges) VendorProfilePhoneNumbersOrErr() ([]*VendorProfilePhoneNumber, error) {
+	if e.loadedTypes[5] {
+		return e.VendorProfilePhoneNumbers, nil
+	}
+	return nil, &NotLoadedError{edge: "vendor_profile_phone_numbers"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -121,7 +152,7 @@ func (*VendorProfile) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case vendorprofile.FieldTags:
 			values[i] = new([]byte)
-		case vendorprofile.FieldID, vendorprofile.FieldCreatedBy, vendorprofile.FieldUpdatedBy, vendorprofile.FieldDeletedBy, vendorprofile.FieldMappingID, vendorprofile.FieldOwnerID, vendorprofile.FieldVendorID, vendorprofile.FieldName, vendorprofile.FieldDbaName, vendorprofile.FieldDescription, vendorprofile.FieldWebsiteURI:
+		case vendorprofile.FieldID, vendorprofile.FieldCreatedBy, vendorprofile.FieldUpdatedBy, vendorprofile.FieldDeletedBy, vendorprofile.FieldMappingID, vendorprofile.FieldOwnerID, vendorprofile.FieldVendorID, vendorprofile.FieldName, vendorprofile.FieldCorporationType, vendorprofile.FieldCorporationDba, vendorprofile.FieldDescription, vendorprofile.FieldWebsiteURI, vendorprofile.FieldTaxID, vendorprofile.FieldTaxIDType:
 			values[i] = new(sql.NullString)
 		case vendorprofile.FieldCreatedAt, vendorprofile.FieldUpdatedAt, vendorprofile.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -214,11 +245,17 @@ func (vp *VendorProfile) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				vp.Name = value.String
 			}
-		case vendorprofile.FieldDbaName:
+		case vendorprofile.FieldCorporationType:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field dba_name", values[i])
+				return fmt.Errorf("unexpected type %T for field corporation_type", values[i])
 			} else if value.Valid {
-				vp.DbaName = value.String
+				vp.CorporationType = value.String
+			}
+		case vendorprofile.FieldCorporationDba:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field corporation_dba", values[i])
+			} else if value.Valid {
+				vp.CorporationDba = value.String
 			}
 		case vendorprofile.FieldDescription:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -231,6 +268,18 @@ func (vp *VendorProfile) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field website_uri", values[i])
 			} else if value.Valid {
 				vp.WebsiteURI = value.String
+			}
+		case vendorprofile.FieldTaxID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field tax_id", values[i])
+			} else if value.Valid {
+				vp.TaxID = value.String
+			}
+		case vendorprofile.FieldTaxIDType:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field tax_id_type", values[i])
+			} else if value.Valid {
+				vp.TaxIDType = enums.TaxIDType(value.String)
 			}
 		default:
 			vp.selectValues.Set(columns[i], values[i])
@@ -255,6 +304,11 @@ func (vp *VendorProfile) QueryPostalAddresses() *PostalAddressQuery {
 	return NewVendorProfileClient(vp.config).QueryPostalAddresses(vp)
 }
 
+// QueryPhoneNumbers queries the "phone_numbers" edge of the VendorProfile entity.
+func (vp *VendorProfile) QueryPhoneNumbers() *PhoneNumberQuery {
+	return NewVendorProfileClient(vp.config).QueryPhoneNumbers(vp)
+}
+
 // QueryVendor queries the "vendor" edge of the VendorProfile entity.
 func (vp *VendorProfile) QueryVendor() *VendorQuery {
 	return NewVendorProfileClient(vp.config).QueryVendor(vp)
@@ -263,6 +317,11 @@ func (vp *VendorProfile) QueryVendor() *VendorQuery {
 // QueryVendorProfilePostalAddresses queries the "vendor_profile_postal_addresses" edge of the VendorProfile entity.
 func (vp *VendorProfile) QueryVendorProfilePostalAddresses() *VendorProfilePostalAddressQuery {
 	return NewVendorProfileClient(vp.config).QueryVendorProfilePostalAddresses(vp)
+}
+
+// QueryVendorProfilePhoneNumbers queries the "vendor_profile_phone_numbers" edge of the VendorProfile entity.
+func (vp *VendorProfile) QueryVendorProfilePhoneNumbers() *VendorProfilePhoneNumberQuery {
+	return NewVendorProfileClient(vp.config).QueryVendorProfilePhoneNumbers(vp)
 }
 
 // Update returns a builder for updating this VendorProfile.
@@ -321,14 +380,22 @@ func (vp *VendorProfile) String() string {
 	builder.WriteString("name=")
 	builder.WriteString(vp.Name)
 	builder.WriteString(", ")
-	builder.WriteString("dba_name=")
-	builder.WriteString(vp.DbaName)
+	builder.WriteString("corporation_type=")
+	builder.WriteString(vp.CorporationType)
+	builder.WriteString(", ")
+	builder.WriteString("corporation_dba=")
+	builder.WriteString(vp.CorporationDba)
 	builder.WriteString(", ")
 	builder.WriteString("description=")
 	builder.WriteString(vp.Description)
 	builder.WriteString(", ")
 	builder.WriteString("website_uri=")
 	builder.WriteString(vp.WebsiteURI)
+	builder.WriteString(", ")
+	builder.WriteString("tax_id=<sensitive>")
+	builder.WriteString(", ")
+	builder.WriteString("tax_id_type=")
+	builder.WriteString(fmt.Sprintf("%v", vp.TaxIDType))
 	builder.WriteByte(')')
 	return builder.String()
 }
@@ -357,6 +424,30 @@ func (vp *VendorProfile) appendNamedPostalAddresses(name string, edges ...*Posta
 	}
 }
 
+// NamedPhoneNumbers returns the PhoneNumbers named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (vp *VendorProfile) NamedPhoneNumbers(name string) ([]*PhoneNumber, error) {
+	if vp.Edges.namedPhoneNumbers == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := vp.Edges.namedPhoneNumbers[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (vp *VendorProfile) appendNamedPhoneNumbers(name string, edges ...*PhoneNumber) {
+	if vp.Edges.namedPhoneNumbers == nil {
+		vp.Edges.namedPhoneNumbers = make(map[string][]*PhoneNumber)
+	}
+	if len(edges) == 0 {
+		vp.Edges.namedPhoneNumbers[name] = []*PhoneNumber{}
+	} else {
+		vp.Edges.namedPhoneNumbers[name] = append(vp.Edges.namedPhoneNumbers[name], edges...)
+	}
+}
+
 // NamedVendorProfilePostalAddresses returns the VendorProfilePostalAddresses named value or an error if the edge was not
 // loaded in eager-loading with this name.
 func (vp *VendorProfile) NamedVendorProfilePostalAddresses(name string) ([]*VendorProfilePostalAddress, error) {
@@ -378,6 +469,30 @@ func (vp *VendorProfile) appendNamedVendorProfilePostalAddresses(name string, ed
 		vp.Edges.namedVendorProfilePostalAddresses[name] = []*VendorProfilePostalAddress{}
 	} else {
 		vp.Edges.namedVendorProfilePostalAddresses[name] = append(vp.Edges.namedVendorProfilePostalAddresses[name], edges...)
+	}
+}
+
+// NamedVendorProfilePhoneNumbers returns the VendorProfilePhoneNumbers named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (vp *VendorProfile) NamedVendorProfilePhoneNumbers(name string) ([]*VendorProfilePhoneNumber, error) {
+	if vp.Edges.namedVendorProfilePhoneNumbers == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := vp.Edges.namedVendorProfilePhoneNumbers[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (vp *VendorProfile) appendNamedVendorProfilePhoneNumbers(name string, edges ...*VendorProfilePhoneNumber) {
+	if vp.Edges.namedVendorProfilePhoneNumbers == nil {
+		vp.Edges.namedVendorProfilePhoneNumbers = make(map[string][]*VendorProfilePhoneNumber)
+	}
+	if len(edges) == 0 {
+		vp.Edges.namedVendorProfilePhoneNumbers[name] = []*VendorProfilePhoneNumber{}
+	} else {
+		vp.Edges.namedVendorProfilePhoneNumbers[name] = append(vp.Edges.namedVendorProfilePhoneNumbers[name], edges...)
 	}
 }
 

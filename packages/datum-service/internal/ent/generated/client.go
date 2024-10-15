@@ -66,6 +66,8 @@ import (
 	"github.com/datum-cloud/datum-os/internal/ent/generated/orgmembershiphistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/passwordresettoken"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/personalaccesstoken"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/phonenumber"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/phonenumberhistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/postaladdress"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/postaladdresshistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/subscriber"
@@ -80,6 +82,8 @@ import (
 	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorhistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofile"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofilehistory"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofilephonenumber"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofilephonenumberhistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofilepostaladdress"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofilepostaladdresshistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/webauthn"
@@ -204,6 +208,10 @@ type Client struct {
 	PasswordResetToken *PasswordResetTokenClient
 	// PersonalAccessToken is the client for interacting with the PersonalAccessToken builders.
 	PersonalAccessToken *PersonalAccessTokenClient
+	// PhoneNumber is the client for interacting with the PhoneNumber builders.
+	PhoneNumber *PhoneNumberClient
+	// PhoneNumberHistory is the client for interacting with the PhoneNumberHistory builders.
+	PhoneNumberHistory *PhoneNumberHistoryClient
 	// PostalAddress is the client for interacting with the PostalAddress builders.
 	PostalAddress *PostalAddressClient
 	// PostalAddressHistory is the client for interacting with the PostalAddressHistory builders.
@@ -232,6 +240,10 @@ type Client struct {
 	VendorProfile *VendorProfileClient
 	// VendorProfileHistory is the client for interacting with the VendorProfileHistory builders.
 	VendorProfileHistory *VendorProfileHistoryClient
+	// VendorProfilePhoneNumber is the client for interacting with the VendorProfilePhoneNumber builders.
+	VendorProfilePhoneNumber *VendorProfilePhoneNumberClient
+	// VendorProfilePhoneNumberHistory is the client for interacting with the VendorProfilePhoneNumberHistory builders.
+	VendorProfilePhoneNumberHistory *VendorProfilePhoneNumberHistoryClient
 	// VendorProfilePostalAddress is the client for interacting with the VendorProfilePostalAddress builders.
 	VendorProfilePostalAddress *VendorProfilePostalAddressClient
 	// VendorProfilePostalAddressHistory is the client for interacting with the VendorProfilePostalAddressHistory builders.
@@ -308,6 +320,8 @@ func (c *Client) init() {
 	c.OrganizationSettingHistory = NewOrganizationSettingHistoryClient(c.config)
 	c.PasswordResetToken = NewPasswordResetTokenClient(c.config)
 	c.PersonalAccessToken = NewPersonalAccessTokenClient(c.config)
+	c.PhoneNumber = NewPhoneNumberClient(c.config)
+	c.PhoneNumberHistory = NewPhoneNumberHistoryClient(c.config)
 	c.PostalAddress = NewPostalAddressClient(c.config)
 	c.PostalAddressHistory = NewPostalAddressHistoryClient(c.config)
 	c.Subscriber = NewSubscriberClient(c.config)
@@ -322,6 +336,8 @@ func (c *Client) init() {
 	c.VendorHistory = NewVendorHistoryClient(c.config)
 	c.VendorProfile = NewVendorProfileClient(c.config)
 	c.VendorProfileHistory = NewVendorProfileHistoryClient(c.config)
+	c.VendorProfilePhoneNumber = NewVendorProfilePhoneNumberClient(c.config)
+	c.VendorProfilePhoneNumberHistory = NewVendorProfilePhoneNumberHistoryClient(c.config)
 	c.VendorProfilePostalAddress = NewVendorProfilePostalAddressClient(c.config)
 	c.VendorProfilePostalAddressHistory = NewVendorProfilePostalAddressHistoryClient(c.config)
 	c.Webauthn = NewWebauthnClient(c.config)
@@ -567,6 +583,8 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		OrganizationSettingHistory:        NewOrganizationSettingHistoryClient(cfg),
 		PasswordResetToken:                NewPasswordResetTokenClient(cfg),
 		PersonalAccessToken:               NewPersonalAccessTokenClient(cfg),
+		PhoneNumber:                       NewPhoneNumberClient(cfg),
+		PhoneNumberHistory:                NewPhoneNumberHistoryClient(cfg),
 		PostalAddress:                     NewPostalAddressClient(cfg),
 		PostalAddressHistory:              NewPostalAddressHistoryClient(cfg),
 		Subscriber:                        NewSubscriberClient(cfg),
@@ -581,6 +599,8 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		VendorHistory:                     NewVendorHistoryClient(cfg),
 		VendorProfile:                     NewVendorProfileClient(cfg),
 		VendorProfileHistory:              NewVendorProfileHistoryClient(cfg),
+		VendorProfilePhoneNumber:          NewVendorProfilePhoneNumberClient(cfg),
+		VendorProfilePhoneNumberHistory:   NewVendorProfilePhoneNumberHistoryClient(cfg),
 		VendorProfilePostalAddress:        NewVendorProfilePostalAddressClient(cfg),
 		VendorProfilePostalAddressHistory: NewVendorProfilePostalAddressHistoryClient(cfg),
 		Webauthn:                          NewWebauthnClient(cfg),
@@ -655,6 +675,8 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		OrganizationSettingHistory:        NewOrganizationSettingHistoryClient(cfg),
 		PasswordResetToken:                NewPasswordResetTokenClient(cfg),
 		PersonalAccessToken:               NewPersonalAccessTokenClient(cfg),
+		PhoneNumber:                       NewPhoneNumberClient(cfg),
+		PhoneNumberHistory:                NewPhoneNumberHistoryClient(cfg),
 		PostalAddress:                     NewPostalAddressClient(cfg),
 		PostalAddressHistory:              NewPostalAddressHistoryClient(cfg),
 		Subscriber:                        NewSubscriberClient(cfg),
@@ -669,6 +691,8 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		VendorHistory:                     NewVendorHistoryClient(cfg),
 		VendorProfile:                     NewVendorProfileClient(cfg),
 		VendorProfileHistory:              NewVendorProfileHistoryClient(cfg),
+		VendorProfilePhoneNumber:          NewVendorProfilePhoneNumberClient(cfg),
+		VendorProfilePhoneNumberHistory:   NewVendorProfilePhoneNumberHistoryClient(cfg),
 		VendorProfilePostalAddress:        NewVendorProfilePostalAddressClient(cfg),
 		VendorProfilePostalAddressHistory: NewVendorProfilePostalAddressHistoryClient(cfg),
 		Webauthn:                          NewWebauthnClient(cfg),
@@ -716,11 +740,13 @@ func (c *Client) Use(hooks ...Hook) {
 		c.OauthProviderHistory, c.OhAuthTooToken, c.OrgMembership,
 		c.OrgMembershipHistory, c.Organization, c.OrganizationHistory,
 		c.OrganizationSetting, c.OrganizationSettingHistory, c.PasswordResetToken,
-		c.PersonalAccessToken, c.PostalAddress, c.PostalAddressHistory, c.Subscriber,
-		c.TFASetting, c.Template, c.TemplateHistory, c.User, c.UserHistory,
-		c.UserSetting, c.UserSettingHistory, c.Vendor, c.VendorHistory,
-		c.VendorProfile, c.VendorProfileHistory, c.VendorProfilePostalAddress,
-		c.VendorProfilePostalAddressHistory, c.Webauthn, c.Webhook, c.WebhookHistory,
+		c.PersonalAccessToken, c.PhoneNumber, c.PhoneNumberHistory, c.PostalAddress,
+		c.PostalAddressHistory, c.Subscriber, c.TFASetting, c.Template,
+		c.TemplateHistory, c.User, c.UserHistory, c.UserSetting, c.UserSettingHistory,
+		c.Vendor, c.VendorHistory, c.VendorProfile, c.VendorProfileHistory,
+		c.VendorProfilePhoneNumber, c.VendorProfilePhoneNumberHistory,
+		c.VendorProfilePostalAddress, c.VendorProfilePostalAddressHistory, c.Webauthn,
+		c.Webhook, c.WebhookHistory,
 	} {
 		n.Use(hooks...)
 	}
@@ -743,11 +769,13 @@ func (c *Client) Intercept(interceptors ...Interceptor) {
 		c.OauthProviderHistory, c.OhAuthTooToken, c.OrgMembership,
 		c.OrgMembershipHistory, c.Organization, c.OrganizationHistory,
 		c.OrganizationSetting, c.OrganizationSettingHistory, c.PasswordResetToken,
-		c.PersonalAccessToken, c.PostalAddress, c.PostalAddressHistory, c.Subscriber,
-		c.TFASetting, c.Template, c.TemplateHistory, c.User, c.UserHistory,
-		c.UserSetting, c.UserSettingHistory, c.Vendor, c.VendorHistory,
-		c.VendorProfile, c.VendorProfileHistory, c.VendorProfilePostalAddress,
-		c.VendorProfilePostalAddressHistory, c.Webauthn, c.Webhook, c.WebhookHistory,
+		c.PersonalAccessToken, c.PhoneNumber, c.PhoneNumberHistory, c.PostalAddress,
+		c.PostalAddressHistory, c.Subscriber, c.TFASetting, c.Template,
+		c.TemplateHistory, c.User, c.UserHistory, c.UserSetting, c.UserSettingHistory,
+		c.Vendor, c.VendorHistory, c.VendorProfile, c.VendorProfileHistory,
+		c.VendorProfilePhoneNumber, c.VendorProfilePhoneNumberHistory,
+		c.VendorProfilePostalAddress, c.VendorProfilePostalAddressHistory, c.Webauthn,
+		c.Webhook, c.WebhookHistory,
 	} {
 		n.Intercept(interceptors...)
 	}
@@ -856,6 +884,10 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.PasswordResetToken.mutate(ctx, m)
 	case *PersonalAccessTokenMutation:
 		return c.PersonalAccessToken.mutate(ctx, m)
+	case *PhoneNumberMutation:
+		return c.PhoneNumber.mutate(ctx, m)
+	case *PhoneNumberHistoryMutation:
+		return c.PhoneNumberHistory.mutate(ctx, m)
 	case *PostalAddressMutation:
 		return c.PostalAddress.mutate(ctx, m)
 	case *PostalAddressHistoryMutation:
@@ -884,6 +916,10 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.VendorProfile.mutate(ctx, m)
 	case *VendorProfileHistoryMutation:
 		return c.VendorProfileHistory.mutate(ctx, m)
+	case *VendorProfilePhoneNumberMutation:
+		return c.VendorProfilePhoneNumber.mutate(ctx, m)
+	case *VendorProfilePhoneNumberHistoryMutation:
+		return c.VendorProfilePhoneNumberHistory.mutate(ctx, m)
 	case *VendorProfilePostalAddressMutation:
 		return c.VendorProfilePostalAddress.mutate(ctx, m)
 	case *VendorProfilePostalAddressHistoryMutation:
@@ -9256,6 +9292,25 @@ func (c *OrganizationClient) QueryPostalAddresses(o *Organization) *PostalAddres
 	return query
 }
 
+// QueryPhoneNumbers queries the phone_numbers edge of a Organization.
+func (c *OrganizationClient) QueryPhoneNumbers(o *Organization) *PhoneNumberQuery {
+	query := (&PhoneNumberClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := o.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, id),
+			sqlgraph.To(phonenumber.Table, phonenumber.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.PhoneNumbersTable, organization.PhoneNumbersColumn),
+		)
+		schemaConfig := o.schemaConfig
+		step.To.Schema = schemaConfig.PhoneNumber
+		step.Edge.Schema = schemaConfig.PhoneNumber
+		fromV = sqlgraph.Neighbors(o.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryMembers queries the members edge of a Organization.
 func (c *OrganizationClient) QueryMembers(o *Organization) *OrgMembershipQuery {
 	query := (&OrgMembershipClient{config: c.config}).Query()
@@ -10069,6 +10124,351 @@ func (c *PersonalAccessTokenClient) mutate(ctx context.Context, m *PersonalAcces
 		return (&PersonalAccessTokenDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
 	default:
 		return nil, fmt.Errorf("generated: unknown PersonalAccessToken mutation op: %q", m.Op())
+	}
+}
+
+// PhoneNumberClient is a client for the PhoneNumber schema.
+type PhoneNumberClient struct {
+	config
+}
+
+// NewPhoneNumberClient returns a client for the PhoneNumber from the given config.
+func NewPhoneNumberClient(c config) *PhoneNumberClient {
+	return &PhoneNumberClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `phonenumber.Hooks(f(g(h())))`.
+func (c *PhoneNumberClient) Use(hooks ...Hook) {
+	c.hooks.PhoneNumber = append(c.hooks.PhoneNumber, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `phonenumber.Intercept(f(g(h())))`.
+func (c *PhoneNumberClient) Intercept(interceptors ...Interceptor) {
+	c.inters.PhoneNumber = append(c.inters.PhoneNumber, interceptors...)
+}
+
+// Create returns a builder for creating a PhoneNumber entity.
+func (c *PhoneNumberClient) Create() *PhoneNumberCreate {
+	mutation := newPhoneNumberMutation(c.config, OpCreate)
+	return &PhoneNumberCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of PhoneNumber entities.
+func (c *PhoneNumberClient) CreateBulk(builders ...*PhoneNumberCreate) *PhoneNumberCreateBulk {
+	return &PhoneNumberCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *PhoneNumberClient) MapCreateBulk(slice any, setFunc func(*PhoneNumberCreate, int)) *PhoneNumberCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &PhoneNumberCreateBulk{err: fmt.Errorf("calling to PhoneNumberClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*PhoneNumberCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &PhoneNumberCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for PhoneNumber.
+func (c *PhoneNumberClient) Update() *PhoneNumberUpdate {
+	mutation := newPhoneNumberMutation(c.config, OpUpdate)
+	return &PhoneNumberUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *PhoneNumberClient) UpdateOne(pn *PhoneNumber) *PhoneNumberUpdateOne {
+	mutation := newPhoneNumberMutation(c.config, OpUpdateOne, withPhoneNumber(pn))
+	return &PhoneNumberUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *PhoneNumberClient) UpdateOneID(id string) *PhoneNumberUpdateOne {
+	mutation := newPhoneNumberMutation(c.config, OpUpdateOne, withPhoneNumberID(id))
+	return &PhoneNumberUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for PhoneNumber.
+func (c *PhoneNumberClient) Delete() *PhoneNumberDelete {
+	mutation := newPhoneNumberMutation(c.config, OpDelete)
+	return &PhoneNumberDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *PhoneNumberClient) DeleteOne(pn *PhoneNumber) *PhoneNumberDeleteOne {
+	return c.DeleteOneID(pn.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *PhoneNumberClient) DeleteOneID(id string) *PhoneNumberDeleteOne {
+	builder := c.Delete().Where(phonenumber.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &PhoneNumberDeleteOne{builder}
+}
+
+// Query returns a query builder for PhoneNumber.
+func (c *PhoneNumberClient) Query() *PhoneNumberQuery {
+	return &PhoneNumberQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypePhoneNumber},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a PhoneNumber entity by its id.
+func (c *PhoneNumberClient) Get(ctx context.Context, id string) (*PhoneNumber, error) {
+	return c.Query().Where(phonenumber.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *PhoneNumberClient) GetX(ctx context.Context, id string) *PhoneNumber {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryOwner queries the owner edge of a PhoneNumber.
+func (c *PhoneNumberClient) QueryOwner(pn *PhoneNumber) *OrganizationQuery {
+	query := (&OrganizationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := pn.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(phonenumber.Table, phonenumber.FieldID, id),
+			sqlgraph.To(organization.Table, organization.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, phonenumber.OwnerTable, phonenumber.OwnerColumn),
+		)
+		schemaConfig := pn.schemaConfig
+		step.To.Schema = schemaConfig.Organization
+		step.Edge.Schema = schemaConfig.PhoneNumber
+		fromV = sqlgraph.Neighbors(pn.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryProfile queries the profile edge of a PhoneNumber.
+func (c *PhoneNumberClient) QueryProfile(pn *PhoneNumber) *VendorProfileQuery {
+	query := (&VendorProfileClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := pn.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(phonenumber.Table, phonenumber.FieldID, id),
+			sqlgraph.To(vendorprofile.Table, vendorprofile.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, phonenumber.ProfileTable, phonenumber.ProfilePrimaryKey...),
+		)
+		schemaConfig := pn.schemaConfig
+		step.To.Schema = schemaConfig.VendorProfile
+		step.Edge.Schema = schemaConfig.VendorProfilePhoneNumber
+		fromV = sqlgraph.Neighbors(pn.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryEvents queries the events edge of a PhoneNumber.
+func (c *PhoneNumberClient) QueryEvents(pn *PhoneNumber) *EventQuery {
+	query := (&EventClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := pn.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(phonenumber.Table, phonenumber.FieldID, id),
+			sqlgraph.To(event.Table, event.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, phonenumber.EventsTable, phonenumber.EventsColumn),
+		)
+		schemaConfig := pn.schemaConfig
+		step.To.Schema = schemaConfig.Event
+		step.Edge.Schema = schemaConfig.Event
+		fromV = sqlgraph.Neighbors(pn.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryVendorProfilePhoneNumbers queries the vendor_profile_phone_numbers edge of a PhoneNumber.
+func (c *PhoneNumberClient) QueryVendorProfilePhoneNumbers(pn *PhoneNumber) *VendorProfilePhoneNumberQuery {
+	query := (&VendorProfilePhoneNumberClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := pn.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(phonenumber.Table, phonenumber.FieldID, id),
+			sqlgraph.To(vendorprofilephonenumber.Table, vendorprofilephonenumber.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, true, phonenumber.VendorProfilePhoneNumbersTable, phonenumber.VendorProfilePhoneNumbersColumn),
+		)
+		schemaConfig := pn.schemaConfig
+		step.To.Schema = schemaConfig.VendorProfilePhoneNumber
+		step.Edge.Schema = schemaConfig.VendorProfilePhoneNumber
+		fromV = sqlgraph.Neighbors(pn.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *PhoneNumberClient) Hooks() []Hook {
+	hooks := c.hooks.PhoneNumber
+	return append(hooks[:len(hooks):len(hooks)], phonenumber.Hooks[:]...)
+}
+
+// Interceptors returns the client interceptors.
+func (c *PhoneNumberClient) Interceptors() []Interceptor {
+	inters := c.inters.PhoneNumber
+	return append(inters[:len(inters):len(inters)], phonenumber.Interceptors[:]...)
+}
+
+func (c *PhoneNumberClient) mutate(ctx context.Context, m *PhoneNumberMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&PhoneNumberCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&PhoneNumberUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&PhoneNumberUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&PhoneNumberDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("generated: unknown PhoneNumber mutation op: %q", m.Op())
+	}
+}
+
+// PhoneNumberHistoryClient is a client for the PhoneNumberHistory schema.
+type PhoneNumberHistoryClient struct {
+	config
+}
+
+// NewPhoneNumberHistoryClient returns a client for the PhoneNumberHistory from the given config.
+func NewPhoneNumberHistoryClient(c config) *PhoneNumberHistoryClient {
+	return &PhoneNumberHistoryClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `phonenumberhistory.Hooks(f(g(h())))`.
+func (c *PhoneNumberHistoryClient) Use(hooks ...Hook) {
+	c.hooks.PhoneNumberHistory = append(c.hooks.PhoneNumberHistory, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `phonenumberhistory.Intercept(f(g(h())))`.
+func (c *PhoneNumberHistoryClient) Intercept(interceptors ...Interceptor) {
+	c.inters.PhoneNumberHistory = append(c.inters.PhoneNumberHistory, interceptors...)
+}
+
+// Create returns a builder for creating a PhoneNumberHistory entity.
+func (c *PhoneNumberHistoryClient) Create() *PhoneNumberHistoryCreate {
+	mutation := newPhoneNumberHistoryMutation(c.config, OpCreate)
+	return &PhoneNumberHistoryCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of PhoneNumberHistory entities.
+func (c *PhoneNumberHistoryClient) CreateBulk(builders ...*PhoneNumberHistoryCreate) *PhoneNumberHistoryCreateBulk {
+	return &PhoneNumberHistoryCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *PhoneNumberHistoryClient) MapCreateBulk(slice any, setFunc func(*PhoneNumberHistoryCreate, int)) *PhoneNumberHistoryCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &PhoneNumberHistoryCreateBulk{err: fmt.Errorf("calling to PhoneNumberHistoryClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*PhoneNumberHistoryCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &PhoneNumberHistoryCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for PhoneNumberHistory.
+func (c *PhoneNumberHistoryClient) Update() *PhoneNumberHistoryUpdate {
+	mutation := newPhoneNumberHistoryMutation(c.config, OpUpdate)
+	return &PhoneNumberHistoryUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *PhoneNumberHistoryClient) UpdateOne(pnh *PhoneNumberHistory) *PhoneNumberHistoryUpdateOne {
+	mutation := newPhoneNumberHistoryMutation(c.config, OpUpdateOne, withPhoneNumberHistory(pnh))
+	return &PhoneNumberHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *PhoneNumberHistoryClient) UpdateOneID(id string) *PhoneNumberHistoryUpdateOne {
+	mutation := newPhoneNumberHistoryMutation(c.config, OpUpdateOne, withPhoneNumberHistoryID(id))
+	return &PhoneNumberHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for PhoneNumberHistory.
+func (c *PhoneNumberHistoryClient) Delete() *PhoneNumberHistoryDelete {
+	mutation := newPhoneNumberHistoryMutation(c.config, OpDelete)
+	return &PhoneNumberHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *PhoneNumberHistoryClient) DeleteOne(pnh *PhoneNumberHistory) *PhoneNumberHistoryDeleteOne {
+	return c.DeleteOneID(pnh.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *PhoneNumberHistoryClient) DeleteOneID(id string) *PhoneNumberHistoryDeleteOne {
+	builder := c.Delete().Where(phonenumberhistory.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &PhoneNumberHistoryDeleteOne{builder}
+}
+
+// Query returns a query builder for PhoneNumberHistory.
+func (c *PhoneNumberHistoryClient) Query() *PhoneNumberHistoryQuery {
+	return &PhoneNumberHistoryQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypePhoneNumberHistory},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a PhoneNumberHistory entity by its id.
+func (c *PhoneNumberHistoryClient) Get(ctx context.Context, id string) (*PhoneNumberHistory, error) {
+	return c.Query().Where(phonenumberhistory.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *PhoneNumberHistoryClient) GetX(ctx context.Context, id string) *PhoneNumberHistory {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *PhoneNumberHistoryClient) Hooks() []Hook {
+	return c.hooks.PhoneNumberHistory
+}
+
+// Interceptors returns the client interceptors.
+func (c *PhoneNumberHistoryClient) Interceptors() []Interceptor {
+	inters := c.inters.PhoneNumberHistory
+	return append(inters[:len(inters):len(inters)], phonenumberhistory.Interceptors[:]...)
+}
+
+func (c *PhoneNumberHistoryClient) mutate(ctx context.Context, m *PhoneNumberHistoryMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&PhoneNumberHistoryCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&PhoneNumberHistoryUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&PhoneNumberHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&PhoneNumberHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("generated: unknown PhoneNumberHistory mutation op: %q", m.Op())
 	}
 }
 
@@ -12328,6 +12728,25 @@ func (c *VendorProfileClient) QueryPostalAddresses(vp *VendorProfile) *PostalAdd
 	return query
 }
 
+// QueryPhoneNumbers queries the phone_numbers edge of a VendorProfile.
+func (c *VendorProfileClient) QueryPhoneNumbers(vp *VendorProfile) *PhoneNumberQuery {
+	query := (&PhoneNumberClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := vp.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(vendorprofile.Table, vendorprofile.FieldID, id),
+			sqlgraph.To(phonenumber.Table, phonenumber.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, vendorprofile.PhoneNumbersTable, vendorprofile.PhoneNumbersPrimaryKey...),
+		)
+		schemaConfig := vp.schemaConfig
+		step.To.Schema = schemaConfig.PhoneNumber
+		step.Edge.Schema = schemaConfig.VendorProfilePhoneNumber
+		fromV = sqlgraph.Neighbors(vp.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryVendor queries the vendor edge of a VendorProfile.
 func (c *VendorProfileClient) QueryVendor(vp *VendorProfile) *VendorQuery {
 	query := (&VendorClient{config: c.config}).Query()
@@ -12360,6 +12779,25 @@ func (c *VendorProfileClient) QueryVendorProfilePostalAddresses(vp *VendorProfil
 		schemaConfig := vp.schemaConfig
 		step.To.Schema = schemaConfig.VendorProfilePostalAddress
 		step.Edge.Schema = schemaConfig.VendorProfilePostalAddress
+		fromV = sqlgraph.Neighbors(vp.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryVendorProfilePhoneNumbers queries the vendor_profile_phone_numbers edge of a VendorProfile.
+func (c *VendorProfileClient) QueryVendorProfilePhoneNumbers(vp *VendorProfile) *VendorProfilePhoneNumberQuery {
+	query := (&VendorProfilePhoneNumberClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := vp.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(vendorprofile.Table, vendorprofile.FieldID, id),
+			sqlgraph.To(vendorprofilephonenumber.Table, vendorprofilephonenumber.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, true, vendorprofile.VendorProfilePhoneNumbersTable, vendorprofile.VendorProfilePhoneNumbersColumn),
+		)
+		schemaConfig := vp.schemaConfig
+		step.To.Schema = schemaConfig.VendorProfilePhoneNumber
+		step.Edge.Schema = schemaConfig.VendorProfilePhoneNumber
 		fromV = sqlgraph.Neighbors(vp.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -12524,6 +12962,332 @@ func (c *VendorProfileHistoryClient) mutate(ctx context.Context, m *VendorProfil
 		return (&VendorProfileHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
 	default:
 		return nil, fmt.Errorf("generated: unknown VendorProfileHistory mutation op: %q", m.Op())
+	}
+}
+
+// VendorProfilePhoneNumberClient is a client for the VendorProfilePhoneNumber schema.
+type VendorProfilePhoneNumberClient struct {
+	config
+}
+
+// NewVendorProfilePhoneNumberClient returns a client for the VendorProfilePhoneNumber from the given config.
+func NewVendorProfilePhoneNumberClient(c config) *VendorProfilePhoneNumberClient {
+	return &VendorProfilePhoneNumberClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `vendorprofilephonenumber.Hooks(f(g(h())))`.
+func (c *VendorProfilePhoneNumberClient) Use(hooks ...Hook) {
+	c.hooks.VendorProfilePhoneNumber = append(c.hooks.VendorProfilePhoneNumber, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `vendorprofilephonenumber.Intercept(f(g(h())))`.
+func (c *VendorProfilePhoneNumberClient) Intercept(interceptors ...Interceptor) {
+	c.inters.VendorProfilePhoneNumber = append(c.inters.VendorProfilePhoneNumber, interceptors...)
+}
+
+// Create returns a builder for creating a VendorProfilePhoneNumber entity.
+func (c *VendorProfilePhoneNumberClient) Create() *VendorProfilePhoneNumberCreate {
+	mutation := newVendorProfilePhoneNumberMutation(c.config, OpCreate)
+	return &VendorProfilePhoneNumberCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of VendorProfilePhoneNumber entities.
+func (c *VendorProfilePhoneNumberClient) CreateBulk(builders ...*VendorProfilePhoneNumberCreate) *VendorProfilePhoneNumberCreateBulk {
+	return &VendorProfilePhoneNumberCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *VendorProfilePhoneNumberClient) MapCreateBulk(slice any, setFunc func(*VendorProfilePhoneNumberCreate, int)) *VendorProfilePhoneNumberCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &VendorProfilePhoneNumberCreateBulk{err: fmt.Errorf("calling to VendorProfilePhoneNumberClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*VendorProfilePhoneNumberCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &VendorProfilePhoneNumberCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for VendorProfilePhoneNumber.
+func (c *VendorProfilePhoneNumberClient) Update() *VendorProfilePhoneNumberUpdate {
+	mutation := newVendorProfilePhoneNumberMutation(c.config, OpUpdate)
+	return &VendorProfilePhoneNumberUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *VendorProfilePhoneNumberClient) UpdateOne(vppn *VendorProfilePhoneNumber) *VendorProfilePhoneNumberUpdateOne {
+	mutation := newVendorProfilePhoneNumberMutation(c.config, OpUpdateOne, withVendorProfilePhoneNumber(vppn))
+	return &VendorProfilePhoneNumberUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *VendorProfilePhoneNumberClient) UpdateOneID(id string) *VendorProfilePhoneNumberUpdateOne {
+	mutation := newVendorProfilePhoneNumberMutation(c.config, OpUpdateOne, withVendorProfilePhoneNumberID(id))
+	return &VendorProfilePhoneNumberUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for VendorProfilePhoneNumber.
+func (c *VendorProfilePhoneNumberClient) Delete() *VendorProfilePhoneNumberDelete {
+	mutation := newVendorProfilePhoneNumberMutation(c.config, OpDelete)
+	return &VendorProfilePhoneNumberDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *VendorProfilePhoneNumberClient) DeleteOne(vppn *VendorProfilePhoneNumber) *VendorProfilePhoneNumberDeleteOne {
+	return c.DeleteOneID(vppn.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *VendorProfilePhoneNumberClient) DeleteOneID(id string) *VendorProfilePhoneNumberDeleteOne {
+	builder := c.Delete().Where(vendorprofilephonenumber.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &VendorProfilePhoneNumberDeleteOne{builder}
+}
+
+// Query returns a query builder for VendorProfilePhoneNumber.
+func (c *VendorProfilePhoneNumberClient) Query() *VendorProfilePhoneNumberQuery {
+	return &VendorProfilePhoneNumberQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeVendorProfilePhoneNumber},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a VendorProfilePhoneNumber entity by its id.
+func (c *VendorProfilePhoneNumberClient) Get(ctx context.Context, id string) (*VendorProfilePhoneNumber, error) {
+	return c.Query().Where(vendorprofilephonenumber.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *VendorProfilePhoneNumberClient) GetX(ctx context.Context, id string) *VendorProfilePhoneNumber {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryPhoneNumber queries the phone_number edge of a VendorProfilePhoneNumber.
+func (c *VendorProfilePhoneNumberClient) QueryPhoneNumber(vppn *VendorProfilePhoneNumber) *PhoneNumberQuery {
+	query := (&PhoneNumberClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := vppn.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(vendorprofilephonenumber.Table, vendorprofilephonenumber.FieldID, id),
+			sqlgraph.To(phonenumber.Table, phonenumber.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, vendorprofilephonenumber.PhoneNumberTable, vendorprofilephonenumber.PhoneNumberColumn),
+		)
+		schemaConfig := vppn.schemaConfig
+		step.To.Schema = schemaConfig.PhoneNumber
+		step.Edge.Schema = schemaConfig.VendorProfilePhoneNumber
+		fromV = sqlgraph.Neighbors(vppn.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryProfile queries the profile edge of a VendorProfilePhoneNumber.
+func (c *VendorProfilePhoneNumberClient) QueryProfile(vppn *VendorProfilePhoneNumber) *VendorProfileQuery {
+	query := (&VendorProfileClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := vppn.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(vendorprofilephonenumber.Table, vendorprofilephonenumber.FieldID, id),
+			sqlgraph.To(vendorprofile.Table, vendorprofile.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, vendorprofilephonenumber.ProfileTable, vendorprofilephonenumber.ProfileColumn),
+		)
+		schemaConfig := vppn.schemaConfig
+		step.To.Schema = schemaConfig.VendorProfile
+		step.Edge.Schema = schemaConfig.VendorProfilePhoneNumber
+		fromV = sqlgraph.Neighbors(vppn.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryEvents queries the events edge of a VendorProfilePhoneNumber.
+func (c *VendorProfilePhoneNumberClient) QueryEvents(vppn *VendorProfilePhoneNumber) *EventQuery {
+	query := (&EventClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := vppn.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(vendorprofilephonenumber.Table, vendorprofilephonenumber.FieldID, id),
+			sqlgraph.To(event.Table, event.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, vendorprofilephonenumber.EventsTable, vendorprofilephonenumber.EventsColumn),
+		)
+		schemaConfig := vppn.schemaConfig
+		step.To.Schema = schemaConfig.Event
+		step.Edge.Schema = schemaConfig.Event
+		fromV = sqlgraph.Neighbors(vppn.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *VendorProfilePhoneNumberClient) Hooks() []Hook {
+	hooks := c.hooks.VendorProfilePhoneNumber
+	return append(hooks[:len(hooks):len(hooks)], vendorprofilephonenumber.Hooks[:]...)
+}
+
+// Interceptors returns the client interceptors.
+func (c *VendorProfilePhoneNumberClient) Interceptors() []Interceptor {
+	inters := c.inters.VendorProfilePhoneNumber
+	return append(inters[:len(inters):len(inters)], vendorprofilephonenumber.Interceptors[:]...)
+}
+
+func (c *VendorProfilePhoneNumberClient) mutate(ctx context.Context, m *VendorProfilePhoneNumberMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&VendorProfilePhoneNumberCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&VendorProfilePhoneNumberUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&VendorProfilePhoneNumberUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&VendorProfilePhoneNumberDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("generated: unknown VendorProfilePhoneNumber mutation op: %q", m.Op())
+	}
+}
+
+// VendorProfilePhoneNumberHistoryClient is a client for the VendorProfilePhoneNumberHistory schema.
+type VendorProfilePhoneNumberHistoryClient struct {
+	config
+}
+
+// NewVendorProfilePhoneNumberHistoryClient returns a client for the VendorProfilePhoneNumberHistory from the given config.
+func NewVendorProfilePhoneNumberHistoryClient(c config) *VendorProfilePhoneNumberHistoryClient {
+	return &VendorProfilePhoneNumberHistoryClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `vendorprofilephonenumberhistory.Hooks(f(g(h())))`.
+func (c *VendorProfilePhoneNumberHistoryClient) Use(hooks ...Hook) {
+	c.hooks.VendorProfilePhoneNumberHistory = append(c.hooks.VendorProfilePhoneNumberHistory, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `vendorprofilephonenumberhistory.Intercept(f(g(h())))`.
+func (c *VendorProfilePhoneNumberHistoryClient) Intercept(interceptors ...Interceptor) {
+	c.inters.VendorProfilePhoneNumberHistory = append(c.inters.VendorProfilePhoneNumberHistory, interceptors...)
+}
+
+// Create returns a builder for creating a VendorProfilePhoneNumberHistory entity.
+func (c *VendorProfilePhoneNumberHistoryClient) Create() *VendorProfilePhoneNumberHistoryCreate {
+	mutation := newVendorProfilePhoneNumberHistoryMutation(c.config, OpCreate)
+	return &VendorProfilePhoneNumberHistoryCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of VendorProfilePhoneNumberHistory entities.
+func (c *VendorProfilePhoneNumberHistoryClient) CreateBulk(builders ...*VendorProfilePhoneNumberHistoryCreate) *VendorProfilePhoneNumberHistoryCreateBulk {
+	return &VendorProfilePhoneNumberHistoryCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *VendorProfilePhoneNumberHistoryClient) MapCreateBulk(slice any, setFunc func(*VendorProfilePhoneNumberHistoryCreate, int)) *VendorProfilePhoneNumberHistoryCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &VendorProfilePhoneNumberHistoryCreateBulk{err: fmt.Errorf("calling to VendorProfilePhoneNumberHistoryClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*VendorProfilePhoneNumberHistoryCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &VendorProfilePhoneNumberHistoryCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for VendorProfilePhoneNumberHistory.
+func (c *VendorProfilePhoneNumberHistoryClient) Update() *VendorProfilePhoneNumberHistoryUpdate {
+	mutation := newVendorProfilePhoneNumberHistoryMutation(c.config, OpUpdate)
+	return &VendorProfilePhoneNumberHistoryUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *VendorProfilePhoneNumberHistoryClient) UpdateOne(vppnh *VendorProfilePhoneNumberHistory) *VendorProfilePhoneNumberHistoryUpdateOne {
+	mutation := newVendorProfilePhoneNumberHistoryMutation(c.config, OpUpdateOne, withVendorProfilePhoneNumberHistory(vppnh))
+	return &VendorProfilePhoneNumberHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *VendorProfilePhoneNumberHistoryClient) UpdateOneID(id string) *VendorProfilePhoneNumberHistoryUpdateOne {
+	mutation := newVendorProfilePhoneNumberHistoryMutation(c.config, OpUpdateOne, withVendorProfilePhoneNumberHistoryID(id))
+	return &VendorProfilePhoneNumberHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for VendorProfilePhoneNumberHistory.
+func (c *VendorProfilePhoneNumberHistoryClient) Delete() *VendorProfilePhoneNumberHistoryDelete {
+	mutation := newVendorProfilePhoneNumberHistoryMutation(c.config, OpDelete)
+	return &VendorProfilePhoneNumberHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *VendorProfilePhoneNumberHistoryClient) DeleteOne(vppnh *VendorProfilePhoneNumberHistory) *VendorProfilePhoneNumberHistoryDeleteOne {
+	return c.DeleteOneID(vppnh.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *VendorProfilePhoneNumberHistoryClient) DeleteOneID(id string) *VendorProfilePhoneNumberHistoryDeleteOne {
+	builder := c.Delete().Where(vendorprofilephonenumberhistory.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &VendorProfilePhoneNumberHistoryDeleteOne{builder}
+}
+
+// Query returns a query builder for VendorProfilePhoneNumberHistory.
+func (c *VendorProfilePhoneNumberHistoryClient) Query() *VendorProfilePhoneNumberHistoryQuery {
+	return &VendorProfilePhoneNumberHistoryQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeVendorProfilePhoneNumberHistory},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a VendorProfilePhoneNumberHistory entity by its id.
+func (c *VendorProfilePhoneNumberHistoryClient) Get(ctx context.Context, id string) (*VendorProfilePhoneNumberHistory, error) {
+	return c.Query().Where(vendorprofilephonenumberhistory.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *VendorProfilePhoneNumberHistoryClient) GetX(ctx context.Context, id string) *VendorProfilePhoneNumberHistory {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *VendorProfilePhoneNumberHistoryClient) Hooks() []Hook {
+	return c.hooks.VendorProfilePhoneNumberHistory
+}
+
+// Interceptors returns the client interceptors.
+func (c *VendorProfilePhoneNumberHistoryClient) Interceptors() []Interceptor {
+	inters := c.inters.VendorProfilePhoneNumberHistory
+	return append(inters[:len(inters):len(inters)], vendorprofilephonenumberhistory.Interceptors[:]...)
+}
+
+func (c *VendorProfilePhoneNumberHistoryClient) mutate(ctx context.Context, m *VendorProfilePhoneNumberHistoryMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&VendorProfilePhoneNumberHistoryCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&VendorProfilePhoneNumberHistoryUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&VendorProfilePhoneNumberHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&VendorProfilePhoneNumberHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("generated: unknown VendorProfilePhoneNumberHistory mutation op: %q", m.Op())
 	}
 }
 
@@ -13348,11 +14112,12 @@ type (
 		Invite, Note, NoteHistory, OauthProvider, OauthProviderHistory, OhAuthTooToken,
 		OrgMembership, OrgMembershipHistory, Organization, OrganizationHistory,
 		OrganizationSetting, OrganizationSettingHistory, PasswordResetToken,
-		PersonalAccessToken, PostalAddress, PostalAddressHistory, Subscriber,
-		TFASetting, Template, TemplateHistory, User, UserHistory, UserSetting,
-		UserSettingHistory, Vendor, VendorHistory, VendorProfile, VendorProfileHistory,
-		VendorProfilePostalAddress, VendorProfilePostalAddressHistory, Webauthn,
-		Webhook, WebhookHistory []ent.Hook
+		PersonalAccessToken, PhoneNumber, PhoneNumberHistory, PostalAddress,
+		PostalAddressHistory, Subscriber, TFASetting, Template, TemplateHistory, User,
+		UserHistory, UserSetting, UserSettingHistory, Vendor, VendorHistory,
+		VendorProfile, VendorProfileHistory, VendorProfilePhoneNumber,
+		VendorProfilePhoneNumberHistory, VendorProfilePostalAddress,
+		VendorProfilePostalAddressHistory, Webauthn, Webhook, WebhookHistory []ent.Hook
 	}
 	inters struct {
 		APIToken, Contact, ContactHistory, ContactList, ContactListHistory,
@@ -13366,11 +14131,13 @@ type (
 		Invite, Note, NoteHistory, OauthProvider, OauthProviderHistory, OhAuthTooToken,
 		OrgMembership, OrgMembershipHistory, Organization, OrganizationHistory,
 		OrganizationSetting, OrganizationSettingHistory, PasswordResetToken,
-		PersonalAccessToken, PostalAddress, PostalAddressHistory, Subscriber,
-		TFASetting, Template, TemplateHistory, User, UserHistory, UserSetting,
-		UserSettingHistory, Vendor, VendorHistory, VendorProfile, VendorProfileHistory,
-		VendorProfilePostalAddress, VendorProfilePostalAddressHistory, Webauthn,
-		Webhook, WebhookHistory []ent.Interceptor
+		PersonalAccessToken, PhoneNumber, PhoneNumberHistory, PostalAddress,
+		PostalAddressHistory, Subscriber, TFASetting, Template, TemplateHistory, User,
+		UserHistory, UserSetting, UserSettingHistory, Vendor, VendorHistory,
+		VendorProfile, VendorProfileHistory, VendorProfilePhoneNumber,
+		VendorProfilePhoneNumberHistory, VendorProfilePostalAddress,
+		VendorProfilePostalAddressHistory, Webauthn, Webhook,
+		WebhookHistory []ent.Interceptor
 	}
 )
 

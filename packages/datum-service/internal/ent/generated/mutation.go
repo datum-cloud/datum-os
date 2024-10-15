@@ -62,6 +62,8 @@ import (
 	"github.com/datum-cloud/datum-os/internal/ent/generated/orgmembershiphistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/passwordresettoken"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/personalaccesstoken"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/phonenumber"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/phonenumberhistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/postaladdress"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/postaladdresshistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/predicate"
@@ -77,6 +79,8 @@ import (
 	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorhistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofile"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofilehistory"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofilephonenumber"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofilephonenumberhistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofilepostaladdress"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofilepostaladdresshistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/webauthn"
@@ -145,6 +149,8 @@ const (
 	TypeOrganizationSettingHistory        = "OrganizationSettingHistory"
 	TypePasswordResetToken                = "PasswordResetToken"
 	TypePersonalAccessToken               = "PersonalAccessToken"
+	TypePhoneNumber                       = "PhoneNumber"
+	TypePhoneNumberHistory                = "PhoneNumberHistory"
 	TypePostalAddress                     = "PostalAddress"
 	TypePostalAddressHistory              = "PostalAddressHistory"
 	TypeSubscriber                        = "Subscriber"
@@ -159,6 +165,8 @@ const (
 	TypeVendorHistory                     = "VendorHistory"
 	TypeVendorProfile                     = "VendorProfile"
 	TypeVendorProfileHistory              = "VendorProfileHistory"
+	TypeVendorProfilePhoneNumber          = "VendorProfilePhoneNumber"
+	TypeVendorProfilePhoneNumberHistory   = "VendorProfilePhoneNumberHistory"
 	TypeVendorProfilePostalAddress        = "VendorProfilePostalAddress"
 	TypeVendorProfilePostalAddressHistory = "VendorProfilePostalAddressHistory"
 	TypeWebauthn                          = "Webauthn"
@@ -62048,6 +62056,9 @@ type OrganizationMutation struct {
 	postal_addresses                map[string]struct{}
 	removedpostal_addresses         map[string]struct{}
 	clearedpostal_addresses         bool
+	phone_numbers                   map[string]struct{}
+	removedphone_numbers            map[string]struct{}
+	clearedphone_numbers            bool
 	members                         map[string]struct{}
 	removedmembers                  map[string]struct{}
 	clearedmembers                  bool
@@ -64450,6 +64461,60 @@ func (m *OrganizationMutation) ResetPostalAddresses() {
 	m.removedpostal_addresses = nil
 }
 
+// AddPhoneNumberIDs adds the "phone_numbers" edge to the PhoneNumber entity by ids.
+func (m *OrganizationMutation) AddPhoneNumberIDs(ids ...string) {
+	if m.phone_numbers == nil {
+		m.phone_numbers = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.phone_numbers[ids[i]] = struct{}{}
+	}
+}
+
+// ClearPhoneNumbers clears the "phone_numbers" edge to the PhoneNumber entity.
+func (m *OrganizationMutation) ClearPhoneNumbers() {
+	m.clearedphone_numbers = true
+}
+
+// PhoneNumbersCleared reports if the "phone_numbers" edge to the PhoneNumber entity was cleared.
+func (m *OrganizationMutation) PhoneNumbersCleared() bool {
+	return m.clearedphone_numbers
+}
+
+// RemovePhoneNumberIDs removes the "phone_numbers" edge to the PhoneNumber entity by IDs.
+func (m *OrganizationMutation) RemovePhoneNumberIDs(ids ...string) {
+	if m.removedphone_numbers == nil {
+		m.removedphone_numbers = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.phone_numbers, ids[i])
+		m.removedphone_numbers[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedPhoneNumbers returns the removed IDs of the "phone_numbers" edge to the PhoneNumber entity.
+func (m *OrganizationMutation) RemovedPhoneNumbersIDs() (ids []string) {
+	for id := range m.removedphone_numbers {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// PhoneNumbersIDs returns the "phone_numbers" edge IDs in the mutation.
+func (m *OrganizationMutation) PhoneNumbersIDs() (ids []string) {
+	for id := range m.phone_numbers {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetPhoneNumbers resets all changes to the "phone_numbers" edge.
+func (m *OrganizationMutation) ResetPhoneNumbers() {
+	m.phone_numbers = nil
+	m.clearedphone_numbers = false
+	m.removedphone_numbers = nil
+}
+
 // AddMemberIDs adds the "members" edge to the OrgMembership entity by ids.
 func (m *OrganizationMutation) AddMemberIDs(ids ...string) {
 	if m.members == nil {
@@ -64944,7 +65009,7 @@ func (m *OrganizationMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *OrganizationMutation) AddedEdges() []string {
-	edges := make([]string, 0, 31)
+	edges := make([]string, 0, 32)
 	if m.parent != nil {
 		edges = append(edges, organization.EdgeParent)
 	}
@@ -65034,6 +65099,9 @@ func (m *OrganizationMutation) AddedEdges() []string {
 	}
 	if m.postal_addresses != nil {
 		edges = append(edges, organization.EdgePostalAddresses)
+	}
+	if m.phone_numbers != nil {
+		edges = append(edges, organization.EdgePhoneNumbers)
 	}
 	if m.members != nil {
 		edges = append(edges, organization.EdgeMembers)
@@ -65221,6 +65289,12 @@ func (m *OrganizationMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case organization.EdgePhoneNumbers:
+		ids := make([]ent.Value, 0, len(m.phone_numbers))
+		for id := range m.phone_numbers {
+			ids = append(ids, id)
+		}
+		return ids
 	case organization.EdgeMembers:
 		ids := make([]ent.Value, 0, len(m.members))
 		for id := range m.members {
@@ -65233,7 +65307,7 @@ func (m *OrganizationMutation) AddedIDs(name string) []ent.Value {
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *OrganizationMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 31)
+	edges := make([]string, 0, 32)
 	if m.removedchildren != nil {
 		edges = append(edges, organization.EdgeChildren)
 	}
@@ -65317,6 +65391,9 @@ func (m *OrganizationMutation) RemovedEdges() []string {
 	}
 	if m.removedpostal_addresses != nil {
 		edges = append(edges, organization.EdgePostalAddresses)
+	}
+	if m.removedphone_numbers != nil {
+		edges = append(edges, organization.EdgePhoneNumbers)
 	}
 	if m.removedmembers != nil {
 		edges = append(edges, organization.EdgeMembers)
@@ -65496,6 +65573,12 @@ func (m *OrganizationMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case organization.EdgePhoneNumbers:
+		ids := make([]ent.Value, 0, len(m.removedphone_numbers))
+		for id := range m.removedphone_numbers {
+			ids = append(ids, id)
+		}
+		return ids
 	case organization.EdgeMembers:
 		ids := make([]ent.Value, 0, len(m.removedmembers))
 		for id := range m.removedmembers {
@@ -65508,7 +65591,7 @@ func (m *OrganizationMutation) RemovedIDs(name string) []ent.Value {
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *OrganizationMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 31)
+	edges := make([]string, 0, 32)
 	if m.clearedparent {
 		edges = append(edges, organization.EdgeParent)
 	}
@@ -65599,6 +65682,9 @@ func (m *OrganizationMutation) ClearedEdges() []string {
 	if m.clearedpostal_addresses {
 		edges = append(edges, organization.EdgePostalAddresses)
 	}
+	if m.clearedphone_numbers {
+		edges = append(edges, organization.EdgePhoneNumbers)
+	}
 	if m.clearedmembers {
 		edges = append(edges, organization.EdgeMembers)
 	}
@@ -65669,6 +65755,8 @@ func (m *OrganizationMutation) EdgeCleared(name string) bool {
 		return m.clearedvendor_profiles
 	case organization.EdgePostalAddresses:
 		return m.clearedpostal_addresses
+	case organization.EdgePhoneNumbers:
+		return m.clearedphone_numbers
 	case organization.EdgeMembers:
 		return m.clearedmembers
 	}
@@ -65782,6 +65870,9 @@ func (m *OrganizationMutation) ResetEdge(name string) error {
 		return nil
 	case organization.EdgePostalAddresses:
 		m.ResetPostalAddresses()
+		return nil
+	case organization.EdgePhoneNumbers:
+		m.ResetPhoneNumbers()
 		return nil
 	case organization.EdgeMembers:
 		m.ResetMembers()
@@ -73102,6 +73193,3056 @@ func (m *PersonalAccessTokenMutation) ResetEdge(name string) error {
 		return nil
 	}
 	return fmt.Errorf("unknown PersonalAccessToken edge %s", name)
+}
+
+// PhoneNumberMutation represents an operation that mutates the PhoneNumber nodes in the graph.
+type PhoneNumberMutation struct {
+	config
+	op                                  Op
+	typ                                 string
+	id                                  *string
+	created_at                          *time.Time
+	updated_at                          *time.Time
+	created_by                          *string
+	updated_by                          *string
+	deleted_at                          *time.Time
+	deleted_by                          *string
+	mapping_id                          *string
+	tags                                *[]string
+	appendtags                          []string
+	kind                                *enums.PhoneNumberType
+	region_code                         *string
+	short_code                          *string
+	number                              *string
+	extension                           *string
+	clearedFields                       map[string]struct{}
+	owner                               *string
+	clearedowner                        bool
+	profile                             map[string]struct{}
+	removedprofile                      map[string]struct{}
+	clearedprofile                      bool
+	events                              map[string]struct{}
+	removedevents                       map[string]struct{}
+	clearedevents                       bool
+	vendor_profile_phone_numbers        map[string]struct{}
+	removedvendor_profile_phone_numbers map[string]struct{}
+	clearedvendor_profile_phone_numbers bool
+	done                                bool
+	oldValue                            func(context.Context) (*PhoneNumber, error)
+	predicates                          []predicate.PhoneNumber
+}
+
+var _ ent.Mutation = (*PhoneNumberMutation)(nil)
+
+// phonenumberOption allows management of the mutation configuration using functional options.
+type phonenumberOption func(*PhoneNumberMutation)
+
+// newPhoneNumberMutation creates new mutation for the PhoneNumber entity.
+func newPhoneNumberMutation(c config, op Op, opts ...phonenumberOption) *PhoneNumberMutation {
+	m := &PhoneNumberMutation{
+		config:        c,
+		op:            op,
+		typ:           TypePhoneNumber,
+		clearedFields: make(map[string]struct{}),
+	}
+	for _, opt := range opts {
+		opt(m)
+	}
+	return m
+}
+
+// withPhoneNumberID sets the ID field of the mutation.
+func withPhoneNumberID(id string) phonenumberOption {
+	return func(m *PhoneNumberMutation) {
+		var (
+			err   error
+			once  sync.Once
+			value *PhoneNumber
+		)
+		m.oldValue = func(ctx context.Context) (*PhoneNumber, error) {
+			once.Do(func() {
+				if m.done {
+					err = errors.New("querying old values post mutation is not allowed")
+				} else {
+					value, err = m.Client().PhoneNumber.Get(ctx, id)
+				}
+			})
+			return value, err
+		}
+		m.id = &id
+	}
+}
+
+// withPhoneNumber sets the old PhoneNumber of the mutation.
+func withPhoneNumber(node *PhoneNumber) phonenumberOption {
+	return func(m *PhoneNumberMutation) {
+		m.oldValue = func(context.Context) (*PhoneNumber, error) {
+			return node, nil
+		}
+		m.id = &node.ID
+	}
+}
+
+// Client returns a new `ent.Client` from the mutation. If the mutation was
+// executed in a transaction (ent.Tx), a transactional client is returned.
+func (m PhoneNumberMutation) Client() *Client {
+	client := &Client{config: m.config}
+	client.init()
+	return client
+}
+
+// Tx returns an `ent.Tx` for mutations that were executed in transactions;
+// it returns an error otherwise.
+func (m PhoneNumberMutation) Tx() (*Tx, error) {
+	if _, ok := m.driver.(*txDriver); !ok {
+		return nil, errors.New("generated: mutation is not running in a transaction")
+	}
+	tx := &Tx{config: m.config}
+	tx.init()
+	return tx, nil
+}
+
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of PhoneNumber entities.
+func (m *PhoneNumberMutation) SetID(id string) {
+	m.id = &id
+}
+
+// ID returns the ID value in the mutation. Note that the ID is only available
+// if it was provided to the builder or after it was returned from the database.
+func (m *PhoneNumberMutation) ID() (id string, exists bool) {
+	if m.id == nil {
+		return
+	}
+	return *m.id, true
+}
+
+// IDs queries the database and returns the entity ids that match the mutation's predicate.
+// That means, if the mutation is applied within a transaction with an isolation level such
+// as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
+// or updated by the mutation.
+func (m *PhoneNumberMutation) IDs(ctx context.Context) ([]string, error) {
+	switch {
+	case m.op.Is(OpUpdateOne | OpDeleteOne):
+		id, exists := m.ID()
+		if exists {
+			return []string{id}, nil
+		}
+		fallthrough
+	case m.op.Is(OpUpdate | OpDelete):
+		return m.Client().PhoneNumber.Query().Where(m.predicates...).IDs(ctx)
+	default:
+		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
+	}
+}
+
+// SetCreatedAt sets the "created_at" field.
+func (m *PhoneNumberMutation) SetCreatedAt(t time.Time) {
+	m.created_at = &t
+}
+
+// CreatedAt returns the value of the "created_at" field in the mutation.
+func (m *PhoneNumberMutation) CreatedAt() (r time.Time, exists bool) {
+	v := m.created_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedAt returns the old "created_at" field's value of the PhoneNumber entity.
+// If the PhoneNumber object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PhoneNumberMutation) OldCreatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedAt: %w", err)
+	}
+	return oldValue.CreatedAt, nil
+}
+
+// ClearCreatedAt clears the value of the "created_at" field.
+func (m *PhoneNumberMutation) ClearCreatedAt() {
+	m.created_at = nil
+	m.clearedFields[phonenumber.FieldCreatedAt] = struct{}{}
+}
+
+// CreatedAtCleared returns if the "created_at" field was cleared in this mutation.
+func (m *PhoneNumberMutation) CreatedAtCleared() bool {
+	_, ok := m.clearedFields[phonenumber.FieldCreatedAt]
+	return ok
+}
+
+// ResetCreatedAt resets all changes to the "created_at" field.
+func (m *PhoneNumberMutation) ResetCreatedAt() {
+	m.created_at = nil
+	delete(m.clearedFields, phonenumber.FieldCreatedAt)
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (m *PhoneNumberMutation) SetUpdatedAt(t time.Time) {
+	m.updated_at = &t
+}
+
+// UpdatedAt returns the value of the "updated_at" field in the mutation.
+func (m *PhoneNumberMutation) UpdatedAt() (r time.Time, exists bool) {
+	v := m.updated_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedAt returns the old "updated_at" field's value of the PhoneNumber entity.
+// If the PhoneNumber object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PhoneNumberMutation) OldUpdatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedAt: %w", err)
+	}
+	return oldValue.UpdatedAt, nil
+}
+
+// ClearUpdatedAt clears the value of the "updated_at" field.
+func (m *PhoneNumberMutation) ClearUpdatedAt() {
+	m.updated_at = nil
+	m.clearedFields[phonenumber.FieldUpdatedAt] = struct{}{}
+}
+
+// UpdatedAtCleared returns if the "updated_at" field was cleared in this mutation.
+func (m *PhoneNumberMutation) UpdatedAtCleared() bool {
+	_, ok := m.clearedFields[phonenumber.FieldUpdatedAt]
+	return ok
+}
+
+// ResetUpdatedAt resets all changes to the "updated_at" field.
+func (m *PhoneNumberMutation) ResetUpdatedAt() {
+	m.updated_at = nil
+	delete(m.clearedFields, phonenumber.FieldUpdatedAt)
+}
+
+// SetCreatedBy sets the "created_by" field.
+func (m *PhoneNumberMutation) SetCreatedBy(s string) {
+	m.created_by = &s
+}
+
+// CreatedBy returns the value of the "created_by" field in the mutation.
+func (m *PhoneNumberMutation) CreatedBy() (r string, exists bool) {
+	v := m.created_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedBy returns the old "created_by" field's value of the PhoneNumber entity.
+// If the PhoneNumber object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PhoneNumberMutation) OldCreatedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedBy: %w", err)
+	}
+	return oldValue.CreatedBy, nil
+}
+
+// ClearCreatedBy clears the value of the "created_by" field.
+func (m *PhoneNumberMutation) ClearCreatedBy() {
+	m.created_by = nil
+	m.clearedFields[phonenumber.FieldCreatedBy] = struct{}{}
+}
+
+// CreatedByCleared returns if the "created_by" field was cleared in this mutation.
+func (m *PhoneNumberMutation) CreatedByCleared() bool {
+	_, ok := m.clearedFields[phonenumber.FieldCreatedBy]
+	return ok
+}
+
+// ResetCreatedBy resets all changes to the "created_by" field.
+func (m *PhoneNumberMutation) ResetCreatedBy() {
+	m.created_by = nil
+	delete(m.clearedFields, phonenumber.FieldCreatedBy)
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (m *PhoneNumberMutation) SetUpdatedBy(s string) {
+	m.updated_by = &s
+}
+
+// UpdatedBy returns the value of the "updated_by" field in the mutation.
+func (m *PhoneNumberMutation) UpdatedBy() (r string, exists bool) {
+	v := m.updated_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedBy returns the old "updated_by" field's value of the PhoneNumber entity.
+// If the PhoneNumber object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PhoneNumberMutation) OldUpdatedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedBy: %w", err)
+	}
+	return oldValue.UpdatedBy, nil
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (m *PhoneNumberMutation) ClearUpdatedBy() {
+	m.updated_by = nil
+	m.clearedFields[phonenumber.FieldUpdatedBy] = struct{}{}
+}
+
+// UpdatedByCleared returns if the "updated_by" field was cleared in this mutation.
+func (m *PhoneNumberMutation) UpdatedByCleared() bool {
+	_, ok := m.clearedFields[phonenumber.FieldUpdatedBy]
+	return ok
+}
+
+// ResetUpdatedBy resets all changes to the "updated_by" field.
+func (m *PhoneNumberMutation) ResetUpdatedBy() {
+	m.updated_by = nil
+	delete(m.clearedFields, phonenumber.FieldUpdatedBy)
+}
+
+// SetDeletedAt sets the "deleted_at" field.
+func (m *PhoneNumberMutation) SetDeletedAt(t time.Time) {
+	m.deleted_at = &t
+}
+
+// DeletedAt returns the value of the "deleted_at" field in the mutation.
+func (m *PhoneNumberMutation) DeletedAt() (r time.Time, exists bool) {
+	v := m.deleted_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDeletedAt returns the old "deleted_at" field's value of the PhoneNumber entity.
+// If the PhoneNumber object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PhoneNumberMutation) OldDeletedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDeletedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDeletedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDeletedAt: %w", err)
+	}
+	return oldValue.DeletedAt, nil
+}
+
+// ClearDeletedAt clears the value of the "deleted_at" field.
+func (m *PhoneNumberMutation) ClearDeletedAt() {
+	m.deleted_at = nil
+	m.clearedFields[phonenumber.FieldDeletedAt] = struct{}{}
+}
+
+// DeletedAtCleared returns if the "deleted_at" field was cleared in this mutation.
+func (m *PhoneNumberMutation) DeletedAtCleared() bool {
+	_, ok := m.clearedFields[phonenumber.FieldDeletedAt]
+	return ok
+}
+
+// ResetDeletedAt resets all changes to the "deleted_at" field.
+func (m *PhoneNumberMutation) ResetDeletedAt() {
+	m.deleted_at = nil
+	delete(m.clearedFields, phonenumber.FieldDeletedAt)
+}
+
+// SetDeletedBy sets the "deleted_by" field.
+func (m *PhoneNumberMutation) SetDeletedBy(s string) {
+	m.deleted_by = &s
+}
+
+// DeletedBy returns the value of the "deleted_by" field in the mutation.
+func (m *PhoneNumberMutation) DeletedBy() (r string, exists bool) {
+	v := m.deleted_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDeletedBy returns the old "deleted_by" field's value of the PhoneNumber entity.
+// If the PhoneNumber object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PhoneNumberMutation) OldDeletedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDeletedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDeletedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDeletedBy: %w", err)
+	}
+	return oldValue.DeletedBy, nil
+}
+
+// ClearDeletedBy clears the value of the "deleted_by" field.
+func (m *PhoneNumberMutation) ClearDeletedBy() {
+	m.deleted_by = nil
+	m.clearedFields[phonenumber.FieldDeletedBy] = struct{}{}
+}
+
+// DeletedByCleared returns if the "deleted_by" field was cleared in this mutation.
+func (m *PhoneNumberMutation) DeletedByCleared() bool {
+	_, ok := m.clearedFields[phonenumber.FieldDeletedBy]
+	return ok
+}
+
+// ResetDeletedBy resets all changes to the "deleted_by" field.
+func (m *PhoneNumberMutation) ResetDeletedBy() {
+	m.deleted_by = nil
+	delete(m.clearedFields, phonenumber.FieldDeletedBy)
+}
+
+// SetMappingID sets the "mapping_id" field.
+func (m *PhoneNumberMutation) SetMappingID(s string) {
+	m.mapping_id = &s
+}
+
+// MappingID returns the value of the "mapping_id" field in the mutation.
+func (m *PhoneNumberMutation) MappingID() (r string, exists bool) {
+	v := m.mapping_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldMappingID returns the old "mapping_id" field's value of the PhoneNumber entity.
+// If the PhoneNumber object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PhoneNumberMutation) OldMappingID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldMappingID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldMappingID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldMappingID: %w", err)
+	}
+	return oldValue.MappingID, nil
+}
+
+// ResetMappingID resets all changes to the "mapping_id" field.
+func (m *PhoneNumberMutation) ResetMappingID() {
+	m.mapping_id = nil
+}
+
+// SetTags sets the "tags" field.
+func (m *PhoneNumberMutation) SetTags(s []string) {
+	m.tags = &s
+	m.appendtags = nil
+}
+
+// Tags returns the value of the "tags" field in the mutation.
+func (m *PhoneNumberMutation) Tags() (r []string, exists bool) {
+	v := m.tags
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldTags returns the old "tags" field's value of the PhoneNumber entity.
+// If the PhoneNumber object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PhoneNumberMutation) OldTags(ctx context.Context) (v []string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldTags is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldTags requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldTags: %w", err)
+	}
+	return oldValue.Tags, nil
+}
+
+// AppendTags adds s to the "tags" field.
+func (m *PhoneNumberMutation) AppendTags(s []string) {
+	m.appendtags = append(m.appendtags, s...)
+}
+
+// AppendedTags returns the list of values that were appended to the "tags" field in this mutation.
+func (m *PhoneNumberMutation) AppendedTags() ([]string, bool) {
+	if len(m.appendtags) == 0 {
+		return nil, false
+	}
+	return m.appendtags, true
+}
+
+// ClearTags clears the value of the "tags" field.
+func (m *PhoneNumberMutation) ClearTags() {
+	m.tags = nil
+	m.appendtags = nil
+	m.clearedFields[phonenumber.FieldTags] = struct{}{}
+}
+
+// TagsCleared returns if the "tags" field was cleared in this mutation.
+func (m *PhoneNumberMutation) TagsCleared() bool {
+	_, ok := m.clearedFields[phonenumber.FieldTags]
+	return ok
+}
+
+// ResetTags resets all changes to the "tags" field.
+func (m *PhoneNumberMutation) ResetTags() {
+	m.tags = nil
+	m.appendtags = nil
+	delete(m.clearedFields, phonenumber.FieldTags)
+}
+
+// SetOwnerID sets the "owner_id" field.
+func (m *PhoneNumberMutation) SetOwnerID(s string) {
+	m.owner = &s
+}
+
+// OwnerID returns the value of the "owner_id" field in the mutation.
+func (m *PhoneNumberMutation) OwnerID() (r string, exists bool) {
+	v := m.owner
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldOwnerID returns the old "owner_id" field's value of the PhoneNumber entity.
+// If the PhoneNumber object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PhoneNumberMutation) OldOwnerID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldOwnerID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldOwnerID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldOwnerID: %w", err)
+	}
+	return oldValue.OwnerID, nil
+}
+
+// ClearOwnerID clears the value of the "owner_id" field.
+func (m *PhoneNumberMutation) ClearOwnerID() {
+	m.owner = nil
+	m.clearedFields[phonenumber.FieldOwnerID] = struct{}{}
+}
+
+// OwnerIDCleared returns if the "owner_id" field was cleared in this mutation.
+func (m *PhoneNumberMutation) OwnerIDCleared() bool {
+	_, ok := m.clearedFields[phonenumber.FieldOwnerID]
+	return ok
+}
+
+// ResetOwnerID resets all changes to the "owner_id" field.
+func (m *PhoneNumberMutation) ResetOwnerID() {
+	m.owner = nil
+	delete(m.clearedFields, phonenumber.FieldOwnerID)
+}
+
+// SetKind sets the "kind" field.
+func (m *PhoneNumberMutation) SetKind(ennuty enums.PhoneNumberType) {
+	m.kind = &ennuty
+}
+
+// Kind returns the value of the "kind" field in the mutation.
+func (m *PhoneNumberMutation) Kind() (r enums.PhoneNumberType, exists bool) {
+	v := m.kind
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldKind returns the old "kind" field's value of the PhoneNumber entity.
+// If the PhoneNumber object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PhoneNumberMutation) OldKind(ctx context.Context) (v enums.PhoneNumberType, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldKind is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldKind requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldKind: %w", err)
+	}
+	return oldValue.Kind, nil
+}
+
+// ResetKind resets all changes to the "kind" field.
+func (m *PhoneNumberMutation) ResetKind() {
+	m.kind = nil
+}
+
+// SetRegionCode sets the "region_code" field.
+func (m *PhoneNumberMutation) SetRegionCode(s string) {
+	m.region_code = &s
+}
+
+// RegionCode returns the value of the "region_code" field in the mutation.
+func (m *PhoneNumberMutation) RegionCode() (r string, exists bool) {
+	v := m.region_code
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldRegionCode returns the old "region_code" field's value of the PhoneNumber entity.
+// If the PhoneNumber object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PhoneNumberMutation) OldRegionCode(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldRegionCode is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldRegionCode requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldRegionCode: %w", err)
+	}
+	return oldValue.RegionCode, nil
+}
+
+// ClearRegionCode clears the value of the "region_code" field.
+func (m *PhoneNumberMutation) ClearRegionCode() {
+	m.region_code = nil
+	m.clearedFields[phonenumber.FieldRegionCode] = struct{}{}
+}
+
+// RegionCodeCleared returns if the "region_code" field was cleared in this mutation.
+func (m *PhoneNumberMutation) RegionCodeCleared() bool {
+	_, ok := m.clearedFields[phonenumber.FieldRegionCode]
+	return ok
+}
+
+// ResetRegionCode resets all changes to the "region_code" field.
+func (m *PhoneNumberMutation) ResetRegionCode() {
+	m.region_code = nil
+	delete(m.clearedFields, phonenumber.FieldRegionCode)
+}
+
+// SetShortCode sets the "short_code" field.
+func (m *PhoneNumberMutation) SetShortCode(s string) {
+	m.short_code = &s
+}
+
+// ShortCode returns the value of the "short_code" field in the mutation.
+func (m *PhoneNumberMutation) ShortCode() (r string, exists bool) {
+	v := m.short_code
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldShortCode returns the old "short_code" field's value of the PhoneNumber entity.
+// If the PhoneNumber object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PhoneNumberMutation) OldShortCode(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldShortCode is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldShortCode requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldShortCode: %w", err)
+	}
+	return oldValue.ShortCode, nil
+}
+
+// ClearShortCode clears the value of the "short_code" field.
+func (m *PhoneNumberMutation) ClearShortCode() {
+	m.short_code = nil
+	m.clearedFields[phonenumber.FieldShortCode] = struct{}{}
+}
+
+// ShortCodeCleared returns if the "short_code" field was cleared in this mutation.
+func (m *PhoneNumberMutation) ShortCodeCleared() bool {
+	_, ok := m.clearedFields[phonenumber.FieldShortCode]
+	return ok
+}
+
+// ResetShortCode resets all changes to the "short_code" field.
+func (m *PhoneNumberMutation) ResetShortCode() {
+	m.short_code = nil
+	delete(m.clearedFields, phonenumber.FieldShortCode)
+}
+
+// SetNumber sets the "number" field.
+func (m *PhoneNumberMutation) SetNumber(s string) {
+	m.number = &s
+}
+
+// Number returns the value of the "number" field in the mutation.
+func (m *PhoneNumberMutation) Number() (r string, exists bool) {
+	v := m.number
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldNumber returns the old "number" field's value of the PhoneNumber entity.
+// If the PhoneNumber object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PhoneNumberMutation) OldNumber(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldNumber is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldNumber requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldNumber: %w", err)
+	}
+	return oldValue.Number, nil
+}
+
+// ClearNumber clears the value of the "number" field.
+func (m *PhoneNumberMutation) ClearNumber() {
+	m.number = nil
+	m.clearedFields[phonenumber.FieldNumber] = struct{}{}
+}
+
+// NumberCleared returns if the "number" field was cleared in this mutation.
+func (m *PhoneNumberMutation) NumberCleared() bool {
+	_, ok := m.clearedFields[phonenumber.FieldNumber]
+	return ok
+}
+
+// ResetNumber resets all changes to the "number" field.
+func (m *PhoneNumberMutation) ResetNumber() {
+	m.number = nil
+	delete(m.clearedFields, phonenumber.FieldNumber)
+}
+
+// SetExtension sets the "extension" field.
+func (m *PhoneNumberMutation) SetExtension(s string) {
+	m.extension = &s
+}
+
+// Extension returns the value of the "extension" field in the mutation.
+func (m *PhoneNumberMutation) Extension() (r string, exists bool) {
+	v := m.extension
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldExtension returns the old "extension" field's value of the PhoneNumber entity.
+// If the PhoneNumber object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PhoneNumberMutation) OldExtension(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldExtension is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldExtension requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldExtension: %w", err)
+	}
+	return oldValue.Extension, nil
+}
+
+// ClearExtension clears the value of the "extension" field.
+func (m *PhoneNumberMutation) ClearExtension() {
+	m.extension = nil
+	m.clearedFields[phonenumber.FieldExtension] = struct{}{}
+}
+
+// ExtensionCleared returns if the "extension" field was cleared in this mutation.
+func (m *PhoneNumberMutation) ExtensionCleared() bool {
+	_, ok := m.clearedFields[phonenumber.FieldExtension]
+	return ok
+}
+
+// ResetExtension resets all changes to the "extension" field.
+func (m *PhoneNumberMutation) ResetExtension() {
+	m.extension = nil
+	delete(m.clearedFields, phonenumber.FieldExtension)
+}
+
+// ClearOwner clears the "owner" edge to the Organization entity.
+func (m *PhoneNumberMutation) ClearOwner() {
+	m.clearedowner = true
+	m.clearedFields[phonenumber.FieldOwnerID] = struct{}{}
+}
+
+// OwnerCleared reports if the "owner" edge to the Organization entity was cleared.
+func (m *PhoneNumberMutation) OwnerCleared() bool {
+	return m.OwnerIDCleared() || m.clearedowner
+}
+
+// OwnerIDs returns the "owner" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// OwnerID instead. It exists only for internal usage by the builders.
+func (m *PhoneNumberMutation) OwnerIDs() (ids []string) {
+	if id := m.owner; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetOwner resets all changes to the "owner" edge.
+func (m *PhoneNumberMutation) ResetOwner() {
+	m.owner = nil
+	m.clearedowner = false
+}
+
+// AddProfileIDs adds the "profile" edge to the VendorProfile entity by ids.
+func (m *PhoneNumberMutation) AddProfileIDs(ids ...string) {
+	if m.profile == nil {
+		m.profile = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.profile[ids[i]] = struct{}{}
+	}
+}
+
+// ClearProfile clears the "profile" edge to the VendorProfile entity.
+func (m *PhoneNumberMutation) ClearProfile() {
+	m.clearedprofile = true
+}
+
+// ProfileCleared reports if the "profile" edge to the VendorProfile entity was cleared.
+func (m *PhoneNumberMutation) ProfileCleared() bool {
+	return m.clearedprofile
+}
+
+// RemoveProfileIDs removes the "profile" edge to the VendorProfile entity by IDs.
+func (m *PhoneNumberMutation) RemoveProfileIDs(ids ...string) {
+	if m.removedprofile == nil {
+		m.removedprofile = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.profile, ids[i])
+		m.removedprofile[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedProfile returns the removed IDs of the "profile" edge to the VendorProfile entity.
+func (m *PhoneNumberMutation) RemovedProfileIDs() (ids []string) {
+	for id := range m.removedprofile {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ProfileIDs returns the "profile" edge IDs in the mutation.
+func (m *PhoneNumberMutation) ProfileIDs() (ids []string) {
+	for id := range m.profile {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetProfile resets all changes to the "profile" edge.
+func (m *PhoneNumberMutation) ResetProfile() {
+	m.profile = nil
+	m.clearedprofile = false
+	m.removedprofile = nil
+}
+
+// AddEventIDs adds the "events" edge to the Event entity by ids.
+func (m *PhoneNumberMutation) AddEventIDs(ids ...string) {
+	if m.events == nil {
+		m.events = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.events[ids[i]] = struct{}{}
+	}
+}
+
+// ClearEvents clears the "events" edge to the Event entity.
+func (m *PhoneNumberMutation) ClearEvents() {
+	m.clearedevents = true
+}
+
+// EventsCleared reports if the "events" edge to the Event entity was cleared.
+func (m *PhoneNumberMutation) EventsCleared() bool {
+	return m.clearedevents
+}
+
+// RemoveEventIDs removes the "events" edge to the Event entity by IDs.
+func (m *PhoneNumberMutation) RemoveEventIDs(ids ...string) {
+	if m.removedevents == nil {
+		m.removedevents = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.events, ids[i])
+		m.removedevents[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedEvents returns the removed IDs of the "events" edge to the Event entity.
+func (m *PhoneNumberMutation) RemovedEventsIDs() (ids []string) {
+	for id := range m.removedevents {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// EventsIDs returns the "events" edge IDs in the mutation.
+func (m *PhoneNumberMutation) EventsIDs() (ids []string) {
+	for id := range m.events {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetEvents resets all changes to the "events" edge.
+func (m *PhoneNumberMutation) ResetEvents() {
+	m.events = nil
+	m.clearedevents = false
+	m.removedevents = nil
+}
+
+// AddVendorProfilePhoneNumberIDs adds the "vendor_profile_phone_numbers" edge to the VendorProfilePhoneNumber entity by ids.
+func (m *PhoneNumberMutation) AddVendorProfilePhoneNumberIDs(ids ...string) {
+	if m.vendor_profile_phone_numbers == nil {
+		m.vendor_profile_phone_numbers = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.vendor_profile_phone_numbers[ids[i]] = struct{}{}
+	}
+}
+
+// ClearVendorProfilePhoneNumbers clears the "vendor_profile_phone_numbers" edge to the VendorProfilePhoneNumber entity.
+func (m *PhoneNumberMutation) ClearVendorProfilePhoneNumbers() {
+	m.clearedvendor_profile_phone_numbers = true
+}
+
+// VendorProfilePhoneNumbersCleared reports if the "vendor_profile_phone_numbers" edge to the VendorProfilePhoneNumber entity was cleared.
+func (m *PhoneNumberMutation) VendorProfilePhoneNumbersCleared() bool {
+	return m.clearedvendor_profile_phone_numbers
+}
+
+// RemoveVendorProfilePhoneNumberIDs removes the "vendor_profile_phone_numbers" edge to the VendorProfilePhoneNumber entity by IDs.
+func (m *PhoneNumberMutation) RemoveVendorProfilePhoneNumberIDs(ids ...string) {
+	if m.removedvendor_profile_phone_numbers == nil {
+		m.removedvendor_profile_phone_numbers = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.vendor_profile_phone_numbers, ids[i])
+		m.removedvendor_profile_phone_numbers[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedVendorProfilePhoneNumbers returns the removed IDs of the "vendor_profile_phone_numbers" edge to the VendorProfilePhoneNumber entity.
+func (m *PhoneNumberMutation) RemovedVendorProfilePhoneNumbersIDs() (ids []string) {
+	for id := range m.removedvendor_profile_phone_numbers {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// VendorProfilePhoneNumbersIDs returns the "vendor_profile_phone_numbers" edge IDs in the mutation.
+func (m *PhoneNumberMutation) VendorProfilePhoneNumbersIDs() (ids []string) {
+	for id := range m.vendor_profile_phone_numbers {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetVendorProfilePhoneNumbers resets all changes to the "vendor_profile_phone_numbers" edge.
+func (m *PhoneNumberMutation) ResetVendorProfilePhoneNumbers() {
+	m.vendor_profile_phone_numbers = nil
+	m.clearedvendor_profile_phone_numbers = false
+	m.removedvendor_profile_phone_numbers = nil
+}
+
+// Where appends a list predicates to the PhoneNumberMutation builder.
+func (m *PhoneNumberMutation) Where(ps ...predicate.PhoneNumber) {
+	m.predicates = append(m.predicates, ps...)
+}
+
+// WhereP appends storage-level predicates to the PhoneNumberMutation builder. Using this method,
+// users can use type-assertion to append predicates that do not depend on any generated package.
+func (m *PhoneNumberMutation) WhereP(ps ...func(*sql.Selector)) {
+	p := make([]predicate.PhoneNumber, len(ps))
+	for i := range ps {
+		p[i] = ps[i]
+	}
+	m.Where(p...)
+}
+
+// Op returns the operation name.
+func (m *PhoneNumberMutation) Op() Op {
+	return m.op
+}
+
+// SetOp allows setting the mutation operation.
+func (m *PhoneNumberMutation) SetOp(op Op) {
+	m.op = op
+}
+
+// Type returns the node type of this mutation (PhoneNumber).
+func (m *PhoneNumberMutation) Type() string {
+	return m.typ
+}
+
+// Fields returns all fields that were changed during this mutation. Note that in
+// order to get all numeric fields that were incremented/decremented, call
+// AddedFields().
+func (m *PhoneNumberMutation) Fields() []string {
+	fields := make([]string, 0, 14)
+	if m.created_at != nil {
+		fields = append(fields, phonenumber.FieldCreatedAt)
+	}
+	if m.updated_at != nil {
+		fields = append(fields, phonenumber.FieldUpdatedAt)
+	}
+	if m.created_by != nil {
+		fields = append(fields, phonenumber.FieldCreatedBy)
+	}
+	if m.updated_by != nil {
+		fields = append(fields, phonenumber.FieldUpdatedBy)
+	}
+	if m.deleted_at != nil {
+		fields = append(fields, phonenumber.FieldDeletedAt)
+	}
+	if m.deleted_by != nil {
+		fields = append(fields, phonenumber.FieldDeletedBy)
+	}
+	if m.mapping_id != nil {
+		fields = append(fields, phonenumber.FieldMappingID)
+	}
+	if m.tags != nil {
+		fields = append(fields, phonenumber.FieldTags)
+	}
+	if m.owner != nil {
+		fields = append(fields, phonenumber.FieldOwnerID)
+	}
+	if m.kind != nil {
+		fields = append(fields, phonenumber.FieldKind)
+	}
+	if m.region_code != nil {
+		fields = append(fields, phonenumber.FieldRegionCode)
+	}
+	if m.short_code != nil {
+		fields = append(fields, phonenumber.FieldShortCode)
+	}
+	if m.number != nil {
+		fields = append(fields, phonenumber.FieldNumber)
+	}
+	if m.extension != nil {
+		fields = append(fields, phonenumber.FieldExtension)
+	}
+	return fields
+}
+
+// Field returns the value of a field with the given name. The second boolean
+// return value indicates that this field was not set, or was not defined in the
+// schema.
+func (m *PhoneNumberMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case phonenumber.FieldCreatedAt:
+		return m.CreatedAt()
+	case phonenumber.FieldUpdatedAt:
+		return m.UpdatedAt()
+	case phonenumber.FieldCreatedBy:
+		return m.CreatedBy()
+	case phonenumber.FieldUpdatedBy:
+		return m.UpdatedBy()
+	case phonenumber.FieldDeletedAt:
+		return m.DeletedAt()
+	case phonenumber.FieldDeletedBy:
+		return m.DeletedBy()
+	case phonenumber.FieldMappingID:
+		return m.MappingID()
+	case phonenumber.FieldTags:
+		return m.Tags()
+	case phonenumber.FieldOwnerID:
+		return m.OwnerID()
+	case phonenumber.FieldKind:
+		return m.Kind()
+	case phonenumber.FieldRegionCode:
+		return m.RegionCode()
+	case phonenumber.FieldShortCode:
+		return m.ShortCode()
+	case phonenumber.FieldNumber:
+		return m.Number()
+	case phonenumber.FieldExtension:
+		return m.Extension()
+	}
+	return nil, false
+}
+
+// OldField returns the old value of the field from the database. An error is
+// returned if the mutation operation is not UpdateOne, or the query to the
+// database failed.
+func (m *PhoneNumberMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case phonenumber.FieldCreatedAt:
+		return m.OldCreatedAt(ctx)
+	case phonenumber.FieldUpdatedAt:
+		return m.OldUpdatedAt(ctx)
+	case phonenumber.FieldCreatedBy:
+		return m.OldCreatedBy(ctx)
+	case phonenumber.FieldUpdatedBy:
+		return m.OldUpdatedBy(ctx)
+	case phonenumber.FieldDeletedAt:
+		return m.OldDeletedAt(ctx)
+	case phonenumber.FieldDeletedBy:
+		return m.OldDeletedBy(ctx)
+	case phonenumber.FieldMappingID:
+		return m.OldMappingID(ctx)
+	case phonenumber.FieldTags:
+		return m.OldTags(ctx)
+	case phonenumber.FieldOwnerID:
+		return m.OldOwnerID(ctx)
+	case phonenumber.FieldKind:
+		return m.OldKind(ctx)
+	case phonenumber.FieldRegionCode:
+		return m.OldRegionCode(ctx)
+	case phonenumber.FieldShortCode:
+		return m.OldShortCode(ctx)
+	case phonenumber.FieldNumber:
+		return m.OldNumber(ctx)
+	case phonenumber.FieldExtension:
+		return m.OldExtension(ctx)
+	}
+	return nil, fmt.Errorf("unknown PhoneNumber field %s", name)
+}
+
+// SetField sets the value of a field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *PhoneNumberMutation) SetField(name string, value ent.Value) error {
+	switch name {
+	case phonenumber.FieldCreatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedAt(v)
+		return nil
+	case phonenumber.FieldUpdatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedAt(v)
+		return nil
+	case phonenumber.FieldCreatedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedBy(v)
+		return nil
+	case phonenumber.FieldUpdatedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedBy(v)
+		return nil
+	case phonenumber.FieldDeletedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDeletedAt(v)
+		return nil
+	case phonenumber.FieldDeletedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDeletedBy(v)
+		return nil
+	case phonenumber.FieldMappingID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetMappingID(v)
+		return nil
+	case phonenumber.FieldTags:
+		v, ok := value.([]string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetTags(v)
+		return nil
+	case phonenumber.FieldOwnerID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetOwnerID(v)
+		return nil
+	case phonenumber.FieldKind:
+		v, ok := value.(enums.PhoneNumberType)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetKind(v)
+		return nil
+	case phonenumber.FieldRegionCode:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetRegionCode(v)
+		return nil
+	case phonenumber.FieldShortCode:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetShortCode(v)
+		return nil
+	case phonenumber.FieldNumber:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetNumber(v)
+		return nil
+	case phonenumber.FieldExtension:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetExtension(v)
+		return nil
+	}
+	return fmt.Errorf("unknown PhoneNumber field %s", name)
+}
+
+// AddedFields returns all numeric fields that were incremented/decremented during
+// this mutation.
+func (m *PhoneNumberMutation) AddedFields() []string {
+	return nil
+}
+
+// AddedField returns the numeric value that was incremented/decremented on a field
+// with the given name. The second boolean return value indicates that this field
+// was not set, or was not defined in the schema.
+func (m *PhoneNumberMutation) AddedField(name string) (ent.Value, bool) {
+	return nil, false
+}
+
+// AddField adds the value to the field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *PhoneNumberMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	}
+	return fmt.Errorf("unknown PhoneNumber numeric field %s", name)
+}
+
+// ClearedFields returns all nullable fields that were cleared during this
+// mutation.
+func (m *PhoneNumberMutation) ClearedFields() []string {
+	var fields []string
+	if m.FieldCleared(phonenumber.FieldCreatedAt) {
+		fields = append(fields, phonenumber.FieldCreatedAt)
+	}
+	if m.FieldCleared(phonenumber.FieldUpdatedAt) {
+		fields = append(fields, phonenumber.FieldUpdatedAt)
+	}
+	if m.FieldCleared(phonenumber.FieldCreatedBy) {
+		fields = append(fields, phonenumber.FieldCreatedBy)
+	}
+	if m.FieldCleared(phonenumber.FieldUpdatedBy) {
+		fields = append(fields, phonenumber.FieldUpdatedBy)
+	}
+	if m.FieldCleared(phonenumber.FieldDeletedAt) {
+		fields = append(fields, phonenumber.FieldDeletedAt)
+	}
+	if m.FieldCleared(phonenumber.FieldDeletedBy) {
+		fields = append(fields, phonenumber.FieldDeletedBy)
+	}
+	if m.FieldCleared(phonenumber.FieldTags) {
+		fields = append(fields, phonenumber.FieldTags)
+	}
+	if m.FieldCleared(phonenumber.FieldOwnerID) {
+		fields = append(fields, phonenumber.FieldOwnerID)
+	}
+	if m.FieldCleared(phonenumber.FieldRegionCode) {
+		fields = append(fields, phonenumber.FieldRegionCode)
+	}
+	if m.FieldCleared(phonenumber.FieldShortCode) {
+		fields = append(fields, phonenumber.FieldShortCode)
+	}
+	if m.FieldCleared(phonenumber.FieldNumber) {
+		fields = append(fields, phonenumber.FieldNumber)
+	}
+	if m.FieldCleared(phonenumber.FieldExtension) {
+		fields = append(fields, phonenumber.FieldExtension)
+	}
+	return fields
+}
+
+// FieldCleared returns a boolean indicating if a field with the given name was
+// cleared in this mutation.
+func (m *PhoneNumberMutation) FieldCleared(name string) bool {
+	_, ok := m.clearedFields[name]
+	return ok
+}
+
+// ClearField clears the value of the field with the given name. It returns an
+// error if the field is not defined in the schema.
+func (m *PhoneNumberMutation) ClearField(name string) error {
+	switch name {
+	case phonenumber.FieldCreatedAt:
+		m.ClearCreatedAt()
+		return nil
+	case phonenumber.FieldUpdatedAt:
+		m.ClearUpdatedAt()
+		return nil
+	case phonenumber.FieldCreatedBy:
+		m.ClearCreatedBy()
+		return nil
+	case phonenumber.FieldUpdatedBy:
+		m.ClearUpdatedBy()
+		return nil
+	case phonenumber.FieldDeletedAt:
+		m.ClearDeletedAt()
+		return nil
+	case phonenumber.FieldDeletedBy:
+		m.ClearDeletedBy()
+		return nil
+	case phonenumber.FieldTags:
+		m.ClearTags()
+		return nil
+	case phonenumber.FieldOwnerID:
+		m.ClearOwnerID()
+		return nil
+	case phonenumber.FieldRegionCode:
+		m.ClearRegionCode()
+		return nil
+	case phonenumber.FieldShortCode:
+		m.ClearShortCode()
+		return nil
+	case phonenumber.FieldNumber:
+		m.ClearNumber()
+		return nil
+	case phonenumber.FieldExtension:
+		m.ClearExtension()
+		return nil
+	}
+	return fmt.Errorf("unknown PhoneNumber nullable field %s", name)
+}
+
+// ResetField resets all changes in the mutation for the field with the given name.
+// It returns an error if the field is not defined in the schema.
+func (m *PhoneNumberMutation) ResetField(name string) error {
+	switch name {
+	case phonenumber.FieldCreatedAt:
+		m.ResetCreatedAt()
+		return nil
+	case phonenumber.FieldUpdatedAt:
+		m.ResetUpdatedAt()
+		return nil
+	case phonenumber.FieldCreatedBy:
+		m.ResetCreatedBy()
+		return nil
+	case phonenumber.FieldUpdatedBy:
+		m.ResetUpdatedBy()
+		return nil
+	case phonenumber.FieldDeletedAt:
+		m.ResetDeletedAt()
+		return nil
+	case phonenumber.FieldDeletedBy:
+		m.ResetDeletedBy()
+		return nil
+	case phonenumber.FieldMappingID:
+		m.ResetMappingID()
+		return nil
+	case phonenumber.FieldTags:
+		m.ResetTags()
+		return nil
+	case phonenumber.FieldOwnerID:
+		m.ResetOwnerID()
+		return nil
+	case phonenumber.FieldKind:
+		m.ResetKind()
+		return nil
+	case phonenumber.FieldRegionCode:
+		m.ResetRegionCode()
+		return nil
+	case phonenumber.FieldShortCode:
+		m.ResetShortCode()
+		return nil
+	case phonenumber.FieldNumber:
+		m.ResetNumber()
+		return nil
+	case phonenumber.FieldExtension:
+		m.ResetExtension()
+		return nil
+	}
+	return fmt.Errorf("unknown PhoneNumber field %s", name)
+}
+
+// AddedEdges returns all edge names that were set/added in this mutation.
+func (m *PhoneNumberMutation) AddedEdges() []string {
+	edges := make([]string, 0, 4)
+	if m.owner != nil {
+		edges = append(edges, phonenumber.EdgeOwner)
+	}
+	if m.profile != nil {
+		edges = append(edges, phonenumber.EdgeProfile)
+	}
+	if m.events != nil {
+		edges = append(edges, phonenumber.EdgeEvents)
+	}
+	if m.vendor_profile_phone_numbers != nil {
+		edges = append(edges, phonenumber.EdgeVendorProfilePhoneNumbers)
+	}
+	return edges
+}
+
+// AddedIDs returns all IDs (to other nodes) that were added for the given edge
+// name in this mutation.
+func (m *PhoneNumberMutation) AddedIDs(name string) []ent.Value {
+	switch name {
+	case phonenumber.EdgeOwner:
+		if id := m.owner; id != nil {
+			return []ent.Value{*id}
+		}
+	case phonenumber.EdgeProfile:
+		ids := make([]ent.Value, 0, len(m.profile))
+		for id := range m.profile {
+			ids = append(ids, id)
+		}
+		return ids
+	case phonenumber.EdgeEvents:
+		ids := make([]ent.Value, 0, len(m.events))
+		for id := range m.events {
+			ids = append(ids, id)
+		}
+		return ids
+	case phonenumber.EdgeVendorProfilePhoneNumbers:
+		ids := make([]ent.Value, 0, len(m.vendor_profile_phone_numbers))
+		for id := range m.vendor_profile_phone_numbers {
+			ids = append(ids, id)
+		}
+		return ids
+	}
+	return nil
+}
+
+// RemovedEdges returns all edge names that were removed in this mutation.
+func (m *PhoneNumberMutation) RemovedEdges() []string {
+	edges := make([]string, 0, 4)
+	if m.removedprofile != nil {
+		edges = append(edges, phonenumber.EdgeProfile)
+	}
+	if m.removedevents != nil {
+		edges = append(edges, phonenumber.EdgeEvents)
+	}
+	if m.removedvendor_profile_phone_numbers != nil {
+		edges = append(edges, phonenumber.EdgeVendorProfilePhoneNumbers)
+	}
+	return edges
+}
+
+// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
+// the given name in this mutation.
+func (m *PhoneNumberMutation) RemovedIDs(name string) []ent.Value {
+	switch name {
+	case phonenumber.EdgeProfile:
+		ids := make([]ent.Value, 0, len(m.removedprofile))
+		for id := range m.removedprofile {
+			ids = append(ids, id)
+		}
+		return ids
+	case phonenumber.EdgeEvents:
+		ids := make([]ent.Value, 0, len(m.removedevents))
+		for id := range m.removedevents {
+			ids = append(ids, id)
+		}
+		return ids
+	case phonenumber.EdgeVendorProfilePhoneNumbers:
+		ids := make([]ent.Value, 0, len(m.removedvendor_profile_phone_numbers))
+		for id := range m.removedvendor_profile_phone_numbers {
+			ids = append(ids, id)
+		}
+		return ids
+	}
+	return nil
+}
+
+// ClearedEdges returns all edge names that were cleared in this mutation.
+func (m *PhoneNumberMutation) ClearedEdges() []string {
+	edges := make([]string, 0, 4)
+	if m.clearedowner {
+		edges = append(edges, phonenumber.EdgeOwner)
+	}
+	if m.clearedprofile {
+		edges = append(edges, phonenumber.EdgeProfile)
+	}
+	if m.clearedevents {
+		edges = append(edges, phonenumber.EdgeEvents)
+	}
+	if m.clearedvendor_profile_phone_numbers {
+		edges = append(edges, phonenumber.EdgeVendorProfilePhoneNumbers)
+	}
+	return edges
+}
+
+// EdgeCleared returns a boolean which indicates if the edge with the given name
+// was cleared in this mutation.
+func (m *PhoneNumberMutation) EdgeCleared(name string) bool {
+	switch name {
+	case phonenumber.EdgeOwner:
+		return m.clearedowner
+	case phonenumber.EdgeProfile:
+		return m.clearedprofile
+	case phonenumber.EdgeEvents:
+		return m.clearedevents
+	case phonenumber.EdgeVendorProfilePhoneNumbers:
+		return m.clearedvendor_profile_phone_numbers
+	}
+	return false
+}
+
+// ClearEdge clears the value of the edge with the given name. It returns an error
+// if that edge is not defined in the schema.
+func (m *PhoneNumberMutation) ClearEdge(name string) error {
+	switch name {
+	case phonenumber.EdgeOwner:
+		m.ClearOwner()
+		return nil
+	}
+	return fmt.Errorf("unknown PhoneNumber unique edge %s", name)
+}
+
+// ResetEdge resets all changes to the edge with the given name in this mutation.
+// It returns an error if the edge is not defined in the schema.
+func (m *PhoneNumberMutation) ResetEdge(name string) error {
+	switch name {
+	case phonenumber.EdgeOwner:
+		m.ResetOwner()
+		return nil
+	case phonenumber.EdgeProfile:
+		m.ResetProfile()
+		return nil
+	case phonenumber.EdgeEvents:
+		m.ResetEvents()
+		return nil
+	case phonenumber.EdgeVendorProfilePhoneNumbers:
+		m.ResetVendorProfilePhoneNumbers()
+		return nil
+	}
+	return fmt.Errorf("unknown PhoneNumber edge %s", name)
+}
+
+// PhoneNumberHistoryMutation represents an operation that mutates the PhoneNumberHistory nodes in the graph.
+type PhoneNumberHistoryMutation struct {
+	config
+	op            Op
+	typ           string
+	id            *string
+	history_time  *time.Time
+	ref           *string
+	operation     *enthistory.OpType
+	created_at    *time.Time
+	updated_at    *time.Time
+	created_by    *string
+	updated_by    *string
+	deleted_at    *time.Time
+	deleted_by    *string
+	mapping_id    *string
+	tags          *[]string
+	appendtags    []string
+	owner_id      *string
+	kind          *enums.PhoneNumberType
+	region_code   *string
+	short_code    *string
+	number        *string
+	extension     *string
+	clearedFields map[string]struct{}
+	done          bool
+	oldValue      func(context.Context) (*PhoneNumberHistory, error)
+	predicates    []predicate.PhoneNumberHistory
+}
+
+var _ ent.Mutation = (*PhoneNumberHistoryMutation)(nil)
+
+// phonenumberhistoryOption allows management of the mutation configuration using functional options.
+type phonenumberhistoryOption func(*PhoneNumberHistoryMutation)
+
+// newPhoneNumberHistoryMutation creates new mutation for the PhoneNumberHistory entity.
+func newPhoneNumberHistoryMutation(c config, op Op, opts ...phonenumberhistoryOption) *PhoneNumberHistoryMutation {
+	m := &PhoneNumberHistoryMutation{
+		config:        c,
+		op:            op,
+		typ:           TypePhoneNumberHistory,
+		clearedFields: make(map[string]struct{}),
+	}
+	for _, opt := range opts {
+		opt(m)
+	}
+	return m
+}
+
+// withPhoneNumberHistoryID sets the ID field of the mutation.
+func withPhoneNumberHistoryID(id string) phonenumberhistoryOption {
+	return func(m *PhoneNumberHistoryMutation) {
+		var (
+			err   error
+			once  sync.Once
+			value *PhoneNumberHistory
+		)
+		m.oldValue = func(ctx context.Context) (*PhoneNumberHistory, error) {
+			once.Do(func() {
+				if m.done {
+					err = errors.New("querying old values post mutation is not allowed")
+				} else {
+					value, err = m.Client().PhoneNumberHistory.Get(ctx, id)
+				}
+			})
+			return value, err
+		}
+		m.id = &id
+	}
+}
+
+// withPhoneNumberHistory sets the old PhoneNumberHistory of the mutation.
+func withPhoneNumberHistory(node *PhoneNumberHistory) phonenumberhistoryOption {
+	return func(m *PhoneNumberHistoryMutation) {
+		m.oldValue = func(context.Context) (*PhoneNumberHistory, error) {
+			return node, nil
+		}
+		m.id = &node.ID
+	}
+}
+
+// Client returns a new `ent.Client` from the mutation. If the mutation was
+// executed in a transaction (ent.Tx), a transactional client is returned.
+func (m PhoneNumberHistoryMutation) Client() *Client {
+	client := &Client{config: m.config}
+	client.init()
+	return client
+}
+
+// Tx returns an `ent.Tx` for mutations that were executed in transactions;
+// it returns an error otherwise.
+func (m PhoneNumberHistoryMutation) Tx() (*Tx, error) {
+	if _, ok := m.driver.(*txDriver); !ok {
+		return nil, errors.New("generated: mutation is not running in a transaction")
+	}
+	tx := &Tx{config: m.config}
+	tx.init()
+	return tx, nil
+}
+
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of PhoneNumberHistory entities.
+func (m *PhoneNumberHistoryMutation) SetID(id string) {
+	m.id = &id
+}
+
+// ID returns the ID value in the mutation. Note that the ID is only available
+// if it was provided to the builder or after it was returned from the database.
+func (m *PhoneNumberHistoryMutation) ID() (id string, exists bool) {
+	if m.id == nil {
+		return
+	}
+	return *m.id, true
+}
+
+// IDs queries the database and returns the entity ids that match the mutation's predicate.
+// That means, if the mutation is applied within a transaction with an isolation level such
+// as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
+// or updated by the mutation.
+func (m *PhoneNumberHistoryMutation) IDs(ctx context.Context) ([]string, error) {
+	switch {
+	case m.op.Is(OpUpdateOne | OpDeleteOne):
+		id, exists := m.ID()
+		if exists {
+			return []string{id}, nil
+		}
+		fallthrough
+	case m.op.Is(OpUpdate | OpDelete):
+		return m.Client().PhoneNumberHistory.Query().Where(m.predicates...).IDs(ctx)
+	default:
+		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
+	}
+}
+
+// SetHistoryTime sets the "history_time" field.
+func (m *PhoneNumberHistoryMutation) SetHistoryTime(t time.Time) {
+	m.history_time = &t
+}
+
+// HistoryTime returns the value of the "history_time" field in the mutation.
+func (m *PhoneNumberHistoryMutation) HistoryTime() (r time.Time, exists bool) {
+	v := m.history_time
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldHistoryTime returns the old "history_time" field's value of the PhoneNumberHistory entity.
+// If the PhoneNumberHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PhoneNumberHistoryMutation) OldHistoryTime(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldHistoryTime is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldHistoryTime requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldHistoryTime: %w", err)
+	}
+	return oldValue.HistoryTime, nil
+}
+
+// ResetHistoryTime resets all changes to the "history_time" field.
+func (m *PhoneNumberHistoryMutation) ResetHistoryTime() {
+	m.history_time = nil
+}
+
+// SetRef sets the "ref" field.
+func (m *PhoneNumberHistoryMutation) SetRef(s string) {
+	m.ref = &s
+}
+
+// Ref returns the value of the "ref" field in the mutation.
+func (m *PhoneNumberHistoryMutation) Ref() (r string, exists bool) {
+	v := m.ref
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldRef returns the old "ref" field's value of the PhoneNumberHistory entity.
+// If the PhoneNumberHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PhoneNumberHistoryMutation) OldRef(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldRef is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldRef requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldRef: %w", err)
+	}
+	return oldValue.Ref, nil
+}
+
+// ClearRef clears the value of the "ref" field.
+func (m *PhoneNumberHistoryMutation) ClearRef() {
+	m.ref = nil
+	m.clearedFields[phonenumberhistory.FieldRef] = struct{}{}
+}
+
+// RefCleared returns if the "ref" field was cleared in this mutation.
+func (m *PhoneNumberHistoryMutation) RefCleared() bool {
+	_, ok := m.clearedFields[phonenumberhistory.FieldRef]
+	return ok
+}
+
+// ResetRef resets all changes to the "ref" field.
+func (m *PhoneNumberHistoryMutation) ResetRef() {
+	m.ref = nil
+	delete(m.clearedFields, phonenumberhistory.FieldRef)
+}
+
+// SetOperation sets the "operation" field.
+func (m *PhoneNumberHistoryMutation) SetOperation(et enthistory.OpType) {
+	m.operation = &et
+}
+
+// Operation returns the value of the "operation" field in the mutation.
+func (m *PhoneNumberHistoryMutation) Operation() (r enthistory.OpType, exists bool) {
+	v := m.operation
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldOperation returns the old "operation" field's value of the PhoneNumberHistory entity.
+// If the PhoneNumberHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PhoneNumberHistoryMutation) OldOperation(ctx context.Context) (v enthistory.OpType, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldOperation is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldOperation requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldOperation: %w", err)
+	}
+	return oldValue.Operation, nil
+}
+
+// ResetOperation resets all changes to the "operation" field.
+func (m *PhoneNumberHistoryMutation) ResetOperation() {
+	m.operation = nil
+}
+
+// SetCreatedAt sets the "created_at" field.
+func (m *PhoneNumberHistoryMutation) SetCreatedAt(t time.Time) {
+	m.created_at = &t
+}
+
+// CreatedAt returns the value of the "created_at" field in the mutation.
+func (m *PhoneNumberHistoryMutation) CreatedAt() (r time.Time, exists bool) {
+	v := m.created_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedAt returns the old "created_at" field's value of the PhoneNumberHistory entity.
+// If the PhoneNumberHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PhoneNumberHistoryMutation) OldCreatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedAt: %w", err)
+	}
+	return oldValue.CreatedAt, nil
+}
+
+// ClearCreatedAt clears the value of the "created_at" field.
+func (m *PhoneNumberHistoryMutation) ClearCreatedAt() {
+	m.created_at = nil
+	m.clearedFields[phonenumberhistory.FieldCreatedAt] = struct{}{}
+}
+
+// CreatedAtCleared returns if the "created_at" field was cleared in this mutation.
+func (m *PhoneNumberHistoryMutation) CreatedAtCleared() bool {
+	_, ok := m.clearedFields[phonenumberhistory.FieldCreatedAt]
+	return ok
+}
+
+// ResetCreatedAt resets all changes to the "created_at" field.
+func (m *PhoneNumberHistoryMutation) ResetCreatedAt() {
+	m.created_at = nil
+	delete(m.clearedFields, phonenumberhistory.FieldCreatedAt)
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (m *PhoneNumberHistoryMutation) SetUpdatedAt(t time.Time) {
+	m.updated_at = &t
+}
+
+// UpdatedAt returns the value of the "updated_at" field in the mutation.
+func (m *PhoneNumberHistoryMutation) UpdatedAt() (r time.Time, exists bool) {
+	v := m.updated_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedAt returns the old "updated_at" field's value of the PhoneNumberHistory entity.
+// If the PhoneNumberHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PhoneNumberHistoryMutation) OldUpdatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedAt: %w", err)
+	}
+	return oldValue.UpdatedAt, nil
+}
+
+// ClearUpdatedAt clears the value of the "updated_at" field.
+func (m *PhoneNumberHistoryMutation) ClearUpdatedAt() {
+	m.updated_at = nil
+	m.clearedFields[phonenumberhistory.FieldUpdatedAt] = struct{}{}
+}
+
+// UpdatedAtCleared returns if the "updated_at" field was cleared in this mutation.
+func (m *PhoneNumberHistoryMutation) UpdatedAtCleared() bool {
+	_, ok := m.clearedFields[phonenumberhistory.FieldUpdatedAt]
+	return ok
+}
+
+// ResetUpdatedAt resets all changes to the "updated_at" field.
+func (m *PhoneNumberHistoryMutation) ResetUpdatedAt() {
+	m.updated_at = nil
+	delete(m.clearedFields, phonenumberhistory.FieldUpdatedAt)
+}
+
+// SetCreatedBy sets the "created_by" field.
+func (m *PhoneNumberHistoryMutation) SetCreatedBy(s string) {
+	m.created_by = &s
+}
+
+// CreatedBy returns the value of the "created_by" field in the mutation.
+func (m *PhoneNumberHistoryMutation) CreatedBy() (r string, exists bool) {
+	v := m.created_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedBy returns the old "created_by" field's value of the PhoneNumberHistory entity.
+// If the PhoneNumberHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PhoneNumberHistoryMutation) OldCreatedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedBy: %w", err)
+	}
+	return oldValue.CreatedBy, nil
+}
+
+// ClearCreatedBy clears the value of the "created_by" field.
+func (m *PhoneNumberHistoryMutation) ClearCreatedBy() {
+	m.created_by = nil
+	m.clearedFields[phonenumberhistory.FieldCreatedBy] = struct{}{}
+}
+
+// CreatedByCleared returns if the "created_by" field was cleared in this mutation.
+func (m *PhoneNumberHistoryMutation) CreatedByCleared() bool {
+	_, ok := m.clearedFields[phonenumberhistory.FieldCreatedBy]
+	return ok
+}
+
+// ResetCreatedBy resets all changes to the "created_by" field.
+func (m *PhoneNumberHistoryMutation) ResetCreatedBy() {
+	m.created_by = nil
+	delete(m.clearedFields, phonenumberhistory.FieldCreatedBy)
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (m *PhoneNumberHistoryMutation) SetUpdatedBy(s string) {
+	m.updated_by = &s
+}
+
+// UpdatedBy returns the value of the "updated_by" field in the mutation.
+func (m *PhoneNumberHistoryMutation) UpdatedBy() (r string, exists bool) {
+	v := m.updated_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedBy returns the old "updated_by" field's value of the PhoneNumberHistory entity.
+// If the PhoneNumberHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PhoneNumberHistoryMutation) OldUpdatedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedBy: %w", err)
+	}
+	return oldValue.UpdatedBy, nil
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (m *PhoneNumberHistoryMutation) ClearUpdatedBy() {
+	m.updated_by = nil
+	m.clearedFields[phonenumberhistory.FieldUpdatedBy] = struct{}{}
+}
+
+// UpdatedByCleared returns if the "updated_by" field was cleared in this mutation.
+func (m *PhoneNumberHistoryMutation) UpdatedByCleared() bool {
+	_, ok := m.clearedFields[phonenumberhistory.FieldUpdatedBy]
+	return ok
+}
+
+// ResetUpdatedBy resets all changes to the "updated_by" field.
+func (m *PhoneNumberHistoryMutation) ResetUpdatedBy() {
+	m.updated_by = nil
+	delete(m.clearedFields, phonenumberhistory.FieldUpdatedBy)
+}
+
+// SetDeletedAt sets the "deleted_at" field.
+func (m *PhoneNumberHistoryMutation) SetDeletedAt(t time.Time) {
+	m.deleted_at = &t
+}
+
+// DeletedAt returns the value of the "deleted_at" field in the mutation.
+func (m *PhoneNumberHistoryMutation) DeletedAt() (r time.Time, exists bool) {
+	v := m.deleted_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDeletedAt returns the old "deleted_at" field's value of the PhoneNumberHistory entity.
+// If the PhoneNumberHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PhoneNumberHistoryMutation) OldDeletedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDeletedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDeletedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDeletedAt: %w", err)
+	}
+	return oldValue.DeletedAt, nil
+}
+
+// ClearDeletedAt clears the value of the "deleted_at" field.
+func (m *PhoneNumberHistoryMutation) ClearDeletedAt() {
+	m.deleted_at = nil
+	m.clearedFields[phonenumberhistory.FieldDeletedAt] = struct{}{}
+}
+
+// DeletedAtCleared returns if the "deleted_at" field was cleared in this mutation.
+func (m *PhoneNumberHistoryMutation) DeletedAtCleared() bool {
+	_, ok := m.clearedFields[phonenumberhistory.FieldDeletedAt]
+	return ok
+}
+
+// ResetDeletedAt resets all changes to the "deleted_at" field.
+func (m *PhoneNumberHistoryMutation) ResetDeletedAt() {
+	m.deleted_at = nil
+	delete(m.clearedFields, phonenumberhistory.FieldDeletedAt)
+}
+
+// SetDeletedBy sets the "deleted_by" field.
+func (m *PhoneNumberHistoryMutation) SetDeletedBy(s string) {
+	m.deleted_by = &s
+}
+
+// DeletedBy returns the value of the "deleted_by" field in the mutation.
+func (m *PhoneNumberHistoryMutation) DeletedBy() (r string, exists bool) {
+	v := m.deleted_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDeletedBy returns the old "deleted_by" field's value of the PhoneNumberHistory entity.
+// If the PhoneNumberHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PhoneNumberHistoryMutation) OldDeletedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDeletedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDeletedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDeletedBy: %w", err)
+	}
+	return oldValue.DeletedBy, nil
+}
+
+// ClearDeletedBy clears the value of the "deleted_by" field.
+func (m *PhoneNumberHistoryMutation) ClearDeletedBy() {
+	m.deleted_by = nil
+	m.clearedFields[phonenumberhistory.FieldDeletedBy] = struct{}{}
+}
+
+// DeletedByCleared returns if the "deleted_by" field was cleared in this mutation.
+func (m *PhoneNumberHistoryMutation) DeletedByCleared() bool {
+	_, ok := m.clearedFields[phonenumberhistory.FieldDeletedBy]
+	return ok
+}
+
+// ResetDeletedBy resets all changes to the "deleted_by" field.
+func (m *PhoneNumberHistoryMutation) ResetDeletedBy() {
+	m.deleted_by = nil
+	delete(m.clearedFields, phonenumberhistory.FieldDeletedBy)
+}
+
+// SetMappingID sets the "mapping_id" field.
+func (m *PhoneNumberHistoryMutation) SetMappingID(s string) {
+	m.mapping_id = &s
+}
+
+// MappingID returns the value of the "mapping_id" field in the mutation.
+func (m *PhoneNumberHistoryMutation) MappingID() (r string, exists bool) {
+	v := m.mapping_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldMappingID returns the old "mapping_id" field's value of the PhoneNumberHistory entity.
+// If the PhoneNumberHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PhoneNumberHistoryMutation) OldMappingID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldMappingID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldMappingID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldMappingID: %w", err)
+	}
+	return oldValue.MappingID, nil
+}
+
+// ResetMappingID resets all changes to the "mapping_id" field.
+func (m *PhoneNumberHistoryMutation) ResetMappingID() {
+	m.mapping_id = nil
+}
+
+// SetTags sets the "tags" field.
+func (m *PhoneNumberHistoryMutation) SetTags(s []string) {
+	m.tags = &s
+	m.appendtags = nil
+}
+
+// Tags returns the value of the "tags" field in the mutation.
+func (m *PhoneNumberHistoryMutation) Tags() (r []string, exists bool) {
+	v := m.tags
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldTags returns the old "tags" field's value of the PhoneNumberHistory entity.
+// If the PhoneNumberHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PhoneNumberHistoryMutation) OldTags(ctx context.Context) (v []string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldTags is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldTags requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldTags: %w", err)
+	}
+	return oldValue.Tags, nil
+}
+
+// AppendTags adds s to the "tags" field.
+func (m *PhoneNumberHistoryMutation) AppendTags(s []string) {
+	m.appendtags = append(m.appendtags, s...)
+}
+
+// AppendedTags returns the list of values that were appended to the "tags" field in this mutation.
+func (m *PhoneNumberHistoryMutation) AppendedTags() ([]string, bool) {
+	if len(m.appendtags) == 0 {
+		return nil, false
+	}
+	return m.appendtags, true
+}
+
+// ClearTags clears the value of the "tags" field.
+func (m *PhoneNumberHistoryMutation) ClearTags() {
+	m.tags = nil
+	m.appendtags = nil
+	m.clearedFields[phonenumberhistory.FieldTags] = struct{}{}
+}
+
+// TagsCleared returns if the "tags" field was cleared in this mutation.
+func (m *PhoneNumberHistoryMutation) TagsCleared() bool {
+	_, ok := m.clearedFields[phonenumberhistory.FieldTags]
+	return ok
+}
+
+// ResetTags resets all changes to the "tags" field.
+func (m *PhoneNumberHistoryMutation) ResetTags() {
+	m.tags = nil
+	m.appendtags = nil
+	delete(m.clearedFields, phonenumberhistory.FieldTags)
+}
+
+// SetOwnerID sets the "owner_id" field.
+func (m *PhoneNumberHistoryMutation) SetOwnerID(s string) {
+	m.owner_id = &s
+}
+
+// OwnerID returns the value of the "owner_id" field in the mutation.
+func (m *PhoneNumberHistoryMutation) OwnerID() (r string, exists bool) {
+	v := m.owner_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldOwnerID returns the old "owner_id" field's value of the PhoneNumberHistory entity.
+// If the PhoneNumberHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PhoneNumberHistoryMutation) OldOwnerID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldOwnerID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldOwnerID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldOwnerID: %w", err)
+	}
+	return oldValue.OwnerID, nil
+}
+
+// ClearOwnerID clears the value of the "owner_id" field.
+func (m *PhoneNumberHistoryMutation) ClearOwnerID() {
+	m.owner_id = nil
+	m.clearedFields[phonenumberhistory.FieldOwnerID] = struct{}{}
+}
+
+// OwnerIDCleared returns if the "owner_id" field was cleared in this mutation.
+func (m *PhoneNumberHistoryMutation) OwnerIDCleared() bool {
+	_, ok := m.clearedFields[phonenumberhistory.FieldOwnerID]
+	return ok
+}
+
+// ResetOwnerID resets all changes to the "owner_id" field.
+func (m *PhoneNumberHistoryMutation) ResetOwnerID() {
+	m.owner_id = nil
+	delete(m.clearedFields, phonenumberhistory.FieldOwnerID)
+}
+
+// SetKind sets the "kind" field.
+func (m *PhoneNumberHistoryMutation) SetKind(ennuty enums.PhoneNumberType) {
+	m.kind = &ennuty
+}
+
+// Kind returns the value of the "kind" field in the mutation.
+func (m *PhoneNumberHistoryMutation) Kind() (r enums.PhoneNumberType, exists bool) {
+	v := m.kind
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldKind returns the old "kind" field's value of the PhoneNumberHistory entity.
+// If the PhoneNumberHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PhoneNumberHistoryMutation) OldKind(ctx context.Context) (v enums.PhoneNumberType, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldKind is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldKind requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldKind: %w", err)
+	}
+	return oldValue.Kind, nil
+}
+
+// ResetKind resets all changes to the "kind" field.
+func (m *PhoneNumberHistoryMutation) ResetKind() {
+	m.kind = nil
+}
+
+// SetRegionCode sets the "region_code" field.
+func (m *PhoneNumberHistoryMutation) SetRegionCode(s string) {
+	m.region_code = &s
+}
+
+// RegionCode returns the value of the "region_code" field in the mutation.
+func (m *PhoneNumberHistoryMutation) RegionCode() (r string, exists bool) {
+	v := m.region_code
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldRegionCode returns the old "region_code" field's value of the PhoneNumberHistory entity.
+// If the PhoneNumberHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PhoneNumberHistoryMutation) OldRegionCode(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldRegionCode is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldRegionCode requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldRegionCode: %w", err)
+	}
+	return oldValue.RegionCode, nil
+}
+
+// ClearRegionCode clears the value of the "region_code" field.
+func (m *PhoneNumberHistoryMutation) ClearRegionCode() {
+	m.region_code = nil
+	m.clearedFields[phonenumberhistory.FieldRegionCode] = struct{}{}
+}
+
+// RegionCodeCleared returns if the "region_code" field was cleared in this mutation.
+func (m *PhoneNumberHistoryMutation) RegionCodeCleared() bool {
+	_, ok := m.clearedFields[phonenumberhistory.FieldRegionCode]
+	return ok
+}
+
+// ResetRegionCode resets all changes to the "region_code" field.
+func (m *PhoneNumberHistoryMutation) ResetRegionCode() {
+	m.region_code = nil
+	delete(m.clearedFields, phonenumberhistory.FieldRegionCode)
+}
+
+// SetShortCode sets the "short_code" field.
+func (m *PhoneNumberHistoryMutation) SetShortCode(s string) {
+	m.short_code = &s
+}
+
+// ShortCode returns the value of the "short_code" field in the mutation.
+func (m *PhoneNumberHistoryMutation) ShortCode() (r string, exists bool) {
+	v := m.short_code
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldShortCode returns the old "short_code" field's value of the PhoneNumberHistory entity.
+// If the PhoneNumberHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PhoneNumberHistoryMutation) OldShortCode(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldShortCode is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldShortCode requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldShortCode: %w", err)
+	}
+	return oldValue.ShortCode, nil
+}
+
+// ClearShortCode clears the value of the "short_code" field.
+func (m *PhoneNumberHistoryMutation) ClearShortCode() {
+	m.short_code = nil
+	m.clearedFields[phonenumberhistory.FieldShortCode] = struct{}{}
+}
+
+// ShortCodeCleared returns if the "short_code" field was cleared in this mutation.
+func (m *PhoneNumberHistoryMutation) ShortCodeCleared() bool {
+	_, ok := m.clearedFields[phonenumberhistory.FieldShortCode]
+	return ok
+}
+
+// ResetShortCode resets all changes to the "short_code" field.
+func (m *PhoneNumberHistoryMutation) ResetShortCode() {
+	m.short_code = nil
+	delete(m.clearedFields, phonenumberhistory.FieldShortCode)
+}
+
+// SetNumber sets the "number" field.
+func (m *PhoneNumberHistoryMutation) SetNumber(s string) {
+	m.number = &s
+}
+
+// Number returns the value of the "number" field in the mutation.
+func (m *PhoneNumberHistoryMutation) Number() (r string, exists bool) {
+	v := m.number
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldNumber returns the old "number" field's value of the PhoneNumberHistory entity.
+// If the PhoneNumberHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PhoneNumberHistoryMutation) OldNumber(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldNumber is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldNumber requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldNumber: %w", err)
+	}
+	return oldValue.Number, nil
+}
+
+// ClearNumber clears the value of the "number" field.
+func (m *PhoneNumberHistoryMutation) ClearNumber() {
+	m.number = nil
+	m.clearedFields[phonenumberhistory.FieldNumber] = struct{}{}
+}
+
+// NumberCleared returns if the "number" field was cleared in this mutation.
+func (m *PhoneNumberHistoryMutation) NumberCleared() bool {
+	_, ok := m.clearedFields[phonenumberhistory.FieldNumber]
+	return ok
+}
+
+// ResetNumber resets all changes to the "number" field.
+func (m *PhoneNumberHistoryMutation) ResetNumber() {
+	m.number = nil
+	delete(m.clearedFields, phonenumberhistory.FieldNumber)
+}
+
+// SetExtension sets the "extension" field.
+func (m *PhoneNumberHistoryMutation) SetExtension(s string) {
+	m.extension = &s
+}
+
+// Extension returns the value of the "extension" field in the mutation.
+func (m *PhoneNumberHistoryMutation) Extension() (r string, exists bool) {
+	v := m.extension
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldExtension returns the old "extension" field's value of the PhoneNumberHistory entity.
+// If the PhoneNumberHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PhoneNumberHistoryMutation) OldExtension(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldExtension is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldExtension requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldExtension: %w", err)
+	}
+	return oldValue.Extension, nil
+}
+
+// ClearExtension clears the value of the "extension" field.
+func (m *PhoneNumberHistoryMutation) ClearExtension() {
+	m.extension = nil
+	m.clearedFields[phonenumberhistory.FieldExtension] = struct{}{}
+}
+
+// ExtensionCleared returns if the "extension" field was cleared in this mutation.
+func (m *PhoneNumberHistoryMutation) ExtensionCleared() bool {
+	_, ok := m.clearedFields[phonenumberhistory.FieldExtension]
+	return ok
+}
+
+// ResetExtension resets all changes to the "extension" field.
+func (m *PhoneNumberHistoryMutation) ResetExtension() {
+	m.extension = nil
+	delete(m.clearedFields, phonenumberhistory.FieldExtension)
+}
+
+// Where appends a list predicates to the PhoneNumberHistoryMutation builder.
+func (m *PhoneNumberHistoryMutation) Where(ps ...predicate.PhoneNumberHistory) {
+	m.predicates = append(m.predicates, ps...)
+}
+
+// WhereP appends storage-level predicates to the PhoneNumberHistoryMutation builder. Using this method,
+// users can use type-assertion to append predicates that do not depend on any generated package.
+func (m *PhoneNumberHistoryMutation) WhereP(ps ...func(*sql.Selector)) {
+	p := make([]predicate.PhoneNumberHistory, len(ps))
+	for i := range ps {
+		p[i] = ps[i]
+	}
+	m.Where(p...)
+}
+
+// Op returns the operation name.
+func (m *PhoneNumberHistoryMutation) Op() Op {
+	return m.op
+}
+
+// SetOp allows setting the mutation operation.
+func (m *PhoneNumberHistoryMutation) SetOp(op Op) {
+	m.op = op
+}
+
+// Type returns the node type of this mutation (PhoneNumberHistory).
+func (m *PhoneNumberHistoryMutation) Type() string {
+	return m.typ
+}
+
+// Fields returns all fields that were changed during this mutation. Note that in
+// order to get all numeric fields that were incremented/decremented, call
+// AddedFields().
+func (m *PhoneNumberHistoryMutation) Fields() []string {
+	fields := make([]string, 0, 17)
+	if m.history_time != nil {
+		fields = append(fields, phonenumberhistory.FieldHistoryTime)
+	}
+	if m.ref != nil {
+		fields = append(fields, phonenumberhistory.FieldRef)
+	}
+	if m.operation != nil {
+		fields = append(fields, phonenumberhistory.FieldOperation)
+	}
+	if m.created_at != nil {
+		fields = append(fields, phonenumberhistory.FieldCreatedAt)
+	}
+	if m.updated_at != nil {
+		fields = append(fields, phonenumberhistory.FieldUpdatedAt)
+	}
+	if m.created_by != nil {
+		fields = append(fields, phonenumberhistory.FieldCreatedBy)
+	}
+	if m.updated_by != nil {
+		fields = append(fields, phonenumberhistory.FieldUpdatedBy)
+	}
+	if m.deleted_at != nil {
+		fields = append(fields, phonenumberhistory.FieldDeletedAt)
+	}
+	if m.deleted_by != nil {
+		fields = append(fields, phonenumberhistory.FieldDeletedBy)
+	}
+	if m.mapping_id != nil {
+		fields = append(fields, phonenumberhistory.FieldMappingID)
+	}
+	if m.tags != nil {
+		fields = append(fields, phonenumberhistory.FieldTags)
+	}
+	if m.owner_id != nil {
+		fields = append(fields, phonenumberhistory.FieldOwnerID)
+	}
+	if m.kind != nil {
+		fields = append(fields, phonenumberhistory.FieldKind)
+	}
+	if m.region_code != nil {
+		fields = append(fields, phonenumberhistory.FieldRegionCode)
+	}
+	if m.short_code != nil {
+		fields = append(fields, phonenumberhistory.FieldShortCode)
+	}
+	if m.number != nil {
+		fields = append(fields, phonenumberhistory.FieldNumber)
+	}
+	if m.extension != nil {
+		fields = append(fields, phonenumberhistory.FieldExtension)
+	}
+	return fields
+}
+
+// Field returns the value of a field with the given name. The second boolean
+// return value indicates that this field was not set, or was not defined in the
+// schema.
+func (m *PhoneNumberHistoryMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case phonenumberhistory.FieldHistoryTime:
+		return m.HistoryTime()
+	case phonenumberhistory.FieldRef:
+		return m.Ref()
+	case phonenumberhistory.FieldOperation:
+		return m.Operation()
+	case phonenumberhistory.FieldCreatedAt:
+		return m.CreatedAt()
+	case phonenumberhistory.FieldUpdatedAt:
+		return m.UpdatedAt()
+	case phonenumberhistory.FieldCreatedBy:
+		return m.CreatedBy()
+	case phonenumberhistory.FieldUpdatedBy:
+		return m.UpdatedBy()
+	case phonenumberhistory.FieldDeletedAt:
+		return m.DeletedAt()
+	case phonenumberhistory.FieldDeletedBy:
+		return m.DeletedBy()
+	case phonenumberhistory.FieldMappingID:
+		return m.MappingID()
+	case phonenumberhistory.FieldTags:
+		return m.Tags()
+	case phonenumberhistory.FieldOwnerID:
+		return m.OwnerID()
+	case phonenumberhistory.FieldKind:
+		return m.Kind()
+	case phonenumberhistory.FieldRegionCode:
+		return m.RegionCode()
+	case phonenumberhistory.FieldShortCode:
+		return m.ShortCode()
+	case phonenumberhistory.FieldNumber:
+		return m.Number()
+	case phonenumberhistory.FieldExtension:
+		return m.Extension()
+	}
+	return nil, false
+}
+
+// OldField returns the old value of the field from the database. An error is
+// returned if the mutation operation is not UpdateOne, or the query to the
+// database failed.
+func (m *PhoneNumberHistoryMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case phonenumberhistory.FieldHistoryTime:
+		return m.OldHistoryTime(ctx)
+	case phonenumberhistory.FieldRef:
+		return m.OldRef(ctx)
+	case phonenumberhistory.FieldOperation:
+		return m.OldOperation(ctx)
+	case phonenumberhistory.FieldCreatedAt:
+		return m.OldCreatedAt(ctx)
+	case phonenumberhistory.FieldUpdatedAt:
+		return m.OldUpdatedAt(ctx)
+	case phonenumberhistory.FieldCreatedBy:
+		return m.OldCreatedBy(ctx)
+	case phonenumberhistory.FieldUpdatedBy:
+		return m.OldUpdatedBy(ctx)
+	case phonenumberhistory.FieldDeletedAt:
+		return m.OldDeletedAt(ctx)
+	case phonenumberhistory.FieldDeletedBy:
+		return m.OldDeletedBy(ctx)
+	case phonenumberhistory.FieldMappingID:
+		return m.OldMappingID(ctx)
+	case phonenumberhistory.FieldTags:
+		return m.OldTags(ctx)
+	case phonenumberhistory.FieldOwnerID:
+		return m.OldOwnerID(ctx)
+	case phonenumberhistory.FieldKind:
+		return m.OldKind(ctx)
+	case phonenumberhistory.FieldRegionCode:
+		return m.OldRegionCode(ctx)
+	case phonenumberhistory.FieldShortCode:
+		return m.OldShortCode(ctx)
+	case phonenumberhistory.FieldNumber:
+		return m.OldNumber(ctx)
+	case phonenumberhistory.FieldExtension:
+		return m.OldExtension(ctx)
+	}
+	return nil, fmt.Errorf("unknown PhoneNumberHistory field %s", name)
+}
+
+// SetField sets the value of a field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *PhoneNumberHistoryMutation) SetField(name string, value ent.Value) error {
+	switch name {
+	case phonenumberhistory.FieldHistoryTime:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetHistoryTime(v)
+		return nil
+	case phonenumberhistory.FieldRef:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetRef(v)
+		return nil
+	case phonenumberhistory.FieldOperation:
+		v, ok := value.(enthistory.OpType)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetOperation(v)
+		return nil
+	case phonenumberhistory.FieldCreatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedAt(v)
+		return nil
+	case phonenumberhistory.FieldUpdatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedAt(v)
+		return nil
+	case phonenumberhistory.FieldCreatedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedBy(v)
+		return nil
+	case phonenumberhistory.FieldUpdatedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedBy(v)
+		return nil
+	case phonenumberhistory.FieldDeletedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDeletedAt(v)
+		return nil
+	case phonenumberhistory.FieldDeletedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDeletedBy(v)
+		return nil
+	case phonenumberhistory.FieldMappingID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetMappingID(v)
+		return nil
+	case phonenumberhistory.FieldTags:
+		v, ok := value.([]string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetTags(v)
+		return nil
+	case phonenumberhistory.FieldOwnerID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetOwnerID(v)
+		return nil
+	case phonenumberhistory.FieldKind:
+		v, ok := value.(enums.PhoneNumberType)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetKind(v)
+		return nil
+	case phonenumberhistory.FieldRegionCode:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetRegionCode(v)
+		return nil
+	case phonenumberhistory.FieldShortCode:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetShortCode(v)
+		return nil
+	case phonenumberhistory.FieldNumber:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetNumber(v)
+		return nil
+	case phonenumberhistory.FieldExtension:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetExtension(v)
+		return nil
+	}
+	return fmt.Errorf("unknown PhoneNumberHistory field %s", name)
+}
+
+// AddedFields returns all numeric fields that were incremented/decremented during
+// this mutation.
+func (m *PhoneNumberHistoryMutation) AddedFields() []string {
+	return nil
+}
+
+// AddedField returns the numeric value that was incremented/decremented on a field
+// with the given name. The second boolean return value indicates that this field
+// was not set, or was not defined in the schema.
+func (m *PhoneNumberHistoryMutation) AddedField(name string) (ent.Value, bool) {
+	return nil, false
+}
+
+// AddField adds the value to the field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *PhoneNumberHistoryMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	}
+	return fmt.Errorf("unknown PhoneNumberHistory numeric field %s", name)
+}
+
+// ClearedFields returns all nullable fields that were cleared during this
+// mutation.
+func (m *PhoneNumberHistoryMutation) ClearedFields() []string {
+	var fields []string
+	if m.FieldCleared(phonenumberhistory.FieldRef) {
+		fields = append(fields, phonenumberhistory.FieldRef)
+	}
+	if m.FieldCleared(phonenumberhistory.FieldCreatedAt) {
+		fields = append(fields, phonenumberhistory.FieldCreatedAt)
+	}
+	if m.FieldCleared(phonenumberhistory.FieldUpdatedAt) {
+		fields = append(fields, phonenumberhistory.FieldUpdatedAt)
+	}
+	if m.FieldCleared(phonenumberhistory.FieldCreatedBy) {
+		fields = append(fields, phonenumberhistory.FieldCreatedBy)
+	}
+	if m.FieldCleared(phonenumberhistory.FieldUpdatedBy) {
+		fields = append(fields, phonenumberhistory.FieldUpdatedBy)
+	}
+	if m.FieldCleared(phonenumberhistory.FieldDeletedAt) {
+		fields = append(fields, phonenumberhistory.FieldDeletedAt)
+	}
+	if m.FieldCleared(phonenumberhistory.FieldDeletedBy) {
+		fields = append(fields, phonenumberhistory.FieldDeletedBy)
+	}
+	if m.FieldCleared(phonenumberhistory.FieldTags) {
+		fields = append(fields, phonenumberhistory.FieldTags)
+	}
+	if m.FieldCleared(phonenumberhistory.FieldOwnerID) {
+		fields = append(fields, phonenumberhistory.FieldOwnerID)
+	}
+	if m.FieldCleared(phonenumberhistory.FieldRegionCode) {
+		fields = append(fields, phonenumberhistory.FieldRegionCode)
+	}
+	if m.FieldCleared(phonenumberhistory.FieldShortCode) {
+		fields = append(fields, phonenumberhistory.FieldShortCode)
+	}
+	if m.FieldCleared(phonenumberhistory.FieldNumber) {
+		fields = append(fields, phonenumberhistory.FieldNumber)
+	}
+	if m.FieldCleared(phonenumberhistory.FieldExtension) {
+		fields = append(fields, phonenumberhistory.FieldExtension)
+	}
+	return fields
+}
+
+// FieldCleared returns a boolean indicating if a field with the given name was
+// cleared in this mutation.
+func (m *PhoneNumberHistoryMutation) FieldCleared(name string) bool {
+	_, ok := m.clearedFields[name]
+	return ok
+}
+
+// ClearField clears the value of the field with the given name. It returns an
+// error if the field is not defined in the schema.
+func (m *PhoneNumberHistoryMutation) ClearField(name string) error {
+	switch name {
+	case phonenumberhistory.FieldRef:
+		m.ClearRef()
+		return nil
+	case phonenumberhistory.FieldCreatedAt:
+		m.ClearCreatedAt()
+		return nil
+	case phonenumberhistory.FieldUpdatedAt:
+		m.ClearUpdatedAt()
+		return nil
+	case phonenumberhistory.FieldCreatedBy:
+		m.ClearCreatedBy()
+		return nil
+	case phonenumberhistory.FieldUpdatedBy:
+		m.ClearUpdatedBy()
+		return nil
+	case phonenumberhistory.FieldDeletedAt:
+		m.ClearDeletedAt()
+		return nil
+	case phonenumberhistory.FieldDeletedBy:
+		m.ClearDeletedBy()
+		return nil
+	case phonenumberhistory.FieldTags:
+		m.ClearTags()
+		return nil
+	case phonenumberhistory.FieldOwnerID:
+		m.ClearOwnerID()
+		return nil
+	case phonenumberhistory.FieldRegionCode:
+		m.ClearRegionCode()
+		return nil
+	case phonenumberhistory.FieldShortCode:
+		m.ClearShortCode()
+		return nil
+	case phonenumberhistory.FieldNumber:
+		m.ClearNumber()
+		return nil
+	case phonenumberhistory.FieldExtension:
+		m.ClearExtension()
+		return nil
+	}
+	return fmt.Errorf("unknown PhoneNumberHistory nullable field %s", name)
+}
+
+// ResetField resets all changes in the mutation for the field with the given name.
+// It returns an error if the field is not defined in the schema.
+func (m *PhoneNumberHistoryMutation) ResetField(name string) error {
+	switch name {
+	case phonenumberhistory.FieldHistoryTime:
+		m.ResetHistoryTime()
+		return nil
+	case phonenumberhistory.FieldRef:
+		m.ResetRef()
+		return nil
+	case phonenumberhistory.FieldOperation:
+		m.ResetOperation()
+		return nil
+	case phonenumberhistory.FieldCreatedAt:
+		m.ResetCreatedAt()
+		return nil
+	case phonenumberhistory.FieldUpdatedAt:
+		m.ResetUpdatedAt()
+		return nil
+	case phonenumberhistory.FieldCreatedBy:
+		m.ResetCreatedBy()
+		return nil
+	case phonenumberhistory.FieldUpdatedBy:
+		m.ResetUpdatedBy()
+		return nil
+	case phonenumberhistory.FieldDeletedAt:
+		m.ResetDeletedAt()
+		return nil
+	case phonenumberhistory.FieldDeletedBy:
+		m.ResetDeletedBy()
+		return nil
+	case phonenumberhistory.FieldMappingID:
+		m.ResetMappingID()
+		return nil
+	case phonenumberhistory.FieldTags:
+		m.ResetTags()
+		return nil
+	case phonenumberhistory.FieldOwnerID:
+		m.ResetOwnerID()
+		return nil
+	case phonenumberhistory.FieldKind:
+		m.ResetKind()
+		return nil
+	case phonenumberhistory.FieldRegionCode:
+		m.ResetRegionCode()
+		return nil
+	case phonenumberhistory.FieldShortCode:
+		m.ResetShortCode()
+		return nil
+	case phonenumberhistory.FieldNumber:
+		m.ResetNumber()
+		return nil
+	case phonenumberhistory.FieldExtension:
+		m.ResetExtension()
+		return nil
+	}
+	return fmt.Errorf("unknown PhoneNumberHistory field %s", name)
+}
+
+// AddedEdges returns all edge names that were set/added in this mutation.
+func (m *PhoneNumberHistoryMutation) AddedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// AddedIDs returns all IDs (to other nodes) that were added for the given edge
+// name in this mutation.
+func (m *PhoneNumberHistoryMutation) AddedIDs(name string) []ent.Value {
+	return nil
+}
+
+// RemovedEdges returns all edge names that were removed in this mutation.
+func (m *PhoneNumberHistoryMutation) RemovedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
+// the given name in this mutation.
+func (m *PhoneNumberHistoryMutation) RemovedIDs(name string) []ent.Value {
+	return nil
+}
+
+// ClearedEdges returns all edge names that were cleared in this mutation.
+func (m *PhoneNumberHistoryMutation) ClearedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// EdgeCleared returns a boolean which indicates if the edge with the given name
+// was cleared in this mutation.
+func (m *PhoneNumberHistoryMutation) EdgeCleared(name string) bool {
+	return false
+}
+
+// ClearEdge clears the value of the edge with the given name. It returns an error
+// if that edge is not defined in the schema.
+func (m *PhoneNumberHistoryMutation) ClearEdge(name string) error {
+	return fmt.Errorf("unknown PhoneNumberHistory unique edge %s", name)
+}
+
+// ResetEdge resets all changes to the edge with the given name in this mutation.
+// It returns an error if the edge is not defined in the schema.
+func (m *PhoneNumberHistoryMutation) ResetEdge(name string) error {
+	return fmt.Errorf("unknown PhoneNumberHistory edge %s", name)
 }
 
 // PostalAddressMutation represents an operation that mutates the PostalAddress nodes in the graph.
@@ -92970,20 +96111,29 @@ type VendorProfileMutation struct {
 	tags                                   *[]string
 	appendtags                             []string
 	name                                   *string
-	dba_name                               *string
+	corporation_type                       *string
+	corporation_dba                        *string
 	description                            *string
 	website_uri                            *string
+	tax_id                                 *string
+	tax_id_type                            *enums.TaxIDType
 	clearedFields                          map[string]struct{}
 	owner                                  *string
 	clearedowner                           bool
 	postal_addresses                       map[string]struct{}
 	removedpostal_addresses                map[string]struct{}
 	clearedpostal_addresses                bool
+	phone_numbers                          map[string]struct{}
+	removedphone_numbers                   map[string]struct{}
+	clearedphone_numbers                   bool
 	vendor                                 *string
 	clearedvendor                          bool
 	vendor_profile_postal_addresses        map[string]struct{}
 	removedvendor_profile_postal_addresses map[string]struct{}
 	clearedvendor_profile_postal_addresses bool
+	vendor_profile_phone_numbers           map[string]struct{}
+	removedvendor_profile_phone_numbers    map[string]struct{}
+	clearedvendor_profile_phone_numbers    bool
 	done                                   bool
 	oldValue                               func(context.Context) (*VendorProfile, error)
 	predicates                             []predicate.VendorProfile
@@ -93622,53 +96772,102 @@ func (m *VendorProfileMutation) ResetName() {
 	m.name = nil
 }
 
-// SetDbaName sets the "dba_name" field.
-func (m *VendorProfileMutation) SetDbaName(s string) {
-	m.dba_name = &s
+// SetCorporationType sets the "corporation_type" field.
+func (m *VendorProfileMutation) SetCorporationType(s string) {
+	m.corporation_type = &s
 }
 
-// DbaName returns the value of the "dba_name" field in the mutation.
-func (m *VendorProfileMutation) DbaName() (r string, exists bool) {
-	v := m.dba_name
+// CorporationType returns the value of the "corporation_type" field in the mutation.
+func (m *VendorProfileMutation) CorporationType() (r string, exists bool) {
+	v := m.corporation_type
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// OldDbaName returns the old "dba_name" field's value of the VendorProfile entity.
+// OldCorporationType returns the old "corporation_type" field's value of the VendorProfile entity.
 // If the VendorProfile object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *VendorProfileMutation) OldDbaName(ctx context.Context) (v string, err error) {
+func (m *VendorProfileMutation) OldCorporationType(ctx context.Context) (v string, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldDbaName is only allowed on UpdateOne operations")
+		return v, errors.New("OldCorporationType is only allowed on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldDbaName requires an ID field in the mutation")
+		return v, errors.New("OldCorporationType requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
-		return v, fmt.Errorf("querying old value for OldDbaName: %w", err)
+		return v, fmt.Errorf("querying old value for OldCorporationType: %w", err)
 	}
-	return oldValue.DbaName, nil
+	return oldValue.CorporationType, nil
 }
 
-// ClearDbaName clears the value of the "dba_name" field.
-func (m *VendorProfileMutation) ClearDbaName() {
-	m.dba_name = nil
-	m.clearedFields[vendorprofile.FieldDbaName] = struct{}{}
+// ClearCorporationType clears the value of the "corporation_type" field.
+func (m *VendorProfileMutation) ClearCorporationType() {
+	m.corporation_type = nil
+	m.clearedFields[vendorprofile.FieldCorporationType] = struct{}{}
 }
 
-// DbaNameCleared returns if the "dba_name" field was cleared in this mutation.
-func (m *VendorProfileMutation) DbaNameCleared() bool {
-	_, ok := m.clearedFields[vendorprofile.FieldDbaName]
+// CorporationTypeCleared returns if the "corporation_type" field was cleared in this mutation.
+func (m *VendorProfileMutation) CorporationTypeCleared() bool {
+	_, ok := m.clearedFields[vendorprofile.FieldCorporationType]
 	return ok
 }
 
-// ResetDbaName resets all changes to the "dba_name" field.
-func (m *VendorProfileMutation) ResetDbaName() {
-	m.dba_name = nil
-	delete(m.clearedFields, vendorprofile.FieldDbaName)
+// ResetCorporationType resets all changes to the "corporation_type" field.
+func (m *VendorProfileMutation) ResetCorporationType() {
+	m.corporation_type = nil
+	delete(m.clearedFields, vendorprofile.FieldCorporationType)
+}
+
+// SetCorporationDba sets the "corporation_dba" field.
+func (m *VendorProfileMutation) SetCorporationDba(s string) {
+	m.corporation_dba = &s
+}
+
+// CorporationDba returns the value of the "corporation_dba" field in the mutation.
+func (m *VendorProfileMutation) CorporationDba() (r string, exists bool) {
+	v := m.corporation_dba
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCorporationDba returns the old "corporation_dba" field's value of the VendorProfile entity.
+// If the VendorProfile object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VendorProfileMutation) OldCorporationDba(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCorporationDba is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCorporationDba requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCorporationDba: %w", err)
+	}
+	return oldValue.CorporationDba, nil
+}
+
+// ClearCorporationDba clears the value of the "corporation_dba" field.
+func (m *VendorProfileMutation) ClearCorporationDba() {
+	m.corporation_dba = nil
+	m.clearedFields[vendorprofile.FieldCorporationDba] = struct{}{}
+}
+
+// CorporationDbaCleared returns if the "corporation_dba" field was cleared in this mutation.
+func (m *VendorProfileMutation) CorporationDbaCleared() bool {
+	_, ok := m.clearedFields[vendorprofile.FieldCorporationDba]
+	return ok
+}
+
+// ResetCorporationDba resets all changes to the "corporation_dba" field.
+func (m *VendorProfileMutation) ResetCorporationDba() {
+	m.corporation_dba = nil
+	delete(m.clearedFields, vendorprofile.FieldCorporationDba)
 }
 
 // SetDescription sets the "description" field.
@@ -93769,6 +96968,91 @@ func (m *VendorProfileMutation) ResetWebsiteURI() {
 	delete(m.clearedFields, vendorprofile.FieldWebsiteURI)
 }
 
+// SetTaxID sets the "tax_id" field.
+func (m *VendorProfileMutation) SetTaxID(s string) {
+	m.tax_id = &s
+}
+
+// TaxID returns the value of the "tax_id" field in the mutation.
+func (m *VendorProfileMutation) TaxID() (r string, exists bool) {
+	v := m.tax_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldTaxID returns the old "tax_id" field's value of the VendorProfile entity.
+// If the VendorProfile object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VendorProfileMutation) OldTaxID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldTaxID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldTaxID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldTaxID: %w", err)
+	}
+	return oldValue.TaxID, nil
+}
+
+// ClearTaxID clears the value of the "tax_id" field.
+func (m *VendorProfileMutation) ClearTaxID() {
+	m.tax_id = nil
+	m.clearedFields[vendorprofile.FieldTaxID] = struct{}{}
+}
+
+// TaxIDCleared returns if the "tax_id" field was cleared in this mutation.
+func (m *VendorProfileMutation) TaxIDCleared() bool {
+	_, ok := m.clearedFields[vendorprofile.FieldTaxID]
+	return ok
+}
+
+// ResetTaxID resets all changes to the "tax_id" field.
+func (m *VendorProfileMutation) ResetTaxID() {
+	m.tax_id = nil
+	delete(m.clearedFields, vendorprofile.FieldTaxID)
+}
+
+// SetTaxIDType sets the "tax_id_type" field.
+func (m *VendorProfileMutation) SetTaxIDType(eit enums.TaxIDType) {
+	m.tax_id_type = &eit
+}
+
+// TaxIDType returns the value of the "tax_id_type" field in the mutation.
+func (m *VendorProfileMutation) TaxIDType() (r enums.TaxIDType, exists bool) {
+	v := m.tax_id_type
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldTaxIDType returns the old "tax_id_type" field's value of the VendorProfile entity.
+// If the VendorProfile object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VendorProfileMutation) OldTaxIDType(ctx context.Context) (v enums.TaxIDType, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldTaxIDType is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldTaxIDType requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldTaxIDType: %w", err)
+	}
+	return oldValue.TaxIDType, nil
+}
+
+// ResetTaxIDType resets all changes to the "tax_id_type" field.
+func (m *VendorProfileMutation) ResetTaxIDType() {
+	m.tax_id_type = nil
+}
+
 // ClearOwner clears the "owner" edge to the Organization entity.
 func (m *VendorProfileMutation) ClearOwner() {
 	m.clearedowner = true
@@ -93848,6 +97132,60 @@ func (m *VendorProfileMutation) ResetPostalAddresses() {
 	m.postal_addresses = nil
 	m.clearedpostal_addresses = false
 	m.removedpostal_addresses = nil
+}
+
+// AddPhoneNumberIDs adds the "phone_numbers" edge to the PhoneNumber entity by ids.
+func (m *VendorProfileMutation) AddPhoneNumberIDs(ids ...string) {
+	if m.phone_numbers == nil {
+		m.phone_numbers = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.phone_numbers[ids[i]] = struct{}{}
+	}
+}
+
+// ClearPhoneNumbers clears the "phone_numbers" edge to the PhoneNumber entity.
+func (m *VendorProfileMutation) ClearPhoneNumbers() {
+	m.clearedphone_numbers = true
+}
+
+// PhoneNumbersCleared reports if the "phone_numbers" edge to the PhoneNumber entity was cleared.
+func (m *VendorProfileMutation) PhoneNumbersCleared() bool {
+	return m.clearedphone_numbers
+}
+
+// RemovePhoneNumberIDs removes the "phone_numbers" edge to the PhoneNumber entity by IDs.
+func (m *VendorProfileMutation) RemovePhoneNumberIDs(ids ...string) {
+	if m.removedphone_numbers == nil {
+		m.removedphone_numbers = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.phone_numbers, ids[i])
+		m.removedphone_numbers[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedPhoneNumbers returns the removed IDs of the "phone_numbers" edge to the PhoneNumber entity.
+func (m *VendorProfileMutation) RemovedPhoneNumbersIDs() (ids []string) {
+	for id := range m.removedphone_numbers {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// PhoneNumbersIDs returns the "phone_numbers" edge IDs in the mutation.
+func (m *VendorProfileMutation) PhoneNumbersIDs() (ids []string) {
+	for id := range m.phone_numbers {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetPhoneNumbers resets all changes to the "phone_numbers" edge.
+func (m *VendorProfileMutation) ResetPhoneNumbers() {
+	m.phone_numbers = nil
+	m.clearedphone_numbers = false
+	m.removedphone_numbers = nil
 }
 
 // ClearVendor clears the "vendor" edge to the Vendor entity.
@@ -93931,6 +97269,60 @@ func (m *VendorProfileMutation) ResetVendorProfilePostalAddresses() {
 	m.removedvendor_profile_postal_addresses = nil
 }
 
+// AddVendorProfilePhoneNumberIDs adds the "vendor_profile_phone_numbers" edge to the VendorProfilePhoneNumber entity by ids.
+func (m *VendorProfileMutation) AddVendorProfilePhoneNumberIDs(ids ...string) {
+	if m.vendor_profile_phone_numbers == nil {
+		m.vendor_profile_phone_numbers = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.vendor_profile_phone_numbers[ids[i]] = struct{}{}
+	}
+}
+
+// ClearVendorProfilePhoneNumbers clears the "vendor_profile_phone_numbers" edge to the VendorProfilePhoneNumber entity.
+func (m *VendorProfileMutation) ClearVendorProfilePhoneNumbers() {
+	m.clearedvendor_profile_phone_numbers = true
+}
+
+// VendorProfilePhoneNumbersCleared reports if the "vendor_profile_phone_numbers" edge to the VendorProfilePhoneNumber entity was cleared.
+func (m *VendorProfileMutation) VendorProfilePhoneNumbersCleared() bool {
+	return m.clearedvendor_profile_phone_numbers
+}
+
+// RemoveVendorProfilePhoneNumberIDs removes the "vendor_profile_phone_numbers" edge to the VendorProfilePhoneNumber entity by IDs.
+func (m *VendorProfileMutation) RemoveVendorProfilePhoneNumberIDs(ids ...string) {
+	if m.removedvendor_profile_phone_numbers == nil {
+		m.removedvendor_profile_phone_numbers = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.vendor_profile_phone_numbers, ids[i])
+		m.removedvendor_profile_phone_numbers[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedVendorProfilePhoneNumbers returns the removed IDs of the "vendor_profile_phone_numbers" edge to the VendorProfilePhoneNumber entity.
+func (m *VendorProfileMutation) RemovedVendorProfilePhoneNumbersIDs() (ids []string) {
+	for id := range m.removedvendor_profile_phone_numbers {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// VendorProfilePhoneNumbersIDs returns the "vendor_profile_phone_numbers" edge IDs in the mutation.
+func (m *VendorProfileMutation) VendorProfilePhoneNumbersIDs() (ids []string) {
+	for id := range m.vendor_profile_phone_numbers {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetVendorProfilePhoneNumbers resets all changes to the "vendor_profile_phone_numbers" edge.
+func (m *VendorProfileMutation) ResetVendorProfilePhoneNumbers() {
+	m.vendor_profile_phone_numbers = nil
+	m.clearedvendor_profile_phone_numbers = false
+	m.removedvendor_profile_phone_numbers = nil
+}
+
 // Where appends a list predicates to the VendorProfileMutation builder.
 func (m *VendorProfileMutation) Where(ps ...predicate.VendorProfile) {
 	m.predicates = append(m.predicates, ps...)
@@ -93965,7 +97357,7 @@ func (m *VendorProfileMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *VendorProfileMutation) Fields() []string {
-	fields := make([]string, 0, 14)
+	fields := make([]string, 0, 17)
 	if m.created_at != nil {
 		fields = append(fields, vendorprofile.FieldCreatedAt)
 	}
@@ -93999,14 +97391,23 @@ func (m *VendorProfileMutation) Fields() []string {
 	if m.name != nil {
 		fields = append(fields, vendorprofile.FieldName)
 	}
-	if m.dba_name != nil {
-		fields = append(fields, vendorprofile.FieldDbaName)
+	if m.corporation_type != nil {
+		fields = append(fields, vendorprofile.FieldCorporationType)
+	}
+	if m.corporation_dba != nil {
+		fields = append(fields, vendorprofile.FieldCorporationDba)
 	}
 	if m.description != nil {
 		fields = append(fields, vendorprofile.FieldDescription)
 	}
 	if m.website_uri != nil {
 		fields = append(fields, vendorprofile.FieldWebsiteURI)
+	}
+	if m.tax_id != nil {
+		fields = append(fields, vendorprofile.FieldTaxID)
+	}
+	if m.tax_id_type != nil {
+		fields = append(fields, vendorprofile.FieldTaxIDType)
 	}
 	return fields
 }
@@ -94038,12 +97439,18 @@ func (m *VendorProfileMutation) Field(name string) (ent.Value, bool) {
 		return m.VendorID()
 	case vendorprofile.FieldName:
 		return m.Name()
-	case vendorprofile.FieldDbaName:
-		return m.DbaName()
+	case vendorprofile.FieldCorporationType:
+		return m.CorporationType()
+	case vendorprofile.FieldCorporationDba:
+		return m.CorporationDba()
 	case vendorprofile.FieldDescription:
 		return m.Description()
 	case vendorprofile.FieldWebsiteURI:
 		return m.WebsiteURI()
+	case vendorprofile.FieldTaxID:
+		return m.TaxID()
+	case vendorprofile.FieldTaxIDType:
+		return m.TaxIDType()
 	}
 	return nil, false
 }
@@ -94075,12 +97482,18 @@ func (m *VendorProfileMutation) OldField(ctx context.Context, name string) (ent.
 		return m.OldVendorID(ctx)
 	case vendorprofile.FieldName:
 		return m.OldName(ctx)
-	case vendorprofile.FieldDbaName:
-		return m.OldDbaName(ctx)
+	case vendorprofile.FieldCorporationType:
+		return m.OldCorporationType(ctx)
+	case vendorprofile.FieldCorporationDba:
+		return m.OldCorporationDba(ctx)
 	case vendorprofile.FieldDescription:
 		return m.OldDescription(ctx)
 	case vendorprofile.FieldWebsiteURI:
 		return m.OldWebsiteURI(ctx)
+	case vendorprofile.FieldTaxID:
+		return m.OldTaxID(ctx)
+	case vendorprofile.FieldTaxIDType:
+		return m.OldTaxIDType(ctx)
 	}
 	return nil, fmt.Errorf("unknown VendorProfile field %s", name)
 }
@@ -94167,12 +97580,19 @@ func (m *VendorProfileMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetName(v)
 		return nil
-	case vendorprofile.FieldDbaName:
+	case vendorprofile.FieldCorporationType:
 		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.SetDbaName(v)
+		m.SetCorporationType(v)
+		return nil
+	case vendorprofile.FieldCorporationDba:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCorporationDba(v)
 		return nil
 	case vendorprofile.FieldDescription:
 		v, ok := value.(string)
@@ -94187,6 +97607,20 @@ func (m *VendorProfileMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetWebsiteURI(v)
+		return nil
+	case vendorprofile.FieldTaxID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetTaxID(v)
+		return nil
+	case vendorprofile.FieldTaxIDType:
+		v, ok := value.(enums.TaxIDType)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetTaxIDType(v)
 		return nil
 	}
 	return fmt.Errorf("unknown VendorProfile field %s", name)
@@ -94245,14 +97679,20 @@ func (m *VendorProfileMutation) ClearedFields() []string {
 	if m.FieldCleared(vendorprofile.FieldVendorID) {
 		fields = append(fields, vendorprofile.FieldVendorID)
 	}
-	if m.FieldCleared(vendorprofile.FieldDbaName) {
-		fields = append(fields, vendorprofile.FieldDbaName)
+	if m.FieldCleared(vendorprofile.FieldCorporationType) {
+		fields = append(fields, vendorprofile.FieldCorporationType)
+	}
+	if m.FieldCleared(vendorprofile.FieldCorporationDba) {
+		fields = append(fields, vendorprofile.FieldCorporationDba)
 	}
 	if m.FieldCleared(vendorprofile.FieldDescription) {
 		fields = append(fields, vendorprofile.FieldDescription)
 	}
 	if m.FieldCleared(vendorprofile.FieldWebsiteURI) {
 		fields = append(fields, vendorprofile.FieldWebsiteURI)
+	}
+	if m.FieldCleared(vendorprofile.FieldTaxID) {
+		fields = append(fields, vendorprofile.FieldTaxID)
 	}
 	return fields
 }
@@ -94295,14 +97735,20 @@ func (m *VendorProfileMutation) ClearField(name string) error {
 	case vendorprofile.FieldVendorID:
 		m.ClearVendorID()
 		return nil
-	case vendorprofile.FieldDbaName:
-		m.ClearDbaName()
+	case vendorprofile.FieldCorporationType:
+		m.ClearCorporationType()
+		return nil
+	case vendorprofile.FieldCorporationDba:
+		m.ClearCorporationDba()
 		return nil
 	case vendorprofile.FieldDescription:
 		m.ClearDescription()
 		return nil
 	case vendorprofile.FieldWebsiteURI:
 		m.ClearWebsiteURI()
+		return nil
+	case vendorprofile.FieldTaxID:
+		m.ClearTaxID()
 		return nil
 	}
 	return fmt.Errorf("unknown VendorProfile nullable field %s", name)
@@ -94345,8 +97791,11 @@ func (m *VendorProfileMutation) ResetField(name string) error {
 	case vendorprofile.FieldName:
 		m.ResetName()
 		return nil
-	case vendorprofile.FieldDbaName:
-		m.ResetDbaName()
+	case vendorprofile.FieldCorporationType:
+		m.ResetCorporationType()
+		return nil
+	case vendorprofile.FieldCorporationDba:
+		m.ResetCorporationDba()
 		return nil
 	case vendorprofile.FieldDescription:
 		m.ResetDescription()
@@ -94354,24 +97803,36 @@ func (m *VendorProfileMutation) ResetField(name string) error {
 	case vendorprofile.FieldWebsiteURI:
 		m.ResetWebsiteURI()
 		return nil
+	case vendorprofile.FieldTaxID:
+		m.ResetTaxID()
+		return nil
+	case vendorprofile.FieldTaxIDType:
+		m.ResetTaxIDType()
+		return nil
 	}
 	return fmt.Errorf("unknown VendorProfile field %s", name)
 }
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *VendorProfileMutation) AddedEdges() []string {
-	edges := make([]string, 0, 4)
+	edges := make([]string, 0, 6)
 	if m.owner != nil {
 		edges = append(edges, vendorprofile.EdgeOwner)
 	}
 	if m.postal_addresses != nil {
 		edges = append(edges, vendorprofile.EdgePostalAddresses)
 	}
+	if m.phone_numbers != nil {
+		edges = append(edges, vendorprofile.EdgePhoneNumbers)
+	}
 	if m.vendor != nil {
 		edges = append(edges, vendorprofile.EdgeVendor)
 	}
 	if m.vendor_profile_postal_addresses != nil {
 		edges = append(edges, vendorprofile.EdgeVendorProfilePostalAddresses)
+	}
+	if m.vendor_profile_phone_numbers != nil {
+		edges = append(edges, vendorprofile.EdgeVendorProfilePhoneNumbers)
 	}
 	return edges
 }
@@ -94390,6 +97851,12 @@ func (m *VendorProfileMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case vendorprofile.EdgePhoneNumbers:
+		ids := make([]ent.Value, 0, len(m.phone_numbers))
+		for id := range m.phone_numbers {
+			ids = append(ids, id)
+		}
+		return ids
 	case vendorprofile.EdgeVendor:
 		if id := m.vendor; id != nil {
 			return []ent.Value{*id}
@@ -94400,18 +97867,30 @@ func (m *VendorProfileMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case vendorprofile.EdgeVendorProfilePhoneNumbers:
+		ids := make([]ent.Value, 0, len(m.vendor_profile_phone_numbers))
+		for id := range m.vendor_profile_phone_numbers {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *VendorProfileMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 4)
+	edges := make([]string, 0, 6)
 	if m.removedpostal_addresses != nil {
 		edges = append(edges, vendorprofile.EdgePostalAddresses)
 	}
+	if m.removedphone_numbers != nil {
+		edges = append(edges, vendorprofile.EdgePhoneNumbers)
+	}
 	if m.removedvendor_profile_postal_addresses != nil {
 		edges = append(edges, vendorprofile.EdgeVendorProfilePostalAddresses)
+	}
+	if m.removedvendor_profile_phone_numbers != nil {
+		edges = append(edges, vendorprofile.EdgeVendorProfilePhoneNumbers)
 	}
 	return edges
 }
@@ -94426,9 +97905,21 @@ func (m *VendorProfileMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case vendorprofile.EdgePhoneNumbers:
+		ids := make([]ent.Value, 0, len(m.removedphone_numbers))
+		for id := range m.removedphone_numbers {
+			ids = append(ids, id)
+		}
+		return ids
 	case vendorprofile.EdgeVendorProfilePostalAddresses:
 		ids := make([]ent.Value, 0, len(m.removedvendor_profile_postal_addresses))
 		for id := range m.removedvendor_profile_postal_addresses {
+			ids = append(ids, id)
+		}
+		return ids
+	case vendorprofile.EdgeVendorProfilePhoneNumbers:
+		ids := make([]ent.Value, 0, len(m.removedvendor_profile_phone_numbers))
+		for id := range m.removedvendor_profile_phone_numbers {
 			ids = append(ids, id)
 		}
 		return ids
@@ -94438,18 +97929,24 @@ func (m *VendorProfileMutation) RemovedIDs(name string) []ent.Value {
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *VendorProfileMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 4)
+	edges := make([]string, 0, 6)
 	if m.clearedowner {
 		edges = append(edges, vendorprofile.EdgeOwner)
 	}
 	if m.clearedpostal_addresses {
 		edges = append(edges, vendorprofile.EdgePostalAddresses)
 	}
+	if m.clearedphone_numbers {
+		edges = append(edges, vendorprofile.EdgePhoneNumbers)
+	}
 	if m.clearedvendor {
 		edges = append(edges, vendorprofile.EdgeVendor)
 	}
 	if m.clearedvendor_profile_postal_addresses {
 		edges = append(edges, vendorprofile.EdgeVendorProfilePostalAddresses)
+	}
+	if m.clearedvendor_profile_phone_numbers {
+		edges = append(edges, vendorprofile.EdgeVendorProfilePhoneNumbers)
 	}
 	return edges
 }
@@ -94462,10 +97959,14 @@ func (m *VendorProfileMutation) EdgeCleared(name string) bool {
 		return m.clearedowner
 	case vendorprofile.EdgePostalAddresses:
 		return m.clearedpostal_addresses
+	case vendorprofile.EdgePhoneNumbers:
+		return m.clearedphone_numbers
 	case vendorprofile.EdgeVendor:
 		return m.clearedvendor
 	case vendorprofile.EdgeVendorProfilePostalAddresses:
 		return m.clearedvendor_profile_postal_addresses
+	case vendorprofile.EdgeVendorProfilePhoneNumbers:
+		return m.clearedvendor_profile_phone_numbers
 	}
 	return false
 }
@@ -94494,11 +97995,17 @@ func (m *VendorProfileMutation) ResetEdge(name string) error {
 	case vendorprofile.EdgePostalAddresses:
 		m.ResetPostalAddresses()
 		return nil
+	case vendorprofile.EdgePhoneNumbers:
+		m.ResetPhoneNumbers()
+		return nil
 	case vendorprofile.EdgeVendor:
 		m.ResetVendor()
 		return nil
 	case vendorprofile.EdgeVendorProfilePostalAddresses:
 		m.ResetVendorProfilePostalAddresses()
+		return nil
+	case vendorprofile.EdgeVendorProfilePhoneNumbers:
+		m.ResetVendorProfilePhoneNumbers()
 		return nil
 	}
 	return fmt.Errorf("unknown VendorProfile edge %s", name)
@@ -94507,31 +98014,34 @@ func (m *VendorProfileMutation) ResetEdge(name string) error {
 // VendorProfileHistoryMutation represents an operation that mutates the VendorProfileHistory nodes in the graph.
 type VendorProfileHistoryMutation struct {
 	config
-	op            Op
-	typ           string
-	id            *string
-	history_time  *time.Time
-	ref           *string
-	operation     *enthistory.OpType
-	created_at    *time.Time
-	updated_at    *time.Time
-	created_by    *string
-	updated_by    *string
-	deleted_at    *time.Time
-	deleted_by    *string
-	mapping_id    *string
-	tags          *[]string
-	appendtags    []string
-	owner_id      *string
-	vendor_id     *string
-	name          *string
-	dba_name      *string
-	description   *string
-	website_uri   *string
-	clearedFields map[string]struct{}
-	done          bool
-	oldValue      func(context.Context) (*VendorProfileHistory, error)
-	predicates    []predicate.VendorProfileHistory
+	op               Op
+	typ              string
+	id               *string
+	history_time     *time.Time
+	ref              *string
+	operation        *enthistory.OpType
+	created_at       *time.Time
+	updated_at       *time.Time
+	created_by       *string
+	updated_by       *string
+	deleted_at       *time.Time
+	deleted_by       *string
+	mapping_id       *string
+	tags             *[]string
+	appendtags       []string
+	owner_id         *string
+	vendor_id        *string
+	name             *string
+	corporation_type *string
+	corporation_dba  *string
+	description      *string
+	website_uri      *string
+	tax_id           *string
+	tax_id_type      *enums.TaxIDType
+	clearedFields    map[string]struct{}
+	done             bool
+	oldValue         func(context.Context) (*VendorProfileHistory, error)
+	predicates       []predicate.VendorProfileHistory
 }
 
 var _ ent.Mutation = (*VendorProfileHistoryMutation)(nil)
@@ -95288,53 +98798,102 @@ func (m *VendorProfileHistoryMutation) ResetName() {
 	m.name = nil
 }
 
-// SetDbaName sets the "dba_name" field.
-func (m *VendorProfileHistoryMutation) SetDbaName(s string) {
-	m.dba_name = &s
+// SetCorporationType sets the "corporation_type" field.
+func (m *VendorProfileHistoryMutation) SetCorporationType(s string) {
+	m.corporation_type = &s
 }
 
-// DbaName returns the value of the "dba_name" field in the mutation.
-func (m *VendorProfileHistoryMutation) DbaName() (r string, exists bool) {
-	v := m.dba_name
+// CorporationType returns the value of the "corporation_type" field in the mutation.
+func (m *VendorProfileHistoryMutation) CorporationType() (r string, exists bool) {
+	v := m.corporation_type
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// OldDbaName returns the old "dba_name" field's value of the VendorProfileHistory entity.
+// OldCorporationType returns the old "corporation_type" field's value of the VendorProfileHistory entity.
 // If the VendorProfileHistory object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *VendorProfileHistoryMutation) OldDbaName(ctx context.Context) (v string, err error) {
+func (m *VendorProfileHistoryMutation) OldCorporationType(ctx context.Context) (v string, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldDbaName is only allowed on UpdateOne operations")
+		return v, errors.New("OldCorporationType is only allowed on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldDbaName requires an ID field in the mutation")
+		return v, errors.New("OldCorporationType requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
-		return v, fmt.Errorf("querying old value for OldDbaName: %w", err)
+		return v, fmt.Errorf("querying old value for OldCorporationType: %w", err)
 	}
-	return oldValue.DbaName, nil
+	return oldValue.CorporationType, nil
 }
 
-// ClearDbaName clears the value of the "dba_name" field.
-func (m *VendorProfileHistoryMutation) ClearDbaName() {
-	m.dba_name = nil
-	m.clearedFields[vendorprofilehistory.FieldDbaName] = struct{}{}
+// ClearCorporationType clears the value of the "corporation_type" field.
+func (m *VendorProfileHistoryMutation) ClearCorporationType() {
+	m.corporation_type = nil
+	m.clearedFields[vendorprofilehistory.FieldCorporationType] = struct{}{}
 }
 
-// DbaNameCleared returns if the "dba_name" field was cleared in this mutation.
-func (m *VendorProfileHistoryMutation) DbaNameCleared() bool {
-	_, ok := m.clearedFields[vendorprofilehistory.FieldDbaName]
+// CorporationTypeCleared returns if the "corporation_type" field was cleared in this mutation.
+func (m *VendorProfileHistoryMutation) CorporationTypeCleared() bool {
+	_, ok := m.clearedFields[vendorprofilehistory.FieldCorporationType]
 	return ok
 }
 
-// ResetDbaName resets all changes to the "dba_name" field.
-func (m *VendorProfileHistoryMutation) ResetDbaName() {
-	m.dba_name = nil
-	delete(m.clearedFields, vendorprofilehistory.FieldDbaName)
+// ResetCorporationType resets all changes to the "corporation_type" field.
+func (m *VendorProfileHistoryMutation) ResetCorporationType() {
+	m.corporation_type = nil
+	delete(m.clearedFields, vendorprofilehistory.FieldCorporationType)
+}
+
+// SetCorporationDba sets the "corporation_dba" field.
+func (m *VendorProfileHistoryMutation) SetCorporationDba(s string) {
+	m.corporation_dba = &s
+}
+
+// CorporationDba returns the value of the "corporation_dba" field in the mutation.
+func (m *VendorProfileHistoryMutation) CorporationDba() (r string, exists bool) {
+	v := m.corporation_dba
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCorporationDba returns the old "corporation_dba" field's value of the VendorProfileHistory entity.
+// If the VendorProfileHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VendorProfileHistoryMutation) OldCorporationDba(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCorporationDba is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCorporationDba requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCorporationDba: %w", err)
+	}
+	return oldValue.CorporationDba, nil
+}
+
+// ClearCorporationDba clears the value of the "corporation_dba" field.
+func (m *VendorProfileHistoryMutation) ClearCorporationDba() {
+	m.corporation_dba = nil
+	m.clearedFields[vendorprofilehistory.FieldCorporationDba] = struct{}{}
+}
+
+// CorporationDbaCleared returns if the "corporation_dba" field was cleared in this mutation.
+func (m *VendorProfileHistoryMutation) CorporationDbaCleared() bool {
+	_, ok := m.clearedFields[vendorprofilehistory.FieldCorporationDba]
+	return ok
+}
+
+// ResetCorporationDba resets all changes to the "corporation_dba" field.
+func (m *VendorProfileHistoryMutation) ResetCorporationDba() {
+	m.corporation_dba = nil
+	delete(m.clearedFields, vendorprofilehistory.FieldCorporationDba)
 }
 
 // SetDescription sets the "description" field.
@@ -95435,6 +98994,91 @@ func (m *VendorProfileHistoryMutation) ResetWebsiteURI() {
 	delete(m.clearedFields, vendorprofilehistory.FieldWebsiteURI)
 }
 
+// SetTaxID sets the "tax_id" field.
+func (m *VendorProfileHistoryMutation) SetTaxID(s string) {
+	m.tax_id = &s
+}
+
+// TaxID returns the value of the "tax_id" field in the mutation.
+func (m *VendorProfileHistoryMutation) TaxID() (r string, exists bool) {
+	v := m.tax_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldTaxID returns the old "tax_id" field's value of the VendorProfileHistory entity.
+// If the VendorProfileHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VendorProfileHistoryMutation) OldTaxID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldTaxID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldTaxID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldTaxID: %w", err)
+	}
+	return oldValue.TaxID, nil
+}
+
+// ClearTaxID clears the value of the "tax_id" field.
+func (m *VendorProfileHistoryMutation) ClearTaxID() {
+	m.tax_id = nil
+	m.clearedFields[vendorprofilehistory.FieldTaxID] = struct{}{}
+}
+
+// TaxIDCleared returns if the "tax_id" field was cleared in this mutation.
+func (m *VendorProfileHistoryMutation) TaxIDCleared() bool {
+	_, ok := m.clearedFields[vendorprofilehistory.FieldTaxID]
+	return ok
+}
+
+// ResetTaxID resets all changes to the "tax_id" field.
+func (m *VendorProfileHistoryMutation) ResetTaxID() {
+	m.tax_id = nil
+	delete(m.clearedFields, vendorprofilehistory.FieldTaxID)
+}
+
+// SetTaxIDType sets the "tax_id_type" field.
+func (m *VendorProfileHistoryMutation) SetTaxIDType(eit enums.TaxIDType) {
+	m.tax_id_type = &eit
+}
+
+// TaxIDType returns the value of the "tax_id_type" field in the mutation.
+func (m *VendorProfileHistoryMutation) TaxIDType() (r enums.TaxIDType, exists bool) {
+	v := m.tax_id_type
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldTaxIDType returns the old "tax_id_type" field's value of the VendorProfileHistory entity.
+// If the VendorProfileHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VendorProfileHistoryMutation) OldTaxIDType(ctx context.Context) (v enums.TaxIDType, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldTaxIDType is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldTaxIDType requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldTaxIDType: %w", err)
+	}
+	return oldValue.TaxIDType, nil
+}
+
+// ResetTaxIDType resets all changes to the "tax_id_type" field.
+func (m *VendorProfileHistoryMutation) ResetTaxIDType() {
+	m.tax_id_type = nil
+}
+
 // Where appends a list predicates to the VendorProfileHistoryMutation builder.
 func (m *VendorProfileHistoryMutation) Where(ps ...predicate.VendorProfileHistory) {
 	m.predicates = append(m.predicates, ps...)
@@ -95469,7 +99113,7 @@ func (m *VendorProfileHistoryMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *VendorProfileHistoryMutation) Fields() []string {
-	fields := make([]string, 0, 17)
+	fields := make([]string, 0, 20)
 	if m.history_time != nil {
 		fields = append(fields, vendorprofilehistory.FieldHistoryTime)
 	}
@@ -95512,14 +99156,23 @@ func (m *VendorProfileHistoryMutation) Fields() []string {
 	if m.name != nil {
 		fields = append(fields, vendorprofilehistory.FieldName)
 	}
-	if m.dba_name != nil {
-		fields = append(fields, vendorprofilehistory.FieldDbaName)
+	if m.corporation_type != nil {
+		fields = append(fields, vendorprofilehistory.FieldCorporationType)
+	}
+	if m.corporation_dba != nil {
+		fields = append(fields, vendorprofilehistory.FieldCorporationDba)
 	}
 	if m.description != nil {
 		fields = append(fields, vendorprofilehistory.FieldDescription)
 	}
 	if m.website_uri != nil {
 		fields = append(fields, vendorprofilehistory.FieldWebsiteURI)
+	}
+	if m.tax_id != nil {
+		fields = append(fields, vendorprofilehistory.FieldTaxID)
+	}
+	if m.tax_id_type != nil {
+		fields = append(fields, vendorprofilehistory.FieldTaxIDType)
 	}
 	return fields
 }
@@ -95557,12 +99210,18 @@ func (m *VendorProfileHistoryMutation) Field(name string) (ent.Value, bool) {
 		return m.VendorID()
 	case vendorprofilehistory.FieldName:
 		return m.Name()
-	case vendorprofilehistory.FieldDbaName:
-		return m.DbaName()
+	case vendorprofilehistory.FieldCorporationType:
+		return m.CorporationType()
+	case vendorprofilehistory.FieldCorporationDba:
+		return m.CorporationDba()
 	case vendorprofilehistory.FieldDescription:
 		return m.Description()
 	case vendorprofilehistory.FieldWebsiteURI:
 		return m.WebsiteURI()
+	case vendorprofilehistory.FieldTaxID:
+		return m.TaxID()
+	case vendorprofilehistory.FieldTaxIDType:
+		return m.TaxIDType()
 	}
 	return nil, false
 }
@@ -95600,12 +99259,18 @@ func (m *VendorProfileHistoryMutation) OldField(ctx context.Context, name string
 		return m.OldVendorID(ctx)
 	case vendorprofilehistory.FieldName:
 		return m.OldName(ctx)
-	case vendorprofilehistory.FieldDbaName:
-		return m.OldDbaName(ctx)
+	case vendorprofilehistory.FieldCorporationType:
+		return m.OldCorporationType(ctx)
+	case vendorprofilehistory.FieldCorporationDba:
+		return m.OldCorporationDba(ctx)
 	case vendorprofilehistory.FieldDescription:
 		return m.OldDescription(ctx)
 	case vendorprofilehistory.FieldWebsiteURI:
 		return m.OldWebsiteURI(ctx)
+	case vendorprofilehistory.FieldTaxID:
+		return m.OldTaxID(ctx)
+	case vendorprofilehistory.FieldTaxIDType:
+		return m.OldTaxIDType(ctx)
 	}
 	return nil, fmt.Errorf("unknown VendorProfileHistory field %s", name)
 }
@@ -95713,12 +99378,19 @@ func (m *VendorProfileHistoryMutation) SetField(name string, value ent.Value) er
 		}
 		m.SetName(v)
 		return nil
-	case vendorprofilehistory.FieldDbaName:
+	case vendorprofilehistory.FieldCorporationType:
 		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.SetDbaName(v)
+		m.SetCorporationType(v)
+		return nil
+	case vendorprofilehistory.FieldCorporationDba:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCorporationDba(v)
 		return nil
 	case vendorprofilehistory.FieldDescription:
 		v, ok := value.(string)
@@ -95733,6 +99405,20 @@ func (m *VendorProfileHistoryMutation) SetField(name string, value ent.Value) er
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetWebsiteURI(v)
+		return nil
+	case vendorprofilehistory.FieldTaxID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetTaxID(v)
+		return nil
+	case vendorprofilehistory.FieldTaxIDType:
+		v, ok := value.(enums.TaxIDType)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetTaxIDType(v)
 		return nil
 	}
 	return fmt.Errorf("unknown VendorProfileHistory field %s", name)
@@ -95794,14 +99480,20 @@ func (m *VendorProfileHistoryMutation) ClearedFields() []string {
 	if m.FieldCleared(vendorprofilehistory.FieldVendorID) {
 		fields = append(fields, vendorprofilehistory.FieldVendorID)
 	}
-	if m.FieldCleared(vendorprofilehistory.FieldDbaName) {
-		fields = append(fields, vendorprofilehistory.FieldDbaName)
+	if m.FieldCleared(vendorprofilehistory.FieldCorporationType) {
+		fields = append(fields, vendorprofilehistory.FieldCorporationType)
+	}
+	if m.FieldCleared(vendorprofilehistory.FieldCorporationDba) {
+		fields = append(fields, vendorprofilehistory.FieldCorporationDba)
 	}
 	if m.FieldCleared(vendorprofilehistory.FieldDescription) {
 		fields = append(fields, vendorprofilehistory.FieldDescription)
 	}
 	if m.FieldCleared(vendorprofilehistory.FieldWebsiteURI) {
 		fields = append(fields, vendorprofilehistory.FieldWebsiteURI)
+	}
+	if m.FieldCleared(vendorprofilehistory.FieldTaxID) {
+		fields = append(fields, vendorprofilehistory.FieldTaxID)
 	}
 	return fields
 }
@@ -95847,14 +99539,20 @@ func (m *VendorProfileHistoryMutation) ClearField(name string) error {
 	case vendorprofilehistory.FieldVendorID:
 		m.ClearVendorID()
 		return nil
-	case vendorprofilehistory.FieldDbaName:
-		m.ClearDbaName()
+	case vendorprofilehistory.FieldCorporationType:
+		m.ClearCorporationType()
+		return nil
+	case vendorprofilehistory.FieldCorporationDba:
+		m.ClearCorporationDba()
 		return nil
 	case vendorprofilehistory.FieldDescription:
 		m.ClearDescription()
 		return nil
 	case vendorprofilehistory.FieldWebsiteURI:
 		m.ClearWebsiteURI()
+		return nil
+	case vendorprofilehistory.FieldTaxID:
+		m.ClearTaxID()
 		return nil
 	}
 	return fmt.Errorf("unknown VendorProfileHistory nullable field %s", name)
@@ -95906,14 +99604,23 @@ func (m *VendorProfileHistoryMutation) ResetField(name string) error {
 	case vendorprofilehistory.FieldName:
 		m.ResetName()
 		return nil
-	case vendorprofilehistory.FieldDbaName:
-		m.ResetDbaName()
+	case vendorprofilehistory.FieldCorporationType:
+		m.ResetCorporationType()
+		return nil
+	case vendorprofilehistory.FieldCorporationDba:
+		m.ResetCorporationDba()
 		return nil
 	case vendorprofilehistory.FieldDescription:
 		m.ResetDescription()
 		return nil
 	case vendorprofilehistory.FieldWebsiteURI:
 		m.ResetWebsiteURI()
+		return nil
+	case vendorprofilehistory.FieldTaxID:
+		m.ResetTaxID()
+		return nil
+	case vendorprofilehistory.FieldTaxIDType:
+		m.ResetTaxIDType()
 		return nil
 	}
 	return fmt.Errorf("unknown VendorProfileHistory field %s", name)
@@ -95965,6 +99672,2147 @@ func (m *VendorProfileHistoryMutation) ClearEdge(name string) error {
 // It returns an error if the edge is not defined in the schema.
 func (m *VendorProfileHistoryMutation) ResetEdge(name string) error {
 	return fmt.Errorf("unknown VendorProfileHistory edge %s", name)
+}
+
+// VendorProfilePhoneNumberMutation represents an operation that mutates the VendorProfilePhoneNumber nodes in the graph.
+type VendorProfilePhoneNumberMutation struct {
+	config
+	op                  Op
+	typ                 string
+	id                  *string
+	created_at          *time.Time
+	updated_at          *time.Time
+	created_by          *string
+	updated_by          *string
+	mapping_id          *string
+	deleted_at          *time.Time
+	deleted_by          *string
+	clearedFields       map[string]struct{}
+	phone_number        *string
+	clearedphone_number bool
+	profile             *string
+	clearedprofile      bool
+	events              map[string]struct{}
+	removedevents       map[string]struct{}
+	clearedevents       bool
+	done                bool
+	oldValue            func(context.Context) (*VendorProfilePhoneNumber, error)
+	predicates          []predicate.VendorProfilePhoneNumber
+}
+
+var _ ent.Mutation = (*VendorProfilePhoneNumberMutation)(nil)
+
+// vendorprofilephonenumberOption allows management of the mutation configuration using functional options.
+type vendorprofilephonenumberOption func(*VendorProfilePhoneNumberMutation)
+
+// newVendorProfilePhoneNumberMutation creates new mutation for the VendorProfilePhoneNumber entity.
+func newVendorProfilePhoneNumberMutation(c config, op Op, opts ...vendorprofilephonenumberOption) *VendorProfilePhoneNumberMutation {
+	m := &VendorProfilePhoneNumberMutation{
+		config:        c,
+		op:            op,
+		typ:           TypeVendorProfilePhoneNumber,
+		clearedFields: make(map[string]struct{}),
+	}
+	for _, opt := range opts {
+		opt(m)
+	}
+	return m
+}
+
+// withVendorProfilePhoneNumberID sets the ID field of the mutation.
+func withVendorProfilePhoneNumberID(id string) vendorprofilephonenumberOption {
+	return func(m *VendorProfilePhoneNumberMutation) {
+		var (
+			err   error
+			once  sync.Once
+			value *VendorProfilePhoneNumber
+		)
+		m.oldValue = func(ctx context.Context) (*VendorProfilePhoneNumber, error) {
+			once.Do(func() {
+				if m.done {
+					err = errors.New("querying old values post mutation is not allowed")
+				} else {
+					value, err = m.Client().VendorProfilePhoneNumber.Get(ctx, id)
+				}
+			})
+			return value, err
+		}
+		m.id = &id
+	}
+}
+
+// withVendorProfilePhoneNumber sets the old VendorProfilePhoneNumber of the mutation.
+func withVendorProfilePhoneNumber(node *VendorProfilePhoneNumber) vendorprofilephonenumberOption {
+	return func(m *VendorProfilePhoneNumberMutation) {
+		m.oldValue = func(context.Context) (*VendorProfilePhoneNumber, error) {
+			return node, nil
+		}
+		m.id = &node.ID
+	}
+}
+
+// Client returns a new `ent.Client` from the mutation. If the mutation was
+// executed in a transaction (ent.Tx), a transactional client is returned.
+func (m VendorProfilePhoneNumberMutation) Client() *Client {
+	client := &Client{config: m.config}
+	client.init()
+	return client
+}
+
+// Tx returns an `ent.Tx` for mutations that were executed in transactions;
+// it returns an error otherwise.
+func (m VendorProfilePhoneNumberMutation) Tx() (*Tx, error) {
+	if _, ok := m.driver.(*txDriver); !ok {
+		return nil, errors.New("generated: mutation is not running in a transaction")
+	}
+	tx := &Tx{config: m.config}
+	tx.init()
+	return tx, nil
+}
+
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of VendorProfilePhoneNumber entities.
+func (m *VendorProfilePhoneNumberMutation) SetID(id string) {
+	m.id = &id
+}
+
+// ID returns the ID value in the mutation. Note that the ID is only available
+// if it was provided to the builder or after it was returned from the database.
+func (m *VendorProfilePhoneNumberMutation) ID() (id string, exists bool) {
+	if m.id == nil {
+		return
+	}
+	return *m.id, true
+}
+
+// IDs queries the database and returns the entity ids that match the mutation's predicate.
+// That means, if the mutation is applied within a transaction with an isolation level such
+// as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
+// or updated by the mutation.
+func (m *VendorProfilePhoneNumberMutation) IDs(ctx context.Context) ([]string, error) {
+	switch {
+	case m.op.Is(OpUpdateOne | OpDeleteOne):
+		id, exists := m.ID()
+		if exists {
+			return []string{id}, nil
+		}
+		fallthrough
+	case m.op.Is(OpUpdate | OpDelete):
+		return m.Client().VendorProfilePhoneNumber.Query().Where(m.predicates...).IDs(ctx)
+	default:
+		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
+	}
+}
+
+// SetCreatedAt sets the "created_at" field.
+func (m *VendorProfilePhoneNumberMutation) SetCreatedAt(t time.Time) {
+	m.created_at = &t
+}
+
+// CreatedAt returns the value of the "created_at" field in the mutation.
+func (m *VendorProfilePhoneNumberMutation) CreatedAt() (r time.Time, exists bool) {
+	v := m.created_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedAt returns the old "created_at" field's value of the VendorProfilePhoneNumber entity.
+// If the VendorProfilePhoneNumber object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VendorProfilePhoneNumberMutation) OldCreatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedAt: %w", err)
+	}
+	return oldValue.CreatedAt, nil
+}
+
+// ClearCreatedAt clears the value of the "created_at" field.
+func (m *VendorProfilePhoneNumberMutation) ClearCreatedAt() {
+	m.created_at = nil
+	m.clearedFields[vendorprofilephonenumber.FieldCreatedAt] = struct{}{}
+}
+
+// CreatedAtCleared returns if the "created_at" field was cleared in this mutation.
+func (m *VendorProfilePhoneNumberMutation) CreatedAtCleared() bool {
+	_, ok := m.clearedFields[vendorprofilephonenumber.FieldCreatedAt]
+	return ok
+}
+
+// ResetCreatedAt resets all changes to the "created_at" field.
+func (m *VendorProfilePhoneNumberMutation) ResetCreatedAt() {
+	m.created_at = nil
+	delete(m.clearedFields, vendorprofilephonenumber.FieldCreatedAt)
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (m *VendorProfilePhoneNumberMutation) SetUpdatedAt(t time.Time) {
+	m.updated_at = &t
+}
+
+// UpdatedAt returns the value of the "updated_at" field in the mutation.
+func (m *VendorProfilePhoneNumberMutation) UpdatedAt() (r time.Time, exists bool) {
+	v := m.updated_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedAt returns the old "updated_at" field's value of the VendorProfilePhoneNumber entity.
+// If the VendorProfilePhoneNumber object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VendorProfilePhoneNumberMutation) OldUpdatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedAt: %w", err)
+	}
+	return oldValue.UpdatedAt, nil
+}
+
+// ClearUpdatedAt clears the value of the "updated_at" field.
+func (m *VendorProfilePhoneNumberMutation) ClearUpdatedAt() {
+	m.updated_at = nil
+	m.clearedFields[vendorprofilephonenumber.FieldUpdatedAt] = struct{}{}
+}
+
+// UpdatedAtCleared returns if the "updated_at" field was cleared in this mutation.
+func (m *VendorProfilePhoneNumberMutation) UpdatedAtCleared() bool {
+	_, ok := m.clearedFields[vendorprofilephonenumber.FieldUpdatedAt]
+	return ok
+}
+
+// ResetUpdatedAt resets all changes to the "updated_at" field.
+func (m *VendorProfilePhoneNumberMutation) ResetUpdatedAt() {
+	m.updated_at = nil
+	delete(m.clearedFields, vendorprofilephonenumber.FieldUpdatedAt)
+}
+
+// SetCreatedBy sets the "created_by" field.
+func (m *VendorProfilePhoneNumberMutation) SetCreatedBy(s string) {
+	m.created_by = &s
+}
+
+// CreatedBy returns the value of the "created_by" field in the mutation.
+func (m *VendorProfilePhoneNumberMutation) CreatedBy() (r string, exists bool) {
+	v := m.created_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedBy returns the old "created_by" field's value of the VendorProfilePhoneNumber entity.
+// If the VendorProfilePhoneNumber object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VendorProfilePhoneNumberMutation) OldCreatedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedBy: %w", err)
+	}
+	return oldValue.CreatedBy, nil
+}
+
+// ClearCreatedBy clears the value of the "created_by" field.
+func (m *VendorProfilePhoneNumberMutation) ClearCreatedBy() {
+	m.created_by = nil
+	m.clearedFields[vendorprofilephonenumber.FieldCreatedBy] = struct{}{}
+}
+
+// CreatedByCleared returns if the "created_by" field was cleared in this mutation.
+func (m *VendorProfilePhoneNumberMutation) CreatedByCleared() bool {
+	_, ok := m.clearedFields[vendorprofilephonenumber.FieldCreatedBy]
+	return ok
+}
+
+// ResetCreatedBy resets all changes to the "created_by" field.
+func (m *VendorProfilePhoneNumberMutation) ResetCreatedBy() {
+	m.created_by = nil
+	delete(m.clearedFields, vendorprofilephonenumber.FieldCreatedBy)
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (m *VendorProfilePhoneNumberMutation) SetUpdatedBy(s string) {
+	m.updated_by = &s
+}
+
+// UpdatedBy returns the value of the "updated_by" field in the mutation.
+func (m *VendorProfilePhoneNumberMutation) UpdatedBy() (r string, exists bool) {
+	v := m.updated_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedBy returns the old "updated_by" field's value of the VendorProfilePhoneNumber entity.
+// If the VendorProfilePhoneNumber object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VendorProfilePhoneNumberMutation) OldUpdatedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedBy: %w", err)
+	}
+	return oldValue.UpdatedBy, nil
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (m *VendorProfilePhoneNumberMutation) ClearUpdatedBy() {
+	m.updated_by = nil
+	m.clearedFields[vendorprofilephonenumber.FieldUpdatedBy] = struct{}{}
+}
+
+// UpdatedByCleared returns if the "updated_by" field was cleared in this mutation.
+func (m *VendorProfilePhoneNumberMutation) UpdatedByCleared() bool {
+	_, ok := m.clearedFields[vendorprofilephonenumber.FieldUpdatedBy]
+	return ok
+}
+
+// ResetUpdatedBy resets all changes to the "updated_by" field.
+func (m *VendorProfilePhoneNumberMutation) ResetUpdatedBy() {
+	m.updated_by = nil
+	delete(m.clearedFields, vendorprofilephonenumber.FieldUpdatedBy)
+}
+
+// SetMappingID sets the "mapping_id" field.
+func (m *VendorProfilePhoneNumberMutation) SetMappingID(s string) {
+	m.mapping_id = &s
+}
+
+// MappingID returns the value of the "mapping_id" field in the mutation.
+func (m *VendorProfilePhoneNumberMutation) MappingID() (r string, exists bool) {
+	v := m.mapping_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldMappingID returns the old "mapping_id" field's value of the VendorProfilePhoneNumber entity.
+// If the VendorProfilePhoneNumber object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VendorProfilePhoneNumberMutation) OldMappingID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldMappingID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldMappingID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldMappingID: %w", err)
+	}
+	return oldValue.MappingID, nil
+}
+
+// ResetMappingID resets all changes to the "mapping_id" field.
+func (m *VendorProfilePhoneNumberMutation) ResetMappingID() {
+	m.mapping_id = nil
+}
+
+// SetDeletedAt sets the "deleted_at" field.
+func (m *VendorProfilePhoneNumberMutation) SetDeletedAt(t time.Time) {
+	m.deleted_at = &t
+}
+
+// DeletedAt returns the value of the "deleted_at" field in the mutation.
+func (m *VendorProfilePhoneNumberMutation) DeletedAt() (r time.Time, exists bool) {
+	v := m.deleted_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDeletedAt returns the old "deleted_at" field's value of the VendorProfilePhoneNumber entity.
+// If the VendorProfilePhoneNumber object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VendorProfilePhoneNumberMutation) OldDeletedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDeletedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDeletedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDeletedAt: %w", err)
+	}
+	return oldValue.DeletedAt, nil
+}
+
+// ClearDeletedAt clears the value of the "deleted_at" field.
+func (m *VendorProfilePhoneNumberMutation) ClearDeletedAt() {
+	m.deleted_at = nil
+	m.clearedFields[vendorprofilephonenumber.FieldDeletedAt] = struct{}{}
+}
+
+// DeletedAtCleared returns if the "deleted_at" field was cleared in this mutation.
+func (m *VendorProfilePhoneNumberMutation) DeletedAtCleared() bool {
+	_, ok := m.clearedFields[vendorprofilephonenumber.FieldDeletedAt]
+	return ok
+}
+
+// ResetDeletedAt resets all changes to the "deleted_at" field.
+func (m *VendorProfilePhoneNumberMutation) ResetDeletedAt() {
+	m.deleted_at = nil
+	delete(m.clearedFields, vendorprofilephonenumber.FieldDeletedAt)
+}
+
+// SetDeletedBy sets the "deleted_by" field.
+func (m *VendorProfilePhoneNumberMutation) SetDeletedBy(s string) {
+	m.deleted_by = &s
+}
+
+// DeletedBy returns the value of the "deleted_by" field in the mutation.
+func (m *VendorProfilePhoneNumberMutation) DeletedBy() (r string, exists bool) {
+	v := m.deleted_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDeletedBy returns the old "deleted_by" field's value of the VendorProfilePhoneNumber entity.
+// If the VendorProfilePhoneNumber object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VendorProfilePhoneNumberMutation) OldDeletedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDeletedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDeletedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDeletedBy: %w", err)
+	}
+	return oldValue.DeletedBy, nil
+}
+
+// ClearDeletedBy clears the value of the "deleted_by" field.
+func (m *VendorProfilePhoneNumberMutation) ClearDeletedBy() {
+	m.deleted_by = nil
+	m.clearedFields[vendorprofilephonenumber.FieldDeletedBy] = struct{}{}
+}
+
+// DeletedByCleared returns if the "deleted_by" field was cleared in this mutation.
+func (m *VendorProfilePhoneNumberMutation) DeletedByCleared() bool {
+	_, ok := m.clearedFields[vendorprofilephonenumber.FieldDeletedBy]
+	return ok
+}
+
+// ResetDeletedBy resets all changes to the "deleted_by" field.
+func (m *VendorProfilePhoneNumberMutation) ResetDeletedBy() {
+	m.deleted_by = nil
+	delete(m.clearedFields, vendorprofilephonenumber.FieldDeletedBy)
+}
+
+// SetVendorProfileID sets the "vendor_profile_id" field.
+func (m *VendorProfilePhoneNumberMutation) SetVendorProfileID(s string) {
+	m.profile = &s
+}
+
+// VendorProfileID returns the value of the "vendor_profile_id" field in the mutation.
+func (m *VendorProfilePhoneNumberMutation) VendorProfileID() (r string, exists bool) {
+	v := m.profile
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldVendorProfileID returns the old "vendor_profile_id" field's value of the VendorProfilePhoneNumber entity.
+// If the VendorProfilePhoneNumber object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VendorProfilePhoneNumberMutation) OldVendorProfileID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldVendorProfileID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldVendorProfileID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldVendorProfileID: %w", err)
+	}
+	return oldValue.VendorProfileID, nil
+}
+
+// ResetVendorProfileID resets all changes to the "vendor_profile_id" field.
+func (m *VendorProfilePhoneNumberMutation) ResetVendorProfileID() {
+	m.profile = nil
+}
+
+// SetPhoneNumberID sets the "phone_number_id" field.
+func (m *VendorProfilePhoneNumberMutation) SetPhoneNumberID(s string) {
+	m.phone_number = &s
+}
+
+// PhoneNumberID returns the value of the "phone_number_id" field in the mutation.
+func (m *VendorProfilePhoneNumberMutation) PhoneNumberID() (r string, exists bool) {
+	v := m.phone_number
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldPhoneNumberID returns the old "phone_number_id" field's value of the VendorProfilePhoneNumber entity.
+// If the VendorProfilePhoneNumber object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VendorProfilePhoneNumberMutation) OldPhoneNumberID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldPhoneNumberID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldPhoneNumberID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldPhoneNumberID: %w", err)
+	}
+	return oldValue.PhoneNumberID, nil
+}
+
+// ResetPhoneNumberID resets all changes to the "phone_number_id" field.
+func (m *VendorProfilePhoneNumberMutation) ResetPhoneNumberID() {
+	m.phone_number = nil
+}
+
+// ClearPhoneNumber clears the "phone_number" edge to the PhoneNumber entity.
+func (m *VendorProfilePhoneNumberMutation) ClearPhoneNumber() {
+	m.clearedphone_number = true
+	m.clearedFields[vendorprofilephonenumber.FieldPhoneNumberID] = struct{}{}
+}
+
+// PhoneNumberCleared reports if the "phone_number" edge to the PhoneNumber entity was cleared.
+func (m *VendorProfilePhoneNumberMutation) PhoneNumberCleared() bool {
+	return m.clearedphone_number
+}
+
+// PhoneNumberIDs returns the "phone_number" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// PhoneNumberID instead. It exists only for internal usage by the builders.
+func (m *VendorProfilePhoneNumberMutation) PhoneNumberIDs() (ids []string) {
+	if id := m.phone_number; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetPhoneNumber resets all changes to the "phone_number" edge.
+func (m *VendorProfilePhoneNumberMutation) ResetPhoneNumber() {
+	m.phone_number = nil
+	m.clearedphone_number = false
+}
+
+// SetProfileID sets the "profile" edge to the VendorProfile entity by id.
+func (m *VendorProfilePhoneNumberMutation) SetProfileID(id string) {
+	m.profile = &id
+}
+
+// ClearProfile clears the "profile" edge to the VendorProfile entity.
+func (m *VendorProfilePhoneNumberMutation) ClearProfile() {
+	m.clearedprofile = true
+	m.clearedFields[vendorprofilephonenumber.FieldVendorProfileID] = struct{}{}
+}
+
+// ProfileCleared reports if the "profile" edge to the VendorProfile entity was cleared.
+func (m *VendorProfilePhoneNumberMutation) ProfileCleared() bool {
+	return m.clearedprofile
+}
+
+// ProfileID returns the "profile" edge ID in the mutation.
+func (m *VendorProfilePhoneNumberMutation) ProfileID() (id string, exists bool) {
+	if m.profile != nil {
+		return *m.profile, true
+	}
+	return
+}
+
+// ProfileIDs returns the "profile" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// ProfileID instead. It exists only for internal usage by the builders.
+func (m *VendorProfilePhoneNumberMutation) ProfileIDs() (ids []string) {
+	if id := m.profile; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetProfile resets all changes to the "profile" edge.
+func (m *VendorProfilePhoneNumberMutation) ResetProfile() {
+	m.profile = nil
+	m.clearedprofile = false
+}
+
+// AddEventIDs adds the "events" edge to the Event entity by ids.
+func (m *VendorProfilePhoneNumberMutation) AddEventIDs(ids ...string) {
+	if m.events == nil {
+		m.events = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.events[ids[i]] = struct{}{}
+	}
+}
+
+// ClearEvents clears the "events" edge to the Event entity.
+func (m *VendorProfilePhoneNumberMutation) ClearEvents() {
+	m.clearedevents = true
+}
+
+// EventsCleared reports if the "events" edge to the Event entity was cleared.
+func (m *VendorProfilePhoneNumberMutation) EventsCleared() bool {
+	return m.clearedevents
+}
+
+// RemoveEventIDs removes the "events" edge to the Event entity by IDs.
+func (m *VendorProfilePhoneNumberMutation) RemoveEventIDs(ids ...string) {
+	if m.removedevents == nil {
+		m.removedevents = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.events, ids[i])
+		m.removedevents[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedEvents returns the removed IDs of the "events" edge to the Event entity.
+func (m *VendorProfilePhoneNumberMutation) RemovedEventsIDs() (ids []string) {
+	for id := range m.removedevents {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// EventsIDs returns the "events" edge IDs in the mutation.
+func (m *VendorProfilePhoneNumberMutation) EventsIDs() (ids []string) {
+	for id := range m.events {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetEvents resets all changes to the "events" edge.
+func (m *VendorProfilePhoneNumberMutation) ResetEvents() {
+	m.events = nil
+	m.clearedevents = false
+	m.removedevents = nil
+}
+
+// Where appends a list predicates to the VendorProfilePhoneNumberMutation builder.
+func (m *VendorProfilePhoneNumberMutation) Where(ps ...predicate.VendorProfilePhoneNumber) {
+	m.predicates = append(m.predicates, ps...)
+}
+
+// WhereP appends storage-level predicates to the VendorProfilePhoneNumberMutation builder. Using this method,
+// users can use type-assertion to append predicates that do not depend on any generated package.
+func (m *VendorProfilePhoneNumberMutation) WhereP(ps ...func(*sql.Selector)) {
+	p := make([]predicate.VendorProfilePhoneNumber, len(ps))
+	for i := range ps {
+		p[i] = ps[i]
+	}
+	m.Where(p...)
+}
+
+// Op returns the operation name.
+func (m *VendorProfilePhoneNumberMutation) Op() Op {
+	return m.op
+}
+
+// SetOp allows setting the mutation operation.
+func (m *VendorProfilePhoneNumberMutation) SetOp(op Op) {
+	m.op = op
+}
+
+// Type returns the node type of this mutation (VendorProfilePhoneNumber).
+func (m *VendorProfilePhoneNumberMutation) Type() string {
+	return m.typ
+}
+
+// Fields returns all fields that were changed during this mutation. Note that in
+// order to get all numeric fields that were incremented/decremented, call
+// AddedFields().
+func (m *VendorProfilePhoneNumberMutation) Fields() []string {
+	fields := make([]string, 0, 9)
+	if m.created_at != nil {
+		fields = append(fields, vendorprofilephonenumber.FieldCreatedAt)
+	}
+	if m.updated_at != nil {
+		fields = append(fields, vendorprofilephonenumber.FieldUpdatedAt)
+	}
+	if m.created_by != nil {
+		fields = append(fields, vendorprofilephonenumber.FieldCreatedBy)
+	}
+	if m.updated_by != nil {
+		fields = append(fields, vendorprofilephonenumber.FieldUpdatedBy)
+	}
+	if m.mapping_id != nil {
+		fields = append(fields, vendorprofilephonenumber.FieldMappingID)
+	}
+	if m.deleted_at != nil {
+		fields = append(fields, vendorprofilephonenumber.FieldDeletedAt)
+	}
+	if m.deleted_by != nil {
+		fields = append(fields, vendorprofilephonenumber.FieldDeletedBy)
+	}
+	if m.profile != nil {
+		fields = append(fields, vendorprofilephonenumber.FieldVendorProfileID)
+	}
+	if m.phone_number != nil {
+		fields = append(fields, vendorprofilephonenumber.FieldPhoneNumberID)
+	}
+	return fields
+}
+
+// Field returns the value of a field with the given name. The second boolean
+// return value indicates that this field was not set, or was not defined in the
+// schema.
+func (m *VendorProfilePhoneNumberMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case vendorprofilephonenumber.FieldCreatedAt:
+		return m.CreatedAt()
+	case vendorprofilephonenumber.FieldUpdatedAt:
+		return m.UpdatedAt()
+	case vendorprofilephonenumber.FieldCreatedBy:
+		return m.CreatedBy()
+	case vendorprofilephonenumber.FieldUpdatedBy:
+		return m.UpdatedBy()
+	case vendorprofilephonenumber.FieldMappingID:
+		return m.MappingID()
+	case vendorprofilephonenumber.FieldDeletedAt:
+		return m.DeletedAt()
+	case vendorprofilephonenumber.FieldDeletedBy:
+		return m.DeletedBy()
+	case vendorprofilephonenumber.FieldVendorProfileID:
+		return m.VendorProfileID()
+	case vendorprofilephonenumber.FieldPhoneNumberID:
+		return m.PhoneNumberID()
+	}
+	return nil, false
+}
+
+// OldField returns the old value of the field from the database. An error is
+// returned if the mutation operation is not UpdateOne, or the query to the
+// database failed.
+func (m *VendorProfilePhoneNumberMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case vendorprofilephonenumber.FieldCreatedAt:
+		return m.OldCreatedAt(ctx)
+	case vendorprofilephonenumber.FieldUpdatedAt:
+		return m.OldUpdatedAt(ctx)
+	case vendorprofilephonenumber.FieldCreatedBy:
+		return m.OldCreatedBy(ctx)
+	case vendorprofilephonenumber.FieldUpdatedBy:
+		return m.OldUpdatedBy(ctx)
+	case vendorprofilephonenumber.FieldMappingID:
+		return m.OldMappingID(ctx)
+	case vendorprofilephonenumber.FieldDeletedAt:
+		return m.OldDeletedAt(ctx)
+	case vendorprofilephonenumber.FieldDeletedBy:
+		return m.OldDeletedBy(ctx)
+	case vendorprofilephonenumber.FieldVendorProfileID:
+		return m.OldVendorProfileID(ctx)
+	case vendorprofilephonenumber.FieldPhoneNumberID:
+		return m.OldPhoneNumberID(ctx)
+	}
+	return nil, fmt.Errorf("unknown VendorProfilePhoneNumber field %s", name)
+}
+
+// SetField sets the value of a field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *VendorProfilePhoneNumberMutation) SetField(name string, value ent.Value) error {
+	switch name {
+	case vendorprofilephonenumber.FieldCreatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedAt(v)
+		return nil
+	case vendorprofilephonenumber.FieldUpdatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedAt(v)
+		return nil
+	case vendorprofilephonenumber.FieldCreatedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedBy(v)
+		return nil
+	case vendorprofilephonenumber.FieldUpdatedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedBy(v)
+		return nil
+	case vendorprofilephonenumber.FieldMappingID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetMappingID(v)
+		return nil
+	case vendorprofilephonenumber.FieldDeletedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDeletedAt(v)
+		return nil
+	case vendorprofilephonenumber.FieldDeletedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDeletedBy(v)
+		return nil
+	case vendorprofilephonenumber.FieldVendorProfileID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetVendorProfileID(v)
+		return nil
+	case vendorprofilephonenumber.FieldPhoneNumberID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetPhoneNumberID(v)
+		return nil
+	}
+	return fmt.Errorf("unknown VendorProfilePhoneNumber field %s", name)
+}
+
+// AddedFields returns all numeric fields that were incremented/decremented during
+// this mutation.
+func (m *VendorProfilePhoneNumberMutation) AddedFields() []string {
+	return nil
+}
+
+// AddedField returns the numeric value that was incremented/decremented on a field
+// with the given name. The second boolean return value indicates that this field
+// was not set, or was not defined in the schema.
+func (m *VendorProfilePhoneNumberMutation) AddedField(name string) (ent.Value, bool) {
+	return nil, false
+}
+
+// AddField adds the value to the field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *VendorProfilePhoneNumberMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	}
+	return fmt.Errorf("unknown VendorProfilePhoneNumber numeric field %s", name)
+}
+
+// ClearedFields returns all nullable fields that were cleared during this
+// mutation.
+func (m *VendorProfilePhoneNumberMutation) ClearedFields() []string {
+	var fields []string
+	if m.FieldCleared(vendorprofilephonenumber.FieldCreatedAt) {
+		fields = append(fields, vendorprofilephonenumber.FieldCreatedAt)
+	}
+	if m.FieldCleared(vendorprofilephonenumber.FieldUpdatedAt) {
+		fields = append(fields, vendorprofilephonenumber.FieldUpdatedAt)
+	}
+	if m.FieldCleared(vendorprofilephonenumber.FieldCreatedBy) {
+		fields = append(fields, vendorprofilephonenumber.FieldCreatedBy)
+	}
+	if m.FieldCleared(vendorprofilephonenumber.FieldUpdatedBy) {
+		fields = append(fields, vendorprofilephonenumber.FieldUpdatedBy)
+	}
+	if m.FieldCleared(vendorprofilephonenumber.FieldDeletedAt) {
+		fields = append(fields, vendorprofilephonenumber.FieldDeletedAt)
+	}
+	if m.FieldCleared(vendorprofilephonenumber.FieldDeletedBy) {
+		fields = append(fields, vendorprofilephonenumber.FieldDeletedBy)
+	}
+	return fields
+}
+
+// FieldCleared returns a boolean indicating if a field with the given name was
+// cleared in this mutation.
+func (m *VendorProfilePhoneNumberMutation) FieldCleared(name string) bool {
+	_, ok := m.clearedFields[name]
+	return ok
+}
+
+// ClearField clears the value of the field with the given name. It returns an
+// error if the field is not defined in the schema.
+func (m *VendorProfilePhoneNumberMutation) ClearField(name string) error {
+	switch name {
+	case vendorprofilephonenumber.FieldCreatedAt:
+		m.ClearCreatedAt()
+		return nil
+	case vendorprofilephonenumber.FieldUpdatedAt:
+		m.ClearUpdatedAt()
+		return nil
+	case vendorprofilephonenumber.FieldCreatedBy:
+		m.ClearCreatedBy()
+		return nil
+	case vendorprofilephonenumber.FieldUpdatedBy:
+		m.ClearUpdatedBy()
+		return nil
+	case vendorprofilephonenumber.FieldDeletedAt:
+		m.ClearDeletedAt()
+		return nil
+	case vendorprofilephonenumber.FieldDeletedBy:
+		m.ClearDeletedBy()
+		return nil
+	}
+	return fmt.Errorf("unknown VendorProfilePhoneNumber nullable field %s", name)
+}
+
+// ResetField resets all changes in the mutation for the field with the given name.
+// It returns an error if the field is not defined in the schema.
+func (m *VendorProfilePhoneNumberMutation) ResetField(name string) error {
+	switch name {
+	case vendorprofilephonenumber.FieldCreatedAt:
+		m.ResetCreatedAt()
+		return nil
+	case vendorprofilephonenumber.FieldUpdatedAt:
+		m.ResetUpdatedAt()
+		return nil
+	case vendorprofilephonenumber.FieldCreatedBy:
+		m.ResetCreatedBy()
+		return nil
+	case vendorprofilephonenumber.FieldUpdatedBy:
+		m.ResetUpdatedBy()
+		return nil
+	case vendorprofilephonenumber.FieldMappingID:
+		m.ResetMappingID()
+		return nil
+	case vendorprofilephonenumber.FieldDeletedAt:
+		m.ResetDeletedAt()
+		return nil
+	case vendorprofilephonenumber.FieldDeletedBy:
+		m.ResetDeletedBy()
+		return nil
+	case vendorprofilephonenumber.FieldVendorProfileID:
+		m.ResetVendorProfileID()
+		return nil
+	case vendorprofilephonenumber.FieldPhoneNumberID:
+		m.ResetPhoneNumberID()
+		return nil
+	}
+	return fmt.Errorf("unknown VendorProfilePhoneNumber field %s", name)
+}
+
+// AddedEdges returns all edge names that were set/added in this mutation.
+func (m *VendorProfilePhoneNumberMutation) AddedEdges() []string {
+	edges := make([]string, 0, 3)
+	if m.phone_number != nil {
+		edges = append(edges, vendorprofilephonenumber.EdgePhoneNumber)
+	}
+	if m.profile != nil {
+		edges = append(edges, vendorprofilephonenumber.EdgeProfile)
+	}
+	if m.events != nil {
+		edges = append(edges, vendorprofilephonenumber.EdgeEvents)
+	}
+	return edges
+}
+
+// AddedIDs returns all IDs (to other nodes) that were added for the given edge
+// name in this mutation.
+func (m *VendorProfilePhoneNumberMutation) AddedIDs(name string) []ent.Value {
+	switch name {
+	case vendorprofilephonenumber.EdgePhoneNumber:
+		if id := m.phone_number; id != nil {
+			return []ent.Value{*id}
+		}
+	case vendorprofilephonenumber.EdgeProfile:
+		if id := m.profile; id != nil {
+			return []ent.Value{*id}
+		}
+	case vendorprofilephonenumber.EdgeEvents:
+		ids := make([]ent.Value, 0, len(m.events))
+		for id := range m.events {
+			ids = append(ids, id)
+		}
+		return ids
+	}
+	return nil
+}
+
+// RemovedEdges returns all edge names that were removed in this mutation.
+func (m *VendorProfilePhoneNumberMutation) RemovedEdges() []string {
+	edges := make([]string, 0, 3)
+	if m.removedevents != nil {
+		edges = append(edges, vendorprofilephonenumber.EdgeEvents)
+	}
+	return edges
+}
+
+// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
+// the given name in this mutation.
+func (m *VendorProfilePhoneNumberMutation) RemovedIDs(name string) []ent.Value {
+	switch name {
+	case vendorprofilephonenumber.EdgeEvents:
+		ids := make([]ent.Value, 0, len(m.removedevents))
+		for id := range m.removedevents {
+			ids = append(ids, id)
+		}
+		return ids
+	}
+	return nil
+}
+
+// ClearedEdges returns all edge names that were cleared in this mutation.
+func (m *VendorProfilePhoneNumberMutation) ClearedEdges() []string {
+	edges := make([]string, 0, 3)
+	if m.clearedphone_number {
+		edges = append(edges, vendorprofilephonenumber.EdgePhoneNumber)
+	}
+	if m.clearedprofile {
+		edges = append(edges, vendorprofilephonenumber.EdgeProfile)
+	}
+	if m.clearedevents {
+		edges = append(edges, vendorprofilephonenumber.EdgeEvents)
+	}
+	return edges
+}
+
+// EdgeCleared returns a boolean which indicates if the edge with the given name
+// was cleared in this mutation.
+func (m *VendorProfilePhoneNumberMutation) EdgeCleared(name string) bool {
+	switch name {
+	case vendorprofilephonenumber.EdgePhoneNumber:
+		return m.clearedphone_number
+	case vendorprofilephonenumber.EdgeProfile:
+		return m.clearedprofile
+	case vendorprofilephonenumber.EdgeEvents:
+		return m.clearedevents
+	}
+	return false
+}
+
+// ClearEdge clears the value of the edge with the given name. It returns an error
+// if that edge is not defined in the schema.
+func (m *VendorProfilePhoneNumberMutation) ClearEdge(name string) error {
+	switch name {
+	case vendorprofilephonenumber.EdgePhoneNumber:
+		m.ClearPhoneNumber()
+		return nil
+	case vendorprofilephonenumber.EdgeProfile:
+		m.ClearProfile()
+		return nil
+	}
+	return fmt.Errorf("unknown VendorProfilePhoneNumber unique edge %s", name)
+}
+
+// ResetEdge resets all changes to the edge with the given name in this mutation.
+// It returns an error if the edge is not defined in the schema.
+func (m *VendorProfilePhoneNumberMutation) ResetEdge(name string) error {
+	switch name {
+	case vendorprofilephonenumber.EdgePhoneNumber:
+		m.ResetPhoneNumber()
+		return nil
+	case vendorprofilephonenumber.EdgeProfile:
+		m.ResetProfile()
+		return nil
+	case vendorprofilephonenumber.EdgeEvents:
+		m.ResetEvents()
+		return nil
+	}
+	return fmt.Errorf("unknown VendorProfilePhoneNumber edge %s", name)
+}
+
+// VendorProfilePhoneNumberHistoryMutation represents an operation that mutates the VendorProfilePhoneNumberHistory nodes in the graph.
+type VendorProfilePhoneNumberHistoryMutation struct {
+	config
+	op                Op
+	typ               string
+	id                *string
+	history_time      *time.Time
+	ref               *string
+	operation         *enthistory.OpType
+	created_at        *time.Time
+	updated_at        *time.Time
+	created_by        *string
+	updated_by        *string
+	mapping_id        *string
+	deleted_at        *time.Time
+	deleted_by        *string
+	vendor_profile_id *string
+	phone_number_id   *string
+	clearedFields     map[string]struct{}
+	done              bool
+	oldValue          func(context.Context) (*VendorProfilePhoneNumberHistory, error)
+	predicates        []predicate.VendorProfilePhoneNumberHistory
+}
+
+var _ ent.Mutation = (*VendorProfilePhoneNumberHistoryMutation)(nil)
+
+// vendorprofilephonenumberhistoryOption allows management of the mutation configuration using functional options.
+type vendorprofilephonenumberhistoryOption func(*VendorProfilePhoneNumberHistoryMutation)
+
+// newVendorProfilePhoneNumberHistoryMutation creates new mutation for the VendorProfilePhoneNumberHistory entity.
+func newVendorProfilePhoneNumberHistoryMutation(c config, op Op, opts ...vendorprofilephonenumberhistoryOption) *VendorProfilePhoneNumberHistoryMutation {
+	m := &VendorProfilePhoneNumberHistoryMutation{
+		config:        c,
+		op:            op,
+		typ:           TypeVendorProfilePhoneNumberHistory,
+		clearedFields: make(map[string]struct{}),
+	}
+	for _, opt := range opts {
+		opt(m)
+	}
+	return m
+}
+
+// withVendorProfilePhoneNumberHistoryID sets the ID field of the mutation.
+func withVendorProfilePhoneNumberHistoryID(id string) vendorprofilephonenumberhistoryOption {
+	return func(m *VendorProfilePhoneNumberHistoryMutation) {
+		var (
+			err   error
+			once  sync.Once
+			value *VendorProfilePhoneNumberHistory
+		)
+		m.oldValue = func(ctx context.Context) (*VendorProfilePhoneNumberHistory, error) {
+			once.Do(func() {
+				if m.done {
+					err = errors.New("querying old values post mutation is not allowed")
+				} else {
+					value, err = m.Client().VendorProfilePhoneNumberHistory.Get(ctx, id)
+				}
+			})
+			return value, err
+		}
+		m.id = &id
+	}
+}
+
+// withVendorProfilePhoneNumberHistory sets the old VendorProfilePhoneNumberHistory of the mutation.
+func withVendorProfilePhoneNumberHistory(node *VendorProfilePhoneNumberHistory) vendorprofilephonenumberhistoryOption {
+	return func(m *VendorProfilePhoneNumberHistoryMutation) {
+		m.oldValue = func(context.Context) (*VendorProfilePhoneNumberHistory, error) {
+			return node, nil
+		}
+		m.id = &node.ID
+	}
+}
+
+// Client returns a new `ent.Client` from the mutation. If the mutation was
+// executed in a transaction (ent.Tx), a transactional client is returned.
+func (m VendorProfilePhoneNumberHistoryMutation) Client() *Client {
+	client := &Client{config: m.config}
+	client.init()
+	return client
+}
+
+// Tx returns an `ent.Tx` for mutations that were executed in transactions;
+// it returns an error otherwise.
+func (m VendorProfilePhoneNumberHistoryMutation) Tx() (*Tx, error) {
+	if _, ok := m.driver.(*txDriver); !ok {
+		return nil, errors.New("generated: mutation is not running in a transaction")
+	}
+	tx := &Tx{config: m.config}
+	tx.init()
+	return tx, nil
+}
+
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of VendorProfilePhoneNumberHistory entities.
+func (m *VendorProfilePhoneNumberHistoryMutation) SetID(id string) {
+	m.id = &id
+}
+
+// ID returns the ID value in the mutation. Note that the ID is only available
+// if it was provided to the builder or after it was returned from the database.
+func (m *VendorProfilePhoneNumberHistoryMutation) ID() (id string, exists bool) {
+	if m.id == nil {
+		return
+	}
+	return *m.id, true
+}
+
+// IDs queries the database and returns the entity ids that match the mutation's predicate.
+// That means, if the mutation is applied within a transaction with an isolation level such
+// as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
+// or updated by the mutation.
+func (m *VendorProfilePhoneNumberHistoryMutation) IDs(ctx context.Context) ([]string, error) {
+	switch {
+	case m.op.Is(OpUpdateOne | OpDeleteOne):
+		id, exists := m.ID()
+		if exists {
+			return []string{id}, nil
+		}
+		fallthrough
+	case m.op.Is(OpUpdate | OpDelete):
+		return m.Client().VendorProfilePhoneNumberHistory.Query().Where(m.predicates...).IDs(ctx)
+	default:
+		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
+	}
+}
+
+// SetHistoryTime sets the "history_time" field.
+func (m *VendorProfilePhoneNumberHistoryMutation) SetHistoryTime(t time.Time) {
+	m.history_time = &t
+}
+
+// HistoryTime returns the value of the "history_time" field in the mutation.
+func (m *VendorProfilePhoneNumberHistoryMutation) HistoryTime() (r time.Time, exists bool) {
+	v := m.history_time
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldHistoryTime returns the old "history_time" field's value of the VendorProfilePhoneNumberHistory entity.
+// If the VendorProfilePhoneNumberHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VendorProfilePhoneNumberHistoryMutation) OldHistoryTime(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldHistoryTime is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldHistoryTime requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldHistoryTime: %w", err)
+	}
+	return oldValue.HistoryTime, nil
+}
+
+// ResetHistoryTime resets all changes to the "history_time" field.
+func (m *VendorProfilePhoneNumberHistoryMutation) ResetHistoryTime() {
+	m.history_time = nil
+}
+
+// SetRef sets the "ref" field.
+func (m *VendorProfilePhoneNumberHistoryMutation) SetRef(s string) {
+	m.ref = &s
+}
+
+// Ref returns the value of the "ref" field in the mutation.
+func (m *VendorProfilePhoneNumberHistoryMutation) Ref() (r string, exists bool) {
+	v := m.ref
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldRef returns the old "ref" field's value of the VendorProfilePhoneNumberHistory entity.
+// If the VendorProfilePhoneNumberHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VendorProfilePhoneNumberHistoryMutation) OldRef(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldRef is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldRef requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldRef: %w", err)
+	}
+	return oldValue.Ref, nil
+}
+
+// ClearRef clears the value of the "ref" field.
+func (m *VendorProfilePhoneNumberHistoryMutation) ClearRef() {
+	m.ref = nil
+	m.clearedFields[vendorprofilephonenumberhistory.FieldRef] = struct{}{}
+}
+
+// RefCleared returns if the "ref" field was cleared in this mutation.
+func (m *VendorProfilePhoneNumberHistoryMutation) RefCleared() bool {
+	_, ok := m.clearedFields[vendorprofilephonenumberhistory.FieldRef]
+	return ok
+}
+
+// ResetRef resets all changes to the "ref" field.
+func (m *VendorProfilePhoneNumberHistoryMutation) ResetRef() {
+	m.ref = nil
+	delete(m.clearedFields, vendorprofilephonenumberhistory.FieldRef)
+}
+
+// SetOperation sets the "operation" field.
+func (m *VendorProfilePhoneNumberHistoryMutation) SetOperation(et enthistory.OpType) {
+	m.operation = &et
+}
+
+// Operation returns the value of the "operation" field in the mutation.
+func (m *VendorProfilePhoneNumberHistoryMutation) Operation() (r enthistory.OpType, exists bool) {
+	v := m.operation
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldOperation returns the old "operation" field's value of the VendorProfilePhoneNumberHistory entity.
+// If the VendorProfilePhoneNumberHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VendorProfilePhoneNumberHistoryMutation) OldOperation(ctx context.Context) (v enthistory.OpType, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldOperation is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldOperation requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldOperation: %w", err)
+	}
+	return oldValue.Operation, nil
+}
+
+// ResetOperation resets all changes to the "operation" field.
+func (m *VendorProfilePhoneNumberHistoryMutation) ResetOperation() {
+	m.operation = nil
+}
+
+// SetCreatedAt sets the "created_at" field.
+func (m *VendorProfilePhoneNumberHistoryMutation) SetCreatedAt(t time.Time) {
+	m.created_at = &t
+}
+
+// CreatedAt returns the value of the "created_at" field in the mutation.
+func (m *VendorProfilePhoneNumberHistoryMutation) CreatedAt() (r time.Time, exists bool) {
+	v := m.created_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedAt returns the old "created_at" field's value of the VendorProfilePhoneNumberHistory entity.
+// If the VendorProfilePhoneNumberHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VendorProfilePhoneNumberHistoryMutation) OldCreatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedAt: %w", err)
+	}
+	return oldValue.CreatedAt, nil
+}
+
+// ClearCreatedAt clears the value of the "created_at" field.
+func (m *VendorProfilePhoneNumberHistoryMutation) ClearCreatedAt() {
+	m.created_at = nil
+	m.clearedFields[vendorprofilephonenumberhistory.FieldCreatedAt] = struct{}{}
+}
+
+// CreatedAtCleared returns if the "created_at" field was cleared in this mutation.
+func (m *VendorProfilePhoneNumberHistoryMutation) CreatedAtCleared() bool {
+	_, ok := m.clearedFields[vendorprofilephonenumberhistory.FieldCreatedAt]
+	return ok
+}
+
+// ResetCreatedAt resets all changes to the "created_at" field.
+func (m *VendorProfilePhoneNumberHistoryMutation) ResetCreatedAt() {
+	m.created_at = nil
+	delete(m.clearedFields, vendorprofilephonenumberhistory.FieldCreatedAt)
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (m *VendorProfilePhoneNumberHistoryMutation) SetUpdatedAt(t time.Time) {
+	m.updated_at = &t
+}
+
+// UpdatedAt returns the value of the "updated_at" field in the mutation.
+func (m *VendorProfilePhoneNumberHistoryMutation) UpdatedAt() (r time.Time, exists bool) {
+	v := m.updated_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedAt returns the old "updated_at" field's value of the VendorProfilePhoneNumberHistory entity.
+// If the VendorProfilePhoneNumberHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VendorProfilePhoneNumberHistoryMutation) OldUpdatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedAt: %w", err)
+	}
+	return oldValue.UpdatedAt, nil
+}
+
+// ClearUpdatedAt clears the value of the "updated_at" field.
+func (m *VendorProfilePhoneNumberHistoryMutation) ClearUpdatedAt() {
+	m.updated_at = nil
+	m.clearedFields[vendorprofilephonenumberhistory.FieldUpdatedAt] = struct{}{}
+}
+
+// UpdatedAtCleared returns if the "updated_at" field was cleared in this mutation.
+func (m *VendorProfilePhoneNumberHistoryMutation) UpdatedAtCleared() bool {
+	_, ok := m.clearedFields[vendorprofilephonenumberhistory.FieldUpdatedAt]
+	return ok
+}
+
+// ResetUpdatedAt resets all changes to the "updated_at" field.
+func (m *VendorProfilePhoneNumberHistoryMutation) ResetUpdatedAt() {
+	m.updated_at = nil
+	delete(m.clearedFields, vendorprofilephonenumberhistory.FieldUpdatedAt)
+}
+
+// SetCreatedBy sets the "created_by" field.
+func (m *VendorProfilePhoneNumberHistoryMutation) SetCreatedBy(s string) {
+	m.created_by = &s
+}
+
+// CreatedBy returns the value of the "created_by" field in the mutation.
+func (m *VendorProfilePhoneNumberHistoryMutation) CreatedBy() (r string, exists bool) {
+	v := m.created_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedBy returns the old "created_by" field's value of the VendorProfilePhoneNumberHistory entity.
+// If the VendorProfilePhoneNumberHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VendorProfilePhoneNumberHistoryMutation) OldCreatedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedBy: %w", err)
+	}
+	return oldValue.CreatedBy, nil
+}
+
+// ClearCreatedBy clears the value of the "created_by" field.
+func (m *VendorProfilePhoneNumberHistoryMutation) ClearCreatedBy() {
+	m.created_by = nil
+	m.clearedFields[vendorprofilephonenumberhistory.FieldCreatedBy] = struct{}{}
+}
+
+// CreatedByCleared returns if the "created_by" field was cleared in this mutation.
+func (m *VendorProfilePhoneNumberHistoryMutation) CreatedByCleared() bool {
+	_, ok := m.clearedFields[vendorprofilephonenumberhistory.FieldCreatedBy]
+	return ok
+}
+
+// ResetCreatedBy resets all changes to the "created_by" field.
+func (m *VendorProfilePhoneNumberHistoryMutation) ResetCreatedBy() {
+	m.created_by = nil
+	delete(m.clearedFields, vendorprofilephonenumberhistory.FieldCreatedBy)
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (m *VendorProfilePhoneNumberHistoryMutation) SetUpdatedBy(s string) {
+	m.updated_by = &s
+}
+
+// UpdatedBy returns the value of the "updated_by" field in the mutation.
+func (m *VendorProfilePhoneNumberHistoryMutation) UpdatedBy() (r string, exists bool) {
+	v := m.updated_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedBy returns the old "updated_by" field's value of the VendorProfilePhoneNumberHistory entity.
+// If the VendorProfilePhoneNumberHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VendorProfilePhoneNumberHistoryMutation) OldUpdatedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedBy: %w", err)
+	}
+	return oldValue.UpdatedBy, nil
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (m *VendorProfilePhoneNumberHistoryMutation) ClearUpdatedBy() {
+	m.updated_by = nil
+	m.clearedFields[vendorprofilephonenumberhistory.FieldUpdatedBy] = struct{}{}
+}
+
+// UpdatedByCleared returns if the "updated_by" field was cleared in this mutation.
+func (m *VendorProfilePhoneNumberHistoryMutation) UpdatedByCleared() bool {
+	_, ok := m.clearedFields[vendorprofilephonenumberhistory.FieldUpdatedBy]
+	return ok
+}
+
+// ResetUpdatedBy resets all changes to the "updated_by" field.
+func (m *VendorProfilePhoneNumberHistoryMutation) ResetUpdatedBy() {
+	m.updated_by = nil
+	delete(m.clearedFields, vendorprofilephonenumberhistory.FieldUpdatedBy)
+}
+
+// SetMappingID sets the "mapping_id" field.
+func (m *VendorProfilePhoneNumberHistoryMutation) SetMappingID(s string) {
+	m.mapping_id = &s
+}
+
+// MappingID returns the value of the "mapping_id" field in the mutation.
+func (m *VendorProfilePhoneNumberHistoryMutation) MappingID() (r string, exists bool) {
+	v := m.mapping_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldMappingID returns the old "mapping_id" field's value of the VendorProfilePhoneNumberHistory entity.
+// If the VendorProfilePhoneNumberHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VendorProfilePhoneNumberHistoryMutation) OldMappingID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldMappingID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldMappingID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldMappingID: %w", err)
+	}
+	return oldValue.MappingID, nil
+}
+
+// ResetMappingID resets all changes to the "mapping_id" field.
+func (m *VendorProfilePhoneNumberHistoryMutation) ResetMappingID() {
+	m.mapping_id = nil
+}
+
+// SetDeletedAt sets the "deleted_at" field.
+func (m *VendorProfilePhoneNumberHistoryMutation) SetDeletedAt(t time.Time) {
+	m.deleted_at = &t
+}
+
+// DeletedAt returns the value of the "deleted_at" field in the mutation.
+func (m *VendorProfilePhoneNumberHistoryMutation) DeletedAt() (r time.Time, exists bool) {
+	v := m.deleted_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDeletedAt returns the old "deleted_at" field's value of the VendorProfilePhoneNumberHistory entity.
+// If the VendorProfilePhoneNumberHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VendorProfilePhoneNumberHistoryMutation) OldDeletedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDeletedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDeletedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDeletedAt: %w", err)
+	}
+	return oldValue.DeletedAt, nil
+}
+
+// ClearDeletedAt clears the value of the "deleted_at" field.
+func (m *VendorProfilePhoneNumberHistoryMutation) ClearDeletedAt() {
+	m.deleted_at = nil
+	m.clearedFields[vendorprofilephonenumberhistory.FieldDeletedAt] = struct{}{}
+}
+
+// DeletedAtCleared returns if the "deleted_at" field was cleared in this mutation.
+func (m *VendorProfilePhoneNumberHistoryMutation) DeletedAtCleared() bool {
+	_, ok := m.clearedFields[vendorprofilephonenumberhistory.FieldDeletedAt]
+	return ok
+}
+
+// ResetDeletedAt resets all changes to the "deleted_at" field.
+func (m *VendorProfilePhoneNumberHistoryMutation) ResetDeletedAt() {
+	m.deleted_at = nil
+	delete(m.clearedFields, vendorprofilephonenumberhistory.FieldDeletedAt)
+}
+
+// SetDeletedBy sets the "deleted_by" field.
+func (m *VendorProfilePhoneNumberHistoryMutation) SetDeletedBy(s string) {
+	m.deleted_by = &s
+}
+
+// DeletedBy returns the value of the "deleted_by" field in the mutation.
+func (m *VendorProfilePhoneNumberHistoryMutation) DeletedBy() (r string, exists bool) {
+	v := m.deleted_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDeletedBy returns the old "deleted_by" field's value of the VendorProfilePhoneNumberHistory entity.
+// If the VendorProfilePhoneNumberHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VendorProfilePhoneNumberHistoryMutation) OldDeletedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDeletedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDeletedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDeletedBy: %w", err)
+	}
+	return oldValue.DeletedBy, nil
+}
+
+// ClearDeletedBy clears the value of the "deleted_by" field.
+func (m *VendorProfilePhoneNumberHistoryMutation) ClearDeletedBy() {
+	m.deleted_by = nil
+	m.clearedFields[vendorprofilephonenumberhistory.FieldDeletedBy] = struct{}{}
+}
+
+// DeletedByCleared returns if the "deleted_by" field was cleared in this mutation.
+func (m *VendorProfilePhoneNumberHistoryMutation) DeletedByCleared() bool {
+	_, ok := m.clearedFields[vendorprofilephonenumberhistory.FieldDeletedBy]
+	return ok
+}
+
+// ResetDeletedBy resets all changes to the "deleted_by" field.
+func (m *VendorProfilePhoneNumberHistoryMutation) ResetDeletedBy() {
+	m.deleted_by = nil
+	delete(m.clearedFields, vendorprofilephonenumberhistory.FieldDeletedBy)
+}
+
+// SetVendorProfileID sets the "vendor_profile_id" field.
+func (m *VendorProfilePhoneNumberHistoryMutation) SetVendorProfileID(s string) {
+	m.vendor_profile_id = &s
+}
+
+// VendorProfileID returns the value of the "vendor_profile_id" field in the mutation.
+func (m *VendorProfilePhoneNumberHistoryMutation) VendorProfileID() (r string, exists bool) {
+	v := m.vendor_profile_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldVendorProfileID returns the old "vendor_profile_id" field's value of the VendorProfilePhoneNumberHistory entity.
+// If the VendorProfilePhoneNumberHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VendorProfilePhoneNumberHistoryMutation) OldVendorProfileID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldVendorProfileID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldVendorProfileID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldVendorProfileID: %w", err)
+	}
+	return oldValue.VendorProfileID, nil
+}
+
+// ResetVendorProfileID resets all changes to the "vendor_profile_id" field.
+func (m *VendorProfilePhoneNumberHistoryMutation) ResetVendorProfileID() {
+	m.vendor_profile_id = nil
+}
+
+// SetPhoneNumberID sets the "phone_number_id" field.
+func (m *VendorProfilePhoneNumberHistoryMutation) SetPhoneNumberID(s string) {
+	m.phone_number_id = &s
+}
+
+// PhoneNumberID returns the value of the "phone_number_id" field in the mutation.
+func (m *VendorProfilePhoneNumberHistoryMutation) PhoneNumberID() (r string, exists bool) {
+	v := m.phone_number_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldPhoneNumberID returns the old "phone_number_id" field's value of the VendorProfilePhoneNumberHistory entity.
+// If the VendorProfilePhoneNumberHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VendorProfilePhoneNumberHistoryMutation) OldPhoneNumberID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldPhoneNumberID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldPhoneNumberID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldPhoneNumberID: %w", err)
+	}
+	return oldValue.PhoneNumberID, nil
+}
+
+// ResetPhoneNumberID resets all changes to the "phone_number_id" field.
+func (m *VendorProfilePhoneNumberHistoryMutation) ResetPhoneNumberID() {
+	m.phone_number_id = nil
+}
+
+// Where appends a list predicates to the VendorProfilePhoneNumberHistoryMutation builder.
+func (m *VendorProfilePhoneNumberHistoryMutation) Where(ps ...predicate.VendorProfilePhoneNumberHistory) {
+	m.predicates = append(m.predicates, ps...)
+}
+
+// WhereP appends storage-level predicates to the VendorProfilePhoneNumberHistoryMutation builder. Using this method,
+// users can use type-assertion to append predicates that do not depend on any generated package.
+func (m *VendorProfilePhoneNumberHistoryMutation) WhereP(ps ...func(*sql.Selector)) {
+	p := make([]predicate.VendorProfilePhoneNumberHistory, len(ps))
+	for i := range ps {
+		p[i] = ps[i]
+	}
+	m.Where(p...)
+}
+
+// Op returns the operation name.
+func (m *VendorProfilePhoneNumberHistoryMutation) Op() Op {
+	return m.op
+}
+
+// SetOp allows setting the mutation operation.
+func (m *VendorProfilePhoneNumberHistoryMutation) SetOp(op Op) {
+	m.op = op
+}
+
+// Type returns the node type of this mutation (VendorProfilePhoneNumberHistory).
+func (m *VendorProfilePhoneNumberHistoryMutation) Type() string {
+	return m.typ
+}
+
+// Fields returns all fields that were changed during this mutation. Note that in
+// order to get all numeric fields that were incremented/decremented, call
+// AddedFields().
+func (m *VendorProfilePhoneNumberHistoryMutation) Fields() []string {
+	fields := make([]string, 0, 12)
+	if m.history_time != nil {
+		fields = append(fields, vendorprofilephonenumberhistory.FieldHistoryTime)
+	}
+	if m.ref != nil {
+		fields = append(fields, vendorprofilephonenumberhistory.FieldRef)
+	}
+	if m.operation != nil {
+		fields = append(fields, vendorprofilephonenumberhistory.FieldOperation)
+	}
+	if m.created_at != nil {
+		fields = append(fields, vendorprofilephonenumberhistory.FieldCreatedAt)
+	}
+	if m.updated_at != nil {
+		fields = append(fields, vendorprofilephonenumberhistory.FieldUpdatedAt)
+	}
+	if m.created_by != nil {
+		fields = append(fields, vendorprofilephonenumberhistory.FieldCreatedBy)
+	}
+	if m.updated_by != nil {
+		fields = append(fields, vendorprofilephonenumberhistory.FieldUpdatedBy)
+	}
+	if m.mapping_id != nil {
+		fields = append(fields, vendorprofilephonenumberhistory.FieldMappingID)
+	}
+	if m.deleted_at != nil {
+		fields = append(fields, vendorprofilephonenumberhistory.FieldDeletedAt)
+	}
+	if m.deleted_by != nil {
+		fields = append(fields, vendorprofilephonenumberhistory.FieldDeletedBy)
+	}
+	if m.vendor_profile_id != nil {
+		fields = append(fields, vendorprofilephonenumberhistory.FieldVendorProfileID)
+	}
+	if m.phone_number_id != nil {
+		fields = append(fields, vendorprofilephonenumberhistory.FieldPhoneNumberID)
+	}
+	return fields
+}
+
+// Field returns the value of a field with the given name. The second boolean
+// return value indicates that this field was not set, or was not defined in the
+// schema.
+func (m *VendorProfilePhoneNumberHistoryMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case vendorprofilephonenumberhistory.FieldHistoryTime:
+		return m.HistoryTime()
+	case vendorprofilephonenumberhistory.FieldRef:
+		return m.Ref()
+	case vendorprofilephonenumberhistory.FieldOperation:
+		return m.Operation()
+	case vendorprofilephonenumberhistory.FieldCreatedAt:
+		return m.CreatedAt()
+	case vendorprofilephonenumberhistory.FieldUpdatedAt:
+		return m.UpdatedAt()
+	case vendorprofilephonenumberhistory.FieldCreatedBy:
+		return m.CreatedBy()
+	case vendorprofilephonenumberhistory.FieldUpdatedBy:
+		return m.UpdatedBy()
+	case vendorprofilephonenumberhistory.FieldMappingID:
+		return m.MappingID()
+	case vendorprofilephonenumberhistory.FieldDeletedAt:
+		return m.DeletedAt()
+	case vendorprofilephonenumberhistory.FieldDeletedBy:
+		return m.DeletedBy()
+	case vendorprofilephonenumberhistory.FieldVendorProfileID:
+		return m.VendorProfileID()
+	case vendorprofilephonenumberhistory.FieldPhoneNumberID:
+		return m.PhoneNumberID()
+	}
+	return nil, false
+}
+
+// OldField returns the old value of the field from the database. An error is
+// returned if the mutation operation is not UpdateOne, or the query to the
+// database failed.
+func (m *VendorProfilePhoneNumberHistoryMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case vendorprofilephonenumberhistory.FieldHistoryTime:
+		return m.OldHistoryTime(ctx)
+	case vendorprofilephonenumberhistory.FieldRef:
+		return m.OldRef(ctx)
+	case vendorprofilephonenumberhistory.FieldOperation:
+		return m.OldOperation(ctx)
+	case vendorprofilephonenumberhistory.FieldCreatedAt:
+		return m.OldCreatedAt(ctx)
+	case vendorprofilephonenumberhistory.FieldUpdatedAt:
+		return m.OldUpdatedAt(ctx)
+	case vendorprofilephonenumberhistory.FieldCreatedBy:
+		return m.OldCreatedBy(ctx)
+	case vendorprofilephonenumberhistory.FieldUpdatedBy:
+		return m.OldUpdatedBy(ctx)
+	case vendorprofilephonenumberhistory.FieldMappingID:
+		return m.OldMappingID(ctx)
+	case vendorprofilephonenumberhistory.FieldDeletedAt:
+		return m.OldDeletedAt(ctx)
+	case vendorprofilephonenumberhistory.FieldDeletedBy:
+		return m.OldDeletedBy(ctx)
+	case vendorprofilephonenumberhistory.FieldVendorProfileID:
+		return m.OldVendorProfileID(ctx)
+	case vendorprofilephonenumberhistory.FieldPhoneNumberID:
+		return m.OldPhoneNumberID(ctx)
+	}
+	return nil, fmt.Errorf("unknown VendorProfilePhoneNumberHistory field %s", name)
+}
+
+// SetField sets the value of a field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *VendorProfilePhoneNumberHistoryMutation) SetField(name string, value ent.Value) error {
+	switch name {
+	case vendorprofilephonenumberhistory.FieldHistoryTime:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetHistoryTime(v)
+		return nil
+	case vendorprofilephonenumberhistory.FieldRef:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetRef(v)
+		return nil
+	case vendorprofilephonenumberhistory.FieldOperation:
+		v, ok := value.(enthistory.OpType)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetOperation(v)
+		return nil
+	case vendorprofilephonenumberhistory.FieldCreatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedAt(v)
+		return nil
+	case vendorprofilephonenumberhistory.FieldUpdatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedAt(v)
+		return nil
+	case vendorprofilephonenumberhistory.FieldCreatedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedBy(v)
+		return nil
+	case vendorprofilephonenumberhistory.FieldUpdatedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedBy(v)
+		return nil
+	case vendorprofilephonenumberhistory.FieldMappingID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetMappingID(v)
+		return nil
+	case vendorprofilephonenumberhistory.FieldDeletedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDeletedAt(v)
+		return nil
+	case vendorprofilephonenumberhistory.FieldDeletedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDeletedBy(v)
+		return nil
+	case vendorprofilephonenumberhistory.FieldVendorProfileID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetVendorProfileID(v)
+		return nil
+	case vendorprofilephonenumberhistory.FieldPhoneNumberID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetPhoneNumberID(v)
+		return nil
+	}
+	return fmt.Errorf("unknown VendorProfilePhoneNumberHistory field %s", name)
+}
+
+// AddedFields returns all numeric fields that were incremented/decremented during
+// this mutation.
+func (m *VendorProfilePhoneNumberHistoryMutation) AddedFields() []string {
+	return nil
+}
+
+// AddedField returns the numeric value that was incremented/decremented on a field
+// with the given name. The second boolean return value indicates that this field
+// was not set, or was not defined in the schema.
+func (m *VendorProfilePhoneNumberHistoryMutation) AddedField(name string) (ent.Value, bool) {
+	return nil, false
+}
+
+// AddField adds the value to the field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *VendorProfilePhoneNumberHistoryMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	}
+	return fmt.Errorf("unknown VendorProfilePhoneNumberHistory numeric field %s", name)
+}
+
+// ClearedFields returns all nullable fields that were cleared during this
+// mutation.
+func (m *VendorProfilePhoneNumberHistoryMutation) ClearedFields() []string {
+	var fields []string
+	if m.FieldCleared(vendorprofilephonenumberhistory.FieldRef) {
+		fields = append(fields, vendorprofilephonenumberhistory.FieldRef)
+	}
+	if m.FieldCleared(vendorprofilephonenumberhistory.FieldCreatedAt) {
+		fields = append(fields, vendorprofilephonenumberhistory.FieldCreatedAt)
+	}
+	if m.FieldCleared(vendorprofilephonenumberhistory.FieldUpdatedAt) {
+		fields = append(fields, vendorprofilephonenumberhistory.FieldUpdatedAt)
+	}
+	if m.FieldCleared(vendorprofilephonenumberhistory.FieldCreatedBy) {
+		fields = append(fields, vendorprofilephonenumberhistory.FieldCreatedBy)
+	}
+	if m.FieldCleared(vendorprofilephonenumberhistory.FieldUpdatedBy) {
+		fields = append(fields, vendorprofilephonenumberhistory.FieldUpdatedBy)
+	}
+	if m.FieldCleared(vendorprofilephonenumberhistory.FieldDeletedAt) {
+		fields = append(fields, vendorprofilephonenumberhistory.FieldDeletedAt)
+	}
+	if m.FieldCleared(vendorprofilephonenumberhistory.FieldDeletedBy) {
+		fields = append(fields, vendorprofilephonenumberhistory.FieldDeletedBy)
+	}
+	return fields
+}
+
+// FieldCleared returns a boolean indicating if a field with the given name was
+// cleared in this mutation.
+func (m *VendorProfilePhoneNumberHistoryMutation) FieldCleared(name string) bool {
+	_, ok := m.clearedFields[name]
+	return ok
+}
+
+// ClearField clears the value of the field with the given name. It returns an
+// error if the field is not defined in the schema.
+func (m *VendorProfilePhoneNumberHistoryMutation) ClearField(name string) error {
+	switch name {
+	case vendorprofilephonenumberhistory.FieldRef:
+		m.ClearRef()
+		return nil
+	case vendorprofilephonenumberhistory.FieldCreatedAt:
+		m.ClearCreatedAt()
+		return nil
+	case vendorprofilephonenumberhistory.FieldUpdatedAt:
+		m.ClearUpdatedAt()
+		return nil
+	case vendorprofilephonenumberhistory.FieldCreatedBy:
+		m.ClearCreatedBy()
+		return nil
+	case vendorprofilephonenumberhistory.FieldUpdatedBy:
+		m.ClearUpdatedBy()
+		return nil
+	case vendorprofilephonenumberhistory.FieldDeletedAt:
+		m.ClearDeletedAt()
+		return nil
+	case vendorprofilephonenumberhistory.FieldDeletedBy:
+		m.ClearDeletedBy()
+		return nil
+	}
+	return fmt.Errorf("unknown VendorProfilePhoneNumberHistory nullable field %s", name)
+}
+
+// ResetField resets all changes in the mutation for the field with the given name.
+// It returns an error if the field is not defined in the schema.
+func (m *VendorProfilePhoneNumberHistoryMutation) ResetField(name string) error {
+	switch name {
+	case vendorprofilephonenumberhistory.FieldHistoryTime:
+		m.ResetHistoryTime()
+		return nil
+	case vendorprofilephonenumberhistory.FieldRef:
+		m.ResetRef()
+		return nil
+	case vendorprofilephonenumberhistory.FieldOperation:
+		m.ResetOperation()
+		return nil
+	case vendorprofilephonenumberhistory.FieldCreatedAt:
+		m.ResetCreatedAt()
+		return nil
+	case vendorprofilephonenumberhistory.FieldUpdatedAt:
+		m.ResetUpdatedAt()
+		return nil
+	case vendorprofilephonenumberhistory.FieldCreatedBy:
+		m.ResetCreatedBy()
+		return nil
+	case vendorprofilephonenumberhistory.FieldUpdatedBy:
+		m.ResetUpdatedBy()
+		return nil
+	case vendorprofilephonenumberhistory.FieldMappingID:
+		m.ResetMappingID()
+		return nil
+	case vendorprofilephonenumberhistory.FieldDeletedAt:
+		m.ResetDeletedAt()
+		return nil
+	case vendorprofilephonenumberhistory.FieldDeletedBy:
+		m.ResetDeletedBy()
+		return nil
+	case vendorprofilephonenumberhistory.FieldVendorProfileID:
+		m.ResetVendorProfileID()
+		return nil
+	case vendorprofilephonenumberhistory.FieldPhoneNumberID:
+		m.ResetPhoneNumberID()
+		return nil
+	}
+	return fmt.Errorf("unknown VendorProfilePhoneNumberHistory field %s", name)
+}
+
+// AddedEdges returns all edge names that were set/added in this mutation.
+func (m *VendorProfilePhoneNumberHistoryMutation) AddedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// AddedIDs returns all IDs (to other nodes) that were added for the given edge
+// name in this mutation.
+func (m *VendorProfilePhoneNumberHistoryMutation) AddedIDs(name string) []ent.Value {
+	return nil
+}
+
+// RemovedEdges returns all edge names that were removed in this mutation.
+func (m *VendorProfilePhoneNumberHistoryMutation) RemovedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
+// the given name in this mutation.
+func (m *VendorProfilePhoneNumberHistoryMutation) RemovedIDs(name string) []ent.Value {
+	return nil
+}
+
+// ClearedEdges returns all edge names that were cleared in this mutation.
+func (m *VendorProfilePhoneNumberHistoryMutation) ClearedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// EdgeCleared returns a boolean which indicates if the edge with the given name
+// was cleared in this mutation.
+func (m *VendorProfilePhoneNumberHistoryMutation) EdgeCleared(name string) bool {
+	return false
+}
+
+// ClearEdge clears the value of the edge with the given name. It returns an error
+// if that edge is not defined in the schema.
+func (m *VendorProfilePhoneNumberHistoryMutation) ClearEdge(name string) error {
+	return fmt.Errorf("unknown VendorProfilePhoneNumberHistory unique edge %s", name)
+}
+
+// ResetEdge resets all changes to the edge with the given name in this mutation.
+// It returns an error if the edge is not defined in the schema.
+func (m *VendorProfilePhoneNumberHistoryMutation) ResetEdge(name string) error {
+	return fmt.Errorf("unknown VendorProfilePhoneNumberHistory edge %s", name)
 }
 
 // VendorProfilePostalAddressMutation represents an operation that mutates the VendorProfilePostalAddress nodes in the graph.

@@ -1,0 +1,103 @@
+extend type Query {
+    """
+    Look up phoneNumber by ID
+    """
+     phoneNumber(
+        """
+        ID of the phoneNumber
+        """
+        id: ID!
+    ):  PhoneNumber!
+}
+
+extend type Mutation{
+    """
+    Create a new phoneNumber
+    """
+    createPhoneNumber(
+        """
+        values of the phoneNumber
+        """
+        input: CreatePhoneNumberInput!
+    ): PhoneNumberCreatePayload!
+    """
+    Create multiple new phoneNumbers
+    """
+    createBulkPhoneNumber(
+        """
+        values of the phoneNumber
+        """
+        input: [CreatePhoneNumberInput!]
+    ): PhoneNumberBulkCreatePayload!
+    """
+    Create multiple new phoneNumbers via file upload
+    """
+    createBulkCSVPhoneNumber(
+        """
+        csv file containing values of the phoneNumber
+        """
+        input: Upload!
+    ): PhoneNumberBulkCreatePayload!
+    """
+    Update an existing phoneNumber
+    """
+    updatePhoneNumber(
+        """
+        ID of the phoneNumber
+        """
+        id: ID!
+        """
+        New values for the phoneNumber
+        """
+        input: UpdatePhoneNumberInput!
+    ): PhoneNumberUpdatePayload!
+    """
+    Delete an existing phoneNumber
+    """
+    deletePhoneNumber(
+        """
+        ID of the phoneNumber
+        """
+        id: ID!
+    ): PhoneNumberDeletePayload!
+}
+
+"""
+Return response for createPhoneNumber mutation
+"""
+type PhoneNumberCreatePayload {
+    """
+    Created phoneNumber
+    """
+    phoneNumber: PhoneNumber!
+}
+
+"""
+Return response for updatePhoneNumber mutation
+"""
+type PhoneNumberUpdatePayload {
+    """
+    Updated phoneNumber
+    """
+    phoneNumber: PhoneNumber!
+}
+
+"""
+Return response for deletePhoneNumber mutation
+"""
+type PhoneNumberDeletePayload {
+    """
+    Deleted phoneNumber ID
+    """
+    deletedID: ID!
+}
+
+"""
+Return response for createBulkPhoneNumber mutation
+"""
+type PhoneNumberBulkCreatePayload {
+    """
+    Created phoneNumbers
+    """
+    phoneNumbers: [PhoneNumber!]
+}

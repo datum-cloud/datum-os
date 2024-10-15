@@ -483,6 +483,25 @@ func (r *mutationResolver) bulkCreatePersonalAccessToken(ctx context.Context, in
 	}, nil
 }
 
+// bulkCreatePhoneNumber uses the CreateBulk function to create multiple PhoneNumber entities
+func (r *mutationResolver) bulkCreatePhoneNumber(ctx context.Context, input []*generated.CreatePhoneNumberInput) (*PhoneNumberBulkCreatePayload, error) {
+	c := withTransactionalMutation(ctx)
+	builders := make([]*generated.PhoneNumberCreate, len(input))
+	for i, data := range input {
+		builders[i] = c.PhoneNumber.Create().SetInput(*data)
+	}
+
+	res, err := c.PhoneNumber.CreateBulk(builders...).Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionCreate, object: "phonenumber"}, r.logger)
+	}
+
+	// return response
+	return &PhoneNumberBulkCreatePayload{
+		PhoneNumbers: res,
+	}, nil
+}
+
 // bulkCreatePostalAddress uses the CreateBulk function to create multiple PostalAddress entities
 func (r *mutationResolver) bulkCreatePostalAddress(ctx context.Context, input []*generated.CreatePostalAddressInput) (*PostalAddressBulkCreatePayload, error) {
 	c := withTransactionalMutation(ctx)
@@ -594,6 +613,25 @@ func (r *mutationResolver) bulkCreateVendorProfile(ctx context.Context, input []
 	// return response
 	return &VendorProfileBulkCreatePayload{
 		VendorProfiles: res,
+	}, nil
+}
+
+// bulkCreateVendorProfilePhoneNumber uses the CreateBulk function to create multiple VendorProfilePhoneNumber entities
+func (r *mutationResolver) bulkCreateVendorProfilePhoneNumber(ctx context.Context, input []*generated.CreateVendorProfilePhoneNumberInput) (*VendorProfilePhoneNumberBulkCreatePayload, error) {
+	c := withTransactionalMutation(ctx)
+	builders := make([]*generated.VendorProfilePhoneNumberCreate, len(input))
+	for i, data := range input {
+		builders[i] = c.VendorProfilePhoneNumber.Create().SetInput(*data)
+	}
+
+	res, err := c.VendorProfilePhoneNumber.CreateBulk(builders...).Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionCreate, object: "vendorprofilephonenumber"}, r.logger)
+	}
+
+	// return response
+	return &VendorProfilePhoneNumberBulkCreatePayload{
+		VendorProfilePhoneNumbers: res,
 	}, nil
 }
 

@@ -14,6 +14,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/predicate"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofilehistory"
+	"github.com/datum-cloud/datum-os/pkg/enums"
 
 	"github.com/datum-cloud/datum-os/internal/ent/generated/internal"
 )
@@ -155,23 +156,43 @@ func (vphu *VendorProfileHistoryUpdate) SetNillableName(s *string) *VendorProfil
 	return vphu
 }
 
-// SetDbaName sets the "dba_name" field.
-func (vphu *VendorProfileHistoryUpdate) SetDbaName(s string) *VendorProfileHistoryUpdate {
-	vphu.mutation.SetDbaName(s)
+// SetCorporationType sets the "corporation_type" field.
+func (vphu *VendorProfileHistoryUpdate) SetCorporationType(s string) *VendorProfileHistoryUpdate {
+	vphu.mutation.SetCorporationType(s)
 	return vphu
 }
 
-// SetNillableDbaName sets the "dba_name" field if the given value is not nil.
-func (vphu *VendorProfileHistoryUpdate) SetNillableDbaName(s *string) *VendorProfileHistoryUpdate {
+// SetNillableCorporationType sets the "corporation_type" field if the given value is not nil.
+func (vphu *VendorProfileHistoryUpdate) SetNillableCorporationType(s *string) *VendorProfileHistoryUpdate {
 	if s != nil {
-		vphu.SetDbaName(*s)
+		vphu.SetCorporationType(*s)
 	}
 	return vphu
 }
 
-// ClearDbaName clears the value of the "dba_name" field.
-func (vphu *VendorProfileHistoryUpdate) ClearDbaName() *VendorProfileHistoryUpdate {
-	vphu.mutation.ClearDbaName()
+// ClearCorporationType clears the value of the "corporation_type" field.
+func (vphu *VendorProfileHistoryUpdate) ClearCorporationType() *VendorProfileHistoryUpdate {
+	vphu.mutation.ClearCorporationType()
+	return vphu
+}
+
+// SetCorporationDba sets the "corporation_dba" field.
+func (vphu *VendorProfileHistoryUpdate) SetCorporationDba(s string) *VendorProfileHistoryUpdate {
+	vphu.mutation.SetCorporationDba(s)
+	return vphu
+}
+
+// SetNillableCorporationDba sets the "corporation_dba" field if the given value is not nil.
+func (vphu *VendorProfileHistoryUpdate) SetNillableCorporationDba(s *string) *VendorProfileHistoryUpdate {
+	if s != nil {
+		vphu.SetCorporationDba(*s)
+	}
+	return vphu
+}
+
+// ClearCorporationDba clears the value of the "corporation_dba" field.
+func (vphu *VendorProfileHistoryUpdate) ClearCorporationDba() *VendorProfileHistoryUpdate {
+	vphu.mutation.ClearCorporationDba()
 	return vphu
 }
 
@@ -212,6 +233,40 @@ func (vphu *VendorProfileHistoryUpdate) SetNillableWebsiteURI(s *string) *Vendor
 // ClearWebsiteURI clears the value of the "website_uri" field.
 func (vphu *VendorProfileHistoryUpdate) ClearWebsiteURI() *VendorProfileHistoryUpdate {
 	vphu.mutation.ClearWebsiteURI()
+	return vphu
+}
+
+// SetTaxID sets the "tax_id" field.
+func (vphu *VendorProfileHistoryUpdate) SetTaxID(s string) *VendorProfileHistoryUpdate {
+	vphu.mutation.SetTaxID(s)
+	return vphu
+}
+
+// SetNillableTaxID sets the "tax_id" field if the given value is not nil.
+func (vphu *VendorProfileHistoryUpdate) SetNillableTaxID(s *string) *VendorProfileHistoryUpdate {
+	if s != nil {
+		vphu.SetTaxID(*s)
+	}
+	return vphu
+}
+
+// ClearTaxID clears the value of the "tax_id" field.
+func (vphu *VendorProfileHistoryUpdate) ClearTaxID() *VendorProfileHistoryUpdate {
+	vphu.mutation.ClearTaxID()
+	return vphu
+}
+
+// SetTaxIDType sets the "tax_id_type" field.
+func (vphu *VendorProfileHistoryUpdate) SetTaxIDType(eit enums.TaxIDType) *VendorProfileHistoryUpdate {
+	vphu.mutation.SetTaxIDType(eit)
+	return vphu
+}
+
+// SetNillableTaxIDType sets the "tax_id_type" field if the given value is not nil.
+func (vphu *VendorProfileHistoryUpdate) SetNillableTaxIDType(eit *enums.TaxIDType) *VendorProfileHistoryUpdate {
+	if eit != nil {
+		vphu.SetTaxIDType(*eit)
+	}
 	return vphu
 }
 
@@ -256,7 +311,20 @@ func (vphu *VendorProfileHistoryUpdate) defaults() {
 	}
 }
 
+// check runs all checks and user-defined validators on the builder.
+func (vphu *VendorProfileHistoryUpdate) check() error {
+	if v, ok := vphu.mutation.TaxIDType(); ok {
+		if err := vendorprofilehistory.TaxIDTypeValidator(v); err != nil {
+			return &ValidationError{Name: "tax_id_type", err: fmt.Errorf(`generated: validator failed for field "VendorProfileHistory.tax_id_type": %w`, err)}
+		}
+	}
+	return nil
+}
+
 func (vphu *VendorProfileHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
+	if err := vphu.check(); err != nil {
+		return n, err
+	}
 	_spec := sqlgraph.NewUpdateSpec(vendorprofilehistory.Table, vendorprofilehistory.Columns, sqlgraph.NewFieldSpec(vendorprofilehistory.FieldID, field.TypeString))
 	if ps := vphu.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
@@ -321,11 +389,17 @@ func (vphu *VendorProfileHistoryUpdate) sqlSave(ctx context.Context) (n int, err
 	if value, ok := vphu.mutation.Name(); ok {
 		_spec.SetField(vendorprofilehistory.FieldName, field.TypeString, value)
 	}
-	if value, ok := vphu.mutation.DbaName(); ok {
-		_spec.SetField(vendorprofilehistory.FieldDbaName, field.TypeString, value)
+	if value, ok := vphu.mutation.CorporationType(); ok {
+		_spec.SetField(vendorprofilehistory.FieldCorporationType, field.TypeString, value)
 	}
-	if vphu.mutation.DbaNameCleared() {
-		_spec.ClearField(vendorprofilehistory.FieldDbaName, field.TypeString)
+	if vphu.mutation.CorporationTypeCleared() {
+		_spec.ClearField(vendorprofilehistory.FieldCorporationType, field.TypeString)
+	}
+	if value, ok := vphu.mutation.CorporationDba(); ok {
+		_spec.SetField(vendorprofilehistory.FieldCorporationDba, field.TypeString, value)
+	}
+	if vphu.mutation.CorporationDbaCleared() {
+		_spec.ClearField(vendorprofilehistory.FieldCorporationDba, field.TypeString)
 	}
 	if value, ok := vphu.mutation.Description(); ok {
 		_spec.SetField(vendorprofilehistory.FieldDescription, field.TypeString, value)
@@ -338,6 +412,15 @@ func (vphu *VendorProfileHistoryUpdate) sqlSave(ctx context.Context) (n int, err
 	}
 	if vphu.mutation.WebsiteURICleared() {
 		_spec.ClearField(vendorprofilehistory.FieldWebsiteURI, field.TypeString)
+	}
+	if value, ok := vphu.mutation.TaxID(); ok {
+		_spec.SetField(vendorprofilehistory.FieldTaxID, field.TypeString, value)
+	}
+	if vphu.mutation.TaxIDCleared() {
+		_spec.ClearField(vendorprofilehistory.FieldTaxID, field.TypeString)
+	}
+	if value, ok := vphu.mutation.TaxIDType(); ok {
+		_spec.SetField(vendorprofilehistory.FieldTaxIDType, field.TypeEnum, value)
 	}
 	_spec.Node.Schema = vphu.schemaConfig.VendorProfileHistory
 	ctx = internal.NewSchemaConfigContext(ctx, vphu.schemaConfig)
@@ -485,23 +568,43 @@ func (vphuo *VendorProfileHistoryUpdateOne) SetNillableName(s *string) *VendorPr
 	return vphuo
 }
 
-// SetDbaName sets the "dba_name" field.
-func (vphuo *VendorProfileHistoryUpdateOne) SetDbaName(s string) *VendorProfileHistoryUpdateOne {
-	vphuo.mutation.SetDbaName(s)
+// SetCorporationType sets the "corporation_type" field.
+func (vphuo *VendorProfileHistoryUpdateOne) SetCorporationType(s string) *VendorProfileHistoryUpdateOne {
+	vphuo.mutation.SetCorporationType(s)
 	return vphuo
 }
 
-// SetNillableDbaName sets the "dba_name" field if the given value is not nil.
-func (vphuo *VendorProfileHistoryUpdateOne) SetNillableDbaName(s *string) *VendorProfileHistoryUpdateOne {
+// SetNillableCorporationType sets the "corporation_type" field if the given value is not nil.
+func (vphuo *VendorProfileHistoryUpdateOne) SetNillableCorporationType(s *string) *VendorProfileHistoryUpdateOne {
 	if s != nil {
-		vphuo.SetDbaName(*s)
+		vphuo.SetCorporationType(*s)
 	}
 	return vphuo
 }
 
-// ClearDbaName clears the value of the "dba_name" field.
-func (vphuo *VendorProfileHistoryUpdateOne) ClearDbaName() *VendorProfileHistoryUpdateOne {
-	vphuo.mutation.ClearDbaName()
+// ClearCorporationType clears the value of the "corporation_type" field.
+func (vphuo *VendorProfileHistoryUpdateOne) ClearCorporationType() *VendorProfileHistoryUpdateOne {
+	vphuo.mutation.ClearCorporationType()
+	return vphuo
+}
+
+// SetCorporationDba sets the "corporation_dba" field.
+func (vphuo *VendorProfileHistoryUpdateOne) SetCorporationDba(s string) *VendorProfileHistoryUpdateOne {
+	vphuo.mutation.SetCorporationDba(s)
+	return vphuo
+}
+
+// SetNillableCorporationDba sets the "corporation_dba" field if the given value is not nil.
+func (vphuo *VendorProfileHistoryUpdateOne) SetNillableCorporationDba(s *string) *VendorProfileHistoryUpdateOne {
+	if s != nil {
+		vphuo.SetCorporationDba(*s)
+	}
+	return vphuo
+}
+
+// ClearCorporationDba clears the value of the "corporation_dba" field.
+func (vphuo *VendorProfileHistoryUpdateOne) ClearCorporationDba() *VendorProfileHistoryUpdateOne {
+	vphuo.mutation.ClearCorporationDba()
 	return vphuo
 }
 
@@ -542,6 +645,40 @@ func (vphuo *VendorProfileHistoryUpdateOne) SetNillableWebsiteURI(s *string) *Ve
 // ClearWebsiteURI clears the value of the "website_uri" field.
 func (vphuo *VendorProfileHistoryUpdateOne) ClearWebsiteURI() *VendorProfileHistoryUpdateOne {
 	vphuo.mutation.ClearWebsiteURI()
+	return vphuo
+}
+
+// SetTaxID sets the "tax_id" field.
+func (vphuo *VendorProfileHistoryUpdateOne) SetTaxID(s string) *VendorProfileHistoryUpdateOne {
+	vphuo.mutation.SetTaxID(s)
+	return vphuo
+}
+
+// SetNillableTaxID sets the "tax_id" field if the given value is not nil.
+func (vphuo *VendorProfileHistoryUpdateOne) SetNillableTaxID(s *string) *VendorProfileHistoryUpdateOne {
+	if s != nil {
+		vphuo.SetTaxID(*s)
+	}
+	return vphuo
+}
+
+// ClearTaxID clears the value of the "tax_id" field.
+func (vphuo *VendorProfileHistoryUpdateOne) ClearTaxID() *VendorProfileHistoryUpdateOne {
+	vphuo.mutation.ClearTaxID()
+	return vphuo
+}
+
+// SetTaxIDType sets the "tax_id_type" field.
+func (vphuo *VendorProfileHistoryUpdateOne) SetTaxIDType(eit enums.TaxIDType) *VendorProfileHistoryUpdateOne {
+	vphuo.mutation.SetTaxIDType(eit)
+	return vphuo
+}
+
+// SetNillableTaxIDType sets the "tax_id_type" field if the given value is not nil.
+func (vphuo *VendorProfileHistoryUpdateOne) SetNillableTaxIDType(eit *enums.TaxIDType) *VendorProfileHistoryUpdateOne {
+	if eit != nil {
+		vphuo.SetTaxIDType(*eit)
+	}
 	return vphuo
 }
 
@@ -599,7 +736,20 @@ func (vphuo *VendorProfileHistoryUpdateOne) defaults() {
 	}
 }
 
+// check runs all checks and user-defined validators on the builder.
+func (vphuo *VendorProfileHistoryUpdateOne) check() error {
+	if v, ok := vphuo.mutation.TaxIDType(); ok {
+		if err := vendorprofilehistory.TaxIDTypeValidator(v); err != nil {
+			return &ValidationError{Name: "tax_id_type", err: fmt.Errorf(`generated: validator failed for field "VendorProfileHistory.tax_id_type": %w`, err)}
+		}
+	}
+	return nil
+}
+
 func (vphuo *VendorProfileHistoryUpdateOne) sqlSave(ctx context.Context) (_node *VendorProfileHistory, err error) {
+	if err := vphuo.check(); err != nil {
+		return _node, err
+	}
 	_spec := sqlgraph.NewUpdateSpec(vendorprofilehistory.Table, vendorprofilehistory.Columns, sqlgraph.NewFieldSpec(vendorprofilehistory.FieldID, field.TypeString))
 	id, ok := vphuo.mutation.ID()
 	if !ok {
@@ -681,11 +831,17 @@ func (vphuo *VendorProfileHistoryUpdateOne) sqlSave(ctx context.Context) (_node 
 	if value, ok := vphuo.mutation.Name(); ok {
 		_spec.SetField(vendorprofilehistory.FieldName, field.TypeString, value)
 	}
-	if value, ok := vphuo.mutation.DbaName(); ok {
-		_spec.SetField(vendorprofilehistory.FieldDbaName, field.TypeString, value)
+	if value, ok := vphuo.mutation.CorporationType(); ok {
+		_spec.SetField(vendorprofilehistory.FieldCorporationType, field.TypeString, value)
 	}
-	if vphuo.mutation.DbaNameCleared() {
-		_spec.ClearField(vendorprofilehistory.FieldDbaName, field.TypeString)
+	if vphuo.mutation.CorporationTypeCleared() {
+		_spec.ClearField(vendorprofilehistory.FieldCorporationType, field.TypeString)
+	}
+	if value, ok := vphuo.mutation.CorporationDba(); ok {
+		_spec.SetField(vendorprofilehistory.FieldCorporationDba, field.TypeString, value)
+	}
+	if vphuo.mutation.CorporationDbaCleared() {
+		_spec.ClearField(vendorprofilehistory.FieldCorporationDba, field.TypeString)
 	}
 	if value, ok := vphuo.mutation.Description(); ok {
 		_spec.SetField(vendorprofilehistory.FieldDescription, field.TypeString, value)
@@ -698,6 +854,15 @@ func (vphuo *VendorProfileHistoryUpdateOne) sqlSave(ctx context.Context) (_node 
 	}
 	if vphuo.mutation.WebsiteURICleared() {
 		_spec.ClearField(vendorprofilehistory.FieldWebsiteURI, field.TypeString)
+	}
+	if value, ok := vphuo.mutation.TaxID(); ok {
+		_spec.SetField(vendorprofilehistory.FieldTaxID, field.TypeString, value)
+	}
+	if vphuo.mutation.TaxIDCleared() {
+		_spec.ClearField(vendorprofilehistory.FieldTaxID, field.TypeString)
+	}
+	if value, ok := vphuo.mutation.TaxIDType(); ok {
+		_spec.SetField(vendorprofilehistory.FieldTaxIDType, field.TypeEnum, value)
 	}
 	_spec.Node.Schema = vphuo.schemaConfig.VendorProfileHistory
 	ctx = internal.NewSchemaConfigContext(ctx, vphuo.schemaConfig)

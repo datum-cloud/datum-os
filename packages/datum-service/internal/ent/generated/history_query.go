@@ -30,12 +30,14 @@ import (
 	"github.com/datum-cloud/datum-os/internal/ent/generated/organizationhistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/organizationsettinghistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/orgmembershiphistory"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/phonenumberhistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/postaladdresshistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/templatehistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/userhistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/usersettinghistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorhistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofilehistory"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofilephonenumberhistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofilepostaladdresshistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/webhookhistory"
 )
@@ -1052,6 +1054,52 @@ func (oshq *OrganizationSettingHistoryQuery) AsOf(ctx context.Context, time time
 		First(ctx)
 }
 
+func (pn *PhoneNumber) History() *PhoneNumberHistoryQuery {
+	historyClient := NewPhoneNumberHistoryClient(pn.config)
+	return historyClient.Query().Where(phonenumberhistory.Ref(pn.ID))
+}
+
+func (pnh *PhoneNumberHistory) Next(ctx context.Context) (*PhoneNumberHistory, error) {
+	client := NewPhoneNumberHistoryClient(pnh.config)
+	return client.Query().
+		Where(
+			phonenumberhistory.Ref(pnh.Ref),
+			phonenumberhistory.HistoryTimeGT(pnh.HistoryTime),
+		).
+		Order(phonenumberhistory.ByHistoryTime()).
+		First(ctx)
+}
+
+func (pnh *PhoneNumberHistory) Prev(ctx context.Context) (*PhoneNumberHistory, error) {
+	client := NewPhoneNumberHistoryClient(pnh.config)
+	return client.Query().
+		Where(
+			phonenumberhistory.Ref(pnh.Ref),
+			phonenumberhistory.HistoryTimeLT(pnh.HistoryTime),
+		).
+		Order(phonenumberhistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (pnhq *PhoneNumberHistoryQuery) Earliest(ctx context.Context) (*PhoneNumberHistory, error) {
+	return pnhq.
+		Order(phonenumberhistory.ByHistoryTime()).
+		First(ctx)
+}
+
+func (pnhq *PhoneNumberHistoryQuery) Latest(ctx context.Context) (*PhoneNumberHistory, error) {
+	return pnhq.
+		Order(phonenumberhistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (pnhq *PhoneNumberHistoryQuery) AsOf(ctx context.Context, time time.Time) (*PhoneNumberHistory, error) {
+	return pnhq.
+		Where(phonenumberhistory.HistoryTimeLTE(time)).
+		Order(phonenumberhistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
 func (pa *PostalAddress) History() *PostalAddressHistoryQuery {
 	historyClient := NewPostalAddressHistoryClient(pa.config)
 	return historyClient.Query().Where(postaladdresshistory.Ref(pa.ID))
@@ -1325,6 +1373,52 @@ func (vphq *VendorProfileHistoryQuery) AsOf(ctx context.Context, time time.Time)
 	return vphq.
 		Where(vendorprofilehistory.HistoryTimeLTE(time)).
 		Order(vendorprofilehistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (vppn *VendorProfilePhoneNumber) History() *VendorProfilePhoneNumberHistoryQuery {
+	historyClient := NewVendorProfilePhoneNumberHistoryClient(vppn.config)
+	return historyClient.Query().Where(vendorprofilephonenumberhistory.Ref(vppn.ID))
+}
+
+func (vppnh *VendorProfilePhoneNumberHistory) Next(ctx context.Context) (*VendorProfilePhoneNumberHistory, error) {
+	client := NewVendorProfilePhoneNumberHistoryClient(vppnh.config)
+	return client.Query().
+		Where(
+			vendorprofilephonenumberhistory.Ref(vppnh.Ref),
+			vendorprofilephonenumberhistory.HistoryTimeGT(vppnh.HistoryTime),
+		).
+		Order(vendorprofilephonenumberhistory.ByHistoryTime()).
+		First(ctx)
+}
+
+func (vppnh *VendorProfilePhoneNumberHistory) Prev(ctx context.Context) (*VendorProfilePhoneNumberHistory, error) {
+	client := NewVendorProfilePhoneNumberHistoryClient(vppnh.config)
+	return client.Query().
+		Where(
+			vendorprofilephonenumberhistory.Ref(vppnh.Ref),
+			vendorprofilephonenumberhistory.HistoryTimeLT(vppnh.HistoryTime),
+		).
+		Order(vendorprofilephonenumberhistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (vppnhq *VendorProfilePhoneNumberHistoryQuery) Earliest(ctx context.Context) (*VendorProfilePhoneNumberHistory, error) {
+	return vppnhq.
+		Order(vendorprofilephonenumberhistory.ByHistoryTime()).
+		First(ctx)
+}
+
+func (vppnhq *VendorProfilePhoneNumberHistoryQuery) Latest(ctx context.Context) (*VendorProfilePhoneNumberHistory, error) {
+	return vppnhq.
+		Order(vendorprofilephonenumberhistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (vppnhq *VendorProfilePhoneNumberHistoryQuery) AsOf(ctx context.Context, time time.Time) (*VendorProfilePhoneNumberHistory, error) {
+	return vppnhq.
+		Where(vendorprofilephonenumberhistory.HistoryTimeLTE(time)).
+		Order(vendorprofilephonenumberhistory.ByHistoryTime(sql.OrderDesc())).
 		First(ctx)
 }
 

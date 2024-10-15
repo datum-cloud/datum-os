@@ -10,6 +10,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/datum-cloud/datum-os/pkg/enthistory"
+	"github.com/datum-cloud/datum-os/pkg/enums"
 )
 
 const (
@@ -45,12 +46,18 @@ const (
 	FieldVendorID = "vendor_id"
 	// FieldName holds the string denoting the name field in the database.
 	FieldName = "name"
-	// FieldDbaName holds the string denoting the dba_name field in the database.
-	FieldDbaName = "dba_name"
+	// FieldCorporationType holds the string denoting the corporation_type field in the database.
+	FieldCorporationType = "corporation_type"
+	// FieldCorporationDba holds the string denoting the corporation_dba field in the database.
+	FieldCorporationDba = "corporation_dba"
 	// FieldDescription holds the string denoting the description field in the database.
 	FieldDescription = "description"
 	// FieldWebsiteURI holds the string denoting the website_uri field in the database.
 	FieldWebsiteURI = "website_uri"
+	// FieldTaxID holds the string denoting the tax_id field in the database.
+	FieldTaxID = "tax_id"
+	// FieldTaxIDType holds the string denoting the tax_id_type field in the database.
+	FieldTaxIDType = "tax_id_type"
 	// Table holds the table name of the vendorprofilehistory in the database.
 	Table = "vendor_profile_history"
 )
@@ -72,9 +79,12 @@ var Columns = []string{
 	FieldOwnerID,
 	FieldVendorID,
 	FieldName,
-	FieldDbaName,
+	FieldCorporationType,
+	FieldCorporationDba,
 	FieldDescription,
 	FieldWebsiteURI,
+	FieldTaxID,
+	FieldTaxIDType,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -117,6 +127,18 @@ func OperationValidator(o enthistory.OpType) error {
 		return nil
 	default:
 		return fmt.Errorf("vendorprofilehistory: invalid enum value for operation field: %q", o)
+	}
+}
+
+const DefaultTaxIDType enums.TaxIDType = "UNSPECIFIED"
+
+// TaxIDTypeValidator is a validator for the "tax_id_type" field enum values. It is called by the builders before save.
+func TaxIDTypeValidator(tit enums.TaxIDType) error {
+	switch tit.String() {
+	case "UNSPECIFIED", "SSN", "EIN", "ATIN", "ITIN":
+		return nil
+	default:
+		return fmt.Errorf("vendorprofilehistory: invalid enum value for tax_id_type field: %q", tit)
 	}
 }
 
@@ -193,9 +215,14 @@ func ByName(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldName, opts...).ToFunc()
 }
 
-// ByDbaName orders the results by the dba_name field.
-func ByDbaName(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldDbaName, opts...).ToFunc()
+// ByCorporationType orders the results by the corporation_type field.
+func ByCorporationType(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldCorporationType, opts...).ToFunc()
+}
+
+// ByCorporationDba orders the results by the corporation_dba field.
+func ByCorporationDba(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldCorporationDba, opts...).ToFunc()
 }
 
 // ByDescription orders the results by the description field.
@@ -208,9 +235,26 @@ func ByWebsiteURI(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldWebsiteURI, opts...).ToFunc()
 }
 
+// ByTaxID orders the results by the tax_id field.
+func ByTaxID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldTaxID, opts...).ToFunc()
+}
+
+// ByTaxIDType orders the results by the tax_id_type field.
+func ByTaxIDType(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldTaxIDType, opts...).ToFunc()
+}
+
 var (
 	// enthistory.OpType must implement graphql.Marshaler.
 	_ graphql.Marshaler = (*enthistory.OpType)(nil)
 	// enthistory.OpType must implement graphql.Unmarshaler.
 	_ graphql.Unmarshaler = (*enthistory.OpType)(nil)
+)
+
+var (
+	// enums.TaxIDType must implement graphql.Marshaler.
+	_ graphql.Marshaler = (*enums.TaxIDType)(nil)
+	// enums.TaxIDType must implement graphql.Unmarshaler.
+	_ graphql.Unmarshaler = (*enums.TaxIDType)(nil)
 )

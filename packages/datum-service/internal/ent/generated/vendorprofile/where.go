@@ -8,6 +8,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/predicate"
+	"github.com/datum-cloud/datum-os/pkg/enums"
 
 	"github.com/datum-cloud/datum-os/internal/ent/generated/internal"
 )
@@ -117,9 +118,14 @@ func Name(v string) predicate.VendorProfile {
 	return predicate.VendorProfile(sql.FieldEQ(FieldName, v))
 }
 
-// DbaName applies equality check predicate on the "dba_name" field. It's identical to DbaNameEQ.
-func DbaName(v string) predicate.VendorProfile {
-	return predicate.VendorProfile(sql.FieldEQ(FieldDbaName, v))
+// CorporationType applies equality check predicate on the "corporation_type" field. It's identical to CorporationTypeEQ.
+func CorporationType(v string) predicate.VendorProfile {
+	return predicate.VendorProfile(sql.FieldEQ(FieldCorporationType, v))
+}
+
+// CorporationDba applies equality check predicate on the "corporation_dba" field. It's identical to CorporationDbaEQ.
+func CorporationDba(v string) predicate.VendorProfile {
+	return predicate.VendorProfile(sql.FieldEQ(FieldCorporationDba, v))
 }
 
 // Description applies equality check predicate on the "description" field. It's identical to DescriptionEQ.
@@ -130,6 +136,11 @@ func Description(v string) predicate.VendorProfile {
 // WebsiteURI applies equality check predicate on the "website_uri" field. It's identical to WebsiteURIEQ.
 func WebsiteURI(v string) predicate.VendorProfile {
 	return predicate.VendorProfile(sql.FieldEQ(FieldWebsiteURI, v))
+}
+
+// TaxID applies equality check predicate on the "tax_id" field. It's identical to TaxIDEQ.
+func TaxID(v string) predicate.VendorProfile {
+	return predicate.VendorProfile(sql.FieldEQ(FieldTaxID, v))
 }
 
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
@@ -797,79 +808,154 @@ func NameContainsFold(v string) predicate.VendorProfile {
 	return predicate.VendorProfile(sql.FieldContainsFold(FieldName, v))
 }
 
-// DbaNameEQ applies the EQ predicate on the "dba_name" field.
-func DbaNameEQ(v string) predicate.VendorProfile {
-	return predicate.VendorProfile(sql.FieldEQ(FieldDbaName, v))
+// CorporationTypeEQ applies the EQ predicate on the "corporation_type" field.
+func CorporationTypeEQ(v string) predicate.VendorProfile {
+	return predicate.VendorProfile(sql.FieldEQ(FieldCorporationType, v))
 }
 
-// DbaNameNEQ applies the NEQ predicate on the "dba_name" field.
-func DbaNameNEQ(v string) predicate.VendorProfile {
-	return predicate.VendorProfile(sql.FieldNEQ(FieldDbaName, v))
+// CorporationTypeNEQ applies the NEQ predicate on the "corporation_type" field.
+func CorporationTypeNEQ(v string) predicate.VendorProfile {
+	return predicate.VendorProfile(sql.FieldNEQ(FieldCorporationType, v))
 }
 
-// DbaNameIn applies the In predicate on the "dba_name" field.
-func DbaNameIn(vs ...string) predicate.VendorProfile {
-	return predicate.VendorProfile(sql.FieldIn(FieldDbaName, vs...))
+// CorporationTypeIn applies the In predicate on the "corporation_type" field.
+func CorporationTypeIn(vs ...string) predicate.VendorProfile {
+	return predicate.VendorProfile(sql.FieldIn(FieldCorporationType, vs...))
 }
 
-// DbaNameNotIn applies the NotIn predicate on the "dba_name" field.
-func DbaNameNotIn(vs ...string) predicate.VendorProfile {
-	return predicate.VendorProfile(sql.FieldNotIn(FieldDbaName, vs...))
+// CorporationTypeNotIn applies the NotIn predicate on the "corporation_type" field.
+func CorporationTypeNotIn(vs ...string) predicate.VendorProfile {
+	return predicate.VendorProfile(sql.FieldNotIn(FieldCorporationType, vs...))
 }
 
-// DbaNameGT applies the GT predicate on the "dba_name" field.
-func DbaNameGT(v string) predicate.VendorProfile {
-	return predicate.VendorProfile(sql.FieldGT(FieldDbaName, v))
+// CorporationTypeGT applies the GT predicate on the "corporation_type" field.
+func CorporationTypeGT(v string) predicate.VendorProfile {
+	return predicate.VendorProfile(sql.FieldGT(FieldCorporationType, v))
 }
 
-// DbaNameGTE applies the GTE predicate on the "dba_name" field.
-func DbaNameGTE(v string) predicate.VendorProfile {
-	return predicate.VendorProfile(sql.FieldGTE(FieldDbaName, v))
+// CorporationTypeGTE applies the GTE predicate on the "corporation_type" field.
+func CorporationTypeGTE(v string) predicate.VendorProfile {
+	return predicate.VendorProfile(sql.FieldGTE(FieldCorporationType, v))
 }
 
-// DbaNameLT applies the LT predicate on the "dba_name" field.
-func DbaNameLT(v string) predicate.VendorProfile {
-	return predicate.VendorProfile(sql.FieldLT(FieldDbaName, v))
+// CorporationTypeLT applies the LT predicate on the "corporation_type" field.
+func CorporationTypeLT(v string) predicate.VendorProfile {
+	return predicate.VendorProfile(sql.FieldLT(FieldCorporationType, v))
 }
 
-// DbaNameLTE applies the LTE predicate on the "dba_name" field.
-func DbaNameLTE(v string) predicate.VendorProfile {
-	return predicate.VendorProfile(sql.FieldLTE(FieldDbaName, v))
+// CorporationTypeLTE applies the LTE predicate on the "corporation_type" field.
+func CorporationTypeLTE(v string) predicate.VendorProfile {
+	return predicate.VendorProfile(sql.FieldLTE(FieldCorporationType, v))
 }
 
-// DbaNameContains applies the Contains predicate on the "dba_name" field.
-func DbaNameContains(v string) predicate.VendorProfile {
-	return predicate.VendorProfile(sql.FieldContains(FieldDbaName, v))
+// CorporationTypeContains applies the Contains predicate on the "corporation_type" field.
+func CorporationTypeContains(v string) predicate.VendorProfile {
+	return predicate.VendorProfile(sql.FieldContains(FieldCorporationType, v))
 }
 
-// DbaNameHasPrefix applies the HasPrefix predicate on the "dba_name" field.
-func DbaNameHasPrefix(v string) predicate.VendorProfile {
-	return predicate.VendorProfile(sql.FieldHasPrefix(FieldDbaName, v))
+// CorporationTypeHasPrefix applies the HasPrefix predicate on the "corporation_type" field.
+func CorporationTypeHasPrefix(v string) predicate.VendorProfile {
+	return predicate.VendorProfile(sql.FieldHasPrefix(FieldCorporationType, v))
 }
 
-// DbaNameHasSuffix applies the HasSuffix predicate on the "dba_name" field.
-func DbaNameHasSuffix(v string) predicate.VendorProfile {
-	return predicate.VendorProfile(sql.FieldHasSuffix(FieldDbaName, v))
+// CorporationTypeHasSuffix applies the HasSuffix predicate on the "corporation_type" field.
+func CorporationTypeHasSuffix(v string) predicate.VendorProfile {
+	return predicate.VendorProfile(sql.FieldHasSuffix(FieldCorporationType, v))
 }
 
-// DbaNameIsNil applies the IsNil predicate on the "dba_name" field.
-func DbaNameIsNil() predicate.VendorProfile {
-	return predicate.VendorProfile(sql.FieldIsNull(FieldDbaName))
+// CorporationTypeIsNil applies the IsNil predicate on the "corporation_type" field.
+func CorporationTypeIsNil() predicate.VendorProfile {
+	return predicate.VendorProfile(sql.FieldIsNull(FieldCorporationType))
 }
 
-// DbaNameNotNil applies the NotNil predicate on the "dba_name" field.
-func DbaNameNotNil() predicate.VendorProfile {
-	return predicate.VendorProfile(sql.FieldNotNull(FieldDbaName))
+// CorporationTypeNotNil applies the NotNil predicate on the "corporation_type" field.
+func CorporationTypeNotNil() predicate.VendorProfile {
+	return predicate.VendorProfile(sql.FieldNotNull(FieldCorporationType))
 }
 
-// DbaNameEqualFold applies the EqualFold predicate on the "dba_name" field.
-func DbaNameEqualFold(v string) predicate.VendorProfile {
-	return predicate.VendorProfile(sql.FieldEqualFold(FieldDbaName, v))
+// CorporationTypeEqualFold applies the EqualFold predicate on the "corporation_type" field.
+func CorporationTypeEqualFold(v string) predicate.VendorProfile {
+	return predicate.VendorProfile(sql.FieldEqualFold(FieldCorporationType, v))
 }
 
-// DbaNameContainsFold applies the ContainsFold predicate on the "dba_name" field.
-func DbaNameContainsFold(v string) predicate.VendorProfile {
-	return predicate.VendorProfile(sql.FieldContainsFold(FieldDbaName, v))
+// CorporationTypeContainsFold applies the ContainsFold predicate on the "corporation_type" field.
+func CorporationTypeContainsFold(v string) predicate.VendorProfile {
+	return predicate.VendorProfile(sql.FieldContainsFold(FieldCorporationType, v))
+}
+
+// CorporationDbaEQ applies the EQ predicate on the "corporation_dba" field.
+func CorporationDbaEQ(v string) predicate.VendorProfile {
+	return predicate.VendorProfile(sql.FieldEQ(FieldCorporationDba, v))
+}
+
+// CorporationDbaNEQ applies the NEQ predicate on the "corporation_dba" field.
+func CorporationDbaNEQ(v string) predicate.VendorProfile {
+	return predicate.VendorProfile(sql.FieldNEQ(FieldCorporationDba, v))
+}
+
+// CorporationDbaIn applies the In predicate on the "corporation_dba" field.
+func CorporationDbaIn(vs ...string) predicate.VendorProfile {
+	return predicate.VendorProfile(sql.FieldIn(FieldCorporationDba, vs...))
+}
+
+// CorporationDbaNotIn applies the NotIn predicate on the "corporation_dba" field.
+func CorporationDbaNotIn(vs ...string) predicate.VendorProfile {
+	return predicate.VendorProfile(sql.FieldNotIn(FieldCorporationDba, vs...))
+}
+
+// CorporationDbaGT applies the GT predicate on the "corporation_dba" field.
+func CorporationDbaGT(v string) predicate.VendorProfile {
+	return predicate.VendorProfile(sql.FieldGT(FieldCorporationDba, v))
+}
+
+// CorporationDbaGTE applies the GTE predicate on the "corporation_dba" field.
+func CorporationDbaGTE(v string) predicate.VendorProfile {
+	return predicate.VendorProfile(sql.FieldGTE(FieldCorporationDba, v))
+}
+
+// CorporationDbaLT applies the LT predicate on the "corporation_dba" field.
+func CorporationDbaLT(v string) predicate.VendorProfile {
+	return predicate.VendorProfile(sql.FieldLT(FieldCorporationDba, v))
+}
+
+// CorporationDbaLTE applies the LTE predicate on the "corporation_dba" field.
+func CorporationDbaLTE(v string) predicate.VendorProfile {
+	return predicate.VendorProfile(sql.FieldLTE(FieldCorporationDba, v))
+}
+
+// CorporationDbaContains applies the Contains predicate on the "corporation_dba" field.
+func CorporationDbaContains(v string) predicate.VendorProfile {
+	return predicate.VendorProfile(sql.FieldContains(FieldCorporationDba, v))
+}
+
+// CorporationDbaHasPrefix applies the HasPrefix predicate on the "corporation_dba" field.
+func CorporationDbaHasPrefix(v string) predicate.VendorProfile {
+	return predicate.VendorProfile(sql.FieldHasPrefix(FieldCorporationDba, v))
+}
+
+// CorporationDbaHasSuffix applies the HasSuffix predicate on the "corporation_dba" field.
+func CorporationDbaHasSuffix(v string) predicate.VendorProfile {
+	return predicate.VendorProfile(sql.FieldHasSuffix(FieldCorporationDba, v))
+}
+
+// CorporationDbaIsNil applies the IsNil predicate on the "corporation_dba" field.
+func CorporationDbaIsNil() predicate.VendorProfile {
+	return predicate.VendorProfile(sql.FieldIsNull(FieldCorporationDba))
+}
+
+// CorporationDbaNotNil applies the NotNil predicate on the "corporation_dba" field.
+func CorporationDbaNotNil() predicate.VendorProfile {
+	return predicate.VendorProfile(sql.FieldNotNull(FieldCorporationDba))
+}
+
+// CorporationDbaEqualFold applies the EqualFold predicate on the "corporation_dba" field.
+func CorporationDbaEqualFold(v string) predicate.VendorProfile {
+	return predicate.VendorProfile(sql.FieldEqualFold(FieldCorporationDba, v))
+}
+
+// CorporationDbaContainsFold applies the ContainsFold predicate on the "corporation_dba" field.
+func CorporationDbaContainsFold(v string) predicate.VendorProfile {
+	return predicate.VendorProfile(sql.FieldContainsFold(FieldCorporationDba, v))
 }
 
 // DescriptionEQ applies the EQ predicate on the "description" field.
@@ -1022,6 +1108,111 @@ func WebsiteURIContainsFold(v string) predicate.VendorProfile {
 	return predicate.VendorProfile(sql.FieldContainsFold(FieldWebsiteURI, v))
 }
 
+// TaxIDEQ applies the EQ predicate on the "tax_id" field.
+func TaxIDEQ(v string) predicate.VendorProfile {
+	return predicate.VendorProfile(sql.FieldEQ(FieldTaxID, v))
+}
+
+// TaxIDNEQ applies the NEQ predicate on the "tax_id" field.
+func TaxIDNEQ(v string) predicate.VendorProfile {
+	return predicate.VendorProfile(sql.FieldNEQ(FieldTaxID, v))
+}
+
+// TaxIDIn applies the In predicate on the "tax_id" field.
+func TaxIDIn(vs ...string) predicate.VendorProfile {
+	return predicate.VendorProfile(sql.FieldIn(FieldTaxID, vs...))
+}
+
+// TaxIDNotIn applies the NotIn predicate on the "tax_id" field.
+func TaxIDNotIn(vs ...string) predicate.VendorProfile {
+	return predicate.VendorProfile(sql.FieldNotIn(FieldTaxID, vs...))
+}
+
+// TaxIDGT applies the GT predicate on the "tax_id" field.
+func TaxIDGT(v string) predicate.VendorProfile {
+	return predicate.VendorProfile(sql.FieldGT(FieldTaxID, v))
+}
+
+// TaxIDGTE applies the GTE predicate on the "tax_id" field.
+func TaxIDGTE(v string) predicate.VendorProfile {
+	return predicate.VendorProfile(sql.FieldGTE(FieldTaxID, v))
+}
+
+// TaxIDLT applies the LT predicate on the "tax_id" field.
+func TaxIDLT(v string) predicate.VendorProfile {
+	return predicate.VendorProfile(sql.FieldLT(FieldTaxID, v))
+}
+
+// TaxIDLTE applies the LTE predicate on the "tax_id" field.
+func TaxIDLTE(v string) predicate.VendorProfile {
+	return predicate.VendorProfile(sql.FieldLTE(FieldTaxID, v))
+}
+
+// TaxIDContains applies the Contains predicate on the "tax_id" field.
+func TaxIDContains(v string) predicate.VendorProfile {
+	return predicate.VendorProfile(sql.FieldContains(FieldTaxID, v))
+}
+
+// TaxIDHasPrefix applies the HasPrefix predicate on the "tax_id" field.
+func TaxIDHasPrefix(v string) predicate.VendorProfile {
+	return predicate.VendorProfile(sql.FieldHasPrefix(FieldTaxID, v))
+}
+
+// TaxIDHasSuffix applies the HasSuffix predicate on the "tax_id" field.
+func TaxIDHasSuffix(v string) predicate.VendorProfile {
+	return predicate.VendorProfile(sql.FieldHasSuffix(FieldTaxID, v))
+}
+
+// TaxIDIsNil applies the IsNil predicate on the "tax_id" field.
+func TaxIDIsNil() predicate.VendorProfile {
+	return predicate.VendorProfile(sql.FieldIsNull(FieldTaxID))
+}
+
+// TaxIDNotNil applies the NotNil predicate on the "tax_id" field.
+func TaxIDNotNil() predicate.VendorProfile {
+	return predicate.VendorProfile(sql.FieldNotNull(FieldTaxID))
+}
+
+// TaxIDEqualFold applies the EqualFold predicate on the "tax_id" field.
+func TaxIDEqualFold(v string) predicate.VendorProfile {
+	return predicate.VendorProfile(sql.FieldEqualFold(FieldTaxID, v))
+}
+
+// TaxIDContainsFold applies the ContainsFold predicate on the "tax_id" field.
+func TaxIDContainsFold(v string) predicate.VendorProfile {
+	return predicate.VendorProfile(sql.FieldContainsFold(FieldTaxID, v))
+}
+
+// TaxIDTypeEQ applies the EQ predicate on the "tax_id_type" field.
+func TaxIDTypeEQ(v enums.TaxIDType) predicate.VendorProfile {
+	vc := v
+	return predicate.VendorProfile(sql.FieldEQ(FieldTaxIDType, vc))
+}
+
+// TaxIDTypeNEQ applies the NEQ predicate on the "tax_id_type" field.
+func TaxIDTypeNEQ(v enums.TaxIDType) predicate.VendorProfile {
+	vc := v
+	return predicate.VendorProfile(sql.FieldNEQ(FieldTaxIDType, vc))
+}
+
+// TaxIDTypeIn applies the In predicate on the "tax_id_type" field.
+func TaxIDTypeIn(vs ...enums.TaxIDType) predicate.VendorProfile {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.VendorProfile(sql.FieldIn(FieldTaxIDType, v...))
+}
+
+// TaxIDTypeNotIn applies the NotIn predicate on the "tax_id_type" field.
+func TaxIDTypeNotIn(vs ...enums.TaxIDType) predicate.VendorProfile {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.VendorProfile(sql.FieldNotIn(FieldTaxIDType, v...))
+}
+
 // HasOwner applies the HasEdge predicate on the "owner" edge.
 func HasOwner() predicate.VendorProfile {
 	return predicate.VendorProfile(func(s *sql.Selector) {
@@ -1080,6 +1271,35 @@ func HasPostalAddressesWith(preds ...predicate.PostalAddress) predicate.VendorPr
 	})
 }
 
+// HasPhoneNumbers applies the HasEdge predicate on the "phone_numbers" edge.
+func HasPhoneNumbers() predicate.VendorProfile {
+	return predicate.VendorProfile(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, PhoneNumbersTable, PhoneNumbersPrimaryKey...),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.PhoneNumber
+		step.Edge.Schema = schemaConfig.VendorProfilePhoneNumber
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasPhoneNumbersWith applies the HasEdge predicate on the "phone_numbers" edge with a given conditions (other predicates).
+func HasPhoneNumbersWith(preds ...predicate.PhoneNumber) predicate.VendorProfile {
+	return predicate.VendorProfile(func(s *sql.Selector) {
+		step := newPhoneNumbersStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.PhoneNumber
+		step.Edge.Schema = schemaConfig.VendorProfilePhoneNumber
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasVendor applies the HasEdge predicate on the "vendor" edge.
 func HasVendor() predicate.VendorProfile {
 	return predicate.VendorProfile(func(s *sql.Selector) {
@@ -1130,6 +1350,35 @@ func HasVendorProfilePostalAddressesWith(preds ...predicate.VendorProfilePostalA
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.VendorProfilePostalAddress
 		step.Edge.Schema = schemaConfig.VendorProfilePostalAddress
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasVendorProfilePhoneNumbers applies the HasEdge predicate on the "vendor_profile_phone_numbers" edge.
+func HasVendorProfilePhoneNumbers() predicate.VendorProfile {
+	return predicate.VendorProfile(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, true, VendorProfilePhoneNumbersTable, VendorProfilePhoneNumbersColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.VendorProfilePhoneNumber
+		step.Edge.Schema = schemaConfig.VendorProfilePhoneNumber
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasVendorProfilePhoneNumbersWith applies the HasEdge predicate on the "vendor_profile_phone_numbers" edge with a given conditions (other predicates).
+func HasVendorProfilePhoneNumbersWith(preds ...predicate.VendorProfilePhoneNumber) predicate.VendorProfile {
+	return predicate.VendorProfile(func(s *sql.Selector) {
+		step := newVendorProfilePhoneNumbersStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.VendorProfilePhoneNumber
+		step.Edge.Schema = schemaConfig.VendorProfilePhoneNumber
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

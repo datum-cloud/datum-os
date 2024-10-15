@@ -1,0 +1,103 @@
+extend type Query {
+    """
+    Look up vendorProfilePhoneNumber by ID
+    """
+     vendorProfilePhoneNumber(
+        """
+        ID of the vendorProfilePhoneNumber
+        """
+        id: ID!
+    ):  VendorProfilePhoneNumber!
+}
+
+extend type Mutation{
+    """
+    Create a new vendorProfilePhoneNumber
+    """
+    createVendorProfilePhoneNumber(
+        """
+        values of the vendorProfilePhoneNumber
+        """
+        input: CreateVendorProfilePhoneNumberInput!
+    ): VendorProfilePhoneNumberCreatePayload!
+    """
+    Create multiple new vendorProfilePhoneNumbers
+    """
+    createBulkVendorProfilePhoneNumber(
+        """
+        values of the vendorProfilePhoneNumber
+        """
+        input: [CreateVendorProfilePhoneNumberInput!]
+    ): VendorProfilePhoneNumberBulkCreatePayload!
+    """
+    Create multiple new vendorProfilePhoneNumbers via file upload
+    """
+    createBulkCSVVendorProfilePhoneNumber(
+        """
+        csv file containing values of the vendorProfilePhoneNumber
+        """
+        input: Upload!
+    ): VendorProfilePhoneNumberBulkCreatePayload!
+    """
+    Update an existing vendorProfilePhoneNumber
+    """
+    updateVendorProfilePhoneNumber(
+        """
+        ID of the vendorProfilePhoneNumber
+        """
+        id: ID!
+        """
+        New values for the vendorProfilePhoneNumber
+        """
+        input: UpdateVendorProfilePhoneNumberInput!
+    ): VendorProfilePhoneNumberUpdatePayload!
+    """
+    Delete an existing vendorProfilePhoneNumber
+    """
+    deleteVendorProfilePhoneNumber(
+        """
+        ID of the vendorProfilePhoneNumber
+        """
+        id: ID!
+    ): VendorProfilePhoneNumberDeletePayload!
+}
+
+"""
+Return response for createVendorProfilePhoneNumber mutation
+"""
+type VendorProfilePhoneNumberCreatePayload {
+    """
+    Created vendorProfilePhoneNumber
+    """
+    vendorProfilePhoneNumber: VendorProfilePhoneNumber!
+}
+
+"""
+Return response for updateVendorProfilePhoneNumber mutation
+"""
+type VendorProfilePhoneNumberUpdatePayload {
+    """
+    Updated vendorProfilePhoneNumber
+    """
+    vendorProfilePhoneNumber: VendorProfilePhoneNumber!
+}
+
+"""
+Return response for deleteVendorProfilePhoneNumber mutation
+"""
+type VendorProfilePhoneNumberDeletePayload {
+    """
+    Deleted vendorProfilePhoneNumber ID
+    """
+    deletedID: ID!
+}
+
+"""
+Return response for createBulkVendorProfilePhoneNumber mutation
+"""
+type VendorProfilePhoneNumberBulkCreatePayload {
+    """
+    Created vendorProfilePhoneNumbers
+    """
+    vendorProfilePhoneNumbers: [VendorProfilePhoneNumber!]
+}

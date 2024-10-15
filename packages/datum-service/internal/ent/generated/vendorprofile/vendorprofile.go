@@ -3,11 +3,14 @@
 package vendorprofile
 
 import (
+	"fmt"
 	"time"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
+	"github.com/99designs/gqlgen/graphql"
+	"github.com/datum-cloud/datum-os/pkg/enums"
 )
 
 const (
@@ -37,20 +40,30 @@ const (
 	FieldVendorID = "vendor_id"
 	// FieldName holds the string denoting the name field in the database.
 	FieldName = "name"
-	// FieldDbaName holds the string denoting the dba_name field in the database.
-	FieldDbaName = "dba_name"
+	// FieldCorporationType holds the string denoting the corporation_type field in the database.
+	FieldCorporationType = "corporation_type"
+	// FieldCorporationDba holds the string denoting the corporation_dba field in the database.
+	FieldCorporationDba = "corporation_dba"
 	// FieldDescription holds the string denoting the description field in the database.
 	FieldDescription = "description"
 	// FieldWebsiteURI holds the string denoting the website_uri field in the database.
 	FieldWebsiteURI = "website_uri"
+	// FieldTaxID holds the string denoting the tax_id field in the database.
+	FieldTaxID = "tax_id"
+	// FieldTaxIDType holds the string denoting the tax_id_type field in the database.
+	FieldTaxIDType = "tax_id_type"
 	// EdgeOwner holds the string denoting the owner edge name in mutations.
 	EdgeOwner = "owner"
 	// EdgePostalAddresses holds the string denoting the postal_addresses edge name in mutations.
 	EdgePostalAddresses = "postal_addresses"
+	// EdgePhoneNumbers holds the string denoting the phone_numbers edge name in mutations.
+	EdgePhoneNumbers = "phone_numbers"
 	// EdgeVendor holds the string denoting the vendor edge name in mutations.
 	EdgeVendor = "vendor"
 	// EdgeVendorProfilePostalAddresses holds the string denoting the vendor_profile_postal_addresses edge name in mutations.
 	EdgeVendorProfilePostalAddresses = "vendor_profile_postal_addresses"
+	// EdgeVendorProfilePhoneNumbers holds the string denoting the vendor_profile_phone_numbers edge name in mutations.
+	EdgeVendorProfilePhoneNumbers = "vendor_profile_phone_numbers"
 	// Table holds the table name of the vendorprofile in the database.
 	Table = "vendor_profiles"
 	// OwnerTable is the table that holds the owner relation/edge.
@@ -65,6 +78,11 @@ const (
 	// PostalAddressesInverseTable is the table name for the PostalAddress entity.
 	// It exists in this package in order to avoid circular dependency with the "postaladdress" package.
 	PostalAddressesInverseTable = "postal_addresses"
+	// PhoneNumbersTable is the table that holds the phone_numbers relation/edge. The primary key declared below.
+	PhoneNumbersTable = "vendor_profile_phone_numbers"
+	// PhoneNumbersInverseTable is the table name for the PhoneNumber entity.
+	// It exists in this package in order to avoid circular dependency with the "phonenumber" package.
+	PhoneNumbersInverseTable = "phone_numbers"
 	// VendorTable is the table that holds the vendor relation/edge.
 	VendorTable = "vendor_profiles"
 	// VendorInverseTable is the table name for the Vendor entity.
@@ -79,6 +97,13 @@ const (
 	VendorProfilePostalAddressesInverseTable = "vendor_profile_postal_addresses"
 	// VendorProfilePostalAddressesColumn is the table column denoting the vendor_profile_postal_addresses relation/edge.
 	VendorProfilePostalAddressesColumn = "vendor_profile_id"
+	// VendorProfilePhoneNumbersTable is the table that holds the vendor_profile_phone_numbers relation/edge.
+	VendorProfilePhoneNumbersTable = "vendor_profile_phone_numbers"
+	// VendorProfilePhoneNumbersInverseTable is the table name for the VendorProfilePhoneNumber entity.
+	// It exists in this package in order to avoid circular dependency with the "vendorprofilephonenumber" package.
+	VendorProfilePhoneNumbersInverseTable = "vendor_profile_phone_numbers"
+	// VendorProfilePhoneNumbersColumn is the table column denoting the vendor_profile_phone_numbers relation/edge.
+	VendorProfilePhoneNumbersColumn = "vendor_profile_id"
 )
 
 // Columns holds all SQL columns for vendorprofile fields.
@@ -95,15 +120,21 @@ var Columns = []string{
 	FieldOwnerID,
 	FieldVendorID,
 	FieldName,
-	FieldDbaName,
+	FieldCorporationType,
+	FieldCorporationDba,
 	FieldDescription,
 	FieldWebsiteURI,
+	FieldTaxID,
+	FieldTaxIDType,
 }
 
 var (
 	// PostalAddressesPrimaryKey and PostalAddressesColumn2 are the table columns denoting the
 	// primary key for the postal_addresses relation (M2M).
 	PostalAddressesPrimaryKey = []string{"vendor_profile_id", "postal_address_id"}
+	// PhoneNumbersPrimaryKey and PhoneNumbersColumn2 are the table columns denoting the
+	// primary key for the phone_numbers relation (M2M).
+	PhoneNumbersPrimaryKey = []string{"vendor_profile_id", "phone_number_id"}
 )
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -141,13 +172,29 @@ var (
 	VendorIDValidator func(string) error
 	// NameValidator is a validator for the "name" field. It is called by the builders before save.
 	NameValidator func(string) error
-	// DbaNameValidator is a validator for the "dba_name" field. It is called by the builders before save.
-	DbaNameValidator func(string) error
+	// CorporationTypeValidator is a validator for the "corporation_type" field. It is called by the builders before save.
+	CorporationTypeValidator func(string) error
+	// CorporationDbaValidator is a validator for the "corporation_dba" field. It is called by the builders before save.
+	CorporationDbaValidator func(string) error
 	// WebsiteURIValidator is a validator for the "website_uri" field. It is called by the builders before save.
 	WebsiteURIValidator func(string) error
+	// TaxIDValidator is a validator for the "tax_id" field. It is called by the builders before save.
+	TaxIDValidator func(string) error
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )
+
+const DefaultTaxIDType enums.TaxIDType = "UNSPECIFIED"
+
+// TaxIDTypeValidator is a validator for the "tax_id_type" field enum values. It is called by the builders before save.
+func TaxIDTypeValidator(tit enums.TaxIDType) error {
+	switch tit.String() {
+	case "UNSPECIFIED", "SSN", "EIN", "ATIN", "ITIN":
+		return nil
+	default:
+		return fmt.Errorf("vendorprofile: invalid enum value for tax_id_type field: %q", tit)
+	}
+}
 
 // OrderOption defines the ordering options for the VendorProfile queries.
 type OrderOption func(*sql.Selector)
@@ -207,9 +254,14 @@ func ByName(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldName, opts...).ToFunc()
 }
 
-// ByDbaName orders the results by the dba_name field.
-func ByDbaName(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldDbaName, opts...).ToFunc()
+// ByCorporationType orders the results by the corporation_type field.
+func ByCorporationType(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldCorporationType, opts...).ToFunc()
+}
+
+// ByCorporationDba orders the results by the corporation_dba field.
+func ByCorporationDba(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldCorporationDba, opts...).ToFunc()
 }
 
 // ByDescription orders the results by the description field.
@@ -220,6 +272,16 @@ func ByDescription(opts ...sql.OrderTermOption) OrderOption {
 // ByWebsiteURI orders the results by the website_uri field.
 func ByWebsiteURI(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldWebsiteURI, opts...).ToFunc()
+}
+
+// ByTaxID orders the results by the tax_id field.
+func ByTaxID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldTaxID, opts...).ToFunc()
+}
+
+// ByTaxIDType orders the results by the tax_id_type field.
+func ByTaxIDType(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldTaxIDType, opts...).ToFunc()
 }
 
 // ByOwnerField orders the results by owner field.
@@ -243,6 +305,20 @@ func ByPostalAddresses(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
+// ByPhoneNumbersCount orders the results by phone_numbers count.
+func ByPhoneNumbersCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newPhoneNumbersStep(), opts...)
+	}
+}
+
+// ByPhoneNumbers orders the results by phone_numbers terms.
+func ByPhoneNumbers(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newPhoneNumbersStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByVendorField orders the results by vendor field.
 func ByVendorField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -263,6 +339,20 @@ func ByVendorProfilePostalAddresses(term sql.OrderTerm, terms ...sql.OrderTerm) 
 		sqlgraph.OrderByNeighborTerms(s, newVendorProfilePostalAddressesStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
+
+// ByVendorProfilePhoneNumbersCount orders the results by vendor_profile_phone_numbers count.
+func ByVendorProfilePhoneNumbersCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newVendorProfilePhoneNumbersStep(), opts...)
+	}
+}
+
+// ByVendorProfilePhoneNumbers orders the results by vendor_profile_phone_numbers terms.
+func ByVendorProfilePhoneNumbers(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newVendorProfilePhoneNumbersStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
 func newOwnerStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -275,6 +365,13 @@ func newPostalAddressesStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(PostalAddressesInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2M, false, PostalAddressesTable, PostalAddressesPrimaryKey...),
+	)
+}
+func newPhoneNumbersStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(PhoneNumbersInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, false, PhoneNumbersTable, PhoneNumbersPrimaryKey...),
 	)
 }
 func newVendorStep() *sqlgraph.Step {
@@ -291,3 +388,17 @@ func newVendorProfilePostalAddressesStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.O2M, true, VendorProfilePostalAddressesTable, VendorProfilePostalAddressesColumn),
 	)
 }
+func newVendorProfilePhoneNumbersStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(VendorProfilePhoneNumbersInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, true, VendorProfilePhoneNumbersTable, VendorProfilePhoneNumbersColumn),
+	)
+}
+
+var (
+	// enums.TaxIDType must implement graphql.Marshaler.
+	_ graphql.Marshaler = (*enums.TaxIDType)(nil)
+	// enums.TaxIDType must implement graphql.Unmarshaler.
+	_ graphql.Unmarshaler = (*enums.TaxIDType)(nil)
+)

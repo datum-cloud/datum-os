@@ -34,12 +34,14 @@ import (
 	"github.com/datum-cloud/datum-os/internal/ent/generated/organizationhistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/organizationsettinghistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/orgmembershiphistory"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/phonenumberhistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/postaladdresshistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/templatehistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/userhistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/usersettinghistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorhistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofilehistory"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofilephonenumberhistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofilepostaladdresshistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/webhookhistory"
 	"github.com/datum-cloud/datum-os/pkg/enthistory"
@@ -1519,6 +1521,75 @@ func (osh *OrganizationSettingHistory) Diff(history *OrganizationSettingHistory)
 	return nil, IdenticalHistoryError
 }
 
+func (pnh *PhoneNumberHistory) changes(new *PhoneNumberHistory) []Change {
+	var changes []Change
+	if !reflect.DeepEqual(pnh.CreatedAt, new.CreatedAt) {
+		changes = append(changes, NewChange(phonenumberhistory.FieldCreatedAt, pnh.CreatedAt, new.CreatedAt))
+	}
+	if !reflect.DeepEqual(pnh.UpdatedAt, new.UpdatedAt) {
+		changes = append(changes, NewChange(phonenumberhistory.FieldUpdatedAt, pnh.UpdatedAt, new.UpdatedAt))
+	}
+	if !reflect.DeepEqual(pnh.CreatedBy, new.CreatedBy) {
+		changes = append(changes, NewChange(phonenumberhistory.FieldCreatedBy, pnh.CreatedBy, new.CreatedBy))
+	}
+	if !reflect.DeepEqual(pnh.DeletedAt, new.DeletedAt) {
+		changes = append(changes, NewChange(phonenumberhistory.FieldDeletedAt, pnh.DeletedAt, new.DeletedAt))
+	}
+	if !reflect.DeepEqual(pnh.DeletedBy, new.DeletedBy) {
+		changes = append(changes, NewChange(phonenumberhistory.FieldDeletedBy, pnh.DeletedBy, new.DeletedBy))
+	}
+	if !reflect.DeepEqual(pnh.MappingID, new.MappingID) {
+		changes = append(changes, NewChange(phonenumberhistory.FieldMappingID, pnh.MappingID, new.MappingID))
+	}
+	if !reflect.DeepEqual(pnh.Tags, new.Tags) {
+		changes = append(changes, NewChange(phonenumberhistory.FieldTags, pnh.Tags, new.Tags))
+	}
+	if !reflect.DeepEqual(pnh.OwnerID, new.OwnerID) {
+		changes = append(changes, NewChange(phonenumberhistory.FieldOwnerID, pnh.OwnerID, new.OwnerID))
+	}
+	if !reflect.DeepEqual(pnh.Kind, new.Kind) {
+		changes = append(changes, NewChange(phonenumberhistory.FieldKind, pnh.Kind, new.Kind))
+	}
+	if !reflect.DeepEqual(pnh.RegionCode, new.RegionCode) {
+		changes = append(changes, NewChange(phonenumberhistory.FieldRegionCode, pnh.RegionCode, new.RegionCode))
+	}
+	if !reflect.DeepEqual(pnh.ShortCode, new.ShortCode) {
+		changes = append(changes, NewChange(phonenumberhistory.FieldShortCode, pnh.ShortCode, new.ShortCode))
+	}
+	if !reflect.DeepEqual(pnh.Number, new.Number) {
+		changes = append(changes, NewChange(phonenumberhistory.FieldNumber, pnh.Number, new.Number))
+	}
+	if !reflect.DeepEqual(pnh.Extension, new.Extension) {
+		changes = append(changes, NewChange(phonenumberhistory.FieldExtension, pnh.Extension, new.Extension))
+	}
+	return changes
+}
+
+func (pnh *PhoneNumberHistory) Diff(history *PhoneNumberHistory) (*HistoryDiff[PhoneNumberHistory], error) {
+	if pnh.Ref != history.Ref {
+		return nil, MismatchedRefError
+	}
+
+	pnhUnix, historyUnix := pnh.HistoryTime.Unix(), history.HistoryTime.Unix()
+	pnhOlder := pnhUnix < historyUnix || (pnhUnix == historyUnix && pnh.ID < history.ID)
+	historyOlder := pnhUnix > historyUnix || (pnhUnix == historyUnix && pnh.ID > history.ID)
+
+	if pnhOlder {
+		return &HistoryDiff[PhoneNumberHistory]{
+			Old:     pnh,
+			New:     history,
+			Changes: pnh.changes(history),
+		}, nil
+	} else if historyOlder {
+		return &HistoryDiff[PhoneNumberHistory]{
+			Old:     history,
+			New:     pnh,
+			Changes: history.changes(pnh),
+		}, nil
+	}
+	return nil, IdenticalHistoryError
+}
+
 func (pah *PostalAddressHistory) changes(new *PostalAddressHistory) []Change {
 	var changes []Change
 	if !reflect.DeepEqual(pah.CreatedAt, new.CreatedAt) {
@@ -1932,14 +2003,23 @@ func (vph *VendorProfileHistory) changes(new *VendorProfileHistory) []Change {
 	if !reflect.DeepEqual(vph.Name, new.Name) {
 		changes = append(changes, NewChange(vendorprofilehistory.FieldName, vph.Name, new.Name))
 	}
-	if !reflect.DeepEqual(vph.DbaName, new.DbaName) {
-		changes = append(changes, NewChange(vendorprofilehistory.FieldDbaName, vph.DbaName, new.DbaName))
+	if !reflect.DeepEqual(vph.CorporationType, new.CorporationType) {
+		changes = append(changes, NewChange(vendorprofilehistory.FieldCorporationType, vph.CorporationType, new.CorporationType))
+	}
+	if !reflect.DeepEqual(vph.CorporationDba, new.CorporationDba) {
+		changes = append(changes, NewChange(vendorprofilehistory.FieldCorporationDba, vph.CorporationDba, new.CorporationDba))
 	}
 	if !reflect.DeepEqual(vph.Description, new.Description) {
 		changes = append(changes, NewChange(vendorprofilehistory.FieldDescription, vph.Description, new.Description))
 	}
 	if !reflect.DeepEqual(vph.WebsiteURI, new.WebsiteURI) {
 		changes = append(changes, NewChange(vendorprofilehistory.FieldWebsiteURI, vph.WebsiteURI, new.WebsiteURI))
+	}
+	if !reflect.DeepEqual(vph.TaxID, new.TaxID) {
+		changes = append(changes, NewChange(vendorprofilehistory.FieldTaxID, vph.TaxID, new.TaxID))
+	}
+	if !reflect.DeepEqual(vph.TaxIDType, new.TaxIDType) {
+		changes = append(changes, NewChange(vendorprofilehistory.FieldTaxIDType, vph.TaxIDType, new.TaxIDType))
 	}
 	return changes
 }
@@ -1964,6 +2044,60 @@ func (vph *VendorProfileHistory) Diff(history *VendorProfileHistory) (*HistoryDi
 			Old:     history,
 			New:     vph,
 			Changes: history.changes(vph),
+		}, nil
+	}
+	return nil, IdenticalHistoryError
+}
+
+func (vppnh *VendorProfilePhoneNumberHistory) changes(new *VendorProfilePhoneNumberHistory) []Change {
+	var changes []Change
+	if !reflect.DeepEqual(vppnh.CreatedAt, new.CreatedAt) {
+		changes = append(changes, NewChange(vendorprofilephonenumberhistory.FieldCreatedAt, vppnh.CreatedAt, new.CreatedAt))
+	}
+	if !reflect.DeepEqual(vppnh.UpdatedAt, new.UpdatedAt) {
+		changes = append(changes, NewChange(vendorprofilephonenumberhistory.FieldUpdatedAt, vppnh.UpdatedAt, new.UpdatedAt))
+	}
+	if !reflect.DeepEqual(vppnh.CreatedBy, new.CreatedBy) {
+		changes = append(changes, NewChange(vendorprofilephonenumberhistory.FieldCreatedBy, vppnh.CreatedBy, new.CreatedBy))
+	}
+	if !reflect.DeepEqual(vppnh.MappingID, new.MappingID) {
+		changes = append(changes, NewChange(vendorprofilephonenumberhistory.FieldMappingID, vppnh.MappingID, new.MappingID))
+	}
+	if !reflect.DeepEqual(vppnh.DeletedAt, new.DeletedAt) {
+		changes = append(changes, NewChange(vendorprofilephonenumberhistory.FieldDeletedAt, vppnh.DeletedAt, new.DeletedAt))
+	}
+	if !reflect.DeepEqual(vppnh.DeletedBy, new.DeletedBy) {
+		changes = append(changes, NewChange(vendorprofilephonenumberhistory.FieldDeletedBy, vppnh.DeletedBy, new.DeletedBy))
+	}
+	if !reflect.DeepEqual(vppnh.VendorProfileID, new.VendorProfileID) {
+		changes = append(changes, NewChange(vendorprofilephonenumberhistory.FieldVendorProfileID, vppnh.VendorProfileID, new.VendorProfileID))
+	}
+	if !reflect.DeepEqual(vppnh.PhoneNumberID, new.PhoneNumberID) {
+		changes = append(changes, NewChange(vendorprofilephonenumberhistory.FieldPhoneNumberID, vppnh.PhoneNumberID, new.PhoneNumberID))
+	}
+	return changes
+}
+
+func (vppnh *VendorProfilePhoneNumberHistory) Diff(history *VendorProfilePhoneNumberHistory) (*HistoryDiff[VendorProfilePhoneNumberHistory], error) {
+	if vppnh.Ref != history.Ref {
+		return nil, MismatchedRefError
+	}
+
+	vppnhUnix, historyUnix := vppnh.HistoryTime.Unix(), history.HistoryTime.Unix()
+	vppnhOlder := vppnhUnix < historyUnix || (vppnhUnix == historyUnix && vppnh.ID < history.ID)
+	historyOlder := vppnhUnix > historyUnix || (vppnhUnix == historyUnix && vppnh.ID > history.ID)
+
+	if vppnhOlder {
+		return &HistoryDiff[VendorProfilePhoneNumberHistory]{
+			Old:     vppnh,
+			New:     history,
+			Changes: vppnh.changes(history),
+		}, nil
+	} else if historyOlder {
+		return &HistoryDiff[VendorProfilePhoneNumberHistory]{
+			Old:     history,
+			New:     vppnh,
+			Changes: history.changes(vppnh),
 		}, nil
 	}
 	return nil, IdenticalHistoryError
@@ -2276,6 +2410,12 @@ func (c *Client) Audit(ctx context.Context) ([][]string, error) {
 	}
 	records = append(records, record...)
 
+	record, err = auditPhoneNumberHistory(ctx, c.config)
+	if err != nil {
+		return nil, err
+	}
+	records = append(records, record...)
+
 	record, err = auditPostalAddressHistory(ctx, c.config)
 	if err != nil {
 		return nil, err
@@ -2307,6 +2447,12 @@ func (c *Client) Audit(ctx context.Context) ([][]string, error) {
 	records = append(records, record...)
 
 	record, err = auditVendorProfileHistory(ctx, c.config)
+	if err != nil {
+		return nil, err
+	}
+	records = append(records, record...)
+
+	record, err = auditVendorProfilePhoneNumberHistory(ctx, c.config)
 	if err != nil {
 		return nil, err
 	}
@@ -2532,6 +2678,15 @@ func (c *Client) AuditWithFilter(ctx context.Context, tableName string) ([][]str
 		records = append(records, record...)
 	}
 
+	if tableName == "" || tableName == strings.TrimSuffix("PhoneNumberHistory", "History") {
+		record, err = auditPhoneNumberHistory(ctx, c.config)
+		if err != nil {
+			return nil, err
+		}
+
+		records = append(records, record...)
+	}
+
 	if tableName == "" || tableName == strings.TrimSuffix("PostalAddressHistory", "History") {
 		record, err = auditPostalAddressHistory(ctx, c.config)
 		if err != nil {
@@ -2579,6 +2734,15 @@ func (c *Client) AuditWithFilter(ctx context.Context, tableName string) ([][]str
 
 	if tableName == "" || tableName == strings.TrimSuffix("VendorProfileHistory", "History") {
 		record, err = auditVendorProfileHistory(ctx, c.config)
+		if err != nil {
+			return nil, err
+		}
+
+		records = append(records, record...)
+	}
+
+	if tableName == "" || tableName == strings.TrimSuffix("VendorProfilePhoneNumberHistory", "History") {
+		record, err = auditVendorProfilePhoneNumberHistory(ctx, c.config)
 		if err != nil {
 			return nil, err
 		}
@@ -3802,6 +3966,59 @@ func auditOrganizationSettingHistory(ctx context.Context, config config) ([][]st
 	return records, nil
 }
 
+type phonenumberhistoryref struct {
+	Ref string
+}
+
+func auditPhoneNumberHistory(ctx context.Context, config config) ([][]string, error) {
+	var records = [][]string{}
+	var refs []phonenumberhistoryref
+	client := NewPhoneNumberHistoryClient(config)
+	err := client.Query().
+		Unique(true).
+		Order(phonenumberhistory.ByRef()).
+		Select(phonenumberhistory.FieldRef).
+		Scan(ctx, &refs)
+
+	if err != nil {
+		return nil, err
+	}
+	for _, currRef := range refs {
+		histories, err := client.Query().
+			Where(phonenumberhistory.Ref(currRef.Ref)).
+			Order(phonenumberhistory.ByHistoryTime()).
+			All(ctx)
+		if err != nil {
+			return nil, err
+		}
+
+		for i := 0; i < len(histories); i++ {
+			curr := histories[i]
+			record := record{
+				Table:       "PhoneNumberHistory",
+				RefId:       curr.Ref,
+				HistoryTime: curr.HistoryTime,
+				Operation:   curr.Operation,
+				UpdatedBy:   curr.UpdatedBy,
+			}
+			switch curr.Operation {
+			case enthistory.OpTypeInsert:
+				record.Changes = (&PhoneNumberHistory{}).changes(curr)
+			case enthistory.OpTypeDelete:
+				record.Changes = curr.changes(&PhoneNumberHistory{})
+			default:
+				if i == 0 {
+					record.Changes = (&PhoneNumberHistory{}).changes(curr)
+				} else {
+					record.Changes = histories[i-1].changes(curr)
+				}
+			}
+			records = append(records, record.toRow())
+		}
+	}
+	return records, nil
+}
+
 type postaladdresshistoryref struct {
 	Ref string
 }
@@ -4110,6 +4327,59 @@ func auditVendorProfileHistory(ctx context.Context, config config) ([][]string, 
 			default:
 				if i == 0 {
 					record.Changes = (&VendorProfileHistory{}).changes(curr)
+				} else {
+					record.Changes = histories[i-1].changes(curr)
+				}
+			}
+			records = append(records, record.toRow())
+		}
+	}
+	return records, nil
+}
+
+type vendorprofilephonenumberhistoryref struct {
+	Ref string
+}
+
+func auditVendorProfilePhoneNumberHistory(ctx context.Context, config config) ([][]string, error) {
+	var records = [][]string{}
+	var refs []vendorprofilephonenumberhistoryref
+	client := NewVendorProfilePhoneNumberHistoryClient(config)
+	err := client.Query().
+		Unique(true).
+		Order(vendorprofilephonenumberhistory.ByRef()).
+		Select(vendorprofilephonenumberhistory.FieldRef).
+		Scan(ctx, &refs)
+
+	if err != nil {
+		return nil, err
+	}
+	for _, currRef := range refs {
+		histories, err := client.Query().
+			Where(vendorprofilephonenumberhistory.Ref(currRef.Ref)).
+			Order(vendorprofilephonenumberhistory.ByHistoryTime()).
+			All(ctx)
+		if err != nil {
+			return nil, err
+		}
+
+		for i := 0; i < len(histories); i++ {
+			curr := histories[i]
+			record := record{
+				Table:       "VendorProfilePhoneNumberHistory",
+				RefId:       curr.Ref,
+				HistoryTime: curr.HistoryTime,
+				Operation:   curr.Operation,
+				UpdatedBy:   curr.UpdatedBy,
+			}
+			switch curr.Operation {
+			case enthistory.OpTypeInsert:
+				record.Changes = (&VendorProfilePhoneNumberHistory{}).changes(curr)
+			case enthistory.OpTypeDelete:
+				record.Changes = curr.changes(&VendorProfilePhoneNumberHistory{})
+			default:
+				if i == 0 {
+					record.Changes = (&VendorProfilePhoneNumberHistory{}).changes(curr)
 				} else {
 					record.Changes = histories[i-1].changes(curr)
 				}

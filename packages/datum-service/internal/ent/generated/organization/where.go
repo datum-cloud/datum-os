@@ -1842,6 +1842,35 @@ func HasPostalAddressesWith(preds ...predicate.PostalAddress) predicate.Organiza
 	})
 }
 
+// HasPhoneNumbers applies the HasEdge predicate on the "phone_numbers" edge.
+func HasPhoneNumbers() predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, PhoneNumbersTable, PhoneNumbersColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.PhoneNumber
+		step.Edge.Schema = schemaConfig.PhoneNumber
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasPhoneNumbersWith applies the HasEdge predicate on the "phone_numbers" edge with a given conditions (other predicates).
+func HasPhoneNumbersWith(preds ...predicate.PhoneNumber) predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := newPhoneNumbersStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.PhoneNumber
+		step.Edge.Schema = schemaConfig.PhoneNumber
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasMembers applies the HasEdge predicate on the "members" edge.
 func HasMembers() predicate.Organization {
 	return predicate.Organization(func(s *sql.Selector) {

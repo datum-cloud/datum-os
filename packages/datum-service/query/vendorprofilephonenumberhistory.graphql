@@ -1,0 +1,39 @@
+
+
+query GetAllVendorProfilePhoneNumberHistories {
+  vendorProfilePhoneNumberHistories {
+    edges {
+      node {
+        createdAt
+        createdBy
+        historyTime
+        id
+        operation
+        phoneNumberID
+        ref
+        updatedAt
+        updatedBy
+        vendorProfileID
+      }
+    }
+  }
+}
+
+query GetVendorProfilePhoneNumberHistories($where: VendorProfilePhoneNumberHistoryWhereInput) {
+  vendorProfilePhoneNumberHistories(where: $where) {
+    edges {
+      node {
+        createdAt
+        createdBy
+        historyTime
+        id
+        operation
+        phoneNumberID
+        ref
+        updatedAt
+        updatedBy
+        vendorProfileID
+      }
+    }
+  }
+}

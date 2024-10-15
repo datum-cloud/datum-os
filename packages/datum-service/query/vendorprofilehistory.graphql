@@ -4,9 +4,10 @@ query GetAllVendorProfileHistories {
   vendorProfileHistories {
     edges {
       node {
+        corporationDba
+        corporationType
         createdAt
         createdBy
-        dbaName
         description
         historyTime
         id
@@ -15,6 +16,7 @@ query GetAllVendorProfileHistories {
         ownerID
         ref
         tags
+        taxIDType
         updatedAt
         updatedBy
         vendorID
@@ -28,9 +30,10 @@ query GetVendorProfileHistories($where: VendorProfileHistoryWhereInput) {
   vendorProfileHistories(where: $where) {
     edges {
       node {
+        corporationDba
+        corporationType
         createdAt
         createdBy
-        dbaName
         description
         historyTime
         id
@@ -39,6 +42,7 @@ query GetVendorProfileHistories($where: VendorProfileHistoryWhereInput) {
         ownerID
         ref
         tags
+        taxIDType
         updatedAt
         updatedBy
         vendorID

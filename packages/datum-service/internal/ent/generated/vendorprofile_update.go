@@ -13,10 +13,13 @@ import (
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/organization"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/phonenumber"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/postaladdress"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/predicate"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofile"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofilephonenumber"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofilepostaladdress"
+	"github.com/datum-cloud/datum-os/pkg/enums"
 
 	"github.com/datum-cloud/datum-os/internal/ent/generated/internal"
 )
@@ -158,23 +161,43 @@ func (vpu *VendorProfileUpdate) SetNillableName(s *string) *VendorProfileUpdate 
 	return vpu
 }
 
-// SetDbaName sets the "dba_name" field.
-func (vpu *VendorProfileUpdate) SetDbaName(s string) *VendorProfileUpdate {
-	vpu.mutation.SetDbaName(s)
+// SetCorporationType sets the "corporation_type" field.
+func (vpu *VendorProfileUpdate) SetCorporationType(s string) *VendorProfileUpdate {
+	vpu.mutation.SetCorporationType(s)
 	return vpu
 }
 
-// SetNillableDbaName sets the "dba_name" field if the given value is not nil.
-func (vpu *VendorProfileUpdate) SetNillableDbaName(s *string) *VendorProfileUpdate {
+// SetNillableCorporationType sets the "corporation_type" field if the given value is not nil.
+func (vpu *VendorProfileUpdate) SetNillableCorporationType(s *string) *VendorProfileUpdate {
 	if s != nil {
-		vpu.SetDbaName(*s)
+		vpu.SetCorporationType(*s)
 	}
 	return vpu
 }
 
-// ClearDbaName clears the value of the "dba_name" field.
-func (vpu *VendorProfileUpdate) ClearDbaName() *VendorProfileUpdate {
-	vpu.mutation.ClearDbaName()
+// ClearCorporationType clears the value of the "corporation_type" field.
+func (vpu *VendorProfileUpdate) ClearCorporationType() *VendorProfileUpdate {
+	vpu.mutation.ClearCorporationType()
+	return vpu
+}
+
+// SetCorporationDba sets the "corporation_dba" field.
+func (vpu *VendorProfileUpdate) SetCorporationDba(s string) *VendorProfileUpdate {
+	vpu.mutation.SetCorporationDba(s)
+	return vpu
+}
+
+// SetNillableCorporationDba sets the "corporation_dba" field if the given value is not nil.
+func (vpu *VendorProfileUpdate) SetNillableCorporationDba(s *string) *VendorProfileUpdate {
+	if s != nil {
+		vpu.SetCorporationDba(*s)
+	}
+	return vpu
+}
+
+// ClearCorporationDba clears the value of the "corporation_dba" field.
+func (vpu *VendorProfileUpdate) ClearCorporationDba() *VendorProfileUpdate {
+	vpu.mutation.ClearCorporationDba()
 	return vpu
 }
 
@@ -218,6 +241,40 @@ func (vpu *VendorProfileUpdate) ClearWebsiteURI() *VendorProfileUpdate {
 	return vpu
 }
 
+// SetTaxID sets the "tax_id" field.
+func (vpu *VendorProfileUpdate) SetTaxID(s string) *VendorProfileUpdate {
+	vpu.mutation.SetTaxID(s)
+	return vpu
+}
+
+// SetNillableTaxID sets the "tax_id" field if the given value is not nil.
+func (vpu *VendorProfileUpdate) SetNillableTaxID(s *string) *VendorProfileUpdate {
+	if s != nil {
+		vpu.SetTaxID(*s)
+	}
+	return vpu
+}
+
+// ClearTaxID clears the value of the "tax_id" field.
+func (vpu *VendorProfileUpdate) ClearTaxID() *VendorProfileUpdate {
+	vpu.mutation.ClearTaxID()
+	return vpu
+}
+
+// SetTaxIDType sets the "tax_id_type" field.
+func (vpu *VendorProfileUpdate) SetTaxIDType(eit enums.TaxIDType) *VendorProfileUpdate {
+	vpu.mutation.SetTaxIDType(eit)
+	return vpu
+}
+
+// SetNillableTaxIDType sets the "tax_id_type" field if the given value is not nil.
+func (vpu *VendorProfileUpdate) SetNillableTaxIDType(eit *enums.TaxIDType) *VendorProfileUpdate {
+	if eit != nil {
+		vpu.SetTaxIDType(*eit)
+	}
+	return vpu
+}
+
 // SetOwner sets the "owner" edge to the Organization entity.
 func (vpu *VendorProfileUpdate) SetOwner(o *Organization) *VendorProfileUpdate {
 	return vpu.SetOwnerID(o.ID)
@@ -238,6 +295,21 @@ func (vpu *VendorProfileUpdate) AddPostalAddresses(p ...*PostalAddress) *VendorP
 	return vpu.AddPostalAddressIDs(ids...)
 }
 
+// AddPhoneNumberIDs adds the "phone_numbers" edge to the PhoneNumber entity by IDs.
+func (vpu *VendorProfileUpdate) AddPhoneNumberIDs(ids ...string) *VendorProfileUpdate {
+	vpu.mutation.AddPhoneNumberIDs(ids...)
+	return vpu
+}
+
+// AddPhoneNumbers adds the "phone_numbers" edges to the PhoneNumber entity.
+func (vpu *VendorProfileUpdate) AddPhoneNumbers(p ...*PhoneNumber) *VendorProfileUpdate {
+	ids := make([]string, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return vpu.AddPhoneNumberIDs(ids...)
+}
+
 // AddVendorProfilePostalAddressIDs adds the "vendor_profile_postal_addresses" edge to the VendorProfilePostalAddress entity by IDs.
 func (vpu *VendorProfileUpdate) AddVendorProfilePostalAddressIDs(ids ...string) *VendorProfileUpdate {
 	vpu.mutation.AddVendorProfilePostalAddressIDs(ids...)
@@ -251,6 +323,21 @@ func (vpu *VendorProfileUpdate) AddVendorProfilePostalAddresses(v ...*VendorProf
 		ids[i] = v[i].ID
 	}
 	return vpu.AddVendorProfilePostalAddressIDs(ids...)
+}
+
+// AddVendorProfilePhoneNumberIDs adds the "vendor_profile_phone_numbers" edge to the VendorProfilePhoneNumber entity by IDs.
+func (vpu *VendorProfileUpdate) AddVendorProfilePhoneNumberIDs(ids ...string) *VendorProfileUpdate {
+	vpu.mutation.AddVendorProfilePhoneNumberIDs(ids...)
+	return vpu
+}
+
+// AddVendorProfilePhoneNumbers adds the "vendor_profile_phone_numbers" edges to the VendorProfilePhoneNumber entity.
+func (vpu *VendorProfileUpdate) AddVendorProfilePhoneNumbers(v ...*VendorProfilePhoneNumber) *VendorProfileUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return vpu.AddVendorProfilePhoneNumberIDs(ids...)
 }
 
 // Mutation returns the VendorProfileMutation object of the builder.
@@ -285,6 +372,27 @@ func (vpu *VendorProfileUpdate) RemovePostalAddresses(p ...*PostalAddress) *Vend
 	return vpu.RemovePostalAddressIDs(ids...)
 }
 
+// ClearPhoneNumbers clears all "phone_numbers" edges to the PhoneNumber entity.
+func (vpu *VendorProfileUpdate) ClearPhoneNumbers() *VendorProfileUpdate {
+	vpu.mutation.ClearPhoneNumbers()
+	return vpu
+}
+
+// RemovePhoneNumberIDs removes the "phone_numbers" edge to PhoneNumber entities by IDs.
+func (vpu *VendorProfileUpdate) RemovePhoneNumberIDs(ids ...string) *VendorProfileUpdate {
+	vpu.mutation.RemovePhoneNumberIDs(ids...)
+	return vpu
+}
+
+// RemovePhoneNumbers removes "phone_numbers" edges to PhoneNumber entities.
+func (vpu *VendorProfileUpdate) RemovePhoneNumbers(p ...*PhoneNumber) *VendorProfileUpdate {
+	ids := make([]string, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return vpu.RemovePhoneNumberIDs(ids...)
+}
+
 // ClearVendorProfilePostalAddresses clears all "vendor_profile_postal_addresses" edges to the VendorProfilePostalAddress entity.
 func (vpu *VendorProfileUpdate) ClearVendorProfilePostalAddresses() *VendorProfileUpdate {
 	vpu.mutation.ClearVendorProfilePostalAddresses()
@@ -304,6 +412,27 @@ func (vpu *VendorProfileUpdate) RemoveVendorProfilePostalAddresses(v ...*VendorP
 		ids[i] = v[i].ID
 	}
 	return vpu.RemoveVendorProfilePostalAddressIDs(ids...)
+}
+
+// ClearVendorProfilePhoneNumbers clears all "vendor_profile_phone_numbers" edges to the VendorProfilePhoneNumber entity.
+func (vpu *VendorProfileUpdate) ClearVendorProfilePhoneNumbers() *VendorProfileUpdate {
+	vpu.mutation.ClearVendorProfilePhoneNumbers()
+	return vpu
+}
+
+// RemoveVendorProfilePhoneNumberIDs removes the "vendor_profile_phone_numbers" edge to VendorProfilePhoneNumber entities by IDs.
+func (vpu *VendorProfileUpdate) RemoveVendorProfilePhoneNumberIDs(ids ...string) *VendorProfileUpdate {
+	vpu.mutation.RemoveVendorProfilePhoneNumberIDs(ids...)
+	return vpu
+}
+
+// RemoveVendorProfilePhoneNumbers removes "vendor_profile_phone_numbers" edges to VendorProfilePhoneNumber entities.
+func (vpu *VendorProfileUpdate) RemoveVendorProfilePhoneNumbers(v ...*VendorProfilePhoneNumber) *VendorProfileUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return vpu.RemoveVendorProfilePhoneNumberIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -360,14 +489,29 @@ func (vpu *VendorProfileUpdate) check() error {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "VendorProfile.name": %w`, err)}
 		}
 	}
-	if v, ok := vpu.mutation.DbaName(); ok {
-		if err := vendorprofile.DbaNameValidator(v); err != nil {
-			return &ValidationError{Name: "dba_name", err: fmt.Errorf(`generated: validator failed for field "VendorProfile.dba_name": %w`, err)}
+	if v, ok := vpu.mutation.CorporationType(); ok {
+		if err := vendorprofile.CorporationTypeValidator(v); err != nil {
+			return &ValidationError{Name: "corporation_type", err: fmt.Errorf(`generated: validator failed for field "VendorProfile.corporation_type": %w`, err)}
+		}
+	}
+	if v, ok := vpu.mutation.CorporationDba(); ok {
+		if err := vendorprofile.CorporationDbaValidator(v); err != nil {
+			return &ValidationError{Name: "corporation_dba", err: fmt.Errorf(`generated: validator failed for field "VendorProfile.corporation_dba": %w`, err)}
 		}
 	}
 	if v, ok := vpu.mutation.WebsiteURI(); ok {
 		if err := vendorprofile.WebsiteURIValidator(v); err != nil {
 			return &ValidationError{Name: "website_uri", err: fmt.Errorf(`generated: validator failed for field "VendorProfile.website_uri": %w`, err)}
+		}
+	}
+	if v, ok := vpu.mutation.TaxID(); ok {
+		if err := vendorprofile.TaxIDValidator(v); err != nil {
+			return &ValidationError{Name: "tax_id", err: fmt.Errorf(`generated: validator failed for field "VendorProfile.tax_id": %w`, err)}
+		}
+	}
+	if v, ok := vpu.mutation.TaxIDType(); ok {
+		if err := vendorprofile.TaxIDTypeValidator(v); err != nil {
+			return &ValidationError{Name: "tax_id_type", err: fmt.Errorf(`generated: validator failed for field "VendorProfile.tax_id_type": %w`, err)}
 		}
 	}
 	return nil
@@ -429,11 +573,17 @@ func (vpu *VendorProfileUpdate) sqlSave(ctx context.Context) (n int, err error) 
 	if value, ok := vpu.mutation.Name(); ok {
 		_spec.SetField(vendorprofile.FieldName, field.TypeString, value)
 	}
-	if value, ok := vpu.mutation.DbaName(); ok {
-		_spec.SetField(vendorprofile.FieldDbaName, field.TypeString, value)
+	if value, ok := vpu.mutation.CorporationType(); ok {
+		_spec.SetField(vendorprofile.FieldCorporationType, field.TypeString, value)
 	}
-	if vpu.mutation.DbaNameCleared() {
-		_spec.ClearField(vendorprofile.FieldDbaName, field.TypeString)
+	if vpu.mutation.CorporationTypeCleared() {
+		_spec.ClearField(vendorprofile.FieldCorporationType, field.TypeString)
+	}
+	if value, ok := vpu.mutation.CorporationDba(); ok {
+		_spec.SetField(vendorprofile.FieldCorporationDba, field.TypeString, value)
+	}
+	if vpu.mutation.CorporationDbaCleared() {
+		_spec.ClearField(vendorprofile.FieldCorporationDba, field.TypeString)
 	}
 	if value, ok := vpu.mutation.Description(); ok {
 		_spec.SetField(vendorprofile.FieldDescription, field.TypeString, value)
@@ -446,6 +596,15 @@ func (vpu *VendorProfileUpdate) sqlSave(ctx context.Context) (n int, err error) 
 	}
 	if vpu.mutation.WebsiteURICleared() {
 		_spec.ClearField(vendorprofile.FieldWebsiteURI, field.TypeString)
+	}
+	if value, ok := vpu.mutation.TaxID(); ok {
+		_spec.SetField(vendorprofile.FieldTaxID, field.TypeString, value)
+	}
+	if vpu.mutation.TaxIDCleared() {
+		_spec.ClearField(vendorprofile.FieldTaxID, field.TypeString)
+	}
+	if value, ok := vpu.mutation.TaxIDType(); ok {
+		_spec.SetField(vendorprofile.FieldTaxIDType, field.TypeEnum, value)
 	}
 	if vpu.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -547,6 +706,75 @@ func (vpu *VendorProfileUpdate) sqlSave(ctx context.Context) (n int, err error) 
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if vpu.mutation.PhoneNumbersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   vendorprofile.PhoneNumbersTable,
+			Columns: vendorprofile.PhoneNumbersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(phonenumber.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = vpu.schemaConfig.VendorProfilePhoneNumber
+		createE := &VendorProfilePhoneNumberCreate{config: vpu.config, mutation: newVendorProfilePhoneNumberMutation(vpu.config, OpCreate)}
+		_ = createE.defaults()
+		_, specE := createE.createSpec()
+		edge.Target.Fields = specE.Fields
+		if specE.ID.Value != nil {
+			edge.Target.Fields = append(edge.Target.Fields, specE.ID)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := vpu.mutation.RemovedPhoneNumbersIDs(); len(nodes) > 0 && !vpu.mutation.PhoneNumbersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   vendorprofile.PhoneNumbersTable,
+			Columns: vendorprofile.PhoneNumbersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(phonenumber.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = vpu.schemaConfig.VendorProfilePhoneNumber
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		createE := &VendorProfilePhoneNumberCreate{config: vpu.config, mutation: newVendorProfilePhoneNumberMutation(vpu.config, OpCreate)}
+		_ = createE.defaults()
+		_, specE := createE.createSpec()
+		edge.Target.Fields = specE.Fields
+		if specE.ID.Value != nil {
+			edge.Target.Fields = append(edge.Target.Fields, specE.ID)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := vpu.mutation.PhoneNumbersIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   vendorprofile.PhoneNumbersTable,
+			Columns: vendorprofile.PhoneNumbersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(phonenumber.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = vpu.schemaConfig.VendorProfilePhoneNumber
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		createE := &VendorProfilePhoneNumberCreate{config: vpu.config, mutation: newVendorProfilePhoneNumberMutation(vpu.config, OpCreate)}
+		_ = createE.defaults()
+		_, specE := createE.createSpec()
+		edge.Target.Fields = specE.Fields
+		if specE.ID.Value != nil {
+			edge.Target.Fields = append(edge.Target.Fields, specE.ID)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if vpu.mutation.VendorProfilePostalAddressesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -590,6 +818,54 @@ func (vpu *VendorProfileUpdate) sqlSave(ctx context.Context) (n int, err error) 
 			},
 		}
 		edge.Schema = vpu.schemaConfig.VendorProfilePostalAddress
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if vpu.mutation.VendorProfilePhoneNumbersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   vendorprofile.VendorProfilePhoneNumbersTable,
+			Columns: []string{vendorprofile.VendorProfilePhoneNumbersColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(vendorprofilephonenumber.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = vpu.schemaConfig.VendorProfilePhoneNumber
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := vpu.mutation.RemovedVendorProfilePhoneNumbersIDs(); len(nodes) > 0 && !vpu.mutation.VendorProfilePhoneNumbersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   vendorprofile.VendorProfilePhoneNumbersTable,
+			Columns: []string{vendorprofile.VendorProfilePhoneNumbersColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(vendorprofilephonenumber.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = vpu.schemaConfig.VendorProfilePhoneNumber
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := vpu.mutation.VendorProfilePhoneNumbersIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   vendorprofile.VendorProfilePhoneNumbersTable,
+			Columns: []string{vendorprofile.VendorProfilePhoneNumbersColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(vendorprofilephonenumber.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = vpu.schemaConfig.VendorProfilePhoneNumber
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -741,23 +1017,43 @@ func (vpuo *VendorProfileUpdateOne) SetNillableName(s *string) *VendorProfileUpd
 	return vpuo
 }
 
-// SetDbaName sets the "dba_name" field.
-func (vpuo *VendorProfileUpdateOne) SetDbaName(s string) *VendorProfileUpdateOne {
-	vpuo.mutation.SetDbaName(s)
+// SetCorporationType sets the "corporation_type" field.
+func (vpuo *VendorProfileUpdateOne) SetCorporationType(s string) *VendorProfileUpdateOne {
+	vpuo.mutation.SetCorporationType(s)
 	return vpuo
 }
 
-// SetNillableDbaName sets the "dba_name" field if the given value is not nil.
-func (vpuo *VendorProfileUpdateOne) SetNillableDbaName(s *string) *VendorProfileUpdateOne {
+// SetNillableCorporationType sets the "corporation_type" field if the given value is not nil.
+func (vpuo *VendorProfileUpdateOne) SetNillableCorporationType(s *string) *VendorProfileUpdateOne {
 	if s != nil {
-		vpuo.SetDbaName(*s)
+		vpuo.SetCorporationType(*s)
 	}
 	return vpuo
 }
 
-// ClearDbaName clears the value of the "dba_name" field.
-func (vpuo *VendorProfileUpdateOne) ClearDbaName() *VendorProfileUpdateOne {
-	vpuo.mutation.ClearDbaName()
+// ClearCorporationType clears the value of the "corporation_type" field.
+func (vpuo *VendorProfileUpdateOne) ClearCorporationType() *VendorProfileUpdateOne {
+	vpuo.mutation.ClearCorporationType()
+	return vpuo
+}
+
+// SetCorporationDba sets the "corporation_dba" field.
+func (vpuo *VendorProfileUpdateOne) SetCorporationDba(s string) *VendorProfileUpdateOne {
+	vpuo.mutation.SetCorporationDba(s)
+	return vpuo
+}
+
+// SetNillableCorporationDba sets the "corporation_dba" field if the given value is not nil.
+func (vpuo *VendorProfileUpdateOne) SetNillableCorporationDba(s *string) *VendorProfileUpdateOne {
+	if s != nil {
+		vpuo.SetCorporationDba(*s)
+	}
+	return vpuo
+}
+
+// ClearCorporationDba clears the value of the "corporation_dba" field.
+func (vpuo *VendorProfileUpdateOne) ClearCorporationDba() *VendorProfileUpdateOne {
+	vpuo.mutation.ClearCorporationDba()
 	return vpuo
 }
 
@@ -801,6 +1097,40 @@ func (vpuo *VendorProfileUpdateOne) ClearWebsiteURI() *VendorProfileUpdateOne {
 	return vpuo
 }
 
+// SetTaxID sets the "tax_id" field.
+func (vpuo *VendorProfileUpdateOne) SetTaxID(s string) *VendorProfileUpdateOne {
+	vpuo.mutation.SetTaxID(s)
+	return vpuo
+}
+
+// SetNillableTaxID sets the "tax_id" field if the given value is not nil.
+func (vpuo *VendorProfileUpdateOne) SetNillableTaxID(s *string) *VendorProfileUpdateOne {
+	if s != nil {
+		vpuo.SetTaxID(*s)
+	}
+	return vpuo
+}
+
+// ClearTaxID clears the value of the "tax_id" field.
+func (vpuo *VendorProfileUpdateOne) ClearTaxID() *VendorProfileUpdateOne {
+	vpuo.mutation.ClearTaxID()
+	return vpuo
+}
+
+// SetTaxIDType sets the "tax_id_type" field.
+func (vpuo *VendorProfileUpdateOne) SetTaxIDType(eit enums.TaxIDType) *VendorProfileUpdateOne {
+	vpuo.mutation.SetTaxIDType(eit)
+	return vpuo
+}
+
+// SetNillableTaxIDType sets the "tax_id_type" field if the given value is not nil.
+func (vpuo *VendorProfileUpdateOne) SetNillableTaxIDType(eit *enums.TaxIDType) *VendorProfileUpdateOne {
+	if eit != nil {
+		vpuo.SetTaxIDType(*eit)
+	}
+	return vpuo
+}
+
 // SetOwner sets the "owner" edge to the Organization entity.
 func (vpuo *VendorProfileUpdateOne) SetOwner(o *Organization) *VendorProfileUpdateOne {
 	return vpuo.SetOwnerID(o.ID)
@@ -821,6 +1151,21 @@ func (vpuo *VendorProfileUpdateOne) AddPostalAddresses(p ...*PostalAddress) *Ven
 	return vpuo.AddPostalAddressIDs(ids...)
 }
 
+// AddPhoneNumberIDs adds the "phone_numbers" edge to the PhoneNumber entity by IDs.
+func (vpuo *VendorProfileUpdateOne) AddPhoneNumberIDs(ids ...string) *VendorProfileUpdateOne {
+	vpuo.mutation.AddPhoneNumberIDs(ids...)
+	return vpuo
+}
+
+// AddPhoneNumbers adds the "phone_numbers" edges to the PhoneNumber entity.
+func (vpuo *VendorProfileUpdateOne) AddPhoneNumbers(p ...*PhoneNumber) *VendorProfileUpdateOne {
+	ids := make([]string, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return vpuo.AddPhoneNumberIDs(ids...)
+}
+
 // AddVendorProfilePostalAddressIDs adds the "vendor_profile_postal_addresses" edge to the VendorProfilePostalAddress entity by IDs.
 func (vpuo *VendorProfileUpdateOne) AddVendorProfilePostalAddressIDs(ids ...string) *VendorProfileUpdateOne {
 	vpuo.mutation.AddVendorProfilePostalAddressIDs(ids...)
@@ -834,6 +1179,21 @@ func (vpuo *VendorProfileUpdateOne) AddVendorProfilePostalAddresses(v ...*Vendor
 		ids[i] = v[i].ID
 	}
 	return vpuo.AddVendorProfilePostalAddressIDs(ids...)
+}
+
+// AddVendorProfilePhoneNumberIDs adds the "vendor_profile_phone_numbers" edge to the VendorProfilePhoneNumber entity by IDs.
+func (vpuo *VendorProfileUpdateOne) AddVendorProfilePhoneNumberIDs(ids ...string) *VendorProfileUpdateOne {
+	vpuo.mutation.AddVendorProfilePhoneNumberIDs(ids...)
+	return vpuo
+}
+
+// AddVendorProfilePhoneNumbers adds the "vendor_profile_phone_numbers" edges to the VendorProfilePhoneNumber entity.
+func (vpuo *VendorProfileUpdateOne) AddVendorProfilePhoneNumbers(v ...*VendorProfilePhoneNumber) *VendorProfileUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return vpuo.AddVendorProfilePhoneNumberIDs(ids...)
 }
 
 // Mutation returns the VendorProfileMutation object of the builder.
@@ -868,6 +1228,27 @@ func (vpuo *VendorProfileUpdateOne) RemovePostalAddresses(p ...*PostalAddress) *
 	return vpuo.RemovePostalAddressIDs(ids...)
 }
 
+// ClearPhoneNumbers clears all "phone_numbers" edges to the PhoneNumber entity.
+func (vpuo *VendorProfileUpdateOne) ClearPhoneNumbers() *VendorProfileUpdateOne {
+	vpuo.mutation.ClearPhoneNumbers()
+	return vpuo
+}
+
+// RemovePhoneNumberIDs removes the "phone_numbers" edge to PhoneNumber entities by IDs.
+func (vpuo *VendorProfileUpdateOne) RemovePhoneNumberIDs(ids ...string) *VendorProfileUpdateOne {
+	vpuo.mutation.RemovePhoneNumberIDs(ids...)
+	return vpuo
+}
+
+// RemovePhoneNumbers removes "phone_numbers" edges to PhoneNumber entities.
+func (vpuo *VendorProfileUpdateOne) RemovePhoneNumbers(p ...*PhoneNumber) *VendorProfileUpdateOne {
+	ids := make([]string, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return vpuo.RemovePhoneNumberIDs(ids...)
+}
+
 // ClearVendorProfilePostalAddresses clears all "vendor_profile_postal_addresses" edges to the VendorProfilePostalAddress entity.
 func (vpuo *VendorProfileUpdateOne) ClearVendorProfilePostalAddresses() *VendorProfileUpdateOne {
 	vpuo.mutation.ClearVendorProfilePostalAddresses()
@@ -887,6 +1268,27 @@ func (vpuo *VendorProfileUpdateOne) RemoveVendorProfilePostalAddresses(v ...*Ven
 		ids[i] = v[i].ID
 	}
 	return vpuo.RemoveVendorProfilePostalAddressIDs(ids...)
+}
+
+// ClearVendorProfilePhoneNumbers clears all "vendor_profile_phone_numbers" edges to the VendorProfilePhoneNumber entity.
+func (vpuo *VendorProfileUpdateOne) ClearVendorProfilePhoneNumbers() *VendorProfileUpdateOne {
+	vpuo.mutation.ClearVendorProfilePhoneNumbers()
+	return vpuo
+}
+
+// RemoveVendorProfilePhoneNumberIDs removes the "vendor_profile_phone_numbers" edge to VendorProfilePhoneNumber entities by IDs.
+func (vpuo *VendorProfileUpdateOne) RemoveVendorProfilePhoneNumberIDs(ids ...string) *VendorProfileUpdateOne {
+	vpuo.mutation.RemoveVendorProfilePhoneNumberIDs(ids...)
+	return vpuo
+}
+
+// RemoveVendorProfilePhoneNumbers removes "vendor_profile_phone_numbers" edges to VendorProfilePhoneNumber entities.
+func (vpuo *VendorProfileUpdateOne) RemoveVendorProfilePhoneNumbers(v ...*VendorProfilePhoneNumber) *VendorProfileUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return vpuo.RemoveVendorProfilePhoneNumberIDs(ids...)
 }
 
 // Where appends a list predicates to the VendorProfileUpdate builder.
@@ -956,14 +1358,29 @@ func (vpuo *VendorProfileUpdateOne) check() error {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "VendorProfile.name": %w`, err)}
 		}
 	}
-	if v, ok := vpuo.mutation.DbaName(); ok {
-		if err := vendorprofile.DbaNameValidator(v); err != nil {
-			return &ValidationError{Name: "dba_name", err: fmt.Errorf(`generated: validator failed for field "VendorProfile.dba_name": %w`, err)}
+	if v, ok := vpuo.mutation.CorporationType(); ok {
+		if err := vendorprofile.CorporationTypeValidator(v); err != nil {
+			return &ValidationError{Name: "corporation_type", err: fmt.Errorf(`generated: validator failed for field "VendorProfile.corporation_type": %w`, err)}
+		}
+	}
+	if v, ok := vpuo.mutation.CorporationDba(); ok {
+		if err := vendorprofile.CorporationDbaValidator(v); err != nil {
+			return &ValidationError{Name: "corporation_dba", err: fmt.Errorf(`generated: validator failed for field "VendorProfile.corporation_dba": %w`, err)}
 		}
 	}
 	if v, ok := vpuo.mutation.WebsiteURI(); ok {
 		if err := vendorprofile.WebsiteURIValidator(v); err != nil {
 			return &ValidationError{Name: "website_uri", err: fmt.Errorf(`generated: validator failed for field "VendorProfile.website_uri": %w`, err)}
+		}
+	}
+	if v, ok := vpuo.mutation.TaxID(); ok {
+		if err := vendorprofile.TaxIDValidator(v); err != nil {
+			return &ValidationError{Name: "tax_id", err: fmt.Errorf(`generated: validator failed for field "VendorProfile.tax_id": %w`, err)}
+		}
+	}
+	if v, ok := vpuo.mutation.TaxIDType(); ok {
+		if err := vendorprofile.TaxIDTypeValidator(v); err != nil {
+			return &ValidationError{Name: "tax_id_type", err: fmt.Errorf(`generated: validator failed for field "VendorProfile.tax_id_type": %w`, err)}
 		}
 	}
 	return nil
@@ -1042,11 +1459,17 @@ func (vpuo *VendorProfileUpdateOne) sqlSave(ctx context.Context) (_node *VendorP
 	if value, ok := vpuo.mutation.Name(); ok {
 		_spec.SetField(vendorprofile.FieldName, field.TypeString, value)
 	}
-	if value, ok := vpuo.mutation.DbaName(); ok {
-		_spec.SetField(vendorprofile.FieldDbaName, field.TypeString, value)
+	if value, ok := vpuo.mutation.CorporationType(); ok {
+		_spec.SetField(vendorprofile.FieldCorporationType, field.TypeString, value)
 	}
-	if vpuo.mutation.DbaNameCleared() {
-		_spec.ClearField(vendorprofile.FieldDbaName, field.TypeString)
+	if vpuo.mutation.CorporationTypeCleared() {
+		_spec.ClearField(vendorprofile.FieldCorporationType, field.TypeString)
+	}
+	if value, ok := vpuo.mutation.CorporationDba(); ok {
+		_spec.SetField(vendorprofile.FieldCorporationDba, field.TypeString, value)
+	}
+	if vpuo.mutation.CorporationDbaCleared() {
+		_spec.ClearField(vendorprofile.FieldCorporationDba, field.TypeString)
 	}
 	if value, ok := vpuo.mutation.Description(); ok {
 		_spec.SetField(vendorprofile.FieldDescription, field.TypeString, value)
@@ -1059,6 +1482,15 @@ func (vpuo *VendorProfileUpdateOne) sqlSave(ctx context.Context) (_node *VendorP
 	}
 	if vpuo.mutation.WebsiteURICleared() {
 		_spec.ClearField(vendorprofile.FieldWebsiteURI, field.TypeString)
+	}
+	if value, ok := vpuo.mutation.TaxID(); ok {
+		_spec.SetField(vendorprofile.FieldTaxID, field.TypeString, value)
+	}
+	if vpuo.mutation.TaxIDCleared() {
+		_spec.ClearField(vendorprofile.FieldTaxID, field.TypeString)
+	}
+	if value, ok := vpuo.mutation.TaxIDType(); ok {
+		_spec.SetField(vendorprofile.FieldTaxIDType, field.TypeEnum, value)
 	}
 	if vpuo.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -1160,6 +1592,75 @@ func (vpuo *VendorProfileUpdateOne) sqlSave(ctx context.Context) (_node *VendorP
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if vpuo.mutation.PhoneNumbersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   vendorprofile.PhoneNumbersTable,
+			Columns: vendorprofile.PhoneNumbersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(phonenumber.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = vpuo.schemaConfig.VendorProfilePhoneNumber
+		createE := &VendorProfilePhoneNumberCreate{config: vpuo.config, mutation: newVendorProfilePhoneNumberMutation(vpuo.config, OpCreate)}
+		_ = createE.defaults()
+		_, specE := createE.createSpec()
+		edge.Target.Fields = specE.Fields
+		if specE.ID.Value != nil {
+			edge.Target.Fields = append(edge.Target.Fields, specE.ID)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := vpuo.mutation.RemovedPhoneNumbersIDs(); len(nodes) > 0 && !vpuo.mutation.PhoneNumbersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   vendorprofile.PhoneNumbersTable,
+			Columns: vendorprofile.PhoneNumbersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(phonenumber.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = vpuo.schemaConfig.VendorProfilePhoneNumber
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		createE := &VendorProfilePhoneNumberCreate{config: vpuo.config, mutation: newVendorProfilePhoneNumberMutation(vpuo.config, OpCreate)}
+		_ = createE.defaults()
+		_, specE := createE.createSpec()
+		edge.Target.Fields = specE.Fields
+		if specE.ID.Value != nil {
+			edge.Target.Fields = append(edge.Target.Fields, specE.ID)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := vpuo.mutation.PhoneNumbersIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   vendorprofile.PhoneNumbersTable,
+			Columns: vendorprofile.PhoneNumbersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(phonenumber.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = vpuo.schemaConfig.VendorProfilePhoneNumber
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		createE := &VendorProfilePhoneNumberCreate{config: vpuo.config, mutation: newVendorProfilePhoneNumberMutation(vpuo.config, OpCreate)}
+		_ = createE.defaults()
+		_, specE := createE.createSpec()
+		edge.Target.Fields = specE.Fields
+		if specE.ID.Value != nil {
+			edge.Target.Fields = append(edge.Target.Fields, specE.ID)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if vpuo.mutation.VendorProfilePostalAddressesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -1203,6 +1704,54 @@ func (vpuo *VendorProfileUpdateOne) sqlSave(ctx context.Context) (_node *VendorP
 			},
 		}
 		edge.Schema = vpuo.schemaConfig.VendorProfilePostalAddress
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if vpuo.mutation.VendorProfilePhoneNumbersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   vendorprofile.VendorProfilePhoneNumbersTable,
+			Columns: []string{vendorprofile.VendorProfilePhoneNumbersColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(vendorprofilephonenumber.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = vpuo.schemaConfig.VendorProfilePhoneNumber
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := vpuo.mutation.RemovedVendorProfilePhoneNumbersIDs(); len(nodes) > 0 && !vpuo.mutation.VendorProfilePhoneNumbersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   vendorprofile.VendorProfilePhoneNumbersTable,
+			Columns: []string{vendorprofile.VendorProfilePhoneNumbersColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(vendorprofilephonenumber.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = vpuo.schemaConfig.VendorProfilePhoneNumber
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := vpuo.mutation.VendorProfilePhoneNumbersIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   vendorprofile.VendorProfilePhoneNumbersTable,
+			Columns: []string{vendorprofile.VendorProfilePhoneNumbersColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(vendorprofilephonenumber.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = vpuo.schemaConfig.VendorProfilePhoneNumber
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

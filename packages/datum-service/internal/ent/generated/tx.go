@@ -112,6 +112,10 @@ type Tx struct {
 	PasswordResetToken *PasswordResetTokenClient
 	// PersonalAccessToken is the client for interacting with the PersonalAccessToken builders.
 	PersonalAccessToken *PersonalAccessTokenClient
+	// PhoneNumber is the client for interacting with the PhoneNumber builders.
+	PhoneNumber *PhoneNumberClient
+	// PhoneNumberHistory is the client for interacting with the PhoneNumberHistory builders.
+	PhoneNumberHistory *PhoneNumberHistoryClient
 	// PostalAddress is the client for interacting with the PostalAddress builders.
 	PostalAddress *PostalAddressClient
 	// PostalAddressHistory is the client for interacting with the PostalAddressHistory builders.
@@ -140,6 +144,10 @@ type Tx struct {
 	VendorProfile *VendorProfileClient
 	// VendorProfileHistory is the client for interacting with the VendorProfileHistory builders.
 	VendorProfileHistory *VendorProfileHistoryClient
+	// VendorProfilePhoneNumber is the client for interacting with the VendorProfilePhoneNumber builders.
+	VendorProfilePhoneNumber *VendorProfilePhoneNumberClient
+	// VendorProfilePhoneNumberHistory is the client for interacting with the VendorProfilePhoneNumberHistory builders.
+	VendorProfilePhoneNumberHistory *VendorProfilePhoneNumberHistoryClient
 	// VendorProfilePostalAddress is the client for interacting with the VendorProfilePostalAddress builders.
 	VendorProfilePostalAddress *VendorProfilePostalAddressClient
 	// VendorProfilePostalAddressHistory is the client for interacting with the VendorProfilePostalAddressHistory builders.
@@ -331,6 +339,8 @@ func (tx *Tx) init() {
 	tx.OrganizationSettingHistory = NewOrganizationSettingHistoryClient(tx.config)
 	tx.PasswordResetToken = NewPasswordResetTokenClient(tx.config)
 	tx.PersonalAccessToken = NewPersonalAccessTokenClient(tx.config)
+	tx.PhoneNumber = NewPhoneNumberClient(tx.config)
+	tx.PhoneNumberHistory = NewPhoneNumberHistoryClient(tx.config)
 	tx.PostalAddress = NewPostalAddressClient(tx.config)
 	tx.PostalAddressHistory = NewPostalAddressHistoryClient(tx.config)
 	tx.Subscriber = NewSubscriberClient(tx.config)
@@ -345,6 +355,8 @@ func (tx *Tx) init() {
 	tx.VendorHistory = NewVendorHistoryClient(tx.config)
 	tx.VendorProfile = NewVendorProfileClient(tx.config)
 	tx.VendorProfileHistory = NewVendorProfileHistoryClient(tx.config)
+	tx.VendorProfilePhoneNumber = NewVendorProfilePhoneNumberClient(tx.config)
+	tx.VendorProfilePhoneNumberHistory = NewVendorProfilePhoneNumberHistoryClient(tx.config)
 	tx.VendorProfilePostalAddress = NewVendorProfilePostalAddressClient(tx.config)
 	tx.VendorProfilePostalAddressHistory = NewVendorProfilePostalAddressHistoryClient(tx.config)
 	tx.Webauthn = NewWebauthnClient(tx.config)

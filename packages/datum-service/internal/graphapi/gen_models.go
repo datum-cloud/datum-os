@@ -668,6 +668,30 @@ type PersonalAccessTokenUpdatePayload struct {
 	PersonalAccessToken *generated.PersonalAccessToken `json:"personalAccessToken"`
 }
 
+// Return response for createBulkPhoneNumber mutation
+type PhoneNumberBulkCreatePayload struct {
+	// Created phoneNumbers
+	PhoneNumbers []*generated.PhoneNumber `json:"phoneNumbers,omitempty"`
+}
+
+// Return response for createPhoneNumber mutation
+type PhoneNumberCreatePayload struct {
+	// Created phoneNumber
+	PhoneNumber *generated.PhoneNumber `json:"phoneNumber"`
+}
+
+// Return response for deletePhoneNumber mutation
+type PhoneNumberDeletePayload struct {
+	// Deleted phoneNumber ID
+	DeletedID string `json:"deletedID"`
+}
+
+// Return response for updatePhoneNumber mutation
+type PhoneNumberUpdatePayload struct {
+	// Updated phoneNumber
+	PhoneNumber *generated.PhoneNumber `json:"phoneNumber"`
+}
+
 // Return response for createBulkPostalAddress mutation
 type PostalAddressBulkCreatePayload struct {
 	// Created postalAddresss
@@ -840,6 +864,30 @@ type VendorProfileCreatePayload struct {
 type VendorProfileDeletePayload struct {
 	// Deleted vendorProfile ID
 	DeletedID string `json:"deletedID"`
+}
+
+// Return response for createBulkVendorProfilePhoneNumber mutation
+type VendorProfilePhoneNumberBulkCreatePayload struct {
+	// Created vendorProfilePhoneNumbers
+	VendorProfilePhoneNumbers []*generated.VendorProfilePhoneNumber `json:"vendorProfilePhoneNumbers,omitempty"`
+}
+
+// Return response for createVendorProfilePhoneNumber mutation
+type VendorProfilePhoneNumberCreatePayload struct {
+	// Created vendorProfilePhoneNumber
+	VendorProfilePhoneNumber *generated.VendorProfilePhoneNumber `json:"vendorProfilePhoneNumber"`
+}
+
+// Return response for deleteVendorProfilePhoneNumber mutation
+type VendorProfilePhoneNumberDeletePayload struct {
+	// Deleted vendorProfilePhoneNumber ID
+	DeletedID string `json:"deletedID"`
+}
+
+// Return response for updateVendorProfilePhoneNumber mutation
+type VendorProfilePhoneNumberUpdatePayload struct {
+	// Updated vendorProfilePhoneNumber
+	VendorProfilePhoneNumber *generated.VendorProfilePhoneNumber `json:"vendorProfilePhoneNumber"`
 }
 
 // Return response for createBulkVendorProfilePostalAddress mutation

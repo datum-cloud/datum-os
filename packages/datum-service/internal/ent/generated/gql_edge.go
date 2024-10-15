@@ -1337,6 +1337,18 @@ func (o *Organization) PostalAddresses(ctx context.Context) (result []*PostalAdd
 	return result, err
 }
 
+func (o *Organization) PhoneNumbers(ctx context.Context) (result []*PhoneNumber, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = o.NamedPhoneNumbers(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = o.Edges.PhoneNumbersOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = o.QueryPhoneNumbers().All(ctx)
+	}
+	return result, err
+}
+
 func (o *Organization) Members(ctx context.Context) (result []*OrgMembership, err error) {
 	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
 		result, err = o.NamedMembers(graphql.GetFieldContext(ctx).Field.Alias)
@@ -1385,6 +1397,50 @@ func (pat *PersonalAccessToken) Events(ctx context.Context) (result []*Event, er
 	}
 	if IsNotLoaded(err) {
 		result, err = pat.QueryEvents().All(ctx)
+	}
+	return result, err
+}
+
+func (pn *PhoneNumber) Owner(ctx context.Context) (*Organization, error) {
+	result, err := pn.Edges.OwnerOrErr()
+	if IsNotLoaded(err) {
+		result, err = pn.QueryOwner().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (pn *PhoneNumber) Profile(ctx context.Context) (result []*VendorProfile, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = pn.NamedProfile(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = pn.Edges.ProfileOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = pn.QueryProfile().All(ctx)
+	}
+	return result, err
+}
+
+func (pn *PhoneNumber) Events(ctx context.Context) (result []*Event, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = pn.NamedEvents(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = pn.Edges.EventsOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = pn.QueryEvents().All(ctx)
+	}
+	return result, err
+}
+
+func (pn *PhoneNumber) VendorProfilePhoneNumbers(ctx context.Context) (result []*VendorProfilePhoneNumber, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = pn.NamedVendorProfilePhoneNumbers(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = pn.Edges.VendorProfilePhoneNumbersOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = pn.QueryVendorProfilePhoneNumbers().All(ctx)
 	}
 	return result, err
 }
@@ -1649,6 +1705,18 @@ func (vp *VendorProfile) PostalAddresses(ctx context.Context) (result []*PostalA
 	return result, err
 }
 
+func (vp *VendorProfile) PhoneNumbers(ctx context.Context) (result []*PhoneNumber, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = vp.NamedPhoneNumbers(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = vp.Edges.PhoneNumbersOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = vp.QueryPhoneNumbers().All(ctx)
+	}
+	return result, err
+}
+
 func (vp *VendorProfile) Vendor(ctx context.Context) (*Vendor, error) {
 	result, err := vp.Edges.VendorOrErr()
 	if IsNotLoaded(err) {
@@ -1665,6 +1733,46 @@ func (vp *VendorProfile) VendorProfilePostalAddresses(ctx context.Context) (resu
 	}
 	if IsNotLoaded(err) {
 		result, err = vp.QueryVendorProfilePostalAddresses().All(ctx)
+	}
+	return result, err
+}
+
+func (vp *VendorProfile) VendorProfilePhoneNumbers(ctx context.Context) (result []*VendorProfilePhoneNumber, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = vp.NamedVendorProfilePhoneNumbers(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = vp.Edges.VendorProfilePhoneNumbersOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = vp.QueryVendorProfilePhoneNumbers().All(ctx)
+	}
+	return result, err
+}
+
+func (vppn *VendorProfilePhoneNumber) PhoneNumber(ctx context.Context) (*PhoneNumber, error) {
+	result, err := vppn.Edges.PhoneNumberOrErr()
+	if IsNotLoaded(err) {
+		result, err = vppn.QueryPhoneNumber().Only(ctx)
+	}
+	return result, err
+}
+
+func (vppn *VendorProfilePhoneNumber) Profile(ctx context.Context) (*VendorProfile, error) {
+	result, err := vppn.Edges.ProfileOrErr()
+	if IsNotLoaded(err) {
+		result, err = vppn.QueryProfile().Only(ctx)
+	}
+	return result, err
+}
+
+func (vppn *VendorProfilePhoneNumber) Events(ctx context.Context) (result []*Event, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = vppn.NamedEvents(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = vppn.Edges.EventsOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = vppn.QueryEvents().All(ctx)
 	}
 	return result, err
 }

@@ -3068,6 +3068,7 @@ type CreateOrganizationInput struct {
 	VendorIDs                  []string
 	VendorProfileIDs           []string
 	PostalAddressIDs           []string
+	PhoneNumberIDs             []string
 }
 
 // Mutate applies the CreateOrganizationInput on the OrganizationMutation builder.
@@ -3175,6 +3176,9 @@ func (i *CreateOrganizationInput) Mutate(m *OrganizationMutation) {
 	if v := i.PostalAddressIDs; len(v) > 0 {
 		m.AddPostalAddressIDs(v...)
 	}
+	if v := i.PhoneNumberIDs; len(v) > 0 {
+		m.AddPhoneNumberIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the CreateOrganizationInput on the OrganizationCreate builder.
@@ -3274,6 +3278,9 @@ type UpdateOrganizationInput struct {
 	ClearPostalAddresses             bool
 	AddPostalAddressIDs              []string
 	RemovePostalAddressIDs           []string
+	ClearPhoneNumbers                bool
+	AddPhoneNumberIDs                []string
+	RemovePhoneNumberIDs             []string
 }
 
 // Mutate applies the UpdateOrganizationInput on the OrganizationMutation builder.
@@ -3544,6 +3551,15 @@ func (i *UpdateOrganizationInput) Mutate(m *OrganizationMutation) {
 	}
 	if v := i.RemovePostalAddressIDs; len(v) > 0 {
 		m.RemovePostalAddressIDs(v...)
+	}
+	if i.ClearPhoneNumbers {
+		m.ClearPhoneNumbers()
+	}
+	if v := i.AddPhoneNumberIDs; len(v) > 0 {
+		m.AddPhoneNumberIDs(v...)
+	}
+	if v := i.RemovePhoneNumberIDs; len(v) > 0 {
+		m.RemovePhoneNumberIDs(v...)
 	}
 }
 
@@ -3839,6 +3855,156 @@ func (c *PersonalAccessTokenUpdate) SetInput(i UpdatePersonalAccessTokenInput) *
 
 // SetInput applies the change-set in the UpdatePersonalAccessTokenInput on the PersonalAccessTokenUpdateOne builder.
 func (c *PersonalAccessTokenUpdateOne) SetInput(i UpdatePersonalAccessTokenInput) *PersonalAccessTokenUpdateOne {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// CreatePhoneNumberInput represents a mutation input for creating phonenumbers.
+type CreatePhoneNumberInput struct {
+	Tags       []string
+	Kind       *enums.PhoneNumberType
+	RegionCode *string
+	ShortCode  *string
+	Number     *string
+	Extension  *string
+	OwnerID    *string
+	ProfileIDs []string
+	EventIDs   []string
+}
+
+// Mutate applies the CreatePhoneNumberInput on the PhoneNumberMutation builder.
+func (i *CreatePhoneNumberInput) Mutate(m *PhoneNumberMutation) {
+	if v := i.Tags; v != nil {
+		m.SetTags(v)
+	}
+	if v := i.Kind; v != nil {
+		m.SetKind(*v)
+	}
+	if v := i.RegionCode; v != nil {
+		m.SetRegionCode(*v)
+	}
+	if v := i.ShortCode; v != nil {
+		m.SetShortCode(*v)
+	}
+	if v := i.Number; v != nil {
+		m.SetNumber(*v)
+	}
+	if v := i.Extension; v != nil {
+		m.SetExtension(*v)
+	}
+	if v := i.OwnerID; v != nil {
+		m.SetOwnerID(*v)
+	}
+	if v := i.ProfileIDs; len(v) > 0 {
+		m.AddProfileIDs(v...)
+	}
+	if v := i.EventIDs; len(v) > 0 {
+		m.AddEventIDs(v...)
+	}
+}
+
+// SetInput applies the change-set in the CreatePhoneNumberInput on the PhoneNumberCreate builder.
+func (c *PhoneNumberCreate) SetInput(i CreatePhoneNumberInput) *PhoneNumberCreate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// UpdatePhoneNumberInput represents a mutation input for updating phonenumbers.
+type UpdatePhoneNumberInput struct {
+	ClearTags        bool
+	Tags             []string
+	AppendTags       []string
+	Kind             *enums.PhoneNumberType
+	ClearRegionCode  bool
+	RegionCode       *string
+	ClearShortCode   bool
+	ShortCode        *string
+	ClearNumber      bool
+	Number           *string
+	ClearExtension   bool
+	Extension        *string
+	ClearOwner       bool
+	OwnerID          *string
+	ClearProfile     bool
+	AddProfileIDs    []string
+	RemoveProfileIDs []string
+	ClearEvents      bool
+	AddEventIDs      []string
+	RemoveEventIDs   []string
+}
+
+// Mutate applies the UpdatePhoneNumberInput on the PhoneNumberMutation builder.
+func (i *UpdatePhoneNumberInput) Mutate(m *PhoneNumberMutation) {
+	if i.ClearTags {
+		m.ClearTags()
+	}
+	if v := i.Tags; v != nil {
+		m.SetTags(v)
+	}
+	if i.AppendTags != nil {
+		m.AppendTags(i.Tags)
+	}
+	if v := i.Kind; v != nil {
+		m.SetKind(*v)
+	}
+	if i.ClearRegionCode {
+		m.ClearRegionCode()
+	}
+	if v := i.RegionCode; v != nil {
+		m.SetRegionCode(*v)
+	}
+	if i.ClearShortCode {
+		m.ClearShortCode()
+	}
+	if v := i.ShortCode; v != nil {
+		m.SetShortCode(*v)
+	}
+	if i.ClearNumber {
+		m.ClearNumber()
+	}
+	if v := i.Number; v != nil {
+		m.SetNumber(*v)
+	}
+	if i.ClearExtension {
+		m.ClearExtension()
+	}
+	if v := i.Extension; v != nil {
+		m.SetExtension(*v)
+	}
+	if i.ClearOwner {
+		m.ClearOwner()
+	}
+	if v := i.OwnerID; v != nil {
+		m.SetOwnerID(*v)
+	}
+	if i.ClearProfile {
+		m.ClearProfile()
+	}
+	if v := i.AddProfileIDs; len(v) > 0 {
+		m.AddProfileIDs(v...)
+	}
+	if v := i.RemoveProfileIDs; len(v) > 0 {
+		m.RemoveProfileIDs(v...)
+	}
+	if i.ClearEvents {
+		m.ClearEvents()
+	}
+	if v := i.AddEventIDs; len(v) > 0 {
+		m.AddEventIDs(v...)
+	}
+	if v := i.RemoveEventIDs; len(v) > 0 {
+		m.RemoveEventIDs(v...)
+	}
+}
+
+// SetInput applies the change-set in the UpdatePhoneNumberInput on the PhoneNumberUpdate builder.
+func (c *PhoneNumberUpdate) SetInput(i UpdatePhoneNumberInput) *PhoneNumberUpdate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// SetInput applies the change-set in the UpdatePhoneNumberInput on the PhoneNumberUpdateOne builder.
+func (c *PhoneNumberUpdateOne) SetInput(i UpdatePhoneNumberInput) *PhoneNumberUpdateOne {
 	i.Mutate(c.Mutation())
 	return c
 }
@@ -4925,11 +5091,15 @@ func (c *VendorUpdateOne) SetInput(i UpdateVendorInput) *VendorUpdateOne {
 type CreateVendorProfileInput struct {
 	Tags             []string
 	Name             string
-	DbaName          *string
+	CorporationType  *string
+	CorporationDba   *string
 	Description      *string
 	WebsiteURI       *string
+	TaxID            *string
+	TaxIDType        *enums.TaxIDType
 	OwnerID          *string
 	PostalAddressIDs []string
+	PhoneNumberIDs   []string
 	VendorID         *string
 }
 
@@ -4939,8 +5109,11 @@ func (i *CreateVendorProfileInput) Mutate(m *VendorProfileMutation) {
 		m.SetTags(v)
 	}
 	m.SetName(i.Name)
-	if v := i.DbaName; v != nil {
-		m.SetDbaName(*v)
+	if v := i.CorporationType; v != nil {
+		m.SetCorporationType(*v)
+	}
+	if v := i.CorporationDba; v != nil {
+		m.SetCorporationDba(*v)
 	}
 	if v := i.Description; v != nil {
 		m.SetDescription(*v)
@@ -4948,11 +5121,20 @@ func (i *CreateVendorProfileInput) Mutate(m *VendorProfileMutation) {
 	if v := i.WebsiteURI; v != nil {
 		m.SetWebsiteURI(*v)
 	}
+	if v := i.TaxID; v != nil {
+		m.SetTaxID(*v)
+	}
+	if v := i.TaxIDType; v != nil {
+		m.SetTaxIDType(*v)
+	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
 	}
 	if v := i.PostalAddressIDs; len(v) > 0 {
 		m.AddPostalAddressIDs(v...)
+	}
+	if v := i.PhoneNumberIDs; len(v) > 0 {
+		m.AddPhoneNumberIDs(v...)
 	}
 	if v := i.VendorID; v != nil {
 		m.SetVendorID(*v)
@@ -4971,17 +5153,25 @@ type UpdateVendorProfileInput struct {
 	Tags                   []string
 	AppendTags             []string
 	Name                   *string
-	ClearDbaName           bool
-	DbaName                *string
+	ClearCorporationType   bool
+	CorporationType        *string
+	ClearCorporationDba    bool
+	CorporationDba         *string
 	ClearDescription       bool
 	Description            *string
 	ClearWebsiteURI        bool
 	WebsiteURI             *string
+	ClearTaxID             bool
+	TaxID                  *string
+	TaxIDType              *enums.TaxIDType
 	ClearOwner             bool
 	OwnerID                *string
 	ClearPostalAddresses   bool
 	AddPostalAddressIDs    []string
 	RemovePostalAddressIDs []string
+	ClearPhoneNumbers      bool
+	AddPhoneNumberIDs      []string
+	RemovePhoneNumberIDs   []string
 }
 
 // Mutate applies the UpdateVendorProfileInput on the VendorProfileMutation builder.
@@ -4998,11 +5188,17 @@ func (i *UpdateVendorProfileInput) Mutate(m *VendorProfileMutation) {
 	if v := i.Name; v != nil {
 		m.SetName(*v)
 	}
-	if i.ClearDbaName {
-		m.ClearDbaName()
+	if i.ClearCorporationType {
+		m.ClearCorporationType()
 	}
-	if v := i.DbaName; v != nil {
-		m.SetDbaName(*v)
+	if v := i.CorporationType; v != nil {
+		m.SetCorporationType(*v)
+	}
+	if i.ClearCorporationDba {
+		m.ClearCorporationDba()
+	}
+	if v := i.CorporationDba; v != nil {
+		m.SetCorporationDba(*v)
 	}
 	if i.ClearDescription {
 		m.ClearDescription()
@@ -5015,6 +5211,15 @@ func (i *UpdateVendorProfileInput) Mutate(m *VendorProfileMutation) {
 	}
 	if v := i.WebsiteURI; v != nil {
 		m.SetWebsiteURI(*v)
+	}
+	if i.ClearTaxID {
+		m.ClearTaxID()
+	}
+	if v := i.TaxID; v != nil {
+		m.SetTaxID(*v)
+	}
+	if v := i.TaxIDType; v != nil {
+		m.SetTaxIDType(*v)
 	}
 	if i.ClearOwner {
 		m.ClearOwner()
@@ -5031,6 +5236,15 @@ func (i *UpdateVendorProfileInput) Mutate(m *VendorProfileMutation) {
 	if v := i.RemovePostalAddressIDs; len(v) > 0 {
 		m.RemovePostalAddressIDs(v...)
 	}
+	if i.ClearPhoneNumbers {
+		m.ClearPhoneNumbers()
+	}
+	if v := i.AddPhoneNumberIDs; len(v) > 0 {
+		m.AddPhoneNumberIDs(v...)
+	}
+	if v := i.RemovePhoneNumberIDs; len(v) > 0 {
+		m.RemovePhoneNumberIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the UpdateVendorProfileInput on the VendorProfileUpdate builder.
@@ -5041,6 +5255,60 @@ func (c *VendorProfileUpdate) SetInput(i UpdateVendorProfileInput) *VendorProfil
 
 // SetInput applies the change-set in the UpdateVendorProfileInput on the VendorProfileUpdateOne builder.
 func (c *VendorProfileUpdateOne) SetInput(i UpdateVendorProfileInput) *VendorProfileUpdateOne {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// CreateVendorProfilePhoneNumberInput represents a mutation input for creating vendorprofilephonenumbers.
+type CreateVendorProfilePhoneNumberInput struct {
+	PhoneNumberID string
+	ProfileID     string
+	EventIDs      []string
+}
+
+// Mutate applies the CreateVendorProfilePhoneNumberInput on the VendorProfilePhoneNumberMutation builder.
+func (i *CreateVendorProfilePhoneNumberInput) Mutate(m *VendorProfilePhoneNumberMutation) {
+	m.SetPhoneNumberID(i.PhoneNumberID)
+	m.SetProfileID(i.ProfileID)
+	if v := i.EventIDs; len(v) > 0 {
+		m.AddEventIDs(v...)
+	}
+}
+
+// SetInput applies the change-set in the CreateVendorProfilePhoneNumberInput on the VendorProfilePhoneNumberCreate builder.
+func (c *VendorProfilePhoneNumberCreate) SetInput(i CreateVendorProfilePhoneNumberInput) *VendorProfilePhoneNumberCreate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// UpdateVendorProfilePhoneNumberInput represents a mutation input for updating vendorprofilephonenumbers.
+type UpdateVendorProfilePhoneNumberInput struct {
+	ClearEvents    bool
+	AddEventIDs    []string
+	RemoveEventIDs []string
+}
+
+// Mutate applies the UpdateVendorProfilePhoneNumberInput on the VendorProfilePhoneNumberMutation builder.
+func (i *UpdateVendorProfilePhoneNumberInput) Mutate(m *VendorProfilePhoneNumberMutation) {
+	if i.ClearEvents {
+		m.ClearEvents()
+	}
+	if v := i.AddEventIDs; len(v) > 0 {
+		m.AddEventIDs(v...)
+	}
+	if v := i.RemoveEventIDs; len(v) > 0 {
+		m.RemoveEventIDs(v...)
+	}
+}
+
+// SetInput applies the change-set in the UpdateVendorProfilePhoneNumberInput on the VendorProfilePhoneNumberUpdate builder.
+func (c *VendorProfilePhoneNumberUpdate) SetInput(i UpdateVendorProfilePhoneNumberInput) *VendorProfilePhoneNumberUpdate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// SetInput applies the change-set in the UpdateVendorProfilePhoneNumberInput on the VendorProfilePhoneNumberUpdateOne builder.
+func (c *VendorProfilePhoneNumberUpdateOne) SetInput(i UpdateVendorProfilePhoneNumberInput) *VendorProfilePhoneNumberUpdateOne {
 	i.Mutate(c.Mutation())
 	return c
 }

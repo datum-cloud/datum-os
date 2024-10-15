@@ -105,6 +105,8 @@ const (
 	EdgeVendorProfiles = "vendor_profiles"
 	// EdgePostalAddresses holds the string denoting the postal_addresses edge name in mutations.
 	EdgePostalAddresses = "postal_addresses"
+	// EdgePhoneNumbers holds the string denoting the phone_numbers edge name in mutations.
+	EdgePhoneNumbers = "phone_numbers"
 	// EdgeMembers holds the string denoting the members edge name in mutations.
 	EdgeMembers = "members"
 	// Table holds the table name of the organization in the database.
@@ -303,6 +305,13 @@ const (
 	PostalAddressesInverseTable = "postal_addresses"
 	// PostalAddressesColumn is the table column denoting the postal_addresses relation/edge.
 	PostalAddressesColumn = "owner_id"
+	// PhoneNumbersTable is the table that holds the phone_numbers relation/edge.
+	PhoneNumbersTable = "phone_numbers"
+	// PhoneNumbersInverseTable is the table name for the PhoneNumber entity.
+	// It exists in this package in order to avoid circular dependency with the "phonenumber" package.
+	PhoneNumbersInverseTable = "phone_numbers"
+	// PhoneNumbersColumn is the table column denoting the phone_numbers relation/edge.
+	PhoneNumbersColumn = "owner_id"
 	// MembersTable is the table that holds the members relation/edge.
 	MembersTable = "org_memberships"
 	// MembersInverseTable is the table name for the OrgMembership entity.
@@ -879,6 +888,20 @@ func ByPostalAddresses(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
+// ByPhoneNumbersCount orders the results by phone_numbers count.
+func ByPhoneNumbersCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newPhoneNumbersStep(), opts...)
+	}
+}
+
+// ByPhoneNumbers orders the results by phone_numbers terms.
+func ByPhoneNumbers(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newPhoneNumbersStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByMembersCount orders the results by members count.
 func ByMembersCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -1100,6 +1123,13 @@ func newPostalAddressesStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(PostalAddressesInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, PostalAddressesTable, PostalAddressesColumn),
+	)
+}
+func newPhoneNumbersStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(PhoneNumbersInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, PhoneNumbersTable, PhoneNumbersColumn),
 	)
 }
 func newMembersStep() *sqlgraph.Step {

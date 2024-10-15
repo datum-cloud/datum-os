@@ -34,6 +34,7 @@ import (
 	"github.com/datum-cloud/datum-os/internal/ent/generated/organizationsetting"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/orgmembership"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/personalaccesstoken"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/phonenumber"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/postaladdress"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/predicate"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/subscriber"
@@ -670,6 +671,21 @@ func (ou *OrganizationUpdate) AddPostalAddresses(p ...*PostalAddress) *Organizat
 	return ou.AddPostalAddressIDs(ids...)
 }
 
+// AddPhoneNumberIDs adds the "phone_numbers" edge to the PhoneNumber entity by IDs.
+func (ou *OrganizationUpdate) AddPhoneNumberIDs(ids ...string) *OrganizationUpdate {
+	ou.mutation.AddPhoneNumberIDs(ids...)
+	return ou
+}
+
+// AddPhoneNumbers adds the "phone_numbers" edges to the PhoneNumber entity.
+func (ou *OrganizationUpdate) AddPhoneNumbers(p ...*PhoneNumber) *OrganizationUpdate {
+	ids := make([]string, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return ou.AddPhoneNumberIDs(ids...)
+}
+
 // AddMemberIDs adds the "members" edge to the OrgMembership entity by IDs.
 func (ou *OrganizationUpdate) AddMemberIDs(ids ...string) *OrganizationUpdate {
 	ou.mutation.AddMemberIDs(ids...)
@@ -1282,6 +1298,27 @@ func (ou *OrganizationUpdate) RemovePostalAddresses(p ...*PostalAddress) *Organi
 		ids[i] = p[i].ID
 	}
 	return ou.RemovePostalAddressIDs(ids...)
+}
+
+// ClearPhoneNumbers clears all "phone_numbers" edges to the PhoneNumber entity.
+func (ou *OrganizationUpdate) ClearPhoneNumbers() *OrganizationUpdate {
+	ou.mutation.ClearPhoneNumbers()
+	return ou
+}
+
+// RemovePhoneNumberIDs removes the "phone_numbers" edge to PhoneNumber entities by IDs.
+func (ou *OrganizationUpdate) RemovePhoneNumberIDs(ids ...string) *OrganizationUpdate {
+	ou.mutation.RemovePhoneNumberIDs(ids...)
+	return ou
+}
+
+// RemovePhoneNumbers removes "phone_numbers" edges to PhoneNumber entities.
+func (ou *OrganizationUpdate) RemovePhoneNumbers(p ...*PhoneNumber) *OrganizationUpdate {
+	ids := make([]string, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return ou.RemovePhoneNumberIDs(ids...)
 }
 
 // ClearMembers clears all "members" edges to the OrgMembership entity.
@@ -2840,6 +2877,54 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if ou.mutation.PhoneNumbersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.PhoneNumbersTable,
+			Columns: []string{organization.PhoneNumbersColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(phonenumber.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ou.schemaConfig.PhoneNumber
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ou.mutation.RemovedPhoneNumbersIDs(); len(nodes) > 0 && !ou.mutation.PhoneNumbersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.PhoneNumbersTable,
+			Columns: []string{organization.PhoneNumbersColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(phonenumber.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ou.schemaConfig.PhoneNumber
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ou.mutation.PhoneNumbersIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.PhoneNumbersTable,
+			Columns: []string{organization.PhoneNumbersColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(phonenumber.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ou.schemaConfig.PhoneNumber
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if ou.mutation.MembersCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -3521,6 +3606,21 @@ func (ouo *OrganizationUpdateOne) AddPostalAddresses(p ...*PostalAddress) *Organ
 	return ouo.AddPostalAddressIDs(ids...)
 }
 
+// AddPhoneNumberIDs adds the "phone_numbers" edge to the PhoneNumber entity by IDs.
+func (ouo *OrganizationUpdateOne) AddPhoneNumberIDs(ids ...string) *OrganizationUpdateOne {
+	ouo.mutation.AddPhoneNumberIDs(ids...)
+	return ouo
+}
+
+// AddPhoneNumbers adds the "phone_numbers" edges to the PhoneNumber entity.
+func (ouo *OrganizationUpdateOne) AddPhoneNumbers(p ...*PhoneNumber) *OrganizationUpdateOne {
+	ids := make([]string, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return ouo.AddPhoneNumberIDs(ids...)
+}
+
 // AddMemberIDs adds the "members" edge to the OrgMembership entity by IDs.
 func (ouo *OrganizationUpdateOne) AddMemberIDs(ids ...string) *OrganizationUpdateOne {
 	ouo.mutation.AddMemberIDs(ids...)
@@ -4133,6 +4233,27 @@ func (ouo *OrganizationUpdateOne) RemovePostalAddresses(p ...*PostalAddress) *Or
 		ids[i] = p[i].ID
 	}
 	return ouo.RemovePostalAddressIDs(ids...)
+}
+
+// ClearPhoneNumbers clears all "phone_numbers" edges to the PhoneNumber entity.
+func (ouo *OrganizationUpdateOne) ClearPhoneNumbers() *OrganizationUpdateOne {
+	ouo.mutation.ClearPhoneNumbers()
+	return ouo
+}
+
+// RemovePhoneNumberIDs removes the "phone_numbers" edge to PhoneNumber entities by IDs.
+func (ouo *OrganizationUpdateOne) RemovePhoneNumberIDs(ids ...string) *OrganizationUpdateOne {
+	ouo.mutation.RemovePhoneNumberIDs(ids...)
+	return ouo
+}
+
+// RemovePhoneNumbers removes "phone_numbers" edges to PhoneNumber entities.
+func (ouo *OrganizationUpdateOne) RemovePhoneNumbers(p ...*PhoneNumber) *OrganizationUpdateOne {
+	ids := make([]string, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return ouo.RemovePhoneNumberIDs(ids...)
 }
 
 // ClearMembers clears all "members" edges to the OrgMembership entity.
@@ -5716,6 +5837,54 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 			},
 		}
 		edge.Schema = ouo.schemaConfig.PostalAddress
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if ouo.mutation.PhoneNumbersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.PhoneNumbersTable,
+			Columns: []string{organization.PhoneNumbersColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(phonenumber.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ouo.schemaConfig.PhoneNumber
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ouo.mutation.RemovedPhoneNumbersIDs(); len(nodes) > 0 && !ouo.mutation.PhoneNumbersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.PhoneNumbersTable,
+			Columns: []string{organization.PhoneNumbersColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(phonenumber.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ouo.schemaConfig.PhoneNumber
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ouo.mutation.PhoneNumbersIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.PhoneNumbersTable,
+			Columns: []string{organization.PhoneNumbersColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(phonenumber.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ouo.schemaConfig.PhoneNumber
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

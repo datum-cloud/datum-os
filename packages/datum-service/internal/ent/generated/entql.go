@@ -53,6 +53,8 @@ import (
 	"github.com/datum-cloud/datum-os/internal/ent/generated/orgmembershiphistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/passwordresettoken"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/personalaccesstoken"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/phonenumber"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/phonenumberhistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/postaladdress"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/postaladdresshistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/predicate"
@@ -68,6 +70,8 @@ import (
 	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorhistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofile"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofilehistory"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofilephonenumber"
+	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofilephonenumberhistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofilepostaladdress"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofilepostaladdresshistory"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/webauthn"
@@ -82,7 +86,7 @@ import (
 
 // schemaGraph holds a representation of ent/schema at runtime.
 var schemaGraph = func() *sqlgraph.Schema {
-	graph := &sqlgraph.Schema{Nodes: make([]*sqlgraph.Node, 69)}
+	graph := &sqlgraph.Schema{Nodes: make([]*sqlgraph.Node, 73)}
 	graph.Nodes[0] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   apitoken.Table,
@@ -1455,6 +1459,63 @@ var schemaGraph = func() *sqlgraph.Schema {
 	}
 	graph.Nodes[50] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
+			Table:   phonenumber.Table,
+			Columns: phonenumber.Columns,
+			ID: &sqlgraph.FieldSpec{
+				Type:   field.TypeString,
+				Column: phonenumber.FieldID,
+			},
+		},
+		Type: "PhoneNumber",
+		Fields: map[string]*sqlgraph.FieldSpec{
+			phonenumber.FieldCreatedAt:  {Type: field.TypeTime, Column: phonenumber.FieldCreatedAt},
+			phonenumber.FieldUpdatedAt:  {Type: field.TypeTime, Column: phonenumber.FieldUpdatedAt},
+			phonenumber.FieldCreatedBy:  {Type: field.TypeString, Column: phonenumber.FieldCreatedBy},
+			phonenumber.FieldUpdatedBy:  {Type: field.TypeString, Column: phonenumber.FieldUpdatedBy},
+			phonenumber.FieldDeletedAt:  {Type: field.TypeTime, Column: phonenumber.FieldDeletedAt},
+			phonenumber.FieldDeletedBy:  {Type: field.TypeString, Column: phonenumber.FieldDeletedBy},
+			phonenumber.FieldMappingID:  {Type: field.TypeString, Column: phonenumber.FieldMappingID},
+			phonenumber.FieldTags:       {Type: field.TypeJSON, Column: phonenumber.FieldTags},
+			phonenumber.FieldOwnerID:    {Type: field.TypeString, Column: phonenumber.FieldOwnerID},
+			phonenumber.FieldKind:       {Type: field.TypeString, Column: phonenumber.FieldKind},
+			phonenumber.FieldRegionCode: {Type: field.TypeString, Column: phonenumber.FieldRegionCode},
+			phonenumber.FieldShortCode:  {Type: field.TypeString, Column: phonenumber.FieldShortCode},
+			phonenumber.FieldNumber:     {Type: field.TypeString, Column: phonenumber.FieldNumber},
+			phonenumber.FieldExtension:  {Type: field.TypeString, Column: phonenumber.FieldExtension},
+		},
+	}
+	graph.Nodes[51] = &sqlgraph.Node{
+		NodeSpec: sqlgraph.NodeSpec{
+			Table:   phonenumberhistory.Table,
+			Columns: phonenumberhistory.Columns,
+			ID: &sqlgraph.FieldSpec{
+				Type:   field.TypeString,
+				Column: phonenumberhistory.FieldID,
+			},
+		},
+		Type: "PhoneNumberHistory",
+		Fields: map[string]*sqlgraph.FieldSpec{
+			phonenumberhistory.FieldHistoryTime: {Type: field.TypeTime, Column: phonenumberhistory.FieldHistoryTime},
+			phonenumberhistory.FieldRef:         {Type: field.TypeString, Column: phonenumberhistory.FieldRef},
+			phonenumberhistory.FieldOperation:   {Type: field.TypeEnum, Column: phonenumberhistory.FieldOperation},
+			phonenumberhistory.FieldCreatedAt:   {Type: field.TypeTime, Column: phonenumberhistory.FieldCreatedAt},
+			phonenumberhistory.FieldUpdatedAt:   {Type: field.TypeTime, Column: phonenumberhistory.FieldUpdatedAt},
+			phonenumberhistory.FieldCreatedBy:   {Type: field.TypeString, Column: phonenumberhistory.FieldCreatedBy},
+			phonenumberhistory.FieldUpdatedBy:   {Type: field.TypeString, Column: phonenumberhistory.FieldUpdatedBy},
+			phonenumberhistory.FieldDeletedAt:   {Type: field.TypeTime, Column: phonenumberhistory.FieldDeletedAt},
+			phonenumberhistory.FieldDeletedBy:   {Type: field.TypeString, Column: phonenumberhistory.FieldDeletedBy},
+			phonenumberhistory.FieldMappingID:   {Type: field.TypeString, Column: phonenumberhistory.FieldMappingID},
+			phonenumberhistory.FieldTags:        {Type: field.TypeJSON, Column: phonenumberhistory.FieldTags},
+			phonenumberhistory.FieldOwnerID:     {Type: field.TypeString, Column: phonenumberhistory.FieldOwnerID},
+			phonenumberhistory.FieldKind:        {Type: field.TypeString, Column: phonenumberhistory.FieldKind},
+			phonenumberhistory.FieldRegionCode:  {Type: field.TypeString, Column: phonenumberhistory.FieldRegionCode},
+			phonenumberhistory.FieldShortCode:   {Type: field.TypeString, Column: phonenumberhistory.FieldShortCode},
+			phonenumberhistory.FieldNumber:      {Type: field.TypeString, Column: phonenumberhistory.FieldNumber},
+			phonenumberhistory.FieldExtension:   {Type: field.TypeString, Column: phonenumberhistory.FieldExtension},
+		},
+	}
+	graph.Nodes[52] = &sqlgraph.Node{
+		NodeSpec: sqlgraph.NodeSpec{
 			Table:   postaladdress.Table,
 			Columns: postaladdress.Columns,
 			ID: &sqlgraph.FieldSpec{
@@ -1485,7 +1546,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			postaladdress.FieldOrganization:       {Type: field.TypeString, Column: postaladdress.FieldOrganization},
 		},
 	}
-	graph.Nodes[51] = &sqlgraph.Node{
+	graph.Nodes[53] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   postaladdresshistory.Table,
 			Columns: postaladdresshistory.Columns,
@@ -1520,7 +1581,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			postaladdresshistory.FieldOrganization:       {Type: field.TypeString, Column: postaladdresshistory.FieldOrganization},
 		},
 	}
-	graph.Nodes[52] = &sqlgraph.Node{
+	graph.Nodes[54] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   subscriber.Table,
 			Columns: subscriber.Columns,
@@ -1550,7 +1611,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			subscriber.FieldSecret:        {Type: field.TypeBytes, Column: subscriber.FieldSecret},
 		},
 	}
-	graph.Nodes[53] = &sqlgraph.Node{
+	graph.Nodes[55] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   tfasetting.Table,
 			Columns: tfasetting.Columns,
@@ -1578,7 +1639,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			tfasetting.FieldTotpAllowed:     {Type: field.TypeBool, Column: tfasetting.FieldTotpAllowed},
 		},
 	}
-	graph.Nodes[54] = &sqlgraph.Node{
+	graph.Nodes[56] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   template.Table,
 			Columns: template.Columns,
@@ -1605,7 +1666,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			template.FieldUischema:     {Type: field.TypeJSON, Column: template.FieldUischema},
 		},
 	}
-	graph.Nodes[55] = &sqlgraph.Node{
+	graph.Nodes[57] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   templatehistory.Table,
 			Columns: templatehistory.Columns,
@@ -1635,7 +1696,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			templatehistory.FieldUischema:     {Type: field.TypeJSON, Column: templatehistory.FieldUischema},
 		},
 	}
-	graph.Nodes[56] = &sqlgraph.Node{
+	graph.Nodes[58] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   user.Table,
 			Columns: user.Columns,
@@ -1668,7 +1729,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			user.FieldRole:            {Type: field.TypeEnum, Column: user.FieldRole},
 		},
 	}
-	graph.Nodes[57] = &sqlgraph.Node{
+	graph.Nodes[59] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   userhistory.Table,
 			Columns: userhistory.Columns,
@@ -1704,7 +1765,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			userhistory.FieldRole:            {Type: field.TypeEnum, Column: userhistory.FieldRole},
 		},
 	}
-	graph.Nodes[58] = &sqlgraph.Node{
+	graph.Nodes[60] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   usersetting.Table,
 			Columns: usersetting.Columns,
@@ -1734,7 +1795,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			usersetting.FieldPhoneNumber:       {Type: field.TypeString, Column: usersetting.FieldPhoneNumber},
 		},
 	}
-	graph.Nodes[59] = &sqlgraph.Node{
+	graph.Nodes[61] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   usersettinghistory.Table,
 			Columns: usersettinghistory.Columns,
@@ -1767,7 +1828,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			usersettinghistory.FieldPhoneNumber:       {Type: field.TypeString, Column: usersettinghistory.FieldPhoneNumber},
 		},
 	}
-	graph.Nodes[60] = &sqlgraph.Node{
+	graph.Nodes[62] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   vendor.Table,
 			Columns: vendor.Columns,
@@ -1792,7 +1853,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			vendor.FieldOnboardingState: {Type: field.TypeEnum, Column: vendor.FieldOnboardingState},
 		},
 	}
-	graph.Nodes[61] = &sqlgraph.Node{
+	graph.Nodes[63] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   vendorhistory.Table,
 			Columns: vendorhistory.Columns,
@@ -1820,7 +1881,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			vendorhistory.FieldOnboardingState: {Type: field.TypeEnum, Column: vendorhistory.FieldOnboardingState},
 		},
 	}
-	graph.Nodes[62] = &sqlgraph.Node{
+	graph.Nodes[64] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   vendorprofile.Table,
 			Columns: vendorprofile.Columns,
@@ -1831,23 +1892,26 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		Type: "VendorProfile",
 		Fields: map[string]*sqlgraph.FieldSpec{
-			vendorprofile.FieldCreatedAt:   {Type: field.TypeTime, Column: vendorprofile.FieldCreatedAt},
-			vendorprofile.FieldUpdatedAt:   {Type: field.TypeTime, Column: vendorprofile.FieldUpdatedAt},
-			vendorprofile.FieldCreatedBy:   {Type: field.TypeString, Column: vendorprofile.FieldCreatedBy},
-			vendorprofile.FieldUpdatedBy:   {Type: field.TypeString, Column: vendorprofile.FieldUpdatedBy},
-			vendorprofile.FieldDeletedAt:   {Type: field.TypeTime, Column: vendorprofile.FieldDeletedAt},
-			vendorprofile.FieldDeletedBy:   {Type: field.TypeString, Column: vendorprofile.FieldDeletedBy},
-			vendorprofile.FieldMappingID:   {Type: field.TypeString, Column: vendorprofile.FieldMappingID},
-			vendorprofile.FieldTags:        {Type: field.TypeJSON, Column: vendorprofile.FieldTags},
-			vendorprofile.FieldOwnerID:     {Type: field.TypeString, Column: vendorprofile.FieldOwnerID},
-			vendorprofile.FieldVendorID:    {Type: field.TypeString, Column: vendorprofile.FieldVendorID},
-			vendorprofile.FieldName:        {Type: field.TypeString, Column: vendorprofile.FieldName},
-			vendorprofile.FieldDbaName:     {Type: field.TypeString, Column: vendorprofile.FieldDbaName},
-			vendorprofile.FieldDescription: {Type: field.TypeString, Column: vendorprofile.FieldDescription},
-			vendorprofile.FieldWebsiteURI:  {Type: field.TypeString, Column: vendorprofile.FieldWebsiteURI},
+			vendorprofile.FieldCreatedAt:       {Type: field.TypeTime, Column: vendorprofile.FieldCreatedAt},
+			vendorprofile.FieldUpdatedAt:       {Type: field.TypeTime, Column: vendorprofile.FieldUpdatedAt},
+			vendorprofile.FieldCreatedBy:       {Type: field.TypeString, Column: vendorprofile.FieldCreatedBy},
+			vendorprofile.FieldUpdatedBy:       {Type: field.TypeString, Column: vendorprofile.FieldUpdatedBy},
+			vendorprofile.FieldDeletedAt:       {Type: field.TypeTime, Column: vendorprofile.FieldDeletedAt},
+			vendorprofile.FieldDeletedBy:       {Type: field.TypeString, Column: vendorprofile.FieldDeletedBy},
+			vendorprofile.FieldMappingID:       {Type: field.TypeString, Column: vendorprofile.FieldMappingID},
+			vendorprofile.FieldTags:            {Type: field.TypeJSON, Column: vendorprofile.FieldTags},
+			vendorprofile.FieldOwnerID:         {Type: field.TypeString, Column: vendorprofile.FieldOwnerID},
+			vendorprofile.FieldVendorID:        {Type: field.TypeString, Column: vendorprofile.FieldVendorID},
+			vendorprofile.FieldName:            {Type: field.TypeString, Column: vendorprofile.FieldName},
+			vendorprofile.FieldCorporationType: {Type: field.TypeString, Column: vendorprofile.FieldCorporationType},
+			vendorprofile.FieldCorporationDba:  {Type: field.TypeString, Column: vendorprofile.FieldCorporationDba},
+			vendorprofile.FieldDescription:     {Type: field.TypeString, Column: vendorprofile.FieldDescription},
+			vendorprofile.FieldWebsiteURI:      {Type: field.TypeString, Column: vendorprofile.FieldWebsiteURI},
+			vendorprofile.FieldTaxID:           {Type: field.TypeString, Column: vendorprofile.FieldTaxID},
+			vendorprofile.FieldTaxIDType:       {Type: field.TypeEnum, Column: vendorprofile.FieldTaxIDType},
 		},
 	}
-	graph.Nodes[63] = &sqlgraph.Node{
+	graph.Nodes[65] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   vendorprofilehistory.Table,
 			Columns: vendorprofilehistory.Columns,
@@ -1858,26 +1922,76 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		Type: "VendorProfileHistory",
 		Fields: map[string]*sqlgraph.FieldSpec{
-			vendorprofilehistory.FieldHistoryTime: {Type: field.TypeTime, Column: vendorprofilehistory.FieldHistoryTime},
-			vendorprofilehistory.FieldRef:         {Type: field.TypeString, Column: vendorprofilehistory.FieldRef},
-			vendorprofilehistory.FieldOperation:   {Type: field.TypeEnum, Column: vendorprofilehistory.FieldOperation},
-			vendorprofilehistory.FieldCreatedAt:   {Type: field.TypeTime, Column: vendorprofilehistory.FieldCreatedAt},
-			vendorprofilehistory.FieldUpdatedAt:   {Type: field.TypeTime, Column: vendorprofilehistory.FieldUpdatedAt},
-			vendorprofilehistory.FieldCreatedBy:   {Type: field.TypeString, Column: vendorprofilehistory.FieldCreatedBy},
-			vendorprofilehistory.FieldUpdatedBy:   {Type: field.TypeString, Column: vendorprofilehistory.FieldUpdatedBy},
-			vendorprofilehistory.FieldDeletedAt:   {Type: field.TypeTime, Column: vendorprofilehistory.FieldDeletedAt},
-			vendorprofilehistory.FieldDeletedBy:   {Type: field.TypeString, Column: vendorprofilehistory.FieldDeletedBy},
-			vendorprofilehistory.FieldMappingID:   {Type: field.TypeString, Column: vendorprofilehistory.FieldMappingID},
-			vendorprofilehistory.FieldTags:        {Type: field.TypeJSON, Column: vendorprofilehistory.FieldTags},
-			vendorprofilehistory.FieldOwnerID:     {Type: field.TypeString, Column: vendorprofilehistory.FieldOwnerID},
-			vendorprofilehistory.FieldVendorID:    {Type: field.TypeString, Column: vendorprofilehistory.FieldVendorID},
-			vendorprofilehistory.FieldName:        {Type: field.TypeString, Column: vendorprofilehistory.FieldName},
-			vendorprofilehistory.FieldDbaName:     {Type: field.TypeString, Column: vendorprofilehistory.FieldDbaName},
-			vendorprofilehistory.FieldDescription: {Type: field.TypeString, Column: vendorprofilehistory.FieldDescription},
-			vendorprofilehistory.FieldWebsiteURI:  {Type: field.TypeString, Column: vendorprofilehistory.FieldWebsiteURI},
+			vendorprofilehistory.FieldHistoryTime:     {Type: field.TypeTime, Column: vendorprofilehistory.FieldHistoryTime},
+			vendorprofilehistory.FieldRef:             {Type: field.TypeString, Column: vendorprofilehistory.FieldRef},
+			vendorprofilehistory.FieldOperation:       {Type: field.TypeEnum, Column: vendorprofilehistory.FieldOperation},
+			vendorprofilehistory.FieldCreatedAt:       {Type: field.TypeTime, Column: vendorprofilehistory.FieldCreatedAt},
+			vendorprofilehistory.FieldUpdatedAt:       {Type: field.TypeTime, Column: vendorprofilehistory.FieldUpdatedAt},
+			vendorprofilehistory.FieldCreatedBy:       {Type: field.TypeString, Column: vendorprofilehistory.FieldCreatedBy},
+			vendorprofilehistory.FieldUpdatedBy:       {Type: field.TypeString, Column: vendorprofilehistory.FieldUpdatedBy},
+			vendorprofilehistory.FieldDeletedAt:       {Type: field.TypeTime, Column: vendorprofilehistory.FieldDeletedAt},
+			vendorprofilehistory.FieldDeletedBy:       {Type: field.TypeString, Column: vendorprofilehistory.FieldDeletedBy},
+			vendorprofilehistory.FieldMappingID:       {Type: field.TypeString, Column: vendorprofilehistory.FieldMappingID},
+			vendorprofilehistory.FieldTags:            {Type: field.TypeJSON, Column: vendorprofilehistory.FieldTags},
+			vendorprofilehistory.FieldOwnerID:         {Type: field.TypeString, Column: vendorprofilehistory.FieldOwnerID},
+			vendorprofilehistory.FieldVendorID:        {Type: field.TypeString, Column: vendorprofilehistory.FieldVendorID},
+			vendorprofilehistory.FieldName:            {Type: field.TypeString, Column: vendorprofilehistory.FieldName},
+			vendorprofilehistory.FieldCorporationType: {Type: field.TypeString, Column: vendorprofilehistory.FieldCorporationType},
+			vendorprofilehistory.FieldCorporationDba:  {Type: field.TypeString, Column: vendorprofilehistory.FieldCorporationDba},
+			vendorprofilehistory.FieldDescription:     {Type: field.TypeString, Column: vendorprofilehistory.FieldDescription},
+			vendorprofilehistory.FieldWebsiteURI:      {Type: field.TypeString, Column: vendorprofilehistory.FieldWebsiteURI},
+			vendorprofilehistory.FieldTaxID:           {Type: field.TypeString, Column: vendorprofilehistory.FieldTaxID},
+			vendorprofilehistory.FieldTaxIDType:       {Type: field.TypeEnum, Column: vendorprofilehistory.FieldTaxIDType},
 		},
 	}
-	graph.Nodes[64] = &sqlgraph.Node{
+	graph.Nodes[66] = &sqlgraph.Node{
+		NodeSpec: sqlgraph.NodeSpec{
+			Table:   vendorprofilephonenumber.Table,
+			Columns: vendorprofilephonenumber.Columns,
+			ID: &sqlgraph.FieldSpec{
+				Type:   field.TypeString,
+				Column: vendorprofilephonenumber.FieldID,
+			},
+		},
+		Type: "VendorProfilePhoneNumber",
+		Fields: map[string]*sqlgraph.FieldSpec{
+			vendorprofilephonenumber.FieldCreatedAt:       {Type: field.TypeTime, Column: vendorprofilephonenumber.FieldCreatedAt},
+			vendorprofilephonenumber.FieldUpdatedAt:       {Type: field.TypeTime, Column: vendorprofilephonenumber.FieldUpdatedAt},
+			vendorprofilephonenumber.FieldCreatedBy:       {Type: field.TypeString, Column: vendorprofilephonenumber.FieldCreatedBy},
+			vendorprofilephonenumber.FieldUpdatedBy:       {Type: field.TypeString, Column: vendorprofilephonenumber.FieldUpdatedBy},
+			vendorprofilephonenumber.FieldMappingID:       {Type: field.TypeString, Column: vendorprofilephonenumber.FieldMappingID},
+			vendorprofilephonenumber.FieldDeletedAt:       {Type: field.TypeTime, Column: vendorprofilephonenumber.FieldDeletedAt},
+			vendorprofilephonenumber.FieldDeletedBy:       {Type: field.TypeString, Column: vendorprofilephonenumber.FieldDeletedBy},
+			vendorprofilephonenumber.FieldVendorProfileID: {Type: field.TypeString, Column: vendorprofilephonenumber.FieldVendorProfileID},
+			vendorprofilephonenumber.FieldPhoneNumberID:   {Type: field.TypeString, Column: vendorprofilephonenumber.FieldPhoneNumberID},
+		},
+	}
+	graph.Nodes[67] = &sqlgraph.Node{
+		NodeSpec: sqlgraph.NodeSpec{
+			Table:   vendorprofilephonenumberhistory.Table,
+			Columns: vendorprofilephonenumberhistory.Columns,
+			ID: &sqlgraph.FieldSpec{
+				Type:   field.TypeString,
+				Column: vendorprofilephonenumberhistory.FieldID,
+			},
+		},
+		Type: "VendorProfilePhoneNumberHistory",
+		Fields: map[string]*sqlgraph.FieldSpec{
+			vendorprofilephonenumberhistory.FieldHistoryTime:     {Type: field.TypeTime, Column: vendorprofilephonenumberhistory.FieldHistoryTime},
+			vendorprofilephonenumberhistory.FieldRef:             {Type: field.TypeString, Column: vendorprofilephonenumberhistory.FieldRef},
+			vendorprofilephonenumberhistory.FieldOperation:       {Type: field.TypeEnum, Column: vendorprofilephonenumberhistory.FieldOperation},
+			vendorprofilephonenumberhistory.FieldCreatedAt:       {Type: field.TypeTime, Column: vendorprofilephonenumberhistory.FieldCreatedAt},
+			vendorprofilephonenumberhistory.FieldUpdatedAt:       {Type: field.TypeTime, Column: vendorprofilephonenumberhistory.FieldUpdatedAt},
+			vendorprofilephonenumberhistory.FieldCreatedBy:       {Type: field.TypeString, Column: vendorprofilephonenumberhistory.FieldCreatedBy},
+			vendorprofilephonenumberhistory.FieldUpdatedBy:       {Type: field.TypeString, Column: vendorprofilephonenumberhistory.FieldUpdatedBy},
+			vendorprofilephonenumberhistory.FieldMappingID:       {Type: field.TypeString, Column: vendorprofilephonenumberhistory.FieldMappingID},
+			vendorprofilephonenumberhistory.FieldDeletedAt:       {Type: field.TypeTime, Column: vendorprofilephonenumberhistory.FieldDeletedAt},
+			vendorprofilephonenumberhistory.FieldDeletedBy:       {Type: field.TypeString, Column: vendorprofilephonenumberhistory.FieldDeletedBy},
+			vendorprofilephonenumberhistory.FieldVendorProfileID: {Type: field.TypeString, Column: vendorprofilephonenumberhistory.FieldVendorProfileID},
+			vendorprofilephonenumberhistory.FieldPhoneNumberID:   {Type: field.TypeString, Column: vendorprofilephonenumberhistory.FieldPhoneNumberID},
+		},
+	}
+	graph.Nodes[68] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   vendorprofilepostaladdress.Table,
 			Columns: vendorprofilepostaladdress.Columns,
@@ -1900,7 +2014,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			vendorprofilepostaladdress.FieldPostalAddressID:   {Type: field.TypeString, Column: vendorprofilepostaladdress.FieldPostalAddressID},
 		},
 	}
-	graph.Nodes[65] = &sqlgraph.Node{
+	graph.Nodes[69] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   vendorprofilepostaladdresshistory.Table,
 			Columns: vendorprofilepostaladdresshistory.Columns,
@@ -1926,7 +2040,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			vendorprofilepostaladdresshistory.FieldPostalAddressID:   {Type: field.TypeString, Column: vendorprofilepostaladdresshistory.FieldPostalAddressID},
 		},
 	}
-	graph.Nodes[66] = &sqlgraph.Node{
+	graph.Nodes[70] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   webauthn.Table,
 			Columns: webauthn.Columns,
@@ -1956,7 +2070,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			webauthn.FieldUserVerified:    {Type: field.TypeBool, Column: webauthn.FieldUserVerified},
 		},
 	}
-	graph.Nodes[67] = &sqlgraph.Node{
+	graph.Nodes[71] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   webhook.Table,
 			Columns: webhook.Columns,
@@ -1988,7 +2102,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			webhook.FieldLastResponse:   {Type: field.TypeString, Column: webhook.FieldLastResponse},
 		},
 	}
-	graph.Nodes[68] = &sqlgraph.Node{
+	graph.Nodes[72] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   webhookhistory.Table,
 			Columns: webhookhistory.Columns,
@@ -3488,6 +3602,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"PostalAddress",
 	)
 	graph.MustAddE(
+		"phone_numbers",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.PhoneNumbersTable,
+			Columns: []string{organization.PhoneNumbersColumn},
+			Bidi:    false,
+		},
+		"Organization",
+		"PhoneNumber",
+	)
+	graph.MustAddE(
 		"members",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -3558,6 +3684,54 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"PersonalAccessToken",
 		"Event",
+	)
+	graph.MustAddE(
+		"owner",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   phonenumber.OwnerTable,
+			Columns: []string{phonenumber.OwnerColumn},
+			Bidi:    false,
+		},
+		"PhoneNumber",
+		"Organization",
+	)
+	graph.MustAddE(
+		"profile",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   phonenumber.ProfileTable,
+			Columns: phonenumber.ProfilePrimaryKey,
+			Bidi:    false,
+		},
+		"PhoneNumber",
+		"VendorProfile",
+	)
+	graph.MustAddE(
+		"events",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   phonenumber.EventsTable,
+			Columns: []string{phonenumber.EventsColumn},
+			Bidi:    false,
+		},
+		"PhoneNumber",
+		"Event",
+	)
+	graph.MustAddE(
+		"vendor_profile_phone_numbers",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   phonenumber.VendorProfilePhoneNumbersTable,
+			Columns: []string{phonenumber.VendorProfilePhoneNumbersColumn},
+			Bidi:    false,
+		},
+		"PhoneNumber",
+		"VendorProfilePhoneNumber",
 	)
 	graph.MustAddE(
 		"owner",
@@ -3896,6 +4070,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"PostalAddress",
 	)
 	graph.MustAddE(
+		"phone_numbers",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   vendorprofile.PhoneNumbersTable,
+			Columns: vendorprofile.PhoneNumbersPrimaryKey,
+			Bidi:    false,
+		},
+		"VendorProfile",
+		"PhoneNumber",
+	)
+	graph.MustAddE(
 		"vendor",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2O,
@@ -3918,6 +4104,54 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"VendorProfile",
 		"VendorProfilePostalAddress",
+	)
+	graph.MustAddE(
+		"vendor_profile_phone_numbers",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   vendorprofile.VendorProfilePhoneNumbersTable,
+			Columns: []string{vendorprofile.VendorProfilePhoneNumbersColumn},
+			Bidi:    false,
+		},
+		"VendorProfile",
+		"VendorProfilePhoneNumber",
+	)
+	graph.MustAddE(
+		"phone_number",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   vendorprofilephonenumber.PhoneNumberTable,
+			Columns: []string{vendorprofilephonenumber.PhoneNumberColumn},
+			Bidi:    false,
+		},
+		"VendorProfilePhoneNumber",
+		"PhoneNumber",
+	)
+	graph.MustAddE(
+		"profile",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   vendorprofilephonenumber.ProfileTable,
+			Columns: []string{vendorprofilephonenumber.ProfileColumn},
+			Bidi:    false,
+		},
+		"VendorProfilePhoneNumber",
+		"VendorProfile",
+	)
+	graph.MustAddE(
+		"events",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   vendorprofilephonenumber.EventsTable,
+			Columns: []string{vendorprofilephonenumber.EventsColumn},
+			Bidi:    false,
+		},
+		"VendorProfilePhoneNumber",
+		"Event",
 	)
 	graph.MustAddE(
 		"postal_address",
@@ -10720,6 +10954,20 @@ func (f *OrganizationFilter) WhereHasPostalAddressesWith(preds ...predicate.Post
 	})))
 }
 
+// WhereHasPhoneNumbers applies a predicate to check if query has an edge phone_numbers.
+func (f *OrganizationFilter) WhereHasPhoneNumbers() {
+	f.Where(entql.HasEdge("phone_numbers"))
+}
+
+// WhereHasPhoneNumbersWith applies a predicate to check if query has an edge phone_numbers with a given conditions (other predicates).
+func (f *OrganizationFilter) WhereHasPhoneNumbersWith(preds ...predicate.PhoneNumber) {
+	f.Where(entql.HasEdgeWith("phone_numbers", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
 // WhereHasMembers applies a predicate to check if query has an edge members.
 func (f *OrganizationFilter) WhereHasMembers() {
 	f.Where(entql.HasEdge("members"))
@@ -11405,6 +11653,297 @@ func (f *PersonalAccessTokenFilter) WhereHasEventsWith(preds ...predicate.Event)
 }
 
 // addPredicate implements the predicateAdder interface.
+func (pnq *PhoneNumberQuery) addPredicate(pred func(s *sql.Selector)) {
+	pnq.predicates = append(pnq.predicates, pred)
+}
+
+// Filter returns a Filter implementation to apply filters on the PhoneNumberQuery builder.
+func (pnq *PhoneNumberQuery) Filter() *PhoneNumberFilter {
+	return &PhoneNumberFilter{config: pnq.config, predicateAdder: pnq}
+}
+
+// addPredicate implements the predicateAdder interface.
+func (m *PhoneNumberMutation) addPredicate(pred func(s *sql.Selector)) {
+	m.predicates = append(m.predicates, pred)
+}
+
+// Filter returns an entql.Where implementation to apply filters on the PhoneNumberMutation builder.
+func (m *PhoneNumberMutation) Filter() *PhoneNumberFilter {
+	return &PhoneNumberFilter{config: m.config, predicateAdder: m}
+}
+
+// PhoneNumberFilter provides a generic filtering capability at runtime for PhoneNumberQuery.
+type PhoneNumberFilter struct {
+	predicateAdder
+	config
+}
+
+// Where applies the entql predicate on the query filter.
+func (f *PhoneNumberFilter) Where(p entql.P) {
+	f.addPredicate(func(s *sql.Selector) {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[50].Type, p, s); err != nil {
+			s.AddError(err)
+		}
+	})
+}
+
+// WhereID applies the entql string predicate on the id field.
+func (f *PhoneNumberFilter) WhereID(p entql.StringP) {
+	f.Where(p.Field(phonenumber.FieldID))
+}
+
+// WhereCreatedAt applies the entql time.Time predicate on the created_at field.
+func (f *PhoneNumberFilter) WhereCreatedAt(p entql.TimeP) {
+	f.Where(p.Field(phonenumber.FieldCreatedAt))
+}
+
+// WhereUpdatedAt applies the entql time.Time predicate on the updated_at field.
+func (f *PhoneNumberFilter) WhereUpdatedAt(p entql.TimeP) {
+	f.Where(p.Field(phonenumber.FieldUpdatedAt))
+}
+
+// WhereCreatedBy applies the entql string predicate on the created_by field.
+func (f *PhoneNumberFilter) WhereCreatedBy(p entql.StringP) {
+	f.Where(p.Field(phonenumber.FieldCreatedBy))
+}
+
+// WhereUpdatedBy applies the entql string predicate on the updated_by field.
+func (f *PhoneNumberFilter) WhereUpdatedBy(p entql.StringP) {
+	f.Where(p.Field(phonenumber.FieldUpdatedBy))
+}
+
+// WhereDeletedAt applies the entql time.Time predicate on the deleted_at field.
+func (f *PhoneNumberFilter) WhereDeletedAt(p entql.TimeP) {
+	f.Where(p.Field(phonenumber.FieldDeletedAt))
+}
+
+// WhereDeletedBy applies the entql string predicate on the deleted_by field.
+func (f *PhoneNumberFilter) WhereDeletedBy(p entql.StringP) {
+	f.Where(p.Field(phonenumber.FieldDeletedBy))
+}
+
+// WhereMappingID applies the entql string predicate on the mapping_id field.
+func (f *PhoneNumberFilter) WhereMappingID(p entql.StringP) {
+	f.Where(p.Field(phonenumber.FieldMappingID))
+}
+
+// WhereTags applies the entql json.RawMessage predicate on the tags field.
+func (f *PhoneNumberFilter) WhereTags(p entql.BytesP) {
+	f.Where(p.Field(phonenumber.FieldTags))
+}
+
+// WhereOwnerID applies the entql string predicate on the owner_id field.
+func (f *PhoneNumberFilter) WhereOwnerID(p entql.StringP) {
+	f.Where(p.Field(phonenumber.FieldOwnerID))
+}
+
+// WhereKind applies the entql string predicate on the kind field.
+func (f *PhoneNumberFilter) WhereKind(p entql.StringP) {
+	f.Where(p.Field(phonenumber.FieldKind))
+}
+
+// WhereRegionCode applies the entql string predicate on the region_code field.
+func (f *PhoneNumberFilter) WhereRegionCode(p entql.StringP) {
+	f.Where(p.Field(phonenumber.FieldRegionCode))
+}
+
+// WhereShortCode applies the entql string predicate on the short_code field.
+func (f *PhoneNumberFilter) WhereShortCode(p entql.StringP) {
+	f.Where(p.Field(phonenumber.FieldShortCode))
+}
+
+// WhereNumber applies the entql string predicate on the number field.
+func (f *PhoneNumberFilter) WhereNumber(p entql.StringP) {
+	f.Where(p.Field(phonenumber.FieldNumber))
+}
+
+// WhereExtension applies the entql string predicate on the extension field.
+func (f *PhoneNumberFilter) WhereExtension(p entql.StringP) {
+	f.Where(p.Field(phonenumber.FieldExtension))
+}
+
+// WhereHasOwner applies a predicate to check if query has an edge owner.
+func (f *PhoneNumberFilter) WhereHasOwner() {
+	f.Where(entql.HasEdge("owner"))
+}
+
+// WhereHasOwnerWith applies a predicate to check if query has an edge owner with a given conditions (other predicates).
+func (f *PhoneNumberFilter) WhereHasOwnerWith(preds ...predicate.Organization) {
+	f.Where(entql.HasEdgeWith("owner", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasProfile applies a predicate to check if query has an edge profile.
+func (f *PhoneNumberFilter) WhereHasProfile() {
+	f.Where(entql.HasEdge("profile"))
+}
+
+// WhereHasProfileWith applies a predicate to check if query has an edge profile with a given conditions (other predicates).
+func (f *PhoneNumberFilter) WhereHasProfileWith(preds ...predicate.VendorProfile) {
+	f.Where(entql.HasEdgeWith("profile", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasEvents applies a predicate to check if query has an edge events.
+func (f *PhoneNumberFilter) WhereHasEvents() {
+	f.Where(entql.HasEdge("events"))
+}
+
+// WhereHasEventsWith applies a predicate to check if query has an edge events with a given conditions (other predicates).
+func (f *PhoneNumberFilter) WhereHasEventsWith(preds ...predicate.Event) {
+	f.Where(entql.HasEdgeWith("events", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasVendorProfilePhoneNumbers applies a predicate to check if query has an edge vendor_profile_phone_numbers.
+func (f *PhoneNumberFilter) WhereHasVendorProfilePhoneNumbers() {
+	f.Where(entql.HasEdge("vendor_profile_phone_numbers"))
+}
+
+// WhereHasVendorProfilePhoneNumbersWith applies a predicate to check if query has an edge vendor_profile_phone_numbers with a given conditions (other predicates).
+func (f *PhoneNumberFilter) WhereHasVendorProfilePhoneNumbersWith(preds ...predicate.VendorProfilePhoneNumber) {
+	f.Where(entql.HasEdgeWith("vendor_profile_phone_numbers", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// addPredicate implements the predicateAdder interface.
+func (pnhq *PhoneNumberHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
+	pnhq.predicates = append(pnhq.predicates, pred)
+}
+
+// Filter returns a Filter implementation to apply filters on the PhoneNumberHistoryQuery builder.
+func (pnhq *PhoneNumberHistoryQuery) Filter() *PhoneNumberHistoryFilter {
+	return &PhoneNumberHistoryFilter{config: pnhq.config, predicateAdder: pnhq}
+}
+
+// addPredicate implements the predicateAdder interface.
+func (m *PhoneNumberHistoryMutation) addPredicate(pred func(s *sql.Selector)) {
+	m.predicates = append(m.predicates, pred)
+}
+
+// Filter returns an entql.Where implementation to apply filters on the PhoneNumberHistoryMutation builder.
+func (m *PhoneNumberHistoryMutation) Filter() *PhoneNumberHistoryFilter {
+	return &PhoneNumberHistoryFilter{config: m.config, predicateAdder: m}
+}
+
+// PhoneNumberHistoryFilter provides a generic filtering capability at runtime for PhoneNumberHistoryQuery.
+type PhoneNumberHistoryFilter struct {
+	predicateAdder
+	config
+}
+
+// Where applies the entql predicate on the query filter.
+func (f *PhoneNumberHistoryFilter) Where(p entql.P) {
+	f.addPredicate(func(s *sql.Selector) {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[51].Type, p, s); err != nil {
+			s.AddError(err)
+		}
+	})
+}
+
+// WhereID applies the entql string predicate on the id field.
+func (f *PhoneNumberHistoryFilter) WhereID(p entql.StringP) {
+	f.Where(p.Field(phonenumberhistory.FieldID))
+}
+
+// WhereHistoryTime applies the entql time.Time predicate on the history_time field.
+func (f *PhoneNumberHistoryFilter) WhereHistoryTime(p entql.TimeP) {
+	f.Where(p.Field(phonenumberhistory.FieldHistoryTime))
+}
+
+// WhereRef applies the entql string predicate on the ref field.
+func (f *PhoneNumberHistoryFilter) WhereRef(p entql.StringP) {
+	f.Where(p.Field(phonenumberhistory.FieldRef))
+}
+
+// WhereOperation applies the entql string predicate on the operation field.
+func (f *PhoneNumberHistoryFilter) WhereOperation(p entql.StringP) {
+	f.Where(p.Field(phonenumberhistory.FieldOperation))
+}
+
+// WhereCreatedAt applies the entql time.Time predicate on the created_at field.
+func (f *PhoneNumberHistoryFilter) WhereCreatedAt(p entql.TimeP) {
+	f.Where(p.Field(phonenumberhistory.FieldCreatedAt))
+}
+
+// WhereUpdatedAt applies the entql time.Time predicate on the updated_at field.
+func (f *PhoneNumberHistoryFilter) WhereUpdatedAt(p entql.TimeP) {
+	f.Where(p.Field(phonenumberhistory.FieldUpdatedAt))
+}
+
+// WhereCreatedBy applies the entql string predicate on the created_by field.
+func (f *PhoneNumberHistoryFilter) WhereCreatedBy(p entql.StringP) {
+	f.Where(p.Field(phonenumberhistory.FieldCreatedBy))
+}
+
+// WhereUpdatedBy applies the entql string predicate on the updated_by field.
+func (f *PhoneNumberHistoryFilter) WhereUpdatedBy(p entql.StringP) {
+	f.Where(p.Field(phonenumberhistory.FieldUpdatedBy))
+}
+
+// WhereDeletedAt applies the entql time.Time predicate on the deleted_at field.
+func (f *PhoneNumberHistoryFilter) WhereDeletedAt(p entql.TimeP) {
+	f.Where(p.Field(phonenumberhistory.FieldDeletedAt))
+}
+
+// WhereDeletedBy applies the entql string predicate on the deleted_by field.
+func (f *PhoneNumberHistoryFilter) WhereDeletedBy(p entql.StringP) {
+	f.Where(p.Field(phonenumberhistory.FieldDeletedBy))
+}
+
+// WhereMappingID applies the entql string predicate on the mapping_id field.
+func (f *PhoneNumberHistoryFilter) WhereMappingID(p entql.StringP) {
+	f.Where(p.Field(phonenumberhistory.FieldMappingID))
+}
+
+// WhereTags applies the entql json.RawMessage predicate on the tags field.
+func (f *PhoneNumberHistoryFilter) WhereTags(p entql.BytesP) {
+	f.Where(p.Field(phonenumberhistory.FieldTags))
+}
+
+// WhereOwnerID applies the entql string predicate on the owner_id field.
+func (f *PhoneNumberHistoryFilter) WhereOwnerID(p entql.StringP) {
+	f.Where(p.Field(phonenumberhistory.FieldOwnerID))
+}
+
+// WhereKind applies the entql string predicate on the kind field.
+func (f *PhoneNumberHistoryFilter) WhereKind(p entql.StringP) {
+	f.Where(p.Field(phonenumberhistory.FieldKind))
+}
+
+// WhereRegionCode applies the entql string predicate on the region_code field.
+func (f *PhoneNumberHistoryFilter) WhereRegionCode(p entql.StringP) {
+	f.Where(p.Field(phonenumberhistory.FieldRegionCode))
+}
+
+// WhereShortCode applies the entql string predicate on the short_code field.
+func (f *PhoneNumberHistoryFilter) WhereShortCode(p entql.StringP) {
+	f.Where(p.Field(phonenumberhistory.FieldShortCode))
+}
+
+// WhereNumber applies the entql string predicate on the number field.
+func (f *PhoneNumberHistoryFilter) WhereNumber(p entql.StringP) {
+	f.Where(p.Field(phonenumberhistory.FieldNumber))
+}
+
+// WhereExtension applies the entql string predicate on the extension field.
+func (f *PhoneNumberHistoryFilter) WhereExtension(p entql.StringP) {
+	f.Where(p.Field(phonenumberhistory.FieldExtension))
+}
+
+// addPredicate implements the predicateAdder interface.
 func (paq *PostalAddressQuery) addPredicate(pred func(s *sql.Selector)) {
 	paq.predicates = append(paq.predicates, pred)
 }
@@ -11433,7 +11972,7 @@ type PostalAddressFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *PostalAddressFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[50].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[52].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -11624,7 +12163,7 @@ type PostalAddressHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *PostalAddressHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[51].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[53].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -11774,7 +12313,7 @@ type SubscriberFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *SubscriberFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[52].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[54].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -11927,7 +12466,7 @@ type TFASettingFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *TFASettingFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[53].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[55].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -12056,7 +12595,7 @@ type TemplateFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *TemplateFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[54].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[56].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -12194,7 +12733,7 @@ type TemplateHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *TemplateHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[55].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[57].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -12319,7 +12858,7 @@ type UserFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *UserFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[56].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[58].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -12627,7 +13166,7 @@ type UserHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *UserHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[57].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[59].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -12782,7 +13321,7 @@ type UserSettingFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *UserSettingFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[58].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[60].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -12935,7 +13474,7 @@ type UserSettingHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *UserSettingHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[59].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[61].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -13075,7 +13614,7 @@ type VendorFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *VendorFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[60].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[62].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -13217,7 +13756,7 @@ type VendorHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *VendorHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[61].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[63].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -13332,7 +13871,7 @@ type VendorProfileFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *VendorProfileFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[62].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[64].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -13398,9 +13937,14 @@ func (f *VendorProfileFilter) WhereName(p entql.StringP) {
 	f.Where(p.Field(vendorprofile.FieldName))
 }
 
-// WhereDbaName applies the entql string predicate on the dba_name field.
-func (f *VendorProfileFilter) WhereDbaName(p entql.StringP) {
-	f.Where(p.Field(vendorprofile.FieldDbaName))
+// WhereCorporationType applies the entql string predicate on the corporation_type field.
+func (f *VendorProfileFilter) WhereCorporationType(p entql.StringP) {
+	f.Where(p.Field(vendorprofile.FieldCorporationType))
+}
+
+// WhereCorporationDba applies the entql string predicate on the corporation_dba field.
+func (f *VendorProfileFilter) WhereCorporationDba(p entql.StringP) {
+	f.Where(p.Field(vendorprofile.FieldCorporationDba))
 }
 
 // WhereDescription applies the entql string predicate on the description field.
@@ -13411,6 +13955,16 @@ func (f *VendorProfileFilter) WhereDescription(p entql.StringP) {
 // WhereWebsiteURI applies the entql string predicate on the website_uri field.
 func (f *VendorProfileFilter) WhereWebsiteURI(p entql.StringP) {
 	f.Where(p.Field(vendorprofile.FieldWebsiteURI))
+}
+
+// WhereTaxID applies the entql string predicate on the tax_id field.
+func (f *VendorProfileFilter) WhereTaxID(p entql.StringP) {
+	f.Where(p.Field(vendorprofile.FieldTaxID))
+}
+
+// WhereTaxIDType applies the entql string predicate on the tax_id_type field.
+func (f *VendorProfileFilter) WhereTaxIDType(p entql.StringP) {
+	f.Where(p.Field(vendorprofile.FieldTaxIDType))
 }
 
 // WhereHasOwner applies a predicate to check if query has an edge owner.
@@ -13441,6 +13995,20 @@ func (f *VendorProfileFilter) WhereHasPostalAddressesWith(preds ...predicate.Pos
 	})))
 }
 
+// WhereHasPhoneNumbers applies a predicate to check if query has an edge phone_numbers.
+func (f *VendorProfileFilter) WhereHasPhoneNumbers() {
+	f.Where(entql.HasEdge("phone_numbers"))
+}
+
+// WhereHasPhoneNumbersWith applies a predicate to check if query has an edge phone_numbers with a given conditions (other predicates).
+func (f *VendorProfileFilter) WhereHasPhoneNumbersWith(preds ...predicate.PhoneNumber) {
+	f.Where(entql.HasEdgeWith("phone_numbers", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
 // WhereHasVendor applies a predicate to check if query has an edge vendor.
 func (f *VendorProfileFilter) WhereHasVendor() {
 	f.Where(entql.HasEdge("vendor"))
@@ -13463,6 +14031,20 @@ func (f *VendorProfileFilter) WhereHasVendorProfilePostalAddresses() {
 // WhereHasVendorProfilePostalAddressesWith applies a predicate to check if query has an edge vendor_profile_postal_addresses with a given conditions (other predicates).
 func (f *VendorProfileFilter) WhereHasVendorProfilePostalAddressesWith(preds ...predicate.VendorProfilePostalAddress) {
 	f.Where(entql.HasEdgeWith("vendor_profile_postal_addresses", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasVendorProfilePhoneNumbers applies a predicate to check if query has an edge vendor_profile_phone_numbers.
+func (f *VendorProfileFilter) WhereHasVendorProfilePhoneNumbers() {
+	f.Where(entql.HasEdge("vendor_profile_phone_numbers"))
+}
+
+// WhereHasVendorProfilePhoneNumbersWith applies a predicate to check if query has an edge vendor_profile_phone_numbers with a given conditions (other predicates).
+func (f *VendorProfileFilter) WhereHasVendorProfilePhoneNumbersWith(preds ...predicate.VendorProfilePhoneNumber) {
+	f.Where(entql.HasEdgeWith("vendor_profile_phone_numbers", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
@@ -13498,7 +14080,7 @@ type VendorProfileHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *VendorProfileHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[63].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[65].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -13579,9 +14161,14 @@ func (f *VendorProfileHistoryFilter) WhereName(p entql.StringP) {
 	f.Where(p.Field(vendorprofilehistory.FieldName))
 }
 
-// WhereDbaName applies the entql string predicate on the dba_name field.
-func (f *VendorProfileHistoryFilter) WhereDbaName(p entql.StringP) {
-	f.Where(p.Field(vendorprofilehistory.FieldDbaName))
+// WhereCorporationType applies the entql string predicate on the corporation_type field.
+func (f *VendorProfileHistoryFilter) WhereCorporationType(p entql.StringP) {
+	f.Where(p.Field(vendorprofilehistory.FieldCorporationType))
+}
+
+// WhereCorporationDba applies the entql string predicate on the corporation_dba field.
+func (f *VendorProfileHistoryFilter) WhereCorporationDba(p entql.StringP) {
+	f.Where(p.Field(vendorprofilehistory.FieldCorporationDba))
 }
 
 // WhereDescription applies the entql string predicate on the description field.
@@ -13592,6 +14179,243 @@ func (f *VendorProfileHistoryFilter) WhereDescription(p entql.StringP) {
 // WhereWebsiteURI applies the entql string predicate on the website_uri field.
 func (f *VendorProfileHistoryFilter) WhereWebsiteURI(p entql.StringP) {
 	f.Where(p.Field(vendorprofilehistory.FieldWebsiteURI))
+}
+
+// WhereTaxID applies the entql string predicate on the tax_id field.
+func (f *VendorProfileHistoryFilter) WhereTaxID(p entql.StringP) {
+	f.Where(p.Field(vendorprofilehistory.FieldTaxID))
+}
+
+// WhereTaxIDType applies the entql string predicate on the tax_id_type field.
+func (f *VendorProfileHistoryFilter) WhereTaxIDType(p entql.StringP) {
+	f.Where(p.Field(vendorprofilehistory.FieldTaxIDType))
+}
+
+// addPredicate implements the predicateAdder interface.
+func (vppnq *VendorProfilePhoneNumberQuery) addPredicate(pred func(s *sql.Selector)) {
+	vppnq.predicates = append(vppnq.predicates, pred)
+}
+
+// Filter returns a Filter implementation to apply filters on the VendorProfilePhoneNumberQuery builder.
+func (vppnq *VendorProfilePhoneNumberQuery) Filter() *VendorProfilePhoneNumberFilter {
+	return &VendorProfilePhoneNumberFilter{config: vppnq.config, predicateAdder: vppnq}
+}
+
+// addPredicate implements the predicateAdder interface.
+func (m *VendorProfilePhoneNumberMutation) addPredicate(pred func(s *sql.Selector)) {
+	m.predicates = append(m.predicates, pred)
+}
+
+// Filter returns an entql.Where implementation to apply filters on the VendorProfilePhoneNumberMutation builder.
+func (m *VendorProfilePhoneNumberMutation) Filter() *VendorProfilePhoneNumberFilter {
+	return &VendorProfilePhoneNumberFilter{config: m.config, predicateAdder: m}
+}
+
+// VendorProfilePhoneNumberFilter provides a generic filtering capability at runtime for VendorProfilePhoneNumberQuery.
+type VendorProfilePhoneNumberFilter struct {
+	predicateAdder
+	config
+}
+
+// Where applies the entql predicate on the query filter.
+func (f *VendorProfilePhoneNumberFilter) Where(p entql.P) {
+	f.addPredicate(func(s *sql.Selector) {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[66].Type, p, s); err != nil {
+			s.AddError(err)
+		}
+	})
+}
+
+// WhereID applies the entql string predicate on the id field.
+func (f *VendorProfilePhoneNumberFilter) WhereID(p entql.StringP) {
+	f.Where(p.Field(vendorprofilephonenumber.FieldID))
+}
+
+// WhereCreatedAt applies the entql time.Time predicate on the created_at field.
+func (f *VendorProfilePhoneNumberFilter) WhereCreatedAt(p entql.TimeP) {
+	f.Where(p.Field(vendorprofilephonenumber.FieldCreatedAt))
+}
+
+// WhereUpdatedAt applies the entql time.Time predicate on the updated_at field.
+func (f *VendorProfilePhoneNumberFilter) WhereUpdatedAt(p entql.TimeP) {
+	f.Where(p.Field(vendorprofilephonenumber.FieldUpdatedAt))
+}
+
+// WhereCreatedBy applies the entql string predicate on the created_by field.
+func (f *VendorProfilePhoneNumberFilter) WhereCreatedBy(p entql.StringP) {
+	f.Where(p.Field(vendorprofilephonenumber.FieldCreatedBy))
+}
+
+// WhereUpdatedBy applies the entql string predicate on the updated_by field.
+func (f *VendorProfilePhoneNumberFilter) WhereUpdatedBy(p entql.StringP) {
+	f.Where(p.Field(vendorprofilephonenumber.FieldUpdatedBy))
+}
+
+// WhereMappingID applies the entql string predicate on the mapping_id field.
+func (f *VendorProfilePhoneNumberFilter) WhereMappingID(p entql.StringP) {
+	f.Where(p.Field(vendorprofilephonenumber.FieldMappingID))
+}
+
+// WhereDeletedAt applies the entql time.Time predicate on the deleted_at field.
+func (f *VendorProfilePhoneNumberFilter) WhereDeletedAt(p entql.TimeP) {
+	f.Where(p.Field(vendorprofilephonenumber.FieldDeletedAt))
+}
+
+// WhereDeletedBy applies the entql string predicate on the deleted_by field.
+func (f *VendorProfilePhoneNumberFilter) WhereDeletedBy(p entql.StringP) {
+	f.Where(p.Field(vendorprofilephonenumber.FieldDeletedBy))
+}
+
+// WhereVendorProfileID applies the entql string predicate on the vendor_profile_id field.
+func (f *VendorProfilePhoneNumberFilter) WhereVendorProfileID(p entql.StringP) {
+	f.Where(p.Field(vendorprofilephonenumber.FieldVendorProfileID))
+}
+
+// WherePhoneNumberID applies the entql string predicate on the phone_number_id field.
+func (f *VendorProfilePhoneNumberFilter) WherePhoneNumberID(p entql.StringP) {
+	f.Where(p.Field(vendorprofilephonenumber.FieldPhoneNumberID))
+}
+
+// WhereHasPhoneNumber applies a predicate to check if query has an edge phone_number.
+func (f *VendorProfilePhoneNumberFilter) WhereHasPhoneNumber() {
+	f.Where(entql.HasEdge("phone_number"))
+}
+
+// WhereHasPhoneNumberWith applies a predicate to check if query has an edge phone_number with a given conditions (other predicates).
+func (f *VendorProfilePhoneNumberFilter) WhereHasPhoneNumberWith(preds ...predicate.PhoneNumber) {
+	f.Where(entql.HasEdgeWith("phone_number", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasProfile applies a predicate to check if query has an edge profile.
+func (f *VendorProfilePhoneNumberFilter) WhereHasProfile() {
+	f.Where(entql.HasEdge("profile"))
+}
+
+// WhereHasProfileWith applies a predicate to check if query has an edge profile with a given conditions (other predicates).
+func (f *VendorProfilePhoneNumberFilter) WhereHasProfileWith(preds ...predicate.VendorProfile) {
+	f.Where(entql.HasEdgeWith("profile", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasEvents applies a predicate to check if query has an edge events.
+func (f *VendorProfilePhoneNumberFilter) WhereHasEvents() {
+	f.Where(entql.HasEdge("events"))
+}
+
+// WhereHasEventsWith applies a predicate to check if query has an edge events with a given conditions (other predicates).
+func (f *VendorProfilePhoneNumberFilter) WhereHasEventsWith(preds ...predicate.Event) {
+	f.Where(entql.HasEdgeWith("events", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// addPredicate implements the predicateAdder interface.
+func (vppnhq *VendorProfilePhoneNumberHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
+	vppnhq.predicates = append(vppnhq.predicates, pred)
+}
+
+// Filter returns a Filter implementation to apply filters on the VendorProfilePhoneNumberHistoryQuery builder.
+func (vppnhq *VendorProfilePhoneNumberHistoryQuery) Filter() *VendorProfilePhoneNumberHistoryFilter {
+	return &VendorProfilePhoneNumberHistoryFilter{config: vppnhq.config, predicateAdder: vppnhq}
+}
+
+// addPredicate implements the predicateAdder interface.
+func (m *VendorProfilePhoneNumberHistoryMutation) addPredicate(pred func(s *sql.Selector)) {
+	m.predicates = append(m.predicates, pred)
+}
+
+// Filter returns an entql.Where implementation to apply filters on the VendorProfilePhoneNumberHistoryMutation builder.
+func (m *VendorProfilePhoneNumberHistoryMutation) Filter() *VendorProfilePhoneNumberHistoryFilter {
+	return &VendorProfilePhoneNumberHistoryFilter{config: m.config, predicateAdder: m}
+}
+
+// VendorProfilePhoneNumberHistoryFilter provides a generic filtering capability at runtime for VendorProfilePhoneNumberHistoryQuery.
+type VendorProfilePhoneNumberHistoryFilter struct {
+	predicateAdder
+	config
+}
+
+// Where applies the entql predicate on the query filter.
+func (f *VendorProfilePhoneNumberHistoryFilter) Where(p entql.P) {
+	f.addPredicate(func(s *sql.Selector) {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[67].Type, p, s); err != nil {
+			s.AddError(err)
+		}
+	})
+}
+
+// WhereID applies the entql string predicate on the id field.
+func (f *VendorProfilePhoneNumberHistoryFilter) WhereID(p entql.StringP) {
+	f.Where(p.Field(vendorprofilephonenumberhistory.FieldID))
+}
+
+// WhereHistoryTime applies the entql time.Time predicate on the history_time field.
+func (f *VendorProfilePhoneNumberHistoryFilter) WhereHistoryTime(p entql.TimeP) {
+	f.Where(p.Field(vendorprofilephonenumberhistory.FieldHistoryTime))
+}
+
+// WhereRef applies the entql string predicate on the ref field.
+func (f *VendorProfilePhoneNumberHistoryFilter) WhereRef(p entql.StringP) {
+	f.Where(p.Field(vendorprofilephonenumberhistory.FieldRef))
+}
+
+// WhereOperation applies the entql string predicate on the operation field.
+func (f *VendorProfilePhoneNumberHistoryFilter) WhereOperation(p entql.StringP) {
+	f.Where(p.Field(vendorprofilephonenumberhistory.FieldOperation))
+}
+
+// WhereCreatedAt applies the entql time.Time predicate on the created_at field.
+func (f *VendorProfilePhoneNumberHistoryFilter) WhereCreatedAt(p entql.TimeP) {
+	f.Where(p.Field(vendorprofilephonenumberhistory.FieldCreatedAt))
+}
+
+// WhereUpdatedAt applies the entql time.Time predicate on the updated_at field.
+func (f *VendorProfilePhoneNumberHistoryFilter) WhereUpdatedAt(p entql.TimeP) {
+	f.Where(p.Field(vendorprofilephonenumberhistory.FieldUpdatedAt))
+}
+
+// WhereCreatedBy applies the entql string predicate on the created_by field.
+func (f *VendorProfilePhoneNumberHistoryFilter) WhereCreatedBy(p entql.StringP) {
+	f.Where(p.Field(vendorprofilephonenumberhistory.FieldCreatedBy))
+}
+
+// WhereUpdatedBy applies the entql string predicate on the updated_by field.
+func (f *VendorProfilePhoneNumberHistoryFilter) WhereUpdatedBy(p entql.StringP) {
+	f.Where(p.Field(vendorprofilephonenumberhistory.FieldUpdatedBy))
+}
+
+// WhereMappingID applies the entql string predicate on the mapping_id field.
+func (f *VendorProfilePhoneNumberHistoryFilter) WhereMappingID(p entql.StringP) {
+	f.Where(p.Field(vendorprofilephonenumberhistory.FieldMappingID))
+}
+
+// WhereDeletedAt applies the entql time.Time predicate on the deleted_at field.
+func (f *VendorProfilePhoneNumberHistoryFilter) WhereDeletedAt(p entql.TimeP) {
+	f.Where(p.Field(vendorprofilephonenumberhistory.FieldDeletedAt))
+}
+
+// WhereDeletedBy applies the entql string predicate on the deleted_by field.
+func (f *VendorProfilePhoneNumberHistoryFilter) WhereDeletedBy(p entql.StringP) {
+	f.Where(p.Field(vendorprofilephonenumberhistory.FieldDeletedBy))
+}
+
+// WhereVendorProfileID applies the entql string predicate on the vendor_profile_id field.
+func (f *VendorProfilePhoneNumberHistoryFilter) WhereVendorProfileID(p entql.StringP) {
+	f.Where(p.Field(vendorprofilephonenumberhistory.FieldVendorProfileID))
+}
+
+// WherePhoneNumberID applies the entql string predicate on the phone_number_id field.
+func (f *VendorProfilePhoneNumberHistoryFilter) WherePhoneNumberID(p entql.StringP) {
+	f.Where(p.Field(vendorprofilephonenumberhistory.FieldPhoneNumberID))
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -13623,7 +14447,7 @@ type VendorProfilePostalAddressFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *VendorProfilePostalAddressFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[64].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[68].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -13755,7 +14579,7 @@ type VendorProfilePostalAddressHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *VendorProfilePostalAddressHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[65].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[69].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -13860,7 +14684,7 @@ type WebauthnFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *WebauthnFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[66].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[70].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -13999,7 +14823,7 @@ type WebhookFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *WebhookFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[67].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[71].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -14176,7 +15000,7 @@ type WebhookHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *WebhookHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[68].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[72].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})

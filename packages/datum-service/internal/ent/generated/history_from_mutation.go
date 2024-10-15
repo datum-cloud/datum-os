@@ -5057,6 +5057,246 @@ func (m *OrganizationSettingMutation) CreateHistoryFromDelete(ctx context.Contex
 	return nil
 }
 
+func (m *PhoneNumberMutation) CreateHistoryFromCreate(ctx context.Context) error {
+	client := m.Client()
+
+	id, ok := m.ID()
+	if !ok {
+		return idNotFoundError
+	}
+
+	create := client.PhoneNumberHistory.Create()
+
+	create = create.
+		SetOperation(EntOpToHistoryOp(m.Op())).
+		SetHistoryTime(time.Now()).
+		SetRef(id)
+
+	if createdAt, exists := m.CreatedAt(); exists {
+		create = create.SetCreatedAt(createdAt)
+	}
+
+	if updatedAt, exists := m.UpdatedAt(); exists {
+		create = create.SetUpdatedAt(updatedAt)
+	}
+
+	if createdBy, exists := m.CreatedBy(); exists {
+		create = create.SetCreatedBy(createdBy)
+	}
+
+	if updatedBy, exists := m.UpdatedBy(); exists {
+		create = create.SetUpdatedBy(updatedBy)
+	}
+
+	if deletedAt, exists := m.DeletedAt(); exists {
+		create = create.SetDeletedAt(deletedAt)
+	}
+
+	if deletedBy, exists := m.DeletedBy(); exists {
+		create = create.SetDeletedBy(deletedBy)
+	}
+
+	if mappingID, exists := m.MappingID(); exists {
+		create = create.SetMappingID(mappingID)
+	}
+
+	if tags, exists := m.Tags(); exists {
+		create = create.SetTags(tags)
+	}
+
+	if ownerID, exists := m.OwnerID(); exists {
+		create = create.SetOwnerID(ownerID)
+	}
+
+	if kind, exists := m.Kind(); exists {
+		create = create.SetKind(kind)
+	}
+
+	if regionCode, exists := m.RegionCode(); exists {
+		create = create.SetRegionCode(regionCode)
+	}
+
+	if shortCode, exists := m.ShortCode(); exists {
+		create = create.SetShortCode(shortCode)
+	}
+
+	if number, exists := m.Number(); exists {
+		create = create.SetNumber(number)
+	}
+
+	if extension, exists := m.Extension(); exists {
+		create = create.SetExtension(extension)
+	}
+
+	_, err := create.Save(ctx)
+
+	return err
+}
+
+func (m *PhoneNumberMutation) CreateHistoryFromUpdate(ctx context.Context) error {
+	// check for soft delete operation and delete instead
+	if entx.CheckIsSoftDelete(ctx) {
+		return m.CreateHistoryFromDelete(ctx)
+	}
+	client := m.Client()
+
+	ids, err := m.IDs(ctx)
+	if err != nil {
+		return fmt.Errorf("getting ids: %w", err)
+	}
+
+	for _, id := range ids {
+		phonenumber, err := client.PhoneNumber.Get(ctx, id)
+		if err != nil {
+			return err
+		}
+
+		create := client.PhoneNumberHistory.Create()
+
+		create = create.
+			SetOperation(EntOpToHistoryOp(m.Op())).
+			SetHistoryTime(time.Now()).
+			SetRef(id)
+
+		if createdAt, exists := m.CreatedAt(); exists {
+			create = create.SetCreatedAt(createdAt)
+		} else {
+			create = create.SetCreatedAt(phonenumber.CreatedAt)
+		}
+
+		if updatedAt, exists := m.UpdatedAt(); exists {
+			create = create.SetUpdatedAt(updatedAt)
+		} else {
+			create = create.SetUpdatedAt(phonenumber.UpdatedAt)
+		}
+
+		if createdBy, exists := m.CreatedBy(); exists {
+			create = create.SetCreatedBy(createdBy)
+		} else {
+			create = create.SetCreatedBy(phonenumber.CreatedBy)
+		}
+
+		if updatedBy, exists := m.UpdatedBy(); exists {
+			create = create.SetUpdatedBy(updatedBy)
+		} else {
+			create = create.SetUpdatedBy(phonenumber.UpdatedBy)
+		}
+
+		if deletedAt, exists := m.DeletedAt(); exists {
+			create = create.SetDeletedAt(deletedAt)
+		} else {
+			create = create.SetDeletedAt(phonenumber.DeletedAt)
+		}
+
+		if deletedBy, exists := m.DeletedBy(); exists {
+			create = create.SetDeletedBy(deletedBy)
+		} else {
+			create = create.SetDeletedBy(phonenumber.DeletedBy)
+		}
+
+		if mappingID, exists := m.MappingID(); exists {
+			create = create.SetMappingID(mappingID)
+		} else {
+			create = create.SetMappingID(phonenumber.MappingID)
+		}
+
+		if tags, exists := m.Tags(); exists {
+			create = create.SetTags(tags)
+		} else {
+			create = create.SetTags(phonenumber.Tags)
+		}
+
+		if ownerID, exists := m.OwnerID(); exists {
+			create = create.SetOwnerID(ownerID)
+		} else {
+			create = create.SetOwnerID(phonenumber.OwnerID)
+		}
+
+		if kind, exists := m.Kind(); exists {
+			create = create.SetKind(kind)
+		} else {
+			create = create.SetKind(phonenumber.Kind)
+		}
+
+		if regionCode, exists := m.RegionCode(); exists {
+			create = create.SetRegionCode(regionCode)
+		} else {
+			create = create.SetRegionCode(phonenumber.RegionCode)
+		}
+
+		if shortCode, exists := m.ShortCode(); exists {
+			create = create.SetShortCode(shortCode)
+		} else {
+			create = create.SetShortCode(phonenumber.ShortCode)
+		}
+
+		if number, exists := m.Number(); exists {
+			create = create.SetNumber(number)
+		} else {
+			create = create.SetNumber(phonenumber.Number)
+		}
+
+		if extension, exists := m.Extension(); exists {
+			create = create.SetExtension(extension)
+		} else {
+			create = create.SetExtension(phonenumber.Extension)
+		}
+
+		if _, err := create.Save(ctx); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *PhoneNumberMutation) CreateHistoryFromDelete(ctx context.Context) error {
+	// check for soft delete operation and skip so it happens on update
+	if entx.CheckIsSoftDelete(ctx) {
+		return nil
+	}
+	client := m.Client()
+
+	ids, err := m.IDs(ctx)
+	if err != nil {
+		return fmt.Errorf("getting ids: %w", err)
+	}
+
+	for _, id := range ids {
+		phonenumber, err := client.PhoneNumber.Get(ctx, id)
+		if err != nil {
+			return err
+		}
+
+		create := client.PhoneNumberHistory.Create()
+
+		_, err = create.
+			SetOperation(EntOpToHistoryOp(m.Op())).
+			SetHistoryTime(time.Now()).
+			SetRef(id).
+			SetCreatedAt(phonenumber.CreatedAt).
+			SetUpdatedAt(phonenumber.UpdatedAt).
+			SetCreatedBy(phonenumber.CreatedBy).
+			SetUpdatedBy(phonenumber.UpdatedBy).
+			SetDeletedAt(phonenumber.DeletedAt).
+			SetDeletedBy(phonenumber.DeletedBy).
+			SetMappingID(phonenumber.MappingID).
+			SetTags(phonenumber.Tags).
+			SetOwnerID(phonenumber.OwnerID).
+			SetKind(phonenumber.Kind).
+			SetRegionCode(phonenumber.RegionCode).
+			SetShortCode(phonenumber.ShortCode).
+			SetNumber(phonenumber.Number).
+			SetExtension(phonenumber.Extension).
+			Save(ctx)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *PostalAddressMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	client := m.Client()
 
@@ -6448,8 +6688,12 @@ func (m *VendorProfileMutation) CreateHistoryFromCreate(ctx context.Context) err
 		create = create.SetName(name)
 	}
 
-	if dbaName, exists := m.DbaName(); exists {
-		create = create.SetDbaName(dbaName)
+	if corporationType, exists := m.CorporationType(); exists {
+		create = create.SetCorporationType(corporationType)
+	}
+
+	if corporationDba, exists := m.CorporationDba(); exists {
+		create = create.SetCorporationDba(corporationDba)
 	}
 
 	if description, exists := m.Description(); exists {
@@ -6458,6 +6702,14 @@ func (m *VendorProfileMutation) CreateHistoryFromCreate(ctx context.Context) err
 
 	if websiteURI, exists := m.WebsiteURI(); exists {
 		create = create.SetWebsiteURI(websiteURI)
+	}
+
+	if taxID, exists := m.TaxID(); exists {
+		create = create.SetTaxID(taxID)
+	}
+
+	if taxIDType, exists := m.TaxIDType(); exists {
+		create = create.SetTaxIDType(taxIDType)
 	}
 
 	_, err := create.Save(ctx)
@@ -6556,10 +6808,16 @@ func (m *VendorProfileMutation) CreateHistoryFromUpdate(ctx context.Context) err
 			create = create.SetName(vendorprofile.Name)
 		}
 
-		if dbaName, exists := m.DbaName(); exists {
-			create = create.SetDbaName(dbaName)
+		if corporationType, exists := m.CorporationType(); exists {
+			create = create.SetCorporationType(corporationType)
 		} else {
-			create = create.SetDbaName(vendorprofile.DbaName)
+			create = create.SetCorporationType(vendorprofile.CorporationType)
+		}
+
+		if corporationDba, exists := m.CorporationDba(); exists {
+			create = create.SetCorporationDba(corporationDba)
+		} else {
+			create = create.SetCorporationDba(vendorprofile.CorporationDba)
 		}
 
 		if description, exists := m.Description(); exists {
@@ -6572,6 +6830,18 @@ func (m *VendorProfileMutation) CreateHistoryFromUpdate(ctx context.Context) err
 			create = create.SetWebsiteURI(websiteURI)
 		} else {
 			create = create.SetWebsiteURI(vendorprofile.WebsiteURI)
+		}
+
+		if taxID, exists := m.TaxID(); exists {
+			create = create.SetTaxID(taxID)
+		} else {
+			create = create.SetTaxID(vendorprofile.TaxID)
+		}
+
+		if taxIDType, exists := m.TaxIDType(); exists {
+			create = create.SetTaxIDType(taxIDType)
+		} else {
+			create = create.SetTaxIDType(vendorprofile.TaxIDType)
 		}
 
 		if _, err := create.Save(ctx); err != nil {
@@ -6617,9 +6887,197 @@ func (m *VendorProfileMutation) CreateHistoryFromDelete(ctx context.Context) err
 			SetOwnerID(vendorprofile.OwnerID).
 			SetVendorID(vendorprofile.VendorID).
 			SetName(vendorprofile.Name).
-			SetDbaName(vendorprofile.DbaName).
+			SetCorporationType(vendorprofile.CorporationType).
+			SetCorporationDba(vendorprofile.CorporationDba).
 			SetDescription(vendorprofile.Description).
 			SetWebsiteURI(vendorprofile.WebsiteURI).
+			SetTaxID(vendorprofile.TaxID).
+			SetTaxIDType(vendorprofile.TaxIDType).
+			Save(ctx)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *VendorProfilePhoneNumberMutation) CreateHistoryFromCreate(ctx context.Context) error {
+	client := m.Client()
+
+	id, ok := m.ID()
+	if !ok {
+		return idNotFoundError
+	}
+
+	create := client.VendorProfilePhoneNumberHistory.Create()
+
+	create = create.
+		SetOperation(EntOpToHistoryOp(m.Op())).
+		SetHistoryTime(time.Now()).
+		SetRef(id)
+
+	if createdAt, exists := m.CreatedAt(); exists {
+		create = create.SetCreatedAt(createdAt)
+	}
+
+	if updatedAt, exists := m.UpdatedAt(); exists {
+		create = create.SetUpdatedAt(updatedAt)
+	}
+
+	if createdBy, exists := m.CreatedBy(); exists {
+		create = create.SetCreatedBy(createdBy)
+	}
+
+	if updatedBy, exists := m.UpdatedBy(); exists {
+		create = create.SetUpdatedBy(updatedBy)
+	}
+
+	if mappingID, exists := m.MappingID(); exists {
+		create = create.SetMappingID(mappingID)
+	}
+
+	if deletedAt, exists := m.DeletedAt(); exists {
+		create = create.SetDeletedAt(deletedAt)
+	}
+
+	if deletedBy, exists := m.DeletedBy(); exists {
+		create = create.SetDeletedBy(deletedBy)
+	}
+
+	if vendorProfileID, exists := m.VendorProfileID(); exists {
+		create = create.SetVendorProfileID(vendorProfileID)
+	}
+
+	if phoneNumberID, exists := m.PhoneNumberID(); exists {
+		create = create.SetPhoneNumberID(phoneNumberID)
+	}
+
+	_, err := create.Save(ctx)
+
+	return err
+}
+
+func (m *VendorProfilePhoneNumberMutation) CreateHistoryFromUpdate(ctx context.Context) error {
+	// check for soft delete operation and delete instead
+	if entx.CheckIsSoftDelete(ctx) {
+		return m.CreateHistoryFromDelete(ctx)
+	}
+	client := m.Client()
+
+	ids, err := m.IDs(ctx)
+	if err != nil {
+		return fmt.Errorf("getting ids: %w", err)
+	}
+
+	for _, id := range ids {
+		vendorprofilephonenumber, err := client.VendorProfilePhoneNumber.Get(ctx, id)
+		if err != nil {
+			return err
+		}
+
+		create := client.VendorProfilePhoneNumberHistory.Create()
+
+		create = create.
+			SetOperation(EntOpToHistoryOp(m.Op())).
+			SetHistoryTime(time.Now()).
+			SetRef(id)
+
+		if createdAt, exists := m.CreatedAt(); exists {
+			create = create.SetCreatedAt(createdAt)
+		} else {
+			create = create.SetCreatedAt(vendorprofilephonenumber.CreatedAt)
+		}
+
+		if updatedAt, exists := m.UpdatedAt(); exists {
+			create = create.SetUpdatedAt(updatedAt)
+		} else {
+			create = create.SetUpdatedAt(vendorprofilephonenumber.UpdatedAt)
+		}
+
+		if createdBy, exists := m.CreatedBy(); exists {
+			create = create.SetCreatedBy(createdBy)
+		} else {
+			create = create.SetCreatedBy(vendorprofilephonenumber.CreatedBy)
+		}
+
+		if updatedBy, exists := m.UpdatedBy(); exists {
+			create = create.SetUpdatedBy(updatedBy)
+		} else {
+			create = create.SetUpdatedBy(vendorprofilephonenumber.UpdatedBy)
+		}
+
+		if mappingID, exists := m.MappingID(); exists {
+			create = create.SetMappingID(mappingID)
+		} else {
+			create = create.SetMappingID(vendorprofilephonenumber.MappingID)
+		}
+
+		if deletedAt, exists := m.DeletedAt(); exists {
+			create = create.SetDeletedAt(deletedAt)
+		} else {
+			create = create.SetDeletedAt(vendorprofilephonenumber.DeletedAt)
+		}
+
+		if deletedBy, exists := m.DeletedBy(); exists {
+			create = create.SetDeletedBy(deletedBy)
+		} else {
+			create = create.SetDeletedBy(vendorprofilephonenumber.DeletedBy)
+		}
+
+		if vendorProfileID, exists := m.VendorProfileID(); exists {
+			create = create.SetVendorProfileID(vendorProfileID)
+		} else {
+			create = create.SetVendorProfileID(vendorprofilephonenumber.VendorProfileID)
+		}
+
+		if phoneNumberID, exists := m.PhoneNumberID(); exists {
+			create = create.SetPhoneNumberID(phoneNumberID)
+		} else {
+			create = create.SetPhoneNumberID(vendorprofilephonenumber.PhoneNumberID)
+		}
+
+		if _, err := create.Save(ctx); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *VendorProfilePhoneNumberMutation) CreateHistoryFromDelete(ctx context.Context) error {
+	// check for soft delete operation and skip so it happens on update
+	if entx.CheckIsSoftDelete(ctx) {
+		return nil
+	}
+	client := m.Client()
+
+	ids, err := m.IDs(ctx)
+	if err != nil {
+		return fmt.Errorf("getting ids: %w", err)
+	}
+
+	for _, id := range ids {
+		vendorprofilephonenumber, err := client.VendorProfilePhoneNumber.Get(ctx, id)
+		if err != nil {
+			return err
+		}
+
+		create := client.VendorProfilePhoneNumberHistory.Create()
+
+		_, err = create.
+			SetOperation(EntOpToHistoryOp(m.Op())).
+			SetHistoryTime(time.Now()).
+			SetRef(id).
+			SetCreatedAt(vendorprofilephonenumber.CreatedAt).
+			SetUpdatedAt(vendorprofilephonenumber.UpdatedAt).
+			SetCreatedBy(vendorprofilephonenumber.CreatedBy).
+			SetUpdatedBy(vendorprofilephonenumber.UpdatedBy).
+			SetMappingID(vendorprofilephonenumber.MappingID).
+			SetDeletedAt(vendorprofilephonenumber.DeletedAt).
+			SetDeletedBy(vendorprofilephonenumber.DeletedBy).
+			SetVendorProfileID(vendorprofilephonenumber.VendorProfileID).
+			SetPhoneNumberID(vendorprofilephonenumber.PhoneNumberID).
 			Save(ctx)
 		if err != nil {
 			return err

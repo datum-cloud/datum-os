@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/vendorprofilehistory"
 	"github.com/datum-cloud/datum-os/pkg/enthistory"
+	"github.com/datum-cloud/datum-os/pkg/enums"
 )
 
 // VendorProfileHistoryCreate is the builder for creating a VendorProfileHistory entity.
@@ -193,16 +194,30 @@ func (vphc *VendorProfileHistoryCreate) SetName(s string) *VendorProfileHistoryC
 	return vphc
 }
 
-// SetDbaName sets the "dba_name" field.
-func (vphc *VendorProfileHistoryCreate) SetDbaName(s string) *VendorProfileHistoryCreate {
-	vphc.mutation.SetDbaName(s)
+// SetCorporationType sets the "corporation_type" field.
+func (vphc *VendorProfileHistoryCreate) SetCorporationType(s string) *VendorProfileHistoryCreate {
+	vphc.mutation.SetCorporationType(s)
 	return vphc
 }
 
-// SetNillableDbaName sets the "dba_name" field if the given value is not nil.
-func (vphc *VendorProfileHistoryCreate) SetNillableDbaName(s *string) *VendorProfileHistoryCreate {
+// SetNillableCorporationType sets the "corporation_type" field if the given value is not nil.
+func (vphc *VendorProfileHistoryCreate) SetNillableCorporationType(s *string) *VendorProfileHistoryCreate {
 	if s != nil {
-		vphc.SetDbaName(*s)
+		vphc.SetCorporationType(*s)
+	}
+	return vphc
+}
+
+// SetCorporationDba sets the "corporation_dba" field.
+func (vphc *VendorProfileHistoryCreate) SetCorporationDba(s string) *VendorProfileHistoryCreate {
+	vphc.mutation.SetCorporationDba(s)
+	return vphc
+}
+
+// SetNillableCorporationDba sets the "corporation_dba" field if the given value is not nil.
+func (vphc *VendorProfileHistoryCreate) SetNillableCorporationDba(s *string) *VendorProfileHistoryCreate {
+	if s != nil {
+		vphc.SetCorporationDba(*s)
 	}
 	return vphc
 }
@@ -231,6 +246,34 @@ func (vphc *VendorProfileHistoryCreate) SetWebsiteURI(s string) *VendorProfileHi
 func (vphc *VendorProfileHistoryCreate) SetNillableWebsiteURI(s *string) *VendorProfileHistoryCreate {
 	if s != nil {
 		vphc.SetWebsiteURI(*s)
+	}
+	return vphc
+}
+
+// SetTaxID sets the "tax_id" field.
+func (vphc *VendorProfileHistoryCreate) SetTaxID(s string) *VendorProfileHistoryCreate {
+	vphc.mutation.SetTaxID(s)
+	return vphc
+}
+
+// SetNillableTaxID sets the "tax_id" field if the given value is not nil.
+func (vphc *VendorProfileHistoryCreate) SetNillableTaxID(s *string) *VendorProfileHistoryCreate {
+	if s != nil {
+		vphc.SetTaxID(*s)
+	}
+	return vphc
+}
+
+// SetTaxIDType sets the "tax_id_type" field.
+func (vphc *VendorProfileHistoryCreate) SetTaxIDType(eit enums.TaxIDType) *VendorProfileHistoryCreate {
+	vphc.mutation.SetTaxIDType(eit)
+	return vphc
+}
+
+// SetNillableTaxIDType sets the "tax_id_type" field if the given value is not nil.
+func (vphc *VendorProfileHistoryCreate) SetNillableTaxIDType(eit *enums.TaxIDType) *VendorProfileHistoryCreate {
+	if eit != nil {
+		vphc.SetTaxIDType(*eit)
 	}
 	return vphc
 }
@@ -304,6 +347,10 @@ func (vphc *VendorProfileHistoryCreate) defaults() {
 		v := vendorprofilehistory.DefaultTags
 		vphc.mutation.SetTags(v)
 	}
+	if _, ok := vphc.mutation.TaxIDType(); !ok {
+		v := vendorprofilehistory.DefaultTaxIDType
+		vphc.mutation.SetTaxIDType(v)
+	}
 	if _, ok := vphc.mutation.ID(); !ok {
 		v := vendorprofilehistory.DefaultID()
 		vphc.mutation.SetID(v)
@@ -328,6 +375,14 @@ func (vphc *VendorProfileHistoryCreate) check() error {
 	}
 	if _, ok := vphc.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`generated: missing required field "VendorProfileHistory.name"`)}
+	}
+	if _, ok := vphc.mutation.TaxIDType(); !ok {
+		return &ValidationError{Name: "tax_id_type", err: errors.New(`generated: missing required field "VendorProfileHistory.tax_id_type"`)}
+	}
+	if v, ok := vphc.mutation.TaxIDType(); ok {
+		if err := vendorprofilehistory.TaxIDTypeValidator(v); err != nil {
+			return &ValidationError{Name: "tax_id_type", err: fmt.Errorf(`generated: validator failed for field "VendorProfileHistory.tax_id_type": %w`, err)}
+		}
 	}
 	return nil
 }
@@ -421,9 +476,13 @@ func (vphc *VendorProfileHistoryCreate) createSpec() (*VendorProfileHistory, *sq
 		_spec.SetField(vendorprofilehistory.FieldName, field.TypeString, value)
 		_node.Name = value
 	}
-	if value, ok := vphc.mutation.DbaName(); ok {
-		_spec.SetField(vendorprofilehistory.FieldDbaName, field.TypeString, value)
-		_node.DbaName = value
+	if value, ok := vphc.mutation.CorporationType(); ok {
+		_spec.SetField(vendorprofilehistory.FieldCorporationType, field.TypeString, value)
+		_node.CorporationType = value
+	}
+	if value, ok := vphc.mutation.CorporationDba(); ok {
+		_spec.SetField(vendorprofilehistory.FieldCorporationDba, field.TypeString, value)
+		_node.CorporationDba = value
 	}
 	if value, ok := vphc.mutation.Description(); ok {
 		_spec.SetField(vendorprofilehistory.FieldDescription, field.TypeString, value)
@@ -432,6 +491,14 @@ func (vphc *VendorProfileHistoryCreate) createSpec() (*VendorProfileHistory, *sq
 	if value, ok := vphc.mutation.WebsiteURI(); ok {
 		_spec.SetField(vendorprofilehistory.FieldWebsiteURI, field.TypeString, value)
 		_node.WebsiteURI = value
+	}
+	if value, ok := vphc.mutation.TaxID(); ok {
+		_spec.SetField(vendorprofilehistory.FieldTaxID, field.TypeString, value)
+		_node.TaxID = value
+	}
+	if value, ok := vphc.mutation.TaxIDType(); ok {
+		_spec.SetField(vendorprofilehistory.FieldTaxIDType, field.TypeEnum, value)
+		_node.TaxIDType = value
 	}
 	return _node, _spec
 }

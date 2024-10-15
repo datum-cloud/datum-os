@@ -80,6 +80,8 @@ type SchemaConfig struct {
 	PasswordResetToken                string // PasswordResetToken table.
 	PersonalAccessToken               string // PersonalAccessToken table.
 	PersonalAccessTokenEvents         string // PersonalAccessToken-events->Event table.
+	PhoneNumber                       string // PhoneNumber table.
+	PhoneNumberHistory                string // PhoneNumberHistory table.
 	PostalAddress                     string // PostalAddress table.
 	PostalAddressHistory              string // PostalAddressHistory table.
 	Subscriber                        string // Subscriber table.
@@ -96,6 +98,8 @@ type SchemaConfig struct {
 	VendorHistory                     string // VendorHistory table.
 	VendorProfile                     string // VendorProfile table.
 	VendorProfileHistory              string // VendorProfileHistory table.
+	VendorProfilePhoneNumber          string // VendorProfilePhoneNumber table.
+	VendorProfilePhoneNumberHistory   string // VendorProfilePhoneNumberHistory table.
 	VendorProfilePostalAddress        string // VendorProfilePostalAddress table.
 	VendorProfilePostalAddressHistory string // VendorProfilePostalAddressHistory table.
 	Webauthn                          string // Webauthn table.

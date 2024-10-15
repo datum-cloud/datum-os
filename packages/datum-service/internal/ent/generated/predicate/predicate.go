@@ -156,6 +156,12 @@ type PasswordResetToken func(*sql.Selector)
 // PersonalAccessToken is the predicate function for personalaccesstoken builders.
 type PersonalAccessToken func(*sql.Selector)
 
+// PhoneNumber is the predicate function for phonenumber builders.
+type PhoneNumber func(*sql.Selector)
+
+// PhoneNumberHistory is the predicate function for phonenumberhistory builders.
+type PhoneNumberHistory func(*sql.Selector)
+
 // PostalAddress is the predicate function for postaladdress builders.
 type PostalAddress func(*sql.Selector)
 
@@ -197,6 +203,12 @@ type VendorProfile func(*sql.Selector)
 
 // VendorProfileHistory is the predicate function for vendorprofilehistory builders.
 type VendorProfileHistory func(*sql.Selector)
+
+// VendorProfilePhoneNumber is the predicate function for vendorprofilephonenumber builders.
+type VendorProfilePhoneNumber func(*sql.Selector)
+
+// VendorProfilePhoneNumberHistory is the predicate function for vendorprofilephonenumberhistory builders.
+type VendorProfilePhoneNumberHistory func(*sql.Selector)
 
 // VendorProfilePostalAddress is the predicate function for vendorprofilepostaladdress builders.
 type VendorProfilePostalAddress func(*sql.Selector)

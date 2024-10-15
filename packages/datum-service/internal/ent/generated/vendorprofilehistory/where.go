@@ -8,6 +8,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"github.com/datum-cloud/datum-os/internal/ent/generated/predicate"
 	"github.com/datum-cloud/datum-os/pkg/enthistory"
+	"github.com/datum-cloud/datum-os/pkg/enums"
 )
 
 // ID filters vertices based on their ID field.
@@ -125,9 +126,14 @@ func Name(v string) predicate.VendorProfileHistory {
 	return predicate.VendorProfileHistory(sql.FieldEQ(FieldName, v))
 }
 
-// DbaName applies equality check predicate on the "dba_name" field. It's identical to DbaNameEQ.
-func DbaName(v string) predicate.VendorProfileHistory {
-	return predicate.VendorProfileHistory(sql.FieldEQ(FieldDbaName, v))
+// CorporationType applies equality check predicate on the "corporation_type" field. It's identical to CorporationTypeEQ.
+func CorporationType(v string) predicate.VendorProfileHistory {
+	return predicate.VendorProfileHistory(sql.FieldEQ(FieldCorporationType, v))
+}
+
+// CorporationDba applies equality check predicate on the "corporation_dba" field. It's identical to CorporationDbaEQ.
+func CorporationDba(v string) predicate.VendorProfileHistory {
+	return predicate.VendorProfileHistory(sql.FieldEQ(FieldCorporationDba, v))
 }
 
 // Description applies equality check predicate on the "description" field. It's identical to DescriptionEQ.
@@ -138,6 +144,11 @@ func Description(v string) predicate.VendorProfileHistory {
 // WebsiteURI applies equality check predicate on the "website_uri" field. It's identical to WebsiteURIEQ.
 func WebsiteURI(v string) predicate.VendorProfileHistory {
 	return predicate.VendorProfileHistory(sql.FieldEQ(FieldWebsiteURI, v))
+}
+
+// TaxID applies equality check predicate on the "tax_id" field. It's identical to TaxIDEQ.
+func TaxID(v string) predicate.VendorProfileHistory {
+	return predicate.VendorProfileHistory(sql.FieldEQ(FieldTaxID, v))
 }
 
 // HistoryTimeEQ applies the EQ predicate on the "history_time" field.
@@ -940,79 +951,154 @@ func NameContainsFold(v string) predicate.VendorProfileHistory {
 	return predicate.VendorProfileHistory(sql.FieldContainsFold(FieldName, v))
 }
 
-// DbaNameEQ applies the EQ predicate on the "dba_name" field.
-func DbaNameEQ(v string) predicate.VendorProfileHistory {
-	return predicate.VendorProfileHistory(sql.FieldEQ(FieldDbaName, v))
+// CorporationTypeEQ applies the EQ predicate on the "corporation_type" field.
+func CorporationTypeEQ(v string) predicate.VendorProfileHistory {
+	return predicate.VendorProfileHistory(sql.FieldEQ(FieldCorporationType, v))
 }
 
-// DbaNameNEQ applies the NEQ predicate on the "dba_name" field.
-func DbaNameNEQ(v string) predicate.VendorProfileHistory {
-	return predicate.VendorProfileHistory(sql.FieldNEQ(FieldDbaName, v))
+// CorporationTypeNEQ applies the NEQ predicate on the "corporation_type" field.
+func CorporationTypeNEQ(v string) predicate.VendorProfileHistory {
+	return predicate.VendorProfileHistory(sql.FieldNEQ(FieldCorporationType, v))
 }
 
-// DbaNameIn applies the In predicate on the "dba_name" field.
-func DbaNameIn(vs ...string) predicate.VendorProfileHistory {
-	return predicate.VendorProfileHistory(sql.FieldIn(FieldDbaName, vs...))
+// CorporationTypeIn applies the In predicate on the "corporation_type" field.
+func CorporationTypeIn(vs ...string) predicate.VendorProfileHistory {
+	return predicate.VendorProfileHistory(sql.FieldIn(FieldCorporationType, vs...))
 }
 
-// DbaNameNotIn applies the NotIn predicate on the "dba_name" field.
-func DbaNameNotIn(vs ...string) predicate.VendorProfileHistory {
-	return predicate.VendorProfileHistory(sql.FieldNotIn(FieldDbaName, vs...))
+// CorporationTypeNotIn applies the NotIn predicate on the "corporation_type" field.
+func CorporationTypeNotIn(vs ...string) predicate.VendorProfileHistory {
+	return predicate.VendorProfileHistory(sql.FieldNotIn(FieldCorporationType, vs...))
 }
 
-// DbaNameGT applies the GT predicate on the "dba_name" field.
-func DbaNameGT(v string) predicate.VendorProfileHistory {
-	return predicate.VendorProfileHistory(sql.FieldGT(FieldDbaName, v))
+// CorporationTypeGT applies the GT predicate on the "corporation_type" field.
+func CorporationTypeGT(v string) predicate.VendorProfileHistory {
+	return predicate.VendorProfileHistory(sql.FieldGT(FieldCorporationType, v))
 }
 
-// DbaNameGTE applies the GTE predicate on the "dba_name" field.
-func DbaNameGTE(v string) predicate.VendorProfileHistory {
-	return predicate.VendorProfileHistory(sql.FieldGTE(FieldDbaName, v))
+// CorporationTypeGTE applies the GTE predicate on the "corporation_type" field.
+func CorporationTypeGTE(v string) predicate.VendorProfileHistory {
+	return predicate.VendorProfileHistory(sql.FieldGTE(FieldCorporationType, v))
 }
 
-// DbaNameLT applies the LT predicate on the "dba_name" field.
-func DbaNameLT(v string) predicate.VendorProfileHistory {
-	return predicate.VendorProfileHistory(sql.FieldLT(FieldDbaName, v))
+// CorporationTypeLT applies the LT predicate on the "corporation_type" field.
+func CorporationTypeLT(v string) predicate.VendorProfileHistory {
+	return predicate.VendorProfileHistory(sql.FieldLT(FieldCorporationType, v))
 }
 
-// DbaNameLTE applies the LTE predicate on the "dba_name" field.
-func DbaNameLTE(v string) predicate.VendorProfileHistory {
-	return predicate.VendorProfileHistory(sql.FieldLTE(FieldDbaName, v))
+// CorporationTypeLTE applies the LTE predicate on the "corporation_type" field.
+func CorporationTypeLTE(v string) predicate.VendorProfileHistory {
+	return predicate.VendorProfileHistory(sql.FieldLTE(FieldCorporationType, v))
 }
 
-// DbaNameContains applies the Contains predicate on the "dba_name" field.
-func DbaNameContains(v string) predicate.VendorProfileHistory {
-	return predicate.VendorProfileHistory(sql.FieldContains(FieldDbaName, v))
+// CorporationTypeContains applies the Contains predicate on the "corporation_type" field.
+func CorporationTypeContains(v string) predicate.VendorProfileHistory {
+	return predicate.VendorProfileHistory(sql.FieldContains(FieldCorporationType, v))
 }
 
-// DbaNameHasPrefix applies the HasPrefix predicate on the "dba_name" field.
-func DbaNameHasPrefix(v string) predicate.VendorProfileHistory {
-	return predicate.VendorProfileHistory(sql.FieldHasPrefix(FieldDbaName, v))
+// CorporationTypeHasPrefix applies the HasPrefix predicate on the "corporation_type" field.
+func CorporationTypeHasPrefix(v string) predicate.VendorProfileHistory {
+	return predicate.VendorProfileHistory(sql.FieldHasPrefix(FieldCorporationType, v))
 }
 
-// DbaNameHasSuffix applies the HasSuffix predicate on the "dba_name" field.
-func DbaNameHasSuffix(v string) predicate.VendorProfileHistory {
-	return predicate.VendorProfileHistory(sql.FieldHasSuffix(FieldDbaName, v))
+// CorporationTypeHasSuffix applies the HasSuffix predicate on the "corporation_type" field.
+func CorporationTypeHasSuffix(v string) predicate.VendorProfileHistory {
+	return predicate.VendorProfileHistory(sql.FieldHasSuffix(FieldCorporationType, v))
 }
 
-// DbaNameIsNil applies the IsNil predicate on the "dba_name" field.
-func DbaNameIsNil() predicate.VendorProfileHistory {
-	return predicate.VendorProfileHistory(sql.FieldIsNull(FieldDbaName))
+// CorporationTypeIsNil applies the IsNil predicate on the "corporation_type" field.
+func CorporationTypeIsNil() predicate.VendorProfileHistory {
+	return predicate.VendorProfileHistory(sql.FieldIsNull(FieldCorporationType))
 }
 
-// DbaNameNotNil applies the NotNil predicate on the "dba_name" field.
-func DbaNameNotNil() predicate.VendorProfileHistory {
-	return predicate.VendorProfileHistory(sql.FieldNotNull(FieldDbaName))
+// CorporationTypeNotNil applies the NotNil predicate on the "corporation_type" field.
+func CorporationTypeNotNil() predicate.VendorProfileHistory {
+	return predicate.VendorProfileHistory(sql.FieldNotNull(FieldCorporationType))
 }
 
-// DbaNameEqualFold applies the EqualFold predicate on the "dba_name" field.
-func DbaNameEqualFold(v string) predicate.VendorProfileHistory {
-	return predicate.VendorProfileHistory(sql.FieldEqualFold(FieldDbaName, v))
+// CorporationTypeEqualFold applies the EqualFold predicate on the "corporation_type" field.
+func CorporationTypeEqualFold(v string) predicate.VendorProfileHistory {
+	return predicate.VendorProfileHistory(sql.FieldEqualFold(FieldCorporationType, v))
 }
 
-// DbaNameContainsFold applies the ContainsFold predicate on the "dba_name" field.
-func DbaNameContainsFold(v string) predicate.VendorProfileHistory {
-	return predicate.VendorProfileHistory(sql.FieldContainsFold(FieldDbaName, v))
+// CorporationTypeContainsFold applies the ContainsFold predicate on the "corporation_type" field.
+func CorporationTypeContainsFold(v string) predicate.VendorProfileHistory {
+	return predicate.VendorProfileHistory(sql.FieldContainsFold(FieldCorporationType, v))
+}
+
+// CorporationDbaEQ applies the EQ predicate on the "corporation_dba" field.
+func CorporationDbaEQ(v string) predicate.VendorProfileHistory {
+	return predicate.VendorProfileHistory(sql.FieldEQ(FieldCorporationDba, v))
+}
+
+// CorporationDbaNEQ applies the NEQ predicate on the "corporation_dba" field.
+func CorporationDbaNEQ(v string) predicate.VendorProfileHistory {
+	return predicate.VendorProfileHistory(sql.FieldNEQ(FieldCorporationDba, v))
+}
+
+// CorporationDbaIn applies the In predicate on the "corporation_dba" field.
+func CorporationDbaIn(vs ...string) predicate.VendorProfileHistory {
+	return predicate.VendorProfileHistory(sql.FieldIn(FieldCorporationDba, vs...))
+}
+
+// CorporationDbaNotIn applies the NotIn predicate on the "corporation_dba" field.
+func CorporationDbaNotIn(vs ...string) predicate.VendorProfileHistory {
+	return predicate.VendorProfileHistory(sql.FieldNotIn(FieldCorporationDba, vs...))
+}
+
+// CorporationDbaGT applies the GT predicate on the "corporation_dba" field.
+func CorporationDbaGT(v string) predicate.VendorProfileHistory {
+	return predicate.VendorProfileHistory(sql.FieldGT(FieldCorporationDba, v))
+}
+
+// CorporationDbaGTE applies the GTE predicate on the "corporation_dba" field.
+func CorporationDbaGTE(v string) predicate.VendorProfileHistory {
+	return predicate.VendorProfileHistory(sql.FieldGTE(FieldCorporationDba, v))
+}
+
+// CorporationDbaLT applies the LT predicate on the "corporation_dba" field.
+func CorporationDbaLT(v string) predicate.VendorProfileHistory {
+	return predicate.VendorProfileHistory(sql.FieldLT(FieldCorporationDba, v))
+}
+
+// CorporationDbaLTE applies the LTE predicate on the "corporation_dba" field.
+func CorporationDbaLTE(v string) predicate.VendorProfileHistory {
+	return predicate.VendorProfileHistory(sql.FieldLTE(FieldCorporationDba, v))
+}
+
+// CorporationDbaContains applies the Contains predicate on the "corporation_dba" field.
+func CorporationDbaContains(v string) predicate.VendorProfileHistory {
+	return predicate.VendorProfileHistory(sql.FieldContains(FieldCorporationDba, v))
+}
+
+// CorporationDbaHasPrefix applies the HasPrefix predicate on the "corporation_dba" field.
+func CorporationDbaHasPrefix(v string) predicate.VendorProfileHistory {
+	return predicate.VendorProfileHistory(sql.FieldHasPrefix(FieldCorporationDba, v))
+}
+
+// CorporationDbaHasSuffix applies the HasSuffix predicate on the "corporation_dba" field.
+func CorporationDbaHasSuffix(v string) predicate.VendorProfileHistory {
+	return predicate.VendorProfileHistory(sql.FieldHasSuffix(FieldCorporationDba, v))
+}
+
+// CorporationDbaIsNil applies the IsNil predicate on the "corporation_dba" field.
+func CorporationDbaIsNil() predicate.VendorProfileHistory {
+	return predicate.VendorProfileHistory(sql.FieldIsNull(FieldCorporationDba))
+}
+
+// CorporationDbaNotNil applies the NotNil predicate on the "corporation_dba" field.
+func CorporationDbaNotNil() predicate.VendorProfileHistory {
+	return predicate.VendorProfileHistory(sql.FieldNotNull(FieldCorporationDba))
+}
+
+// CorporationDbaEqualFold applies the EqualFold predicate on the "corporation_dba" field.
+func CorporationDbaEqualFold(v string) predicate.VendorProfileHistory {
+	return predicate.VendorProfileHistory(sql.FieldEqualFold(FieldCorporationDba, v))
+}
+
+// CorporationDbaContainsFold applies the ContainsFold predicate on the "corporation_dba" field.
+func CorporationDbaContainsFold(v string) predicate.VendorProfileHistory {
+	return predicate.VendorProfileHistory(sql.FieldContainsFold(FieldCorporationDba, v))
 }
 
 // DescriptionEQ applies the EQ predicate on the "description" field.
@@ -1163,6 +1249,111 @@ func WebsiteURIEqualFold(v string) predicate.VendorProfileHistory {
 // WebsiteURIContainsFold applies the ContainsFold predicate on the "website_uri" field.
 func WebsiteURIContainsFold(v string) predicate.VendorProfileHistory {
 	return predicate.VendorProfileHistory(sql.FieldContainsFold(FieldWebsiteURI, v))
+}
+
+// TaxIDEQ applies the EQ predicate on the "tax_id" field.
+func TaxIDEQ(v string) predicate.VendorProfileHistory {
+	return predicate.VendorProfileHistory(sql.FieldEQ(FieldTaxID, v))
+}
+
+// TaxIDNEQ applies the NEQ predicate on the "tax_id" field.
+func TaxIDNEQ(v string) predicate.VendorProfileHistory {
+	return predicate.VendorProfileHistory(sql.FieldNEQ(FieldTaxID, v))
+}
+
+// TaxIDIn applies the In predicate on the "tax_id" field.
+func TaxIDIn(vs ...string) predicate.VendorProfileHistory {
+	return predicate.VendorProfileHistory(sql.FieldIn(FieldTaxID, vs...))
+}
+
+// TaxIDNotIn applies the NotIn predicate on the "tax_id" field.
+func TaxIDNotIn(vs ...string) predicate.VendorProfileHistory {
+	return predicate.VendorProfileHistory(sql.FieldNotIn(FieldTaxID, vs...))
+}
+
+// TaxIDGT applies the GT predicate on the "tax_id" field.
+func TaxIDGT(v string) predicate.VendorProfileHistory {
+	return predicate.VendorProfileHistory(sql.FieldGT(FieldTaxID, v))
+}
+
+// TaxIDGTE applies the GTE predicate on the "tax_id" field.
+func TaxIDGTE(v string) predicate.VendorProfileHistory {
+	return predicate.VendorProfileHistory(sql.FieldGTE(FieldTaxID, v))
+}
+
+// TaxIDLT applies the LT predicate on the "tax_id" field.
+func TaxIDLT(v string) predicate.VendorProfileHistory {
+	return predicate.VendorProfileHistory(sql.FieldLT(FieldTaxID, v))
+}
+
+// TaxIDLTE applies the LTE predicate on the "tax_id" field.
+func TaxIDLTE(v string) predicate.VendorProfileHistory {
+	return predicate.VendorProfileHistory(sql.FieldLTE(FieldTaxID, v))
+}
+
+// TaxIDContains applies the Contains predicate on the "tax_id" field.
+func TaxIDContains(v string) predicate.VendorProfileHistory {
+	return predicate.VendorProfileHistory(sql.FieldContains(FieldTaxID, v))
+}
+
+// TaxIDHasPrefix applies the HasPrefix predicate on the "tax_id" field.
+func TaxIDHasPrefix(v string) predicate.VendorProfileHistory {
+	return predicate.VendorProfileHistory(sql.FieldHasPrefix(FieldTaxID, v))
+}
+
+// TaxIDHasSuffix applies the HasSuffix predicate on the "tax_id" field.
+func TaxIDHasSuffix(v string) predicate.VendorProfileHistory {
+	return predicate.VendorProfileHistory(sql.FieldHasSuffix(FieldTaxID, v))
+}
+
+// TaxIDIsNil applies the IsNil predicate on the "tax_id" field.
+func TaxIDIsNil() predicate.VendorProfileHistory {
+	return predicate.VendorProfileHistory(sql.FieldIsNull(FieldTaxID))
+}
+
+// TaxIDNotNil applies the NotNil predicate on the "tax_id" field.
+func TaxIDNotNil() predicate.VendorProfileHistory {
+	return predicate.VendorProfileHistory(sql.FieldNotNull(FieldTaxID))
+}
+
+// TaxIDEqualFold applies the EqualFold predicate on the "tax_id" field.
+func TaxIDEqualFold(v string) predicate.VendorProfileHistory {
+	return predicate.VendorProfileHistory(sql.FieldEqualFold(FieldTaxID, v))
+}
+
+// TaxIDContainsFold applies the ContainsFold predicate on the "tax_id" field.
+func TaxIDContainsFold(v string) predicate.VendorProfileHistory {
+	return predicate.VendorProfileHistory(sql.FieldContainsFold(FieldTaxID, v))
+}
+
+// TaxIDTypeEQ applies the EQ predicate on the "tax_id_type" field.
+func TaxIDTypeEQ(v enums.TaxIDType) predicate.VendorProfileHistory {
+	vc := v
+	return predicate.VendorProfileHistory(sql.FieldEQ(FieldTaxIDType, vc))
+}
+
+// TaxIDTypeNEQ applies the NEQ predicate on the "tax_id_type" field.
+func TaxIDTypeNEQ(v enums.TaxIDType) predicate.VendorProfileHistory {
+	vc := v
+	return predicate.VendorProfileHistory(sql.FieldNEQ(FieldTaxIDType, vc))
+}
+
+// TaxIDTypeIn applies the In predicate on the "tax_id_type" field.
+func TaxIDTypeIn(vs ...enums.TaxIDType) predicate.VendorProfileHistory {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.VendorProfileHistory(sql.FieldIn(FieldTaxIDType, v...))
+}
+
+// TaxIDTypeNotIn applies the NotIn predicate on the "tax_id_type" field.
+func TaxIDTypeNotIn(vs ...enums.TaxIDType) predicate.VendorProfileHistory {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.VendorProfileHistory(sql.FieldNotIn(FieldTaxIDType, v...))
 }
 
 // And groups predicates with the AND operator between them.

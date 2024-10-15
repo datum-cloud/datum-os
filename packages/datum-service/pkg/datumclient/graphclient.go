@@ -224,6 +224,15 @@ type DatumGraphClient interface {
 	GetAllPersonalAccessTokens(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllPersonalAccessTokens, error)
 	GetPersonalAccessTokenByID(ctx context.Context, personalAccessTokenID string, interceptors ...clientv2.RequestInterceptor) (*GetPersonalAccessTokenByID, error)
 	UpdatePersonalAccessToken(ctx context.Context, updatePersonalAccessTokenID string, input UpdatePersonalAccessTokenInput, interceptors ...clientv2.RequestInterceptor) (*UpdatePersonalAccessToken, error)
+	CreateBulkCSVPhoneNumber(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVPhoneNumber, error)
+	CreateBulkPhoneNumber(ctx context.Context, input []*CreatePhoneNumberInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkPhoneNumber, error)
+	CreatePhoneNumber(ctx context.Context, input CreatePhoneNumberInput, interceptors ...clientv2.RequestInterceptor) (*CreatePhoneNumber, error)
+	GetAllPhoneNumbers(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllPhoneNumbers, error)
+	GetPhoneNumberByID(ctx context.Context, phoneNumberID string, interceptors ...clientv2.RequestInterceptor) (*GetPhoneNumberByID, error)
+	GetPhoneNumbers(ctx context.Context, where *PhoneNumberWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetPhoneNumbers, error)
+	UpdatePhoneNumber(ctx context.Context, updatePhoneNumberID string, input UpdatePhoneNumberInput, interceptors ...clientv2.RequestInterceptor) (*UpdatePhoneNumber, error)
+	GetAllPhoneNumberHistories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllPhoneNumberHistories, error)
+	GetPhoneNumberHistories(ctx context.Context, where *PhoneNumberHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetPhoneNumberHistories, error)
 	CreateBulkCSVPostalAddress(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVPostalAddress, error)
 	CreateBulkPostalAddress(ctx context.Context, input []*CreatePostalAddressInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkPostalAddress, error)
 	CreatePostalAddress(ctx context.Context, input CreatePostalAddressInput, interceptors ...clientv2.RequestInterceptor) (*CreatePostalAddress, error)
@@ -286,6 +295,15 @@ type DatumGraphClient interface {
 	UpdateVendorProfile(ctx context.Context, updateVendorProfileID string, input UpdateVendorProfileInput, interceptors ...clientv2.RequestInterceptor) (*UpdateVendorProfile, error)
 	GetAllVendorProfileHistories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllVendorProfileHistories, error)
 	GetVendorProfileHistories(ctx context.Context, where *VendorProfileHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetVendorProfileHistories, error)
+	CreateBulkCSVVendorProfilePhoneNumber(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVVendorProfilePhoneNumber, error)
+	CreateBulkVendorProfilePhoneNumber(ctx context.Context, input []*CreateVendorProfilePhoneNumberInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkVendorProfilePhoneNumber, error)
+	CreateVendorProfilePhoneNumber(ctx context.Context, input CreateVendorProfilePhoneNumberInput, interceptors ...clientv2.RequestInterceptor) (*CreateVendorProfilePhoneNumber, error)
+	GetAllVendorProfilePhoneNumbers(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllVendorProfilePhoneNumbers, error)
+	GetVendorProfilePhoneNumberByID(ctx context.Context, vendorProfilePhoneNumberID string, interceptors ...clientv2.RequestInterceptor) (*GetVendorProfilePhoneNumberByID, error)
+	GetVendorProfilePhoneNumbers(ctx context.Context, where *VendorProfilePhoneNumberWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetVendorProfilePhoneNumbers, error)
+	UpdateVendorProfilePhoneNumber(ctx context.Context, updateVendorProfilePhoneNumberID string, input UpdateVendorProfilePhoneNumberInput, interceptors ...clientv2.RequestInterceptor) (*UpdateVendorProfilePhoneNumber, error)
+	GetAllVendorProfilePhoneNumberHistories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllVendorProfilePhoneNumberHistories, error)
+	GetVendorProfilePhoneNumberHistories(ctx context.Context, where *VendorProfilePhoneNumberHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetVendorProfilePhoneNumberHistories, error)
 	CreateBulkCSVVendorProfilePostalAddress(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVVendorProfilePostalAddress, error)
 	CreateBulkVendorProfilePostalAddress(ctx context.Context, input []*CreateVendorProfilePostalAddressInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkVendorProfilePostalAddress, error)
 	CreateVendorProfilePostalAddress(ctx context.Context, input CreateVendorProfilePostalAddressInput, interceptors ...clientv2.RequestInterceptor) (*CreateVendorProfilePostalAddress, error)
@@ -24034,6 +24052,972 @@ func (t *UpdatePersonalAccessToken_UpdatePersonalAccessToken) GetPersonalAccessT
 	return &t.PersonalAccessToken
 }
 
+type CreateBulkCSVPhoneNumber_CreateBulkCSVPhoneNumber_PhoneNumbers struct {
+	CreatedAt  *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy  *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Extension  *string    "json:\"extension,omitempty\" graphql:\"extension\""
+	ID         string     "json:\"id\" graphql:\"id\""
+	Kind       string     "json:\"kind\" graphql:\"kind\""
+	Number     *string    "json:\"number,omitempty\" graphql:\"number\""
+	OwnerID    *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	RegionCode *string    "json:\"regionCode,omitempty\" graphql:\"regionCode\""
+	ShortCode  *string    "json:\"shortCode,omitempty\" graphql:\"shortCode\""
+	Tags       []string   "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt  *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy  *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *CreateBulkCSVPhoneNumber_CreateBulkCSVPhoneNumber_PhoneNumbers) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkCSVPhoneNumber_CreateBulkCSVPhoneNumber_PhoneNumbers{}
+	}
+	return t.CreatedAt
+}
+func (t *CreateBulkCSVPhoneNumber_CreateBulkCSVPhoneNumber_PhoneNumbers) GetCreatedBy() *string {
+	if t == nil {
+		t = &CreateBulkCSVPhoneNumber_CreateBulkCSVPhoneNumber_PhoneNumbers{}
+	}
+	return t.CreatedBy
+}
+func (t *CreateBulkCSVPhoneNumber_CreateBulkCSVPhoneNumber_PhoneNumbers) GetExtension() *string {
+	if t == nil {
+		t = &CreateBulkCSVPhoneNumber_CreateBulkCSVPhoneNumber_PhoneNumbers{}
+	}
+	return t.Extension
+}
+func (t *CreateBulkCSVPhoneNumber_CreateBulkCSVPhoneNumber_PhoneNumbers) GetID() string {
+	if t == nil {
+		t = &CreateBulkCSVPhoneNumber_CreateBulkCSVPhoneNumber_PhoneNumbers{}
+	}
+	return t.ID
+}
+func (t *CreateBulkCSVPhoneNumber_CreateBulkCSVPhoneNumber_PhoneNumbers) GetKind() string {
+	if t == nil {
+		t = &CreateBulkCSVPhoneNumber_CreateBulkCSVPhoneNumber_PhoneNumbers{}
+	}
+	return t.Kind
+}
+func (t *CreateBulkCSVPhoneNumber_CreateBulkCSVPhoneNumber_PhoneNumbers) GetNumber() *string {
+	if t == nil {
+		t = &CreateBulkCSVPhoneNumber_CreateBulkCSVPhoneNumber_PhoneNumbers{}
+	}
+	return t.Number
+}
+func (t *CreateBulkCSVPhoneNumber_CreateBulkCSVPhoneNumber_PhoneNumbers) GetOwnerID() *string {
+	if t == nil {
+		t = &CreateBulkCSVPhoneNumber_CreateBulkCSVPhoneNumber_PhoneNumbers{}
+	}
+	return t.OwnerID
+}
+func (t *CreateBulkCSVPhoneNumber_CreateBulkCSVPhoneNumber_PhoneNumbers) GetRegionCode() *string {
+	if t == nil {
+		t = &CreateBulkCSVPhoneNumber_CreateBulkCSVPhoneNumber_PhoneNumbers{}
+	}
+	return t.RegionCode
+}
+func (t *CreateBulkCSVPhoneNumber_CreateBulkCSVPhoneNumber_PhoneNumbers) GetShortCode() *string {
+	if t == nil {
+		t = &CreateBulkCSVPhoneNumber_CreateBulkCSVPhoneNumber_PhoneNumbers{}
+	}
+	return t.ShortCode
+}
+func (t *CreateBulkCSVPhoneNumber_CreateBulkCSVPhoneNumber_PhoneNumbers) GetTags() []string {
+	if t == nil {
+		t = &CreateBulkCSVPhoneNumber_CreateBulkCSVPhoneNumber_PhoneNumbers{}
+	}
+	return t.Tags
+}
+func (t *CreateBulkCSVPhoneNumber_CreateBulkCSVPhoneNumber_PhoneNumbers) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkCSVPhoneNumber_CreateBulkCSVPhoneNumber_PhoneNumbers{}
+	}
+	return t.UpdatedAt
+}
+func (t *CreateBulkCSVPhoneNumber_CreateBulkCSVPhoneNumber_PhoneNumbers) GetUpdatedBy() *string {
+	if t == nil {
+		t = &CreateBulkCSVPhoneNumber_CreateBulkCSVPhoneNumber_PhoneNumbers{}
+	}
+	return t.UpdatedBy
+}
+
+type CreateBulkCSVPhoneNumber_CreateBulkCSVPhoneNumber struct {
+	PhoneNumbers []*CreateBulkCSVPhoneNumber_CreateBulkCSVPhoneNumber_PhoneNumbers "json:\"phoneNumbers,omitempty\" graphql:\"phoneNumbers\""
+}
+
+func (t *CreateBulkCSVPhoneNumber_CreateBulkCSVPhoneNumber) GetPhoneNumbers() []*CreateBulkCSVPhoneNumber_CreateBulkCSVPhoneNumber_PhoneNumbers {
+	if t == nil {
+		t = &CreateBulkCSVPhoneNumber_CreateBulkCSVPhoneNumber{}
+	}
+	return t.PhoneNumbers
+}
+
+type CreateBulkPhoneNumber_CreateBulkPhoneNumber_PhoneNumbers struct {
+	CreatedAt  *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy  *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Extension  *string    "json:\"extension,omitempty\" graphql:\"extension\""
+	ID         string     "json:\"id\" graphql:\"id\""
+	Kind       string     "json:\"kind\" graphql:\"kind\""
+	Number     *string    "json:\"number,omitempty\" graphql:\"number\""
+	OwnerID    *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	RegionCode *string    "json:\"regionCode,omitempty\" graphql:\"regionCode\""
+	ShortCode  *string    "json:\"shortCode,omitempty\" graphql:\"shortCode\""
+	Tags       []string   "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt  *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy  *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *CreateBulkPhoneNumber_CreateBulkPhoneNumber_PhoneNumbers) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkPhoneNumber_CreateBulkPhoneNumber_PhoneNumbers{}
+	}
+	return t.CreatedAt
+}
+func (t *CreateBulkPhoneNumber_CreateBulkPhoneNumber_PhoneNumbers) GetCreatedBy() *string {
+	if t == nil {
+		t = &CreateBulkPhoneNumber_CreateBulkPhoneNumber_PhoneNumbers{}
+	}
+	return t.CreatedBy
+}
+func (t *CreateBulkPhoneNumber_CreateBulkPhoneNumber_PhoneNumbers) GetExtension() *string {
+	if t == nil {
+		t = &CreateBulkPhoneNumber_CreateBulkPhoneNumber_PhoneNumbers{}
+	}
+	return t.Extension
+}
+func (t *CreateBulkPhoneNumber_CreateBulkPhoneNumber_PhoneNumbers) GetID() string {
+	if t == nil {
+		t = &CreateBulkPhoneNumber_CreateBulkPhoneNumber_PhoneNumbers{}
+	}
+	return t.ID
+}
+func (t *CreateBulkPhoneNumber_CreateBulkPhoneNumber_PhoneNumbers) GetKind() string {
+	if t == nil {
+		t = &CreateBulkPhoneNumber_CreateBulkPhoneNumber_PhoneNumbers{}
+	}
+	return t.Kind
+}
+func (t *CreateBulkPhoneNumber_CreateBulkPhoneNumber_PhoneNumbers) GetNumber() *string {
+	if t == nil {
+		t = &CreateBulkPhoneNumber_CreateBulkPhoneNumber_PhoneNumbers{}
+	}
+	return t.Number
+}
+func (t *CreateBulkPhoneNumber_CreateBulkPhoneNumber_PhoneNumbers) GetOwnerID() *string {
+	if t == nil {
+		t = &CreateBulkPhoneNumber_CreateBulkPhoneNumber_PhoneNumbers{}
+	}
+	return t.OwnerID
+}
+func (t *CreateBulkPhoneNumber_CreateBulkPhoneNumber_PhoneNumbers) GetRegionCode() *string {
+	if t == nil {
+		t = &CreateBulkPhoneNumber_CreateBulkPhoneNumber_PhoneNumbers{}
+	}
+	return t.RegionCode
+}
+func (t *CreateBulkPhoneNumber_CreateBulkPhoneNumber_PhoneNumbers) GetShortCode() *string {
+	if t == nil {
+		t = &CreateBulkPhoneNumber_CreateBulkPhoneNumber_PhoneNumbers{}
+	}
+	return t.ShortCode
+}
+func (t *CreateBulkPhoneNumber_CreateBulkPhoneNumber_PhoneNumbers) GetTags() []string {
+	if t == nil {
+		t = &CreateBulkPhoneNumber_CreateBulkPhoneNumber_PhoneNumbers{}
+	}
+	return t.Tags
+}
+func (t *CreateBulkPhoneNumber_CreateBulkPhoneNumber_PhoneNumbers) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkPhoneNumber_CreateBulkPhoneNumber_PhoneNumbers{}
+	}
+	return t.UpdatedAt
+}
+func (t *CreateBulkPhoneNumber_CreateBulkPhoneNumber_PhoneNumbers) GetUpdatedBy() *string {
+	if t == nil {
+		t = &CreateBulkPhoneNumber_CreateBulkPhoneNumber_PhoneNumbers{}
+	}
+	return t.UpdatedBy
+}
+
+type CreateBulkPhoneNumber_CreateBulkPhoneNumber struct {
+	PhoneNumbers []*CreateBulkPhoneNumber_CreateBulkPhoneNumber_PhoneNumbers "json:\"phoneNumbers,omitempty\" graphql:\"phoneNumbers\""
+}
+
+func (t *CreateBulkPhoneNumber_CreateBulkPhoneNumber) GetPhoneNumbers() []*CreateBulkPhoneNumber_CreateBulkPhoneNumber_PhoneNumbers {
+	if t == nil {
+		t = &CreateBulkPhoneNumber_CreateBulkPhoneNumber{}
+	}
+	return t.PhoneNumbers
+}
+
+type CreatePhoneNumber_CreatePhoneNumber_PhoneNumber struct {
+	CreatedAt  *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy  *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Extension  *string    "json:\"extension,omitempty\" graphql:\"extension\""
+	ID         string     "json:\"id\" graphql:\"id\""
+	Kind       string     "json:\"kind\" graphql:\"kind\""
+	Number     *string    "json:\"number,omitempty\" graphql:\"number\""
+	OwnerID    *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	RegionCode *string    "json:\"regionCode,omitempty\" graphql:\"regionCode\""
+	ShortCode  *string    "json:\"shortCode,omitempty\" graphql:\"shortCode\""
+	Tags       []string   "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt  *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy  *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *CreatePhoneNumber_CreatePhoneNumber_PhoneNumber) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &CreatePhoneNumber_CreatePhoneNumber_PhoneNumber{}
+	}
+	return t.CreatedAt
+}
+func (t *CreatePhoneNumber_CreatePhoneNumber_PhoneNumber) GetCreatedBy() *string {
+	if t == nil {
+		t = &CreatePhoneNumber_CreatePhoneNumber_PhoneNumber{}
+	}
+	return t.CreatedBy
+}
+func (t *CreatePhoneNumber_CreatePhoneNumber_PhoneNumber) GetExtension() *string {
+	if t == nil {
+		t = &CreatePhoneNumber_CreatePhoneNumber_PhoneNumber{}
+	}
+	return t.Extension
+}
+func (t *CreatePhoneNumber_CreatePhoneNumber_PhoneNumber) GetID() string {
+	if t == nil {
+		t = &CreatePhoneNumber_CreatePhoneNumber_PhoneNumber{}
+	}
+	return t.ID
+}
+func (t *CreatePhoneNumber_CreatePhoneNumber_PhoneNumber) GetKind() string {
+	if t == nil {
+		t = &CreatePhoneNumber_CreatePhoneNumber_PhoneNumber{}
+	}
+	return t.Kind
+}
+func (t *CreatePhoneNumber_CreatePhoneNumber_PhoneNumber) GetNumber() *string {
+	if t == nil {
+		t = &CreatePhoneNumber_CreatePhoneNumber_PhoneNumber{}
+	}
+	return t.Number
+}
+func (t *CreatePhoneNumber_CreatePhoneNumber_PhoneNumber) GetOwnerID() *string {
+	if t == nil {
+		t = &CreatePhoneNumber_CreatePhoneNumber_PhoneNumber{}
+	}
+	return t.OwnerID
+}
+func (t *CreatePhoneNumber_CreatePhoneNumber_PhoneNumber) GetRegionCode() *string {
+	if t == nil {
+		t = &CreatePhoneNumber_CreatePhoneNumber_PhoneNumber{}
+	}
+	return t.RegionCode
+}
+func (t *CreatePhoneNumber_CreatePhoneNumber_PhoneNumber) GetShortCode() *string {
+	if t == nil {
+		t = &CreatePhoneNumber_CreatePhoneNumber_PhoneNumber{}
+	}
+	return t.ShortCode
+}
+func (t *CreatePhoneNumber_CreatePhoneNumber_PhoneNumber) GetTags() []string {
+	if t == nil {
+		t = &CreatePhoneNumber_CreatePhoneNumber_PhoneNumber{}
+	}
+	return t.Tags
+}
+func (t *CreatePhoneNumber_CreatePhoneNumber_PhoneNumber) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &CreatePhoneNumber_CreatePhoneNumber_PhoneNumber{}
+	}
+	return t.UpdatedAt
+}
+func (t *CreatePhoneNumber_CreatePhoneNumber_PhoneNumber) GetUpdatedBy() *string {
+	if t == nil {
+		t = &CreatePhoneNumber_CreatePhoneNumber_PhoneNumber{}
+	}
+	return t.UpdatedBy
+}
+
+type CreatePhoneNumber_CreatePhoneNumber struct {
+	PhoneNumber CreatePhoneNumber_CreatePhoneNumber_PhoneNumber "json:\"phoneNumber\" graphql:\"phoneNumber\""
+}
+
+func (t *CreatePhoneNumber_CreatePhoneNumber) GetPhoneNumber() *CreatePhoneNumber_CreatePhoneNumber_PhoneNumber {
+	if t == nil {
+		t = &CreatePhoneNumber_CreatePhoneNumber{}
+	}
+	return &t.PhoneNumber
+}
+
+type GetAllPhoneNumbers_PhoneNumbers_Edges_Node struct {
+	CreatedAt  *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy  *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Extension  *string    "json:\"extension,omitempty\" graphql:\"extension\""
+	ID         string     "json:\"id\" graphql:\"id\""
+	Kind       string     "json:\"kind\" graphql:\"kind\""
+	Number     *string    "json:\"number,omitempty\" graphql:\"number\""
+	OwnerID    *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	RegionCode *string    "json:\"regionCode,omitempty\" graphql:\"regionCode\""
+	ShortCode  *string    "json:\"shortCode,omitempty\" graphql:\"shortCode\""
+	Tags       []string   "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt  *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy  *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetAllPhoneNumbers_PhoneNumbers_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllPhoneNumbers_PhoneNumbers_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetAllPhoneNumbers_PhoneNumbers_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetAllPhoneNumbers_PhoneNumbers_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetAllPhoneNumbers_PhoneNumbers_Edges_Node) GetExtension() *string {
+	if t == nil {
+		t = &GetAllPhoneNumbers_PhoneNumbers_Edges_Node{}
+	}
+	return t.Extension
+}
+func (t *GetAllPhoneNumbers_PhoneNumbers_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetAllPhoneNumbers_PhoneNumbers_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetAllPhoneNumbers_PhoneNumbers_Edges_Node) GetKind() string {
+	if t == nil {
+		t = &GetAllPhoneNumbers_PhoneNumbers_Edges_Node{}
+	}
+	return t.Kind
+}
+func (t *GetAllPhoneNumbers_PhoneNumbers_Edges_Node) GetNumber() *string {
+	if t == nil {
+		t = &GetAllPhoneNumbers_PhoneNumbers_Edges_Node{}
+	}
+	return t.Number
+}
+func (t *GetAllPhoneNumbers_PhoneNumbers_Edges_Node) GetOwnerID() *string {
+	if t == nil {
+		t = &GetAllPhoneNumbers_PhoneNumbers_Edges_Node{}
+	}
+	return t.OwnerID
+}
+func (t *GetAllPhoneNumbers_PhoneNumbers_Edges_Node) GetRegionCode() *string {
+	if t == nil {
+		t = &GetAllPhoneNumbers_PhoneNumbers_Edges_Node{}
+	}
+	return t.RegionCode
+}
+func (t *GetAllPhoneNumbers_PhoneNumbers_Edges_Node) GetShortCode() *string {
+	if t == nil {
+		t = &GetAllPhoneNumbers_PhoneNumbers_Edges_Node{}
+	}
+	return t.ShortCode
+}
+func (t *GetAllPhoneNumbers_PhoneNumbers_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &GetAllPhoneNumbers_PhoneNumbers_Edges_Node{}
+	}
+	return t.Tags
+}
+func (t *GetAllPhoneNumbers_PhoneNumbers_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllPhoneNumbers_PhoneNumbers_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetAllPhoneNumbers_PhoneNumbers_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetAllPhoneNumbers_PhoneNumbers_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+
+type GetAllPhoneNumbers_PhoneNumbers_Edges struct {
+	Node *GetAllPhoneNumbers_PhoneNumbers_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetAllPhoneNumbers_PhoneNumbers_Edges) GetNode() *GetAllPhoneNumbers_PhoneNumbers_Edges_Node {
+	if t == nil {
+		t = &GetAllPhoneNumbers_PhoneNumbers_Edges{}
+	}
+	return t.Node
+}
+
+type GetAllPhoneNumbers_PhoneNumbers struct {
+	Edges []*GetAllPhoneNumbers_PhoneNumbers_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+}
+
+func (t *GetAllPhoneNumbers_PhoneNumbers) GetEdges() []*GetAllPhoneNumbers_PhoneNumbers_Edges {
+	if t == nil {
+		t = &GetAllPhoneNumbers_PhoneNumbers{}
+	}
+	return t.Edges
+}
+
+type GetPhoneNumberByID_PhoneNumber struct {
+	CreatedAt  *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy  *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Extension  *string    "json:\"extension,omitempty\" graphql:\"extension\""
+	ID         string     "json:\"id\" graphql:\"id\""
+	Kind       string     "json:\"kind\" graphql:\"kind\""
+	Number     *string    "json:\"number,omitempty\" graphql:\"number\""
+	OwnerID    *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	RegionCode *string    "json:\"regionCode,omitempty\" graphql:\"regionCode\""
+	ShortCode  *string    "json:\"shortCode,omitempty\" graphql:\"shortCode\""
+	Tags       []string   "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt  *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy  *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetPhoneNumberByID_PhoneNumber) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetPhoneNumberByID_PhoneNumber{}
+	}
+	return t.CreatedAt
+}
+func (t *GetPhoneNumberByID_PhoneNumber) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetPhoneNumberByID_PhoneNumber{}
+	}
+	return t.CreatedBy
+}
+func (t *GetPhoneNumberByID_PhoneNumber) GetExtension() *string {
+	if t == nil {
+		t = &GetPhoneNumberByID_PhoneNumber{}
+	}
+	return t.Extension
+}
+func (t *GetPhoneNumberByID_PhoneNumber) GetID() string {
+	if t == nil {
+		t = &GetPhoneNumberByID_PhoneNumber{}
+	}
+	return t.ID
+}
+func (t *GetPhoneNumberByID_PhoneNumber) GetKind() string {
+	if t == nil {
+		t = &GetPhoneNumberByID_PhoneNumber{}
+	}
+	return t.Kind
+}
+func (t *GetPhoneNumberByID_PhoneNumber) GetNumber() *string {
+	if t == nil {
+		t = &GetPhoneNumberByID_PhoneNumber{}
+	}
+	return t.Number
+}
+func (t *GetPhoneNumberByID_PhoneNumber) GetOwnerID() *string {
+	if t == nil {
+		t = &GetPhoneNumberByID_PhoneNumber{}
+	}
+	return t.OwnerID
+}
+func (t *GetPhoneNumberByID_PhoneNumber) GetRegionCode() *string {
+	if t == nil {
+		t = &GetPhoneNumberByID_PhoneNumber{}
+	}
+	return t.RegionCode
+}
+func (t *GetPhoneNumberByID_PhoneNumber) GetShortCode() *string {
+	if t == nil {
+		t = &GetPhoneNumberByID_PhoneNumber{}
+	}
+	return t.ShortCode
+}
+func (t *GetPhoneNumberByID_PhoneNumber) GetTags() []string {
+	if t == nil {
+		t = &GetPhoneNumberByID_PhoneNumber{}
+	}
+	return t.Tags
+}
+func (t *GetPhoneNumberByID_PhoneNumber) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetPhoneNumberByID_PhoneNumber{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetPhoneNumberByID_PhoneNumber) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetPhoneNumberByID_PhoneNumber{}
+	}
+	return t.UpdatedBy
+}
+
+type GetPhoneNumbers_PhoneNumbers_Edges_Node struct {
+	CreatedAt  *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy  *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Extension  *string    "json:\"extension,omitempty\" graphql:\"extension\""
+	ID         string     "json:\"id\" graphql:\"id\""
+	Kind       string     "json:\"kind\" graphql:\"kind\""
+	Number     *string    "json:\"number,omitempty\" graphql:\"number\""
+	OwnerID    *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	RegionCode *string    "json:\"regionCode,omitempty\" graphql:\"regionCode\""
+	ShortCode  *string    "json:\"shortCode,omitempty\" graphql:\"shortCode\""
+	Tags       []string   "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt  *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy  *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetPhoneNumbers_PhoneNumbers_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetPhoneNumbers_PhoneNumbers_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetPhoneNumbers_PhoneNumbers_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetPhoneNumbers_PhoneNumbers_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetPhoneNumbers_PhoneNumbers_Edges_Node) GetExtension() *string {
+	if t == nil {
+		t = &GetPhoneNumbers_PhoneNumbers_Edges_Node{}
+	}
+	return t.Extension
+}
+func (t *GetPhoneNumbers_PhoneNumbers_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetPhoneNumbers_PhoneNumbers_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetPhoneNumbers_PhoneNumbers_Edges_Node) GetKind() string {
+	if t == nil {
+		t = &GetPhoneNumbers_PhoneNumbers_Edges_Node{}
+	}
+	return t.Kind
+}
+func (t *GetPhoneNumbers_PhoneNumbers_Edges_Node) GetNumber() *string {
+	if t == nil {
+		t = &GetPhoneNumbers_PhoneNumbers_Edges_Node{}
+	}
+	return t.Number
+}
+func (t *GetPhoneNumbers_PhoneNumbers_Edges_Node) GetOwnerID() *string {
+	if t == nil {
+		t = &GetPhoneNumbers_PhoneNumbers_Edges_Node{}
+	}
+	return t.OwnerID
+}
+func (t *GetPhoneNumbers_PhoneNumbers_Edges_Node) GetRegionCode() *string {
+	if t == nil {
+		t = &GetPhoneNumbers_PhoneNumbers_Edges_Node{}
+	}
+	return t.RegionCode
+}
+func (t *GetPhoneNumbers_PhoneNumbers_Edges_Node) GetShortCode() *string {
+	if t == nil {
+		t = &GetPhoneNumbers_PhoneNumbers_Edges_Node{}
+	}
+	return t.ShortCode
+}
+func (t *GetPhoneNumbers_PhoneNumbers_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &GetPhoneNumbers_PhoneNumbers_Edges_Node{}
+	}
+	return t.Tags
+}
+func (t *GetPhoneNumbers_PhoneNumbers_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetPhoneNumbers_PhoneNumbers_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetPhoneNumbers_PhoneNumbers_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetPhoneNumbers_PhoneNumbers_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+
+type GetPhoneNumbers_PhoneNumbers_Edges struct {
+	Node *GetPhoneNumbers_PhoneNumbers_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetPhoneNumbers_PhoneNumbers_Edges) GetNode() *GetPhoneNumbers_PhoneNumbers_Edges_Node {
+	if t == nil {
+		t = &GetPhoneNumbers_PhoneNumbers_Edges{}
+	}
+	return t.Node
+}
+
+type GetPhoneNumbers_PhoneNumbers struct {
+	Edges []*GetPhoneNumbers_PhoneNumbers_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+}
+
+func (t *GetPhoneNumbers_PhoneNumbers) GetEdges() []*GetPhoneNumbers_PhoneNumbers_Edges {
+	if t == nil {
+		t = &GetPhoneNumbers_PhoneNumbers{}
+	}
+	return t.Edges
+}
+
+type UpdatePhoneNumber_UpdatePhoneNumber_PhoneNumber struct {
+	CreatedAt  *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy  *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Extension  *string    "json:\"extension,omitempty\" graphql:\"extension\""
+	ID         string     "json:\"id\" graphql:\"id\""
+	Kind       string     "json:\"kind\" graphql:\"kind\""
+	Number     *string    "json:\"number,omitempty\" graphql:\"number\""
+	OwnerID    *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	RegionCode *string    "json:\"regionCode,omitempty\" graphql:\"regionCode\""
+	ShortCode  *string    "json:\"shortCode,omitempty\" graphql:\"shortCode\""
+	Tags       []string   "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt  *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy  *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *UpdatePhoneNumber_UpdatePhoneNumber_PhoneNumber) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &UpdatePhoneNumber_UpdatePhoneNumber_PhoneNumber{}
+	}
+	return t.CreatedAt
+}
+func (t *UpdatePhoneNumber_UpdatePhoneNumber_PhoneNumber) GetCreatedBy() *string {
+	if t == nil {
+		t = &UpdatePhoneNumber_UpdatePhoneNumber_PhoneNumber{}
+	}
+	return t.CreatedBy
+}
+func (t *UpdatePhoneNumber_UpdatePhoneNumber_PhoneNumber) GetExtension() *string {
+	if t == nil {
+		t = &UpdatePhoneNumber_UpdatePhoneNumber_PhoneNumber{}
+	}
+	return t.Extension
+}
+func (t *UpdatePhoneNumber_UpdatePhoneNumber_PhoneNumber) GetID() string {
+	if t == nil {
+		t = &UpdatePhoneNumber_UpdatePhoneNumber_PhoneNumber{}
+	}
+	return t.ID
+}
+func (t *UpdatePhoneNumber_UpdatePhoneNumber_PhoneNumber) GetKind() string {
+	if t == nil {
+		t = &UpdatePhoneNumber_UpdatePhoneNumber_PhoneNumber{}
+	}
+	return t.Kind
+}
+func (t *UpdatePhoneNumber_UpdatePhoneNumber_PhoneNumber) GetNumber() *string {
+	if t == nil {
+		t = &UpdatePhoneNumber_UpdatePhoneNumber_PhoneNumber{}
+	}
+	return t.Number
+}
+func (t *UpdatePhoneNumber_UpdatePhoneNumber_PhoneNumber) GetOwnerID() *string {
+	if t == nil {
+		t = &UpdatePhoneNumber_UpdatePhoneNumber_PhoneNumber{}
+	}
+	return t.OwnerID
+}
+func (t *UpdatePhoneNumber_UpdatePhoneNumber_PhoneNumber) GetRegionCode() *string {
+	if t == nil {
+		t = &UpdatePhoneNumber_UpdatePhoneNumber_PhoneNumber{}
+	}
+	return t.RegionCode
+}
+func (t *UpdatePhoneNumber_UpdatePhoneNumber_PhoneNumber) GetShortCode() *string {
+	if t == nil {
+		t = &UpdatePhoneNumber_UpdatePhoneNumber_PhoneNumber{}
+	}
+	return t.ShortCode
+}
+func (t *UpdatePhoneNumber_UpdatePhoneNumber_PhoneNumber) GetTags() []string {
+	if t == nil {
+		t = &UpdatePhoneNumber_UpdatePhoneNumber_PhoneNumber{}
+	}
+	return t.Tags
+}
+func (t *UpdatePhoneNumber_UpdatePhoneNumber_PhoneNumber) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &UpdatePhoneNumber_UpdatePhoneNumber_PhoneNumber{}
+	}
+	return t.UpdatedAt
+}
+func (t *UpdatePhoneNumber_UpdatePhoneNumber_PhoneNumber) GetUpdatedBy() *string {
+	if t == nil {
+		t = &UpdatePhoneNumber_UpdatePhoneNumber_PhoneNumber{}
+	}
+	return t.UpdatedBy
+}
+
+type UpdatePhoneNumber_UpdatePhoneNumber struct {
+	PhoneNumber UpdatePhoneNumber_UpdatePhoneNumber_PhoneNumber "json:\"phoneNumber\" graphql:\"phoneNumber\""
+}
+
+func (t *UpdatePhoneNumber_UpdatePhoneNumber) GetPhoneNumber() *UpdatePhoneNumber_UpdatePhoneNumber_PhoneNumber {
+	if t == nil {
+		t = &UpdatePhoneNumber_UpdatePhoneNumber{}
+	}
+	return &t.PhoneNumber
+}
+
+type GetAllPhoneNumberHistories_PhoneNumberHistories_Edges_Node struct {
+	CreatedAt   *time.Time        "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy   *string           "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Extension   *string           "json:\"extension,omitempty\" graphql:\"extension\""
+	HistoryTime time.Time         "json:\"historyTime\" graphql:\"historyTime\""
+	ID          string            "json:\"id\" graphql:\"id\""
+	Kind        string            "json:\"kind\" graphql:\"kind\""
+	Number      *string           "json:\"number,omitempty\" graphql:\"number\""
+	Operation   enthistory.OpType "json:\"operation\" graphql:\"operation\""
+	OwnerID     *string           "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Ref         *string           "json:\"ref,omitempty\" graphql:\"ref\""
+	RegionCode  *string           "json:\"regionCode,omitempty\" graphql:\"regionCode\""
+	ShortCode   *string           "json:\"shortCode,omitempty\" graphql:\"shortCode\""
+	Tags        []string          "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt   *time.Time        "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy   *string           "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetAllPhoneNumberHistories_PhoneNumberHistories_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllPhoneNumberHistories_PhoneNumberHistories_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetAllPhoneNumberHistories_PhoneNumberHistories_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetAllPhoneNumberHistories_PhoneNumberHistories_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetAllPhoneNumberHistories_PhoneNumberHistories_Edges_Node) GetExtension() *string {
+	if t == nil {
+		t = &GetAllPhoneNumberHistories_PhoneNumberHistories_Edges_Node{}
+	}
+	return t.Extension
+}
+func (t *GetAllPhoneNumberHistories_PhoneNumberHistories_Edges_Node) GetHistoryTime() *time.Time {
+	if t == nil {
+		t = &GetAllPhoneNumberHistories_PhoneNumberHistories_Edges_Node{}
+	}
+	return &t.HistoryTime
+}
+func (t *GetAllPhoneNumberHistories_PhoneNumberHistories_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetAllPhoneNumberHistories_PhoneNumberHistories_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetAllPhoneNumberHistories_PhoneNumberHistories_Edges_Node) GetKind() string {
+	if t == nil {
+		t = &GetAllPhoneNumberHistories_PhoneNumberHistories_Edges_Node{}
+	}
+	return t.Kind
+}
+func (t *GetAllPhoneNumberHistories_PhoneNumberHistories_Edges_Node) GetNumber() *string {
+	if t == nil {
+		t = &GetAllPhoneNumberHistories_PhoneNumberHistories_Edges_Node{}
+	}
+	return t.Number
+}
+func (t *GetAllPhoneNumberHistories_PhoneNumberHistories_Edges_Node) GetOperation() *enthistory.OpType {
+	if t == nil {
+		t = &GetAllPhoneNumberHistories_PhoneNumberHistories_Edges_Node{}
+	}
+	return &t.Operation
+}
+func (t *GetAllPhoneNumberHistories_PhoneNumberHistories_Edges_Node) GetOwnerID() *string {
+	if t == nil {
+		t = &GetAllPhoneNumberHistories_PhoneNumberHistories_Edges_Node{}
+	}
+	return t.OwnerID
+}
+func (t *GetAllPhoneNumberHistories_PhoneNumberHistories_Edges_Node) GetRef() *string {
+	if t == nil {
+		t = &GetAllPhoneNumberHistories_PhoneNumberHistories_Edges_Node{}
+	}
+	return t.Ref
+}
+func (t *GetAllPhoneNumberHistories_PhoneNumberHistories_Edges_Node) GetRegionCode() *string {
+	if t == nil {
+		t = &GetAllPhoneNumberHistories_PhoneNumberHistories_Edges_Node{}
+	}
+	return t.RegionCode
+}
+func (t *GetAllPhoneNumberHistories_PhoneNumberHistories_Edges_Node) GetShortCode() *string {
+	if t == nil {
+		t = &GetAllPhoneNumberHistories_PhoneNumberHistories_Edges_Node{}
+	}
+	return t.ShortCode
+}
+func (t *GetAllPhoneNumberHistories_PhoneNumberHistories_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &GetAllPhoneNumberHistories_PhoneNumberHistories_Edges_Node{}
+	}
+	return t.Tags
+}
+func (t *GetAllPhoneNumberHistories_PhoneNumberHistories_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllPhoneNumberHistories_PhoneNumberHistories_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetAllPhoneNumberHistories_PhoneNumberHistories_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetAllPhoneNumberHistories_PhoneNumberHistories_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+
+type GetAllPhoneNumberHistories_PhoneNumberHistories_Edges struct {
+	Node *GetAllPhoneNumberHistories_PhoneNumberHistories_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetAllPhoneNumberHistories_PhoneNumberHistories_Edges) GetNode() *GetAllPhoneNumberHistories_PhoneNumberHistories_Edges_Node {
+	if t == nil {
+		t = &GetAllPhoneNumberHistories_PhoneNumberHistories_Edges{}
+	}
+	return t.Node
+}
+
+type GetAllPhoneNumberHistories_PhoneNumberHistories struct {
+	Edges []*GetAllPhoneNumberHistories_PhoneNumberHistories_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+}
+
+func (t *GetAllPhoneNumberHistories_PhoneNumberHistories) GetEdges() []*GetAllPhoneNumberHistories_PhoneNumberHistories_Edges {
+	if t == nil {
+		t = &GetAllPhoneNumberHistories_PhoneNumberHistories{}
+	}
+	return t.Edges
+}
+
+type GetPhoneNumberHistories_PhoneNumberHistories_Edges_Node struct {
+	CreatedAt   *time.Time        "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy   *string           "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Extension   *string           "json:\"extension,omitempty\" graphql:\"extension\""
+	HistoryTime time.Time         "json:\"historyTime\" graphql:\"historyTime\""
+	ID          string            "json:\"id\" graphql:\"id\""
+	Kind        string            "json:\"kind\" graphql:\"kind\""
+	Number      *string           "json:\"number,omitempty\" graphql:\"number\""
+	Operation   enthistory.OpType "json:\"operation\" graphql:\"operation\""
+	OwnerID     *string           "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Ref         *string           "json:\"ref,omitempty\" graphql:\"ref\""
+	RegionCode  *string           "json:\"regionCode,omitempty\" graphql:\"regionCode\""
+	ShortCode   *string           "json:\"shortCode,omitempty\" graphql:\"shortCode\""
+	Tags        []string          "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt   *time.Time        "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy   *string           "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetPhoneNumberHistories_PhoneNumberHistories_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetPhoneNumberHistories_PhoneNumberHistories_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetPhoneNumberHistories_PhoneNumberHistories_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetPhoneNumberHistories_PhoneNumberHistories_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetPhoneNumberHistories_PhoneNumberHistories_Edges_Node) GetExtension() *string {
+	if t == nil {
+		t = &GetPhoneNumberHistories_PhoneNumberHistories_Edges_Node{}
+	}
+	return t.Extension
+}
+func (t *GetPhoneNumberHistories_PhoneNumberHistories_Edges_Node) GetHistoryTime() *time.Time {
+	if t == nil {
+		t = &GetPhoneNumberHistories_PhoneNumberHistories_Edges_Node{}
+	}
+	return &t.HistoryTime
+}
+func (t *GetPhoneNumberHistories_PhoneNumberHistories_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetPhoneNumberHistories_PhoneNumberHistories_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetPhoneNumberHistories_PhoneNumberHistories_Edges_Node) GetKind() string {
+	if t == nil {
+		t = &GetPhoneNumberHistories_PhoneNumberHistories_Edges_Node{}
+	}
+	return t.Kind
+}
+func (t *GetPhoneNumberHistories_PhoneNumberHistories_Edges_Node) GetNumber() *string {
+	if t == nil {
+		t = &GetPhoneNumberHistories_PhoneNumberHistories_Edges_Node{}
+	}
+	return t.Number
+}
+func (t *GetPhoneNumberHistories_PhoneNumberHistories_Edges_Node) GetOperation() *enthistory.OpType {
+	if t == nil {
+		t = &GetPhoneNumberHistories_PhoneNumberHistories_Edges_Node{}
+	}
+	return &t.Operation
+}
+func (t *GetPhoneNumberHistories_PhoneNumberHistories_Edges_Node) GetOwnerID() *string {
+	if t == nil {
+		t = &GetPhoneNumberHistories_PhoneNumberHistories_Edges_Node{}
+	}
+	return t.OwnerID
+}
+func (t *GetPhoneNumberHistories_PhoneNumberHistories_Edges_Node) GetRef() *string {
+	if t == nil {
+		t = &GetPhoneNumberHistories_PhoneNumberHistories_Edges_Node{}
+	}
+	return t.Ref
+}
+func (t *GetPhoneNumberHistories_PhoneNumberHistories_Edges_Node) GetRegionCode() *string {
+	if t == nil {
+		t = &GetPhoneNumberHistories_PhoneNumberHistories_Edges_Node{}
+	}
+	return t.RegionCode
+}
+func (t *GetPhoneNumberHistories_PhoneNumberHistories_Edges_Node) GetShortCode() *string {
+	if t == nil {
+		t = &GetPhoneNumberHistories_PhoneNumberHistories_Edges_Node{}
+	}
+	return t.ShortCode
+}
+func (t *GetPhoneNumberHistories_PhoneNumberHistories_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &GetPhoneNumberHistories_PhoneNumberHistories_Edges_Node{}
+	}
+	return t.Tags
+}
+func (t *GetPhoneNumberHistories_PhoneNumberHistories_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetPhoneNumberHistories_PhoneNumberHistories_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetPhoneNumberHistories_PhoneNumberHistories_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetPhoneNumberHistories_PhoneNumberHistories_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+
+type GetPhoneNumberHistories_PhoneNumberHistories_Edges struct {
+	Node *GetPhoneNumberHistories_PhoneNumberHistories_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetPhoneNumberHistories_PhoneNumberHistories_Edges) GetNode() *GetPhoneNumberHistories_PhoneNumberHistories_Edges_Node {
+	if t == nil {
+		t = &GetPhoneNumberHistories_PhoneNumberHistories_Edges{}
+	}
+	return t.Node
+}
+
+type GetPhoneNumberHistories_PhoneNumberHistories struct {
+	Edges []*GetPhoneNumberHistories_PhoneNumberHistories_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+}
+
+func (t *GetPhoneNumberHistories_PhoneNumberHistories) GetEdges() []*GetPhoneNumberHistories_PhoneNumberHistories_Edges {
+	if t == nil {
+		t = &GetPhoneNumberHistories_PhoneNumberHistories{}
+	}
+	return t.Edges
+}
+
 type CreateBulkCSVPostalAddress_CreateBulkCSVPostalAddress_PostalAddresses struct {
 	AddressLines       []string   "json:\"addressLines\" graphql:\"addressLines\""
 	AdministrativeArea *string    "json:\"administrativeArea,omitempty\" graphql:\"administrativeArea\""
@@ -30210,20 +31194,34 @@ func (t *GetVendorHistories_VendorHistories) GetEdges() []*GetVendorHistories_Ve
 }
 
 type CreateBulkCSVVendorProfile_CreateBulkCSVVendorProfile_VendorProfiles struct {
-	CreatedAt   *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy   *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	DbaName     *string    "json:\"dbaName,omitempty\" graphql:\"dbaName\""
-	Description *string    "json:\"description,omitempty\" graphql:\"description\""
-	ID          string     "json:\"id\" graphql:\"id\""
-	Name        string     "json:\"name\" graphql:\"name\""
-	OwnerID     *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Tags        []string   "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt   *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy   *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	VendorID    *string    "json:\"vendorID,omitempty\" graphql:\"vendorID\""
-	WebsiteURI  *string    "json:\"websiteURI,omitempty\" graphql:\"websiteURI\""
+	CorporationDba  *string         "json:\"corporationDba,omitempty\" graphql:\"corporationDba\""
+	CorporationType *string         "json:\"corporationType,omitempty\" graphql:\"corporationType\""
+	CreatedAt       *time.Time      "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy       *string         "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description     *string         "json:\"description,omitempty\" graphql:\"description\""
+	ID              string          "json:\"id\" graphql:\"id\""
+	Name            string          "json:\"name\" graphql:\"name\""
+	OwnerID         *string         "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Tags            []string        "json:\"tags,omitempty\" graphql:\"tags\""
+	TaxIDType       enums.TaxIDType "json:\"taxIDType\" graphql:\"taxIDType\""
+	UpdatedAt       *time.Time      "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy       *string         "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	VendorID        *string         "json:\"vendorID,omitempty\" graphql:\"vendorID\""
+	WebsiteURI      *string         "json:\"websiteURI,omitempty\" graphql:\"websiteURI\""
 }
 
+func (t *CreateBulkCSVVendorProfile_CreateBulkCSVVendorProfile_VendorProfiles) GetCorporationDba() *string {
+	if t == nil {
+		t = &CreateBulkCSVVendorProfile_CreateBulkCSVVendorProfile_VendorProfiles{}
+	}
+	return t.CorporationDba
+}
+func (t *CreateBulkCSVVendorProfile_CreateBulkCSVVendorProfile_VendorProfiles) GetCorporationType() *string {
+	if t == nil {
+		t = &CreateBulkCSVVendorProfile_CreateBulkCSVVendorProfile_VendorProfiles{}
+	}
+	return t.CorporationType
+}
 func (t *CreateBulkCSVVendorProfile_CreateBulkCSVVendorProfile_VendorProfiles) GetCreatedAt() *time.Time {
 	if t == nil {
 		t = &CreateBulkCSVVendorProfile_CreateBulkCSVVendorProfile_VendorProfiles{}
@@ -30235,12 +31233,6 @@ func (t *CreateBulkCSVVendorProfile_CreateBulkCSVVendorProfile_VendorProfiles) G
 		t = &CreateBulkCSVVendorProfile_CreateBulkCSVVendorProfile_VendorProfiles{}
 	}
 	return t.CreatedBy
-}
-func (t *CreateBulkCSVVendorProfile_CreateBulkCSVVendorProfile_VendorProfiles) GetDbaName() *string {
-	if t == nil {
-		t = &CreateBulkCSVVendorProfile_CreateBulkCSVVendorProfile_VendorProfiles{}
-	}
-	return t.DbaName
 }
 func (t *CreateBulkCSVVendorProfile_CreateBulkCSVVendorProfile_VendorProfiles) GetDescription() *string {
 	if t == nil {
@@ -30271,6 +31263,12 @@ func (t *CreateBulkCSVVendorProfile_CreateBulkCSVVendorProfile_VendorProfiles) G
 		t = &CreateBulkCSVVendorProfile_CreateBulkCSVVendorProfile_VendorProfiles{}
 	}
 	return t.Tags
+}
+func (t *CreateBulkCSVVendorProfile_CreateBulkCSVVendorProfile_VendorProfiles) GetTaxIDType() *enums.TaxIDType {
+	if t == nil {
+		t = &CreateBulkCSVVendorProfile_CreateBulkCSVVendorProfile_VendorProfiles{}
+	}
+	return &t.TaxIDType
 }
 func (t *CreateBulkCSVVendorProfile_CreateBulkCSVVendorProfile_VendorProfiles) GetUpdatedAt() *time.Time {
 	if t == nil {
@@ -30309,20 +31307,34 @@ func (t *CreateBulkCSVVendorProfile_CreateBulkCSVVendorProfile) GetVendorProfile
 }
 
 type CreateBulkVendorProfile_CreateBulkVendorProfile_VendorProfiles struct {
-	CreatedAt   *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy   *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	DbaName     *string    "json:\"dbaName,omitempty\" graphql:\"dbaName\""
-	Description *string    "json:\"description,omitempty\" graphql:\"description\""
-	ID          string     "json:\"id\" graphql:\"id\""
-	Name        string     "json:\"name\" graphql:\"name\""
-	OwnerID     *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Tags        []string   "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt   *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy   *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	VendorID    *string    "json:\"vendorID,omitempty\" graphql:\"vendorID\""
-	WebsiteURI  *string    "json:\"websiteURI,omitempty\" graphql:\"websiteURI\""
+	CorporationDba  *string         "json:\"corporationDba,omitempty\" graphql:\"corporationDba\""
+	CorporationType *string         "json:\"corporationType,omitempty\" graphql:\"corporationType\""
+	CreatedAt       *time.Time      "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy       *string         "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description     *string         "json:\"description,omitempty\" graphql:\"description\""
+	ID              string          "json:\"id\" graphql:\"id\""
+	Name            string          "json:\"name\" graphql:\"name\""
+	OwnerID         *string         "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Tags            []string        "json:\"tags,omitempty\" graphql:\"tags\""
+	TaxIDType       enums.TaxIDType "json:\"taxIDType\" graphql:\"taxIDType\""
+	UpdatedAt       *time.Time      "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy       *string         "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	VendorID        *string         "json:\"vendorID,omitempty\" graphql:\"vendorID\""
+	WebsiteURI      *string         "json:\"websiteURI,omitempty\" graphql:\"websiteURI\""
 }
 
+func (t *CreateBulkVendorProfile_CreateBulkVendorProfile_VendorProfiles) GetCorporationDba() *string {
+	if t == nil {
+		t = &CreateBulkVendorProfile_CreateBulkVendorProfile_VendorProfiles{}
+	}
+	return t.CorporationDba
+}
+func (t *CreateBulkVendorProfile_CreateBulkVendorProfile_VendorProfiles) GetCorporationType() *string {
+	if t == nil {
+		t = &CreateBulkVendorProfile_CreateBulkVendorProfile_VendorProfiles{}
+	}
+	return t.CorporationType
+}
 func (t *CreateBulkVendorProfile_CreateBulkVendorProfile_VendorProfiles) GetCreatedAt() *time.Time {
 	if t == nil {
 		t = &CreateBulkVendorProfile_CreateBulkVendorProfile_VendorProfiles{}
@@ -30334,12 +31346,6 @@ func (t *CreateBulkVendorProfile_CreateBulkVendorProfile_VendorProfiles) GetCrea
 		t = &CreateBulkVendorProfile_CreateBulkVendorProfile_VendorProfiles{}
 	}
 	return t.CreatedBy
-}
-func (t *CreateBulkVendorProfile_CreateBulkVendorProfile_VendorProfiles) GetDbaName() *string {
-	if t == nil {
-		t = &CreateBulkVendorProfile_CreateBulkVendorProfile_VendorProfiles{}
-	}
-	return t.DbaName
 }
 func (t *CreateBulkVendorProfile_CreateBulkVendorProfile_VendorProfiles) GetDescription() *string {
 	if t == nil {
@@ -30370,6 +31376,12 @@ func (t *CreateBulkVendorProfile_CreateBulkVendorProfile_VendorProfiles) GetTags
 		t = &CreateBulkVendorProfile_CreateBulkVendorProfile_VendorProfiles{}
 	}
 	return t.Tags
+}
+func (t *CreateBulkVendorProfile_CreateBulkVendorProfile_VendorProfiles) GetTaxIDType() *enums.TaxIDType {
+	if t == nil {
+		t = &CreateBulkVendorProfile_CreateBulkVendorProfile_VendorProfiles{}
+	}
+	return &t.TaxIDType
 }
 func (t *CreateBulkVendorProfile_CreateBulkVendorProfile_VendorProfiles) GetUpdatedAt() *time.Time {
 	if t == nil {
@@ -30408,20 +31420,34 @@ func (t *CreateBulkVendorProfile_CreateBulkVendorProfile) GetVendorProfiles() []
 }
 
 type CreateVendorProfile_CreateVendorProfile_VendorProfile struct {
-	CreatedAt   *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy   *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	DbaName     *string    "json:\"dbaName,omitempty\" graphql:\"dbaName\""
-	Description *string    "json:\"description,omitempty\" graphql:\"description\""
-	ID          string     "json:\"id\" graphql:\"id\""
-	Name        string     "json:\"name\" graphql:\"name\""
-	OwnerID     *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Tags        []string   "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt   *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy   *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	VendorID    *string    "json:\"vendorID,omitempty\" graphql:\"vendorID\""
-	WebsiteURI  *string    "json:\"websiteURI,omitempty\" graphql:\"websiteURI\""
+	CorporationDba  *string         "json:\"corporationDba,omitempty\" graphql:\"corporationDba\""
+	CorporationType *string         "json:\"corporationType,omitempty\" graphql:\"corporationType\""
+	CreatedAt       *time.Time      "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy       *string         "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description     *string         "json:\"description,omitempty\" graphql:\"description\""
+	ID              string          "json:\"id\" graphql:\"id\""
+	Name            string          "json:\"name\" graphql:\"name\""
+	OwnerID         *string         "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Tags            []string        "json:\"tags,omitempty\" graphql:\"tags\""
+	TaxIDType       enums.TaxIDType "json:\"taxIDType\" graphql:\"taxIDType\""
+	UpdatedAt       *time.Time      "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy       *string         "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	VendorID        *string         "json:\"vendorID,omitempty\" graphql:\"vendorID\""
+	WebsiteURI      *string         "json:\"websiteURI,omitempty\" graphql:\"websiteURI\""
 }
 
+func (t *CreateVendorProfile_CreateVendorProfile_VendorProfile) GetCorporationDba() *string {
+	if t == nil {
+		t = &CreateVendorProfile_CreateVendorProfile_VendorProfile{}
+	}
+	return t.CorporationDba
+}
+func (t *CreateVendorProfile_CreateVendorProfile_VendorProfile) GetCorporationType() *string {
+	if t == nil {
+		t = &CreateVendorProfile_CreateVendorProfile_VendorProfile{}
+	}
+	return t.CorporationType
+}
 func (t *CreateVendorProfile_CreateVendorProfile_VendorProfile) GetCreatedAt() *time.Time {
 	if t == nil {
 		t = &CreateVendorProfile_CreateVendorProfile_VendorProfile{}
@@ -30433,12 +31459,6 @@ func (t *CreateVendorProfile_CreateVendorProfile_VendorProfile) GetCreatedBy() *
 		t = &CreateVendorProfile_CreateVendorProfile_VendorProfile{}
 	}
 	return t.CreatedBy
-}
-func (t *CreateVendorProfile_CreateVendorProfile_VendorProfile) GetDbaName() *string {
-	if t == nil {
-		t = &CreateVendorProfile_CreateVendorProfile_VendorProfile{}
-	}
-	return t.DbaName
 }
 func (t *CreateVendorProfile_CreateVendorProfile_VendorProfile) GetDescription() *string {
 	if t == nil {
@@ -30469,6 +31489,12 @@ func (t *CreateVendorProfile_CreateVendorProfile_VendorProfile) GetTags() []stri
 		t = &CreateVendorProfile_CreateVendorProfile_VendorProfile{}
 	}
 	return t.Tags
+}
+func (t *CreateVendorProfile_CreateVendorProfile_VendorProfile) GetTaxIDType() *enums.TaxIDType {
+	if t == nil {
+		t = &CreateVendorProfile_CreateVendorProfile_VendorProfile{}
+	}
+	return &t.TaxIDType
 }
 func (t *CreateVendorProfile_CreateVendorProfile_VendorProfile) GetUpdatedAt() *time.Time {
 	if t == nil {
@@ -30507,20 +31533,34 @@ func (t *CreateVendorProfile_CreateVendorProfile) GetVendorProfile() *CreateVend
 }
 
 type GetAllVendorProfiles_VendorProfiles_Edges_Node struct {
-	CreatedAt   *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy   *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	DbaName     *string    "json:\"dbaName,omitempty\" graphql:\"dbaName\""
-	Description *string    "json:\"description,omitempty\" graphql:\"description\""
-	ID          string     "json:\"id\" graphql:\"id\""
-	Name        string     "json:\"name\" graphql:\"name\""
-	OwnerID     *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Tags        []string   "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt   *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy   *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	VendorID    *string    "json:\"vendorID,omitempty\" graphql:\"vendorID\""
-	WebsiteURI  *string    "json:\"websiteURI,omitempty\" graphql:\"websiteURI\""
+	CorporationDba  *string         "json:\"corporationDba,omitempty\" graphql:\"corporationDba\""
+	CorporationType *string         "json:\"corporationType,omitempty\" graphql:\"corporationType\""
+	CreatedAt       *time.Time      "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy       *string         "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description     *string         "json:\"description,omitempty\" graphql:\"description\""
+	ID              string          "json:\"id\" graphql:\"id\""
+	Name            string          "json:\"name\" graphql:\"name\""
+	OwnerID         *string         "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Tags            []string        "json:\"tags,omitempty\" graphql:\"tags\""
+	TaxIDType       enums.TaxIDType "json:\"taxIDType\" graphql:\"taxIDType\""
+	UpdatedAt       *time.Time      "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy       *string         "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	VendorID        *string         "json:\"vendorID,omitempty\" graphql:\"vendorID\""
+	WebsiteURI      *string         "json:\"websiteURI,omitempty\" graphql:\"websiteURI\""
 }
 
+func (t *GetAllVendorProfiles_VendorProfiles_Edges_Node) GetCorporationDba() *string {
+	if t == nil {
+		t = &GetAllVendorProfiles_VendorProfiles_Edges_Node{}
+	}
+	return t.CorporationDba
+}
+func (t *GetAllVendorProfiles_VendorProfiles_Edges_Node) GetCorporationType() *string {
+	if t == nil {
+		t = &GetAllVendorProfiles_VendorProfiles_Edges_Node{}
+	}
+	return t.CorporationType
+}
 func (t *GetAllVendorProfiles_VendorProfiles_Edges_Node) GetCreatedAt() *time.Time {
 	if t == nil {
 		t = &GetAllVendorProfiles_VendorProfiles_Edges_Node{}
@@ -30532,12 +31572,6 @@ func (t *GetAllVendorProfiles_VendorProfiles_Edges_Node) GetCreatedBy() *string 
 		t = &GetAllVendorProfiles_VendorProfiles_Edges_Node{}
 	}
 	return t.CreatedBy
-}
-func (t *GetAllVendorProfiles_VendorProfiles_Edges_Node) GetDbaName() *string {
-	if t == nil {
-		t = &GetAllVendorProfiles_VendorProfiles_Edges_Node{}
-	}
-	return t.DbaName
 }
 func (t *GetAllVendorProfiles_VendorProfiles_Edges_Node) GetDescription() *string {
 	if t == nil {
@@ -30568,6 +31602,12 @@ func (t *GetAllVendorProfiles_VendorProfiles_Edges_Node) GetTags() []string {
 		t = &GetAllVendorProfiles_VendorProfiles_Edges_Node{}
 	}
 	return t.Tags
+}
+func (t *GetAllVendorProfiles_VendorProfiles_Edges_Node) GetTaxIDType() *enums.TaxIDType {
+	if t == nil {
+		t = &GetAllVendorProfiles_VendorProfiles_Edges_Node{}
+	}
+	return &t.TaxIDType
 }
 func (t *GetAllVendorProfiles_VendorProfiles_Edges_Node) GetUpdatedAt() *time.Time {
 	if t == nil {
@@ -30617,20 +31657,34 @@ func (t *GetAllVendorProfiles_VendorProfiles) GetEdges() []*GetAllVendorProfiles
 }
 
 type GetVendorProfileByID_VendorProfile struct {
-	CreatedAt   *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy   *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	DbaName     *string    "json:\"dbaName,omitempty\" graphql:\"dbaName\""
-	Description *string    "json:\"description,omitempty\" graphql:\"description\""
-	ID          string     "json:\"id\" graphql:\"id\""
-	Name        string     "json:\"name\" graphql:\"name\""
-	OwnerID     *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Tags        []string   "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt   *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy   *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	VendorID    *string    "json:\"vendorID,omitempty\" graphql:\"vendorID\""
-	WebsiteURI  *string    "json:\"websiteURI,omitempty\" graphql:\"websiteURI\""
+	CorporationDba  *string         "json:\"corporationDba,omitempty\" graphql:\"corporationDba\""
+	CorporationType *string         "json:\"corporationType,omitempty\" graphql:\"corporationType\""
+	CreatedAt       *time.Time      "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy       *string         "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description     *string         "json:\"description,omitempty\" graphql:\"description\""
+	ID              string          "json:\"id\" graphql:\"id\""
+	Name            string          "json:\"name\" graphql:\"name\""
+	OwnerID         *string         "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Tags            []string        "json:\"tags,omitempty\" graphql:\"tags\""
+	TaxIDType       enums.TaxIDType "json:\"taxIDType\" graphql:\"taxIDType\""
+	UpdatedAt       *time.Time      "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy       *string         "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	VendorID        *string         "json:\"vendorID,omitempty\" graphql:\"vendorID\""
+	WebsiteURI      *string         "json:\"websiteURI,omitempty\" graphql:\"websiteURI\""
 }
 
+func (t *GetVendorProfileByID_VendorProfile) GetCorporationDba() *string {
+	if t == nil {
+		t = &GetVendorProfileByID_VendorProfile{}
+	}
+	return t.CorporationDba
+}
+func (t *GetVendorProfileByID_VendorProfile) GetCorporationType() *string {
+	if t == nil {
+		t = &GetVendorProfileByID_VendorProfile{}
+	}
+	return t.CorporationType
+}
 func (t *GetVendorProfileByID_VendorProfile) GetCreatedAt() *time.Time {
 	if t == nil {
 		t = &GetVendorProfileByID_VendorProfile{}
@@ -30642,12 +31696,6 @@ func (t *GetVendorProfileByID_VendorProfile) GetCreatedBy() *string {
 		t = &GetVendorProfileByID_VendorProfile{}
 	}
 	return t.CreatedBy
-}
-func (t *GetVendorProfileByID_VendorProfile) GetDbaName() *string {
-	if t == nil {
-		t = &GetVendorProfileByID_VendorProfile{}
-	}
-	return t.DbaName
 }
 func (t *GetVendorProfileByID_VendorProfile) GetDescription() *string {
 	if t == nil {
@@ -30679,6 +31727,12 @@ func (t *GetVendorProfileByID_VendorProfile) GetTags() []string {
 	}
 	return t.Tags
 }
+func (t *GetVendorProfileByID_VendorProfile) GetTaxIDType() *enums.TaxIDType {
+	if t == nil {
+		t = &GetVendorProfileByID_VendorProfile{}
+	}
+	return &t.TaxIDType
+}
 func (t *GetVendorProfileByID_VendorProfile) GetUpdatedAt() *time.Time {
 	if t == nil {
 		t = &GetVendorProfileByID_VendorProfile{}
@@ -30705,20 +31759,34 @@ func (t *GetVendorProfileByID_VendorProfile) GetWebsiteURI() *string {
 }
 
 type GetVendorProfiles_VendorProfiles_Edges_Node struct {
-	CreatedAt   *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy   *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	DbaName     *string    "json:\"dbaName,omitempty\" graphql:\"dbaName\""
-	Description *string    "json:\"description,omitempty\" graphql:\"description\""
-	ID          string     "json:\"id\" graphql:\"id\""
-	Name        string     "json:\"name\" graphql:\"name\""
-	OwnerID     *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Tags        []string   "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt   *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy   *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	VendorID    *string    "json:\"vendorID,omitempty\" graphql:\"vendorID\""
-	WebsiteURI  *string    "json:\"websiteURI,omitempty\" graphql:\"websiteURI\""
+	CorporationDba  *string         "json:\"corporationDba,omitempty\" graphql:\"corporationDba\""
+	CorporationType *string         "json:\"corporationType,omitempty\" graphql:\"corporationType\""
+	CreatedAt       *time.Time      "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy       *string         "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description     *string         "json:\"description,omitempty\" graphql:\"description\""
+	ID              string          "json:\"id\" graphql:\"id\""
+	Name            string          "json:\"name\" graphql:\"name\""
+	OwnerID         *string         "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Tags            []string        "json:\"tags,omitempty\" graphql:\"tags\""
+	TaxIDType       enums.TaxIDType "json:\"taxIDType\" graphql:\"taxIDType\""
+	UpdatedAt       *time.Time      "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy       *string         "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	VendorID        *string         "json:\"vendorID,omitempty\" graphql:\"vendorID\""
+	WebsiteURI      *string         "json:\"websiteURI,omitempty\" graphql:\"websiteURI\""
 }
 
+func (t *GetVendorProfiles_VendorProfiles_Edges_Node) GetCorporationDba() *string {
+	if t == nil {
+		t = &GetVendorProfiles_VendorProfiles_Edges_Node{}
+	}
+	return t.CorporationDba
+}
+func (t *GetVendorProfiles_VendorProfiles_Edges_Node) GetCorporationType() *string {
+	if t == nil {
+		t = &GetVendorProfiles_VendorProfiles_Edges_Node{}
+	}
+	return t.CorporationType
+}
 func (t *GetVendorProfiles_VendorProfiles_Edges_Node) GetCreatedAt() *time.Time {
 	if t == nil {
 		t = &GetVendorProfiles_VendorProfiles_Edges_Node{}
@@ -30730,12 +31798,6 @@ func (t *GetVendorProfiles_VendorProfiles_Edges_Node) GetCreatedBy() *string {
 		t = &GetVendorProfiles_VendorProfiles_Edges_Node{}
 	}
 	return t.CreatedBy
-}
-func (t *GetVendorProfiles_VendorProfiles_Edges_Node) GetDbaName() *string {
-	if t == nil {
-		t = &GetVendorProfiles_VendorProfiles_Edges_Node{}
-	}
-	return t.DbaName
 }
 func (t *GetVendorProfiles_VendorProfiles_Edges_Node) GetDescription() *string {
 	if t == nil {
@@ -30766,6 +31828,12 @@ func (t *GetVendorProfiles_VendorProfiles_Edges_Node) GetTags() []string {
 		t = &GetVendorProfiles_VendorProfiles_Edges_Node{}
 	}
 	return t.Tags
+}
+func (t *GetVendorProfiles_VendorProfiles_Edges_Node) GetTaxIDType() *enums.TaxIDType {
+	if t == nil {
+		t = &GetVendorProfiles_VendorProfiles_Edges_Node{}
+	}
+	return &t.TaxIDType
 }
 func (t *GetVendorProfiles_VendorProfiles_Edges_Node) GetUpdatedAt() *time.Time {
 	if t == nil {
@@ -30815,20 +31883,34 @@ func (t *GetVendorProfiles_VendorProfiles) GetEdges() []*GetVendorProfiles_Vendo
 }
 
 type UpdateVendorProfile_UpdateVendorProfile_VendorProfile struct {
-	CreatedAt   *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy   *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	DbaName     *string    "json:\"dbaName,omitempty\" graphql:\"dbaName\""
-	Description *string    "json:\"description,omitempty\" graphql:\"description\""
-	ID          string     "json:\"id\" graphql:\"id\""
-	Name        string     "json:\"name\" graphql:\"name\""
-	OwnerID     *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Tags        []string   "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt   *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy   *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	VendorID    *string    "json:\"vendorID,omitempty\" graphql:\"vendorID\""
-	WebsiteURI  *string    "json:\"websiteURI,omitempty\" graphql:\"websiteURI\""
+	CorporationDba  *string         "json:\"corporationDba,omitempty\" graphql:\"corporationDba\""
+	CorporationType *string         "json:\"corporationType,omitempty\" graphql:\"corporationType\""
+	CreatedAt       *time.Time      "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy       *string         "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description     *string         "json:\"description,omitempty\" graphql:\"description\""
+	ID              string          "json:\"id\" graphql:\"id\""
+	Name            string          "json:\"name\" graphql:\"name\""
+	OwnerID         *string         "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Tags            []string        "json:\"tags,omitempty\" graphql:\"tags\""
+	TaxIDType       enums.TaxIDType "json:\"taxIDType\" graphql:\"taxIDType\""
+	UpdatedAt       *time.Time      "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy       *string         "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	VendorID        *string         "json:\"vendorID,omitempty\" graphql:\"vendorID\""
+	WebsiteURI      *string         "json:\"websiteURI,omitempty\" graphql:\"websiteURI\""
 }
 
+func (t *UpdateVendorProfile_UpdateVendorProfile_VendorProfile) GetCorporationDba() *string {
+	if t == nil {
+		t = &UpdateVendorProfile_UpdateVendorProfile_VendorProfile{}
+	}
+	return t.CorporationDba
+}
+func (t *UpdateVendorProfile_UpdateVendorProfile_VendorProfile) GetCorporationType() *string {
+	if t == nil {
+		t = &UpdateVendorProfile_UpdateVendorProfile_VendorProfile{}
+	}
+	return t.CorporationType
+}
 func (t *UpdateVendorProfile_UpdateVendorProfile_VendorProfile) GetCreatedAt() *time.Time {
 	if t == nil {
 		t = &UpdateVendorProfile_UpdateVendorProfile_VendorProfile{}
@@ -30840,12 +31922,6 @@ func (t *UpdateVendorProfile_UpdateVendorProfile_VendorProfile) GetCreatedBy() *
 		t = &UpdateVendorProfile_UpdateVendorProfile_VendorProfile{}
 	}
 	return t.CreatedBy
-}
-func (t *UpdateVendorProfile_UpdateVendorProfile_VendorProfile) GetDbaName() *string {
-	if t == nil {
-		t = &UpdateVendorProfile_UpdateVendorProfile_VendorProfile{}
-	}
-	return t.DbaName
 }
 func (t *UpdateVendorProfile_UpdateVendorProfile_VendorProfile) GetDescription() *string {
 	if t == nil {
@@ -30876,6 +31952,12 @@ func (t *UpdateVendorProfile_UpdateVendorProfile_VendorProfile) GetTags() []stri
 		t = &UpdateVendorProfile_UpdateVendorProfile_VendorProfile{}
 	}
 	return t.Tags
+}
+func (t *UpdateVendorProfile_UpdateVendorProfile_VendorProfile) GetTaxIDType() *enums.TaxIDType {
+	if t == nil {
+		t = &UpdateVendorProfile_UpdateVendorProfile_VendorProfile{}
+	}
+	return &t.TaxIDType
 }
 func (t *UpdateVendorProfile_UpdateVendorProfile_VendorProfile) GetUpdatedAt() *time.Time {
 	if t == nil {
@@ -30914,23 +31996,37 @@ func (t *UpdateVendorProfile_UpdateVendorProfile) GetVendorProfile() *UpdateVend
 }
 
 type GetAllVendorProfileHistories_VendorProfileHistories_Edges_Node struct {
-	CreatedAt   *time.Time        "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy   *string           "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	DbaName     *string           "json:\"dbaName,omitempty\" graphql:\"dbaName\""
-	Description *string           "json:\"description,omitempty\" graphql:\"description\""
-	HistoryTime time.Time         "json:\"historyTime\" graphql:\"historyTime\""
-	ID          string            "json:\"id\" graphql:\"id\""
-	Name        string            "json:\"name\" graphql:\"name\""
-	Operation   enthistory.OpType "json:\"operation\" graphql:\"operation\""
-	OwnerID     *string           "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Ref         *string           "json:\"ref,omitempty\" graphql:\"ref\""
-	Tags        []string          "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt   *time.Time        "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy   *string           "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	VendorID    *string           "json:\"vendorID,omitempty\" graphql:\"vendorID\""
-	WebsiteURI  *string           "json:\"websiteURI,omitempty\" graphql:\"websiteURI\""
+	CorporationDba  *string           "json:\"corporationDba,omitempty\" graphql:\"corporationDba\""
+	CorporationType *string           "json:\"corporationType,omitempty\" graphql:\"corporationType\""
+	CreatedAt       *time.Time        "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy       *string           "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description     *string           "json:\"description,omitempty\" graphql:\"description\""
+	HistoryTime     time.Time         "json:\"historyTime\" graphql:\"historyTime\""
+	ID              string            "json:\"id\" graphql:\"id\""
+	Name            string            "json:\"name\" graphql:\"name\""
+	Operation       enthistory.OpType "json:\"operation\" graphql:\"operation\""
+	OwnerID         *string           "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Ref             *string           "json:\"ref,omitempty\" graphql:\"ref\""
+	Tags            []string          "json:\"tags,omitempty\" graphql:\"tags\""
+	TaxIDType       enums.TaxIDType   "json:\"taxIDType\" graphql:\"taxIDType\""
+	UpdatedAt       *time.Time        "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy       *string           "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	VendorID        *string           "json:\"vendorID,omitempty\" graphql:\"vendorID\""
+	WebsiteURI      *string           "json:\"websiteURI,omitempty\" graphql:\"websiteURI\""
 }
 
+func (t *GetAllVendorProfileHistories_VendorProfileHistories_Edges_Node) GetCorporationDba() *string {
+	if t == nil {
+		t = &GetAllVendorProfileHistories_VendorProfileHistories_Edges_Node{}
+	}
+	return t.CorporationDba
+}
+func (t *GetAllVendorProfileHistories_VendorProfileHistories_Edges_Node) GetCorporationType() *string {
+	if t == nil {
+		t = &GetAllVendorProfileHistories_VendorProfileHistories_Edges_Node{}
+	}
+	return t.CorporationType
+}
 func (t *GetAllVendorProfileHistories_VendorProfileHistories_Edges_Node) GetCreatedAt() *time.Time {
 	if t == nil {
 		t = &GetAllVendorProfileHistories_VendorProfileHistories_Edges_Node{}
@@ -30942,12 +32038,6 @@ func (t *GetAllVendorProfileHistories_VendorProfileHistories_Edges_Node) GetCrea
 		t = &GetAllVendorProfileHistories_VendorProfileHistories_Edges_Node{}
 	}
 	return t.CreatedBy
-}
-func (t *GetAllVendorProfileHistories_VendorProfileHistories_Edges_Node) GetDbaName() *string {
-	if t == nil {
-		t = &GetAllVendorProfileHistories_VendorProfileHistories_Edges_Node{}
-	}
-	return t.DbaName
 }
 func (t *GetAllVendorProfileHistories_VendorProfileHistories_Edges_Node) GetDescription() *string {
 	if t == nil {
@@ -30997,6 +32087,12 @@ func (t *GetAllVendorProfileHistories_VendorProfileHistories_Edges_Node) GetTags
 	}
 	return t.Tags
 }
+func (t *GetAllVendorProfileHistories_VendorProfileHistories_Edges_Node) GetTaxIDType() *enums.TaxIDType {
+	if t == nil {
+		t = &GetAllVendorProfileHistories_VendorProfileHistories_Edges_Node{}
+	}
+	return &t.TaxIDType
+}
 func (t *GetAllVendorProfileHistories_VendorProfileHistories_Edges_Node) GetUpdatedAt() *time.Time {
 	if t == nil {
 		t = &GetAllVendorProfileHistories_VendorProfileHistories_Edges_Node{}
@@ -31045,23 +32141,37 @@ func (t *GetAllVendorProfileHistories_VendorProfileHistories) GetEdges() []*GetA
 }
 
 type GetVendorProfileHistories_VendorProfileHistories_Edges_Node struct {
-	CreatedAt   *time.Time        "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy   *string           "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	DbaName     *string           "json:\"dbaName,omitempty\" graphql:\"dbaName\""
-	Description *string           "json:\"description,omitempty\" graphql:\"description\""
-	HistoryTime time.Time         "json:\"historyTime\" graphql:\"historyTime\""
-	ID          string            "json:\"id\" graphql:\"id\""
-	Name        string            "json:\"name\" graphql:\"name\""
-	Operation   enthistory.OpType "json:\"operation\" graphql:\"operation\""
-	OwnerID     *string           "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Ref         *string           "json:\"ref,omitempty\" graphql:\"ref\""
-	Tags        []string          "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt   *time.Time        "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy   *string           "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	VendorID    *string           "json:\"vendorID,omitempty\" graphql:\"vendorID\""
-	WebsiteURI  *string           "json:\"websiteURI,omitempty\" graphql:\"websiteURI\""
+	CorporationDba  *string           "json:\"corporationDba,omitempty\" graphql:\"corporationDba\""
+	CorporationType *string           "json:\"corporationType,omitempty\" graphql:\"corporationType\""
+	CreatedAt       *time.Time        "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy       *string           "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description     *string           "json:\"description,omitempty\" graphql:\"description\""
+	HistoryTime     time.Time         "json:\"historyTime\" graphql:\"historyTime\""
+	ID              string            "json:\"id\" graphql:\"id\""
+	Name            string            "json:\"name\" graphql:\"name\""
+	Operation       enthistory.OpType "json:\"operation\" graphql:\"operation\""
+	OwnerID         *string           "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Ref             *string           "json:\"ref,omitempty\" graphql:\"ref\""
+	Tags            []string          "json:\"tags,omitempty\" graphql:\"tags\""
+	TaxIDType       enums.TaxIDType   "json:\"taxIDType\" graphql:\"taxIDType\""
+	UpdatedAt       *time.Time        "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy       *string           "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	VendorID        *string           "json:\"vendorID,omitempty\" graphql:\"vendorID\""
+	WebsiteURI      *string           "json:\"websiteURI,omitempty\" graphql:\"websiteURI\""
 }
 
+func (t *GetVendorProfileHistories_VendorProfileHistories_Edges_Node) GetCorporationDba() *string {
+	if t == nil {
+		t = &GetVendorProfileHistories_VendorProfileHistories_Edges_Node{}
+	}
+	return t.CorporationDba
+}
+func (t *GetVendorProfileHistories_VendorProfileHistories_Edges_Node) GetCorporationType() *string {
+	if t == nil {
+		t = &GetVendorProfileHistories_VendorProfileHistories_Edges_Node{}
+	}
+	return t.CorporationType
+}
 func (t *GetVendorProfileHistories_VendorProfileHistories_Edges_Node) GetCreatedAt() *time.Time {
 	if t == nil {
 		t = &GetVendorProfileHistories_VendorProfileHistories_Edges_Node{}
@@ -31073,12 +32183,6 @@ func (t *GetVendorProfileHistories_VendorProfileHistories_Edges_Node) GetCreated
 		t = &GetVendorProfileHistories_VendorProfileHistories_Edges_Node{}
 	}
 	return t.CreatedBy
-}
-func (t *GetVendorProfileHistories_VendorProfileHistories_Edges_Node) GetDbaName() *string {
-	if t == nil {
-		t = &GetVendorProfileHistories_VendorProfileHistories_Edges_Node{}
-	}
-	return t.DbaName
 }
 func (t *GetVendorProfileHistories_VendorProfileHistories_Edges_Node) GetDescription() *string {
 	if t == nil {
@@ -31128,6 +32232,12 @@ func (t *GetVendorProfileHistories_VendorProfileHistories_Edges_Node) GetTags() 
 	}
 	return t.Tags
 }
+func (t *GetVendorProfileHistories_VendorProfileHistories_Edges_Node) GetTaxIDType() *enums.TaxIDType {
+	if t == nil {
+		t = &GetVendorProfileHistories_VendorProfileHistories_Edges_Node{}
+	}
+	return &t.TaxIDType
+}
 func (t *GetVendorProfileHistories_VendorProfileHistories_Edges_Node) GetUpdatedAt() *time.Time {
 	if t == nil {
 		t = &GetVendorProfileHistories_VendorProfileHistories_Edges_Node{}
@@ -31171,6 +32281,657 @@ type GetVendorProfileHistories_VendorProfileHistories struct {
 func (t *GetVendorProfileHistories_VendorProfileHistories) GetEdges() []*GetVendorProfileHistories_VendorProfileHistories_Edges {
 	if t == nil {
 		t = &GetVendorProfileHistories_VendorProfileHistories{}
+	}
+	return t.Edges
+}
+
+type CreateBulkCSVVendorProfilePhoneNumber_CreateBulkCSVVendorProfilePhoneNumber_VendorProfilePhoneNumbers struct {
+	CreatedAt       *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy       *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID              string     "json:\"id\" graphql:\"id\""
+	PhoneNumberID   string     "json:\"phoneNumberID\" graphql:\"phoneNumberID\""
+	UpdatedAt       *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy       *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	VendorProfileID string     "json:\"vendorProfileID\" graphql:\"vendorProfileID\""
+}
+
+func (t *CreateBulkCSVVendorProfilePhoneNumber_CreateBulkCSVVendorProfilePhoneNumber_VendorProfilePhoneNumbers) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkCSVVendorProfilePhoneNumber_CreateBulkCSVVendorProfilePhoneNumber_VendorProfilePhoneNumbers{}
+	}
+	return t.CreatedAt
+}
+func (t *CreateBulkCSVVendorProfilePhoneNumber_CreateBulkCSVVendorProfilePhoneNumber_VendorProfilePhoneNumbers) GetCreatedBy() *string {
+	if t == nil {
+		t = &CreateBulkCSVVendorProfilePhoneNumber_CreateBulkCSVVendorProfilePhoneNumber_VendorProfilePhoneNumbers{}
+	}
+	return t.CreatedBy
+}
+func (t *CreateBulkCSVVendorProfilePhoneNumber_CreateBulkCSVVendorProfilePhoneNumber_VendorProfilePhoneNumbers) GetID() string {
+	if t == nil {
+		t = &CreateBulkCSVVendorProfilePhoneNumber_CreateBulkCSVVendorProfilePhoneNumber_VendorProfilePhoneNumbers{}
+	}
+	return t.ID
+}
+func (t *CreateBulkCSVVendorProfilePhoneNumber_CreateBulkCSVVendorProfilePhoneNumber_VendorProfilePhoneNumbers) GetPhoneNumberID() string {
+	if t == nil {
+		t = &CreateBulkCSVVendorProfilePhoneNumber_CreateBulkCSVVendorProfilePhoneNumber_VendorProfilePhoneNumbers{}
+	}
+	return t.PhoneNumberID
+}
+func (t *CreateBulkCSVVendorProfilePhoneNumber_CreateBulkCSVVendorProfilePhoneNumber_VendorProfilePhoneNumbers) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkCSVVendorProfilePhoneNumber_CreateBulkCSVVendorProfilePhoneNumber_VendorProfilePhoneNumbers{}
+	}
+	return t.UpdatedAt
+}
+func (t *CreateBulkCSVVendorProfilePhoneNumber_CreateBulkCSVVendorProfilePhoneNumber_VendorProfilePhoneNumbers) GetUpdatedBy() *string {
+	if t == nil {
+		t = &CreateBulkCSVVendorProfilePhoneNumber_CreateBulkCSVVendorProfilePhoneNumber_VendorProfilePhoneNumbers{}
+	}
+	return t.UpdatedBy
+}
+func (t *CreateBulkCSVVendorProfilePhoneNumber_CreateBulkCSVVendorProfilePhoneNumber_VendorProfilePhoneNumbers) GetVendorProfileID() string {
+	if t == nil {
+		t = &CreateBulkCSVVendorProfilePhoneNumber_CreateBulkCSVVendorProfilePhoneNumber_VendorProfilePhoneNumbers{}
+	}
+	return t.VendorProfileID
+}
+
+type CreateBulkCSVVendorProfilePhoneNumber_CreateBulkCSVVendorProfilePhoneNumber struct {
+	VendorProfilePhoneNumbers []*CreateBulkCSVVendorProfilePhoneNumber_CreateBulkCSVVendorProfilePhoneNumber_VendorProfilePhoneNumbers "json:\"vendorProfilePhoneNumbers,omitempty\" graphql:\"vendorProfilePhoneNumbers\""
+}
+
+func (t *CreateBulkCSVVendorProfilePhoneNumber_CreateBulkCSVVendorProfilePhoneNumber) GetVendorProfilePhoneNumbers() []*CreateBulkCSVVendorProfilePhoneNumber_CreateBulkCSVVendorProfilePhoneNumber_VendorProfilePhoneNumbers {
+	if t == nil {
+		t = &CreateBulkCSVVendorProfilePhoneNumber_CreateBulkCSVVendorProfilePhoneNumber{}
+	}
+	return t.VendorProfilePhoneNumbers
+}
+
+type CreateBulkVendorProfilePhoneNumber_CreateBulkVendorProfilePhoneNumber_VendorProfilePhoneNumbers struct {
+	CreatedAt       *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy       *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID              string     "json:\"id\" graphql:\"id\""
+	PhoneNumberID   string     "json:\"phoneNumberID\" graphql:\"phoneNumberID\""
+	UpdatedAt       *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy       *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	VendorProfileID string     "json:\"vendorProfileID\" graphql:\"vendorProfileID\""
+}
+
+func (t *CreateBulkVendorProfilePhoneNumber_CreateBulkVendorProfilePhoneNumber_VendorProfilePhoneNumbers) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkVendorProfilePhoneNumber_CreateBulkVendorProfilePhoneNumber_VendorProfilePhoneNumbers{}
+	}
+	return t.CreatedAt
+}
+func (t *CreateBulkVendorProfilePhoneNumber_CreateBulkVendorProfilePhoneNumber_VendorProfilePhoneNumbers) GetCreatedBy() *string {
+	if t == nil {
+		t = &CreateBulkVendorProfilePhoneNumber_CreateBulkVendorProfilePhoneNumber_VendorProfilePhoneNumbers{}
+	}
+	return t.CreatedBy
+}
+func (t *CreateBulkVendorProfilePhoneNumber_CreateBulkVendorProfilePhoneNumber_VendorProfilePhoneNumbers) GetID() string {
+	if t == nil {
+		t = &CreateBulkVendorProfilePhoneNumber_CreateBulkVendorProfilePhoneNumber_VendorProfilePhoneNumbers{}
+	}
+	return t.ID
+}
+func (t *CreateBulkVendorProfilePhoneNumber_CreateBulkVendorProfilePhoneNumber_VendorProfilePhoneNumbers) GetPhoneNumberID() string {
+	if t == nil {
+		t = &CreateBulkVendorProfilePhoneNumber_CreateBulkVendorProfilePhoneNumber_VendorProfilePhoneNumbers{}
+	}
+	return t.PhoneNumberID
+}
+func (t *CreateBulkVendorProfilePhoneNumber_CreateBulkVendorProfilePhoneNumber_VendorProfilePhoneNumbers) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkVendorProfilePhoneNumber_CreateBulkVendorProfilePhoneNumber_VendorProfilePhoneNumbers{}
+	}
+	return t.UpdatedAt
+}
+func (t *CreateBulkVendorProfilePhoneNumber_CreateBulkVendorProfilePhoneNumber_VendorProfilePhoneNumbers) GetUpdatedBy() *string {
+	if t == nil {
+		t = &CreateBulkVendorProfilePhoneNumber_CreateBulkVendorProfilePhoneNumber_VendorProfilePhoneNumbers{}
+	}
+	return t.UpdatedBy
+}
+func (t *CreateBulkVendorProfilePhoneNumber_CreateBulkVendorProfilePhoneNumber_VendorProfilePhoneNumbers) GetVendorProfileID() string {
+	if t == nil {
+		t = &CreateBulkVendorProfilePhoneNumber_CreateBulkVendorProfilePhoneNumber_VendorProfilePhoneNumbers{}
+	}
+	return t.VendorProfileID
+}
+
+type CreateBulkVendorProfilePhoneNumber_CreateBulkVendorProfilePhoneNumber struct {
+	VendorProfilePhoneNumbers []*CreateBulkVendorProfilePhoneNumber_CreateBulkVendorProfilePhoneNumber_VendorProfilePhoneNumbers "json:\"vendorProfilePhoneNumbers,omitempty\" graphql:\"vendorProfilePhoneNumbers\""
+}
+
+func (t *CreateBulkVendorProfilePhoneNumber_CreateBulkVendorProfilePhoneNumber) GetVendorProfilePhoneNumbers() []*CreateBulkVendorProfilePhoneNumber_CreateBulkVendorProfilePhoneNumber_VendorProfilePhoneNumbers {
+	if t == nil {
+		t = &CreateBulkVendorProfilePhoneNumber_CreateBulkVendorProfilePhoneNumber{}
+	}
+	return t.VendorProfilePhoneNumbers
+}
+
+type CreateVendorProfilePhoneNumber_CreateVendorProfilePhoneNumber_VendorProfilePhoneNumber struct {
+	CreatedAt       *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy       *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID              string     "json:\"id\" graphql:\"id\""
+	PhoneNumberID   string     "json:\"phoneNumberID\" graphql:\"phoneNumberID\""
+	UpdatedAt       *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy       *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	VendorProfileID string     "json:\"vendorProfileID\" graphql:\"vendorProfileID\""
+}
+
+func (t *CreateVendorProfilePhoneNumber_CreateVendorProfilePhoneNumber_VendorProfilePhoneNumber) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &CreateVendorProfilePhoneNumber_CreateVendorProfilePhoneNumber_VendorProfilePhoneNumber{}
+	}
+	return t.CreatedAt
+}
+func (t *CreateVendorProfilePhoneNumber_CreateVendorProfilePhoneNumber_VendorProfilePhoneNumber) GetCreatedBy() *string {
+	if t == nil {
+		t = &CreateVendorProfilePhoneNumber_CreateVendorProfilePhoneNumber_VendorProfilePhoneNumber{}
+	}
+	return t.CreatedBy
+}
+func (t *CreateVendorProfilePhoneNumber_CreateVendorProfilePhoneNumber_VendorProfilePhoneNumber) GetID() string {
+	if t == nil {
+		t = &CreateVendorProfilePhoneNumber_CreateVendorProfilePhoneNumber_VendorProfilePhoneNumber{}
+	}
+	return t.ID
+}
+func (t *CreateVendorProfilePhoneNumber_CreateVendorProfilePhoneNumber_VendorProfilePhoneNumber) GetPhoneNumberID() string {
+	if t == nil {
+		t = &CreateVendorProfilePhoneNumber_CreateVendorProfilePhoneNumber_VendorProfilePhoneNumber{}
+	}
+	return t.PhoneNumberID
+}
+func (t *CreateVendorProfilePhoneNumber_CreateVendorProfilePhoneNumber_VendorProfilePhoneNumber) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &CreateVendorProfilePhoneNumber_CreateVendorProfilePhoneNumber_VendorProfilePhoneNumber{}
+	}
+	return t.UpdatedAt
+}
+func (t *CreateVendorProfilePhoneNumber_CreateVendorProfilePhoneNumber_VendorProfilePhoneNumber) GetUpdatedBy() *string {
+	if t == nil {
+		t = &CreateVendorProfilePhoneNumber_CreateVendorProfilePhoneNumber_VendorProfilePhoneNumber{}
+	}
+	return t.UpdatedBy
+}
+func (t *CreateVendorProfilePhoneNumber_CreateVendorProfilePhoneNumber_VendorProfilePhoneNumber) GetVendorProfileID() string {
+	if t == nil {
+		t = &CreateVendorProfilePhoneNumber_CreateVendorProfilePhoneNumber_VendorProfilePhoneNumber{}
+	}
+	return t.VendorProfileID
+}
+
+type CreateVendorProfilePhoneNumber_CreateVendorProfilePhoneNumber struct {
+	VendorProfilePhoneNumber CreateVendorProfilePhoneNumber_CreateVendorProfilePhoneNumber_VendorProfilePhoneNumber "json:\"vendorProfilePhoneNumber\" graphql:\"vendorProfilePhoneNumber\""
+}
+
+func (t *CreateVendorProfilePhoneNumber_CreateVendorProfilePhoneNumber) GetVendorProfilePhoneNumber() *CreateVendorProfilePhoneNumber_CreateVendorProfilePhoneNumber_VendorProfilePhoneNumber {
+	if t == nil {
+		t = &CreateVendorProfilePhoneNumber_CreateVendorProfilePhoneNumber{}
+	}
+	return &t.VendorProfilePhoneNumber
+}
+
+type GetAllVendorProfilePhoneNumbers_VendorProfilePhoneNumbers_Edges_Node struct {
+	CreatedAt       *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy       *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID              string     "json:\"id\" graphql:\"id\""
+	PhoneNumberID   string     "json:\"phoneNumberID\" graphql:\"phoneNumberID\""
+	UpdatedAt       *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy       *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	VendorProfileID string     "json:\"vendorProfileID\" graphql:\"vendorProfileID\""
+}
+
+func (t *GetAllVendorProfilePhoneNumbers_VendorProfilePhoneNumbers_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllVendorProfilePhoneNumbers_VendorProfilePhoneNumbers_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetAllVendorProfilePhoneNumbers_VendorProfilePhoneNumbers_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetAllVendorProfilePhoneNumbers_VendorProfilePhoneNumbers_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetAllVendorProfilePhoneNumbers_VendorProfilePhoneNumbers_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetAllVendorProfilePhoneNumbers_VendorProfilePhoneNumbers_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetAllVendorProfilePhoneNumbers_VendorProfilePhoneNumbers_Edges_Node) GetPhoneNumberID() string {
+	if t == nil {
+		t = &GetAllVendorProfilePhoneNumbers_VendorProfilePhoneNumbers_Edges_Node{}
+	}
+	return t.PhoneNumberID
+}
+func (t *GetAllVendorProfilePhoneNumbers_VendorProfilePhoneNumbers_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllVendorProfilePhoneNumbers_VendorProfilePhoneNumbers_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetAllVendorProfilePhoneNumbers_VendorProfilePhoneNumbers_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetAllVendorProfilePhoneNumbers_VendorProfilePhoneNumbers_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+func (t *GetAllVendorProfilePhoneNumbers_VendorProfilePhoneNumbers_Edges_Node) GetVendorProfileID() string {
+	if t == nil {
+		t = &GetAllVendorProfilePhoneNumbers_VendorProfilePhoneNumbers_Edges_Node{}
+	}
+	return t.VendorProfileID
+}
+
+type GetAllVendorProfilePhoneNumbers_VendorProfilePhoneNumbers_Edges struct {
+	Node *GetAllVendorProfilePhoneNumbers_VendorProfilePhoneNumbers_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetAllVendorProfilePhoneNumbers_VendorProfilePhoneNumbers_Edges) GetNode() *GetAllVendorProfilePhoneNumbers_VendorProfilePhoneNumbers_Edges_Node {
+	if t == nil {
+		t = &GetAllVendorProfilePhoneNumbers_VendorProfilePhoneNumbers_Edges{}
+	}
+	return t.Node
+}
+
+type GetAllVendorProfilePhoneNumbers_VendorProfilePhoneNumbers struct {
+	Edges []*GetAllVendorProfilePhoneNumbers_VendorProfilePhoneNumbers_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+}
+
+func (t *GetAllVendorProfilePhoneNumbers_VendorProfilePhoneNumbers) GetEdges() []*GetAllVendorProfilePhoneNumbers_VendorProfilePhoneNumbers_Edges {
+	if t == nil {
+		t = &GetAllVendorProfilePhoneNumbers_VendorProfilePhoneNumbers{}
+	}
+	return t.Edges
+}
+
+type GetVendorProfilePhoneNumberByID_VendorProfilePhoneNumber struct {
+	CreatedAt       *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy       *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID              string     "json:\"id\" graphql:\"id\""
+	PhoneNumberID   string     "json:\"phoneNumberID\" graphql:\"phoneNumberID\""
+	UpdatedAt       *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy       *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	VendorProfileID string     "json:\"vendorProfileID\" graphql:\"vendorProfileID\""
+}
+
+func (t *GetVendorProfilePhoneNumberByID_VendorProfilePhoneNumber) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetVendorProfilePhoneNumberByID_VendorProfilePhoneNumber{}
+	}
+	return t.CreatedAt
+}
+func (t *GetVendorProfilePhoneNumberByID_VendorProfilePhoneNumber) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetVendorProfilePhoneNumberByID_VendorProfilePhoneNumber{}
+	}
+	return t.CreatedBy
+}
+func (t *GetVendorProfilePhoneNumberByID_VendorProfilePhoneNumber) GetID() string {
+	if t == nil {
+		t = &GetVendorProfilePhoneNumberByID_VendorProfilePhoneNumber{}
+	}
+	return t.ID
+}
+func (t *GetVendorProfilePhoneNumberByID_VendorProfilePhoneNumber) GetPhoneNumberID() string {
+	if t == nil {
+		t = &GetVendorProfilePhoneNumberByID_VendorProfilePhoneNumber{}
+	}
+	return t.PhoneNumberID
+}
+func (t *GetVendorProfilePhoneNumberByID_VendorProfilePhoneNumber) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetVendorProfilePhoneNumberByID_VendorProfilePhoneNumber{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetVendorProfilePhoneNumberByID_VendorProfilePhoneNumber) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetVendorProfilePhoneNumberByID_VendorProfilePhoneNumber{}
+	}
+	return t.UpdatedBy
+}
+func (t *GetVendorProfilePhoneNumberByID_VendorProfilePhoneNumber) GetVendorProfileID() string {
+	if t == nil {
+		t = &GetVendorProfilePhoneNumberByID_VendorProfilePhoneNumber{}
+	}
+	return t.VendorProfileID
+}
+
+type GetVendorProfilePhoneNumbers_VendorProfilePhoneNumbers_Edges_Node struct {
+	CreatedAt       *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy       *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID              string     "json:\"id\" graphql:\"id\""
+	PhoneNumberID   string     "json:\"phoneNumberID\" graphql:\"phoneNumberID\""
+	UpdatedAt       *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy       *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	VendorProfileID string     "json:\"vendorProfileID\" graphql:\"vendorProfileID\""
+}
+
+func (t *GetVendorProfilePhoneNumbers_VendorProfilePhoneNumbers_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetVendorProfilePhoneNumbers_VendorProfilePhoneNumbers_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetVendorProfilePhoneNumbers_VendorProfilePhoneNumbers_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetVendorProfilePhoneNumbers_VendorProfilePhoneNumbers_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetVendorProfilePhoneNumbers_VendorProfilePhoneNumbers_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetVendorProfilePhoneNumbers_VendorProfilePhoneNumbers_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetVendorProfilePhoneNumbers_VendorProfilePhoneNumbers_Edges_Node) GetPhoneNumberID() string {
+	if t == nil {
+		t = &GetVendorProfilePhoneNumbers_VendorProfilePhoneNumbers_Edges_Node{}
+	}
+	return t.PhoneNumberID
+}
+func (t *GetVendorProfilePhoneNumbers_VendorProfilePhoneNumbers_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetVendorProfilePhoneNumbers_VendorProfilePhoneNumbers_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetVendorProfilePhoneNumbers_VendorProfilePhoneNumbers_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetVendorProfilePhoneNumbers_VendorProfilePhoneNumbers_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+func (t *GetVendorProfilePhoneNumbers_VendorProfilePhoneNumbers_Edges_Node) GetVendorProfileID() string {
+	if t == nil {
+		t = &GetVendorProfilePhoneNumbers_VendorProfilePhoneNumbers_Edges_Node{}
+	}
+	return t.VendorProfileID
+}
+
+type GetVendorProfilePhoneNumbers_VendorProfilePhoneNumbers_Edges struct {
+	Node *GetVendorProfilePhoneNumbers_VendorProfilePhoneNumbers_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetVendorProfilePhoneNumbers_VendorProfilePhoneNumbers_Edges) GetNode() *GetVendorProfilePhoneNumbers_VendorProfilePhoneNumbers_Edges_Node {
+	if t == nil {
+		t = &GetVendorProfilePhoneNumbers_VendorProfilePhoneNumbers_Edges{}
+	}
+	return t.Node
+}
+
+type GetVendorProfilePhoneNumbers_VendorProfilePhoneNumbers struct {
+	Edges []*GetVendorProfilePhoneNumbers_VendorProfilePhoneNumbers_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+}
+
+func (t *GetVendorProfilePhoneNumbers_VendorProfilePhoneNumbers) GetEdges() []*GetVendorProfilePhoneNumbers_VendorProfilePhoneNumbers_Edges {
+	if t == nil {
+		t = &GetVendorProfilePhoneNumbers_VendorProfilePhoneNumbers{}
+	}
+	return t.Edges
+}
+
+type UpdateVendorProfilePhoneNumber_UpdateVendorProfilePhoneNumber_VendorProfilePhoneNumber struct {
+	CreatedAt       *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy       *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID              string     "json:\"id\" graphql:\"id\""
+	PhoneNumberID   string     "json:\"phoneNumberID\" graphql:\"phoneNumberID\""
+	UpdatedAt       *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy       *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	VendorProfileID string     "json:\"vendorProfileID\" graphql:\"vendorProfileID\""
+}
+
+func (t *UpdateVendorProfilePhoneNumber_UpdateVendorProfilePhoneNumber_VendorProfilePhoneNumber) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateVendorProfilePhoneNumber_UpdateVendorProfilePhoneNumber_VendorProfilePhoneNumber{}
+	}
+	return t.CreatedAt
+}
+func (t *UpdateVendorProfilePhoneNumber_UpdateVendorProfilePhoneNumber_VendorProfilePhoneNumber) GetCreatedBy() *string {
+	if t == nil {
+		t = &UpdateVendorProfilePhoneNumber_UpdateVendorProfilePhoneNumber_VendorProfilePhoneNumber{}
+	}
+	return t.CreatedBy
+}
+func (t *UpdateVendorProfilePhoneNumber_UpdateVendorProfilePhoneNumber_VendorProfilePhoneNumber) GetID() string {
+	if t == nil {
+		t = &UpdateVendorProfilePhoneNumber_UpdateVendorProfilePhoneNumber_VendorProfilePhoneNumber{}
+	}
+	return t.ID
+}
+func (t *UpdateVendorProfilePhoneNumber_UpdateVendorProfilePhoneNumber_VendorProfilePhoneNumber) GetPhoneNumberID() string {
+	if t == nil {
+		t = &UpdateVendorProfilePhoneNumber_UpdateVendorProfilePhoneNumber_VendorProfilePhoneNumber{}
+	}
+	return t.PhoneNumberID
+}
+func (t *UpdateVendorProfilePhoneNumber_UpdateVendorProfilePhoneNumber_VendorProfilePhoneNumber) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateVendorProfilePhoneNumber_UpdateVendorProfilePhoneNumber_VendorProfilePhoneNumber{}
+	}
+	return t.UpdatedAt
+}
+func (t *UpdateVendorProfilePhoneNumber_UpdateVendorProfilePhoneNumber_VendorProfilePhoneNumber) GetUpdatedBy() *string {
+	if t == nil {
+		t = &UpdateVendorProfilePhoneNumber_UpdateVendorProfilePhoneNumber_VendorProfilePhoneNumber{}
+	}
+	return t.UpdatedBy
+}
+func (t *UpdateVendorProfilePhoneNumber_UpdateVendorProfilePhoneNumber_VendorProfilePhoneNumber) GetVendorProfileID() string {
+	if t == nil {
+		t = &UpdateVendorProfilePhoneNumber_UpdateVendorProfilePhoneNumber_VendorProfilePhoneNumber{}
+	}
+	return t.VendorProfileID
+}
+
+type UpdateVendorProfilePhoneNumber_UpdateVendorProfilePhoneNumber struct {
+	VendorProfilePhoneNumber UpdateVendorProfilePhoneNumber_UpdateVendorProfilePhoneNumber_VendorProfilePhoneNumber "json:\"vendorProfilePhoneNumber\" graphql:\"vendorProfilePhoneNumber\""
+}
+
+func (t *UpdateVendorProfilePhoneNumber_UpdateVendorProfilePhoneNumber) GetVendorProfilePhoneNumber() *UpdateVendorProfilePhoneNumber_UpdateVendorProfilePhoneNumber_VendorProfilePhoneNumber {
+	if t == nil {
+		t = &UpdateVendorProfilePhoneNumber_UpdateVendorProfilePhoneNumber{}
+	}
+	return &t.VendorProfilePhoneNumber
+}
+
+type GetAllVendorProfilePhoneNumberHistories_VendorProfilePhoneNumberHistories_Edges_Node struct {
+	CreatedAt       *time.Time        "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy       *string           "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	HistoryTime     time.Time         "json:\"historyTime\" graphql:\"historyTime\""
+	ID              string            "json:\"id\" graphql:\"id\""
+	Operation       enthistory.OpType "json:\"operation\" graphql:\"operation\""
+	PhoneNumberID   string            "json:\"phoneNumberID\" graphql:\"phoneNumberID\""
+	Ref             *string           "json:\"ref,omitempty\" graphql:\"ref\""
+	UpdatedAt       *time.Time        "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy       *string           "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	VendorProfileID string            "json:\"vendorProfileID\" graphql:\"vendorProfileID\""
+}
+
+func (t *GetAllVendorProfilePhoneNumberHistories_VendorProfilePhoneNumberHistories_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllVendorProfilePhoneNumberHistories_VendorProfilePhoneNumberHistories_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetAllVendorProfilePhoneNumberHistories_VendorProfilePhoneNumberHistories_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetAllVendorProfilePhoneNumberHistories_VendorProfilePhoneNumberHistories_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetAllVendorProfilePhoneNumberHistories_VendorProfilePhoneNumberHistories_Edges_Node) GetHistoryTime() *time.Time {
+	if t == nil {
+		t = &GetAllVendorProfilePhoneNumberHistories_VendorProfilePhoneNumberHistories_Edges_Node{}
+	}
+	return &t.HistoryTime
+}
+func (t *GetAllVendorProfilePhoneNumberHistories_VendorProfilePhoneNumberHistories_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetAllVendorProfilePhoneNumberHistories_VendorProfilePhoneNumberHistories_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetAllVendorProfilePhoneNumberHistories_VendorProfilePhoneNumberHistories_Edges_Node) GetOperation() *enthistory.OpType {
+	if t == nil {
+		t = &GetAllVendorProfilePhoneNumberHistories_VendorProfilePhoneNumberHistories_Edges_Node{}
+	}
+	return &t.Operation
+}
+func (t *GetAllVendorProfilePhoneNumberHistories_VendorProfilePhoneNumberHistories_Edges_Node) GetPhoneNumberID() string {
+	if t == nil {
+		t = &GetAllVendorProfilePhoneNumberHistories_VendorProfilePhoneNumberHistories_Edges_Node{}
+	}
+	return t.PhoneNumberID
+}
+func (t *GetAllVendorProfilePhoneNumberHistories_VendorProfilePhoneNumberHistories_Edges_Node) GetRef() *string {
+	if t == nil {
+		t = &GetAllVendorProfilePhoneNumberHistories_VendorProfilePhoneNumberHistories_Edges_Node{}
+	}
+	return t.Ref
+}
+func (t *GetAllVendorProfilePhoneNumberHistories_VendorProfilePhoneNumberHistories_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllVendorProfilePhoneNumberHistories_VendorProfilePhoneNumberHistories_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetAllVendorProfilePhoneNumberHistories_VendorProfilePhoneNumberHistories_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetAllVendorProfilePhoneNumberHistories_VendorProfilePhoneNumberHistories_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+func (t *GetAllVendorProfilePhoneNumberHistories_VendorProfilePhoneNumberHistories_Edges_Node) GetVendorProfileID() string {
+	if t == nil {
+		t = &GetAllVendorProfilePhoneNumberHistories_VendorProfilePhoneNumberHistories_Edges_Node{}
+	}
+	return t.VendorProfileID
+}
+
+type GetAllVendorProfilePhoneNumberHistories_VendorProfilePhoneNumberHistories_Edges struct {
+	Node *GetAllVendorProfilePhoneNumberHistories_VendorProfilePhoneNumberHistories_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetAllVendorProfilePhoneNumberHistories_VendorProfilePhoneNumberHistories_Edges) GetNode() *GetAllVendorProfilePhoneNumberHistories_VendorProfilePhoneNumberHistories_Edges_Node {
+	if t == nil {
+		t = &GetAllVendorProfilePhoneNumberHistories_VendorProfilePhoneNumberHistories_Edges{}
+	}
+	return t.Node
+}
+
+type GetAllVendorProfilePhoneNumberHistories_VendorProfilePhoneNumberHistories struct {
+	Edges []*GetAllVendorProfilePhoneNumberHistories_VendorProfilePhoneNumberHistories_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+}
+
+func (t *GetAllVendorProfilePhoneNumberHistories_VendorProfilePhoneNumberHistories) GetEdges() []*GetAllVendorProfilePhoneNumberHistories_VendorProfilePhoneNumberHistories_Edges {
+	if t == nil {
+		t = &GetAllVendorProfilePhoneNumberHistories_VendorProfilePhoneNumberHistories{}
+	}
+	return t.Edges
+}
+
+type GetVendorProfilePhoneNumberHistories_VendorProfilePhoneNumberHistories_Edges_Node struct {
+	CreatedAt       *time.Time        "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy       *string           "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	HistoryTime     time.Time         "json:\"historyTime\" graphql:\"historyTime\""
+	ID              string            "json:\"id\" graphql:\"id\""
+	Operation       enthistory.OpType "json:\"operation\" graphql:\"operation\""
+	PhoneNumberID   string            "json:\"phoneNumberID\" graphql:\"phoneNumberID\""
+	Ref             *string           "json:\"ref,omitempty\" graphql:\"ref\""
+	UpdatedAt       *time.Time        "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy       *string           "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	VendorProfileID string            "json:\"vendorProfileID\" graphql:\"vendorProfileID\""
+}
+
+func (t *GetVendorProfilePhoneNumberHistories_VendorProfilePhoneNumberHistories_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetVendorProfilePhoneNumberHistories_VendorProfilePhoneNumberHistories_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetVendorProfilePhoneNumberHistories_VendorProfilePhoneNumberHistories_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetVendorProfilePhoneNumberHistories_VendorProfilePhoneNumberHistories_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetVendorProfilePhoneNumberHistories_VendorProfilePhoneNumberHistories_Edges_Node) GetHistoryTime() *time.Time {
+	if t == nil {
+		t = &GetVendorProfilePhoneNumberHistories_VendorProfilePhoneNumberHistories_Edges_Node{}
+	}
+	return &t.HistoryTime
+}
+func (t *GetVendorProfilePhoneNumberHistories_VendorProfilePhoneNumberHistories_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetVendorProfilePhoneNumberHistories_VendorProfilePhoneNumberHistories_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetVendorProfilePhoneNumberHistories_VendorProfilePhoneNumberHistories_Edges_Node) GetOperation() *enthistory.OpType {
+	if t == nil {
+		t = &GetVendorProfilePhoneNumberHistories_VendorProfilePhoneNumberHistories_Edges_Node{}
+	}
+	return &t.Operation
+}
+func (t *GetVendorProfilePhoneNumberHistories_VendorProfilePhoneNumberHistories_Edges_Node) GetPhoneNumberID() string {
+	if t == nil {
+		t = &GetVendorProfilePhoneNumberHistories_VendorProfilePhoneNumberHistories_Edges_Node{}
+	}
+	return t.PhoneNumberID
+}
+func (t *GetVendorProfilePhoneNumberHistories_VendorProfilePhoneNumberHistories_Edges_Node) GetRef() *string {
+	if t == nil {
+		t = &GetVendorProfilePhoneNumberHistories_VendorProfilePhoneNumberHistories_Edges_Node{}
+	}
+	return t.Ref
+}
+func (t *GetVendorProfilePhoneNumberHistories_VendorProfilePhoneNumberHistories_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetVendorProfilePhoneNumberHistories_VendorProfilePhoneNumberHistories_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetVendorProfilePhoneNumberHistories_VendorProfilePhoneNumberHistories_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetVendorProfilePhoneNumberHistories_VendorProfilePhoneNumberHistories_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+func (t *GetVendorProfilePhoneNumberHistories_VendorProfilePhoneNumberHistories_Edges_Node) GetVendorProfileID() string {
+	if t == nil {
+		t = &GetVendorProfilePhoneNumberHistories_VendorProfilePhoneNumberHistories_Edges_Node{}
+	}
+	return t.VendorProfileID
+}
+
+type GetVendorProfilePhoneNumberHistories_VendorProfilePhoneNumberHistories_Edges struct {
+	Node *GetVendorProfilePhoneNumberHistories_VendorProfilePhoneNumberHistories_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetVendorProfilePhoneNumberHistories_VendorProfilePhoneNumberHistories_Edges) GetNode() *GetVendorProfilePhoneNumberHistories_VendorProfilePhoneNumberHistories_Edges_Node {
+	if t == nil {
+		t = &GetVendorProfilePhoneNumberHistories_VendorProfilePhoneNumberHistories_Edges{}
+	}
+	return t.Node
+}
+
+type GetVendorProfilePhoneNumberHistories_VendorProfilePhoneNumberHistories struct {
+	Edges []*GetVendorProfilePhoneNumberHistories_VendorProfilePhoneNumberHistories_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+}
+
+func (t *GetVendorProfilePhoneNumberHistories_VendorProfilePhoneNumberHistories) GetEdges() []*GetVendorProfilePhoneNumberHistories_VendorProfilePhoneNumberHistories_Edges {
+	if t == nil {
+		t = &GetVendorProfilePhoneNumberHistories_VendorProfilePhoneNumberHistories{}
 	}
 	return t.Edges
 }
@@ -35113,6 +36874,105 @@ func (t *UpdatePersonalAccessToken) GetUpdatePersonalAccessToken() *UpdatePerson
 	return &t.UpdatePersonalAccessToken
 }
 
+type CreateBulkCSVPhoneNumber struct {
+	CreateBulkCSVPhoneNumber CreateBulkCSVPhoneNumber_CreateBulkCSVPhoneNumber "json:\"createBulkCSVPhoneNumber\" graphql:\"createBulkCSVPhoneNumber\""
+}
+
+func (t *CreateBulkCSVPhoneNumber) GetCreateBulkCSVPhoneNumber() *CreateBulkCSVPhoneNumber_CreateBulkCSVPhoneNumber {
+	if t == nil {
+		t = &CreateBulkCSVPhoneNumber{}
+	}
+	return &t.CreateBulkCSVPhoneNumber
+}
+
+type CreateBulkPhoneNumber struct {
+	CreateBulkPhoneNumber CreateBulkPhoneNumber_CreateBulkPhoneNumber "json:\"createBulkPhoneNumber\" graphql:\"createBulkPhoneNumber\""
+}
+
+func (t *CreateBulkPhoneNumber) GetCreateBulkPhoneNumber() *CreateBulkPhoneNumber_CreateBulkPhoneNumber {
+	if t == nil {
+		t = &CreateBulkPhoneNumber{}
+	}
+	return &t.CreateBulkPhoneNumber
+}
+
+type CreatePhoneNumber struct {
+	CreatePhoneNumber CreatePhoneNumber_CreatePhoneNumber "json:\"createPhoneNumber\" graphql:\"createPhoneNumber\""
+}
+
+func (t *CreatePhoneNumber) GetCreatePhoneNumber() *CreatePhoneNumber_CreatePhoneNumber {
+	if t == nil {
+		t = &CreatePhoneNumber{}
+	}
+	return &t.CreatePhoneNumber
+}
+
+type GetAllPhoneNumbers struct {
+	PhoneNumbers GetAllPhoneNumbers_PhoneNumbers "json:\"phoneNumbers\" graphql:\"phoneNumbers\""
+}
+
+func (t *GetAllPhoneNumbers) GetPhoneNumbers() *GetAllPhoneNumbers_PhoneNumbers {
+	if t == nil {
+		t = &GetAllPhoneNumbers{}
+	}
+	return &t.PhoneNumbers
+}
+
+type GetPhoneNumberByID struct {
+	PhoneNumber GetPhoneNumberByID_PhoneNumber "json:\"phoneNumber\" graphql:\"phoneNumber\""
+}
+
+func (t *GetPhoneNumberByID) GetPhoneNumber() *GetPhoneNumberByID_PhoneNumber {
+	if t == nil {
+		t = &GetPhoneNumberByID{}
+	}
+	return &t.PhoneNumber
+}
+
+type GetPhoneNumbers struct {
+	PhoneNumbers GetPhoneNumbers_PhoneNumbers "json:\"phoneNumbers\" graphql:\"phoneNumbers\""
+}
+
+func (t *GetPhoneNumbers) GetPhoneNumbers() *GetPhoneNumbers_PhoneNumbers {
+	if t == nil {
+		t = &GetPhoneNumbers{}
+	}
+	return &t.PhoneNumbers
+}
+
+type UpdatePhoneNumber struct {
+	UpdatePhoneNumber UpdatePhoneNumber_UpdatePhoneNumber "json:\"updatePhoneNumber\" graphql:\"updatePhoneNumber\""
+}
+
+func (t *UpdatePhoneNumber) GetUpdatePhoneNumber() *UpdatePhoneNumber_UpdatePhoneNumber {
+	if t == nil {
+		t = &UpdatePhoneNumber{}
+	}
+	return &t.UpdatePhoneNumber
+}
+
+type GetAllPhoneNumberHistories struct {
+	PhoneNumberHistories GetAllPhoneNumberHistories_PhoneNumberHistories "json:\"phoneNumberHistories\" graphql:\"phoneNumberHistories\""
+}
+
+func (t *GetAllPhoneNumberHistories) GetPhoneNumberHistories() *GetAllPhoneNumberHistories_PhoneNumberHistories {
+	if t == nil {
+		t = &GetAllPhoneNumberHistories{}
+	}
+	return &t.PhoneNumberHistories
+}
+
+type GetPhoneNumberHistories struct {
+	PhoneNumberHistories GetPhoneNumberHistories_PhoneNumberHistories "json:\"phoneNumberHistories\" graphql:\"phoneNumberHistories\""
+}
+
+func (t *GetPhoneNumberHistories) GetPhoneNumberHistories() *GetPhoneNumberHistories_PhoneNumberHistories {
+	if t == nil {
+		t = &GetPhoneNumberHistories{}
+	}
+	return &t.PhoneNumberHistories
+}
+
 type CreateBulkCSVPostalAddress struct {
 	CreateBulkCSVPostalAddress CreateBulkCSVPostalAddress_CreateBulkCSVPostalAddress "json:\"createBulkCSVPostalAddress\" graphql:\"createBulkCSVPostalAddress\""
 }
@@ -35793,6 +37653,105 @@ func (t *GetVendorProfileHistories) GetVendorProfileHistories() *GetVendorProfil
 		t = &GetVendorProfileHistories{}
 	}
 	return &t.VendorProfileHistories
+}
+
+type CreateBulkCSVVendorProfilePhoneNumber struct {
+	CreateBulkCSVVendorProfilePhoneNumber CreateBulkCSVVendorProfilePhoneNumber_CreateBulkCSVVendorProfilePhoneNumber "json:\"createBulkCSVVendorProfilePhoneNumber\" graphql:\"createBulkCSVVendorProfilePhoneNumber\""
+}
+
+func (t *CreateBulkCSVVendorProfilePhoneNumber) GetCreateBulkCSVVendorProfilePhoneNumber() *CreateBulkCSVVendorProfilePhoneNumber_CreateBulkCSVVendorProfilePhoneNumber {
+	if t == nil {
+		t = &CreateBulkCSVVendorProfilePhoneNumber{}
+	}
+	return &t.CreateBulkCSVVendorProfilePhoneNumber
+}
+
+type CreateBulkVendorProfilePhoneNumber struct {
+	CreateBulkVendorProfilePhoneNumber CreateBulkVendorProfilePhoneNumber_CreateBulkVendorProfilePhoneNumber "json:\"createBulkVendorProfilePhoneNumber\" graphql:\"createBulkVendorProfilePhoneNumber\""
+}
+
+func (t *CreateBulkVendorProfilePhoneNumber) GetCreateBulkVendorProfilePhoneNumber() *CreateBulkVendorProfilePhoneNumber_CreateBulkVendorProfilePhoneNumber {
+	if t == nil {
+		t = &CreateBulkVendorProfilePhoneNumber{}
+	}
+	return &t.CreateBulkVendorProfilePhoneNumber
+}
+
+type CreateVendorProfilePhoneNumber struct {
+	CreateVendorProfilePhoneNumber CreateVendorProfilePhoneNumber_CreateVendorProfilePhoneNumber "json:\"createVendorProfilePhoneNumber\" graphql:\"createVendorProfilePhoneNumber\""
+}
+
+func (t *CreateVendorProfilePhoneNumber) GetCreateVendorProfilePhoneNumber() *CreateVendorProfilePhoneNumber_CreateVendorProfilePhoneNumber {
+	if t == nil {
+		t = &CreateVendorProfilePhoneNumber{}
+	}
+	return &t.CreateVendorProfilePhoneNumber
+}
+
+type GetAllVendorProfilePhoneNumbers struct {
+	VendorProfilePhoneNumbers GetAllVendorProfilePhoneNumbers_VendorProfilePhoneNumbers "json:\"vendorProfilePhoneNumbers\" graphql:\"vendorProfilePhoneNumbers\""
+}
+
+func (t *GetAllVendorProfilePhoneNumbers) GetVendorProfilePhoneNumbers() *GetAllVendorProfilePhoneNumbers_VendorProfilePhoneNumbers {
+	if t == nil {
+		t = &GetAllVendorProfilePhoneNumbers{}
+	}
+	return &t.VendorProfilePhoneNumbers
+}
+
+type GetVendorProfilePhoneNumberByID struct {
+	VendorProfilePhoneNumber GetVendorProfilePhoneNumberByID_VendorProfilePhoneNumber "json:\"vendorProfilePhoneNumber\" graphql:\"vendorProfilePhoneNumber\""
+}
+
+func (t *GetVendorProfilePhoneNumberByID) GetVendorProfilePhoneNumber() *GetVendorProfilePhoneNumberByID_VendorProfilePhoneNumber {
+	if t == nil {
+		t = &GetVendorProfilePhoneNumberByID{}
+	}
+	return &t.VendorProfilePhoneNumber
+}
+
+type GetVendorProfilePhoneNumbers struct {
+	VendorProfilePhoneNumbers GetVendorProfilePhoneNumbers_VendorProfilePhoneNumbers "json:\"vendorProfilePhoneNumbers\" graphql:\"vendorProfilePhoneNumbers\""
+}
+
+func (t *GetVendorProfilePhoneNumbers) GetVendorProfilePhoneNumbers() *GetVendorProfilePhoneNumbers_VendorProfilePhoneNumbers {
+	if t == nil {
+		t = &GetVendorProfilePhoneNumbers{}
+	}
+	return &t.VendorProfilePhoneNumbers
+}
+
+type UpdateVendorProfilePhoneNumber struct {
+	UpdateVendorProfilePhoneNumber UpdateVendorProfilePhoneNumber_UpdateVendorProfilePhoneNumber "json:\"updateVendorProfilePhoneNumber\" graphql:\"updateVendorProfilePhoneNumber\""
+}
+
+func (t *UpdateVendorProfilePhoneNumber) GetUpdateVendorProfilePhoneNumber() *UpdateVendorProfilePhoneNumber_UpdateVendorProfilePhoneNumber {
+	if t == nil {
+		t = &UpdateVendorProfilePhoneNumber{}
+	}
+	return &t.UpdateVendorProfilePhoneNumber
+}
+
+type GetAllVendorProfilePhoneNumberHistories struct {
+	VendorProfilePhoneNumberHistories GetAllVendorProfilePhoneNumberHistories_VendorProfilePhoneNumberHistories "json:\"vendorProfilePhoneNumberHistories\" graphql:\"vendorProfilePhoneNumberHistories\""
+}
+
+func (t *GetAllVendorProfilePhoneNumberHistories) GetVendorProfilePhoneNumberHistories() *GetAllVendorProfilePhoneNumberHistories_VendorProfilePhoneNumberHistories {
+	if t == nil {
+		t = &GetAllVendorProfilePhoneNumberHistories{}
+	}
+	return &t.VendorProfilePhoneNumberHistories
+}
+
+type GetVendorProfilePhoneNumberHistories struct {
+	VendorProfilePhoneNumberHistories GetVendorProfilePhoneNumberHistories_VendorProfilePhoneNumberHistories "json:\"vendorProfilePhoneNumberHistories\" graphql:\"vendorProfilePhoneNumberHistories\""
+}
+
+func (t *GetVendorProfilePhoneNumberHistories) GetVendorProfilePhoneNumberHistories() *GetVendorProfilePhoneNumberHistories_VendorProfilePhoneNumberHistories {
+	if t == nil {
+		t = &GetVendorProfilePhoneNumberHistories{}
+	}
+	return &t.VendorProfilePhoneNumberHistories
 }
 
 type CreateBulkCSVVendorProfilePostalAddress struct {
@@ -44249,6 +46208,348 @@ func (c *Client) UpdatePersonalAccessToken(ctx context.Context, updatePersonalAc
 	return &res, nil
 }
 
+const CreateBulkCSVPhoneNumberDocument = `mutation CreateBulkCSVPhoneNumber ($input: Upload!) {
+	createBulkCSVPhoneNumber(input: $input) {
+		phoneNumbers {
+			createdAt
+			createdBy
+			extension
+			id
+			kind
+			number
+			ownerID
+			regionCode
+			shortCode
+			tags
+			updatedAt
+			updatedBy
+		}
+	}
+}
+`
+
+func (c *Client) CreateBulkCSVPhoneNumber(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVPhoneNumber, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res CreateBulkCSVPhoneNumber
+	if err := c.Client.Post(ctx, "CreateBulkCSVPhoneNumber", CreateBulkCSVPhoneNumberDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const CreateBulkPhoneNumberDocument = `mutation CreateBulkPhoneNumber ($input: [CreatePhoneNumberInput!]) {
+	createBulkPhoneNumber(input: $input) {
+		phoneNumbers {
+			createdAt
+			createdBy
+			extension
+			id
+			kind
+			number
+			ownerID
+			regionCode
+			shortCode
+			tags
+			updatedAt
+			updatedBy
+		}
+	}
+}
+`
+
+func (c *Client) CreateBulkPhoneNumber(ctx context.Context, input []*CreatePhoneNumberInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkPhoneNumber, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res CreateBulkPhoneNumber
+	if err := c.Client.Post(ctx, "CreateBulkPhoneNumber", CreateBulkPhoneNumberDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const CreatePhoneNumberDocument = `mutation CreatePhoneNumber ($input: CreatePhoneNumberInput!) {
+	createPhoneNumber(input: $input) {
+		phoneNumber {
+			createdAt
+			createdBy
+			extension
+			id
+			kind
+			number
+			ownerID
+			regionCode
+			shortCode
+			tags
+			updatedAt
+			updatedBy
+		}
+	}
+}
+`
+
+func (c *Client) CreatePhoneNumber(ctx context.Context, input CreatePhoneNumberInput, interceptors ...clientv2.RequestInterceptor) (*CreatePhoneNumber, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res CreatePhoneNumber
+	if err := c.Client.Post(ctx, "CreatePhoneNumber", CreatePhoneNumberDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetAllPhoneNumbersDocument = `query GetAllPhoneNumbers {
+	phoneNumbers {
+		edges {
+			node {
+				createdAt
+				createdBy
+				extension
+				id
+				kind
+				number
+				ownerID
+				regionCode
+				shortCode
+				tags
+				updatedAt
+				updatedBy
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetAllPhoneNumbers(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllPhoneNumbers, error) {
+	vars := map[string]any{}
+
+	var res GetAllPhoneNumbers
+	if err := c.Client.Post(ctx, "GetAllPhoneNumbers", GetAllPhoneNumbersDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetPhoneNumberByIDDocument = `query GetPhoneNumberByID ($phoneNumberId: ID!) {
+	phoneNumber(id: $phoneNumberId) {
+		createdAt
+		createdBy
+		extension
+		id
+		kind
+		number
+		ownerID
+		regionCode
+		shortCode
+		tags
+		updatedAt
+		updatedBy
+	}
+}
+`
+
+func (c *Client) GetPhoneNumberByID(ctx context.Context, phoneNumberID string, interceptors ...clientv2.RequestInterceptor) (*GetPhoneNumberByID, error) {
+	vars := map[string]any{
+		"phoneNumberId": phoneNumberID,
+	}
+
+	var res GetPhoneNumberByID
+	if err := c.Client.Post(ctx, "GetPhoneNumberByID", GetPhoneNumberByIDDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetPhoneNumbersDocument = `query GetPhoneNumbers ($where: PhoneNumberWhereInput) {
+	phoneNumbers(where: $where) {
+		edges {
+			node {
+				createdAt
+				createdBy
+				extension
+				id
+				kind
+				number
+				ownerID
+				regionCode
+				shortCode
+				tags
+				updatedAt
+				updatedBy
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetPhoneNumbers(ctx context.Context, where *PhoneNumberWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetPhoneNumbers, error) {
+	vars := map[string]any{
+		"where": where,
+	}
+
+	var res GetPhoneNumbers
+	if err := c.Client.Post(ctx, "GetPhoneNumbers", GetPhoneNumbersDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const UpdatePhoneNumberDocument = `mutation UpdatePhoneNumber ($updatePhoneNumberId: ID!, $input: UpdatePhoneNumberInput!) {
+	updatePhoneNumber(id: $updatePhoneNumberId, input: $input) {
+		phoneNumber {
+			createdAt
+			createdBy
+			extension
+			id
+			kind
+			number
+			ownerID
+			regionCode
+			shortCode
+			tags
+			updatedAt
+			updatedBy
+		}
+	}
+}
+`
+
+func (c *Client) UpdatePhoneNumber(ctx context.Context, updatePhoneNumberID string, input UpdatePhoneNumberInput, interceptors ...clientv2.RequestInterceptor) (*UpdatePhoneNumber, error) {
+	vars := map[string]any{
+		"updatePhoneNumberId": updatePhoneNumberID,
+		"input":               input,
+	}
+
+	var res UpdatePhoneNumber
+	if err := c.Client.Post(ctx, "UpdatePhoneNumber", UpdatePhoneNumberDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetAllPhoneNumberHistoriesDocument = `query GetAllPhoneNumberHistories {
+	phoneNumberHistories {
+		edges {
+			node {
+				createdAt
+				createdBy
+				extension
+				historyTime
+				id
+				kind
+				number
+				operation
+				ownerID
+				ref
+				regionCode
+				shortCode
+				tags
+				updatedAt
+				updatedBy
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetAllPhoneNumberHistories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllPhoneNumberHistories, error) {
+	vars := map[string]any{}
+
+	var res GetAllPhoneNumberHistories
+	if err := c.Client.Post(ctx, "GetAllPhoneNumberHistories", GetAllPhoneNumberHistoriesDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetPhoneNumberHistoriesDocument = `query GetPhoneNumberHistories ($where: PhoneNumberHistoryWhereInput) {
+	phoneNumberHistories(where: $where) {
+		edges {
+			node {
+				createdAt
+				createdBy
+				extension
+				historyTime
+				id
+				kind
+				number
+				operation
+				ownerID
+				ref
+				regionCode
+				shortCode
+				tags
+				updatedAt
+				updatedBy
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetPhoneNumberHistories(ctx context.Context, where *PhoneNumberHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetPhoneNumberHistories, error) {
+	vars := map[string]any{
+		"where": where,
+	}
+
+	var res GetPhoneNumberHistories
+	if err := c.Client.Post(ctx, "GetPhoneNumberHistories", GetPhoneNumberHistoriesDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
 const CreateBulkCSVPostalAddressDocument = `mutation CreateBulkCSVPostalAddress ($input: Upload!) {
 	createBulkCSVPostalAddress(input: $input) {
 		postalAddresses {
@@ -46348,14 +48649,16 @@ func (c *Client) GetVendorHistories(ctx context.Context, where *VendorHistoryWhe
 const CreateBulkCSVVendorProfileDocument = `mutation CreateBulkCSVVendorProfile ($input: Upload!) {
 	createBulkCSVVendorProfile(input: $input) {
 		vendorProfiles {
+			corporationDba
+			corporationType
 			createdAt
 			createdBy
-			dbaName
 			description
 			id
 			name
 			ownerID
 			tags
+			taxIDType
 			updatedAt
 			updatedBy
 			vendorID
@@ -46385,14 +48688,16 @@ func (c *Client) CreateBulkCSVVendorProfile(ctx context.Context, input graphql.U
 const CreateBulkVendorProfileDocument = `mutation CreateBulkVendorProfile ($input: [CreateVendorProfileInput!]) {
 	createBulkVendorProfile(input: $input) {
 		vendorProfiles {
+			corporationDba
+			corporationType
 			createdAt
 			createdBy
-			dbaName
 			description
 			id
 			name
 			ownerID
 			tags
+			taxIDType
 			updatedAt
 			updatedBy
 			vendorID
@@ -46422,14 +48727,16 @@ func (c *Client) CreateBulkVendorProfile(ctx context.Context, input []*CreateVen
 const CreateVendorProfileDocument = `mutation CreateVendorProfile ($input: CreateVendorProfileInput!) {
 	createVendorProfile(input: $input) {
 		vendorProfile {
+			corporationDba
+			corporationType
 			createdAt
 			createdBy
-			dbaName
 			description
 			id
 			name
 			ownerID
 			tags
+			taxIDType
 			updatedAt
 			updatedBy
 			vendorID
@@ -46460,14 +48767,16 @@ const GetAllVendorProfilesDocument = `query GetAllVendorProfiles {
 	vendorProfiles {
 		edges {
 			node {
+				corporationDba
+				corporationType
 				createdAt
 				createdBy
-				dbaName
 				description
 				id
 				name
 				ownerID
 				tags
+				taxIDType
 				updatedAt
 				updatedBy
 				vendorID
@@ -46495,14 +48804,16 @@ func (c *Client) GetAllVendorProfiles(ctx context.Context, interceptors ...clien
 
 const GetVendorProfileByIDDocument = `query GetVendorProfileByID ($vendorProfileId: ID!) {
 	vendorProfile(id: $vendorProfileId) {
+		corporationDba
+		corporationType
 		createdAt
 		createdBy
-		dbaName
 		description
 		id
 		name
 		ownerID
 		tags
+		taxIDType
 		updatedAt
 		updatedBy
 		vendorID
@@ -46532,14 +48843,16 @@ const GetVendorProfilesDocument = `query GetVendorProfiles ($where: VendorProfil
 	vendorProfiles(where: $where) {
 		edges {
 			node {
+				corporationDba
+				corporationType
 				createdAt
 				createdBy
-				dbaName
 				description
 				id
 				name
 				ownerID
 				tags
+				taxIDType
 				updatedAt
 				updatedBy
 				vendorID
@@ -46570,14 +48883,16 @@ func (c *Client) GetVendorProfiles(ctx context.Context, where *VendorProfileWher
 const UpdateVendorProfileDocument = `mutation UpdateVendorProfile ($updateVendorProfileId: ID!, $input: UpdateVendorProfileInput!) {
 	updateVendorProfile(id: $updateVendorProfileId, input: $input) {
 		vendorProfile {
+			corporationDba
+			corporationType
 			createdAt
 			createdBy
-			dbaName
 			description
 			id
 			name
 			ownerID
 			tags
+			taxIDType
 			updatedAt
 			updatedBy
 			vendorID
@@ -46609,9 +48924,10 @@ const GetAllVendorProfileHistoriesDocument = `query GetAllVendorProfileHistories
 	vendorProfileHistories {
 		edges {
 			node {
+				corporationDba
+				corporationType
 				createdAt
 				createdBy
-				dbaName
 				description
 				historyTime
 				id
@@ -46620,6 +48936,7 @@ const GetAllVendorProfileHistoriesDocument = `query GetAllVendorProfileHistories
 				ownerID
 				ref
 				tags
+				taxIDType
 				updatedAt
 				updatedBy
 				vendorID
@@ -46649,9 +48966,10 @@ const GetVendorProfileHistoriesDocument = `query GetVendorProfileHistories ($whe
 	vendorProfileHistories(where: $where) {
 		edges {
 			node {
+				corporationDba
+				corporationType
 				createdAt
 				createdBy
-				dbaName
 				description
 				historyTime
 				id
@@ -46660,6 +48978,7 @@ const GetVendorProfileHistoriesDocument = `query GetVendorProfileHistories ($whe
 				ownerID
 				ref
 				tags
+				taxIDType
 				updatedAt
 				updatedBy
 				vendorID
@@ -46677,6 +48996,303 @@ func (c *Client) GetVendorProfileHistories(ctx context.Context, where *VendorPro
 
 	var res GetVendorProfileHistories
 	if err := c.Client.Post(ctx, "GetVendorProfileHistories", GetVendorProfileHistoriesDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const CreateBulkCSVVendorProfilePhoneNumberDocument = `mutation CreateBulkCSVVendorProfilePhoneNumber ($input: Upload!) {
+	createBulkCSVVendorProfilePhoneNumber(input: $input) {
+		vendorProfilePhoneNumbers {
+			createdAt
+			createdBy
+			id
+			phoneNumberID
+			updatedAt
+			updatedBy
+			vendorProfileID
+		}
+	}
+}
+`
+
+func (c *Client) CreateBulkCSVVendorProfilePhoneNumber(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVVendorProfilePhoneNumber, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res CreateBulkCSVVendorProfilePhoneNumber
+	if err := c.Client.Post(ctx, "CreateBulkCSVVendorProfilePhoneNumber", CreateBulkCSVVendorProfilePhoneNumberDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const CreateBulkVendorProfilePhoneNumberDocument = `mutation CreateBulkVendorProfilePhoneNumber ($input: [CreateVendorProfilePhoneNumberInput!]) {
+	createBulkVendorProfilePhoneNumber(input: $input) {
+		vendorProfilePhoneNumbers {
+			createdAt
+			createdBy
+			id
+			phoneNumberID
+			updatedAt
+			updatedBy
+			vendorProfileID
+		}
+	}
+}
+`
+
+func (c *Client) CreateBulkVendorProfilePhoneNumber(ctx context.Context, input []*CreateVendorProfilePhoneNumberInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkVendorProfilePhoneNumber, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res CreateBulkVendorProfilePhoneNumber
+	if err := c.Client.Post(ctx, "CreateBulkVendorProfilePhoneNumber", CreateBulkVendorProfilePhoneNumberDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const CreateVendorProfilePhoneNumberDocument = `mutation CreateVendorProfilePhoneNumber ($input: CreateVendorProfilePhoneNumberInput!) {
+	createVendorProfilePhoneNumber(input: $input) {
+		vendorProfilePhoneNumber {
+			createdAt
+			createdBy
+			id
+			phoneNumberID
+			updatedAt
+			updatedBy
+			vendorProfileID
+		}
+	}
+}
+`
+
+func (c *Client) CreateVendorProfilePhoneNumber(ctx context.Context, input CreateVendorProfilePhoneNumberInput, interceptors ...clientv2.RequestInterceptor) (*CreateVendorProfilePhoneNumber, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res CreateVendorProfilePhoneNumber
+	if err := c.Client.Post(ctx, "CreateVendorProfilePhoneNumber", CreateVendorProfilePhoneNumberDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetAllVendorProfilePhoneNumbersDocument = `query GetAllVendorProfilePhoneNumbers {
+	vendorProfilePhoneNumbers {
+		edges {
+			node {
+				createdAt
+				createdBy
+				id
+				phoneNumberID
+				updatedAt
+				updatedBy
+				vendorProfileID
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetAllVendorProfilePhoneNumbers(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllVendorProfilePhoneNumbers, error) {
+	vars := map[string]any{}
+
+	var res GetAllVendorProfilePhoneNumbers
+	if err := c.Client.Post(ctx, "GetAllVendorProfilePhoneNumbers", GetAllVendorProfilePhoneNumbersDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetVendorProfilePhoneNumberByIDDocument = `query GetVendorProfilePhoneNumberByID ($vendorProfilePhoneNumberId: ID!) {
+	vendorProfilePhoneNumber(id: $vendorProfilePhoneNumberId) {
+		createdAt
+		createdBy
+		id
+		phoneNumberID
+		updatedAt
+		updatedBy
+		vendorProfileID
+	}
+}
+`
+
+func (c *Client) GetVendorProfilePhoneNumberByID(ctx context.Context, vendorProfilePhoneNumberID string, interceptors ...clientv2.RequestInterceptor) (*GetVendorProfilePhoneNumberByID, error) {
+	vars := map[string]any{
+		"vendorProfilePhoneNumberId": vendorProfilePhoneNumberID,
+	}
+
+	var res GetVendorProfilePhoneNumberByID
+	if err := c.Client.Post(ctx, "GetVendorProfilePhoneNumberByID", GetVendorProfilePhoneNumberByIDDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetVendorProfilePhoneNumbersDocument = `query GetVendorProfilePhoneNumbers ($where: VendorProfilePhoneNumberWhereInput) {
+	vendorProfilePhoneNumbers(where: $where) {
+		edges {
+			node {
+				createdAt
+				createdBy
+				id
+				phoneNumberID
+				updatedAt
+				updatedBy
+				vendorProfileID
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetVendorProfilePhoneNumbers(ctx context.Context, where *VendorProfilePhoneNumberWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetVendorProfilePhoneNumbers, error) {
+	vars := map[string]any{
+		"where": where,
+	}
+
+	var res GetVendorProfilePhoneNumbers
+	if err := c.Client.Post(ctx, "GetVendorProfilePhoneNumbers", GetVendorProfilePhoneNumbersDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const UpdateVendorProfilePhoneNumberDocument = `mutation UpdateVendorProfilePhoneNumber ($updateVendorProfilePhoneNumberId: ID!, $input: UpdateVendorProfilePhoneNumberInput!) {
+	updateVendorProfilePhoneNumber(id: $updateVendorProfilePhoneNumberId, input: $input) {
+		vendorProfilePhoneNumber {
+			createdAt
+			createdBy
+			id
+			phoneNumberID
+			updatedAt
+			updatedBy
+			vendorProfileID
+		}
+	}
+}
+`
+
+func (c *Client) UpdateVendorProfilePhoneNumber(ctx context.Context, updateVendorProfilePhoneNumberID string, input UpdateVendorProfilePhoneNumberInput, interceptors ...clientv2.RequestInterceptor) (*UpdateVendorProfilePhoneNumber, error) {
+	vars := map[string]any{
+		"updateVendorProfilePhoneNumberId": updateVendorProfilePhoneNumberID,
+		"input":                            input,
+	}
+
+	var res UpdateVendorProfilePhoneNumber
+	if err := c.Client.Post(ctx, "UpdateVendorProfilePhoneNumber", UpdateVendorProfilePhoneNumberDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetAllVendorProfilePhoneNumberHistoriesDocument = `query GetAllVendorProfilePhoneNumberHistories {
+	vendorProfilePhoneNumberHistories {
+		edges {
+			node {
+				createdAt
+				createdBy
+				historyTime
+				id
+				operation
+				phoneNumberID
+				ref
+				updatedAt
+				updatedBy
+				vendorProfileID
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetAllVendorProfilePhoneNumberHistories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllVendorProfilePhoneNumberHistories, error) {
+	vars := map[string]any{}
+
+	var res GetAllVendorProfilePhoneNumberHistories
+	if err := c.Client.Post(ctx, "GetAllVendorProfilePhoneNumberHistories", GetAllVendorProfilePhoneNumberHistoriesDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetVendorProfilePhoneNumberHistoriesDocument = `query GetVendorProfilePhoneNumberHistories ($where: VendorProfilePhoneNumberHistoryWhereInput) {
+	vendorProfilePhoneNumberHistories(where: $where) {
+		edges {
+			node {
+				createdAt
+				createdBy
+				historyTime
+				id
+				operation
+				phoneNumberID
+				ref
+				updatedAt
+				updatedBy
+				vendorProfileID
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetVendorProfilePhoneNumberHistories(ctx context.Context, where *VendorProfilePhoneNumberHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetVendorProfilePhoneNumberHistories, error) {
+	vars := map[string]any{
+		"where": where,
+	}
+
+	var res GetVendorProfilePhoneNumberHistories
+	if err := c.Client.Post(ctx, "GetVendorProfilePhoneNumberHistories", GetVendorProfilePhoneNumberHistoriesDocument, &res, vars, interceptors...); err != nil {
 		if c.Client.ParseDataWhenErrors {
 			return &res, err
 		}
@@ -47540,6 +50156,15 @@ var DocumentOperationNames = map[string]string{
 	GetAllPersonalAccessTokensDocument:                "GetAllPersonalAccessTokens",
 	GetPersonalAccessTokenByIDDocument:                "GetPersonalAccessTokenByID",
 	UpdatePersonalAccessTokenDocument:                 "UpdatePersonalAccessToken",
+	CreateBulkCSVPhoneNumberDocument:                  "CreateBulkCSVPhoneNumber",
+	CreateBulkPhoneNumberDocument:                     "CreateBulkPhoneNumber",
+	CreatePhoneNumberDocument:                         "CreatePhoneNumber",
+	GetAllPhoneNumbersDocument:                        "GetAllPhoneNumbers",
+	GetPhoneNumberByIDDocument:                        "GetPhoneNumberByID",
+	GetPhoneNumbersDocument:                           "GetPhoneNumbers",
+	UpdatePhoneNumberDocument:                         "UpdatePhoneNumber",
+	GetAllPhoneNumberHistoriesDocument:                "GetAllPhoneNumberHistories",
+	GetPhoneNumberHistoriesDocument:                   "GetPhoneNumberHistories",
 	CreateBulkCSVPostalAddressDocument:                "CreateBulkCSVPostalAddress",
 	CreateBulkPostalAddressDocument:                   "CreateBulkPostalAddress",
 	CreatePostalAddressDocument:                       "CreatePostalAddress",
@@ -47602,6 +50227,15 @@ var DocumentOperationNames = map[string]string{
 	UpdateVendorProfileDocument:                       "UpdateVendorProfile",
 	GetAllVendorProfileHistoriesDocument:              "GetAllVendorProfileHistories",
 	GetVendorProfileHistoriesDocument:                 "GetVendorProfileHistories",
+	CreateBulkCSVVendorProfilePhoneNumberDocument:     "CreateBulkCSVVendorProfilePhoneNumber",
+	CreateBulkVendorProfilePhoneNumberDocument:        "CreateBulkVendorProfilePhoneNumber",
+	CreateVendorProfilePhoneNumberDocument:            "CreateVendorProfilePhoneNumber",
+	GetAllVendorProfilePhoneNumbersDocument:           "GetAllVendorProfilePhoneNumbers",
+	GetVendorProfilePhoneNumberByIDDocument:           "GetVendorProfilePhoneNumberByID",
+	GetVendorProfilePhoneNumbersDocument:              "GetVendorProfilePhoneNumbers",
+	UpdateVendorProfilePhoneNumberDocument:            "UpdateVendorProfilePhoneNumber",
+	GetAllVendorProfilePhoneNumberHistoriesDocument:   "GetAllVendorProfilePhoneNumberHistories",
+	GetVendorProfilePhoneNumberHistoriesDocument:      "GetVendorProfilePhoneNumberHistories",
 	CreateBulkCSVVendorProfilePostalAddressDocument:   "CreateBulkCSVVendorProfilePostalAddress",
 	CreateBulkVendorProfilePostalAddressDocument:      "CreateBulkVendorProfilePostalAddress",
 	CreateVendorProfilePostalAddressDocument:          "CreateVendorProfilePostalAddress",
