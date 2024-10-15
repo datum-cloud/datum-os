@@ -1,10 +1,11 @@
 'use client'
 
-import { useRouter } from 'next/navigation'
-import { useSession } from 'next-auth/react'
 import { TriangleAlert } from 'lucide-react'
+import { useSession } from 'next-auth/react'
+import { useRouter } from 'next/navigation'
 
 import { OPERATOR_APP_ROUTES } from '@repo/constants'
+import { Datum } from '@repo/types'
 import { Button } from '@repo/ui/button'
 import {
   Dialog,
@@ -14,13 +15,6 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@repo/ui/dialog'
-import { Datum } from '@repo/types'
-
-import { Loading } from '@/components/shared/loading/loading'
-import { useAsyncFn } from '@/hooks/useAsyncFn'
-import { removeLists } from '@/query/lists'
-
-import { deleteDialogStyles } from './page.styles'
 import {
   Form,
   FormControl,
@@ -32,8 +26,13 @@ import {
   zodResolver,
 } from '@repo/ui/form'
 import { Input } from '@repo/ui/input'
+
+import { Loading } from '@/components/shared/loading/loading'
+import { useAsyncFn } from '@/hooks/useAsyncFn'
+import { removeLists } from '@/query/lists'
 import { DeletionInput, DeletionSchema } from '@/utils/schemas'
-import { useEffect } from 'react'
+
+import { deleteDialogStyles } from './page.styles'
 
 type ListDeleteFormProps = {
   lists: Datum.List[]

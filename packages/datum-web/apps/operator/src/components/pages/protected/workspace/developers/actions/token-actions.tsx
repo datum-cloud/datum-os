@@ -1,8 +1,10 @@
 'use client'
 
 import { MoreHorizontal, Trash2 } from 'lucide-react'
-import { useToast } from '@repo/ui/use-toast'
-import { pageStyles } from '../page.styles'
+import { type UseQueryExecute } from 'urql'
+
+import { useDeletePersonalAccessTokenMutation } from '@repo/codegen/src/schema'
+import { TOAST_DURATION } from '@repo/constants'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -10,8 +12,9 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@repo/ui/dropdown-menu'
-import { useDeletePersonalAccessTokenMutation } from '@repo/codegen/src/schema'
-import { type UseQueryExecute } from 'urql'
+import { useToast } from '@repo/ui/use-toast'
+
+import { pageStyles } from '../page.styles'
 
 type TokenActionProps = {
   tokenId: string
@@ -32,6 +35,7 @@ export const TokenAction = ({ tokenId, refetchTokens }: TokenActionProps) => {
       toast({
         title: 'There was a problem deleting this token, please try again',
         variant: 'destructive',
+        duration: TOAST_DURATION,
       })
     }
 
@@ -39,6 +43,7 @@ export const TokenAction = ({ tokenId, refetchTokens }: TokenActionProps) => {
       toast({
         title: 'Token deleted successfully',
         variant: 'success',
+        duration: TOAST_DURATION,
       })
       refetchTokens({
         requestPolicy: 'network-only',

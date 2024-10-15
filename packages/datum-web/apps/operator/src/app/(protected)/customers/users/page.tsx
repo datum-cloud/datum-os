@@ -1,9 +1,9 @@
-import UsersPage from '@/components/pages/protected/workspace/customer/users/users-page'
-
 import type { Metadata } from 'next/types'
 
+import UsersPage from '@/components/pages/protected/workspace/customer/users/users-page'
+
 export const metadata: Metadata = {
-  title: 'Workspace Users',
+  title: 'Users',
 }
 
 const Page: React.FC = () => {

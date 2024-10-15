@@ -6,6 +6,7 @@ import {
   OrgMembershipRole,
   useUpdateUserRoleInOrgMutation,
 } from '@repo/codegen/src/schema'
+import { TOAST_DURATION } from '@repo/constants'
 import { Datum } from '@repo/types'
 import { Button } from '@repo/ui/button'
 import {
@@ -93,11 +94,13 @@ const MembersFormDialog = ({
         toast({
           title: `Error ${result.error.message}`,
           variant: 'destructive',
+          duration: TOAST_DURATION,
         })
       } else {
         toast({
           title: 'Role updated successfully',
           variant: 'success',
+          duration: TOAST_DURATION,
         })
         handleCancel()
       }
@@ -105,6 +108,7 @@ const MembersFormDialog = ({
       toast({
         title: `Unexpected error: ${(err as Error).message}`,
         variant: 'destructive',
+        duration: TOAST_DURATION,
       })
     }
   }

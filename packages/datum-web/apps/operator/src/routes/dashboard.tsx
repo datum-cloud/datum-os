@@ -41,7 +41,7 @@ export const NavItems: (NavItem | Separator | NavHeading)[] = [
   },
   {
     title: 'Customers',
-    href: '/workspace/customers',
+    href: '/customers',
     icon: Users,
     isChildren: true,
     children: [
@@ -195,14 +195,14 @@ export const NavItems: (NavItem | Separator | NavHeading)[] = [
 
 export const PersonalNavItems: (NavItem | Separator | NavHeading)[] = [
   {
-    title: 'My workspaces',
-    href: '/workspace',
-    icon: LayersIcon,
-  },
-  {
-    title: 'Profile',
+    title: 'My Profile',
     href: '/profile',
     icon: UserPen,
+  },
+  {
+    title: 'My Workspaces',
+    href: '/workspace',
+    icon: LayersIcon,
   },
   // {
   //   title: 'General Settings',

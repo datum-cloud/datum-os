@@ -30,6 +30,7 @@ export const OPERATOR_APP_ROUTES = {
   settings: '/settings',
   workspace: '/workspace',
   workspaceSettings: '/workspace/settings',
+  personalWorkspaceSettings: '/workspace/personal/settings',
   workspaceMembers: '/workspace/members',
   login: '/login',
   forgotPassword: '/forgot-password',
@@ -106,3 +107,4 @@ export const DEFAULT_AVATAR_DIMENSIONS: Datum.ImageDimensions = {
 export const PRIMARY_COLOR = '#F27A67'
 export const SECONDARY_COLOR = '#9C94B0'
 export const SPINNER_BG = '#FBC8BF'
+export const TOAST_DURATION = 5000

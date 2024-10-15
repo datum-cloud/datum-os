@@ -1,9 +1,9 @@
-import ProfilePage from '@/components/pages/protected/profile/profile-page'
-
 import type { Metadata } from 'next/types'
 
+import ProfilePage from '@/components/pages/protected/profile/profile-page'
+
 export const metadata: Metadata = {
-  title: 'Profile settings',
+  title: 'My Profile',
 }
 
 const Page: React.FC = () => {

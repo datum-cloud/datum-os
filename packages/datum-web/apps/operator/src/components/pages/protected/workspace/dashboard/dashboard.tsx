@@ -47,8 +47,8 @@ const DashboardPage = () => {
   // const activeUsers = users.filter((user) => user.setting.status === 'ACTIVE')
   // const activeUsersMonthly =
   //   users.length > 0 ? getMonthlyUsers(activeUsers) : []
-  const newUsersMonthly = users.length > 0 ? getMonthlyUsers(users) : []
-  const newUsersWeekly = users.length > 0 ? getWeeklyUsers(users) : []
+  const newUsersMonthly = getMonthlyUsers(users)
+  const newUsersWeekly = getWeeklyUsers(users)
   const { card, cardContent, link, row } = pageStyles()
 
   if (error) {

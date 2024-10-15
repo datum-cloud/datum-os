@@ -1,7 +1,5 @@
 'use client'
 
-import { useSession } from 'next-auth/react'
-import React, { useState } from 'react'
 import {
   ArrowLeft,
   ChevronDown,
@@ -12,10 +10,13 @@ import {
   Trash,
   Users2,
 } from 'lucide-react'
+import { useSession } from 'next-auth/react'
 import Link from 'next/link'
+import React, { useState } from 'react'
 
 import { exportExcel } from '@repo/common/csv'
-import { OPERATOR_APP_ROUTES } from '@repo/constants'
+import { OPERATOR_APP_ROUTES, TOAST_DURATION } from '@repo/constants'
+import type { Datum } from '@repo/types'
 import { Button } from '@repo/ui/button'
 import { Row } from '@repo/ui/data-table'
 import {
@@ -26,23 +27,21 @@ import {
 } from '@repo/ui/dropdown-menu'
 import { Tag } from '@repo/ui/tag'
 import { toast } from '@repo/ui/use-toast'
-import type { Datum } from '@repo/types'
 
-import { Loading } from '@/components/shared/loading/loading'
-import ListDeleteDialog from '@/components/pages/protected/workspace/marketing/list/list-delete-dialog'
 import ListsAddContactsDialog from '@/components/pages/protected/workspace/marketing/list/list-add-contacts-dialog'
+import ListDeleteDialog from '@/components/pages/protected/workspace/marketing/list/list-delete-dialog'
+import { Error } from '@/components/shared/error/error'
+import { Loading } from '@/components/shared/loading/loading'
 import { useContacts } from '@/hooks/useContacts'
 import { useList } from '@/hooks/useLists'
 import { editLists } from '@/query/lists'
 import { formatContactsExportData } from '@/utils/export'
 import { ListInput } from '@/utils/schemas'
 
-import { pageStyles as listsStyles } from '../lists/page.styles'
 import ListFormDialog from '../lists/lists-form-dialog'
-
+import { pageStyles as listsStyles } from '../lists/page.styles'
 import ListContactsTable from './list-contacts-table'
 import { pageStyles } from './page.styles'
-import { Error } from '@/components/shared/error/error'
 
 type ListPageProps = {
   id: Datum.ListId
@@ -113,6 +112,7 @@ const ListPage = ({ id }: ListPageProps) => {
 
     toast({
       title: 'Copied to clipboard',
+      duration: TOAST_DURATION,
     })
   }
 

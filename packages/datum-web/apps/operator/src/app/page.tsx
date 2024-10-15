@@ -1,15 +1,18 @@
 'use client'
 
-import React, { useEffect } from 'react'
+import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
+import React, { useEffect } from 'react'
+
+import { useGetAllOrganizationsQuery } from '@repo/codegen/src/schema'
 import { OPERATOR_APP_ROUTES } from '@repo/constants'
 import { Logo } from '@repo/ui/logo'
-import { useSession } from 'next-auth/react'
-import { useGetAllOrganizationsQuery } from '@repo/codegen/src/schema'
+
+import { switchWorkspace } from '@/lib/user'
 
 const Landing = () => {
   const router = useRouter()
-  const { data: session } = useSession()
+  const { data: session, update } = useSession()
 
   const [{ data: allOrgs, fetching }] = useGetAllOrganizationsQuery({
     pause: !session,
@@ -17,14 +20,41 @@ const Landing = () => {
 
   const orgs = allOrgs?.organizations.edges || []
 
+  async function handleWorkspaceRouting() {
+    const nonPersonalOrgs = orgs.filter((org) => !org?.node?.personalOrg)
+    const currentOrg = session?.user?.organization
+    const isPersonalOrg = nonPersonalOrgs.some(
+      (org) => org?.node?.id === currentOrg,
+    )
+    const firstOrg = nonPersonalOrgs[0]?.node?.id
+
+    if (isPersonalOrg && nonPersonalOrgs.length > 0 && firstOrg) {
+      const response = await switchWorkspace({
+        target_organization_id: firstOrg,
+      })
+
+      if (session && response) {
+        await update({
+          ...response.session,
+          user: {
+            ...session.user,
+            accessToken: response.access_token,
+            organization: firstOrg,
+            refreshToken: response.refresh_token,
+          },
+        })
+      }
+
+      // NOTE: Change this to the dashboard when the dashboard functionality is complete
+      router.push(OPERATOR_APP_ROUTES.dashboard)
+    } else {
+      router.push(OPERATOR_APP_ROUTES.workspace)
+    }
+  }
+
   useEffect(() => {
     if (!fetching && session) {
-      if (orgs.length > 0) {
-        // NOTE: Change this to the dashboard when the dashboard functionality is complete
-        router.push(OPERATOR_APP_ROUTES.dashboard)
-      } else {
-        router.push(OPERATOR_APP_ROUTES.workspace)
-      }
+      handleWorkspaceRouting()
     }
   }, [fetching, session, orgs, router])
 
