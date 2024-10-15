@@ -2133,8 +2133,10 @@ type CreateOrganizationInput struct {
 	Description *string `json:"description,omitempty"`
 	// orgs directly associated with a user
 	PersonalOrg *bool `json:"personalOrg,omitempty"`
-	// URL of the user's remote avatar
+	// URL of the organization's remote avatar
 	AvatarRemoteURL *string `json:"avatarRemoteURL,omitempty"`
+	// The organization's local avatar file
+	AvatarLocalFile *string `json:"avatarLocalFile,omitempty"`
 	// Whether the organization has a dedicated database
 	DedicatedDb                *bool                           `json:"dedicatedDb,omitempty"`
 	ParentID                   *string                         `json:"parentID,omitempty"`
@@ -10658,8 +10660,10 @@ type Organization struct {
 	Description *string `json:"description,omitempty"`
 	// orgs directly associated with a user
 	PersonalOrg *bool `json:"personalOrg,omitempty"`
-	// URL of the user's remote avatar
+	// URL of the organization's remote avatar
 	AvatarRemoteURL *string `json:"avatarRemoteURL,omitempty"`
+	// The organization's local avatar file
+	AvatarLocalFile *string `json:"avatarLocalFile,omitempty"`
 	// Whether the organization has a dedicated database
 	DedicatedDb             bool                      `json:"dedicatedDb"`
 	Parent                  *Organization             `json:"parent,omitempty"`
@@ -10751,8 +10755,10 @@ type OrganizationHistory struct {
 	Description *string `json:"description,omitempty"`
 	// orgs directly associated with a user
 	PersonalOrg *bool `json:"personalOrg,omitempty"`
-	// URL of the user's remote avatar
+	// URL of the organization's remote avatar
 	AvatarRemoteURL *string `json:"avatarRemoteURL,omitempty"`
+	// The organization's local avatar file
+	AvatarLocalFile *string `json:"avatarLocalFile,omitempty"`
 	// Whether the organization has a dedicated database
 	DedicatedDb bool `json:"dedicatedDb"`
 }
@@ -10964,6 +10970,22 @@ type OrganizationHistoryWhereInput struct {
 	AvatarRemoteURLNotNil       *bool    `json:"avatarRemoteURLNotNil,omitempty"`
 	AvatarRemoteURLEqualFold    *string  `json:"avatarRemoteURLEqualFold,omitempty"`
 	AvatarRemoteURLContainsFold *string  `json:"avatarRemoteURLContainsFold,omitempty"`
+	// avatar_local_file field predicates
+	AvatarLocalFile             *string  `json:"avatarLocalFile,omitempty"`
+	AvatarLocalFileNeq          *string  `json:"avatarLocalFileNEQ,omitempty"`
+	AvatarLocalFileIn           []string `json:"avatarLocalFileIn,omitempty"`
+	AvatarLocalFileNotIn        []string `json:"avatarLocalFileNotIn,omitempty"`
+	AvatarLocalFileGt           *string  `json:"avatarLocalFileGT,omitempty"`
+	AvatarLocalFileGte          *string  `json:"avatarLocalFileGTE,omitempty"`
+	AvatarLocalFileLt           *string  `json:"avatarLocalFileLT,omitempty"`
+	AvatarLocalFileLte          *string  `json:"avatarLocalFileLTE,omitempty"`
+	AvatarLocalFileContains     *string  `json:"avatarLocalFileContains,omitempty"`
+	AvatarLocalFileHasPrefix    *string  `json:"avatarLocalFileHasPrefix,omitempty"`
+	AvatarLocalFileHasSuffix    *string  `json:"avatarLocalFileHasSuffix,omitempty"`
+	AvatarLocalFileIsNil        *bool    `json:"avatarLocalFileIsNil,omitempty"`
+	AvatarLocalFileNotNil       *bool    `json:"avatarLocalFileNotNil,omitempty"`
+	AvatarLocalFileEqualFold    *string  `json:"avatarLocalFileEqualFold,omitempty"`
+	AvatarLocalFileContainsFold *string  `json:"avatarLocalFileContainsFold,omitempty"`
 }
 
 // Ordering options for Organization connections
@@ -11698,6 +11720,22 @@ type OrganizationWhereInput struct {
 	AvatarRemoteURLNotNil       *bool    `json:"avatarRemoteURLNotNil,omitempty"`
 	AvatarRemoteURLEqualFold    *string  `json:"avatarRemoteURLEqualFold,omitempty"`
 	AvatarRemoteURLContainsFold *string  `json:"avatarRemoteURLContainsFold,omitempty"`
+	// avatar_local_file field predicates
+	AvatarLocalFile             *string  `json:"avatarLocalFile,omitempty"`
+	AvatarLocalFileNeq          *string  `json:"avatarLocalFileNEQ,omitempty"`
+	AvatarLocalFileIn           []string `json:"avatarLocalFileIn,omitempty"`
+	AvatarLocalFileNotIn        []string `json:"avatarLocalFileNotIn,omitempty"`
+	AvatarLocalFileGt           *string  `json:"avatarLocalFileGT,omitempty"`
+	AvatarLocalFileGte          *string  `json:"avatarLocalFileGTE,omitempty"`
+	AvatarLocalFileLt           *string  `json:"avatarLocalFileLT,omitempty"`
+	AvatarLocalFileLte          *string  `json:"avatarLocalFileLTE,omitempty"`
+	AvatarLocalFileContains     *string  `json:"avatarLocalFileContains,omitempty"`
+	AvatarLocalFileHasPrefix    *string  `json:"avatarLocalFileHasPrefix,omitempty"`
+	AvatarLocalFileHasSuffix    *string  `json:"avatarLocalFileHasSuffix,omitempty"`
+	AvatarLocalFileIsNil        *bool    `json:"avatarLocalFileIsNil,omitempty"`
+	AvatarLocalFileNotNil       *bool    `json:"avatarLocalFileNotNil,omitempty"`
+	AvatarLocalFileEqualFold    *string  `json:"avatarLocalFileEqualFold,omitempty"`
+	AvatarLocalFileContainsFold *string  `json:"avatarLocalFileContainsFold,omitempty"`
 	// parent edge predicates
 	HasParent     *bool                     `json:"hasParent,omitempty"`
 	HasParentWith []*OrganizationWhereInput `json:"hasParentWith,omitempty"`
@@ -13494,9 +13532,12 @@ type UpdateOrganizationInput struct {
 	// An optional description of the organization
 	Description      *string `json:"description,omitempty"`
 	ClearDescription *bool   `json:"clearDescription,omitempty"`
-	// URL of the user's remote avatar
-	AvatarRemoteURL                  *string                         `json:"avatarRemoteURL,omitempty"`
-	ClearAvatarRemoteURL             *bool                           `json:"clearAvatarRemoteURL,omitempty"`
+	// URL of the organization's remote avatar
+	AvatarRemoteURL      *string `json:"avatarRemoteURL,omitempty"`
+	ClearAvatarRemoteURL *bool   `json:"clearAvatarRemoteURL,omitempty"`
+	// The organization's local avatar file
+	AvatarLocalFile                  *string                         `json:"avatarLocalFile,omitempty"`
+	ClearAvatarLocalFile             *bool                           `json:"clearAvatarLocalFile,omitempty"`
 	AddGroupIDs                      []string                        `json:"addGroupIDs,omitempty"`
 	RemoveGroupIDs                   []string                        `json:"removeGroupIDs,omitempty"`
 	ClearGroups                      *bool                           `json:"clearGroups,omitempty"`

@@ -16,16 +16,14 @@ const PageTitle = ({
   return (
     <div
       className={cn(
-        'flex flex-col justify-start items-start gap-10',
+        'flex flex-col justify-start items-start gap-2',
         centered ? 'text-center' : undefined,
         className,
       )}
     >
       <h4>{title}</h4>
       {description && (
-        <p className="text-2xl mt-4 leading-5 font-thin font-sans">
-          {description}
-        </p>
+        <p className="text-lg leading-5 font-thin font-sans">{description}</p>
       )}
     </div>
   )

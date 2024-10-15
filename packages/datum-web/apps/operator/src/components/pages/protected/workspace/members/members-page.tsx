@@ -24,6 +24,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@repo/ui/tabs'
 import { useToast } from '@repo/ui/use-toast'
 
 import PageTitle from '@/components/page-title'
+import { Error } from '@/components/shared/error/error'
+import { Loading } from '@/components/shared/loading/loading'
 import Search from '@/components/shared/table-search/table-search'
 import {
   canDeleteRelation,

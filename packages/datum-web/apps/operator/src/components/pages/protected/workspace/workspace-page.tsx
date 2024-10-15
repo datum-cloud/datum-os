@@ -1,28 +1,28 @@
 'use client'
 
-import { useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react'
+import { useRouter } from 'next/navigation'
 
-import { OPERATOR_APP_ROUTES } from '@repo/constants'
 import {
   useCreateOrganizationMutation,
   useGetAllOrganizationsQuery,
 } from '@repo/codegen/src/schema'
-import { toast } from '@repo/ui/use-toast'
-import { Panel, PanelHeader } from '@repo/ui/panel'
+import { OPERATOR_APP_ROUTES } from '@repo/constants'
+import { Button } from '@repo/ui/button'
 import {
   Form,
+  FormControl,
+  FormField,
   FormItem,
   FormLabel,
-  FormField,
-  FormControl,
   FormMessage,
   useForm,
   zodResolver,
 } from '@repo/ui/form'
 import { Info } from '@repo/ui/info'
 import { Input } from '@repo/ui/input'
-import { Button } from '@repo/ui/button'
+import { Panel, PanelHeader } from '@repo/ui/panel'
+import { toast } from '@repo/ui/use-toast'
 
 import PageTitle from '@/components/page-title'
 import { createWorkspaceStyles } from '@/components/pages/protected/workspace/page.styles'
@@ -112,14 +112,6 @@ const WorkspacePage = () => {
 
   async function onSubmit(data: WorkspaceNameInput) {
     await createWorkspace({ name: data.name })
-  }
-
-  if (fetching) {
-    return <Loading />
-  }
-
-  if (error) {
-    return <Error />
   }
 
   return (

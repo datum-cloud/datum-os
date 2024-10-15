@@ -39,7 +39,7 @@ const AvatarUpload = ({
   setAvatar,
   title,
   imageType = 'avatar',
-  fallbackText,
+  fallbackText = 'unknown',
   noBorder = false,
   className,
 }: AvatarUploadProps) => {

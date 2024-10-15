@@ -2,7 +2,7 @@ import { useRouter } from 'next/navigation'
 
 import { OPERATOR_APP_ROUTES } from '@repo/constants'
 import { Panel, PanelHeader } from '@repo/ui/panel'
-import { Avatar, AvatarFallback } from '@repo/ui/avatar'
+import { Avatar, AvatarFallback, AvatarImage } from '@repo/ui/avatar'
 import { Button } from '@repo/ui/button'
 import { Tag } from '@repo/ui/tag'
 import { Datum } from '@repo/types'
@@ -72,18 +72,22 @@ export const ExistingWorkspaces = ({
           const role =
             org?.node?.members?.find((member: any) => member.id === userId)
               ?.role || defaultRole
+          const name = org?.node?.displayName
+          const avatar =
+            org?.node?.avatarLocalFile || org?.node?.avatarRemoteUrl || ''
 
           return (
             <div key={org?.node?.id} className={`${orgWrapper()} group`}>
               <div>
                 <Avatar variant="large">
+                  {avatar && <AvatarImage src={avatar} />}
                   <AvatarFallback>
-                    {org?.node?.displayName.substring(0, 2)}
+                    {name.substring(0, 2)}
                   </AvatarFallback>
                 </Avatar>
               </div>
               <div className={orgInfo()}>
-                <div className={orgTitle()}>{org?.node?.displayName}</div>
+                <div className={orgTitle()}>{name}</div>
                 <Tag>{role}</Tag>
               </div>
               <div className={orgSelect()}>

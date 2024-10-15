@@ -45,8 +45,10 @@ type Organization struct {
 	ParentOrganizationID string `json:"parent_organization_id,omitempty"`
 	// orgs directly associated with a user
 	PersonalOrg bool `json:"personal_org,omitempty"`
-	// URL of the user's remote avatar
+	// URL of the organization's remote avatar
 	AvatarRemoteURL *string `json:"avatar_remote_url,omitempty"`
+	// The organization's local avatar file
+	AvatarLocalFile *string `json:"avatar_local_file,omitempty"`
 	// Whether the organization has a dedicated database
 	DedicatedDb bool `json:"dedicated_db,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
@@ -412,7 +414,7 @@ func (*Organization) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case organization.FieldPersonalOrg, organization.FieldDedicatedDb:
 			values[i] = new(sql.NullBool)
-		case organization.FieldID, organization.FieldCreatedBy, organization.FieldUpdatedBy, organization.FieldMappingID, organization.FieldDeletedBy, organization.FieldName, organization.FieldDisplayName, organization.FieldDescription, organization.FieldParentOrganizationID, organization.FieldAvatarRemoteURL:
+		case organization.FieldID, organization.FieldCreatedBy, organization.FieldUpdatedBy, organization.FieldMappingID, organization.FieldDeletedBy, organization.FieldName, organization.FieldDisplayName, organization.FieldDescription, organization.FieldParentOrganizationID, organization.FieldAvatarRemoteURL, organization.FieldAvatarLocalFile:
 			values[i] = new(sql.NullString)
 		case organization.FieldCreatedAt, organization.FieldUpdatedAt, organization.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -523,6 +525,13 @@ func (o *Organization) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				o.AvatarRemoteURL = new(string)
 				*o.AvatarRemoteURL = value.String
+			}
+		case organization.FieldAvatarLocalFile:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field avatar_local_file", values[i])
+			} else if value.Valid {
+				o.AvatarLocalFile = new(string)
+				*o.AvatarLocalFile = value.String
 			}
 		case organization.FieldDedicatedDb:
 			if value, ok := values[i].(*sql.NullBool); !ok {
@@ -747,6 +756,11 @@ func (o *Organization) String() string {
 	builder.WriteString(", ")
 	if v := o.AvatarRemoteURL; v != nil {
 		builder.WriteString("avatar_remote_url=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
+	if v := o.AvatarLocalFile; v != nil {
+		builder.WriteString("avatar_local_file=")
 		builder.WriteString(*v)
 	}
 	builder.WriteString(", ")

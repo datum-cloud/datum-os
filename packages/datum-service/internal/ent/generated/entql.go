@@ -1297,6 +1297,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			organization.FieldParentOrganizationID: {Type: field.TypeString, Column: organization.FieldParentOrganizationID},
 			organization.FieldPersonalOrg:          {Type: field.TypeBool, Column: organization.FieldPersonalOrg},
 			organization.FieldAvatarRemoteURL:      {Type: field.TypeString, Column: organization.FieldAvatarRemoteURL},
+			organization.FieldAvatarLocalFile:      {Type: field.TypeString, Column: organization.FieldAvatarLocalFile},
 			organization.FieldDedicatedDb:          {Type: field.TypeBool, Column: organization.FieldDedicatedDb},
 		},
 	}
@@ -1328,6 +1329,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			organizationhistory.FieldParentOrganizationID: {Type: field.TypeString, Column: organizationhistory.FieldParentOrganizationID},
 			organizationhistory.FieldPersonalOrg:          {Type: field.TypeBool, Column: organizationhistory.FieldPersonalOrg},
 			organizationhistory.FieldAvatarRemoteURL:      {Type: field.TypeString, Column: organizationhistory.FieldAvatarRemoteURL},
+			organizationhistory.FieldAvatarLocalFile:      {Type: field.TypeString, Column: organizationhistory.FieldAvatarLocalFile},
 			organizationhistory.FieldDedicatedDb:          {Type: field.TypeBool, Column: organizationhistory.FieldDedicatedDb},
 		},
 	}
@@ -9831,6 +9833,11 @@ func (f *OrganizationFilter) WhereAvatarRemoteURL(p entql.StringP) {
 	f.Where(p.Field(organization.FieldAvatarRemoteURL))
 }
 
+// WhereAvatarLocalFile applies the entql string predicate on the avatar_local_file field.
+func (f *OrganizationFilter) WhereAvatarLocalFile(p entql.StringP) {
+	f.Where(p.Field(organization.FieldAvatarLocalFile))
+}
+
 // WhereDedicatedDb applies the entql bool predicate on the dedicated_db field.
 func (f *OrganizationFilter) WhereDedicatedDb(p entql.BoolP) {
 	f.Where(p.Field(organization.FieldDedicatedDb))
@@ -10351,6 +10358,11 @@ func (f *OrganizationHistoryFilter) WherePersonalOrg(p entql.BoolP) {
 // WhereAvatarRemoteURL applies the entql string predicate on the avatar_remote_url field.
 func (f *OrganizationHistoryFilter) WhereAvatarRemoteURL(p entql.StringP) {
 	f.Where(p.Field(organizationhistory.FieldAvatarRemoteURL))
+}
+
+// WhereAvatarLocalFile applies the entql string predicate on the avatar_local_file field.
+func (f *OrganizationHistoryFilter) WhereAvatarLocalFile(p entql.StringP) {
+	f.Where(p.Field(organizationhistory.FieldAvatarLocalFile))
 }
 
 // WhereDedicatedDb applies the entql bool predicate on the dedicated_db field.
@@ -11319,13 +11331,13 @@ func (f *TemplateFilter) WhereHasDocumentsWith(preds ...predicate.DocumentData) 
 }
 
 // addPredicate implements the predicateAdder interface.
-func (thq *TemplateHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
-	thq.predicates = append(thq.predicates, pred)
+func (the *TemplateHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
+	the.predicates = append(the.predicates, pred)
 }
 
 // Filter returns a Filter implementation to apply filters on the TemplateHistoryQuery builder.
-func (thq *TemplateHistoryQuery) Filter() *TemplateHistoryFilter {
-	return &TemplateHistoryFilter{config: thq.config, predicateAdder: thq}
+func (the *TemplateHistoryQuery) Filter() *TemplateHistoryFilter {
+	return &TemplateHistoryFilter{config: the.config, predicateAdder: the}
 }
 
 // addPredicate implements the predicateAdder interface.

@@ -61859,6 +61859,7 @@ type OrganizationMutation struct {
 	description                     *string
 	personal_org                    *bool
 	avatar_remote_url               *string
+	avatar_local_file               *string
 	dedicated_db                    *bool
 	clearedFields                   map[string]struct{}
 	parent                          *string
@@ -62713,6 +62714,55 @@ func (m *OrganizationMutation) AvatarRemoteURLCleared() bool {
 func (m *OrganizationMutation) ResetAvatarRemoteURL() {
 	m.avatar_remote_url = nil
 	delete(m.clearedFields, organization.FieldAvatarRemoteURL)
+}
+
+// SetAvatarLocalFile sets the "avatar_local_file" field.
+func (m *OrganizationMutation) SetAvatarLocalFile(s string) {
+	m.avatar_local_file = &s
+}
+
+// AvatarLocalFile returns the value of the "avatar_local_file" field in the mutation.
+func (m *OrganizationMutation) AvatarLocalFile() (r string, exists bool) {
+	v := m.avatar_local_file
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAvatarLocalFile returns the old "avatar_local_file" field's value of the Organization entity.
+// If the Organization object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *OrganizationMutation) OldAvatarLocalFile(ctx context.Context) (v *string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAvatarLocalFile is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAvatarLocalFile requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAvatarLocalFile: %w", err)
+	}
+	return oldValue.AvatarLocalFile, nil
+}
+
+// ClearAvatarLocalFile clears the value of the "avatar_local_file" field.
+func (m *OrganizationMutation) ClearAvatarLocalFile() {
+	m.avatar_local_file = nil
+	m.clearedFields[organization.FieldAvatarLocalFile] = struct{}{}
+}
+
+// AvatarLocalFileCleared returns if the "avatar_local_file" field was cleared in this mutation.
+func (m *OrganizationMutation) AvatarLocalFileCleared() bool {
+	_, ok := m.clearedFields[organization.FieldAvatarLocalFile]
+	return ok
+}
+
+// ResetAvatarLocalFile resets all changes to the "avatar_local_file" field.
+func (m *OrganizationMutation) ResetAvatarLocalFile() {
+	m.avatar_local_file = nil
+	delete(m.clearedFields, organization.FieldAvatarLocalFile)
 }
 
 // SetDedicatedDb sets the "dedicated_db" field.
@@ -64268,7 +64318,7 @@ func (m *OrganizationMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *OrganizationMutation) Fields() []string {
-	fields := make([]string, 0, 15)
+	fields := make([]string, 0, 16)
 	if m.created_at != nil {
 		fields = append(fields, organization.FieldCreatedAt)
 	}
@@ -64311,6 +64361,9 @@ func (m *OrganizationMutation) Fields() []string {
 	if m.avatar_remote_url != nil {
 		fields = append(fields, organization.FieldAvatarRemoteURL)
 	}
+	if m.avatar_local_file != nil {
+		fields = append(fields, organization.FieldAvatarLocalFile)
+	}
 	if m.dedicated_db != nil {
 		fields = append(fields, organization.FieldDedicatedDb)
 	}
@@ -64350,6 +64403,8 @@ func (m *OrganizationMutation) Field(name string) (ent.Value, bool) {
 		return m.PersonalOrg()
 	case organization.FieldAvatarRemoteURL:
 		return m.AvatarRemoteURL()
+	case organization.FieldAvatarLocalFile:
+		return m.AvatarLocalFile()
 	case organization.FieldDedicatedDb:
 		return m.DedicatedDb()
 	}
@@ -64389,6 +64444,8 @@ func (m *OrganizationMutation) OldField(ctx context.Context, name string) (ent.V
 		return m.OldPersonalOrg(ctx)
 	case organization.FieldAvatarRemoteURL:
 		return m.OldAvatarRemoteURL(ctx)
+	case organization.FieldAvatarLocalFile:
+		return m.OldAvatarLocalFile(ctx)
 	case organization.FieldDedicatedDb:
 		return m.OldDedicatedDb(ctx)
 	}
@@ -64498,6 +64555,13 @@ func (m *OrganizationMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetAvatarRemoteURL(v)
 		return nil
+	case organization.FieldAvatarLocalFile:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAvatarLocalFile(v)
+		return nil
 	case organization.FieldDedicatedDb:
 		v, ok := value.(bool)
 		if !ok {
@@ -64568,6 +64632,9 @@ func (m *OrganizationMutation) ClearedFields() []string {
 	if m.FieldCleared(organization.FieldAvatarRemoteURL) {
 		fields = append(fields, organization.FieldAvatarRemoteURL)
 	}
+	if m.FieldCleared(organization.FieldAvatarLocalFile) {
+		fields = append(fields, organization.FieldAvatarLocalFile)
+	}
 	return fields
 }
 
@@ -64614,6 +64681,9 @@ func (m *OrganizationMutation) ClearField(name string) error {
 		return nil
 	case organization.FieldAvatarRemoteURL:
 		m.ClearAvatarRemoteURL()
+		return nil
+	case organization.FieldAvatarLocalFile:
+		m.ClearAvatarLocalFile()
 		return nil
 	}
 	return fmt.Errorf("unknown Organization nullable field %s", name)
@@ -64664,6 +64734,9 @@ func (m *OrganizationMutation) ResetField(name string) error {
 		return nil
 	case organization.FieldAvatarRemoteURL:
 		m.ResetAvatarRemoteURL()
+		return nil
+	case organization.FieldAvatarLocalFile:
+		m.ResetAvatarLocalFile()
 		return nil
 	case organization.FieldDedicatedDb:
 		m.ResetDedicatedDb()
@@ -65466,6 +65539,7 @@ type OrganizationHistoryMutation struct {
 	parent_organization_id *string
 	personal_org           *bool
 	avatar_remote_url      *string
+	avatar_local_file      *string
 	dedicated_db           *bool
 	clearedFields          map[string]struct{}
 	done                   bool
@@ -66361,6 +66435,55 @@ func (m *OrganizationHistoryMutation) ResetAvatarRemoteURL() {
 	delete(m.clearedFields, organizationhistory.FieldAvatarRemoteURL)
 }
 
+// SetAvatarLocalFile sets the "avatar_local_file" field.
+func (m *OrganizationHistoryMutation) SetAvatarLocalFile(s string) {
+	m.avatar_local_file = &s
+}
+
+// AvatarLocalFile returns the value of the "avatar_local_file" field in the mutation.
+func (m *OrganizationHistoryMutation) AvatarLocalFile() (r string, exists bool) {
+	v := m.avatar_local_file
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAvatarLocalFile returns the old "avatar_local_file" field's value of the OrganizationHistory entity.
+// If the OrganizationHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *OrganizationHistoryMutation) OldAvatarLocalFile(ctx context.Context) (v *string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAvatarLocalFile is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAvatarLocalFile requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAvatarLocalFile: %w", err)
+	}
+	return oldValue.AvatarLocalFile, nil
+}
+
+// ClearAvatarLocalFile clears the value of the "avatar_local_file" field.
+func (m *OrganizationHistoryMutation) ClearAvatarLocalFile() {
+	m.avatar_local_file = nil
+	m.clearedFields[organizationhistory.FieldAvatarLocalFile] = struct{}{}
+}
+
+// AvatarLocalFileCleared returns if the "avatar_local_file" field was cleared in this mutation.
+func (m *OrganizationHistoryMutation) AvatarLocalFileCleared() bool {
+	_, ok := m.clearedFields[organizationhistory.FieldAvatarLocalFile]
+	return ok
+}
+
+// ResetAvatarLocalFile resets all changes to the "avatar_local_file" field.
+func (m *OrganizationHistoryMutation) ResetAvatarLocalFile() {
+	m.avatar_local_file = nil
+	delete(m.clearedFields, organizationhistory.FieldAvatarLocalFile)
+}
+
 // SetDedicatedDb sets the "dedicated_db" field.
 func (m *OrganizationHistoryMutation) SetDedicatedDb(b bool) {
 	m.dedicated_db = &b
@@ -66431,7 +66554,7 @@ func (m *OrganizationHistoryMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *OrganizationHistoryMutation) Fields() []string {
-	fields := make([]string, 0, 18)
+	fields := make([]string, 0, 19)
 	if m.history_time != nil {
 		fields = append(fields, organizationhistory.FieldHistoryTime)
 	}
@@ -66483,6 +66606,9 @@ func (m *OrganizationHistoryMutation) Fields() []string {
 	if m.avatar_remote_url != nil {
 		fields = append(fields, organizationhistory.FieldAvatarRemoteURL)
 	}
+	if m.avatar_local_file != nil {
+		fields = append(fields, organizationhistory.FieldAvatarLocalFile)
+	}
 	if m.dedicated_db != nil {
 		fields = append(fields, organizationhistory.FieldDedicatedDb)
 	}
@@ -66528,6 +66654,8 @@ func (m *OrganizationHistoryMutation) Field(name string) (ent.Value, bool) {
 		return m.PersonalOrg()
 	case organizationhistory.FieldAvatarRemoteURL:
 		return m.AvatarRemoteURL()
+	case organizationhistory.FieldAvatarLocalFile:
+		return m.AvatarLocalFile()
 	case organizationhistory.FieldDedicatedDb:
 		return m.DedicatedDb()
 	}
@@ -66573,6 +66701,8 @@ func (m *OrganizationHistoryMutation) OldField(ctx context.Context, name string)
 		return m.OldPersonalOrg(ctx)
 	case organizationhistory.FieldAvatarRemoteURL:
 		return m.OldAvatarRemoteURL(ctx)
+	case organizationhistory.FieldAvatarLocalFile:
+		return m.OldAvatarLocalFile(ctx)
 	case organizationhistory.FieldDedicatedDb:
 		return m.OldDedicatedDb(ctx)
 	}
@@ -66703,6 +66833,13 @@ func (m *OrganizationHistoryMutation) SetField(name string, value ent.Value) err
 		}
 		m.SetAvatarRemoteURL(v)
 		return nil
+	case organizationhistory.FieldAvatarLocalFile:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAvatarLocalFile(v)
+		return nil
 	case organizationhistory.FieldDedicatedDb:
 		v, ok := value.(bool)
 		if !ok {
@@ -66776,6 +66913,9 @@ func (m *OrganizationHistoryMutation) ClearedFields() []string {
 	if m.FieldCleared(organizationhistory.FieldAvatarRemoteURL) {
 		fields = append(fields, organizationhistory.FieldAvatarRemoteURL)
 	}
+	if m.FieldCleared(organizationhistory.FieldAvatarLocalFile) {
+		fields = append(fields, organizationhistory.FieldAvatarLocalFile)
+	}
 	return fields
 }
 
@@ -66825,6 +66965,9 @@ func (m *OrganizationHistoryMutation) ClearField(name string) error {
 		return nil
 	case organizationhistory.FieldAvatarRemoteURL:
 		m.ClearAvatarRemoteURL()
+		return nil
+	case organizationhistory.FieldAvatarLocalFile:
+		m.ClearAvatarLocalFile()
 		return nil
 	}
 	return fmt.Errorf("unknown OrganizationHistory nullable field %s", name)
@@ -66884,6 +67027,9 @@ func (m *OrganizationHistoryMutation) ResetField(name string) error {
 		return nil
 	case organizationhistory.FieldAvatarRemoteURL:
 		m.ResetAvatarRemoteURL()
+		return nil
+	case organizationhistory.FieldAvatarLocalFile:
+		m.ResetAvatarLocalFile()
 		return nil
 	case organizationhistory.FieldDedicatedDb:
 		m.ResetDedicatedDb()

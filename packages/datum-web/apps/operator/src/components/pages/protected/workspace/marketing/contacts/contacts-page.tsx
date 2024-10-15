@@ -1,17 +1,17 @@
 'use client'
 
-import React, { useState } from 'react'
 import { useSession } from 'next-auth/react'
+import React, { useState } from 'react'
 
 import { exportExcel } from '@repo/common/csv'
-import type { ColumnFiltersState, Row } from '@repo/ui/data-table'
 import type { Datum } from '@repo/types'
+import type { ColumnFiltersState, Row } from '@repo/ui/data-table'
 
-import { useContacts } from '@/hooks/useContacts'
 import PageTitle from '@/components/page-title'
 import ContactDeleteDialog from '@/components/pages/protected/workspace/marketing/contact/contact-delete-dialog'
-import { Loading } from '@/components/shared/loading/loading'
 import { Error } from '@/components/shared/error/error'
+import { Loading } from '@/components/shared/loading/loading'
+import { useContacts } from '@/hooks/useContacts'
 import { formatContactsExportData } from '@/utils/export'
 
 import ContactsControls from './contacts-controls'
@@ -27,7 +27,12 @@ const ContactsPage: React.FC = () => {
   const { data: session } = useSession()
   const organizationId =
     session?.user.organization ?? ('' as Datum.OrganisationId)
-  const { data: contacts = [], error, isLoading } = useContacts(organizationId)
+  const {
+    data: contacts = [],
+    error,
+    isLoading,
+    isRefetching,
+  } = useContacts(organizationId)
   const { wrapper, header } = pageStyles()
 
   function handleExport() {
@@ -42,6 +47,14 @@ const ContactsPage: React.FC = () => {
     setTimeout(() => (document.body.style.pointerEvents = ''), 500)
   }
 
+  if (isLoading && !isRefetching) {
+    return <Loading className="h-full w-full grow" />
+  }
+
+  if (error) {
+    return <Error />
+  }
+
   return (
     <div className={wrapper()}>
       <div className={header()}>
@@ -54,20 +67,14 @@ const ContactsPage: React.FC = () => {
           selectedContacts={selectedContacts}
         />
       </div>
-      {isLoading ? (
-        <Loading className="h-full w-full grow" />
-      ) : error ? (
-        <Error />
-      ) : (
-        <ContactsTable
-          setGlobalFilter={setQuery}
-          setSelection={setSelectedContacts}
-          globalFilter={query}
-          columnFilters={columnFilters}
-          contacts={contacts}
-          onRowsFetched={setExportData}
-        />
-      )}
+      <ContactsTable
+        setGlobalFilter={setQuery}
+        setSelection={setSelectedContacts}
+        globalFilter={query}
+        columnFilters={columnFilters}
+        contacts={contacts}
+        onRowsFetched={setExportData}
+      />
       <ContactDeleteDialog
         contacts={selectedContacts}
         open={openDeleteDialog}

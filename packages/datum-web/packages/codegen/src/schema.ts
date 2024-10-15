@@ -1729,7 +1729,7 @@ export interface CreateInviteInput {
   /** the email used as input to generate the invitation token and is the destination person the invitation is sent to who is required to accept to join the organization */
   recipient: Scalars['String']['input'];
   /** the user who initiated the invitation */
-  requestorID?: InputMaybe<Scalars['String']['input']>;
+  requesterID?: InputMaybe<Scalars['String']['input']>;
   role?: InputMaybe<InviteRole>;
   /** the number of attempts made to perform email send of the invitation, maximum of 5 */
   sendAttempts?: InputMaybe<Scalars['Int']['input']>;
@@ -1818,7 +1818,9 @@ export interface CreateOrgMembershipInput {
  */
 export interface CreateOrganizationInput {
   apiTokenIDs?: InputMaybe<Array<Scalars['ID']['input']>>;
-  /** URL of the user's remote avatar */
+  /** The organization's local avatar file */
+  avatarLocalFile?: InputMaybe<Scalars['String']['input']>;
+  /** URL of the organization's remote avatar */
   avatarRemoteURL?: InputMaybe<Scalars['String']['input']>;
   contactIDs?: InputMaybe<Array<Scalars['ID']['input']>>;
   contactListIDs?: InputMaybe<Array<Scalars['ID']['input']>>;
@@ -7323,22 +7325,22 @@ export interface InviteWhereInput {
   recipientLTE?: InputMaybe<Scalars['String']['input']>;
   recipientNEQ?: InputMaybe<Scalars['String']['input']>;
   recipientNotIn?: InputMaybe<Array<Scalars['String']['input']>>;
-  /** requestor_id field predicates */
-  requestorID?: InputMaybe<Scalars['String']['input']>;
-  requestorIDContains?: InputMaybe<Scalars['String']['input']>;
-  requestorIDContainsFold?: InputMaybe<Scalars['String']['input']>;
-  requestorIDEqualFold?: InputMaybe<Scalars['String']['input']>;
-  requestorIDGT?: InputMaybe<Scalars['String']['input']>;
-  requestorIDGTE?: InputMaybe<Scalars['String']['input']>;
-  requestorIDHasPrefix?: InputMaybe<Scalars['String']['input']>;
-  requestorIDHasSuffix?: InputMaybe<Scalars['String']['input']>;
-  requestorIDIn?: InputMaybe<Array<Scalars['String']['input']>>;
-  requestorIDIsNil?: InputMaybe<Scalars['Boolean']['input']>;
-  requestorIDLT?: InputMaybe<Scalars['String']['input']>;
-  requestorIDLTE?: InputMaybe<Scalars['String']['input']>;
-  requestorIDNEQ?: InputMaybe<Scalars['String']['input']>;
-  requestorIDNotIn?: InputMaybe<Array<Scalars['String']['input']>>;
-  requestorIDNotNil?: InputMaybe<Scalars['Boolean']['input']>;
+  /** requester_id field predicates */
+  requesterID?: InputMaybe<Scalars['String']['input']>;
+  requesterIDContains?: InputMaybe<Scalars['String']['input']>;
+  requesterIDContainsFold?: InputMaybe<Scalars['String']['input']>;
+  requesterIDEqualFold?: InputMaybe<Scalars['String']['input']>;
+  requesterIDGT?: InputMaybe<Scalars['String']['input']>;
+  requesterIDGTE?: InputMaybe<Scalars['String']['input']>;
+  requesterIDHasPrefix?: InputMaybe<Scalars['String']['input']>;
+  requesterIDHasSuffix?: InputMaybe<Scalars['String']['input']>;
+  requesterIDIn?: InputMaybe<Array<Scalars['String']['input']>>;
+  requesterIDIsNil?: InputMaybe<Scalars['Boolean']['input']>;
+  requesterIDLT?: InputMaybe<Scalars['String']['input']>;
+  requesterIDLTE?: InputMaybe<Scalars['String']['input']>;
+  requesterIDNEQ?: InputMaybe<Scalars['String']['input']>;
+  requesterIDNotIn?: InputMaybe<Array<Scalars['String']['input']>>;
+  requesterIDNotNil?: InputMaybe<Scalars['Boolean']['input']>;
   /** role field predicates */
   role?: InputMaybe<InviteRole>;
   roleIn?: InputMaybe<Array<InviteRole>>;
@@ -8681,6 +8683,22 @@ export enum OrganizationHistoryOrderField {
  */
 export interface OrganizationHistoryWhereInput {
   and?: InputMaybe<Array<OrganizationHistoryWhereInput>>;
+  /** avatar_local_file field predicates */
+  avatarLocalFile?: InputMaybe<Scalars['String']['input']>;
+  avatarLocalFileContains?: InputMaybe<Scalars['String']['input']>;
+  avatarLocalFileContainsFold?: InputMaybe<Scalars['String']['input']>;
+  avatarLocalFileEqualFold?: InputMaybe<Scalars['String']['input']>;
+  avatarLocalFileGT?: InputMaybe<Scalars['String']['input']>;
+  avatarLocalFileGTE?: InputMaybe<Scalars['String']['input']>;
+  avatarLocalFileHasPrefix?: InputMaybe<Scalars['String']['input']>;
+  avatarLocalFileHasSuffix?: InputMaybe<Scalars['String']['input']>;
+  avatarLocalFileIn?: InputMaybe<Array<Scalars['String']['input']>>;
+  avatarLocalFileIsNil?: InputMaybe<Scalars['Boolean']['input']>;
+  avatarLocalFileLT?: InputMaybe<Scalars['String']['input']>;
+  avatarLocalFileLTE?: InputMaybe<Scalars['String']['input']>;
+  avatarLocalFileNEQ?: InputMaybe<Scalars['String']['input']>;
+  avatarLocalFileNotIn?: InputMaybe<Array<Scalars['String']['input']>>;
+  avatarLocalFileNotNil?: InputMaybe<Scalars['Boolean']['input']>;
   /** avatar_remote_url field predicates */
   avatarRemoteURL?: InputMaybe<Scalars['String']['input']>;
   avatarRemoteURLContains?: InputMaybe<Scalars['String']['input']>;
@@ -9342,6 +9360,22 @@ export interface OrganizationSettingWhereInput {
  */
 export interface OrganizationWhereInput {
   and?: InputMaybe<Array<OrganizationWhereInput>>;
+  /** avatar_local_file field predicates */
+  avatarLocalFile?: InputMaybe<Scalars['String']['input']>;
+  avatarLocalFileContains?: InputMaybe<Scalars['String']['input']>;
+  avatarLocalFileContainsFold?: InputMaybe<Scalars['String']['input']>;
+  avatarLocalFileEqualFold?: InputMaybe<Scalars['String']['input']>;
+  avatarLocalFileGT?: InputMaybe<Scalars['String']['input']>;
+  avatarLocalFileGTE?: InputMaybe<Scalars['String']['input']>;
+  avatarLocalFileHasPrefix?: InputMaybe<Scalars['String']['input']>;
+  avatarLocalFileHasSuffix?: InputMaybe<Scalars['String']['input']>;
+  avatarLocalFileIn?: InputMaybe<Array<Scalars['String']['input']>>;
+  avatarLocalFileIsNil?: InputMaybe<Scalars['Boolean']['input']>;
+  avatarLocalFileLT?: InputMaybe<Scalars['String']['input']>;
+  avatarLocalFileLTE?: InputMaybe<Scalars['String']['input']>;
+  avatarLocalFileNEQ?: InputMaybe<Scalars['String']['input']>;
+  avatarLocalFileNotIn?: InputMaybe<Array<Scalars['String']['input']>>;
+  avatarLocalFileNotNil?: InputMaybe<Scalars['Boolean']['input']>;
   /** avatar_remote_url field predicates */
   avatarRemoteURL?: InputMaybe<Scalars['String']['input']>;
   avatarRemoteURLContains?: InputMaybe<Scalars['String']['input']>;
@@ -11053,9 +11087,12 @@ export interface UpdateOrganizationInput {
   addUserIDs?: InputMaybe<Array<Scalars['ID']['input']>>;
   addWebhookIDs?: InputMaybe<Array<Scalars['ID']['input']>>;
   appendTags?: InputMaybe<Array<Scalars['String']['input']>>;
-  /** URL of the user's remote avatar */
+  /** The organization's local avatar file */
+  avatarLocalFile?: InputMaybe<Scalars['String']['input']>;
+  /** URL of the organization's remote avatar */
   avatarRemoteURL?: InputMaybe<Scalars['String']['input']>;
   clearAPITokens?: InputMaybe<Scalars['Boolean']['input']>;
+  clearAvatarLocalFile?: InputMaybe<Scalars['Boolean']['input']>;
   clearAvatarRemoteURL?: InputMaybe<Scalars['Boolean']['input']>;
   clearContactLists?: InputMaybe<Scalars['Boolean']['input']>;
   clearContacts?: InputMaybe<Scalars['Boolean']['input']>;
@@ -12877,14 +12914,14 @@ export type GetInviteByIdQueryVariables = Exact<{
 }>;
 
 
-export type GetInviteByIdQuery = { __typename?: 'Query', invite: { __typename?: 'Invite', expires?: any | null, id: string, recipient: string, requestorID?: string | null, role: InviteRole, sendAttempts: number, status: InviteInviteStatus, createdAt?: any | null, createdBy?: string | null, updatedAt?: any | null, updatedBy?: string | null, owner?: { __typename?: 'Organization', displayName: string, id: string, name: string } | null } };
+export type GetInviteByIdQuery = { __typename?: 'Query', invite: { __typename?: 'Invite', expires?: any | null, id: string, recipient: string, requesterID?: string | null, role: InviteRole, sendAttempts: number, status: InviteInviteStatus, createdAt?: any | null, createdBy?: string | null, updatedAt?: any | null, updatedBy?: string | null, owner?: { __typename?: 'Organization', displayName: string, id: string, name: string } | null } };
 
 export type InvitesByOrgIdQueryVariables = Exact<{
   where?: InputMaybe<InviteWhereInput>;
 }>;
 
 
-export type InvitesByOrgIdQuery = { __typename?: 'Query', invites: { __typename?: 'InviteConnection', edges?: Array<{ __typename?: 'InviteEdge', node?: { __typename?: 'Invite', owner?: { __typename?: 'Organization', id: string, invites?: Array<{ __typename?: 'Invite', recipient: string, requestorID?: string | null, role: InviteRole, sendAttempts: number, status: InviteInviteStatus }> | null } | null } | null } | null> | null } };
+export type InvitesByOrgIdQuery = { __typename?: 'Query', invites: { __typename?: 'InviteConnection', edges?: Array<{ __typename?: 'InviteEdge', node?: { __typename?: 'Invite', owner?: { __typename?: 'Organization', id: string, invites?: Array<{ __typename?: 'Invite', recipient: string, requesterID?: string | null, role: InviteRole, sendAttempts: number, status: InviteInviteStatus }> | null } | null } | null } | null> | null } };
 
 export type DeleteInviteMutationVariables = Exact<{
   deleteInviteId: Scalars['ID']['input'];
@@ -12896,7 +12933,7 @@ export type DeleteInviteMutation = { __typename?: 'Mutation', deleteInvite: { __
 export type GetAllOrganizationsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetAllOrganizationsQuery = { __typename?: 'Query', organizations: { __typename?: 'OrganizationConnection', edges?: Array<{ __typename?: 'OrganizationEdge', node?: { __typename?: 'Organization', id: string, name: string, displayName: string, avatarRemoteURL?: string | null, description?: string | null, personalOrg?: boolean | null, createdAt?: any | null, updatedAt?: any | null, parent?: { __typename?: 'Organization', id: string, name: string } | null, children: { __typename?: 'OrganizationConnection', edges?: Array<{ __typename?: 'OrganizationEdge', node?: { __typename?: 'Organization', id: string, name: string, displayName: string, description?: string | null } | null } | null> | null }, members?: Array<{ __typename?: 'OrgMembership', id: string, role: OrgMembershipRole, user: { __typename?: 'User', id: string, firstName?: string | null, lastName?: string | null } }> | null, setting?: { __typename?: 'OrganizationSetting', id: string, createdAt?: any | null, updatedAt?: any | null, createdBy?: string | null, updatedBy?: string | null, domains?: Array<string> | null, billingContact?: string | null, billingEmail?: string | null, billingPhone?: string | null, billingAddress?: string | null, taxIdentifier?: string | null, tags?: Array<string> | null, geoLocation?: OrganizationSettingRegion | null } | null } | null } | null> | null } };
+export type GetAllOrganizationsQuery = { __typename?: 'Query', organizations: { __typename?: 'OrganizationConnection', edges?: Array<{ __typename?: 'OrganizationEdge', node?: { __typename?: 'Organization', id: string, name: string, displayName: string, avatarRemoteURL?: string | null, avatarLocalFile?: string | null, description?: string | null, personalOrg?: boolean | null, createdAt?: any | null, updatedAt?: any | null, parent?: { __typename?: 'Organization', id: string, name: string } | null, children: { __typename?: 'OrganizationConnection', edges?: Array<{ __typename?: 'OrganizationEdge', node?: { __typename?: 'Organization', id: string, name: string, displayName: string, description?: string | null } | null } | null> | null }, members?: Array<{ __typename?: 'OrgMembership', id: string, role: OrgMembershipRole, user: { __typename?: 'User', id: string, firstName?: string | null, lastName?: string | null } }> | null, setting?: { __typename?: 'OrganizationSetting', id: string, createdAt?: any | null, updatedAt?: any | null, createdBy?: string | null, updatedBy?: string | null, domains?: Array<string> | null, billingContact?: string | null, billingEmail?: string | null, billingPhone?: string | null, billingAddress?: string | null, taxIdentifier?: string | null, tags?: Array<string> | null, geoLocation?: OrganizationSettingRegion | null } | null } | null } | null> | null } };
 
 export type GetOrganizationNameByIdQueryVariables = Exact<{
   organizationId: Scalars['ID']['input'];
@@ -13219,7 +13256,7 @@ export const GetInviteByIdDocument = gql`
     expires
     id
     recipient
-    requestorID
+    requesterID
     role
     sendAttempts
     status
@@ -13248,7 +13285,7 @@ export const InvitesByOrgIdDocument = gql`
           id
           invites {
             recipient
-            requestorID
+            requesterID
             role
             sendAttempts
             status
@@ -13283,6 +13320,7 @@ export const GetAllOrganizationsDocument = gql`
         name
         displayName
         avatarRemoteURL
+        avatarLocalFile
         description
         personalOrg
         parent {

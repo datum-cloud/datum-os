@@ -1,9 +1,10 @@
 import type { QueryKey } from '@tanstack/react-query'
 
-import { DEFAULT_BATCH_SIZE, OPERATOR_API_ROUTES } from '@repo/constants'
 import { camelize, decamelize } from '@repo/common/keys'
 import { getPathWithParams } from '@repo/common/routes'
+import { DEFAULT_BATCH_SIZE, OPERATOR_API_ROUTES } from '@repo/constants'
 import { Datum } from '@repo/types'
+
 import { queryClient } from '@/query/client'
 import type { ContactInput } from '@/utils/schemas'
 
@@ -212,9 +213,14 @@ export async function editContacts(
   const result = await response.json()
   const contacts = result.contacts as Datum.Contact[]
 
-  for (const contact of contacts) {
-    await queryClient.invalidateQueries({ queryKey: getContactKey(contact.id) })
-  }
+  await Promise.all(
+    contacts.map((contact) =>
+      queryClient.invalidateQueries({
+        queryKey: getContactKey(contact.id),
+        refetchType: 'none',
+      }),
+    ),
+  )
 
   await queryClient.invalidateQueries({
     queryKey: getContactsKey(id),
@@ -235,10 +241,6 @@ export async function removeContacts(
     method: 'DELETE',
     body: JSON.stringify(formattedInput),
   })
-
-  for (const contact of input) {
-    await queryClient.invalidateQueries({ queryKey: getContactKey(contact) })
-  }
 
   await queryClient.invalidateQueries({ queryKey: getContactsKey(id) })
 }

@@ -26,13 +26,13 @@ const ProfilePage = () => {
     },
     pause: !sessionData,
   })
-  const [{ fetching }, updateUserInfo] = useUpdateUserInfoMutation()
-
+  const [_, updateUserInfo] = useUpdateUserInfoMutation()
   async function updateWorkspace(input: UpdateUserInput) {
     const { error } = await updateUserInfo({
       updateUserId: userId,
       input,
     })
+
 
     if (error) {
       console.error(error)
@@ -44,6 +44,13 @@ const ProfilePage = () => {
       toast({
         title: 'Profile updated',
         variant: 'success',
+      })
+      update({
+        ...sessionData,
+        user: {
+          ...sessionData?.user,
+          name: input?.firstName || input?.lastName ? `${input?.firstName} ${input?.lastName}` : sessionData?.user.name,
+        },
       })
     }
   }
