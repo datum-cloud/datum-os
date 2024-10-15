@@ -2,6 +2,7 @@
 
 import { ArrowDown, ArrowUp, Minus } from 'lucide-react'
 
+import { PRIMARY_COLOR, SECONDARY_COLOR } from '@repo/constants'
 import { ChartConfig, ChartContainer, Recharts } from '@repo/ui/chart'
 import {
   Card,
@@ -10,7 +11,6 @@ import {
   CardHeader,
   CardTitle,
 } from '@repo/ui/chart-card'
-import { PRIMARY_COLOR, SECONDARY_COLOR } from '@repo/constants'
 import { Tag } from '@repo/ui/tag'
 
 import { statisticsStyles } from './page.styles'
@@ -19,6 +19,7 @@ type UsersStatisticsProps = {
   newUsersWeekly: UserStatistics
   newUsersMonthly: UserStatistics
   // activeUsers: UserStatistics
+  onDashboard?: boolean
 }
 
 type UserStatistics = Record<string, string | number>[]
@@ -26,6 +27,7 @@ type UserStatistics = Record<string, string | number>[]
 const UsersStatistics = ({
   newUsersWeekly,
   newUsersMonthly,
+  onDashboard = false,
 }: // activeUsers,
 UsersStatisticsProps) => {
   const {
@@ -34,18 +36,19 @@ UsersStatisticsProps) => {
     cardHeader,
     cardContent,
     cardTitle,
+    cardDescription,
     cardTag,
     cardChart,
   } = statisticsStyles()
   const charts = [
     {
       title: 'New Users',
-      description: '(Weekly)',
+      description: '(This week)',
       data: newUsersWeekly,
     },
     {
       title: 'New Users',
-      description: '(Monthly)',
+      description: '(This month)',
       data: newUsersMonthly,
     },
     // {
@@ -81,16 +84,20 @@ UsersStatisticsProps) => {
           <Card key={`${title}-${index}`} className={card()}>
             <CardHeader className={cardHeader()}>
               <div>
-                <CardTitle className={cardTitle()}>{title}</CardTitle>
-                <CardDescription>{description}</CardDescription>
+                <CardTitle className={cardTitle({ onDashboard })}>
+                  {title}
+                </CardTitle>
+                <CardDescription className={cardDescription({ onDashboard })}>
+                  {description}
+                </CardDescription>
               </div>
               <Tag
                 variant={
                   noChange
                     ? 'default'
                     : positiveChange
-                    ? 'success'
-                    : 'destructive'
+                      ? 'success'
+                      : 'destructive'
                 }
                 className={cardTag()}
               >

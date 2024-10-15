@@ -51,8 +51,10 @@ type OrganizationHistory struct {
 	ParentOrganizationID string `json:"parent_organization_id,omitempty"`
 	// orgs directly associated with a user
 	PersonalOrg bool `json:"personal_org,omitempty"`
-	// URL of the user's remote avatar
+	// URL of the organization's remote avatar
 	AvatarRemoteURL *string `json:"avatar_remote_url,omitempty"`
+	// The organization's local avatar file
+	AvatarLocalFile *string `json:"avatar_local_file,omitempty"`
 	// Whether the organization has a dedicated database
 	DedicatedDb  bool `json:"dedicated_db,omitempty"`
 	selectValues sql.SelectValues
@@ -69,7 +71,7 @@ func (*OrganizationHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(enthistory.OpType)
 		case organizationhistory.FieldPersonalOrg, organizationhistory.FieldDedicatedDb:
 			values[i] = new(sql.NullBool)
-		case organizationhistory.FieldID, organizationhistory.FieldRef, organizationhistory.FieldCreatedBy, organizationhistory.FieldUpdatedBy, organizationhistory.FieldMappingID, organizationhistory.FieldDeletedBy, organizationhistory.FieldName, organizationhistory.FieldDisplayName, organizationhistory.FieldDescription, organizationhistory.FieldParentOrganizationID, organizationhistory.FieldAvatarRemoteURL:
+		case organizationhistory.FieldID, organizationhistory.FieldRef, organizationhistory.FieldCreatedBy, organizationhistory.FieldUpdatedBy, organizationhistory.FieldMappingID, organizationhistory.FieldDeletedBy, organizationhistory.FieldName, organizationhistory.FieldDisplayName, organizationhistory.FieldDescription, organizationhistory.FieldParentOrganizationID, organizationhistory.FieldAvatarRemoteURL, organizationhistory.FieldAvatarLocalFile:
 			values[i] = new(sql.NullString)
 		case organizationhistory.FieldHistoryTime, organizationhistory.FieldCreatedAt, organizationhistory.FieldUpdatedAt, organizationhistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -199,6 +201,13 @@ func (oh *OrganizationHistory) assignValues(columns []string, values []any) erro
 				oh.AvatarRemoteURL = new(string)
 				*oh.AvatarRemoteURL = value.String
 			}
+		case organizationhistory.FieldAvatarLocalFile:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field avatar_local_file", values[i])
+			} else if value.Valid {
+				oh.AvatarLocalFile = new(string)
+				*oh.AvatarLocalFile = value.String
+			}
 		case organizationhistory.FieldDedicatedDb:
 			if value, ok := values[i].(*sql.NullBool); !ok {
 				return fmt.Errorf("unexpected type %T for field dedicated_db", values[i])
@@ -291,6 +300,11 @@ func (oh *OrganizationHistory) String() string {
 	builder.WriteString(", ")
 	if v := oh.AvatarRemoteURL; v != nil {
 		builder.WriteString("avatar_remote_url=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
+	if v := oh.AvatarLocalFile; v != nil {
+		builder.WriteString("avatar_local_file=")
 		builder.WriteString(*v)
 	}
 	builder.WriteString(", ")

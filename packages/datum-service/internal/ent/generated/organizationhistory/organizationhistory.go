@@ -51,6 +51,8 @@ const (
 	FieldPersonalOrg = "personal_org"
 	// FieldAvatarRemoteURL holds the string denoting the avatar_remote_url field in the database.
 	FieldAvatarRemoteURL = "avatar_remote_url"
+	// FieldAvatarLocalFile holds the string denoting the avatar_local_file field in the database.
+	FieldAvatarLocalFile = "avatar_local_file"
 	// FieldDedicatedDb holds the string denoting the dedicated_db field in the database.
 	FieldDedicatedDb = "dedicated_db"
 	// Table holds the table name of the organizationhistory in the database.
@@ -77,6 +79,7 @@ var Columns = []string{
 	FieldParentOrganizationID,
 	FieldPersonalOrg,
 	FieldAvatarRemoteURL,
+	FieldAvatarLocalFile,
 	FieldDedicatedDb,
 }
 
@@ -217,6 +220,11 @@ func ByPersonalOrg(opts ...sql.OrderTermOption) OrderOption {
 // ByAvatarRemoteURL orders the results by the avatar_remote_url field.
 func ByAvatarRemoteURL(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldAvatarRemoteURL, opts...).ToFunc()
+}
+
+// ByAvatarLocalFile orders the results by the avatar_local_file field.
+func ByAvatarLocalFile(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldAvatarLocalFile, opts...).ToFunc()
 }
 
 // ByDedicatedDb orders the results by the dedicated_db field.

@@ -1,13 +1,13 @@
 import type { QueryKey } from '@tanstack/react-query'
 
-import { OPERATOR_API_ROUTES } from '@repo/constants'
 import { camelize, decamelize } from '@repo/common/keys'
+import { getPathWithParams } from '@repo/common/routes'
+import { OPERATOR_API_ROUTES } from '@repo/constants'
 import { Datum } from '@repo/types'
 
-import { getPathWithParams } from '@repo/common/routes'
 import { queryClient } from '@/query/client'
-import type { ListInput } from '@/utils/schemas'
 import { getContactKey, getContactsKey } from '@/query/contacts'
+import type { ListInput } from '@/utils/schemas'
 
 function formatList(input: Record<string, any>): Datum.List {
   const {
@@ -144,9 +144,11 @@ export async function createListMembers(
     queryKey: getContactsKey(organisationId),
   })
 
-  for (const contactId of input) {
-    await queryClient.invalidateQueries({ queryKey: getContactKey(contactId) })
-  }
+  await Promise.all(
+    input.map((contactId) =>
+      queryClient.invalidateQueries({ queryKey: getContactKey(contactId) }),
+    ),
+  )
 
   return members
 }
@@ -173,9 +175,11 @@ export async function removeListMembers(
     queryKey: getContactsKey(organisationId),
   })
 
-  for (const contactId of input) {
-    await queryClient.invalidateQueries({ queryKey: getContactKey(contactId) })
-  }
+  await Promise.all(
+    input.map((contactId) =>
+      queryClient.invalidateQueries({ queryKey: getContactKey(contactId) }),
+    ),
+  )
 }
 
 export async function editLists(id: Datum.OrganisationId, input: ListInput[]) {
@@ -191,11 +195,13 @@ export async function editLists(id: Datum.OrganisationId, input: ListInput[]) {
   const result = await response.json()
   const contacts = camelize(result).contactLists as Datum.List[]
 
-  for (const list of input) {
-    await queryClient.invalidateQueries({
-      queryKey: getListKey(list.id as Datum.ListId),
-    })
-  }
+  await Promise.all(
+    input.map((list) =>
+      queryClient.invalidateQueries({
+        queryKey: getListKey(list.id as Datum.ListId),
+      }),
+    ),
+  )
 
   await queryClient.invalidateQueries({ queryKey: getListsKey(id) })
 

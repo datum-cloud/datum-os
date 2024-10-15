@@ -70,12 +70,17 @@ func (Organization) Fields() []ent.Field {
 			Default(false).
 			Immutable(),
 		field.String("avatar_remote_url").
-			Comment("URL of the user's remote avatar").
+			Comment("URL of the organization's remote avatar").
 			MaxLen(urlMaxLen).
 			Validate(func(s string) error {
 				_, err := url.Parse(s)
 				return err
 			}).
+			Optional().
+			Nillable(),
+		field.String("avatar_local_file").
+			Comment("The organization's local avatar file").
+			MaxLen(dataUrlMaxLen).
 			Optional().
 			Nillable(),
 		field.Bool("dedicated_db").

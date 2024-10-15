@@ -3023,6 +3023,7 @@ type CreateOrganizationInput struct {
 	Description                *string
 	PersonalOrg                *bool
 	AvatarRemoteURL            *string
+	AvatarLocalFile            *string
 	DedicatedDb                *bool
 	ParentID                   *string
 	GroupIDs                   []string
@@ -3068,6 +3069,9 @@ func (i *CreateOrganizationInput) Mutate(m *OrganizationMutation) {
 	}
 	if v := i.AvatarRemoteURL; v != nil {
 		m.SetAvatarRemoteURL(*v)
+	}
+	if v := i.AvatarLocalFile; v != nil {
+		m.SetAvatarLocalFile(*v)
 	}
 	if v := i.DedicatedDb; v != nil {
 		m.SetDedicatedDb(*v)
@@ -3166,6 +3170,8 @@ type UpdateOrganizationInput struct {
 	Description                      *string
 	ClearAvatarRemoteURL             bool
 	AvatarRemoteURL                  *string
+	ClearAvatarLocalFile             bool
+	AvatarLocalFile                  *string
 	ClearGroups                      bool
 	AddGroupIDs                      []string
 	RemoveGroupIDs                   []string
@@ -3267,6 +3273,12 @@ func (i *UpdateOrganizationInput) Mutate(m *OrganizationMutation) {
 	}
 	if v := i.AvatarRemoteURL; v != nil {
 		m.SetAvatarRemoteURL(*v)
+	}
+	if i.ClearAvatarLocalFile {
+		m.ClearAvatarLocalFile()
+	}
+	if v := i.AvatarLocalFile; v != nil {
+		m.SetAvatarLocalFile(*v)
 	}
 	if i.ClearGroups {
 		m.ClearGroups()

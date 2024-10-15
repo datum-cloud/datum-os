@@ -195,6 +195,9 @@ export const MembersTable = ({
           children="Joined"
         />
       ),
+      meta: {
+        minWidth: 250,
+      },
       cell: ({ cell }) =>
         format(new Date(cell.getValue() as string), 'd MMM yyyy'),
     },
@@ -210,6 +213,9 @@ export const MembersTable = ({
       cell: ({ cell }) => (
         <>{providerIcon(cell.getValue() as UserAuthProvider)}</>
       ),
+      meta: {
+        minWidth: 150,
+      },
     },
     {
       accessorKey: 'orgRole',
@@ -220,6 +226,9 @@ export const MembersTable = ({
           children="Role"
         />
       ),
+      meta: {
+        minWidth: 120,
+      },
       cell: ({ cell }) => <>{cell.getValue()}</>,
     },
     {

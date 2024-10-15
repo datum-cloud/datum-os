@@ -4615,6 +4615,10 @@ func (m *OrganizationMutation) CreateHistoryFromCreate(ctx context.Context) erro
 		create = create.SetNillableAvatarRemoteURL(&avatarRemoteURL)
 	}
 
+	if avatarLocalFile, exists := m.AvatarLocalFile(); exists {
+		create = create.SetNillableAvatarLocalFile(&avatarLocalFile)
+	}
+
 	if dedicatedDb, exists := m.DedicatedDb(); exists {
 		create = create.SetDedicatedDb(dedicatedDb)
 	}
@@ -4733,6 +4737,12 @@ func (m *OrganizationMutation) CreateHistoryFromUpdate(ctx context.Context) erro
 			create = create.SetNillableAvatarRemoteURL(organization.AvatarRemoteURL)
 		}
 
+		if avatarLocalFile, exists := m.AvatarLocalFile(); exists {
+			create = create.SetNillableAvatarLocalFile(&avatarLocalFile)
+		} else {
+			create = create.SetNillableAvatarLocalFile(organization.AvatarLocalFile)
+		}
+
 		if dedicatedDb, exists := m.DedicatedDb(); exists {
 			create = create.SetDedicatedDb(dedicatedDb)
 		} else {
@@ -4785,6 +4795,7 @@ func (m *OrganizationMutation) CreateHistoryFromDelete(ctx context.Context) erro
 			SetParentOrganizationID(organization.ParentOrganizationID).
 			SetPersonalOrg(organization.PersonalOrg).
 			SetNillableAvatarRemoteURL(organization.AvatarRemoteURL).
+			SetNillableAvatarLocalFile(organization.AvatarLocalFile).
 			SetDedicatedDb(organization.DedicatedDb).
 			Save(ctx)
 		if err != nil {

@@ -50,13 +50,25 @@ export const statisticsStyles = tv({
   slots: {
     container:
       'w-full flex flex-col lg:flex-row justify-start items-stretch gap-6',
-    card: 'w-full lg:max-w-[367px] md:w-1/3',
+    card: 'w-full lg:w-1/3 lg:max-w-[367px] md:w-1/2',
     cardHeader: 'flex flex-row justify-between items-center pb-[18px] px-8',
     cardContent: 'relative flex gap-8 justify-between items-stretch px-8',
-    cardDescription: 'mt-0.5',
-    cardTitle: 'text-body-m font-medium',
+    cardDescription: '',
+    cardTitle: '',
     cardTag: 'flex items-center gap-0.5 pt-[1px]',
     cardChart: 'min-h-12 max-h-36',
+  },
+  variants: {
+    onDashboard: {
+      true: {
+        cardTitle: 'text-2xl font-semibold',
+        cardDescription: 'text-body-m mt-0',
+      },
+      false: {
+        cardTitle: 'text-body-m font-medium',
+        cardDescription: 'text-body-xs mt-0.5',
+      },
+    },
   },
 })
 

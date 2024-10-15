@@ -189,6 +189,26 @@ func (ohu *OrganizationHistoryUpdate) ClearAvatarRemoteURL() *OrganizationHistor
 	return ohu
 }
 
+// SetAvatarLocalFile sets the "avatar_local_file" field.
+func (ohu *OrganizationHistoryUpdate) SetAvatarLocalFile(s string) *OrganizationHistoryUpdate {
+	ohu.mutation.SetAvatarLocalFile(s)
+	return ohu
+}
+
+// SetNillableAvatarLocalFile sets the "avatar_local_file" field if the given value is not nil.
+func (ohu *OrganizationHistoryUpdate) SetNillableAvatarLocalFile(s *string) *OrganizationHistoryUpdate {
+	if s != nil {
+		ohu.SetAvatarLocalFile(*s)
+	}
+	return ohu
+}
+
+// ClearAvatarLocalFile clears the value of the "avatar_local_file" field.
+func (ohu *OrganizationHistoryUpdate) ClearAvatarLocalFile() *OrganizationHistoryUpdate {
+	ohu.mutation.ClearAvatarLocalFile()
+	return ohu
+}
+
 // SetDedicatedDb sets the "dedicated_db" field.
 func (ohu *OrganizationHistoryUpdate) SetDedicatedDb(b bool) *OrganizationHistoryUpdate {
 	ohu.mutation.SetDedicatedDb(b)
@@ -326,6 +346,12 @@ func (ohu *OrganizationHistoryUpdate) sqlSave(ctx context.Context) (n int, err e
 	}
 	if ohu.mutation.AvatarRemoteURLCleared() {
 		_spec.ClearField(organizationhistory.FieldAvatarRemoteURL, field.TypeString)
+	}
+	if value, ok := ohu.mutation.AvatarLocalFile(); ok {
+		_spec.SetField(organizationhistory.FieldAvatarLocalFile, field.TypeString, value)
+	}
+	if ohu.mutation.AvatarLocalFileCleared() {
+		_spec.ClearField(organizationhistory.FieldAvatarLocalFile, field.TypeString)
 	}
 	if value, ok := ohu.mutation.DedicatedDb(); ok {
 		_spec.SetField(organizationhistory.FieldDedicatedDb, field.TypeBool, value)
@@ -510,6 +536,26 @@ func (ohuo *OrganizationHistoryUpdateOne) ClearAvatarRemoteURL() *OrganizationHi
 	return ohuo
 }
 
+// SetAvatarLocalFile sets the "avatar_local_file" field.
+func (ohuo *OrganizationHistoryUpdateOne) SetAvatarLocalFile(s string) *OrganizationHistoryUpdateOne {
+	ohuo.mutation.SetAvatarLocalFile(s)
+	return ohuo
+}
+
+// SetNillableAvatarLocalFile sets the "avatar_local_file" field if the given value is not nil.
+func (ohuo *OrganizationHistoryUpdateOne) SetNillableAvatarLocalFile(s *string) *OrganizationHistoryUpdateOne {
+	if s != nil {
+		ohuo.SetAvatarLocalFile(*s)
+	}
+	return ohuo
+}
+
+// ClearAvatarLocalFile clears the value of the "avatar_local_file" field.
+func (ohuo *OrganizationHistoryUpdateOne) ClearAvatarLocalFile() *OrganizationHistoryUpdateOne {
+	ohuo.mutation.ClearAvatarLocalFile()
+	return ohuo
+}
+
 // SetDedicatedDb sets the "dedicated_db" field.
 func (ohuo *OrganizationHistoryUpdateOne) SetDedicatedDb(b bool) *OrganizationHistoryUpdateOne {
 	ohuo.mutation.SetDedicatedDb(b)
@@ -677,6 +723,12 @@ func (ohuo *OrganizationHistoryUpdateOne) sqlSave(ctx context.Context) (_node *O
 	}
 	if ohuo.mutation.AvatarRemoteURLCleared() {
 		_spec.ClearField(organizationhistory.FieldAvatarRemoteURL, field.TypeString)
+	}
+	if value, ok := ohuo.mutation.AvatarLocalFile(); ok {
+		_spec.SetField(organizationhistory.FieldAvatarLocalFile, field.TypeString, value)
+	}
+	if ohuo.mutation.AvatarLocalFileCleared() {
+		_spec.ClearField(organizationhistory.FieldAvatarLocalFile, field.TypeString)
 	}
 	if value, ok := ohuo.mutation.DedicatedDb(); ok {
 		_spec.SetField(organizationhistory.FieldDedicatedDb, field.TypeBool, value)

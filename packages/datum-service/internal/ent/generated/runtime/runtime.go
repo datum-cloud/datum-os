@@ -2486,8 +2486,12 @@ func init() {
 			return nil
 		}
 	}()
+	// organizationDescAvatarLocalFile is the schema descriptor for avatar_local_file field.
+	organizationDescAvatarLocalFile := organizationFields[6].Descriptor()
+	// organization.AvatarLocalFileValidator is a validator for the "avatar_local_file" field. It is called by the builders before save.
+	organization.AvatarLocalFileValidator = organizationDescAvatarLocalFile.Validators[0].(func(string) error)
 	// organizationDescDedicatedDb is the schema descriptor for dedicated_db field.
-	organizationDescDedicatedDb := organizationFields[6].Descriptor()
+	organizationDescDedicatedDb := organizationFields[7].Descriptor()
 	// organization.DefaultDedicatedDb holds the default value on creation for the dedicated_db field.
 	organization.DefaultDedicatedDb = organizationDescDedicatedDb.Default.(bool)
 	// organizationDescID is the schema descriptor for id field.
@@ -2538,7 +2542,7 @@ func init() {
 	// organizationhistory.DefaultPersonalOrg holds the default value on creation for the personal_org field.
 	organizationhistory.DefaultPersonalOrg = organizationhistoryDescPersonalOrg.Default.(bool)
 	// organizationhistoryDescDedicatedDb is the schema descriptor for dedicated_db field.
-	organizationhistoryDescDedicatedDb := organizationhistoryFields[18].Descriptor()
+	organizationhistoryDescDedicatedDb := organizationhistoryFields[19].Descriptor()
 	// organizationhistory.DefaultDedicatedDb holds the default value on creation for the dedicated_db field.
 	organizationhistory.DefaultDedicatedDb = organizationhistoryDescDedicatedDb.Default.(bool)
 	// organizationhistoryDescID is the schema descriptor for id field.
