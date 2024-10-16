@@ -12,16 +12,13 @@ import {
   ColumnFiltersState,
   DataTable,
   DataTableColumnHeader,
+  FilterFn,
   Row,
 } from '@repo/ui/data-table'
 import { Tag } from '@repo/ui/tag'
 
 import { formatDate } from '@/utils/date'
-import {
-  booleanFilter,
-  fuzzyFilter,
-  fuzzySort,
-} from '@/utils/filters/functions'
+import { customFilter, fuzzyFilter, fuzzySort } from '@/utils/filters/functions'
 import { sortAlphabetically } from '@/utils/sort'
 
 import ContactsTableDropdown from './contacts-table-dropdown'
@@ -37,11 +34,6 @@ type ContactsTableProps = {
 }
 
 const { header, checkboxContainer, link } = tableStyles()
-
-const filterFns = {
-  fuzzy: fuzzyFilter,
-  boolean: booleanFilter,
-}
 
 export const CONTACT_COLUMNS: ColumnDef<Datum.Contact>[] = [
   {
@@ -84,7 +76,7 @@ export const CONTACT_COLUMNS: ColumnDef<Datum.Contact>[] = [
     id: 'email',
     accessorFn: (row) => row.email || '',
     enableGlobalFilter: true,
-    filterFn: booleanFilter,
+    filterFn: 'custom',
     enableSorting: true,
     sortingFn: fuzzySort,
     header: ({ column }) => (
@@ -122,7 +114,7 @@ export const CONTACT_COLUMNS: ColumnDef<Datum.Contact>[] = [
         children="Name"
       />
     ),
-    filterFn: booleanFilter,
+    filterFn: 'custom',
     enableGlobalFilter: true,
     enableSorting: true,
     sortingFn: fuzzySort,
@@ -247,6 +239,12 @@ const ContactsTable = ({
       setFilteredContacts(contacts)
     }
   }, [contacts])
+
+  const filterFns: Record<string, FilterFn<Datum.Contact>> = {
+    fuzzy: fuzzyFilter,
+    custom: (row, columnId, filterValue) =>
+      customFilter(row, columnId, columnFilters),
+  }
 
   return (
     <DataTable

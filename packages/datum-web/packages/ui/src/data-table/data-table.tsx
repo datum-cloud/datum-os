@@ -23,8 +23,9 @@ import {
   useReactTable,
 } from '@tanstack/react-table'
 import { EyeIcon } from 'lucide-react'
-import { on } from 'process'
 import { Fragment, useCallback, useEffect, useState } from 'react'
+
+import { Datum } from '@repo/types'
 
 import { cn } from '../../lib/utils'
 import { Button } from '../button/button'
@@ -66,12 +67,16 @@ interface DataTableProps<TData, TValue> {
 }
 
 declare module '@tanstack/react-table' {
-  //add fuzzy filter to the filterFns
   interface FilterFns {
     fuzzy: FilterFn<unknown>
+    custom: FilterFn<unknown>
   }
   interface FilterMeta {
     itemRank: RankingInfo
+  }
+
+  interface ColumnFilter {
+    operator?: Datum.OperatorType
   }
 
   interface ColumnMeta<TData extends RowData, TValue> {
@@ -93,14 +98,14 @@ export function DataTable<TData, TValue>({
   filterFns = {},
   globalFilterFn,
   globalFilter,
-  columnFilters: _columnFilters,
+  columnFilters: initialColumnFilters,
   setGlobalFilter,
   setSelection,
   onRowsFetched,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([])
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>(
-    _columnFilters || [],
+    initialColumnFilters || [],
   )
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
   const [rowSelection, setRowSelection] = useState({})
@@ -132,10 +137,10 @@ export function DataTable<TData, TValue>({
   })
 
   useEffect(() => {
-    if (_columnFilters) {
-      setColumnFilters(_columnFilters)
+    if (initialColumnFilters) {
+      setColumnFilters(initialColumnFilters)
     }
-  }, [_columnFilters])
+  }, [initialColumnFilters])
 
   useEffect(() => {
     if (setSelection) {

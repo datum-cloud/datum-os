@@ -99,7 +99,11 @@ const UsersControls = ({
               </DropdownMenuItem> */}
             </DropdownMenuContent>
           </DropdownMenu>
-          <FilterDialog onFilter={onFilter} entityFilters={USER_FILTERS} />
+          <FilterDialog
+            groupTitle="Users"
+            onFilter={onFilter}
+            filterList={USER_FILTERS}
+          />
         </div>
       </div>
       <UsersFormDialog

@@ -16,11 +16,7 @@ import {
 } from '@repo/ui/data-table'
 import { Tag } from '@repo/ui/tag'
 
-import {
-  booleanFilter,
-  fuzzyFilter,
-  fuzzySort,
-} from '@/utils/filters/functions'
+import { customFilter, fuzzyFilter, fuzzySort } from '@/utils/filters/functions'
 
 import ListsTableDropdown from './lists-table-dropdown'
 import { tableStyles } from './page.styles'
@@ -38,7 +34,7 @@ const { header, checkboxContainer, link } = tableStyles()
 
 const filterFns = {
   fuzzy: fuzzyFilter,
-  empty: booleanFilter,
+  customFilter: customFilter,
 }
 
 export const LIST_COLUMNS: ColumnDef<Datum.List>[] = [

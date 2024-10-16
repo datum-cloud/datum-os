@@ -13,6 +13,7 @@ import {
   Dialog,
   DialogClose,
   DialogContent,
+  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
@@ -125,6 +126,7 @@ const MembersFormDialog = ({
           <DialogTitle>
             Edit role for {`"${member?.firstName} ${member?.lastName}"`}
           </DialogTitle>
+          <DialogDescription />
           <DialogClose onClick={handleCancel} />
         </DialogHeader>
         {isSubmitting || isSubmitted ? (

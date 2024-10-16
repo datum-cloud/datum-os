@@ -68,29 +68,29 @@ export namespace Datum {
     deactivated = 'DEACTIVATED',
   }
 
-  export type OPERATOR =
-    | 'equals'
-    | 'doesNotEqual'
-    | 'contains'
-    | 'doesNotContain'
-    | 'greaterThan'
-    | 'greaterThanOrEqualTo'
-    | 'lessThan'
-    | 'lessThanOrEqualTo'
-    | 'empty'
+  export type OperatorType = 'enum' | 'contains' | 'includes' | 'empty'
+
+  export type Filter = {
+    field: string
+    operator: OperatorType
+    value: any
+  }
 
   export type FilterOption = {
     key: string
     value: any
   }
 
-  export type Filter = {
+  export type FilterMenuItem = {
     icon: React.ForwardRefExoticComponent<
       Omit<LucideProps, 'ref'> & React.RefAttributes<SVGSVGElement>
     >
     title: string
-    operator: Datum.OPERATOR
-    options?: FilterOption[]
+    operators: {
+      key: OperatorType
+      title: string
+      options?: FilterOption[]
+    }[]
   }
 
   export type List = {

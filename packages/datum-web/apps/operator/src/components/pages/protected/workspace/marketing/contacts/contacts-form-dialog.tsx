@@ -12,6 +12,7 @@ import {
   Dialog,
   DialogClose,
   DialogContent,
+  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
@@ -124,6 +125,7 @@ const ContactFormDialog = ({
           <DialogTitle>
             {isNew ? 'Add a contact' : 'Edit contact info'}
           </DialogTitle>
+          <DialogDescription />
           <DialogClose onClick={handleCancel} />
         </DialogHeader>
         {isSubmitting || isSubmitted ? (
