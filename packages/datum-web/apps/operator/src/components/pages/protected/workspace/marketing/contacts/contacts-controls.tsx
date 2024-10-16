@@ -241,7 +241,11 @@ const ContactsControls = ({
             </Accordion>
           </DropdownMenuContent>
         </DropdownMenu>
-        <FilterDialog onFilter={onFilter} entityFilters={CONTACT_FILTERS} />
+        <FilterDialog
+          groupTitle="Contacts"
+          onFilter={onFilter}
+          filterList={CONTACT_FILTERS}
+        />
       </div>
       <ContactFormDialog
         open={openContactDialog}

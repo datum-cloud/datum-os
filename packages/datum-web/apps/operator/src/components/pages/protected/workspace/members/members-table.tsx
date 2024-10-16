@@ -16,11 +16,7 @@ import {
   Row,
 } from '@repo/ui/data-table'
 
-import {
-  booleanFilter,
-  fuzzyFilter,
-  fuzzySort,
-} from '@/utils/filters/functions'
+import { fuzzyFilter, fuzzySort } from '@/utils/filters/functions'
 
 import MembersTableDropdown from './members-table-dropdown'
 import { pageStyles } from './page.styles'
@@ -51,7 +47,6 @@ export const MembersTable = ({
 
   const filterFns = {
     fuzzy: fuzzyFilter,
-    boolean: booleanFilter,
   }
 
   const providerIcon = (provider: UserAuthProvider) => {
@@ -116,7 +111,6 @@ export const MembersTable = ({
           : email
       },
       enableGlobalFilter: true,
-      filterFn: booleanFilter,
       enableSorting: true,
       sortingFn: fuzzySort,
       header: ({ column }) => (

@@ -1,6 +1,6 @@
 import z from 'zod'
-import { InviteRole } from '@repo/codegen/src/schema'
 
+import { InviteRole } from '@repo/codegen/src/schema'
 import { TEL_REGEX } from '@repo/constants'
 
 export const ContactSchema = z.object({
@@ -55,20 +55,10 @@ export const FilterFormSchema = z.object({
   filters: z.record(
     z.string().describe('Field to query'),
     z.object({
-      value: z.any().describe('Query value'),
       operator: z
-        .enum([
-          'equals',
-          'doesNotEqual',
-          'contains',
-          'doesNotContain',
-          'greaterThan',
-          'greaterThanOrEqualTo',
-          'lessThan',
-          'lessThanOrEqualTo',
-          'empty',
-        ])
+        .enum(['enum', 'contains', 'includes', 'empty'])
         .describe('Operator to use for the query'),
+      value: z.any().describe('Query value'),
     }),
   ),
 })

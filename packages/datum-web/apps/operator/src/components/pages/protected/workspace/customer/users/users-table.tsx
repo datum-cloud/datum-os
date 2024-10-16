@@ -13,16 +13,13 @@ import {
   ColumnFiltersState,
   DataTable,
   DataTableColumnHeader,
+  FilterFn,
   Row,
 } from '@repo/ui/data-table'
 import { Tag, TagVariants } from '@repo/ui/tag'
 
 import { formatDate } from '@/utils/date'
-import {
-  booleanFilter,
-  fuzzyFilter,
-  fuzzySort,
-} from '@/utils/filters/functions'
+import { customFilter, fuzzyFilter, fuzzySort } from '@/utils/filters/functions'
 
 import { tableStyles } from './page.styles'
 
@@ -37,11 +34,6 @@ type UsersTableProps = {
 
 const { header, checkboxContainer, link, userDetails, userDetailsText } =
   tableStyles()
-
-const filterFns = {
-  fuzzy: fuzzyFilter,
-  boolean: booleanFilter,
-}
 
 export const USER_COLUMNS: ColumnDef<Datum.OrgUser>[] = [
   {
@@ -85,7 +77,7 @@ export const USER_COLUMNS: ColumnDef<Datum.OrgUser>[] = [
     accessorFn: (row) =>
       `${row?.firstName ?? ''}${row?.lastName ? row?.lastName : ''}`,
     enableGlobalFilter: true,
-    filterFn: booleanFilter,
+    filterFn: 'custom',
     enableSorting: true,
     sortingFn: fuzzySort,
     header: ({ column }) => (
@@ -121,7 +113,7 @@ export const USER_COLUMNS: ColumnDef<Datum.OrgUser>[] = [
     id: 'email',
     accessorFn: (row) => row?.email || '',
     enableGlobalFilter: true,
-    filterFn: booleanFilter,
+    filterFn: 'custom',
     enableSorting: true,
     sortingFn: fuzzySort,
     header: ({ column }) => (
@@ -160,7 +152,7 @@ export const USER_COLUMNS: ColumnDef<Datum.OrgUser>[] = [
         children="Provider"
       />
     ),
-    filterFn: booleanFilter,
+    filterFn: 'custom',
     enableGlobalFilter: false,
     enableSorting: true,
     sortingFn: fuzzySort,
@@ -194,7 +186,7 @@ export const USER_COLUMNS: ColumnDef<Datum.OrgUser>[] = [
         children="Status"
       />
     ),
-    filterFn: booleanFilter,
+    filterFn: 'custom',
     enableGlobalFilter: true,
     enableSorting: true,
     sortingFn: fuzzySort,
@@ -254,6 +246,12 @@ const UsersTable = ({
       setFilteredUsers(users)
     }
   }, [users])
+
+  const filterFns: Record<string, FilterFn<Datum.User>> = {
+    fuzzy: fuzzyFilter,
+    custom: (row, columnId, filterValue) =>
+      customFilter(row, columnId, columnFilters),
+  }
 
   return (
     <DataTable
