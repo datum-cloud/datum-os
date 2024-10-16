@@ -1,5 +1,8 @@
 import useSWR from 'swr'
 
+import { getPathWithQuery } from '@repo/common/routes'
+import { DEFAULT_ERROR_MESSAGE, OPERATOR_API_ROUTES } from '@repo/constants'
+
 import { RegisterUserInput } from '@/utils/schemas'
 
 export interface LoginUser {
@@ -32,25 +35,35 @@ export interface SwitchWorkspace {
 }
 
 export async function registerUser<T>(arg: RegisterUserInput) {
-  const fData: HttpResponse<T> = await fetch('/api/auth/register', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(arg),
-  })
   try {
-    const fDataMessage = await fData.json()
-    fData.message = fDataMessage.error
-    return fData
+    const response: HttpResponse<T> = await fetch(
+      OPERATOR_API_ROUTES.register,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(arg),
+      },
+    )
+    const responseBody = await response.json()
+
+    if (!response.ok) {
+      const errorMessage = responseBody?.message || DEFAULT_ERROR_MESSAGE
+      return { message: errorMessage }
+    }
+
+    return responseBody
   } catch (error) {
-    return { message: 'error' }
+    return { message: DEFAULT_ERROR_MESSAGE }
   }
 }
 
 export const useVerifyUser = (arg: string | null) => {
   const { data, isLoading, error } = useSWR(
-    arg ? `/api/auth/verify?token=${arg}` : null,
+    arg
+      ? `${getPathWithQuery(OPERATOR_API_ROUTES.verify, { token: arg })}`
+      : null,
     async (url) => {
       return (await fetch(url)).json()
     },
@@ -70,7 +83,9 @@ export const useVerifyUser = (arg: string | null) => {
 
 export const useAcceptWorkspaceInvite = (arg: string | null) => {
   const { data, isLoading, error } = useSWR(
-    arg ? `/api/auth/invite?token=${arg}` : null,
+    arg
+      ? `${getPathWithQuery(OPERATOR_API_ROUTES.invite, { token: arg })}`
+      : null,
     async (url) => {
       return (
         await fetch(url, {
@@ -97,97 +112,137 @@ export const useAcceptWorkspaceInvite = (arg: string | null) => {
 }
 
 export async function getPasskeyRegOptions<T>(arg: PasskeyRegOptionsInput) {
-  const fData: HttpResponse<T> = await fetch('/api/auth/registration-options', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(arg),
-    credentials: 'include',
-  })
-
-  const data = await fData.json()
   try {
-    return data
+    const response: HttpResponse<T> = await fetch(
+      OPERATOR_API_ROUTES.registrationOptions,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(arg),
+        credentials: 'include',
+      },
+    )
+
+    const responseBody = await response.json()
+
+    if (!response.ok) {
+      const errorMessage = responseBody?.message || DEFAULT_ERROR_MESSAGE
+      return { message: errorMessage }
+    }
+
+    return responseBody
   } catch (error) {
-    return { message: 'error' }
+    return { message: DEFAULT_ERROR_MESSAGE }
   }
 }
 
 export async function verifyRegistration<T>(
   arg: RegistrationVerificationInput,
 ) {
-  const fData: HttpResponse<T> = await fetch(
-    '/api/auth/registration-verification',
-    {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(arg),
-      credentials: 'include',
-    },
-  )
   try {
-    return await fData.json()
+    const response: HttpResponse<T> = await fetch(
+      OPERATOR_API_ROUTES.registrationVerification,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(arg),
+        credentials: 'include',
+      },
+    )
+    const responseBody = await response.json()
+
+    if (!response.ok) {
+      const errorMessage = responseBody?.message || DEFAULT_ERROR_MESSAGE
+      return { message: errorMessage }
+    }
+
+    return responseBody
   } catch (error) {
-    return { message: 'error' }
+    return { message: DEFAULT_ERROR_MESSAGE }
   }
 }
 
 export async function getPasskeySignInOptions<T>(
   arg: PasskeySignInOptionsInput,
 ) {
-  const fData: HttpResponse<T> = await fetch('/api/auth/signin-options', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(arg),
-    credentials: 'include',
-  })
-
-  const data = await fData.json()
   try {
-    return data
+    const response: HttpResponse<T> = await fetch(
+      OPERATOR_API_ROUTES.signinOptions,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(arg),
+        credentials: 'include',
+      },
+    )
+
+    const responseBody = await response.json()
+
+    if (!response.ok) {
+      const errorMessage = responseBody?.message || DEFAULT_ERROR_MESSAGE
+      return { message: errorMessage }
+    }
+
+    return responseBody
   } catch (error) {
-    return { message: 'error' }
+    return { message: DEFAULT_ERROR_MESSAGE }
   }
 }
 
 export async function verifyAuthentication<T>(arg: AuthVerificationInput) {
-  const fData: HttpResponse<T> = await fetch(
-    '/api/auth/authentication-verification',
-    {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(arg.assertionResponse),
-      credentials: 'include',
-    },
-  )
   try {
-    return await fData.json()
+    const response: HttpResponse<T> = await fetch(
+      OPERATOR_API_ROUTES.signinVerification,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(arg.assertionResponse),
+        credentials: 'include',
+      },
+    )
+    const responseBody = await response.json()
+
+    if (!response.ok) {
+      const errorMessage = responseBody?.message || DEFAULT_ERROR_MESSAGE
+      return { message: errorMessage }
+    }
+
+    return responseBody
   } catch (error) {
-    return { message: 'error' }
+    return { message: DEFAULT_ERROR_MESSAGE }
   }
 }
 
 export async function switchWorkspace<T>(arg: SwitchWorkspace) {
-  const fData: HttpResponse<T> = await fetch('/api/auth/switch-workspace', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(arg),
-    credentials: 'include',
-  })
   try {
-    const fDataMessage = await fData.json()
-    fData.message = fDataMessage.error
-    return fDataMessage
+    const response: HttpResponse<T> = await fetch(
+      OPERATOR_API_ROUTES.switchWorkspace,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(arg),
+        credentials: 'include',
+      },
+    )
+    const responseBody = await response.json()
+
+    if (!response.ok) {
+      const errorMessage = responseBody?.message || DEFAULT_ERROR_MESSAGE
+      return { message: errorMessage }
+    }
+
+    return responseBody
   } catch (error) {
-    return { message: 'error' }
+    return { message: DEFAULT_ERROR_MESSAGE }
   }
 }
