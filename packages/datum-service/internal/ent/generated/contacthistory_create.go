@@ -458,11 +458,11 @@ func (chc *ContactHistoryCreate) createSpec() (*ContactHistory, *sqlgraph.Create
 	}
 	if value, ok := chc.mutation.DeletedAt(); ok {
 		_spec.SetField(contacthistory.FieldDeletedAt, field.TypeTime, value)
-		_node.DeletedAt = value
+		_node.DeletedAt = &value
 	}
 	if value, ok := chc.mutation.DeletedBy(); ok {
 		_spec.SetField(contacthistory.FieldDeletedBy, field.TypeString, value)
-		_node.DeletedBy = value
+		_node.DeletedBy = &value
 	}
 	if value, ok := chc.mutation.Tags(); ok {
 		_spec.SetField(contacthistory.FieldTags, field.TypeJSON, value)

@@ -375,11 +375,11 @@ func (ddhc *DocumentDataHistoryCreate) createSpec() (*DocumentDataHistory, *sqlg
 	}
 	if value, ok := ddhc.mutation.DeletedAt(); ok {
 		_spec.SetField(documentdatahistory.FieldDeletedAt, field.TypeTime, value)
-		_node.DeletedAt = value
+		_node.DeletedAt = &value
 	}
 	if value, ok := ddhc.mutation.DeletedBy(); ok {
 		_spec.SetField(documentdatahistory.FieldDeletedBy, field.TypeString, value)
-		_node.DeletedBy = value
+		_node.DeletedBy = &value
 	}
 	if value, ok := ddhc.mutation.OwnerID(); ok {
 		_spec.SetField(documentdatahistory.FieldOwnerID, field.TypeString, value)

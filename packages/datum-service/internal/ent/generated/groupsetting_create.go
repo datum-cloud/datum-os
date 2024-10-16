@@ -386,11 +386,11 @@ func (gsc *GroupSettingCreate) createSpec() (*GroupSetting, *sqlgraph.CreateSpec
 	}
 	if value, ok := gsc.mutation.DeletedAt(); ok {
 		_spec.SetField(groupsetting.FieldDeletedAt, field.TypeTime, value)
-		_node.DeletedAt = value
+		_node.DeletedAt = &value
 	}
 	if value, ok := gsc.mutation.DeletedBy(); ok {
 		_spec.SetField(groupsetting.FieldDeletedBy, field.TypeString, value)
-		_node.DeletedBy = value
+		_node.DeletedBy = &value
 	}
 	if value, ok := gsc.mutation.Visibility(); ok {
 		_spec.SetField(groupsetting.FieldVisibility, field.TypeEnum, value)

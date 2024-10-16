@@ -332,11 +332,11 @@ func (prtc *PasswordResetTokenCreate) createSpec() (*PasswordResetToken, *sqlgra
 	}
 	if value, ok := prtc.mutation.DeletedAt(); ok {
 		_spec.SetField(passwordresettoken.FieldDeletedAt, field.TypeTime, value)
-		_node.DeletedAt = value
+		_node.DeletedAt = &value
 	}
 	if value, ok := prtc.mutation.DeletedBy(); ok {
 		_spec.SetField(passwordresettoken.FieldDeletedBy, field.TypeString, value)
-		_node.DeletedBy = value
+		_node.DeletedBy = &value
 	}
 	if value, ok := prtc.mutation.Token(); ok {
 		_spec.SetField(passwordresettoken.FieldToken, field.TypeString, value)

@@ -388,11 +388,11 @@ func (tsc *TFASettingCreate) createSpec() (*TFASetting, *sqlgraph.CreateSpec) {
 	}
 	if value, ok := tsc.mutation.DeletedAt(); ok {
 		_spec.SetField(tfasetting.FieldDeletedAt, field.TypeTime, value)
-		_node.DeletedAt = value
+		_node.DeletedAt = &value
 	}
 	if value, ok := tsc.mutation.DeletedBy(); ok {
 		_spec.SetField(tfasetting.FieldDeletedBy, field.TypeString, value)
-		_node.DeletedBy = value
+		_node.DeletedBy = &value
 	}
 	if value, ok := tsc.mutation.Tags(); ok {
 		_spec.SetField(tfasetting.FieldTags, field.TypeJSON, value)

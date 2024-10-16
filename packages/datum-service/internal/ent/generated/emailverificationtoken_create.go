@@ -332,11 +332,11 @@ func (evtc *EmailVerificationTokenCreate) createSpec() (*EmailVerificationToken,
 	}
 	if value, ok := evtc.mutation.DeletedAt(); ok {
 		_spec.SetField(emailverificationtoken.FieldDeletedAt, field.TypeTime, value)
-		_node.DeletedAt = value
+		_node.DeletedAt = &value
 	}
 	if value, ok := evtc.mutation.DeletedBy(); ok {
 		_spec.SetField(emailverificationtoken.FieldDeletedBy, field.TypeString, value)
-		_node.DeletedBy = value
+		_node.DeletedBy = &value
 	}
 	if value, ok := evtc.mutation.Token(); ok {
 		_spec.SetField(emailverificationtoken.FieldToken, field.TypeString, value)

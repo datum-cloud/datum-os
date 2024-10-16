@@ -460,11 +460,11 @@ func (ic *InviteCreate) createSpec() (*Invite, *sqlgraph.CreateSpec) {
 	}
 	if value, ok := ic.mutation.DeletedAt(); ok {
 		_spec.SetField(invite.FieldDeletedAt, field.TypeTime, value)
-		_node.DeletedAt = value
+		_node.DeletedAt = &value
 	}
 	if value, ok := ic.mutation.DeletedBy(); ok {
 		_spec.SetField(invite.FieldDeletedBy, field.TypeString, value)
-		_node.DeletedBy = value
+		_node.DeletedBy = &value
 	}
 	if value, ok := ic.mutation.Token(); ok {
 		_spec.SetField(invite.FieldToken, field.TypeString, value)

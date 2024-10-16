@@ -458,11 +458,11 @@ func (ehc *EntitlementHistoryCreate) createSpec() (*EntitlementHistory, *sqlgrap
 	}
 	if value, ok := ehc.mutation.DeletedAt(); ok {
 		_spec.SetField(entitlementhistory.FieldDeletedAt, field.TypeTime, value)
-		_node.DeletedAt = value
+		_node.DeletedAt = &value
 	}
 	if value, ok := ehc.mutation.DeletedBy(); ok {
 		_spec.SetField(entitlementhistory.FieldDeletedBy, field.TypeString, value)
-		_node.DeletedBy = value
+		_node.DeletedBy = &value
 	}
 	if value, ok := ehc.mutation.OwnerID(); ok {
 		_spec.SetField(entitlementhistory.FieldOwnerID, field.TypeString, value)

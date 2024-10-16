@@ -414,11 +414,11 @@ func (thc *TemplateHistoryCreate) createSpec() (*TemplateHistory, *sqlgraph.Crea
 	}
 	if value, ok := thc.mutation.DeletedAt(); ok {
 		_spec.SetField(templatehistory.FieldDeletedAt, field.TypeTime, value)
-		_node.DeletedAt = value
+		_node.DeletedAt = &value
 	}
 	if value, ok := thc.mutation.DeletedBy(); ok {
 		_spec.SetField(templatehistory.FieldDeletedBy, field.TypeString, value)
-		_node.DeletedBy = value
+		_node.DeletedBy = &value
 	}
 	if value, ok := thc.mutation.MappingID(); ok {
 		_spec.SetField(templatehistory.FieldMappingID, field.TypeString, value)

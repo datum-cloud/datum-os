@@ -31,9 +31,9 @@ type GroupMembership struct {
 	// MappingID holds the value of the "mapping_id" field.
 	MappingID string `json:"mapping_id,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
-	DeletedAt time.Time `json:"deleted_at,omitempty"`
+	DeletedAt *time.Time `json:"deleted_at,omitempty"`
 	// DeletedBy holds the value of the "deleted_by" field.
-	DeletedBy string `json:"deleted_by,omitempty"`
+	DeletedBy *string `json:"deleted_by,omitempty"`
 	// Role holds the value of the "role" field.
 	Role enums.Role `json:"role,omitempty"`
 	// GroupID holds the value of the "group_id" field.
@@ -158,13 +158,15 @@ func (gm *GroupMembership) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
 			} else if value.Valid {
-				gm.DeletedAt = value.Time
+				gm.DeletedAt = new(time.Time)
+				*gm.DeletedAt = value.Time
 			}
 		case groupmembership.FieldDeletedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
 			} else if value.Valid {
-				gm.DeletedBy = value.String
+				gm.DeletedBy = new(string)
+				*gm.DeletedBy = value.String
 			}
 		case groupmembership.FieldRole:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -250,11 +252,15 @@ func (gm *GroupMembership) String() string {
 	builder.WriteString("mapping_id=")
 	builder.WriteString(gm.MappingID)
 	builder.WriteString(", ")
-	builder.WriteString("deleted_at=")
-	builder.WriteString(gm.DeletedAt.Format(time.ANSIC))
+	if v := gm.DeletedAt; v != nil {
+		builder.WriteString("deleted_at=")
+		builder.WriteString(v.Format(time.ANSIC))
+	}
 	builder.WriteString(", ")
-	builder.WriteString("deleted_by=")
-	builder.WriteString(gm.DeletedBy)
+	if v := gm.DeletedBy; v != nil {
+		builder.WriteString("deleted_by=")
+		builder.WriteString(*v)
+	}
 	builder.WriteString(", ")
 	builder.WriteString("role=")
 	builder.WriteString(fmt.Sprintf("%v", gm.Role))

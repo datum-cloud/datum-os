@@ -405,11 +405,11 @@ func (patc *PersonalAccessTokenCreate) createSpec() (*PersonalAccessToken, *sqlg
 	}
 	if value, ok := patc.mutation.DeletedAt(); ok {
 		_spec.SetField(personalaccesstoken.FieldDeletedAt, field.TypeTime, value)
-		_node.DeletedAt = value
+		_node.DeletedAt = &value
 	}
 	if value, ok := patc.mutation.DeletedBy(); ok {
 		_spec.SetField(personalaccesstoken.FieldDeletedBy, field.TypeString, value)
-		_node.DeletedBy = value
+		_node.DeletedBy = &value
 	}
 	if value, ok := patc.mutation.MappingID(); ok {
 		_spec.SetField(personalaccesstoken.FieldMappingID, field.TypeString, value)

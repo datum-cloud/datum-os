@@ -451,11 +451,11 @@ func (sc *SubscriberCreate) createSpec() (*Subscriber, *sqlgraph.CreateSpec) {
 	}
 	if value, ok := sc.mutation.DeletedAt(); ok {
 		_spec.SetField(subscriber.FieldDeletedAt, field.TypeTime, value)
-		_node.DeletedAt = value
+		_node.DeletedAt = &value
 	}
 	if value, ok := sc.mutation.DeletedBy(); ok {
 		_spec.SetField(subscriber.FieldDeletedBy, field.TypeString, value)
-		_node.DeletedBy = value
+		_node.DeletedBy = &value
 	}
 	if value, ok := sc.mutation.Email(); ok {
 		_spec.SetField(subscriber.FieldEmail, field.TypeString, value)

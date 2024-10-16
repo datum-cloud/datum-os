@@ -936,11 +936,11 @@ func (oc *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 	}
 	if value, ok := oc.mutation.DeletedAt(); ok {
 		_spec.SetField(organization.FieldDeletedAt, field.TypeTime, value)
-		_node.DeletedAt = value
+		_node.DeletedAt = &value
 	}
 	if value, ok := oc.mutation.DeletedBy(); ok {
 		_spec.SetField(organization.FieldDeletedBy, field.TypeString, value)
-		_node.DeletedBy = value
+		_node.DeletedBy = &value
 	}
 	if value, ok := oc.mutation.Name(); ok {
 		_spec.SetField(organization.FieldName, field.TypeString, value)

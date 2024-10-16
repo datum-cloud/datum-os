@@ -507,11 +507,11 @@ func (pac *PostalAddressCreate) createSpec() (*PostalAddress, *sqlgraph.CreateSp
 	}
 	if value, ok := pac.mutation.DeletedAt(); ok {
 		_spec.SetField(postaladdress.FieldDeletedAt, field.TypeTime, value)
-		_node.DeletedAt = value
+		_node.DeletedAt = &value
 	}
 	if value, ok := pac.mutation.DeletedBy(); ok {
 		_spec.SetField(postaladdress.FieldDeletedBy, field.TypeString, value)
-		_node.DeletedBy = value
+		_node.DeletedBy = &value
 	}
 	if value, ok := pac.mutation.MappingID(); ok {
 		_spec.SetField(postaladdress.FieldMappingID, field.TypeString, value)

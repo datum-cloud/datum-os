@@ -381,11 +381,11 @@ func (tc *TemplateCreate) createSpec() (*Template, *sqlgraph.CreateSpec) {
 	}
 	if value, ok := tc.mutation.DeletedAt(); ok {
 		_spec.SetField(template.FieldDeletedAt, field.TypeTime, value)
-		_node.DeletedAt = value
+		_node.DeletedAt = &value
 	}
 	if value, ok := tc.mutation.DeletedBy(); ok {
 		_spec.SetField(template.FieldDeletedBy, field.TypeString, value)
-		_node.DeletedBy = value
+		_node.DeletedBy = &value
 	}
 	if value, ok := tc.mutation.MappingID(); ok {
 		_spec.SetField(template.FieldMappingID, field.TypeString, value)

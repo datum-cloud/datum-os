@@ -34,9 +34,9 @@ type GroupHistory struct {
 	// UpdatedBy holds the value of the "updated_by" field.
 	UpdatedBy string `json:"updated_by,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
-	DeletedAt time.Time `json:"deleted_at,omitempty"`
+	DeletedAt *time.Time `json:"deleted_at,omitempty"`
 	// DeletedBy holds the value of the "deleted_by" field.
-	DeletedBy string `json:"deleted_by,omitempty"`
+	DeletedBy *string `json:"deleted_by,omitempty"`
 	// MappingID holds the value of the "mapping_id" field.
 	MappingID string `json:"mapping_id,omitempty"`
 	// tags associated with the object
@@ -136,13 +136,15 @@ func (gh *GroupHistory) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
 			} else if value.Valid {
-				gh.DeletedAt = value.Time
+				gh.DeletedAt = new(time.Time)
+				*gh.DeletedAt = value.Time
 			}
 		case grouphistory.FieldDeletedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
 			} else if value.Valid {
-				gh.DeletedBy = value.String
+				gh.DeletedBy = new(string)
+				*gh.DeletedBy = value.String
 			}
 		case grouphistory.FieldMappingID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -251,11 +253,15 @@ func (gh *GroupHistory) String() string {
 	builder.WriteString("updated_by=")
 	builder.WriteString(gh.UpdatedBy)
 	builder.WriteString(", ")
-	builder.WriteString("deleted_at=")
-	builder.WriteString(gh.DeletedAt.Format(time.ANSIC))
+	if v := gh.DeletedAt; v != nil {
+		builder.WriteString("deleted_at=")
+		builder.WriteString(v.Format(time.ANSIC))
+	}
 	builder.WriteString(", ")
-	builder.WriteString("deleted_by=")
-	builder.WriteString(gh.DeletedBy)
+	if v := gh.DeletedBy; v != nil {
+		builder.WriteString("deleted_by=")
+		builder.WriteString(*v)
+	}
 	builder.WriteString(", ")
 	builder.WriteString("mapping_id=")
 	builder.WriteString(gh.MappingID)

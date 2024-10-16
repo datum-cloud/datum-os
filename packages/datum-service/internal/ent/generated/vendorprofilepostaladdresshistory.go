@@ -36,9 +36,9 @@ type VendorProfilePostalAddressHistory struct {
 	// MappingID holds the value of the "mapping_id" field.
 	MappingID string `json:"mapping_id,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
-	DeletedAt time.Time `json:"deleted_at,omitempty"`
+	DeletedAt *time.Time `json:"deleted_at,omitempty"`
 	// DeletedBy holds the value of the "deleted_by" field.
-	DeletedBy string `json:"deleted_by,omitempty"`
+	DeletedBy *string `json:"deleted_by,omitempty"`
 	// PostalAddressType holds the value of the "postal_address_type" field.
 	PostalAddressType enums.PostalAddressType `json:"postal_address_type,omitempty"`
 	// VendorProfileID holds the value of the "vendor_profile_id" field.
@@ -132,13 +132,15 @@ func (vppah *VendorProfilePostalAddressHistory) assignValues(columns []string, v
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
 			} else if value.Valid {
-				vppah.DeletedAt = value.Time
+				vppah.DeletedAt = new(time.Time)
+				*vppah.DeletedAt = value.Time
 			}
 		case vendorprofilepostaladdresshistory.FieldDeletedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
 			} else if value.Valid {
-				vppah.DeletedBy = value.String
+				vppah.DeletedBy = new(string)
+				*vppah.DeletedBy = value.String
 			}
 		case vendorprofilepostaladdresshistory.FieldPostalAddressType:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -218,11 +220,15 @@ func (vppah *VendorProfilePostalAddressHistory) String() string {
 	builder.WriteString("mapping_id=")
 	builder.WriteString(vppah.MappingID)
 	builder.WriteString(", ")
-	builder.WriteString("deleted_at=")
-	builder.WriteString(vppah.DeletedAt.Format(time.ANSIC))
+	if v := vppah.DeletedAt; v != nil {
+		builder.WriteString("deleted_at=")
+		builder.WriteString(v.Format(time.ANSIC))
+	}
 	builder.WriteString(", ")
-	builder.WriteString("deleted_by=")
-	builder.WriteString(vppah.DeletedBy)
+	if v := vppah.DeletedBy; v != nil {
+		builder.WriteString("deleted_by=")
+		builder.WriteString(*v)
+	}
 	builder.WriteString(", ")
 	builder.WriteString("postal_address_type=")
 	builder.WriteString(fmt.Sprintf("%v", vppah.PostalAddressType))

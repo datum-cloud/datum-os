@@ -455,11 +455,11 @@ func (pahc *PostalAddressHistoryCreate) createSpec() (*PostalAddressHistory, *sq
 	}
 	if value, ok := pahc.mutation.DeletedAt(); ok {
 		_spec.SetField(postaladdresshistory.FieldDeletedAt, field.TypeTime, value)
-		_node.DeletedAt = value
+		_node.DeletedAt = &value
 	}
 	if value, ok := pahc.mutation.DeletedBy(); ok {
 		_spec.SetField(postaladdresshistory.FieldDeletedBy, field.TypeString, value)
-		_node.DeletedBy = value
+		_node.DeletedBy = &value
 	}
 	if value, ok := pahc.mutation.MappingID(); ok {
 		_spec.SetField(postaladdresshistory.FieldMappingID, field.TypeString, value)

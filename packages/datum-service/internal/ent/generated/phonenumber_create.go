@@ -435,11 +435,11 @@ func (pnc *PhoneNumberCreate) createSpec() (*PhoneNumber, *sqlgraph.CreateSpec) 
 	}
 	if value, ok := pnc.mutation.DeletedAt(); ok {
 		_spec.SetField(phonenumber.FieldDeletedAt, field.TypeTime, value)
-		_node.DeletedAt = value
+		_node.DeletedAt = &value
 	}
 	if value, ok := pnc.mutation.DeletedBy(); ok {
 		_spec.SetField(phonenumber.FieldDeletedBy, field.TypeString, value)
-		_node.DeletedBy = value
+		_node.DeletedBy = &value
 	}
 	if value, ok := pnc.mutation.MappingID(); ok {
 		_spec.SetField(phonenumber.FieldMappingID, field.TypeString, value)

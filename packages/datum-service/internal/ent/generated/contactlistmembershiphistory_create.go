@@ -346,11 +346,11 @@ func (clmhc *ContactListMembershipHistoryCreate) createSpec() (*ContactListMembe
 	}
 	if value, ok := clmhc.mutation.DeletedAt(); ok {
 		_spec.SetField(contactlistmembershiphistory.FieldDeletedAt, field.TypeTime, value)
-		_node.DeletedAt = value
+		_node.DeletedAt = &value
 	}
 	if value, ok := clmhc.mutation.DeletedBy(); ok {
 		_spec.SetField(contactlistmembershiphistory.FieldDeletedBy, field.TypeString, value)
-		_node.DeletedBy = value
+		_node.DeletedBy = &value
 	}
 	if value, ok := clmhc.mutation.ContactListID(); ok {
 		_spec.SetField(contactlistmembershiphistory.FieldContactListID, field.TypeString, value)

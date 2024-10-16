@@ -36,9 +36,9 @@ type EntityTypeHistory struct {
 	// MappingID holds the value of the "mapping_id" field.
 	MappingID string `json:"mapping_id,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
-	DeletedAt time.Time `json:"deleted_at,omitempty"`
+	DeletedAt *time.Time `json:"deleted_at,omitempty"`
 	// DeletedBy holds the value of the "deleted_by" field.
-	DeletedBy string `json:"deleted_by,omitempty"`
+	DeletedBy *string `json:"deleted_by,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// The organization id that owns the object
@@ -134,13 +134,15 @@ func (eth *EntityTypeHistory) assignValues(columns []string, values []any) error
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
 			} else if value.Valid {
-				eth.DeletedAt = value.Time
+				eth.DeletedAt = new(time.Time)
+				*eth.DeletedAt = value.Time
 			}
 		case entitytypehistory.FieldDeletedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
 			} else if value.Valid {
-				eth.DeletedBy = value.String
+				eth.DeletedBy = new(string)
+				*eth.DeletedBy = value.String
 			}
 		case entitytypehistory.FieldTags:
 			if value, ok := values[i].(*[]byte); !ok {
@@ -222,11 +224,15 @@ func (eth *EntityTypeHistory) String() string {
 	builder.WriteString("mapping_id=")
 	builder.WriteString(eth.MappingID)
 	builder.WriteString(", ")
-	builder.WriteString("deleted_at=")
-	builder.WriteString(eth.DeletedAt.Format(time.ANSIC))
+	if v := eth.DeletedAt; v != nil {
+		builder.WriteString("deleted_at=")
+		builder.WriteString(v.Format(time.ANSIC))
+	}
 	builder.WriteString(", ")
-	builder.WriteString("deleted_by=")
-	builder.WriteString(eth.DeletedBy)
+	if v := eth.DeletedBy; v != nil {
+		builder.WriteString("deleted_by=")
+		builder.WriteString(*v)
+	}
 	builder.WriteString(", ")
 	builder.WriteString("tags=")
 	builder.WriteString(fmt.Sprintf("%v", eth.Tags))

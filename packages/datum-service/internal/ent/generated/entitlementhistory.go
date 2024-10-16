@@ -38,9 +38,9 @@ type EntitlementHistory struct {
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
-	DeletedAt time.Time `json:"deleted_at,omitempty"`
+	DeletedAt *time.Time `json:"deleted_at,omitempty"`
 	// DeletedBy holds the value of the "deleted_by" field.
-	DeletedBy string `json:"deleted_by,omitempty"`
+	DeletedBy *string `json:"deleted_by,omitempty"`
 	// The organization id that owns the object
 	OwnerID string `json:"owner_id,omitempty"`
 	// the plan to which the entitlement belongs
@@ -156,13 +156,15 @@ func (eh *EntitlementHistory) assignValues(columns []string, values []any) error
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
 			} else if value.Valid {
-				eh.DeletedAt = value.Time
+				eh.DeletedAt = new(time.Time)
+				*eh.DeletedAt = value.Time
 			}
 		case entitlementhistory.FieldDeletedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
 			} else if value.Valid {
-				eh.DeletedBy = value.String
+				eh.DeletedBy = new(string)
+				*eh.DeletedBy = value.String
 			}
 		case entitlementhistory.FieldOwnerID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -276,11 +278,15 @@ func (eh *EntitlementHistory) String() string {
 	builder.WriteString("tags=")
 	builder.WriteString(fmt.Sprintf("%v", eh.Tags))
 	builder.WriteString(", ")
-	builder.WriteString("deleted_at=")
-	builder.WriteString(eh.DeletedAt.Format(time.ANSIC))
+	if v := eh.DeletedAt; v != nil {
+		builder.WriteString("deleted_at=")
+		builder.WriteString(v.Format(time.ANSIC))
+	}
 	builder.WriteString(", ")
-	builder.WriteString("deleted_by=")
-	builder.WriteString(eh.DeletedBy)
+	if v := eh.DeletedBy; v != nil {
+		builder.WriteString("deleted_by=")
+		builder.WriteString(*v)
+	}
 	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
 	builder.WriteString(eh.OwnerID)

@@ -33,9 +33,9 @@ type GroupSetting struct {
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
-	DeletedAt time.Time `json:"deleted_at,omitempty"`
+	DeletedAt *time.Time `json:"deleted_at,omitempty"`
 	// DeletedBy holds the value of the "deleted_by" field.
-	DeletedBy string `json:"deleted_by,omitempty"`
+	DeletedBy *string `json:"deleted_by,omitempty"`
 	// whether the group is visible to it's members / owners only or if it's searchable by anyone within the organization
 	Visibility enums.Visibility `json:"visibility,omitempty"`
 	// the policy governing ability to freely join a group, whether it requires an invitation, application, or either
@@ -150,13 +150,15 @@ func (gs *GroupSetting) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
 			} else if value.Valid {
-				gs.DeletedAt = value.Time
+				gs.DeletedAt = new(time.Time)
+				*gs.DeletedAt = value.Time
 			}
 		case groupsetting.FieldDeletedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
 			} else if value.Valid {
-				gs.DeletedBy = value.String
+				gs.DeletedBy = new(string)
+				*gs.DeletedBy = value.String
 			}
 		case groupsetting.FieldVisibility:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -247,11 +249,15 @@ func (gs *GroupSetting) String() string {
 	builder.WriteString("tags=")
 	builder.WriteString(fmt.Sprintf("%v", gs.Tags))
 	builder.WriteString(", ")
-	builder.WriteString("deleted_at=")
-	builder.WriteString(gs.DeletedAt.Format(time.ANSIC))
+	if v := gs.DeletedAt; v != nil {
+		builder.WriteString("deleted_at=")
+		builder.WriteString(v.Format(time.ANSIC))
+	}
 	builder.WriteString(", ")
-	builder.WriteString("deleted_by=")
-	builder.WriteString(gs.DeletedBy)
+	if v := gs.DeletedBy; v != nil {
+		builder.WriteString("deleted_by=")
+		builder.WriteString(*v)
+	}
 	builder.WriteString(", ")
 	builder.WriteString("visibility=")
 	builder.WriteString(fmt.Sprintf("%v", gs.Visibility))

@@ -28,9 +28,9 @@ type Hush struct {
 	// MappingID holds the value of the "mapping_id" field.
 	MappingID string `json:"mapping_id,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
-	DeletedAt time.Time `json:"deleted_at,omitempty"`
+	DeletedAt *time.Time `json:"deleted_at,omitempty"`
 	// DeletedBy holds the value of the "deleted_by" field.
-	DeletedBy string `json:"deleted_by,omitempty"`
+	DeletedBy *string `json:"deleted_by,omitempty"`
 	// the logical name of the corresponding hush secret or it's general grouping
 	Name string `json:"name,omitempty"`
 	// a description of the hush value or purpose, such as github PAT
@@ -157,13 +157,15 @@ func (h *Hush) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
 			} else if value.Valid {
-				h.DeletedAt = value.Time
+				h.DeletedAt = new(time.Time)
+				*h.DeletedAt = value.Time
 			}
 		case hush.FieldDeletedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
 			} else if value.Valid {
-				h.DeletedBy = value.String
+				h.DeletedBy = new(string)
+				*h.DeletedBy = value.String
 			}
 		case hush.FieldName:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -261,11 +263,15 @@ func (h *Hush) String() string {
 	builder.WriteString("mapping_id=")
 	builder.WriteString(h.MappingID)
 	builder.WriteString(", ")
-	builder.WriteString("deleted_at=")
-	builder.WriteString(h.DeletedAt.Format(time.ANSIC))
+	if v := h.DeletedAt; v != nil {
+		builder.WriteString("deleted_at=")
+		builder.WriteString(v.Format(time.ANSIC))
+	}
 	builder.WriteString(", ")
-	builder.WriteString("deleted_by=")
-	builder.WriteString(h.DeletedBy)
+	if v := h.DeletedBy; v != nil {
+		builder.WriteString("deleted_by=")
+		builder.WriteString(*v)
+	}
 	builder.WriteString(", ")
 	builder.WriteString("name=")
 	builder.WriteString(h.Name)

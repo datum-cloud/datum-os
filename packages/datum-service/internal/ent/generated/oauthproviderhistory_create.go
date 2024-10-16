@@ -438,11 +438,11 @@ func (ophc *OauthProviderHistoryCreate) createSpec() (*OauthProviderHistory, *sq
 	}
 	if value, ok := ophc.mutation.DeletedAt(); ok {
 		_spec.SetField(oauthproviderhistory.FieldDeletedAt, field.TypeTime, value)
-		_node.DeletedAt = value
+		_node.DeletedAt = &value
 	}
 	if value, ok := ophc.mutation.DeletedBy(); ok {
 		_spec.SetField(oauthproviderhistory.FieldDeletedBy, field.TypeString, value)
-		_node.DeletedBy = value
+		_node.DeletedBy = &value
 	}
 	if value, ok := ophc.mutation.OwnerID(); ok {
 		_spec.SetField(oauthproviderhistory.FieldOwnerID, field.TypeString, value)

@@ -424,11 +424,11 @@ func (epc *EntitlementPlanCreate) createSpec() (*EntitlementPlan, *sqlgraph.Crea
 	}
 	if value, ok := epc.mutation.DeletedAt(); ok {
 		_spec.SetField(entitlementplan.FieldDeletedAt, field.TypeTime, value)
-		_node.DeletedAt = value
+		_node.DeletedAt = &value
 	}
 	if value, ok := epc.mutation.DeletedBy(); ok {
 		_spec.SetField(entitlementplan.FieldDeletedBy, field.TypeString, value)
-		_node.DeletedBy = value
+		_node.DeletedBy = &value
 	}
 	if value, ok := epc.mutation.Tags(); ok {
 		_spec.SetField(entitlementplan.FieldTags, field.TypeJSON, value)

@@ -432,11 +432,11 @@ func (ehc *EntityHistoryCreate) createSpec() (*EntityHistory, *sqlgraph.CreateSp
 	}
 	if value, ok := ehc.mutation.DeletedAt(); ok {
 		_spec.SetField(entityhistory.FieldDeletedAt, field.TypeTime, value)
-		_node.DeletedAt = value
+		_node.DeletedAt = &value
 	}
 	if value, ok := ehc.mutation.DeletedBy(); ok {
 		_spec.SetField(entityhistory.FieldDeletedBy, field.TypeString, value)
-		_node.DeletedBy = value
+		_node.DeletedBy = &value
 	}
 	if value, ok := ehc.mutation.Tags(); ok {
 		_spec.SetField(entityhistory.FieldTags, field.TypeJSON, value)

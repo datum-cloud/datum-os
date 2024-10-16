@@ -412,11 +412,11 @@ func (osc *OrganizationSettingCreate) createSpec() (*OrganizationSetting, *sqlgr
 	}
 	if value, ok := osc.mutation.DeletedAt(); ok {
 		_spec.SetField(organizationsetting.FieldDeletedAt, field.TypeTime, value)
-		_node.DeletedAt = value
+		_node.DeletedAt = &value
 	}
 	if value, ok := osc.mutation.DeletedBy(); ok {
 		_spec.SetField(organizationsetting.FieldDeletedBy, field.TypeString, value)
-		_node.DeletedBy = value
+		_node.DeletedBy = &value
 	}
 	if value, ok := osc.mutation.Domains(); ok {
 		_spec.SetField(organizationsetting.FieldDomains, field.TypeJSON, value)

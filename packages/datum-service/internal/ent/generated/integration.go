@@ -32,9 +32,9 @@ type Integration struct {
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
-	DeletedAt time.Time `json:"deleted_at,omitempty"`
+	DeletedAt *time.Time `json:"deleted_at,omitempty"`
 	// DeletedBy holds the value of the "deleted_by" field.
-	DeletedBy string `json:"deleted_by,omitempty"`
+	DeletedBy *string `json:"deleted_by,omitempty"`
 	// The organization id that owns the object
 	OwnerID string `json:"owner_id,omitempty"`
 	// the name of the integration - must be unique within the organization
@@ -200,13 +200,15 @@ func (i *Integration) assignValues(columns []string, values []any) error {
 			if value, ok := values[j].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_at", values[j])
 			} else if value.Valid {
-				i.DeletedAt = value.Time
+				i.DeletedAt = new(time.Time)
+				*i.DeletedAt = value.Time
 			}
 		case integration.FieldDeletedBy:
 			if value, ok := values[j].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_by", values[j])
 			} else if value.Valid {
-				i.DeletedBy = value.String
+				i.DeletedBy = new(string)
+				*i.DeletedBy = value.String
 			}
 		case integration.FieldOwnerID:
 			if value, ok := values[j].(*sql.NullString); !ok {
@@ -325,11 +327,15 @@ func (i *Integration) String() string {
 	builder.WriteString("tags=")
 	builder.WriteString(fmt.Sprintf("%v", i.Tags))
 	builder.WriteString(", ")
-	builder.WriteString("deleted_at=")
-	builder.WriteString(i.DeletedAt.Format(time.ANSIC))
+	if v := i.DeletedAt; v != nil {
+		builder.WriteString("deleted_at=")
+		builder.WriteString(v.Format(time.ANSIC))
+	}
 	builder.WriteString(", ")
-	builder.WriteString("deleted_by=")
-	builder.WriteString(i.DeletedBy)
+	if v := i.DeletedBy; v != nil {
+		builder.WriteString("deleted_by=")
+		builder.WriteString(*v)
+	}
 	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
 	builder.WriteString(i.OwnerID)

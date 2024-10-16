@@ -373,11 +373,11 @@ func (gmhc *GroupMembershipHistoryCreate) createSpec() (*GroupMembershipHistory,
 	}
 	if value, ok := gmhc.mutation.DeletedAt(); ok {
 		_spec.SetField(groupmembershiphistory.FieldDeletedAt, field.TypeTime, value)
-		_node.DeletedAt = value
+		_node.DeletedAt = &value
 	}
 	if value, ok := gmhc.mutation.DeletedBy(); ok {
 		_spec.SetField(groupmembershiphistory.FieldDeletedBy, field.TypeString, value)
-		_node.DeletedBy = value
+		_node.DeletedBy = &value
 	}
 	if value, ok := gmhc.mutation.Role(); ok {
 		_spec.SetField(groupmembershiphistory.FieldRole, field.TypeEnum, value)

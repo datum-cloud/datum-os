@@ -35,9 +35,9 @@ type ContactListMembershipHistory struct {
 	// MappingID holds the value of the "mapping_id" field.
 	MappingID string `json:"mapping_id,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
-	DeletedAt time.Time `json:"deleted_at,omitempty"`
+	DeletedAt *time.Time `json:"deleted_at,omitempty"`
 	// DeletedBy holds the value of the "deleted_by" field.
-	DeletedBy string `json:"deleted_by,omitempty"`
+	DeletedBy *string `json:"deleted_by,omitempty"`
 	// ContactListID holds the value of the "contact_list_id" field.
 	ContactListID string `json:"contact_list_id,omitempty"`
 	// ContactID holds the value of the "contact_id" field.
@@ -129,13 +129,15 @@ func (clmh *ContactListMembershipHistory) assignValues(columns []string, values 
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
 			} else if value.Valid {
-				clmh.DeletedAt = value.Time
+				clmh.DeletedAt = new(time.Time)
+				*clmh.DeletedAt = value.Time
 			}
 		case contactlistmembershiphistory.FieldDeletedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
 			} else if value.Valid {
-				clmh.DeletedBy = value.String
+				clmh.DeletedBy = new(string)
+				*clmh.DeletedBy = value.String
 			}
 		case contactlistmembershiphistory.FieldContactListID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -209,11 +211,15 @@ func (clmh *ContactListMembershipHistory) String() string {
 	builder.WriteString("mapping_id=")
 	builder.WriteString(clmh.MappingID)
 	builder.WriteString(", ")
-	builder.WriteString("deleted_at=")
-	builder.WriteString(clmh.DeletedAt.Format(time.ANSIC))
+	if v := clmh.DeletedAt; v != nil {
+		builder.WriteString("deleted_at=")
+		builder.WriteString(v.Format(time.ANSIC))
+	}
 	builder.WriteString(", ")
-	builder.WriteString("deleted_by=")
-	builder.WriteString(clmh.DeletedBy)
+	if v := clmh.DeletedBy; v != nil {
+		builder.WriteString("deleted_by=")
+		builder.WriteString(*v)
+	}
 	builder.WriteString(", ")
 	builder.WriteString("contact_list_id=")
 	builder.WriteString(clmh.ContactListID)

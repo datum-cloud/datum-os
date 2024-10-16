@@ -39,9 +39,9 @@ type UserSettingHistory struct {
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
-	DeletedAt time.Time `json:"deleted_at,omitempty"`
+	DeletedAt *time.Time `json:"deleted_at,omitempty"`
 	// DeletedBy holds the value of the "deleted_by" field.
-	DeletedBy string `json:"deleted_by,omitempty"`
+	DeletedBy *string `json:"deleted_by,omitempty"`
 	// UserID holds the value of the "user_id" field.
 	UserID string `json:"user_id,omitempty"`
 	// user account is locked if unconfirmed or explicitly locked
@@ -159,13 +159,15 @@ func (ush *UserSettingHistory) assignValues(columns []string, values []any) erro
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
 			} else if value.Valid {
-				ush.DeletedAt = value.Time
+				ush.DeletedAt = new(time.Time)
+				*ush.DeletedAt = value.Time
 			}
 		case usersettinghistory.FieldDeletedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
 			} else if value.Valid {
-				ush.DeletedBy = value.String
+				ush.DeletedBy = new(string)
+				*ush.DeletedBy = value.String
 			}
 		case usersettinghistory.FieldUserID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -287,11 +289,15 @@ func (ush *UserSettingHistory) String() string {
 	builder.WriteString("tags=")
 	builder.WriteString(fmt.Sprintf("%v", ush.Tags))
 	builder.WriteString(", ")
-	builder.WriteString("deleted_at=")
-	builder.WriteString(ush.DeletedAt.Format(time.ANSIC))
+	if v := ush.DeletedAt; v != nil {
+		builder.WriteString("deleted_at=")
+		builder.WriteString(v.Format(time.ANSIC))
+	}
 	builder.WriteString(", ")
-	builder.WriteString("deleted_by=")
-	builder.WriteString(ush.DeletedBy)
+	if v := ush.DeletedBy; v != nil {
+		builder.WriteString("deleted_by=")
+		builder.WriteString(*v)
+	}
 	builder.WriteString(", ")
 	builder.WriteString("user_id=")
 	builder.WriteString(ush.UserID)

@@ -35,9 +35,9 @@ type HushHistory struct {
 	// MappingID holds the value of the "mapping_id" field.
 	MappingID string `json:"mapping_id,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
-	DeletedAt time.Time `json:"deleted_at,omitempty"`
+	DeletedAt *time.Time `json:"deleted_at,omitempty"`
 	// DeletedBy holds the value of the "deleted_by" field.
-	DeletedBy string `json:"deleted_by,omitempty"`
+	DeletedBy *string `json:"deleted_by,omitempty"`
 	// the logical name of the corresponding hush secret or it's general grouping
 	Name string `json:"name,omitempty"`
 	// a description of the hush value or purpose, such as github PAT
@@ -135,13 +135,15 @@ func (hh *HushHistory) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
 			} else if value.Valid {
-				hh.DeletedAt = value.Time
+				hh.DeletedAt = new(time.Time)
+				*hh.DeletedAt = value.Time
 			}
 		case hushhistory.FieldDeletedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
 			} else if value.Valid {
-				hh.DeletedBy = value.String
+				hh.DeletedBy = new(string)
+				*hh.DeletedBy = value.String
 			}
 		case hushhistory.FieldName:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -233,11 +235,15 @@ func (hh *HushHistory) String() string {
 	builder.WriteString("mapping_id=")
 	builder.WriteString(hh.MappingID)
 	builder.WriteString(", ")
-	builder.WriteString("deleted_at=")
-	builder.WriteString(hh.DeletedAt.Format(time.ANSIC))
+	if v := hh.DeletedAt; v != nil {
+		builder.WriteString("deleted_at=")
+		builder.WriteString(v.Format(time.ANSIC))
+	}
 	builder.WriteString(", ")
-	builder.WriteString("deleted_by=")
-	builder.WriteString(hh.DeletedBy)
+	if v := hh.DeletedBy; v != nil {
+		builder.WriteString("deleted_by=")
+		builder.WriteString(*v)
+	}
 	builder.WriteString(", ")
 	builder.WriteString("name=")
 	builder.WriteString(hh.Name)

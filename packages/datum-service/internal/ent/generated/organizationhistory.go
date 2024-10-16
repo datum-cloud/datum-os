@@ -38,9 +38,9 @@ type OrganizationHistory struct {
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
-	DeletedAt time.Time `json:"deleted_at,omitempty"`
+	DeletedAt *time.Time `json:"deleted_at,omitempty"`
 	// DeletedBy holds the value of the "deleted_by" field.
-	DeletedBy string `json:"deleted_by,omitempty"`
+	DeletedBy *string `json:"deleted_by,omitempty"`
 	// the name of the organization
 	Name string `json:"name,omitempty"`
 	// The organization's displayed 'friendly' name
@@ -154,13 +154,15 @@ func (oh *OrganizationHistory) assignValues(columns []string, values []any) erro
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
 			} else if value.Valid {
-				oh.DeletedAt = value.Time
+				oh.DeletedAt = new(time.Time)
+				*oh.DeletedAt = value.Time
 			}
 		case organizationhistory.FieldDeletedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
 			} else if value.Valid {
-				oh.DeletedBy = value.String
+				oh.DeletedBy = new(string)
+				*oh.DeletedBy = value.String
 			}
 		case organizationhistory.FieldName:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -268,11 +270,15 @@ func (oh *OrganizationHistory) String() string {
 	builder.WriteString("tags=")
 	builder.WriteString(fmt.Sprintf("%v", oh.Tags))
 	builder.WriteString(", ")
-	builder.WriteString("deleted_at=")
-	builder.WriteString(oh.DeletedAt.Format(time.ANSIC))
+	if v := oh.DeletedAt; v != nil {
+		builder.WriteString("deleted_at=")
+		builder.WriteString(v.Format(time.ANSIC))
+	}
 	builder.WriteString(", ")
-	builder.WriteString("deleted_by=")
-	builder.WriteString(oh.DeletedBy)
+	if v := oh.DeletedBy; v != nil {
+		builder.WriteString("deleted_by=")
+		builder.WriteString(*v)
+	}
 	builder.WriteString(", ")
 	builder.WriteString("name=")
 	builder.WriteString(oh.Name)

@@ -413,11 +413,11 @@ func (pnhc *PhoneNumberHistoryCreate) createSpec() (*PhoneNumberHistory, *sqlgra
 	}
 	if value, ok := pnhc.mutation.DeletedAt(); ok {
 		_spec.SetField(phonenumberhistory.FieldDeletedAt, field.TypeTime, value)
-		_node.DeletedAt = value
+		_node.DeletedAt = &value
 	}
 	if value, ok := pnhc.mutation.DeletedBy(); ok {
 		_spec.SetField(phonenumberhistory.FieldDeletedBy, field.TypeString, value)
-		_node.DeletedBy = value
+		_node.DeletedBy = &value
 	}
 	if value, ok := pnhc.mutation.MappingID(); ok {
 		_spec.SetField(phonenumberhistory.FieldMappingID, field.TypeString, value)

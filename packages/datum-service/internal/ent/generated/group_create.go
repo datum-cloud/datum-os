@@ -471,11 +471,11 @@ func (gc *GroupCreate) createSpec() (*Group, *sqlgraph.CreateSpec) {
 	}
 	if value, ok := gc.mutation.DeletedAt(); ok {
 		_spec.SetField(group.FieldDeletedAt, field.TypeTime, value)
-		_node.DeletedAt = value
+		_node.DeletedAt = &value
 	}
 	if value, ok := gc.mutation.DeletedBy(); ok {
 		_spec.SetField(group.FieldDeletedBy, field.TypeString, value)
-		_node.DeletedBy = value
+		_node.DeletedBy = &value
 	}
 	if value, ok := gc.mutation.MappingID(); ok {
 		_spec.SetField(group.FieldMappingID, field.TypeString, value)

@@ -373,11 +373,11 @@ func (omhc *OrgMembershipHistoryCreate) createSpec() (*OrgMembershipHistory, *sq
 	}
 	if value, ok := omhc.mutation.DeletedAt(); ok {
 		_spec.SetField(orgmembershiphistory.FieldDeletedAt, field.TypeTime, value)
-		_node.DeletedAt = value
+		_node.DeletedAt = &value
 	}
 	if value, ok := omhc.mutation.DeletedBy(); ok {
 		_spec.SetField(orgmembershiphistory.FieldDeletedBy, field.TypeString, value)
-		_node.DeletedBy = value
+		_node.DeletedBy = &value
 	}
 	if value, ok := omhc.mutation.Role(); ok {
 		_spec.SetField(orgmembershiphistory.FieldRole, field.TypeEnum, value)

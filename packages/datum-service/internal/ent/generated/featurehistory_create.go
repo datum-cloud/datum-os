@@ -412,11 +412,11 @@ func (fhc *FeatureHistoryCreate) createSpec() (*FeatureHistory, *sqlgraph.Create
 	}
 	if value, ok := fhc.mutation.DeletedAt(); ok {
 		_spec.SetField(featurehistory.FieldDeletedAt, field.TypeTime, value)
-		_node.DeletedAt = value
+		_node.DeletedAt = &value
 	}
 	if value, ok := fhc.mutation.DeletedBy(); ok {
 		_spec.SetField(featurehistory.FieldDeletedBy, field.TypeString, value)
-		_node.DeletedBy = value
+		_node.DeletedBy = &value
 	}
 	if value, ok := fhc.mutation.MappingID(); ok {
 		_spec.SetField(featurehistory.FieldMappingID, field.TypeString, value)

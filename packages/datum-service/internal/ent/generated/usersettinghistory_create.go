@@ -485,11 +485,11 @@ func (ushc *UserSettingHistoryCreate) createSpec() (*UserSettingHistory, *sqlgra
 	}
 	if value, ok := ushc.mutation.DeletedAt(); ok {
 		_spec.SetField(usersettinghistory.FieldDeletedAt, field.TypeTime, value)
-		_node.DeletedAt = value
+		_node.DeletedAt = &value
 	}
 	if value, ok := ushc.mutation.DeletedBy(); ok {
 		_spec.SetField(usersettinghistory.FieldDeletedBy, field.TypeString, value)
-		_node.DeletedBy = value
+		_node.DeletedBy = &value
 	}
 	if value, ok := ushc.mutation.UserID(); ok {
 		_spec.SetField(usersettinghistory.FieldUserID, field.TypeString, value)

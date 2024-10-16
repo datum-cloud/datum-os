@@ -792,10 +792,8 @@ func ContactFromGeneratedContact(genContact *generated.Contact) Contact {
 	cd.CreatedBy = genContact.CreatedBy
 	cd.UpdatedBy = genContact.UpdatedBy
 	cd.MappingID = genContact.MappingID
-	if !genContact.DeletedAt.IsZero() {
-		cd.DeletedAt = &genContact.DeletedAt
-	}
-	cd.DeletedBy = genContact.DeletedBy
+	cd.DeletedAt = genContact.DeletedAt
+	cd.DeletedBy = *genContact.DeletedBy
 	cd.OwnerID = genContact.OwnerID
 	cd.FullName = genContact.FullName
 	cd.Title = genContact.Title
@@ -1029,10 +1027,8 @@ func ContactListFromGeneratedContactList(genContactList *generated.ContactList) 
 	cl.CreatedBy = genContactList.CreatedBy
 	cl.UpdatedBy = genContactList.UpdatedBy
 	cl.MappingID = genContactList.MappingID
-	if !genContactList.DeletedAt.IsZero() {
-		cl.DeletedAt = &genContactList.DeletedAt
-	}
-	cl.DeletedBy = genContactList.DeletedBy
+	cl.DeletedAt = genContactList.DeletedAt
+	cl.DeletedBy = *genContactList.DeletedBy
 	cl.OwnerID = genContactList.OwnerID
 	cl.Name = genContactList.Name
 	cl.Visibility = genContactList.Visibility

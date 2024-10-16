@@ -28,9 +28,9 @@ type PersonalAccessToken struct {
 	// UpdatedBy holds the value of the "updated_by" field.
 	UpdatedBy string `json:"updated_by,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
-	DeletedAt time.Time `json:"deleted_at,omitempty"`
+	DeletedAt *time.Time `json:"deleted_at,omitempty"`
 	// DeletedBy holds the value of the "deleted_by" field.
-	DeletedBy string `json:"deleted_by,omitempty"`
+	DeletedBy *string `json:"deleted_by,omitempty"`
 	// MappingID holds the value of the "mapping_id" field.
 	MappingID string `json:"mapping_id,omitempty"`
 	// tags associated with the object
@@ -162,13 +162,15 @@ func (pat *PersonalAccessToken) assignValues(columns []string, values []any) err
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
 			} else if value.Valid {
-				pat.DeletedAt = value.Time
+				pat.DeletedAt = new(time.Time)
+				*pat.DeletedAt = value.Time
 			}
 		case personalaccesstoken.FieldDeletedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
 			} else if value.Valid {
-				pat.DeletedBy = value.String
+				pat.DeletedBy = new(string)
+				*pat.DeletedBy = value.String
 			}
 		case personalaccesstoken.FieldMappingID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -294,11 +296,15 @@ func (pat *PersonalAccessToken) String() string {
 	builder.WriteString("updated_by=")
 	builder.WriteString(pat.UpdatedBy)
 	builder.WriteString(", ")
-	builder.WriteString("deleted_at=")
-	builder.WriteString(pat.DeletedAt.Format(time.ANSIC))
+	if v := pat.DeletedAt; v != nil {
+		builder.WriteString("deleted_at=")
+		builder.WriteString(v.Format(time.ANSIC))
+	}
 	builder.WriteString(", ")
-	builder.WriteString("deleted_by=")
-	builder.WriteString(pat.DeletedBy)
+	if v := pat.DeletedBy; v != nil {
+		builder.WriteString("deleted_by=")
+		builder.WriteString(*v)
+	}
 	builder.WriteString(", ")
 	builder.WriteString("mapping_id=")
 	builder.WriteString(pat.MappingID)

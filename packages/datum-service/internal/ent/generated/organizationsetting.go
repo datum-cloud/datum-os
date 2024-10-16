@@ -33,9 +33,9 @@ type OrganizationSetting struct {
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
-	DeletedAt time.Time `json:"deleted_at,omitempty"`
+	DeletedAt *time.Time `json:"deleted_at,omitempty"`
 	// DeletedBy holds the value of the "deleted_by" field.
-	DeletedBy string `json:"deleted_by,omitempty"`
+	DeletedBy *string `json:"deleted_by,omitempty"`
 	// domains associated with the organization
 	Domains []string `json:"domains,omitempty"`
 	// Name of the person to contact for billing
@@ -154,13 +154,15 @@ func (os *OrganizationSetting) assignValues(columns []string, values []any) erro
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
 			} else if value.Valid {
-				os.DeletedAt = value.Time
+				os.DeletedAt = new(time.Time)
+				*os.DeletedAt = value.Time
 			}
 		case organizationsetting.FieldDeletedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
 			} else if value.Valid {
-				os.DeletedBy = value.String
+				os.DeletedBy = new(string)
+				*os.DeletedBy = value.String
 			}
 		case organizationsetting.FieldDomains:
 			if value, ok := values[i].(*[]byte); !ok {
@@ -271,11 +273,15 @@ func (os *OrganizationSetting) String() string {
 	builder.WriteString("tags=")
 	builder.WriteString(fmt.Sprintf("%v", os.Tags))
 	builder.WriteString(", ")
-	builder.WriteString("deleted_at=")
-	builder.WriteString(os.DeletedAt.Format(time.ANSIC))
+	if v := os.DeletedAt; v != nil {
+		builder.WriteString("deleted_at=")
+		builder.WriteString(v.Format(time.ANSIC))
+	}
 	builder.WriteString(", ")
-	builder.WriteString("deleted_by=")
-	builder.WriteString(os.DeletedBy)
+	if v := os.DeletedBy; v != nil {
+		builder.WriteString("deleted_by=")
+		builder.WriteString(*v)
+	}
 	builder.WriteString(", ")
 	builder.WriteString("domains=")
 	builder.WriteString(fmt.Sprintf("%v", os.Domains))

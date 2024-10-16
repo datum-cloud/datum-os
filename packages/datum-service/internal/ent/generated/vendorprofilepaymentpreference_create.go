@@ -366,11 +366,11 @@ func (vpppc *VendorProfilePaymentPreferenceCreate) createSpec() (*VendorProfileP
 	}
 	if value, ok := vpppc.mutation.DeletedAt(); ok {
 		_spec.SetField(vendorprofilepaymentpreference.FieldDeletedAt, field.TypeTime, value)
-		_node.DeletedAt = value
+		_node.DeletedAt = &value
 	}
 	if value, ok := vpppc.mutation.DeletedBy(); ok {
 		_spec.SetField(vendorprofilepaymentpreference.FieldDeletedBy, field.TypeString, value)
-		_node.DeletedBy = value
+		_node.DeletedBy = &value
 	}
 	if value, ok := vpppc.mutation.Tags(); ok {
 		_spec.SetField(vendorprofilepaymentpreference.FieldTags, field.TypeJSON, value)

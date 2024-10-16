@@ -31,9 +31,9 @@ type VendorProfilePostalAddress struct {
 	// MappingID holds the value of the "mapping_id" field.
 	MappingID string `json:"mapping_id,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
-	DeletedAt time.Time `json:"deleted_at,omitempty"`
+	DeletedAt *time.Time `json:"deleted_at,omitempty"`
 	// DeletedBy holds the value of the "deleted_by" field.
-	DeletedBy string `json:"deleted_by,omitempty"`
+	DeletedBy *string `json:"deleted_by,omitempty"`
 	// PostalAddressType holds the value of the "postal_address_type" field.
 	PostalAddressType enums.PostalAddressType `json:"postal_address_type,omitempty"`
 	// VendorProfileID holds the value of the "vendor_profile_id" field.
@@ -158,13 +158,15 @@ func (vppa *VendorProfilePostalAddress) assignValues(columns []string, values []
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
 			} else if value.Valid {
-				vppa.DeletedAt = value.Time
+				vppa.DeletedAt = new(time.Time)
+				*vppa.DeletedAt = value.Time
 			}
 		case vendorprofilepostaladdress.FieldDeletedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
 			} else if value.Valid {
-				vppa.DeletedBy = value.String
+				vppa.DeletedBy = new(string)
+				*vppa.DeletedBy = value.String
 			}
 		case vendorprofilepostaladdress.FieldPostalAddressType:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -250,11 +252,15 @@ func (vppa *VendorProfilePostalAddress) String() string {
 	builder.WriteString("mapping_id=")
 	builder.WriteString(vppa.MappingID)
 	builder.WriteString(", ")
-	builder.WriteString("deleted_at=")
-	builder.WriteString(vppa.DeletedAt.Format(time.ANSIC))
+	if v := vppa.DeletedAt; v != nil {
+		builder.WriteString("deleted_at=")
+		builder.WriteString(v.Format(time.ANSIC))
+	}
 	builder.WriteString(", ")
-	builder.WriteString("deleted_by=")
-	builder.WriteString(vppa.DeletedBy)
+	if v := vppa.DeletedBy; v != nil {
+		builder.WriteString("deleted_by=")
+		builder.WriteString(*v)
+	}
 	builder.WriteString(", ")
 	builder.WriteString("postal_address_type=")
 	builder.WriteString(fmt.Sprintf("%v", vppa.PostalAddressType))

@@ -342,11 +342,11 @@ func (gmc *GroupMembershipCreate) createSpec() (*GroupMembership, *sqlgraph.Crea
 	}
 	if value, ok := gmc.mutation.DeletedAt(); ok {
 		_spec.SetField(groupmembership.FieldDeletedAt, field.TypeTime, value)
-		_node.DeletedAt = value
+		_node.DeletedAt = &value
 	}
 	if value, ok := gmc.mutation.DeletedBy(); ok {
 		_spec.SetField(groupmembership.FieldDeletedBy, field.TypeString, value)
-		_node.DeletedBy = value
+		_node.DeletedBy = &value
 	}
 	if value, ok := gmc.mutation.Role(); ok {
 		_spec.SetField(groupmembership.FieldRole, field.TypeEnum, value)

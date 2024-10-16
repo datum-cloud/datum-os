@@ -34,9 +34,9 @@ type UserSetting struct {
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
-	DeletedAt time.Time `json:"deleted_at,omitempty"`
+	DeletedAt *time.Time `json:"deleted_at,omitempty"`
 	// DeletedBy holds the value of the "deleted_by" field.
-	DeletedBy string `json:"deleted_by,omitempty"`
+	DeletedBy *string `json:"deleted_by,omitempty"`
 	// UserID holds the value of the "user_id" field.
 	UserID string `json:"user_id,omitempty"`
 	// user account is locked if unconfirmed or explicitly locked
@@ -175,13 +175,15 @@ func (us *UserSetting) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
 			} else if value.Valid {
-				us.DeletedAt = value.Time
+				us.DeletedAt = new(time.Time)
+				*us.DeletedAt = value.Time
 			}
 		case usersetting.FieldDeletedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
 			} else if value.Valid {
-				us.DeletedBy = value.String
+				us.DeletedBy = new(string)
+				*us.DeletedBy = value.String
 			}
 		case usersetting.FieldUserID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -311,11 +313,15 @@ func (us *UserSetting) String() string {
 	builder.WriteString("tags=")
 	builder.WriteString(fmt.Sprintf("%v", us.Tags))
 	builder.WriteString(", ")
-	builder.WriteString("deleted_at=")
-	builder.WriteString(us.DeletedAt.Format(time.ANSIC))
+	if v := us.DeletedAt; v != nil {
+		builder.WriteString("deleted_at=")
+		builder.WriteString(v.Format(time.ANSIC))
+	}
 	builder.WriteString(", ")
-	builder.WriteString("deleted_by=")
-	builder.WriteString(us.DeletedBy)
+	if v := us.DeletedBy; v != nil {
+		builder.WriteString("deleted_by=")
+		builder.WriteString(*v)
+	}
 	builder.WriteString(", ")
 	builder.WriteString("user_id=")
 	builder.WriteString(us.UserID)

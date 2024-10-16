@@ -453,11 +453,11 @@ func (ohc *OrganizationHistoryCreate) createSpec() (*OrganizationHistory, *sqlgr
 	}
 	if value, ok := ohc.mutation.DeletedAt(); ok {
 		_spec.SetField(organizationhistory.FieldDeletedAt, field.TypeTime, value)
-		_node.DeletedAt = value
+		_node.DeletedAt = &value
 	}
 	if value, ok := ohc.mutation.DeletedBy(); ok {
 		_spec.SetField(organizationhistory.FieldDeletedBy, field.TypeString, value)
-		_node.DeletedBy = value
+		_node.DeletedBy = &value
 	}
 	if value, ok := ohc.mutation.Name(); ok {
 		_spec.SetField(organizationhistory.FieldName, field.TypeString, value)

@@ -413,11 +413,11 @@ func (clhc *ContactListHistoryCreate) createSpec() (*ContactListHistory, *sqlgra
 	}
 	if value, ok := clhc.mutation.DeletedAt(); ok {
 		_spec.SetField(contactlisthistory.FieldDeletedAt, field.TypeTime, value)
-		_node.DeletedAt = value
+		_node.DeletedAt = &value
 	}
 	if value, ok := clhc.mutation.DeletedBy(); ok {
 		_spec.SetField(contactlisthistory.FieldDeletedBy, field.TypeString, value)
-		_node.DeletedBy = value
+		_node.DeletedBy = &value
 	}
 	if value, ok := clhc.mutation.MappingID(); ok {
 		_spec.SetField(contactlisthistory.FieldMappingID, field.TypeString, value)

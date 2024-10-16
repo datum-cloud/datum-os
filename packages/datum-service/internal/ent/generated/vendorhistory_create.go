@@ -392,11 +392,11 @@ func (vhc *VendorHistoryCreate) createSpec() (*VendorHistory, *sqlgraph.CreateSp
 	}
 	if value, ok := vhc.mutation.DeletedAt(); ok {
 		_spec.SetField(vendorhistory.FieldDeletedAt, field.TypeTime, value)
-		_node.DeletedAt = value
+		_node.DeletedAt = &value
 	}
 	if value, ok := vhc.mutation.DeletedBy(); ok {
 		_spec.SetField(vendorhistory.FieldDeletedBy, field.TypeString, value)
-		_node.DeletedBy = value
+		_node.DeletedBy = &value
 	}
 	if value, ok := vhc.mutation.MappingID(); ok {
 		_spec.SetField(vendorhistory.FieldMappingID, field.TypeString, value)

@@ -420,11 +420,11 @@ func (fc *FileCreate) createSpec() (*File, *sqlgraph.CreateSpec) {
 	}
 	if value, ok := fc.mutation.DeletedAt(); ok {
 		_spec.SetField(file.FieldDeletedAt, field.TypeTime, value)
-		_node.DeletedAt = value
+		_node.DeletedAt = &value
 	}
 	if value, ok := fc.mutation.DeletedBy(); ok {
 		_spec.SetField(file.FieldDeletedBy, field.TypeString, value)
-		_node.DeletedBy = value
+		_node.DeletedBy = &value
 	}
 	if value, ok := fc.mutation.MappingID(); ok {
 		_spec.SetField(file.FieldMappingID, field.TypeString, value)

@@ -39,9 +39,9 @@ type DocumentDataHistory struct {
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
-	DeletedAt time.Time `json:"deleted_at,omitempty"`
+	DeletedAt *time.Time `json:"deleted_at,omitempty"`
 	// DeletedBy holds the value of the "deleted_by" field.
-	DeletedBy string `json:"deleted_by,omitempty"`
+	DeletedBy *string `json:"deleted_by,omitempty"`
 	// The organization id that owns the object
 	OwnerID string `json:"owner_id,omitempty"`
 	// the template id of the document
@@ -145,13 +145,15 @@ func (ddh *DocumentDataHistory) assignValues(columns []string, values []any) err
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
 			} else if value.Valid {
-				ddh.DeletedAt = value.Time
+				ddh.DeletedAt = new(time.Time)
+				*ddh.DeletedAt = value.Time
 			}
 		case documentdatahistory.FieldDeletedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
 			} else if value.Valid {
-				ddh.DeletedBy = value.String
+				ddh.DeletedBy = new(string)
+				*ddh.DeletedBy = value.String
 			}
 		case documentdatahistory.FieldOwnerID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -236,11 +238,15 @@ func (ddh *DocumentDataHistory) String() string {
 	builder.WriteString("tags=")
 	builder.WriteString(fmt.Sprintf("%v", ddh.Tags))
 	builder.WriteString(", ")
-	builder.WriteString("deleted_at=")
-	builder.WriteString(ddh.DeletedAt.Format(time.ANSIC))
+	if v := ddh.DeletedAt; v != nil {
+		builder.WriteString("deleted_at=")
+		builder.WriteString(v.Format(time.ANSIC))
+	}
 	builder.WriteString(", ")
-	builder.WriteString("deleted_by=")
-	builder.WriteString(ddh.DeletedBy)
+	if v := ddh.DeletedBy; v != nil {
+		builder.WriteString("deleted_by=")
+		builder.WriteString(*v)
+	}
 	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
 	builder.WriteString(ddh.OwnerID)

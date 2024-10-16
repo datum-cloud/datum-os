@@ -34,9 +34,9 @@ type PostalAddressHistory struct {
 	// UpdatedBy holds the value of the "updated_by" field.
 	UpdatedBy string `json:"updated_by,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
-	DeletedAt time.Time `json:"deleted_at,omitempty"`
+	DeletedAt *time.Time `json:"deleted_at,omitempty"`
 	// DeletedBy holds the value of the "deleted_by" field.
-	DeletedBy string `json:"deleted_by,omitempty"`
+	DeletedBy *string `json:"deleted_by,omitempty"`
 	// MappingID holds the value of the "mapping_id" field.
 	MappingID string `json:"mapping_id,omitempty"`
 	// tags associated with the object
@@ -146,13 +146,15 @@ func (pah *PostalAddressHistory) assignValues(columns []string, values []any) er
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
 			} else if value.Valid {
-				pah.DeletedAt = value.Time
+				pah.DeletedAt = new(time.Time)
+				*pah.DeletedAt = value.Time
 			}
 		case postaladdresshistory.FieldDeletedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
 			} else if value.Valid {
-				pah.DeletedBy = value.String
+				pah.DeletedBy = new(string)
+				*pah.DeletedBy = value.String
 			}
 		case postaladdresshistory.FieldMappingID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -302,11 +304,15 @@ func (pah *PostalAddressHistory) String() string {
 	builder.WriteString("updated_by=")
 	builder.WriteString(pah.UpdatedBy)
 	builder.WriteString(", ")
-	builder.WriteString("deleted_at=")
-	builder.WriteString(pah.DeletedAt.Format(time.ANSIC))
+	if v := pah.DeletedAt; v != nil {
+		builder.WriteString("deleted_at=")
+		builder.WriteString(v.Format(time.ANSIC))
+	}
 	builder.WriteString(", ")
-	builder.WriteString("deleted_by=")
-	builder.WriteString(pah.DeletedBy)
+	if v := pah.DeletedBy; v != nil {
+		builder.WriteString("deleted_by=")
+		builder.WriteString(*v)
+	}
 	builder.WriteString(", ")
 	builder.WriteString("mapping_id=")
 	builder.WriteString(pah.MappingID)

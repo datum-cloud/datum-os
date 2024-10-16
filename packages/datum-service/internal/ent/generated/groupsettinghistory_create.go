@@ -445,11 +445,11 @@ func (gshc *GroupSettingHistoryCreate) createSpec() (*GroupSettingHistory, *sqlg
 	}
 	if value, ok := gshc.mutation.DeletedAt(); ok {
 		_spec.SetField(groupsettinghistory.FieldDeletedAt, field.TypeTime, value)
-		_node.DeletedAt = value
+		_node.DeletedAt = &value
 	}
 	if value, ok := gshc.mutation.DeletedBy(); ok {
 		_spec.SetField(groupsettinghistory.FieldDeletedBy, field.TypeString, value)
-		_node.DeletedBy = value
+		_node.DeletedBy = &value
 	}
 	if value, ok := gshc.mutation.Visibility(); ok {
 		_spec.SetField(groupsettinghistory.FieldVisibility, field.TypeEnum, value)

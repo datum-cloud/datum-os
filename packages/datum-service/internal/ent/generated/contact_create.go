@@ -467,11 +467,11 @@ func (cc *ContactCreate) createSpec() (*Contact, *sqlgraph.CreateSpec) {
 	}
 	if value, ok := cc.mutation.DeletedAt(); ok {
 		_spec.SetField(contact.FieldDeletedAt, field.TypeTime, value)
-		_node.DeletedAt = value
+		_node.DeletedAt = &value
 	}
 	if value, ok := cc.mutation.DeletedBy(); ok {
 		_spec.SetField(contact.FieldDeletedBy, field.TypeString, value)
-		_node.DeletedBy = value
+		_node.DeletedBy = &value
 	}
 	if value, ok := cc.mutation.Tags(); ok {
 		_spec.SetField(contact.FieldTags, field.TypeJSON, value)

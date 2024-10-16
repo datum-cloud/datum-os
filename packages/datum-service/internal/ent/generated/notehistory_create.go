@@ -361,11 +361,11 @@ func (nhc *NoteHistoryCreate) createSpec() (*NoteHistory, *sqlgraph.CreateSpec) 
 	}
 	if value, ok := nhc.mutation.DeletedAt(); ok {
 		_spec.SetField(notehistory.FieldDeletedAt, field.TypeTime, value)
-		_node.DeletedAt = value
+		_node.DeletedAt = &value
 	}
 	if value, ok := nhc.mutation.DeletedBy(); ok {
 		_spec.SetField(notehistory.FieldDeletedBy, field.TypeString, value)
-		_node.DeletedBy = value
+		_node.DeletedBy = &value
 	}
 	if value, ok := nhc.mutation.Tags(); ok {
 		_spec.SetField(notehistory.FieldTags, field.TypeJSON, value)

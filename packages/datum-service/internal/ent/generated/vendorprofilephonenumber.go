@@ -30,9 +30,9 @@ type VendorProfilePhoneNumber struct {
 	// MappingID holds the value of the "mapping_id" field.
 	MappingID string `json:"mapping_id,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
-	DeletedAt time.Time `json:"deleted_at,omitempty"`
+	DeletedAt *time.Time `json:"deleted_at,omitempty"`
 	// DeletedBy holds the value of the "deleted_by" field.
-	DeletedBy string `json:"deleted_by,omitempty"`
+	DeletedBy *string `json:"deleted_by,omitempty"`
 	// VendorProfileID holds the value of the "vendor_profile_id" field.
 	VendorProfileID string `json:"vendor_profile_id,omitempty"`
 	// PhoneNumberID holds the value of the "phone_number_id" field.
@@ -155,13 +155,15 @@ func (vppn *VendorProfilePhoneNumber) assignValues(columns []string, values []an
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
 			} else if value.Valid {
-				vppn.DeletedAt = value.Time
+				vppn.DeletedAt = new(time.Time)
+				*vppn.DeletedAt = value.Time
 			}
 		case vendorprofilephonenumber.FieldDeletedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
 			} else if value.Valid {
-				vppn.DeletedBy = value.String
+				vppn.DeletedBy = new(string)
+				*vppn.DeletedBy = value.String
 			}
 		case vendorprofilephonenumber.FieldVendorProfileID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -241,11 +243,15 @@ func (vppn *VendorProfilePhoneNumber) String() string {
 	builder.WriteString("mapping_id=")
 	builder.WriteString(vppn.MappingID)
 	builder.WriteString(", ")
-	builder.WriteString("deleted_at=")
-	builder.WriteString(vppn.DeletedAt.Format(time.ANSIC))
+	if v := vppn.DeletedAt; v != nil {
+		builder.WriteString("deleted_at=")
+		builder.WriteString(v.Format(time.ANSIC))
+	}
 	builder.WriteString(", ")
-	builder.WriteString("deleted_by=")
-	builder.WriteString(vppn.DeletedBy)
+	if v := vppn.DeletedBy; v != nil {
+		builder.WriteString("deleted_by=")
+		builder.WriteString(*v)
+	}
 	builder.WriteString(", ")
 	builder.WriteString("vendor_profile_id=")
 	builder.WriteString(vppn.VendorProfileID)

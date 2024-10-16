@@ -29,9 +29,9 @@ type PasswordResetToken struct {
 	// MappingID holds the value of the "mapping_id" field.
 	MappingID string `json:"mapping_id,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
-	DeletedAt time.Time `json:"deleted_at,omitempty"`
+	DeletedAt *time.Time `json:"deleted_at,omitempty"`
 	// DeletedBy holds the value of the "deleted_by" field.
-	DeletedBy string `json:"deleted_by,omitempty"`
+	DeletedBy *string `json:"deleted_by,omitempty"`
 	// The user id that owns the object
 	OwnerID string `json:"owner_id,omitempty"`
 	// the reset token sent to the user via email which should only be provided to the /forgot-password endpoint + handler
@@ -136,13 +136,15 @@ func (prt *PasswordResetToken) assignValues(columns []string, values []any) erro
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
 			} else if value.Valid {
-				prt.DeletedAt = value.Time
+				prt.DeletedAt = new(time.Time)
+				*prt.DeletedAt = value.Time
 			}
 		case passwordresettoken.FieldDeletedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
 			} else if value.Valid {
-				prt.DeletedBy = value.String
+				prt.DeletedBy = new(string)
+				*prt.DeletedBy = value.String
 			}
 		case passwordresettoken.FieldOwnerID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -231,11 +233,15 @@ func (prt *PasswordResetToken) String() string {
 	builder.WriteString("mapping_id=")
 	builder.WriteString(prt.MappingID)
 	builder.WriteString(", ")
-	builder.WriteString("deleted_at=")
-	builder.WriteString(prt.DeletedAt.Format(time.ANSIC))
+	if v := prt.DeletedAt; v != nil {
+		builder.WriteString("deleted_at=")
+		builder.WriteString(v.Format(time.ANSIC))
+	}
 	builder.WriteString(", ")
-	builder.WriteString("deleted_by=")
-	builder.WriteString(prt.DeletedBy)
+	if v := prt.DeletedBy; v != nil {
+		builder.WriteString("deleted_by=")
+		builder.WriteString(*v)
+	}
 	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
 	builder.WriteString(prt.OwnerID)

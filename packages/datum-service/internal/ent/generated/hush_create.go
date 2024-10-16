@@ -381,11 +381,11 @@ func (hc *HushCreate) createSpec() (*Hush, *sqlgraph.CreateSpec) {
 	}
 	if value, ok := hc.mutation.DeletedAt(); ok {
 		_spec.SetField(hush.FieldDeletedAt, field.TypeTime, value)
-		_node.DeletedAt = value
+		_node.DeletedAt = &value
 	}
 	if value, ok := hc.mutation.DeletedBy(); ok {
 		_spec.SetField(hush.FieldDeletedBy, field.TypeString, value)
-		_node.DeletedBy = value
+		_node.DeletedBy = &value
 	}
 	if value, ok := hc.mutation.Name(); ok {
 		_spec.SetField(hush.FieldName, field.TypeString, value)

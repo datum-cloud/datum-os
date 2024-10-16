@@ -36,9 +36,9 @@ type EntitlementPlanFeatureHistory struct {
 	// MappingID holds the value of the "mapping_id" field.
 	MappingID string `json:"mapping_id,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
-	DeletedAt time.Time `json:"deleted_at,omitempty"`
+	DeletedAt *time.Time `json:"deleted_at,omitempty"`
 	// DeletedBy holds the value of the "deleted_by" field.
-	DeletedBy string `json:"deleted_by,omitempty"`
+	DeletedBy *string `json:"deleted_by,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// The organization id that owns the object
@@ -138,13 +138,15 @@ func (epfh *EntitlementPlanFeatureHistory) assignValues(columns []string, values
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
 			} else if value.Valid {
-				epfh.DeletedAt = value.Time
+				epfh.DeletedAt = new(time.Time)
+				*epfh.DeletedAt = value.Time
 			}
 		case entitlementplanfeaturehistory.FieldDeletedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
 			} else if value.Valid {
-				epfh.DeletedBy = value.String
+				epfh.DeletedBy = new(string)
+				*epfh.DeletedBy = value.String
 			}
 		case entitlementplanfeaturehistory.FieldTags:
 			if value, ok := values[i].(*[]byte); !ok {
@@ -240,11 +242,15 @@ func (epfh *EntitlementPlanFeatureHistory) String() string {
 	builder.WriteString("mapping_id=")
 	builder.WriteString(epfh.MappingID)
 	builder.WriteString(", ")
-	builder.WriteString("deleted_at=")
-	builder.WriteString(epfh.DeletedAt.Format(time.ANSIC))
+	if v := epfh.DeletedAt; v != nil {
+		builder.WriteString("deleted_at=")
+		builder.WriteString(v.Format(time.ANSIC))
+	}
 	builder.WriteString(", ")
-	builder.WriteString("deleted_by=")
-	builder.WriteString(epfh.DeletedBy)
+	if v := epfh.DeletedBy; v != nil {
+		builder.WriteString("deleted_by=")
+		builder.WriteString(*v)
+	}
 	builder.WriteString(", ")
 	builder.WriteString("tags=")
 	builder.WriteString(fmt.Sprintf("%v", epfh.Tags))

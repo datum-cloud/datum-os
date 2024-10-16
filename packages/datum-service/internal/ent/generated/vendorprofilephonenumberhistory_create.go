@@ -328,11 +328,11 @@ func (vppnhc *VendorProfilePhoneNumberHistoryCreate) createSpec() (*VendorProfil
 	}
 	if value, ok := vppnhc.mutation.DeletedAt(); ok {
 		_spec.SetField(vendorprofilephonenumberhistory.FieldDeletedAt, field.TypeTime, value)
-		_node.DeletedAt = value
+		_node.DeletedAt = &value
 	}
 	if value, ok := vppnhc.mutation.DeletedBy(); ok {
 		_spec.SetField(vendorprofilephonenumberhistory.FieldDeletedBy, field.TypeString, value)
-		_node.DeletedBy = value
+		_node.DeletedBy = &value
 	}
 	if value, ok := vppnhc.mutation.VendorProfileID(); ok {
 		_spec.SetField(vendorprofilephonenumberhistory.FieldVendorProfileID, field.TypeString, value)

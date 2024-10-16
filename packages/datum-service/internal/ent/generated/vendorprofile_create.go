@@ -530,11 +530,11 @@ func (vpc *VendorProfileCreate) createSpec() (*VendorProfile, *sqlgraph.CreateSp
 	}
 	if value, ok := vpc.mutation.DeletedAt(); ok {
 		_spec.SetField(vendorprofile.FieldDeletedAt, field.TypeTime, value)
-		_node.DeletedAt = value
+		_node.DeletedAt = &value
 	}
 	if value, ok := vpc.mutation.DeletedBy(); ok {
 		_spec.SetField(vendorprofile.FieldDeletedBy, field.TypeString, value)
-		_node.DeletedBy = value
+		_node.DeletedBy = &value
 	}
 	if value, ok := vpc.mutation.MappingID(); ok {
 		_spec.SetField(vendorprofile.FieldMappingID, field.TypeString, value)

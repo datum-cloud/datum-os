@@ -332,11 +332,11 @@ func (nc *NoteCreate) createSpec() (*Note, *sqlgraph.CreateSpec) {
 	}
 	if value, ok := nc.mutation.DeletedAt(); ok {
 		_spec.SetField(note.FieldDeletedAt, field.TypeTime, value)
-		_node.DeletedAt = value
+		_node.DeletedAt = &value
 	}
 	if value, ok := nc.mutation.DeletedBy(); ok {
 		_spec.SetField(note.FieldDeletedBy, field.TypeString, value)
-		_node.DeletedBy = value
+		_node.DeletedBy = &value
 	}
 	if value, ok := nc.mutation.Tags(); ok {
 		_spec.SetField(note.FieldTags, field.TypeJSON, value)

@@ -433,11 +433,11 @@ func (clc *ContactListCreate) createSpec() (*ContactList, *sqlgraph.CreateSpec) 
 	}
 	if value, ok := clc.mutation.DeletedAt(); ok {
 		_spec.SetField(contactlist.FieldDeletedAt, field.TypeTime, value)
-		_node.DeletedAt = value
+		_node.DeletedAt = &value
 	}
 	if value, ok := clc.mutation.DeletedBy(); ok {
 		_spec.SetField(contactlist.FieldDeletedBy, field.TypeString, value)
-		_node.DeletedBy = value
+		_node.DeletedBy = &value
 	}
 	if value, ok := clc.mutation.MappingID(); ok {
 		_spec.SetField(contactlist.FieldMappingID, field.TypeString, value)

@@ -670,11 +670,11 @@ func (uc *UserCreate) createSpec() (*User, *sqlgraph.CreateSpec) {
 	}
 	if value, ok := uc.mutation.DeletedAt(); ok {
 		_spec.SetField(user.FieldDeletedAt, field.TypeTime, value)
-		_node.DeletedAt = value
+		_node.DeletedAt = &value
 	}
 	if value, ok := uc.mutation.DeletedBy(); ok {
 		_spec.SetField(user.FieldDeletedBy, field.TypeString, value)
-		_node.DeletedBy = value
+		_node.DeletedBy = &value
 	}
 	if value, ok := uc.mutation.MappingID(); ok {
 		_spec.SetField(user.FieldMappingID, field.TypeString, value)

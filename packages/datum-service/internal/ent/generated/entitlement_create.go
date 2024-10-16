@@ -447,11 +447,11 @@ func (ec *EntitlementCreate) createSpec() (*Entitlement, *sqlgraph.CreateSpec) {
 	}
 	if value, ok := ec.mutation.DeletedAt(); ok {
 		_spec.SetField(entitlement.FieldDeletedAt, field.TypeTime, value)
-		_node.DeletedAt = value
+		_node.DeletedAt = &value
 	}
 	if value, ok := ec.mutation.DeletedBy(); ok {
 		_spec.SetField(entitlement.FieldDeletedBy, field.TypeString, value)
-		_node.DeletedBy = value
+		_node.DeletedBy = &value
 	}
 	if value, ok := ec.mutation.ExternalCustomerID(); ok {
 		_spec.SetField(entitlement.FieldExternalCustomerID, field.TypeString, value)

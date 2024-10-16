@@ -472,11 +472,11 @@ func (wc *WebhookCreate) createSpec() (*Webhook, *sqlgraph.CreateSpec) {
 	}
 	if value, ok := wc.mutation.DeletedAt(); ok {
 		_spec.SetField(webhook.FieldDeletedAt, field.TypeTime, value)
-		_node.DeletedAt = value
+		_node.DeletedAt = &value
 	}
 	if value, ok := wc.mutation.DeletedBy(); ok {
 		_spec.SetField(webhook.FieldDeletedBy, field.TypeString, value)
-		_node.DeletedBy = value
+		_node.DeletedBy = &value
 	}
 	if value, ok := wc.mutation.Name(); ok {
 		_spec.SetField(webhook.FieldName, field.TypeString, value)

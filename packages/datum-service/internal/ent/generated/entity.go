@@ -31,9 +31,9 @@ type Entity struct {
 	// MappingID holds the value of the "mapping_id" field.
 	MappingID string `json:"mapping_id,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
-	DeletedAt time.Time `json:"deleted_at,omitempty"`
+	DeletedAt *time.Time `json:"deleted_at,omitempty"`
 	// DeletedBy holds the value of the "deleted_by" field.
-	DeletedBy string `json:"deleted_by,omitempty"`
+	DeletedBy *string `json:"deleted_by,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// The organization id that owns the object
@@ -221,13 +221,15 @@ func (e *Entity) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
 			} else if value.Valid {
-				e.DeletedAt = value.Time
+				e.DeletedAt = new(time.Time)
+				*e.DeletedAt = value.Time
 			}
 		case entity.FieldDeletedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
 			} else if value.Valid {
-				e.DeletedBy = value.String
+				e.DeletedBy = new(string)
+				*e.DeletedBy = value.String
 			}
 		case entity.FieldTags:
 			if value, ok := values[i].(*[]byte); !ok {
@@ -374,11 +376,15 @@ func (e *Entity) String() string {
 	builder.WriteString("mapping_id=")
 	builder.WriteString(e.MappingID)
 	builder.WriteString(", ")
-	builder.WriteString("deleted_at=")
-	builder.WriteString(e.DeletedAt.Format(time.ANSIC))
+	if v := e.DeletedAt; v != nil {
+		builder.WriteString("deleted_at=")
+		builder.WriteString(v.Format(time.ANSIC))
+	}
 	builder.WriteString(", ")
-	builder.WriteString("deleted_by=")
-	builder.WriteString(e.DeletedBy)
+	if v := e.DeletedBy; v != nil {
+		builder.WriteString("deleted_by=")
+		builder.WriteString(*v)
+	}
 	builder.WriteString(", ")
 	builder.WriteString("tags=")
 	builder.WriteString(fmt.Sprintf("%v", e.Tags))

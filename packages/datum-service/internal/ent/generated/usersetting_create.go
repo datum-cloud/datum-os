@@ -464,11 +464,11 @@ func (usc *UserSettingCreate) createSpec() (*UserSetting, *sqlgraph.CreateSpec) 
 	}
 	if value, ok := usc.mutation.DeletedAt(); ok {
 		_spec.SetField(usersetting.FieldDeletedAt, field.TypeTime, value)
-		_node.DeletedAt = value
+		_node.DeletedAt = &value
 	}
 	if value, ok := usc.mutation.DeletedBy(); ok {
 		_spec.SetField(usersetting.FieldDeletedBy, field.TypeString, value)
-		_node.DeletedBy = value
+		_node.DeletedBy = &value
 	}
 	if value, ok := usc.mutation.Locked(); ok {
 		_spec.SetField(usersetting.FieldLocked, field.TypeBool, value)

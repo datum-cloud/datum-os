@@ -380,11 +380,11 @@ func (atc *APITokenCreate) createSpec() (*APIToken, *sqlgraph.CreateSpec) {
 	}
 	if value, ok := atc.mutation.DeletedAt(); ok {
 		_spec.SetField(apitoken.FieldDeletedAt, field.TypeTime, value)
-		_node.DeletedAt = value
+		_node.DeletedAt = &value
 	}
 	if value, ok := atc.mutation.DeletedBy(); ok {
 		_spec.SetField(apitoken.FieldDeletedBy, field.TypeString, value)
-		_node.DeletedBy = value
+		_node.DeletedBy = &value
 	}
 	if value, ok := atc.mutation.MappingID(); ok {
 		_spec.SetField(apitoken.FieldMappingID, field.TypeString, value)

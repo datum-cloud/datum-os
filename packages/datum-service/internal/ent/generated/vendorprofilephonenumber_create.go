@@ -331,11 +331,11 @@ func (vppnc *VendorProfilePhoneNumberCreate) createSpec() (*VendorProfilePhoneNu
 	}
 	if value, ok := vppnc.mutation.DeletedAt(); ok {
 		_spec.SetField(vendorprofilephonenumber.FieldDeletedAt, field.TypeTime, value)
-		_node.DeletedAt = value
+		_node.DeletedAt = &value
 	}
 	if value, ok := vppnc.mutation.DeletedBy(); ok {
 		_spec.SetField(vendorprofilephonenumber.FieldDeletedBy, field.TypeString, value)
-		_node.DeletedBy = value
+		_node.DeletedBy = &value
 	}
 	if nodes := vppnc.mutation.PhoneNumberIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

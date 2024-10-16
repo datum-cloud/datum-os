@@ -38,9 +38,9 @@ type WebhookHistory struct {
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
-	DeletedAt time.Time `json:"deleted_at,omitempty"`
+	DeletedAt *time.Time `json:"deleted_at,omitempty"`
 	// DeletedBy holds the value of the "deleted_by" field.
-	DeletedBy string `json:"deleted_by,omitempty"`
+	DeletedBy *string `json:"deleted_by,omitempty"`
 	// The organization id that owns the object
 	OwnerID string `json:"owner_id,omitempty"`
 	// the name of the webhook
@@ -164,13 +164,15 @@ func (wh *WebhookHistory) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
 			} else if value.Valid {
-				wh.DeletedAt = value.Time
+				wh.DeletedAt = new(time.Time)
+				*wh.DeletedAt = value.Time
 			}
 		case webhookhistory.FieldDeletedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
 			} else if value.Valid {
-				wh.DeletedBy = value.String
+				wh.DeletedBy = new(string)
+				*wh.DeletedBy = value.String
 			}
 		case webhookhistory.FieldOwnerID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -301,11 +303,15 @@ func (wh *WebhookHistory) String() string {
 	builder.WriteString("tags=")
 	builder.WriteString(fmt.Sprintf("%v", wh.Tags))
 	builder.WriteString(", ")
-	builder.WriteString("deleted_at=")
-	builder.WriteString(wh.DeletedAt.Format(time.ANSIC))
+	if v := wh.DeletedAt; v != nil {
+		builder.WriteString("deleted_at=")
+		builder.WriteString(v.Format(time.ANSIC))
+	}
 	builder.WriteString(", ")
-	builder.WriteString("deleted_by=")
-	builder.WriteString(wh.DeletedBy)
+	if v := wh.DeletedBy; v != nil {
+		builder.WriteString("deleted_by=")
+		builder.WriteString(*v)
+	}
 	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
 	builder.WriteString(wh.OwnerID)

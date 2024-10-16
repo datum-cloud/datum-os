@@ -35,9 +35,9 @@ type VendorProfileHistory struct {
 	// UpdatedBy holds the value of the "updated_by" field.
 	UpdatedBy string `json:"updated_by,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
-	DeletedAt time.Time `json:"deleted_at,omitempty"`
+	DeletedAt *time.Time `json:"deleted_at,omitempty"`
 	// DeletedBy holds the value of the "deleted_by" field.
-	DeletedBy string `json:"deleted_by,omitempty"`
+	DeletedBy *string `json:"deleted_by,omitempty"`
 	// MappingID holds the value of the "mapping_id" field.
 	MappingID string `json:"mapping_id,omitempty"`
 	// tags associated with the object
@@ -143,13 +143,15 @@ func (vph *VendorProfileHistory) assignValues(columns []string, values []any) er
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
 			} else if value.Valid {
-				vph.DeletedAt = value.Time
+				vph.DeletedAt = new(time.Time)
+				*vph.DeletedAt = value.Time
 			}
 		case vendorprofilehistory.FieldDeletedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
 			} else if value.Valid {
-				vph.DeletedBy = value.String
+				vph.DeletedBy = new(string)
+				*vph.DeletedBy = value.String
 			}
 		case vendorprofilehistory.FieldMappingID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -276,11 +278,15 @@ func (vph *VendorProfileHistory) String() string {
 	builder.WriteString("updated_by=")
 	builder.WriteString(vph.UpdatedBy)
 	builder.WriteString(", ")
-	builder.WriteString("deleted_at=")
-	builder.WriteString(vph.DeletedAt.Format(time.ANSIC))
+	if v := vph.DeletedAt; v != nil {
+		builder.WriteString("deleted_at=")
+		builder.WriteString(v.Format(time.ANSIC))
+	}
 	builder.WriteString(", ")
-	builder.WriteString("deleted_by=")
-	builder.WriteString(vph.DeletedBy)
+	if v := vph.DeletedBy; v != nil {
+		builder.WriteString("deleted_by=")
+		builder.WriteString(*v)
+	}
 	builder.WriteString(", ")
 	builder.WriteString("mapping_id=")
 	builder.WriteString(vph.MappingID)

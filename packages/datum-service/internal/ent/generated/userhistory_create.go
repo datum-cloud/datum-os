@@ -496,11 +496,11 @@ func (uhc *UserHistoryCreate) createSpec() (*UserHistory, *sqlgraph.CreateSpec) 
 	}
 	if value, ok := uhc.mutation.DeletedAt(); ok {
 		_spec.SetField(userhistory.FieldDeletedAt, field.TypeTime, value)
-		_node.DeletedAt = value
+		_node.DeletedAt = &value
 	}
 	if value, ok := uhc.mutation.DeletedBy(); ok {
 		_spec.SetField(userhistory.FieldDeletedBy, field.TypeString, value)
-		_node.DeletedBy = value
+		_node.DeletedBy = &value
 	}
 	if value, ok := uhc.mutation.MappingID(); ok {
 		_spec.SetField(userhistory.FieldMappingID, field.TypeString, value)

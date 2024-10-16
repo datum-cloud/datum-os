@@ -30,9 +30,9 @@ type ContactListMembership struct {
 	// MappingID holds the value of the "mapping_id" field.
 	MappingID string `json:"mapping_id,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
-	DeletedAt time.Time `json:"deleted_at,omitempty"`
+	DeletedAt *time.Time `json:"deleted_at,omitempty"`
 	// DeletedBy holds the value of the "deleted_by" field.
-	DeletedBy string `json:"deleted_by,omitempty"`
+	DeletedBy *string `json:"deleted_by,omitempty"`
 	// ContactListID holds the value of the "contact_list_id" field.
 	ContactListID string `json:"contact_list_id,omitempty"`
 	// ContactID holds the value of the "contact_id" field.
@@ -155,13 +155,15 @@ func (clm *ContactListMembership) assignValues(columns []string, values []any) e
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
 			} else if value.Valid {
-				clm.DeletedAt = value.Time
+				clm.DeletedAt = new(time.Time)
+				*clm.DeletedAt = value.Time
 			}
 		case contactlistmembership.FieldDeletedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
 			} else if value.Valid {
-				clm.DeletedBy = value.String
+				clm.DeletedBy = new(string)
+				*clm.DeletedBy = value.String
 			}
 		case contactlistmembership.FieldContactListID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -241,11 +243,15 @@ func (clm *ContactListMembership) String() string {
 	builder.WriteString("mapping_id=")
 	builder.WriteString(clm.MappingID)
 	builder.WriteString(", ")
-	builder.WriteString("deleted_at=")
-	builder.WriteString(clm.DeletedAt.Format(time.ANSIC))
+	if v := clm.DeletedAt; v != nil {
+		builder.WriteString("deleted_at=")
+		builder.WriteString(v.Format(time.ANSIC))
+	}
 	builder.WriteString(", ")
-	builder.WriteString("deleted_by=")
-	builder.WriteString(clm.DeletedBy)
+	if v := clm.DeletedBy; v != nil {
+		builder.WriteString("deleted_by=")
+		builder.WriteString(*v)
+	}
 	builder.WriteString(", ")
 	builder.WriteString("contact_list_id=")
 	builder.WriteString(clm.ContactListID)

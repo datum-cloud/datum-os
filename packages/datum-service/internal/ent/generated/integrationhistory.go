@@ -38,9 +38,9 @@ type IntegrationHistory struct {
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
-	DeletedAt time.Time `json:"deleted_at,omitempty"`
+	DeletedAt *time.Time `json:"deleted_at,omitempty"`
 	// DeletedBy holds the value of the "deleted_by" field.
-	DeletedBy string `json:"deleted_by,omitempty"`
+	DeletedBy *string `json:"deleted_by,omitempty"`
 	// The organization id that owns the object
 	OwnerID string `json:"owner_id,omitempty"`
 	// the name of the integration - must be unique within the organization
@@ -146,13 +146,15 @@ func (ih *IntegrationHistory) assignValues(columns []string, values []any) error
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
 			} else if value.Valid {
-				ih.DeletedAt = value.Time
+				ih.DeletedAt = new(time.Time)
+				*ih.DeletedAt = value.Time
 			}
 		case integrationhistory.FieldDeletedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
 			} else if value.Valid {
-				ih.DeletedBy = value.String
+				ih.DeletedBy = new(string)
+				*ih.DeletedBy = value.String
 			}
 		case integrationhistory.FieldOwnerID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -241,11 +243,15 @@ func (ih *IntegrationHistory) String() string {
 	builder.WriteString("tags=")
 	builder.WriteString(fmt.Sprintf("%v", ih.Tags))
 	builder.WriteString(", ")
-	builder.WriteString("deleted_at=")
-	builder.WriteString(ih.DeletedAt.Format(time.ANSIC))
+	if v := ih.DeletedAt; v != nil {
+		builder.WriteString("deleted_at=")
+		builder.WriteString(v.Format(time.ANSIC))
+	}
 	builder.WriteString(", ")
-	builder.WriteString("deleted_by=")
-	builder.WriteString(ih.DeletedBy)
+	if v := ih.DeletedBy; v != nil {
+		builder.WriteString("deleted_by=")
+		builder.WriteString(*v)
+	}
 	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
 	builder.WriteString(ih.OwnerID)

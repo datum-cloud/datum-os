@@ -489,11 +489,11 @@ func (whc *WebhookHistoryCreate) createSpec() (*WebhookHistory, *sqlgraph.Create
 	}
 	if value, ok := whc.mutation.DeletedAt(); ok {
 		_spec.SetField(webhookhistory.FieldDeletedAt, field.TypeTime, value)
-		_node.DeletedAt = value
+		_node.DeletedAt = &value
 	}
 	if value, ok := whc.mutation.DeletedBy(); ok {
 		_spec.SetField(webhookhistory.FieldDeletedBy, field.TypeString, value)
-		_node.DeletedBy = value
+		_node.DeletedBy = &value
 	}
 	if value, ok := whc.mutation.OwnerID(); ok {
 		_spec.SetField(webhookhistory.FieldOwnerID, field.TypeString, value)

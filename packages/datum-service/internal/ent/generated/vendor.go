@@ -30,9 +30,9 @@ type Vendor struct {
 	// UpdatedBy holds the value of the "updated_by" field.
 	UpdatedBy string `json:"updated_by,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
-	DeletedAt time.Time `json:"deleted_at,omitempty"`
+	DeletedAt *time.Time `json:"deleted_at,omitempty"`
 	// DeletedBy holds the value of the "deleted_by" field.
-	DeletedBy string `json:"deleted_by,omitempty"`
+	DeletedBy *string `json:"deleted_by,omitempty"`
 	// MappingID holds the value of the "mapping_id" field.
 	MappingID string `json:"mapping_id,omitempty"`
 	// tags associated with the object
@@ -159,13 +159,15 @@ func (v *Vendor) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
 			} else if value.Valid {
-				v.DeletedAt = value.Time
+				v.DeletedAt = new(time.Time)
+				*v.DeletedAt = value.Time
 			}
 		case vendor.FieldDeletedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
 			} else if value.Valid {
-				v.DeletedBy = value.String
+				v.DeletedBy = new(string)
+				*v.DeletedBy = value.String
 			}
 		case vendor.FieldMappingID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -268,11 +270,15 @@ func (v *Vendor) String() string {
 	builder.WriteString("updated_by=")
 	builder.WriteString(v.UpdatedBy)
 	builder.WriteString(", ")
-	builder.WriteString("deleted_at=")
-	builder.WriteString(v.DeletedAt.Format(time.ANSIC))
+	if v := v.DeletedAt; v != nil {
+		builder.WriteString("deleted_at=")
+		builder.WriteString(v.Format(time.ANSIC))
+	}
 	builder.WriteString(", ")
-	builder.WriteString("deleted_by=")
-	builder.WriteString(v.DeletedBy)
+	if v := v.DeletedBy; v != nil {
+		builder.WriteString("deleted_by=")
+		builder.WriteString(*v)
+	}
 	builder.WriteString(", ")
 	builder.WriteString("mapping_id=")
 	builder.WriteString(v.MappingID)

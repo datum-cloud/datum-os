@@ -31,9 +31,9 @@ type Contact struct {
 	// MappingID holds the value of the "mapping_id" field.
 	MappingID string `json:"mapping_id,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
-	DeletedAt time.Time `json:"deleted_at,omitempty"`
+	DeletedAt *time.Time `json:"deleted_at,omitempty"`
 	// DeletedBy holds the value of the "deleted_by" field.
-	DeletedBy string `json:"deleted_by,omitempty"`
+	DeletedBy *string `json:"deleted_by,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// The organization id that owns the object
@@ -183,13 +183,15 @@ func (c *Contact) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
 			} else if value.Valid {
-				c.DeletedAt = value.Time
+				c.DeletedAt = new(time.Time)
+				*c.DeletedAt = value.Time
 			}
 		case contact.FieldDeletedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
 			} else if value.Valid {
-				c.DeletedBy = value.String
+				c.DeletedBy = new(string)
+				*c.DeletedBy = value.String
 			}
 		case contact.FieldTags:
 			if value, ok := values[i].(*[]byte); !ok {
@@ -318,11 +320,15 @@ func (c *Contact) String() string {
 	builder.WriteString("mapping_id=")
 	builder.WriteString(c.MappingID)
 	builder.WriteString(", ")
-	builder.WriteString("deleted_at=")
-	builder.WriteString(c.DeletedAt.Format(time.ANSIC))
+	if v := c.DeletedAt; v != nil {
+		builder.WriteString("deleted_at=")
+		builder.WriteString(v.Format(time.ANSIC))
+	}
 	builder.WriteString(", ")
-	builder.WriteString("deleted_by=")
-	builder.WriteString(c.DeletedBy)
+	if v := c.DeletedBy; v != nil {
+		builder.WriteString("deleted_by=")
+		builder.WriteString(*v)
+	}
 	builder.WriteString(", ")
 	builder.WriteString("tags=")
 	builder.WriteString(fmt.Sprintf("%v", c.Tags))

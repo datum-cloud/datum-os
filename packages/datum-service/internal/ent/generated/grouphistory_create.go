@@ -420,11 +420,11 @@ func (ghc *GroupHistoryCreate) createSpec() (*GroupHistory, *sqlgraph.CreateSpec
 	}
 	if value, ok := ghc.mutation.DeletedAt(); ok {
 		_spec.SetField(grouphistory.FieldDeletedAt, field.TypeTime, value)
-		_node.DeletedAt = value
+		_node.DeletedAt = &value
 	}
 	if value, ok := ghc.mutation.DeletedBy(); ok {
 		_spec.SetField(grouphistory.FieldDeletedBy, field.TypeString, value)
-		_node.DeletedBy = value
+		_node.DeletedBy = &value
 	}
 	if value, ok := ghc.mutation.MappingID(); ok {
 		_spec.SetField(grouphistory.FieldMappingID, field.TypeString, value)

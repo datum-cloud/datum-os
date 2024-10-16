@@ -450,11 +450,11 @@ func (vphc *VendorProfileHistoryCreate) createSpec() (*VendorProfileHistory, *sq
 	}
 	if value, ok := vphc.mutation.DeletedAt(); ok {
 		_spec.SetField(vendorprofilehistory.FieldDeletedAt, field.TypeTime, value)
-		_node.DeletedAt = value
+		_node.DeletedAt = &value
 	}
 	if value, ok := vphc.mutation.DeletedBy(); ok {
 		_spec.SetField(vendorprofilehistory.FieldDeletedBy, field.TypeString, value)
-		_node.DeletedBy = value
+		_node.DeletedBy = &value
 	}
 	if value, ok := vphc.mutation.MappingID(); ok {
 		_spec.SetField(vendorprofilehistory.FieldMappingID, field.TypeString, value)

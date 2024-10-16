@@ -328,11 +328,11 @@ func (etc *EntityTypeCreate) createSpec() (*EntityType, *sqlgraph.CreateSpec) {
 	}
 	if value, ok := etc.mutation.DeletedAt(); ok {
 		_spec.SetField(entitytype.FieldDeletedAt, field.TypeTime, value)
-		_node.DeletedAt = value
+		_node.DeletedAt = &value
 	}
 	if value, ok := etc.mutation.DeletedBy(); ok {
 		_spec.SetField(entitytype.FieldDeletedBy, field.TypeString, value)
-		_node.DeletedBy = value
+		_node.DeletedBy = &value
 	}
 	if value, ok := etc.mutation.Tags(); ok {
 		_spec.SetField(entitytype.FieldTags, field.TypeJSON, value)

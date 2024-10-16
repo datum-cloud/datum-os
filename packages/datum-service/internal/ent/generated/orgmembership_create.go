@@ -342,11 +342,11 @@ func (omc *OrgMembershipCreate) createSpec() (*OrgMembership, *sqlgraph.CreateSp
 	}
 	if value, ok := omc.mutation.DeletedAt(); ok {
 		_spec.SetField(orgmembership.FieldDeletedAt, field.TypeTime, value)
-		_node.DeletedAt = value
+		_node.DeletedAt = &value
 	}
 	if value, ok := omc.mutation.DeletedBy(); ok {
 		_spec.SetField(orgmembership.FieldDeletedBy, field.TypeString, value)
-		_node.DeletedBy = value
+		_node.DeletedBy = &value
 	}
 	if value, ok := omc.mutation.Role(); ok {
 		_spec.SetField(orgmembership.FieldRole, field.TypeEnum, value)

@@ -30,9 +30,9 @@ type Invite struct {
 	// MappingID holds the value of the "mapping_id" field.
 	MappingID string `json:"mapping_id,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
-	DeletedAt time.Time `json:"deleted_at,omitempty"`
+	DeletedAt *time.Time `json:"deleted_at,omitempty"`
 	// DeletedBy holds the value of the "deleted_by" field.
-	DeletedBy string `json:"deleted_by,omitempty"`
+	DeletedBy *string `json:"deleted_by,omitempty"`
 	// The organization id that owns the object
 	OwnerID string `json:"owner_id,omitempty"`
 	// the invitation token sent to the user via email which should only be provided to the /verify endpoint + handler
@@ -160,13 +160,15 @@ func (i *Invite) assignValues(columns []string, values []any) error {
 			if value, ok := values[j].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_at", values[j])
 			} else if value.Valid {
-				i.DeletedAt = value.Time
+				i.DeletedAt = new(time.Time)
+				*i.DeletedAt = value.Time
 			}
 		case invite.FieldDeletedBy:
 			if value, ok := values[j].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_by", values[j])
 			} else if value.Valid {
-				i.DeletedBy = value.String
+				i.DeletedBy = new(string)
+				*i.DeletedBy = value.String
 			}
 		case invite.FieldOwnerID:
 			if value, ok := values[j].(*sql.NullString); !ok {
@@ -283,11 +285,15 @@ func (i *Invite) String() string {
 	builder.WriteString("mapping_id=")
 	builder.WriteString(i.MappingID)
 	builder.WriteString(", ")
-	builder.WriteString("deleted_at=")
-	builder.WriteString(i.DeletedAt.Format(time.ANSIC))
+	if v := i.DeletedAt; v != nil {
+		builder.WriteString("deleted_at=")
+		builder.WriteString(v.Format(time.ANSIC))
+	}
 	builder.WriteString(", ")
-	builder.WriteString("deleted_by=")
-	builder.WriteString(i.DeletedBy)
+	if v := i.DeletedBy; v != nil {
+		builder.WriteString("deleted_by=")
+		builder.WriteString(*v)
+	}
 	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
 	builder.WriteString(i.OwnerID)

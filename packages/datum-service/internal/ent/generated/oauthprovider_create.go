@@ -384,11 +384,11 @@ func (opc *OauthProviderCreate) createSpec() (*OauthProvider, *sqlgraph.CreateSp
 	}
 	if value, ok := opc.mutation.DeletedAt(); ok {
 		_spec.SetField(oauthprovider.FieldDeletedAt, field.TypeTime, value)
-		_node.DeletedAt = value
+		_node.DeletedAt = &value
 	}
 	if value, ok := opc.mutation.DeletedBy(); ok {
 		_spec.SetField(oauthprovider.FieldDeletedBy, field.TypeString, value)
-		_node.DeletedBy = value
+		_node.DeletedBy = &value
 	}
 	if value, ok := opc.mutation.Name(); ok {
 		_spec.SetField(oauthprovider.FieldName, field.TypeString, value)

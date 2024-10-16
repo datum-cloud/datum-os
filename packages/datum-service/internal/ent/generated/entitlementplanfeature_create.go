@@ -366,11 +366,11 @@ func (epfc *EntitlementPlanFeatureCreate) createSpec() (*EntitlementPlanFeature,
 	}
 	if value, ok := epfc.mutation.DeletedAt(); ok {
 		_spec.SetField(entitlementplanfeature.FieldDeletedAt, field.TypeTime, value)
-		_node.DeletedAt = value
+		_node.DeletedAt = &value
 	}
 	if value, ok := epfc.mutation.DeletedBy(); ok {
 		_spec.SetField(entitlementplanfeature.FieldDeletedBy, field.TypeString, value)
-		_node.DeletedBy = value
+		_node.DeletedBy = &value
 	}
 	if value, ok := epfc.mutation.Tags(); ok {
 		_spec.SetField(entitlementplanfeature.FieldTags, field.TypeJSON, value)

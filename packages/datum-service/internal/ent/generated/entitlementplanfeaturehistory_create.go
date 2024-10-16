@@ -376,11 +376,11 @@ func (epfhc *EntitlementPlanFeatureHistoryCreate) createSpec() (*EntitlementPlan
 	}
 	if value, ok := epfhc.mutation.DeletedAt(); ok {
 		_spec.SetField(entitlementplanfeaturehistory.FieldDeletedAt, field.TypeTime, value)
-		_node.DeletedAt = value
+		_node.DeletedAt = &value
 	}
 	if value, ok := epfhc.mutation.DeletedBy(); ok {
 		_spec.SetField(entitlementplanfeaturehistory.FieldDeletedBy, field.TypeString, value)
-		_node.DeletedBy = value
+		_node.DeletedBy = &value
 	}
 	if value, ok := epfhc.mutation.Tags(); ok {
 		_spec.SetField(entitlementplanfeaturehistory.FieldTags, field.TypeJSON, value)

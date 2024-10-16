@@ -39,9 +39,9 @@ type GroupSettingHistory struct {
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
-	DeletedAt time.Time `json:"deleted_at,omitempty"`
+	DeletedAt *time.Time `json:"deleted_at,omitempty"`
 	// DeletedBy holds the value of the "deleted_by" field.
-	DeletedBy string `json:"deleted_by,omitempty"`
+	DeletedBy *string `json:"deleted_by,omitempty"`
 	// whether the group is visible to it's members / owners only or if it's searchable by anyone within the organization
 	Visibility enums.Visibility `json:"visibility,omitempty"`
 	// the policy governing ability to freely join a group, whether it requires an invitation, application, or either
@@ -151,13 +151,15 @@ func (gsh *GroupSettingHistory) assignValues(columns []string, values []any) err
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
 			} else if value.Valid {
-				gsh.DeletedAt = value.Time
+				gsh.DeletedAt = new(time.Time)
+				*gsh.DeletedAt = value.Time
 			}
 		case groupsettinghistory.FieldDeletedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
 			} else if value.Valid {
-				gsh.DeletedBy = value.String
+				gsh.DeletedBy = new(string)
+				*gsh.DeletedBy = value.String
 			}
 		case groupsettinghistory.FieldVisibility:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -252,11 +254,15 @@ func (gsh *GroupSettingHistory) String() string {
 	builder.WriteString("tags=")
 	builder.WriteString(fmt.Sprintf("%v", gsh.Tags))
 	builder.WriteString(", ")
-	builder.WriteString("deleted_at=")
-	builder.WriteString(gsh.DeletedAt.Format(time.ANSIC))
+	if v := gsh.DeletedAt; v != nil {
+		builder.WriteString("deleted_at=")
+		builder.WriteString(v.Format(time.ANSIC))
+	}
 	builder.WriteString(", ")
-	builder.WriteString("deleted_by=")
-	builder.WriteString(gsh.DeletedBy)
+	if v := gsh.DeletedBy; v != nil {
+		builder.WriteString("deleted_by=")
+		builder.WriteString(*v)
+	}
 	builder.WriteString(", ")
 	builder.WriteString("visibility=")
 	builder.WriteString(fmt.Sprintf("%v", gsh.Visibility))

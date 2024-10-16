@@ -355,11 +355,11 @@ func (vppahc *VendorProfilePostalAddressHistoryCreate) createSpec() (*VendorProf
 	}
 	if value, ok := vppahc.mutation.DeletedAt(); ok {
 		_spec.SetField(vendorprofilepostaladdresshistory.FieldDeletedAt, field.TypeTime, value)
-		_node.DeletedAt = value
+		_node.DeletedAt = &value
 	}
 	if value, ok := vppahc.mutation.DeletedBy(); ok {
 		_spec.SetField(vendorprofilepostaladdresshistory.FieldDeletedBy, field.TypeString, value)
-		_node.DeletedBy = value
+		_node.DeletedBy = &value
 	}
 	if value, ok := vppahc.mutation.PostalAddressType(); ok {
 		_spec.SetField(vendorprofilepostaladdresshistory.FieldPostalAddressType, field.TypeEnum, value)

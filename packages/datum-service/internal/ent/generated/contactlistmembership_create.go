@@ -315,11 +315,11 @@ func (clmc *ContactListMembershipCreate) createSpec() (*ContactListMembership, *
 	}
 	if value, ok := clmc.mutation.DeletedAt(); ok {
 		_spec.SetField(contactlistmembership.FieldDeletedAt, field.TypeTime, value)
-		_node.DeletedAt = value
+		_node.DeletedAt = &value
 	}
 	if value, ok := clmc.mutation.DeletedBy(); ok {
 		_spec.SetField(contactlistmembership.FieldDeletedBy, field.TypeString, value)
-		_node.DeletedBy = value
+		_node.DeletedBy = &value
 	}
 	if nodes := clmc.mutation.ContactListIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
