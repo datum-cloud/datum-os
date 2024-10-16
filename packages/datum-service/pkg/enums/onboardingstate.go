@@ -28,6 +28,19 @@ func (r OnboardingState) String() string {
 	return string(r)
 }
 
+func ToOnboardingStateFromInt(r int) *OnboardingState {
+	switch r {
+	case 1:
+		return &OnboardingStatePending
+	case 2:
+		return &OnboardingStateActive
+	case 3:
+		return &OnboardingStateInactive
+	default:
+		return &OnboardingStateUnspecified
+	}
+}
+
 func ToOnboardingState(r string) *OnboardingState {
 	switch r := strings.ToUpper(r); r {
 	case OnboardingStatePending.String():

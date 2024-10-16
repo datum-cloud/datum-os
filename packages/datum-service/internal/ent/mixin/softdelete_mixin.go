@@ -28,12 +28,14 @@ func (SoftDeleteMixin) Fields() []ent.Field {
 	return []ent.Field{
 		field.Time("deleted_at").
 			Optional().
+			Nillable().
 			Annotations(
 				entgql.Skip(entgql.SkipMutationCreateInput, entgql.SkipMutationUpdateInput),
 				entoas.Annotation{ReadOnly: true},
 			),
 		field.String("deleted_by").
 			Optional().
+			Nillable().
 			Annotations(
 				entgql.Skip(entgql.SkipMutationCreateInput, entgql.SkipMutationUpdateInput),
 				entoas.Annotation{ReadOnly: true},

@@ -26,6 +26,17 @@ func (r VendorType) String() string {
 	return string(r)
 }
 
+func ToVendorTypeFromInt(r int) *VendorType {
+	switch r {
+	case 1:
+		return &VendorTypePerson
+	case 2:
+		return &VendorTypeCorporation
+	default:
+		return &VendorTypeUnspecified
+	}
+}
+
 func ToVendorType(r string) *VendorType {
 	switch r := strings.ToUpper(r); r {
 	case VendorTypePerson.String():
