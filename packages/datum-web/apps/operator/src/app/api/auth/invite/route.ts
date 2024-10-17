@@ -1,39 +1,48 @@
-import { type NextRequest, NextResponse } from 'next/server'
+import { NextResponse } from 'next/server'
+
+import { HttpStatus, SERVICE_APP_ROUTES } from '@repo/constants'
+
 import { auth } from '@/lib/auth/auth'
 import { setSessionCookie } from '@/lib/auth/utils/set-session-cookie'
+import { handleError, handleResponseError } from '@/utils/requests'
 
-export async function GET(request: NextRequest) {
-  const cookies = request.headers.get('cookie')
-  const session = await auth()
-  const accessToken = session?.user?.accessToken
+export async function GET(request: Request): Promise<NextResponse> {
+  try {
+    const session = await auth()
+    const accessToken = session?.user?.accessToken
+    const cookies = request.headers.get('cookie')
+    const searchParams = new URL(request.url).searchParams
+    const token = searchParams.get('token')
+    const headers: HeadersInit = {
+      'content-type': 'application/json',
+      Authorization: `Bearer ${accessToken}`,
+    }
+    if (cookies) {
+      headers['cookie'] = cookies
+    }
 
-  const headers: HeadersInit = {
-    'content-type': 'application/json',
-    Authorization: `Bearer ${accessToken}`,
-  }
-  if (cookies) {
-    headers['cookie'] = cookies
-  }
+    const response = await fetch(
+      `${SERVICE_APP_ROUTES.invite}?token=${token}`,
+      {
+        method: 'GET',
+        headers,
+      },
+    )
 
-  const searchParams = request.nextUrl.searchParams
-  const token = searchParams.get('token')
+    if (!response.ok) {
+      const error = await handleResponseError(
+        response,
+        'Failed to process invite',
+      )
+      return error
+    }
 
-  const fData = await fetch(
-    `${process.env.API_REST_URL}/v1/invite?token=${token}`,
-    {
-      method: 'GET',
-      headers,
-    },
-  )
+    const data = await response.json()
+    setSessionCookie(data.session)
 
-  const fetchedData = await fData.json()
-
-  if (fData.ok) {
-    setSessionCookie(fetchedData.session)
-    return NextResponse.json(fetchedData, { status: 200 })
-  }
-
-  if (fData.status !== 201) {
-    return NextResponse.json(fetchedData, { status: fData.status })
+    return NextResponse.json(data, { status: HttpStatus.Ok })
+  } catch (error: any) {
+    console.error('Failed to process invite', error)
+    return handleError(error, 'Failed to process invite')
   }
 }

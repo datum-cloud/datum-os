@@ -1,31 +1,41 @@
 import { NextResponse } from 'next/server'
 
-export async function POST(request: Request) {
-  const bodyData = await request.json()
-  const cookies = request.headers.get('cookie')
+import { HttpStatus, SERVICE_APP_ROUTES } from '@repo/constants'
 
-  const headers: HeadersInit = {
-    'content-type': 'application/json',
-  }
-  if (cookies) {
-    headers['cookie'] = cookies
-  }
+import { handleError, handleResponseError } from '@/utils/requests'
 
-  const fData = await fetch(
-    `${process.env.API_REST_URL}/v1/registration/verification`,
-    {
+export async function POST(request: Request): Promise<NextResponse> {
+  try {
+    const bodyData = await request.json()
+    const cookies = request.headers.get('cookie')
+    const headers: HeadersInit = {
+      'content-type': 'application/json',
+    }
+    if (cookies) {
+      headers['cookie'] = cookies
+    }
+
+    const response = await fetch(SERVICE_APP_ROUTES.registrationVerification, {
       method: 'POST',
       headers,
       body: JSON.stringify(bodyData),
       credentials: 'include',
-    },
-  )
+    })
 
-  if (fData.ok) {
-    return NextResponse.json(await fData.json(), { status: 200 })
-  }
+    if (!response.ok) {
+      const error = await handleResponseError(
+        response,
+        'Failed to verify registration',
+      )
 
-  if (fData.status !== 201) {
-    return NextResponse.json(await fData.json(), { status: fData.status })
+      return error
+    }
+
+    const data = await response.json()
+
+    return NextResponse.json(data, { status: HttpStatus.Ok })
+  } catch (error: any) {
+    console.error('Failed to verify registration', error)
+    return handleError(error, 'Failed to verify registration')
   }
 }
