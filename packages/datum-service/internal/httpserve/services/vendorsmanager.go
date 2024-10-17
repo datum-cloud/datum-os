@@ -51,16 +51,10 @@ func (s Server) VendorsCreateVendor2(ctx echox.Context, params proto.VendorsCrea
 		)
 	}
 
-	vendorType := enums.ToVendorTypeFromInt(reqVendor.Spec.Type)
-	if vendorType == nil {
-		return echox.NewHTTPError(
-			http.StatusBadRequest,
-			fmt.Sprintf("invalid vendor type: %d", reqVendor.Spec.Type),
-		)
-	}
+	vendorType := models.VendorEnumTypeFromSpecType(reqVendor.Spec.Type)
 
 	var vendorName *string
-	switch *vendorType {
+	switch vendorType {
 	case enums.VendorTypePerson:
 		vendorName = reqVendor.Spec.Profile.Person
 		if vendorName == nil {
@@ -89,6 +83,12 @@ func (s Server) VendorsCreateVendor2(ctx echox.Context, params proto.VendorsCrea
 		displayName = vendorName
 	}
 
+	// TODO: Create and Add Postal Addresses
+	// TODO: Create and Add Contact Details
+	// TODO: Create and Add Tax ID
+	// TODO: Create and Add Named Owner
+	// TODO: Create and Add Phone Numbers
+
 	tx := transaction.FromContext(ctx.Request().Context())
 	profile, err := tx.VendorProfile.Create().
 		SetName(*vendorName).
@@ -105,7 +105,7 @@ func (s Server) VendorsCreateVendor2(ctx echox.Context, params proto.VendorsCrea
 	}
 
 	vendor, err := tx.Vendor.Create().
-		SetVendorType(*vendorType).
+		SetVendorType(vendorType).
 		SetDisplayName(*displayName).
 		SetProfile(profile).
 		Save(ctx.Request().Context())
@@ -128,16 +128,23 @@ func (s Server) VendorsDeleteVendor2(ctx echox.Context, vendor string, params pr
 }
 
 // (GET /v1alpha/vendors/{vendor})
-func (s Server) VendorsGetVendor2(ctx echox.Context, vendor string) error {
+func (s Server) VendorsGetVendor2(ctx echox.Context, vendorID string) error {
 	tx := transaction.FromContext(ctx.Request().Context())
-	ret, err := tx.Vendor.Get(ctx.Request().Context(), vendor)
+	vendor, err := tx.Vendor.Get(ctx.Request().Context(), vendorID)
 	if err != nil {
 		return echox.NewHTTPError(
 			http.StatusNotFound,
 			fmt.Sprintf("could not find vendor %s", err.Error()),
 		)
 	}
-	return ctx.JSON(http.StatusOK, ret)
+	profile, err := vendor.Profile(ctx.Request().Context())
+	if err != nil {
+		return echox.NewHTTPError(
+			http.StatusInternalServerError,
+			fmt.Sprintf("could not find vendor profile %s", err.Error()),
+		)
+	}
+	return ctx.JSON(http.StatusOK, models.VendorResponseFromEntity(vendor, profile))
 }
 
 // (PATCH /v1alpha/vendors/{vendor})
