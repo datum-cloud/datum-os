@@ -2,12 +2,13 @@
 
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
+import { useState } from 'react'
 
 import {
   useCreateOrganizationMutation,
   useGetAllOrganizationsQuery,
 } from '@repo/codegen/src/schema'
-import { OPERATOR_APP_ROUTES } from '@repo/constants'
+import { OPERATOR_APP_ROUTES, TOAST_DURATION } from '@repo/constants'
 import { Button } from '@repo/ui/button'
 import {
   Form,
@@ -26,7 +27,6 @@ import { toast } from '@repo/ui/use-toast'
 
 import PageTitle from '@/components/page-title'
 import { createWorkspaceStyles } from '@/components/pages/protected/workspace/page.styles'
-import { Error } from '@/components/shared/error/error'
 import { Loading } from '@/components/shared/loading/loading'
 import { switchWorkspace } from '@/lib/user'
 import { WorkspaceNameInput, WorkspaceNameSchema } from '@/utils/schemas'
@@ -34,12 +34,12 @@ import { WorkspaceNameInput, WorkspaceNameSchema } from '@/utils/schemas'
 import { ExistingWorkspaces } from './workspace-existing'
 
 const WorkspacePage = () => {
+  const [switching, setSwitching] = useState(false)
   const { push } = useRouter()
   const { data: sessionData, update: updateSession } = useSession()
-  const [{ data: allOrgs, fetching, stale, error }] =
-    useGetAllOrganizationsQuery({
-      pause: !sessionData,
-    })
+  const [{ data: allOrgs }] = useGetAllOrganizationsQuery({
+    pause: !sessionData,
+  })
   const userId = sessionData?.user.userId
   const [{ error: createError }, addOrganization] =
     useCreateOrganizationMutation()
@@ -72,6 +72,7 @@ const WorkspacePage = () => {
 
   async function handleWorkspaceSwitch(orgId?: string) {
     if (orgId) {
+      setSwitching(true)
       const response = await switchWorkspace({
         target_organization_id: orgId,
       })
@@ -88,7 +89,13 @@ const WorkspacePage = () => {
         })
       }
 
-      push(OPERATOR_APP_ROUTES.dashboard)
+      if (orgId === personalOrg?.node?.id) {
+        push(OPERATOR_APP_ROUTES.personalWorkspaceSettings)
+      } else {
+        push(OPERATOR_APP_ROUTES.dashboard)
+      }
+
+      setSwitching(false)
     }
   }
 
@@ -101,17 +108,23 @@ const WorkspacePage = () => {
       toast({
         title: 'Error creating workspace',
         variant: 'destructive',
+        duration: TOAST_DURATION,
       })
     } else {
       toast({
         title: 'Workspace created',
         variant: 'success',
+        duration: TOAST_DURATION,
       })
     }
   }
 
   async function onSubmit(data: WorkspaceNameInput) {
     await createWorkspace({ name: data.name })
+  }
+
+  if (switching) {
+    ;<Loading className="h-full w-full" />
   }
 
   return (

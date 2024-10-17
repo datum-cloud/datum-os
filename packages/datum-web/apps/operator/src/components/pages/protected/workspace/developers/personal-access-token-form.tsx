@@ -1,42 +1,47 @@
 'use client'
-import React, { useEffect, useState } from 'react'
-import { useForm, SubmitHandler, Controller } from 'react-hook-form'
+
 import { zodResolver } from '@hookform/resolvers/zod'
+import { CalendarIcon } from '@radix-ui/react-icons'
+import { useCopyToClipboard } from '@uidotdev/usehooks'
+import { format } from 'date-fns'
+import { Copy } from 'lucide-react'
+import { useSession } from 'next-auth/react'
+import React, { useEffect, useState } from 'react'
+import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 import { z, infer as zInfer } from 'zod'
-import { Panel, PanelHeader } from '@repo/ui/panel'
-import { useToast } from '@repo/ui/use-toast'
-import { Input } from '@repo/ui/input'
-import {
-  Form,
-  FormItem,
-  FormField,
-  FormControl,
-  FormMessage,
-  FormLabel,
-} from '@repo/ui/form'
-import { Button } from '@repo/ui/button'
-import { personalAccessTokenFormStyles } from './personal-access-token-form-styles'
+
 import {
   CreatePersonalAccessTokenInput,
   useCreatePersonalAccessTokenMutation,
 } from '@repo/codegen/src/schema'
-import { useGqlError } from '@/hooks/useGqlError'
-import { useSession } from 'next-auth/react'
-import { Info } from '@repo/ui/info'
+import { TOAST_DURATION } from '@repo/constants'
+import { Button } from '@repo/ui/button'
+import { Calendar } from '@repo/ui/calendar'
 import { Checkbox } from '@repo/ui/checkbox'
-import { format } from 'date-fns'
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogDescription,
 } from '@repo/ui/dialog'
-import { useCopyToClipboard } from '@uidotdev/usehooks'
-import { Copy } from 'lucide-react'
-import { CalendarIcon } from '@radix-ui/react-icons'
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@repo/ui/form'
+import { Info } from '@repo/ui/info'
+import { Input } from '@repo/ui/input'
+import { Panel, PanelHeader } from '@repo/ui/panel'
 import { Popover, PopoverContent, PopoverTrigger } from '@repo/ui/popover'
-import { Calendar } from '@repo/ui/calendar'
+import { useToast } from '@repo/ui/use-toast'
+
+import { useGqlError } from '@/hooks/useGqlError'
+
+import { personalAccessTokenFormStyles } from './personal-access-token-form-styles'
 
 const formSchema = z
   .object({
@@ -114,6 +119,7 @@ const PersonalAccessTokenForm = () => {
       toast({
         title: `Token created successfully`,
         variant: 'success',
+        duration: TOAST_DURATION,
       })
     }
   }
@@ -125,6 +131,7 @@ const PersonalAccessTokenForm = () => {
       toast({
         title: 'Token copied to clipboard',
         variant: 'success',
+        duration: TOAST_DURATION,
       })
     }
   }, [copiedText])
@@ -134,6 +141,7 @@ const PersonalAccessTokenForm = () => {
       toast({
         title: errorMessages.join('\n'),
         variant: 'destructive',
+        duration: TOAST_DURATION,
       })
     }
   }, [errorMessages])

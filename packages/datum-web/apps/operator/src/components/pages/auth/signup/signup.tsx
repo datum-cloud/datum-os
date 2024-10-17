@@ -1,22 +1,16 @@
 'use client'
 
-import { useEffect, useState } from 'react'
-import { signIn } from 'next-auth/react'
-import { useRouter, useSearchParams } from 'next/navigation'
 import { startRegistration } from '@simplewebauthn/browser'
-import { ArrowUpRight, KeyRoundIcon } from 'lucide-react'
+import { ArrowUpRight } from 'lucide-react'
+import { signIn } from 'next-auth/react'
 import Link from 'next/link'
+import { useRouter, useSearchParams } from 'next/navigation'
+import { useEffect, useState } from 'react'
 
-import { capitalizeFirstLetter } from '@repo/common/text'
 import { getPathWithQuery } from '@repo/common/routes'
+import { capitalizeFirstLetter } from '@repo/common/text'
 import { DEFAULT_ERROR_MESSAGE, OPERATOR_APP_ROUTES } from '@repo/constants'
 import { Button } from '@repo/ui/button'
-import { GoogleIcon } from '@repo/ui/icons/google'
-import { GithubIcon } from '@repo/ui/icons/github'
-import { Separator } from '@repo/ui/separator'
-import { Input } from '@repo/ui/input'
-import { PasswordInput } from '@repo/ui/password-input'
-import { Label } from '@repo/ui/label'
 import {
   Form,
   FormControl,
@@ -27,6 +21,12 @@ import {
   useForm,
   zodResolver,
 } from '@repo/ui/form'
+import { GithubIcon } from '@repo/ui/icons/github'
+import { GoogleIcon } from '@repo/ui/icons/google'
+import { Input } from '@repo/ui/input'
+import { Label } from '@repo/ui/label'
+import { PasswordInput } from '@repo/ui/password-input'
+import { Separator } from '@repo/ui/separator'
 
 import { setSessionCookie } from '@/lib/auth/utils/set-session-cookie'
 import {
@@ -64,8 +64,7 @@ export const SignupPage = () => {
   } = form
   const router = useRouter()
   const [error, setError] = useState<string>()
-  const { separator, buttons, keyIcon, formInner, input, oAuthButton } =
-    signupStyles()
+  const { separator, buttons, formInner, input, oAuthButton } = signupStyles()
   const { email, password } = watch()
 
   async function handleGithubOAuth() {

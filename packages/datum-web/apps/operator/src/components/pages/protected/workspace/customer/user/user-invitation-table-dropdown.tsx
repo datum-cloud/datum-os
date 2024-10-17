@@ -1,21 +1,20 @@
 'use client'
 
+import { BellMinus, Ellipsis } from 'lucide-react'
 import React, { useState } from 'react'
 
+import { useDeleteOrganizationInviteMutation } from '@repo/codegen/src/schema'
+import { TOAST_DURATION } from '@repo/constants'
+import { Datum } from '@repo/types'
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@repo/ui/dropdown-menu'
-
-import { BellMinus, Ellipsis } from 'lucide-react'
-
-import { useDeleteOrganizationInviteMutation } from '@repo/codegen/src/schema'
-import { Datum } from '@repo/types'
+import { toast } from '@repo/ui/use-toast'
 
 import { pageStyles } from './page.styles'
-import { toast } from '@repo/ui/use-toast'
 
 type UserInvitationTableDropdownProps = {
   invitationId: Datum.InvitationId
@@ -37,6 +36,7 @@ const UserInvitationTableDropdown = ({
       toast({
         title: 'There was a problem deleting this invite, please try again',
         variant: 'destructive',
+        duration: TOAST_DURATION,
       })
     }
 
@@ -44,6 +44,7 @@ const UserInvitationTableDropdown = ({
       toast({
         title: 'Invite deleted successfully',
         variant: 'success',
+        duration: TOAST_DURATION,
       })
       refetch()
     }

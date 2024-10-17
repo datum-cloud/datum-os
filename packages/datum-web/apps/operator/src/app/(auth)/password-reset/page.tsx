@@ -1,21 +1,22 @@
 'use client'
 
-import { useEffect, useState } from 'react'
 import { ArrowUpRight } from 'lucide-react'
-import { useRouter, useSearchParams } from 'next/navigation'
 import Image from 'next/image'
+import { useRouter, useSearchParams } from 'next/navigation'
+import { useEffect, useState } from 'react'
 
 import { capitalizeFirstLetter } from '@repo/common/text'
-import { Button } from '@repo/ui/button'
-import { Form, FormMessage, useForm, zodResolver } from '@repo/ui/form'
-import { Label } from '@repo/ui/label'
-import { Logo } from '@repo/ui/logo'
-import { PasswordInput } from '@repo/ui/password-input'
 import {
   DEFAULT_ERROR_MESSAGE,
   OPERATOR_API_ROUTES,
   OPERATOR_APP_ROUTES,
 } from '@repo/constants'
+import { Button } from '@repo/ui/button'
+import { Form, FormMessage, useForm, zodResolver } from '@repo/ui/form'
+import { Label } from '@repo/ui/label'
+import { Logo } from '@repo/ui/logo'
+import { PasswordInput } from '@repo/ui/password-input'
+
 import { ResetPasswordInput, ResetPasswordSchema } from '@/utils/schemas'
 
 import { pageStyles as loginStyles } from '../login/page.styles'
@@ -58,12 +59,9 @@ const ResetPassword: React.FC = () => {
       })
 
       if (!response.ok) {
-        if (response?.message) {
-          setError(capitalizeFirstLetter(response?.message))
-          return
-        }
-
-        setError(DEFAULT_ERROR_MESSAGE)
+        const responseBody = await response.json()
+        const errorMessage = responseBody?.message || DEFAULT_ERROR_MESSAGE
+        setError(capitalizeFirstLetter(errorMessage))
         return
       }
 

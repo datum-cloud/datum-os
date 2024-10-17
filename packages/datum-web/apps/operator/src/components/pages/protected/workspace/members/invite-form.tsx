@@ -11,6 +11,7 @@ import {
   useCreateBulkInviteMutation,
 } from '@repo/codegen/src/schema'
 import { pluralize } from '@repo/common/text'
+import { TOAST_DURATION } from '@repo/constants'
 import { Button } from '@repo/ui/button'
 import {
   Form,
@@ -88,6 +89,7 @@ const InviteForm = ({ inviteAdmins, refetchInvites }: InviteFormProps) => {
       toast({
         title: 'Error inviting members',
         variant: 'destructive',
+        duration: TOAST_DURATION,
       })
     } else {
       toast({
@@ -111,6 +113,7 @@ const InviteForm = ({ inviteAdmins, refetchInvites }: InviteFormProps) => {
       toast({
         title: errorMessages.join('\n'),
         variant: 'destructive',
+        duration: TOAST_DURATION,
       })
     }
   }, [errorMessages])

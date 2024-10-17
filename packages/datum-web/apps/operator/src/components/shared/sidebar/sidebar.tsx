@@ -1,15 +1,17 @@
+import { ArrowLeft, MenuIcon } from 'lucide-react'
+import { useSession } from 'next-auth/react'
+import { usePathname } from 'next/navigation'
 import React, { useState } from 'react'
 
-import { useSidebar } from '@/hooks/useSidebar'
-import { ArrowLeft, MenuIcon } from 'lucide-react'
-import { cn } from '@repo/ui/lib/utils'
-import { sidebarStyles } from './sidebar.styles'
-import { SideNav } from './sidebar-nav/sidebar-nav'
-import { NavItems, PersonalNavItems } from '@/routes/dashboard'
-import { useSession } from 'next-auth/react'
 import { useGetAllOrganizationsQuery } from '@repo/codegen/src/schema'
-import { usePathname } from 'next/navigation'
 import { OPERATOR_APP_ROUTES } from '@repo/constants'
+import { cn } from '@repo/ui/lib/utils'
+
+import { useSidebar } from '@/hooks/useSidebar'
+import { NavItems, PersonalNavItems } from '@/routes/dashboard'
+
+import { SideNav } from './sidebar-nav/sidebar-nav'
+import { sidebarStyles } from './sidebar.styles'
 
 interface SidebarProps {
   className?: string
@@ -22,7 +24,10 @@ export default function Sidebar({ className }: SidebarProps) {
   const isProfile = pathname === OPERATOR_APP_ROUTES.profile
   const isSettings = pathname === OPERATOR_APP_ROUTES.settings
   const isWorkspace = pathname === OPERATOR_APP_ROUTES.workspace
-  const showWorkspaceNav = !isProfile && !isSettings && !isWorkspace
+  const isPersonalWorkspaceSettings =
+    pathname === OPERATOR_APP_ROUTES.personalWorkspaceSettings
+  const showWorkspaceNav =
+    !isProfile && !isSettings && !isWorkspace && !isPersonalWorkspaceSettings
 
   const { nav, sideNav, expandNav, expandNavIcon } = sidebarStyles({
     status,

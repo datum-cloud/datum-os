@@ -11,6 +11,7 @@ import {
   useRemoveUserFromOrgMutation,
 } from '@repo/codegen/src/schema'
 import { exportExcel } from '@repo/common/csv'
+import { TOAST_DURATION } from '@repo/constants'
 import type { Datum } from '@repo/types'
 import { Button } from '@repo/ui/button'
 import { Row } from '@repo/ui/data-table'
@@ -122,11 +123,13 @@ const MembersPage: React.FC = () => {
           toast({
             title: `Error ${result.error.message}`,
             variant: 'destructive',
+            duration: TOAST_DURATION,
           })
         } else {
           toast({
             title: 'Invite deleted successfully',
             variant: 'success',
+            duration: TOAST_DURATION,
           })
 
           refetchInvites({
@@ -138,6 +141,7 @@ const MembersPage: React.FC = () => {
       toast({
         title: `Unexpected error: ${(err as Error).message}`,
         variant: 'destructive',
+        duration: TOAST_DURATION,
       })
     }
   }
@@ -153,12 +157,14 @@ const MembersPage: React.FC = () => {
           toast({
             title: `Error ${result.error.message}`,
             variant: 'destructive',
+            duration: TOAST_DURATION,
           })
         } else {
           setOpenDeleteDialog(false)
           toast({
             title: 'Team member removed successfully',
             variant: 'success',
+            duration: TOAST_DURATION,
           })
           refetchMembers({ requestPolicy: 'network-only' })
         }
@@ -168,6 +174,7 @@ const MembersPage: React.FC = () => {
       toast({
         title: `Unexpected error: ${(err as Error).message}`,
         variant: 'destructive',
+        duration: TOAST_DURATION,
       })
     }
   }

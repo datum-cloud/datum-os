@@ -1,27 +1,36 @@
 import { NextResponse } from 'next/server'
 
-export async function POST(request: Request) {
-  const bodyData = await request.json()
+import { HttpStatus, SERVICE_APP_ROUTES } from '@repo/constants'
 
-  const fData = await fetch(
-    `${process.env.API_REST_URL}/v1/authentication/options`,
-    {
+import { handleError, handleResponseError } from '@/utils/requests'
+
+export async function POST(request: Request): Promise<NextResponse> {
+  try {
+    const bodyData = await request.json()
+
+    const response = await fetch(SERVICE_APP_ROUTES.authenticationOptions, {
       method: 'POST',
       headers: {
         'content-type': 'application/json',
       },
       body: JSON.stringify(bodyData),
       credentials: 'include',
-    },
-  )
+    })
 
-  const data = await fData.json()
+    if (!response.ok) {
+      const error = await handleResponseError(
+        response,
+        'Failed to get authentication options',
+      )
 
-  if (fData.ok) {
-    return NextResponse.json(data, { status: 200 })
-  }
+      return error
+    }
 
-  if (fData.status !== 201) {
-    return NextResponse.json(data, { status: fData.status })
+    const data = await response.json()
+
+    return NextResponse.json(data, { status: HttpStatus.Ok })
+  } catch (error: any) {
+    console.error('Failed to get authentication options', error)
+    return handleError(error, 'Failed to get authentication options')
   }
 }

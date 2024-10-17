@@ -8,7 +8,15 @@ export const API_BASE = process.env.NEXT_PUBLIC_API_BASE || ''
 
 export const SERVICE_REST_API = process.env.API_REST_URL || ''
 export const SERVICE_APP_ROUTES = {
+  register: `${SERVICE_REST_API}/v1/register`,
+  registrationOptions: `${SERVICE_REST_API}/v1/registration/options`,
+  registrationVerification: `${SERVICE_REST_API}/v1/registration/verification`,
+  authenticationOptions: `${SERVICE_REST_API}/v1/authentication/options`,
+  authenticationVerification: `${SERVICE_REST_API}/v1/authentication/verification`,
+  switchWorkspace: `${SERVICE_REST_API}/v1/switch`,
+  verify: `${SERVICE_REST_API}/v1/verify`,
   contacts: `${SERVICE_REST_API}/v1/contacts`,
+  invite: `${SERVICE_REST_API}/v1/invite`,
   contact: `${SERVICE_REST_API}/v1/contacts/[id]`,
   contactLists: `${SERVICE_REST_API}/v1/contacts/lists`,
   contactList: `${SERVICE_REST_API}/v1/contacts/lists/[id]`,
@@ -30,6 +38,7 @@ export const OPERATOR_APP_ROUTES = {
   settings: '/settings',
   workspace: '/workspace',
   workspaceSettings: '/workspace/settings',
+  personalWorkspaceSettings: '/workspace/personal/settings',
   workspaceMembers: '/workspace/members',
   login: '/login',
   forgotPassword: '/forgot-password',
@@ -45,6 +54,9 @@ export const OPERATOR_APP_ROUTES = {
 export const OPERATOR_API_ROUTES = {
   contacts: '/api/auth/contacts',
   contact: '/api/auth/contacts/[id]',
+  register: '/api/auth/register',
+  invite: '/api/auth/invite',
+  verify: '/api/auth/verify',
   createContacts: '/api/auth/contacts/create',
   deleteContacts: '/api/auth/contacts/delete',
   editContacts: '/api/auth/contacts/edit',
@@ -53,6 +65,11 @@ export const OPERATOR_API_ROUTES = {
   contactList: '/api/auth/contacts/lists/[id]',
   createContactLists: '/api/auth/contacts/lists/create',
   deleteContactLists: '/api/auth/contacts/lists/delete',
+  registrationOptions: '/api/auth/registration-options',
+  registrationVerification: '/api/auth/registration-verification',
+  signinOptions: '/api/auth/signin-options',
+  signinVerification: '/api/auth/signin-verification',
+  switchWorkspace: '/api/auth/switch-workspace',
   editContactLists: '/api/auth/contacts/lists/edit',
   contactListMembers: '/api/auth/contacts/lists/[id]/members',
   createContactListMembers: '/api/auth/contacts/lists/[id]/members/create',
@@ -81,6 +98,7 @@ export const TEL_REGEX =
 
 export enum HttpStatus {
   Ok = 200,
+  Created = 201,
   NoContent = 204,
   MovedPermanently = 301,
   TemporaryRedirect = 307,
@@ -113,3 +131,4 @@ export const DEFAULT_AVATAR_DIMENSIONS: Datum.ImageDimensions = {
 export const PRIMARY_COLOR = '#F27A67'
 export const SECONDARY_COLOR = '#9C94B0'
 export const SPINNER_BG = '#FBC8BF'
+export const TOAST_DURATION = 5000

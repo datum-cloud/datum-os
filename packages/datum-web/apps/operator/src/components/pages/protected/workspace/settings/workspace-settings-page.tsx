@@ -9,13 +9,11 @@ import {
   useGetAllOrganizationsQuery,
   useUpdateOrganizationMutation,
 } from '@repo/codegen/src/schema'
-import { OPERATOR_APP_ROUTES } from '@repo/constants'
+import { OPERATOR_APP_ROUTES, TOAST_DURATION } from '@repo/constants'
 import { toast } from '@repo/ui/use-toast'
 
 import PageTitle from '@/components/page-title'
 import { AvatarUpload } from '@/components/shared/avatar-upload/avatar-upload'
-import { Error } from '@/components/shared/error/error'
-import { Loading } from '@/components/shared/loading/loading'
 import { canDeleteRelation, useCheckPermissions } from '@/lib/authz/utils'
 
 import { pageStyles } from './page.styles'
@@ -23,7 +21,11 @@ import { WorkspaceDelete } from './workspace-delete'
 import { WorkspaceEmailForm } from './workspace-email-form'
 import { WorkspaceNameForm } from './workspace-name-form'
 
-const WorkspaceSettingsPage = () => {
+const WorkspaceSettingsPage = ({
+  isPersonal = false,
+}: {
+  isPersonal?: boolean
+}) => {
   const { push } = useRouter()
   const { wrapper } = pageStyles()
   const { data: sessionData, update } = useSession()
@@ -53,11 +55,13 @@ const WorkspaceSettingsPage = () => {
       toast({
         title: 'Error updating workspace',
         variant: 'destructive',
+        duration: TOAST_DURATION,
       })
     } else {
       toast({
         title: 'Successfully updated workspace',
         variant: 'success',
+        duration: TOAST_DURATION,
       })
     }
   }
@@ -78,6 +82,7 @@ const WorkspaceSettingsPage = () => {
       toast({
         title: 'Error deleting workspace',
         variant: 'destructive',
+        duration: TOAST_DURATION,
       })
     } else {
       if (response.extensions && sessionData) {
@@ -95,6 +100,7 @@ const WorkspaceSettingsPage = () => {
       toast({
         title: 'Successfully deleted workspace',
         variant: 'success',
+        duration: TOAST_DURATION,
       })
 
       push(OPERATOR_APP_ROUTES.workspace)
@@ -106,7 +112,10 @@ const WorkspaceSettingsPage = () => {
 
   return (
     <>
-      <PageTitle title="General Settings" className="mb-10" />
+      <PageTitle
+        title={isPersonal ? 'Personal Workspace Settings' : 'General Settings'}
+        className="mb-10"
+      />
       <div className={wrapper()}>
         <WorkspaceNameForm
           name={currentWorkspace?.name || ''}
