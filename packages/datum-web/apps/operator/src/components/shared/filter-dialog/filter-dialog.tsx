@@ -246,6 +246,12 @@ const FilterUserDialog = ({
                                   )
                                   return e.target.value
                                 }}
+                                value={
+                                  !operatorOptions ||
+                                  operatorOptions.length === 0
+                                    ? filterValue || ''
+                                    : ''
+                                }
                                 className="h-10 text-body-sm min-w-48"
                                 onClick={(e) => e.stopPropagation()}
                               />
