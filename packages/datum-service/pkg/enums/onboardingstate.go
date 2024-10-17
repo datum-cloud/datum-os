@@ -28,6 +28,23 @@ func (r OnboardingState) String() string {
 	return string(r)
 }
 
+func (r OnboardingState) IntPtr() *int {
+	toPtr := func(num int) *int {
+		return &num
+	}
+
+	switch r {
+	case OnboardingStatePending:
+		return toPtr(1)
+	case OnboardingStateActive:
+		return toPtr(2)
+	case OnboardingStateInactive:
+		return toPtr(3)
+	default:
+		return nil
+	}
+}
+
 func ToOnboardingStateFromInt(r int) *OnboardingState {
 	switch r {
 	case 1:

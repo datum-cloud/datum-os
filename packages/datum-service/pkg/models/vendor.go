@@ -27,17 +27,26 @@ func VendorNameFromEntity(vendor *generated.Vendor) *string {
 	return &name
 }
 
-func VendorResponseFromEntity(vendor *generated.Vendor) *proto.Vendor {
+func VendorResponseFromEntity(vendor *generated.Vendor, profile *generated.VendorProfile) *proto.Vendor {
 	return &proto.Vendor{
 		CreateTime:  &vendor.CreatedAt,
 		DisplayName: &vendor.DisplayName,
 		Etag:        nil,
 		Name:        VendorNameFromEntity(vendor),
 		Reconciling: &reconcilingFalse,
-		Spec:        proto.VendorSpec{},
-		Uid:         &vendor.ID,
-		UpdateTime:  &vendor.UpdatedAt,
-		VendorId:    &vendor.ID,
+		Spec: proto.VendorSpec{
+			Profile: proto.VendorProfile{
+				CorporationDba:  &profile.CorporationDba,
+				CorporationType: &profile.CorporationType,
+				Description:     &profile.Description,
+				WebsiteUri:      &profile.WebsiteURI,
+			},
+			State: vendor.OnboardingState.IntPtr(),
+			Type:  vendor.VendorType.Int(),
+		},
+		Uid:        &vendor.ID,
+		UpdateTime: &vendor.UpdatedAt,
+		VendorId:   &vendor.ID,
 	}
 }
 
@@ -45,13 +54,15 @@ func WrapVendorResponse(vendor *proto.Vendor) *proto.GoogleProtobufAny {
 	any := &proto.GoogleProtobufAny{
 		Type: MessageTypeURL("vendormanager", "v1alpha", "Vendor"),
 	}
-	any.Set("Value", vendor)
+	any.Set("value", vendor)
 	return any
 }
 
-func OperationCreateVendorResponseFromEntity(vendor *generated.Vendor) *proto.Operation {
+func OperationCreateVendorResponseFromEntity(
+	vendor *generated.Vendor, profile *generated.VendorProfile,
+) *proto.Operation {
 	return &proto.Operation{
 		Done:     &doneTrue,
-		Response: WrapVendorResponse(VendorResponseFromEntity(vendor)),
+		Response: WrapVendorResponse(VendorResponseFromEntity(vendor, profile)),
 	}
 }

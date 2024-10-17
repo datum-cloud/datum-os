@@ -116,7 +116,10 @@ func (s Server) VendorsCreateVendor2(ctx echox.Context, params proto.VendorsCrea
 		)
 	}
 
-	return ctx.JSON(http.StatusCreated, models.OperationCreateVendorResponseFromEntity(vendor))
+	return ctx.JSON(
+		http.StatusCreated,
+		models.OperationCreateVendorResponseFromEntity(vendor, profile),
+	)
 }
 
 // (DELETE /v1alpha/vendors/{vendor})

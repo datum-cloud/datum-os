@@ -26,6 +26,17 @@ func (r VendorType) String() string {
 	return string(r)
 }
 
+func (r VendorType) Int() int {
+	switch r {
+	case VendorTypePerson:
+		return 1
+	case VendorTypeCorporation:
+		return 2
+	default:
+		return 0
+	}
+}
+
 func ToVendorTypeFromInt(r int) *VendorType {
 	switch r {
 	case 1:
