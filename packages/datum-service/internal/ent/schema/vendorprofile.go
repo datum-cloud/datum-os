@@ -6,6 +6,7 @@ import (
 
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
+	"entgo.io/ent/dialect/entsql"
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
@@ -85,10 +86,13 @@ func (VendorProfile) Fields() []ent.Field {
 func (VendorProfile) Edges() []ent.Edge {
 	return []ent.Edge{
 		edge.To("postal_addresses", PostalAddress.Type).
-			Through("vendor_profile_postal_addresses", VendorProfilePostalAddress.Type),
+			Through("vendor_profile_postal_addresses", VendorProfilePostalAddress.Type).
+			Annotations(entsql.OnDelete(entsql.Cascade)),
 		edge.To("phone_numbers", PhoneNumber.Type).
-			Through("vendor_profile_phone_numbers", VendorProfilePhoneNumber.Type),
-		edge.To("payment_preferences", VendorProfilePaymentPreference.Type),
+			Through("vendor_profile_phone_numbers", VendorProfilePhoneNumber.Type).
+			Annotations(entsql.OnDelete(entsql.Cascade)),
+		edge.To("payment_preferences", VendorProfilePaymentPreference.Type).
+			Annotations(entsql.OnDelete(entsql.Cascade)),
 		edge.From("vendor", Vendor.Type).
 			Ref("profile").Unique().Field("vendor_id").Immutable(),
 	}

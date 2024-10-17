@@ -1,4 +1,4 @@
-h1:bdEerfyftHV6vcGoxuZBWs1QMn2p7wp9D44knMes+VA=
+h1:9hdZty4lH5EZvsj2h8iq/AxTumncrykbfSMmcbuaeWc=
 20240511231021_init.sql h1:IBtGyZAU7W4d0X2CDBUd4WrR7BRaYvVzYT10q3KIPjg=
 20240513160844_soiree.sql h1:p8/P5xL4Kns/QVFv3tun4kuPPYbORmBn65BT6gNOJZs=
 20240516194815_tags.sql h1:uDJ55sdbNgFvbZGhqiEazvafuo8k/NWjBgI2ocAx1Sk=
@@ -10,3 +10,4 @@ h1:bdEerfyftHV6vcGoxuZBWs1QMn2p7wp9D44knMes+VA=
 20240813161117_entity_additional_fields.sql h1:6UFShNImJvPLTAmNhJZu5/VjlZ7cfirTbXp4NfObJx4=
 20240913205205_feature-contact-lists.sql h1:VrMvo2OXWyjIbXELKhssj4s58GSs+MApa9vdM4wOEIw=
 20241015233736_feature-vendor-management.sql h1:1lWXtwJU+VZNE4I54b31rNFy3SmlyUzryB0x7ARjwYQ=
+20241017085732_bug-vendor-profile-cascade-delete.sql h1:4/fLzmFX/f9FrBVzzHIBWv7eDq4z6m/dcoeJ2tWkdzs=

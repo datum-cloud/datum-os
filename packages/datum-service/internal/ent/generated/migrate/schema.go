@@ -2489,7 +2489,7 @@ var (
 				Symbol:     "vendor_profiles_vendors_profile",
 				Columns:    []*schema.Column{VendorProfilesColumns[17]},
 				RefColumns: []*schema.Column{VendorsColumns[0]},
-				OnDelete:   schema.SetNull,
+				OnDelete:   schema.Cascade,
 			},
 		},
 		Indexes: []*schema.Index{
@@ -2569,7 +2569,7 @@ var (
 				Symbol:     "vendor_profile_payment_preferences_vendor_profiles_payment_preferences",
 				Columns:    []*schema.Column{VendorProfilePaymentPreferencesColumns[12]},
 				RefColumns: []*schema.Column{VendorProfilesColumns[0]},
-				OnDelete:   schema.SetNull,
+				OnDelete:   schema.Cascade,
 			},
 		},
 		Indexes: []*schema.Index{

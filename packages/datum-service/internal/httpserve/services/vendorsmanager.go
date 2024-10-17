@@ -4,23 +4,25 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/datum-cloud/datum-os/internal/httpserve/proto"
 	"github.com/datum-cloud/datum-os/pkg/echox"
 	"github.com/datum-cloud/datum-os/pkg/enums"
 	"github.com/datum-cloud/datum-os/pkg/middleware/transaction"
+	"github.com/datum-cloud/datum-os/pkg/models"
 )
 
 // (GET /v1alpha/organizations/{organization}/vendors)
-func (s Server) VendorsListVendors(ctx echox.Context, organization string, params VendorsListVendorsParams) error {
+func (s Server) VendorsListVendors(ctx echox.Context, organization string, params proto.VendorsListVendorsParams) error {
 	return nil
 }
 
 // (POST /v1alpha/organizations/{organization}/vendors)
-func (s Server) VendorsCreateVendor(ctx echox.Context, organization string, params VendorsCreateVendorParams) error {
+func (s Server) VendorsCreateVendor(ctx echox.Context, organization string, params proto.VendorsCreateVendorParams) error {
 	return nil
 }
 
 // (DELETE /v1alpha/organizations/{organization}/vendors/{vendor})
-func (s Server) VendorsDeleteVendor(ctx echox.Context, organization string, vendor string, params VendorsDeleteVendorParams) error {
+func (s Server) VendorsDeleteVendor(ctx echox.Context, organization string, vendor string, params proto.VendorsDeleteVendorParams) error {
 	return nil
 }
 
@@ -30,18 +32,18 @@ func (s Server) VendorsGetVendor(ctx echox.Context, organization string, vendor 
 }
 
 // (PATCH /v1alpha/organizations/{organization}/vendors/{vendor})
-func (s Server) VendorsUpdateVendor(ctx echox.Context, organization string, vendor string, params VendorsUpdateVendorParams) error {
+func (s Server) VendorsUpdateVendor(ctx echox.Context, organization string, vendor string, params proto.VendorsUpdateVendorParams) error {
 	return nil
 }
 
 // (GET /v1alpha/vendors)
-func (s Server) VendorsListVendors2(ctx echox.Context, params VendorsListVendors2Params) error {
+func (s Server) VendorsListVendors2(ctx echox.Context, params proto.VendorsListVendors2Params) error {
 	return nil
 }
 
 // (POST /v1alpha/vendors)
-func (s Server) VendorsCreateVendor2(ctx echox.Context, params VendorsCreateVendor2Params) error {
-	var reqVendor VendorsCreateVendor2JSONRequestBody
+func (s Server) VendorsCreateVendor2(ctx echox.Context, params proto.VendorsCreateVendor2Params) error {
+	var reqVendor proto.VendorsCreateVendor2JSONRequestBody
 	if err := ctx.Bind(&reqVendor); err != nil {
 		return echox.NewHTTPError(
 			http.StatusBadRequest,
@@ -114,11 +116,11 @@ func (s Server) VendorsCreateVendor2(ctx echox.Context, params VendorsCreateVend
 		)
 	}
 
-	return ctx.JSON(http.StatusCreated, vendor)
+	return ctx.JSON(http.StatusCreated, models.OperationCreateVendorResponseFromEntity(vendor))
 }
 
 // (DELETE /v1alpha/vendors/{vendor})
-func (s Server) VendorsDeleteVendor2(ctx echox.Context, vendor string, params VendorsDeleteVendor2Params) error {
+func (s Server) VendorsDeleteVendor2(ctx echox.Context, vendor string, params proto.VendorsDeleteVendor2Params) error {
 	return nil
 }
 
@@ -136,6 +138,6 @@ func (s Server) VendorsGetVendor2(ctx echox.Context, vendor string) error {
 }
 
 // (PATCH /v1alpha/vendors/{vendor})
-func (s Server) VendorsUpdateVendor2(ctx echox.Context, vendor string, params VendorsUpdateVendor2Params) error {
+func (s Server) VendorsUpdateVendor2(ctx echox.Context, vendor string, params proto.VendorsUpdateVendor2Params) error {
 	return nil
 }

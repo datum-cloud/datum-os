@@ -60,7 +60,10 @@ func (Vendor) Edges() []ent.Edge {
 		edge.To("profile", VendorProfile.Type).
 			Required().
 			Unique().
-			Annotations(entx.CascadeAnnotationField("Vendor")),
+			Annotations(
+				entx.CascadeAnnotationField("Vendor"),
+				entsql.OnDelete(entsql.Cascade),
+			),
 		edge.To("events", Event.Type),
 	}
 }
