@@ -29,7 +29,7 @@ paths:
                 content:
                     application/json:
                         schema:
-                            $ref: '#/components/schemas/Invoice'
+                            $ref: '#/components/schemas/datum.os.invoicesmanager.v1alpha.Invoice'
                 required: true
             responses:
                 "200":
@@ -37,13 +37,13 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/Operation'
+                                $ref: '#/components/schemas/google.longrunning.Operation'
                 default:
                     description: Default error response
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/Status'
+                                $ref: '#/components/schemas/google.rpc.Status'
     /v1alpha/invoices/{invoice}:
         get:
             tags:
@@ -88,13 +88,13 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/ListInvoicesResponse'
+                                $ref: '#/components/schemas/datum.os.invoicesmanager.v1alpha.ListInvoicesResponse'
                 default:
                     description: Default error response
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/Status'
+                                $ref: '#/components/schemas/google.rpc.Status'
         delete:
             tags:
                 - Invoices
@@ -126,13 +126,13 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/Operation'
+                                $ref: '#/components/schemas/google.longrunning.Operation'
                 default:
                     description: Default error response
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/Status'
+                                $ref: '#/components/schemas/google.rpc.Status'
         patch:
             tags:
                 - Invoices
@@ -167,7 +167,7 @@ paths:
                 content:
                     application/json:
                         schema:
-                            $ref: '#/components/schemas/Invoice'
+                            $ref: '#/components/schemas/datum.os.invoicesmanager.v1alpha.Invoice'
                 required: true
             responses:
                 "200":
@@ -175,13 +175,13 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/Operation'
+                                $ref: '#/components/schemas/google.longrunning.Operation'
                 default:
                     description: Default error response
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/Status'
+                                $ref: '#/components/schemas/google.rpc.Status'
     /v1alpha/organizations:
         get:
             tags:
@@ -220,13 +220,13 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/ListOrganizationsResponse'
+                                $ref: '#/components/schemas/datum.os.organizationmanager.v1alpha.ListOrganizationsResponse'
                 default:
                     description: Default error response
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/Status'
+                                $ref: '#/components/schemas/google.rpc.Status'
         post:
             tags:
                 - Organizations
@@ -249,7 +249,7 @@ paths:
                 content:
                     application/json:
                         schema:
-                            $ref: '#/components/schemas/Organization'
+                            $ref: '#/components/schemas/datum.os.organizationmanager.v1alpha.Organization'
                 required: true
             responses:
                 "200":
@@ -257,13 +257,13 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/Operation'
+                                $ref: '#/components/schemas/google.longrunning.Operation'
                 default:
                     description: Default error response
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/Status'
+                                $ref: '#/components/schemas/google.rpc.Status'
     /v1alpha/organizations/{organization}:
         get:
             tags:
@@ -283,13 +283,13 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/Organization'
+                                $ref: '#/components/schemas/datum.os.organizationmanager.v1alpha.Organization'
                 default:
                     description: Default error response
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/Status'
+                                $ref: '#/components/schemas/google.rpc.Status'
         delete:
             tags:
                 - Organizations
@@ -320,13 +320,13 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/Operation'
+                                $ref: '#/components/schemas/google.longrunning.Operation'
                 default:
                     description: Default error response
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/Status'
+                                $ref: '#/components/schemas/google.rpc.Status'
         patch:
             tags:
                 - Organizations
@@ -361,7 +361,7 @@ paths:
                 content:
                     application/json:
                         schema:
-                            $ref: '#/components/schemas/Organization'
+                            $ref: '#/components/schemas/datum.os.organizationmanager.v1alpha.Organization'
                 required: true
             responses:
                 "200":
@@ -369,13 +369,13 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/Operation'
+                                $ref: '#/components/schemas/google.longrunning.Operation'
                 default:
                     description: Default error response
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/Status'
+                                $ref: '#/components/schemas/google.rpc.Status'
     /v1alpha/organizations/{organization}/invoices:
         post:
             tags:
@@ -405,7 +405,7 @@ paths:
                 content:
                     application/json:
                         schema:
-                            $ref: '#/components/schemas/Invoice'
+                            $ref: '#/components/schemas/datum.os.invoicesmanager.v1alpha.Invoice'
                 required: true
             responses:
                 "200":
@@ -413,13 +413,13 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/Operation'
+                                $ref: '#/components/schemas/google.longrunning.Operation'
                 default:
                     description: Default error response
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/Status'
+                                $ref: '#/components/schemas/google.rpc.Status'
     /v1alpha/organizations/{organization}/invoices/{invoice}:
         get:
             tags:
@@ -470,13 +470,13 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/ListInvoicesResponse'
+                                $ref: '#/components/schemas/datum.os.invoicesmanager.v1alpha.ListInvoicesResponse'
                 default:
                     description: Default error response
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/Status'
+                                $ref: '#/components/schemas/google.rpc.Status'
         delete:
             tags:
                 - Invoices
@@ -514,13 +514,13 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/Operation'
+                                $ref: '#/components/schemas/google.longrunning.Operation'
                 default:
                     description: Default error response
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/Status'
+                                $ref: '#/components/schemas/google.rpc.Status'
         patch:
             tags:
                 - Invoices
@@ -561,7 +561,7 @@ paths:
                 content:
                     application/json:
                         schema:
-                            $ref: '#/components/schemas/Invoice'
+                            $ref: '#/components/schemas/datum.os.invoicesmanager.v1alpha.Invoice'
                 required: true
             responses:
                 "200":
@@ -569,13 +569,13 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/Operation'
+                                $ref: '#/components/schemas/google.longrunning.Operation'
                 default:
                     description: Default error response
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/Status'
+                                $ref: '#/components/schemas/google.rpc.Status'
     /v1alpha/organizations/{organization}/vendors:
         get:
             tags:
@@ -620,13 +620,13 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/ListVendorsResponse'
+                                $ref: '#/components/schemas/datum.os.vendormanager.v1alpha.ListVendorsResponse'
                 default:
                     description: Default error response
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/Status'
+                                $ref: '#/components/schemas/google.rpc.Status'
         post:
             tags:
                 - Vendors
@@ -655,7 +655,7 @@ paths:
                 content:
                     application/json:
                         schema:
-                            $ref: '#/components/schemas/Vendor'
+                            $ref: '#/components/schemas/datum.os.vendormanager.v1alpha.Vendor'
                 required: true
             responses:
                 "200":
@@ -663,13 +663,13 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/Operation'
+                                $ref: '#/components/schemas/google.longrunning.Operation'
                 default:
                     description: Default error response
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/Status'
+                                $ref: '#/components/schemas/google.rpc.Status'
     /v1alpha/organizations/{organization}/vendors/{vendor}:
         get:
             tags:
@@ -695,13 +695,13 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/Vendor'
+                                $ref: '#/components/schemas/datum.os.vendormanager.v1alpha.Vendor'
                 default:
                     description: Default error response
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/Status'
+                                $ref: '#/components/schemas/google.rpc.Status'
         delete:
             tags:
                 - Vendors
@@ -738,13 +738,13 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/Operation'
+                                $ref: '#/components/schemas/google.longrunning.Operation'
                 default:
                     description: Default error response
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/Status'
+                                $ref: '#/components/schemas/google.rpc.Status'
         patch:
             tags:
                 - Vendors
@@ -785,7 +785,7 @@ paths:
                 content:
                     application/json:
                         schema:
-                            $ref: '#/components/schemas/Vendor'
+                            $ref: '#/components/schemas/datum.os.vendormanager.v1alpha.Vendor'
                 required: true
             responses:
                 "200":
@@ -793,13 +793,13 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/Operation'
+                                $ref: '#/components/schemas/google.longrunning.Operation'
                 default:
                     description: Default error response
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/Status'
+                                $ref: '#/components/schemas/google.rpc.Status'
     /v1alpha/vendors:
         get:
             tags:
@@ -838,13 +838,13 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/ListVendorsResponse'
+                                $ref: '#/components/schemas/datum.os.vendormanager.v1alpha.ListVendorsResponse'
                 default:
                     description: Default error response
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/Status'
+                                $ref: '#/components/schemas/google.rpc.Status'
         post:
             tags:
                 - Vendors
@@ -867,7 +867,7 @@ paths:
                 content:
                     application/json:
                         schema:
-                            $ref: '#/components/schemas/Vendor'
+                            $ref: '#/components/schemas/datum.os.vendormanager.v1alpha.Vendor'
                 required: true
             responses:
                 "200":
@@ -875,13 +875,13 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/Operation'
+                                $ref: '#/components/schemas/google.longrunning.Operation'
                 default:
                     description: Default error response
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/Status'
+                                $ref: '#/components/schemas/google.rpc.Status'
     /v1alpha/vendors/{vendor}:
         get:
             tags:
@@ -901,13 +901,13 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/Vendor'
+                                $ref: '#/components/schemas/datum.os.vendormanager.v1alpha.Vendor'
                 default:
                     description: Default error response
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/Status'
+                                $ref: '#/components/schemas/google.rpc.Status'
         delete:
             tags:
                 - Vendors
@@ -938,13 +938,13 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/Operation'
+                                $ref: '#/components/schemas/google.longrunning.Operation'
                 default:
                     description: Default error response
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/Status'
+                                $ref: '#/components/schemas/google.rpc.Status'
         patch:
             tags:
                 - Vendors
@@ -979,7 +979,7 @@ paths:
                 content:
                     application/json:
                         schema:
-                            $ref: '#/components/schemas/Vendor'
+                            $ref: '#/components/schemas/datum.os.vendormanager.v1alpha.Vendor'
                 required: true
             responses:
                 "200":
@@ -987,13 +987,13 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/Operation'
+                                $ref: '#/components/schemas/google.longrunning.Operation'
                 default:
                     description: Default error response
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/Status'
+                                $ref: '#/components/schemas/google.rpc.Status'
     /v1alpha/vendors/{vendor}/invoices:
         post:
             tags:
@@ -1023,7 +1023,7 @@ paths:
                 content:
                     application/json:
                         schema:
-                            $ref: '#/components/schemas/Invoice'
+                            $ref: '#/components/schemas/datum.os.invoicesmanager.v1alpha.Invoice'
                 required: true
             responses:
                 "200":
@@ -1031,13 +1031,13 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/Operation'
+                                $ref: '#/components/schemas/google.longrunning.Operation'
                 default:
                     description: Default error response
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/Status'
+                                $ref: '#/components/schemas/google.rpc.Status'
     /v1alpha/vendors/{vendor}/invoices/{invoice}:
         get:
             tags:
@@ -1088,13 +1088,13 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/ListInvoicesResponse'
+                                $ref: '#/components/schemas/datum.os.invoicesmanager.v1alpha.ListInvoicesResponse'
                 default:
                     description: Default error response
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/Status'
+                                $ref: '#/components/schemas/google.rpc.Status'
         delete:
             tags:
                 - Invoices
@@ -1132,13 +1132,13 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/Operation'
+                                $ref: '#/components/schemas/google.longrunning.Operation'
                 default:
                     description: Default error response
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/Status'
+                                $ref: '#/components/schemas/google.rpc.Status'
         patch:
             tags:
                 - Invoices
@@ -1179,7 +1179,7 @@ paths:
                 content:
                     application/json:
                         schema:
-                            $ref: '#/components/schemas/Invoice'
+                            $ref: '#/components/schemas/datum.os.invoicesmanager.v1alpha.Invoice'
                 required: true
             responses:
                 "200":
@@ -1187,24 +1187,16 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/Operation'
+                                $ref: '#/components/schemas/google.longrunning.Operation'
                 default:
                     description: Default error response
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/Status'
+                                $ref: '#/components/schemas/google.rpc.Status'
 components:
     schemas:
-        GoogleProtobufAny:
-            type: object
-            properties:
-                '@type':
-                    type: string
-                    description: The type of the serialized message.
-            additionalProperties: true
-            description: Contains an arbitrary serialized message along with a @type that describes the type of the serialized message.
-        Invoice:
+        datum.os.invoicesmanager.v1alpha.Invoice:
             required:
                 - spec
             type: object
@@ -1275,29 +1267,29 @@ components:
                          an up-to-date value before proceeding.
                 spec:
                     allOf:
-                        - $ref: '#/components/schemas/Invoice_Spec'
+                        - $ref: '#/components/schemas/datum.os.invoicesmanager.v1alpha.Invoice_Spec'
                     description: Spec is the specification of the Invoice.
                 status:
                     readOnly: true
                     allOf:
-                        - $ref: '#/components/schemas/Invoice_Status'
+                        - $ref: '#/components/schemas/datum.os.invoicesmanager.v1alpha.Invoice_Status'
                     description: Status is the current status of the Invoice.
             description: "Invoice is a resource representing an Invoice from an organization to a \n customer account or from a vendor to an organization."
-        Invoice_Spec:
+        datum.os.invoicesmanager.v1alpha.Invoice_Spec:
             type: object
             properties: {}
             description: Spec is the specification of the Invoice. TODO!
-        Invoice_Status:
+        datum.os.invoicesmanager.v1alpha.Invoice_Status:
             type: object
             properties: {}
             description: Status is the current status of the Invoice. TODO!
-        ListInvoicesResponse:
+        datum.os.invoicesmanager.v1alpha.ListInvoicesResponse:
             type: object
             properties:
                 invoices:
                     type: array
                     items:
-                        $ref: '#/components/schemas/Invoice'
+                        $ref: '#/components/schemas/datum.os.invoicesmanager.v1alpha.Invoice'
                     description: The list of Invoices.
                 nextPageToken:
                     type: string
@@ -1306,13 +1298,13 @@ components:
                          Pass this value in the ListInvoicesRequest.page_token field in a subsequent call to `ListInvoices` to retrieve the next page of results.
                          If the page token is not set, there are no more results.
             description: ListInvoicesResponse is the response for listing Invoices.
-        ListOrganizationsResponse:
+        datum.os.organizationmanager.v1alpha.ListOrganizationsResponse:
             type: object
             properties:
                 organizations:
                     type: array
                     items:
-                        $ref: '#/components/schemas/Organization'
+                        $ref: '#/components/schemas/datum.os.organizationmanager.v1alpha.Organization'
                     description: The list of Organizations.
                 nextPageToken:
                     type: string
@@ -1321,64 +1313,7 @@ components:
                          Pass this value in the ListOrganizationsRequest.page_token field in a subsequent call to `ListOrganizations` to retrieve the next page of results.
                          If the page token is not set, there are no more results.
             description: ListOrganizationsResponse is the response for listing Organizations.
-        ListVendorsResponse:
-            type: object
-            properties:
-                vendors:
-                    type: array
-                    items:
-                        $ref: '#/components/schemas/Vendor'
-                    description: The list of Vendors.
-                nextPageToken:
-                    type: string
-                    description: |-
-                        A token to retrieve the next page of results.
-                         Pass this value in the ListVendorsRequest.page_token field in a subsequent call to `ListVendors` to retrieve the next page of results.
-                         If the page token is not set, there are no more results.
-            description: ListVendorsResponse is the response for listing Vendors.
-        Operation:
-            type: object
-            properties:
-                name:
-                    type: string
-                    description: |-
-                        The server-assigned name, which is only unique within the same service that
-                         originally returns it. If you use the default HTTP mapping, the
-                         `name` should be a resource name ending with `operations/{unique_id}`.
-                metadata:
-                    allOf:
-                        - $ref: '#/components/schemas/GoogleProtobufAny'
-                    description: |-
-                        Service-specific metadata associated with the operation.  It typically
-                         contains progress information and common metadata such as create time.
-                         Some services might not provide such metadata.  Any method that returns a
-                         long-running operation should document the metadata type, if any.
-                done:
-                    type: boolean
-                    description: |-
-                        If the value is `false`, it means the operation is still in progress.
-                         If `true`, the operation is completed, and either `error` or `response` is
-                         available.
-                error:
-                    allOf:
-                        - $ref: '#/components/schemas/Status'
-                    description: The error result of the operation in case of failure or cancellation.
-                response:
-                    allOf:
-                        - $ref: '#/components/schemas/GoogleProtobufAny'
-                    description: |-
-                        The normal response of the operation in case of success.  If the original
-                         method returns no data on success, such as `Delete`, the response is
-                         `google.protobuf.Empty`.  If the original method is standard
-                         `Get`/`Create`/`Update`, the response should be the resource.  For other
-                         methods, the response should have the type `XxxResponse`, where `Xxx`
-                         is the original method name.  For example, if the original method name
-                         is `TakeSnapshot()`, the inferred response type is
-                         `TakeSnapshotResponse`.
-            description: |-
-                This resource represents a long-running operation that is the result of a
-                 network API call.
-        Organization:
+        datum.os.organizationmanager.v1alpha.Organization:
             required:
                 - spec
             type: object
@@ -1449,15 +1384,290 @@ components:
                          an up-to-date value before proceeding.
                 spec:
                     allOf:
-                        - $ref: '#/components/schemas/Spec'
+                        - $ref: '#/components/schemas/datum.os.organizationmanager.v1alpha.Spec'
                     description: The specifications of the Organization.
                 status:
                     readOnly: true
                     allOf:
-                        - $ref: '#/components/schemas/Status'
+                        - $ref: '#/components/schemas/datum.os.organizationmanager.v1alpha.Status'
                     description: The status of the Organization.
             description: Organization is a resource representing an Organization.
-        PhoneNumber:
+        datum.os.organizationmanager.v1alpha.Spec:
+            type: object
+            properties: {}
+            description: OrganizationSpec is the specification of an Organization. TODO!
+        datum.os.organizationmanager.v1alpha.Status:
+            type: object
+            properties: {}
+            description: OrganizationStatus is the status of an Organization. TODO!
+        datum.os.vendormanager.v1alpha.ListVendorsResponse:
+            type: object
+            properties:
+                vendors:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/datum.os.vendormanager.v1alpha.Vendor'
+                    description: The list of Vendors.
+                nextPageToken:
+                    type: string
+                    description: |-
+                        A token to retrieve the next page of results.
+                         Pass this value in the ListVendorsRequest.page_token field in a subsequent call to `ListVendors` to retrieve the next page of results.
+                         If the page token is not set, there are no more results.
+            description: ListVendorsResponse is the response for listing Vendors.
+        datum.os.vendormanager.v1alpha.Vendor:
+            required:
+                - spec
+            type: object
+            properties:
+                name:
+                    readOnly: true
+                    type: string
+                    description: |-
+                        The resource name of this Vendor.
+                         Format: vendors/{vendor}
+                         Format: organizations/{organization}/vendors/{vendor}
+                vendorId:
+                    readOnly: true
+                    type: string
+                    description: The resource ID of this Vendor within its parent resource.
+                uid:
+                    readOnly: true
+                    type: string
+                    description: |-
+                        Server assigned unique identifier for the Vendor. The value
+                         is a UUID4 string and guaranteed to remain unchanged until the resource is
+                         deleted.
+                displayName:
+                    type: string
+                    description: |-
+                        Human-readable display name of this Vendor that you can modify.
+                         The maximum length is 63 characters.
+                annotations:
+                    type: object
+                    additionalProperties:
+                        type: string
+                    description: |-
+                        Annotations is an unstructured key-value map stored with a Vendor that
+                         may be set by external tools to store and retrieve arbitrary metadata.
+                         They are not queryable and should be preserved when modifying objects.
+                labels:
+                    type: object
+                    additionalProperties:
+                        type: string
+                    description: |-
+                        Labels is an unstructured key-value map stored with a Vendor that
+                         may be set by external tools to enable platform features which identify
+                         Vendors via label selections.
+                createTime:
+                    readOnly: true
+                    type: string
+                    description: Output only. The time when the Vendor is created.
+                    format: date-time
+                updateTime:
+                    readOnly: true
+                    type: string
+                    description: Output only. The last time that the Vendor is updated.
+                    format: date-time
+                deleteTime:
+                    readOnly: true
+                    type: string
+                    description: |-
+                        Output only. For a deleted resource, the deletion time. It is only
+                         populated as a response to a Delete request.
+                    format: date-time
+                reconciling:
+                    readOnly: true
+                    type: boolean
+                    description: Output only. If set, there are currently changes in flight to the Vendor.
+                etag:
+                    readOnly: true
+                    type: string
+                    description: |-
+                        This checksum is computed by the server based on the value of
+                         other fields, and might be sent on update requests to ensure the client has
+                         an up-to-date value before proceeding.
+                spec:
+                    allOf:
+                        - $ref: '#/components/schemas/datum.os.vendormanager.v1alpha.Vendor_Spec'
+                    description: The specification of the Vendor.
+            description: Vendor is a resource representing a Vendor.
+        datum.os.vendormanager.v1alpha.Vendor_PaymentPreference:
+            required:
+                - preferred
+                - method
+            type: object
+            properties:
+                preferred:
+                    type: boolean
+                    description: Is this the preferred payment method?
+                method:
+                    enum:
+                        - PAYMENT_METHOD_UNSPECIFIED
+                        - PAYMENT_METHOD_DOMESTIC_WIRE_TRANSFER
+                        - PAYMENT_METHOD_INTERNATIONAL_WIRE_TRANSFER
+                        - PAYMENT_METHOD_ACH
+                        - PAYMENT_METHOD_CREDIT_CARD
+                    type: string
+                    description: The payment method of the Vendor.
+                    format: enum
+            description: PaymentPreference is the payment preference of a Vendor.
+        datum.os.vendormanager.v1alpha.Vendor_Profile:
+            type: object
+            properties:
+                person:
+                    type: string
+                    description: The name of the person.
+                corporation:
+                    type: string
+                    description: The name of the corporation.
+                corporationType:
+                    type: string
+                    description: The type of corporation (e.g. LLC, S-Corp, C-Corp, Other).
+                corporationDba:
+                    type: string
+                    description: The DBA (Doing Business As) name of the corporation.
+                description:
+                    type: string
+                    description: The description of the corporation or contractor and the services it provides.
+                websiteUri:
+                    type: string
+                    description: The URL of the website of the corporation or contractor.
+                addresses:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/google.type.PostalAddress'
+                    description: The physical address of the person or corporation.
+                phoneNumbers:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/google.type.PhoneNumber'
+                    description: The phone number of the person or corporation.
+                paymentPreference:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/datum.os.vendormanager.v1alpha.Vendor_PaymentPreference'
+                    description: The payment preference of the Vendor.
+                taxInfo:
+                    allOf:
+                        - $ref: '#/components/schemas/datum.os.vendormanager.v1alpha.Vendor_TaxInfo'
+                    description: The tax information of the person or corporation.
+            description: Profile is the profile of a Vendor.
+        datum.os.vendormanager.v1alpha.Vendor_Spec:
+            required:
+                - type
+                - profile
+            type: object
+            properties:
+                type:
+                    enum:
+                        - VENDOR_TYPE_UNSPECIFIED
+                        - VENDOR_TYPE_PERSON
+                        - VENDOR_TYPE_CORPORATION
+                    type: string
+                    description: The type of Vendor as defined by the VendorType enum.
+                    format: enum
+                profile:
+                    allOf:
+                        - $ref: '#/components/schemas/datum.os.vendormanager.v1alpha.Vendor_Profile'
+                    description: The profile of the Vendor.
+                state:
+                    enum:
+                        - ONBOARDING_STATE_UNSPECIFIED
+                        - ONBOARDING_STATE_PENDING
+                        - ONBOARDING_STATE_ACTIVE
+                        - ONBOARDING_STATE_INACTIVE
+                    type: string
+                    description: "The onboarding state of the Vendor. Defaults to ONBOARDING_STATE_PENDING on creation.\n (-- api-linter: core::0216::state-field-output-only=disabled\n     aip.dev/not-precedent: We are modeling our Vendor APIs from Square's Vendor APIs. \n     The 'state' of a Vendor is not output only. It is settable by the user. --)"
+                    format: enum
+            description: Spec is the specification of a Vendor.
+        datum.os.vendormanager.v1alpha.Vendor_TaxInfo:
+            required:
+                - taxId
+                - taxIdType
+            type: object
+            properties:
+                taxId:
+                    type: string
+                    description: The tax id of the person or corporation.
+                taxIdType:
+                    enum:
+                        - TAX_ID_TYPE_UNSPECIFIED
+                        - TAX_ID_TYPE_SSN
+                        - TAX_ID_TYPE_EIN
+                        - TAX_ID_TYPE_ATIN
+                        - TAX_ID_TYPE_ITIN
+                    type: string
+                    description: The tax id type of the person or corporation.
+                    format: enum
+            description: TaxInfo is the tax information of a Vendor.
+        google.longrunning.Operation:
+            type: object
+            properties:
+                name:
+                    type: string
+                    description: |-
+                        The server-assigned name, which is only unique within the same service that
+                         originally returns it. If you use the default HTTP mapping, the
+                         `name` should be a resource name ending with `operations/{unique_id}`.
+                metadata:
+                    allOf:
+                        - $ref: '#/components/schemas/google.protobuf.Any'
+                    description: |-
+                        Service-specific metadata associated with the operation.  It typically
+                         contains progress information and common metadata such as create time.
+                         Some services might not provide such metadata.  Any method that returns a
+                         long-running operation should document the metadata type, if any.
+                done:
+                    type: boolean
+                    description: |-
+                        If the value is `false`, it means the operation is still in progress.
+                         If `true`, the operation is completed, and either `error` or `response` is
+                         available.
+                error:
+                    allOf:
+                        - $ref: '#/components/schemas/google.rpc.Status'
+                    description: The error result of the operation in case of failure or cancellation.
+                response:
+                    allOf:
+                        - $ref: '#/components/schemas/google.protobuf.Any'
+                    description: |-
+                        The normal response of the operation in case of success.  If the original
+                         method returns no data on success, such as `Delete`, the response is
+                         `google.protobuf.Empty`.  If the original method is standard
+                         `Get`/`Create`/`Update`, the response should be the resource.  For other
+                         methods, the response should have the type `XxxResponse`, where `Xxx`
+                         is the original method name.  For example, if the original method name
+                         is `TakeSnapshot()`, the inferred response type is
+                         `TakeSnapshotResponse`.
+            description: |-
+                This resource represents a long-running operation that is the result of a
+                 network API call.
+        google.protobuf.Any:
+            type: object
+            properties:
+                '@type':
+                    type: string
+                    description: The type of the serialized message.
+            additionalProperties: true
+            description: Contains an arbitrary serialized message along with a @type that describes the type of the serialized message.
+        google.rpc.Status:
+            type: object
+            properties:
+                code:
+                    type: integer
+                    description: The status code, which should be an enum value of [google.rpc.Code][google.rpc.Code].
+                    format: int32
+                message:
+                    type: string
+                    description: A developer-facing error message, which should be in English. Any user-facing error message should be localized and sent in the [google.rpc.Status.details][google.rpc.Status.details] field, or localized by the client.
+                details:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/google.protobuf.Any'
+                    description: A list of messages that carry the error details.  There is a common set of message types for APIs to use.
+            description: 'The `Status` type defines a logical error model that is suitable for different programming environments, including REST APIs and RPC APIs. It is used by [gRPC](https://github.com/grpc). Each `Status` message contains three pieces of data: error code, error message, and error details. You can find out more about this error model and how to work with it in the [API Design Guide](https://cloud.google.com/apis/design/errors).'
+        google.type.PhoneNumber:
             type: object
             properties:
                 e164Number:
@@ -1480,7 +1690,7 @@ components:
                           - https://en.wikipedia.org/wiki/List_of_country_calling_codes
                 shortCode:
                     allOf:
-                        - $ref: '#/components/schemas/PhoneNumber_ShortCode'
+                        - $ref: '#/components/schemas/google.type.PhoneNumber_ShortCode'
                     description: |-
                         A short code.
 
@@ -1525,7 +1735,7 @@ components:
 
                   Reference(s):
                    - https://github.com/google/libphonenumber
-        PhoneNumber_ShortCode:
+        google.type.PhoneNumber_ShortCode:
             type: object
             properties:
                 regionCode:
@@ -1551,7 +1761,7 @@ components:
                  dialable, which means the same short code can exist in different regions,
                  with different usage and pricing, even if those regions share the same
                  country calling code (e.g. US and CA).
-        PostalAddress:
+        google.type.PostalAddress:
             type: object
             properties:
                 revision:
@@ -1678,191 +1888,6 @@ components:
 
                  For more guidance on how to use this schema, please see:
                  https://support.google.com/business/answer/6397478
-        Spec:
-            type: object
-            properties: {}
-            description: OrganizationSpec is the specification of an Organization. TODO!
-        Status:
-            type: object
-            properties:
-                code:
-                    type: integer
-                    description: The status code, which should be an enum value of [google.rpc.Code][google.rpc.Code].
-                    format: int32
-                message:
-                    type: string
-                    description: A developer-facing error message, which should be in English. Any user-facing error message should be localized and sent in the [google.rpc.Status.details][google.rpc.Status.details] field, or localized by the client.
-                details:
-                    type: array
-                    items:
-                        $ref: '#/components/schemas/GoogleProtobufAny'
-                    description: A list of messages that carry the error details.  There is a common set of message types for APIs to use.
-            description: 'The `Status` type defines a logical error model that is suitable for different programming environments, including REST APIs and RPC APIs. It is used by [gRPC](https://github.com/grpc). Each `Status` message contains three pieces of data: error code, error message, and error details. You can find out more about this error model and how to work with it in the [API Design Guide](https://cloud.google.com/apis/design/errors).'
-        Vendor:
-            required:
-                - spec
-            type: object
-            properties:
-                name:
-                    readOnly: true
-                    type: string
-                    description: |-
-                        The resource name of this Vendor.
-                         Format: vendors/{vendor}
-                         Format: organizations/{organization}/vendors/{vendor}
-                vendorId:
-                    readOnly: true
-                    type: string
-                    description: The resource ID of this Vendor within its parent resource.
-                uid:
-                    readOnly: true
-                    type: string
-                    description: |-
-                        Server assigned unique identifier for the Vendor. The value
-                         is a UUID4 string and guaranteed to remain unchanged until the resource is
-                         deleted.
-                displayName:
-                    type: string
-                    description: |-
-                        Human-readable display name of this Vendor that you can modify.
-                         The maximum length is 63 characters.
-                annotations:
-                    type: object
-                    additionalProperties:
-                        type: string
-                    description: |-
-                        Annotations is an unstructured key-value map stored with a Vendor that
-                         may be set by external tools to store and retrieve arbitrary metadata.
-                         They are not queryable and should be preserved when modifying objects.
-                labels:
-                    type: object
-                    additionalProperties:
-                        type: string
-                    description: |-
-                        Labels is an unstructured key-value map stored with a Vendor that
-                         may be set by external tools to enable platform features which identify
-                         Vendors via label selections.
-                createTime:
-                    readOnly: true
-                    type: string
-                    description: Output only. The time when the Vendor is created.
-                    format: date-time
-                updateTime:
-                    readOnly: true
-                    type: string
-                    description: Output only. The last time that the Vendor is updated.
-                    format: date-time
-                deleteTime:
-                    readOnly: true
-                    type: string
-                    description: |-
-                        Output only. For a deleted resource, the deletion time. It is only
-                         populated as a response to a Delete request.
-                    format: date-time
-                reconciling:
-                    readOnly: true
-                    type: boolean
-                    description: Output only. If set, there are currently changes in flight to the Vendor.
-                etag:
-                    readOnly: true
-                    type: string
-                    description: |-
-                        This checksum is computed by the server based on the value of
-                         other fields, and might be sent on update requests to ensure the client has
-                         an up-to-date value before proceeding.
-                spec:
-                    allOf:
-                        - $ref: '#/components/schemas/Vendor_Spec'
-                    description: The specification of the Vendor.
-            description: Vendor is a resource representing a Vendor.
-        Vendor_PaymentPreference:
-            required:
-                - preferred
-                - method
-            type: object
-            properties:
-                preferred:
-                    type: boolean
-                    description: Is this the preferred payment method?
-                method:
-                    type: integer
-                    description: The payment method of the Vendor.
-                    format: enum
-            description: PaymentPreference is the payment preference of a Vendor.
-        Vendor_Profile:
-            type: object
-            properties:
-                person:
-                    type: string
-                    description: The name of the person.
-                corporation:
-                    type: string
-                    description: The name of the corporation.
-                corporationType:
-                    type: string
-                    description: The type of corporation (e.g. LLC, S-Corp, C-Corp, Other).
-                corporationDba:
-                    type: string
-                    description: The DBA (Doing Business As) name of the corporation.
-                description:
-                    type: string
-                    description: The description of the corporation or contractor and the services it provides.
-                websiteUri:
-                    type: string
-                    description: The URL of the website of the corporation or contractor.
-                addresses:
-                    type: array
-                    items:
-                        $ref: '#/components/schemas/PostalAddress'
-                    description: The physical address of the person or corporation.
-                phoneNumbers:
-                    type: array
-                    items:
-                        $ref: '#/components/schemas/PhoneNumber'
-                    description: The phone number of the person or corporation.
-                paymentPreference:
-                    type: array
-                    items:
-                        $ref: '#/components/schemas/Vendor_PaymentPreference'
-                    description: The payment preference of the Vendor.
-                taxInfo:
-                    allOf:
-                        - $ref: '#/components/schemas/Vendor_TaxInfo'
-                    description: The tax information of the person or corporation.
-            description: Profile is the profile of a Vendor.
-        Vendor_Spec:
-            required:
-                - type
-                - profile
-            type: object
-            properties:
-                type:
-                    type: integer
-                    description: The type of Vendor as defined by the VendorType enum.
-                    format: enum
-                profile:
-                    allOf:
-                        - $ref: '#/components/schemas/Vendor_Profile'
-                    description: The profile of the Vendor.
-                state:
-                    type: integer
-                    description: "The onboarding state of the Vendor. Defaults to ONBOARDING_STATE_PENDING on creation.\n (-- api-linter: core::0216::state-field-output-only=disabled\n     aip.dev/not-precedent: We are modeling our Vendor APIs from Square's Vendor APIs. \n     The 'state' of a Vendor is not output only. It is settable by the user. --)"
-                    format: enum
-            description: Spec is the specification of a Vendor.
-        Vendor_TaxInfo:
-            required:
-                - taxId
-                - taxIdType
-            type: object
-            properties:
-                taxId:
-                    type: string
-                    description: The tax id of the person or corporation.
-                taxIdType:
-                    type: integer
-                    description: The tax id type of the person or corporation.
-                    format: enum
-            description: TaxInfo is the tax information of a Vendor.
 tags:
     - name: Invoices
       description: Invoices is the service for managing Invoices.

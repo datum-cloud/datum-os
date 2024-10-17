@@ -31,4 +31,6 @@ tasks:
       - protoc
           -I . -I ../third_party/protos
           --openapi_out=./openapi
+          --openapi_opt=enum_type=string
+          --openapi_opt=fq_schema_naming=true
           ./datum/**/*.proto
