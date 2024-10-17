@@ -1,10 +1,7 @@
 'use client'
 
-import Link from 'next/link'
 import { useEffect, useState } from 'react'
 
-import { getPathWithParams } from '@repo/common/routes'
-import { OPERATOR_APP_ROUTES } from '@repo/constants'
 import type { Datum } from '@repo/types'
 import { Checkbox } from '@repo/ui/checkbox'
 import {
@@ -185,8 +182,6 @@ export const VENDOR_COLUMNS: ColumnDef<Datum.Vendor>[] = [
       />
     ),
     minSize: 200,
-    enableGlobalFilter: false,
-    enableSorting: false,
     cell: ({ cell }) => {
       const isodate = cell.getValue() as string
 
@@ -204,8 +199,6 @@ export const VENDOR_COLUMNS: ColumnDef<Datum.Vendor>[] = [
       />
     ),
     minSize: 200,
-    enableGlobalFilter: false,
-    enableSorting: false,
     cell: ({ cell }) => {
       const isodate = cell.getValue() as string
 
@@ -223,8 +216,6 @@ export const VENDOR_COLUMNS: ColumnDef<Datum.Vendor>[] = [
       />
     ),
     minSize: 185,
-    enableGlobalFilter: false,
-    enableSorting: false,
     cell: ({ cell }) => {
       const status = cell.getValue() as string
 

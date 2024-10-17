@@ -1,7 +1,6 @@
 'use client'
 
 import { ChevronDown, Import, Trash } from 'lucide-react'
-import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 
 import type { Datum } from '@repo/types'
@@ -36,7 +35,6 @@ const VendorsControls = ({
   onFilter,
   selectedVendors,
 }: VendorsControlsProps) => {
-  const router = useRouter()
   const { contactControls, contactDropdownItem, contactDropdownIcon } =
     pageStyles()
   const [openVendorDialog, _setOpenVendorDialog] = useState(false)
@@ -54,7 +52,7 @@ const VendorsControls = ({
         <Search
           compact
           alignment="right"
-          placeholder="Search contacts"
+          placeholder="Search vendors"
           search={search}
         />
         <Button variant="outline" onClick={() => setOpenVendorDialog(true)}>
