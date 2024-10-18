@@ -1,11 +1,14 @@
 package services
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 
+	"github.com/datum-cloud/datum-os/internal/ent/generated"
 	"github.com/datum-cloud/datum-os/internal/httpserve/proto"
 	"github.com/datum-cloud/datum-os/pkg/echox"
+	"github.com/datum-cloud/datum-os/pkg/entx"
 	"github.com/datum-cloud/datum-os/pkg/enums"
 	"github.com/datum-cloud/datum-os/pkg/middleware/transaction"
 	"github.com/datum-cloud/datum-os/pkg/models"
@@ -83,6 +86,17 @@ func (s Server) VendorsCreateVendor2(ctx echox.Context, params proto.VendorsCrea
 		displayName = vendorName
 	}
 
+	// If the client has set the validate only flag, we will not create any resources, but will return a 200 OK along with
+	// what a successful creation would look like, except the server generated fields will be empty.
+	validateOnly := params.ValidateOnly != nil && *params.ValidateOnly
+	if validateOnly {
+		// We would normally set the DisplayName automatically if it was not set, but since we are not creating any
+		// resources, we will set it manually.
+		reqVendor.DisplayName = displayName
+
+		return ctx.JSON(http.StatusOK, models.WrapVendorResponse(&reqVendor))
+	}
+
 	// TODO: Create and Add Postal Addresses
 	// TODO: Create and Add Contact Details
 	// TODO: Create and Add Tax ID
@@ -123,21 +137,104 @@ func (s Server) VendorsCreateVendor2(ctx echox.Context, params proto.VendorsCrea
 }
 
 // (DELETE /v1alpha/vendors/{vendor})
-func (s Server) VendorsDeleteVendor2(ctx echox.Context, vendor string, params proto.VendorsDeleteVendor2Params) error {
-	return nil
+func (s Server) VendorsDeleteVendor2(ctx echox.Context, vendorID string, params proto.VendorsDeleteVendor2Params) error {
+	tx := transaction.FromContext(ctx.Request().Context())
+	vendor, err := tx.Vendor.Get(ctx.Request().Context(), vendorID)
+	if err != nil {
+		// Not Found gets special handling because of allow_missing.
+		if generated.IsNotFound(err) {
+			// If allow_missing is set, we will return a 200 OK with an empty object
+			if params.AllowMissing != nil && *params.AllowMissing {
+				return ctx.JSON(
+					http.StatusOK,
+					struct{}{},
+				)
+			}
+			// Otherwise, we will return a 404 Not Found
+			return echox.NewHTTPError(
+				http.StatusNotFound,
+				fmt.Sprintf("could not find vendor %s", err.Error()),
+			)
+		}
+		// Everything else is an internal server error.
+		return echox.NewHTTPError(
+			http.StatusInternalServerError, err.Error(),
+		)
+	}
+
+	etag := models.MakeEtag(&vendor.UpdatedAt)
+	if params.Etag != nil && *params.Etag != *etag {
+		return echox.NewHTTPError(
+			http.StatusConflict,
+			"vendor has been updated since last fetched",
+		)
+	}
+
+	// If validate_only is set to true, we're done here. We don't need to actually delete anything.
+	if params.ValidateOnly != nil && *params.ValidateOnly {
+		return ctx.JSON(http.StatusOK, struct{}{})
+	}
+
+	profile, err := vendor.Profile(ctx.Request().Context())
+	if err != nil {
+		return echox.NewHTTPError(
+			http.StatusInternalServerError,
+			fmt.Sprintf("could not retrieve vendor profile %s", err.Error()),
+		)
+	}
+
+	// Delete the profile first because it has a foreign key constraint on the vendor.
+	err = tx.VendorProfile.DeleteOne(profile).Exec(ctx.Request().Context())
+	if err != nil {
+		return echox.NewHTTPError(
+			http.StatusInternalServerError,
+			fmt.Sprintf("could not delete vendor profile %s", err.Error()),
+		)
+	}
+
+	err = tx.Vendor.DeleteOne(vendor).Exec(ctx.Request().Context())
+	if err != nil {
+		return echox.NewHTTPError(
+			http.StatusInternalServerError,
+			fmt.Sprintf("could not delete vendor %s", err.Error()),
+		)
+	}
+
+	// Refetch the vendor and profile to get the updated values.
+	ctxWithDeleted := context.WithValue(ctx.Request().Context(), entx.SoftDeleteSkipKey{}, true)
+	vendor, err = tx.Vendor.Get(ctxWithDeleted, vendorID)
+	if err != nil {
+		return echox.NewHTTPError(
+			http.StatusInternalServerError,
+			fmt.Sprintf("could not retrieve vendor %s", err.Error()),
+		)
+	}
+	profile, err = vendor.Profile(ctxWithDeleted)
+	if err != nil {
+		return echox.NewHTTPError(
+			http.StatusInternalServerError,
+			fmt.Sprintf("could not retrieve vendor profile %s", err.Error()),
+		)
+	}
+
+	return ctx.JSON(
+		http.StatusOK,
+		models.OperationDeleteVendorResponseFromEntity(vendor, profile),
+	)
 }
 
 // (GET /v1alpha/vendors/{vendor})
 func (s Server) VendorsGetVendor2(ctx echox.Context, vendorID string) error {
-	tx := transaction.FromContext(ctx.Request().Context())
-	vendor, err := tx.Vendor.Get(ctx.Request().Context(), vendorID)
+	ctxWithDeleted := context.WithValue(ctx.Request().Context(), entx.SoftDeleteSkipKey{}, true)
+	tx := transaction.FromContext(ctxWithDeleted)
+	vendor, err := tx.Vendor.Get(ctxWithDeleted, vendorID)
 	if err != nil {
 		return echox.NewHTTPError(
 			http.StatusNotFound,
 			fmt.Sprintf("could not find vendor %s", err.Error()),
 		)
 	}
-	profile, err := vendor.Profile(ctx.Request().Context())
+	profile, err := vendor.Profile(ctxWithDeleted)
 	if err != nil {
 		return echox.NewHTTPError(
 			http.StatusInternalServerError,

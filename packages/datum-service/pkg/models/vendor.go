@@ -2,6 +2,8 @@ package models
 
 import (
 	"fmt"
+	"hash/crc32"
+	"time"
 
 	"github.com/datum-cloud/datum-os/internal/ent/generated"
 	"github.com/datum-cloud/datum-os/internal/httpserve/proto"
@@ -12,6 +14,19 @@ var (
 	doneTrue         = true
 	reconcilingFalse = false
 )
+
+func MakeEtag(updatedTime *time.Time) *string {
+	if updatedTime == nil {
+		return nil
+	}
+	hash := crc32.ChecksumIEEE([]byte(updatedTime.UTC().Format(time.RFC3339)))
+
+	// We use the W/ prefix to indicate that this is a weak etag. It is not a hash of the resource,
+	// but it is a hash of the updated time.
+	etag := fmt.Sprintf("W/\"%x\"", hash)
+
+	return &etag
+}
 
 func MessageTypeURL(service string, version string, message string) *string {
 	typeURL := fmt.Sprintf("type.datumapis.com/os/%s/%s/%s", service, version, message)
@@ -82,9 +97,10 @@ func VendorEnumTypeFromSpecType(vendorType proto.DatumOsVendormanagerV1alphaVend
 func VendorResponseFromEntity(vendor *generated.Vendor, profile *generated.VendorProfile) *proto.DatumOsVendormanagerV1alphaVendor {
 	return &proto.DatumOsVendormanagerV1alphaVendor{
 		CreateTime:  &vendor.CreatedAt,
+		DeleteTime:  vendor.DeletedAt,
 		DisplayName: &vendor.DisplayName,
-		Etag:        nil,
 		Name:        VendorNameFromEntity(vendor),
+		Etag:        MakeEtag(&vendor.UpdatedAt),
 		Reconciling: &reconcilingFalse,
 		Spec: proto.DatumOsVendormanagerV1alphaVendorSpec{
 			Profile: proto.DatumOsVendormanagerV1alphaVendorProfile{
@@ -111,6 +127,15 @@ func WrapVendorResponse(vendor *proto.DatumOsVendormanagerV1alphaVendor) *proto.
 }
 
 func OperationCreateVendorResponseFromEntity(
+	vendor *generated.Vendor, profile *generated.VendorProfile,
+) *proto.GoogleLongrunningOperation {
+	return &proto.GoogleLongrunningOperation{
+		Done:     &doneTrue,
+		Response: WrapVendorResponse(VendorResponseFromEntity(vendor, profile)),
+	}
+}
+
+func OperationDeleteVendorResponseFromEntity(
 	vendor *generated.Vendor, profile *generated.VendorProfile,
 ) *proto.GoogleLongrunningOperation {
 	return &proto.GoogleLongrunningOperation{

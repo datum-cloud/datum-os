@@ -614,6 +614,11 @@ paths:
                   description: The order by fields for the Vendors. The default order is ascending. There is no descending order.
                   schema:
                     type: string
+                - name: showDeleted
+                  in: query
+                  description: If true, the deleted Vendors will be included in the response.
+                  schema:
+                    type: boolean
             responses:
                 "200":
                     description: OK
@@ -732,6 +737,16 @@ paths:
                   description: If true, the request is validated and nothing is persisted.
                   schema:
                     type: boolean
+                - name: allowMissing
+                  in: query
+                  description: If true, the Vendor will be deleted successfully even if it does not exist.
+                  schema:
+                    type: boolean
+                - name: force
+                  in: query
+                  description: If true, the Vendor will be deleted even if it has child resources still existing.
+                  schema:
+                    type: boolean
             responses:
                 "200":
                     description: OK
@@ -832,6 +847,11 @@ paths:
                   description: The order by fields for the Vendors. The default order is ascending. There is no descending order.
                   schema:
                     type: string
+                - name: showDeleted
+                  in: query
+                  description: If true, the deleted Vendors will be included in the response.
+                  schema:
+                    type: boolean
             responses:
                 "200":
                     description: OK
@@ -930,6 +950,16 @@ paths:
                 - name: validateOnly
                   in: query
                   description: If true, the request is validated and nothing is persisted.
+                  schema:
+                    type: boolean
+                - name: allowMissing
+                  in: query
+                  description: If true, the Vendor will be deleted successfully even if it does not exist.
+                  schema:
+                    type: boolean
+                - name: force
+                  in: query
+                  description: If true, the Vendor will be deleted even if it has child resources still existing.
                   schema:
                     type: boolean
             responses:
