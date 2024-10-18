@@ -115,7 +115,7 @@ export const SignupPage = () => {
   async function onSubmit(data: RegisterUserInput) {
     try {
       const res: any = await registerUser(data)
-      if (res?.ok) {
+      if (res?.success === true) {
         // TODO: email needs invite and verify token to complete this flow
         const verifyUrl = inviteToken
           ? getPathWithQuery(OPERATOR_APP_ROUTES.verify, {

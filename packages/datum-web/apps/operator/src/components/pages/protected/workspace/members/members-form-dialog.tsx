@@ -152,6 +152,9 @@ const MembersFormDialog = ({
                             <SelectItem value="MEMBER" className={selectItem()}>
                               Member
                             </SelectItem>
+                            <SelectItem value="ADMIN" className={selectItem()}>
+                              Admin
+                            </SelectItem>
                             <SelectItem value="OWNER" className={selectItem()}>
                               Owner
                             </SelectItem>

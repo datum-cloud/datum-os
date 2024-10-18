@@ -1,6 +1,8 @@
-import { datumAPIUrl } from '@repo/dally/auth'
 import { Session } from 'next-auth'
 import useSWR from 'swr'
+
+import { OPERATOR_API_ROUTES, SERVICE_APP_ROUTES } from '@repo/constants'
+import { datumAPIUrl } from '@repo/dally/auth'
 
 // high level relation names
 export const canViewRelation = 'can_view'
@@ -42,26 +44,27 @@ export function useCheckPermissions(session: Session | null, relation: string) {
   const accessToken = session?.user?.accessToken
   const currentOrgId = session?.user.organization
 
-  const headers: HeadersInit = {
-    'content-type': 'application/json',
-    Authorization: `Bearer ${accessToken}`,
-  }
+  const { data, error, isLoading } = useSWR(
+    [OPERATOR_API_ROUTES.permissions, accessToken, currentOrgId, relation],
+    async ([url, token, orgId, rel]) => {
+      if (!token || !orgId) return null
 
-  // create the payload for the check
-  const payload: CheckTuple = {
-    relation: relation,
-    objectType: organizationObject,
-    objectId: currentOrgId,
-  }
+      const updatedPayload: CheckTuple = {
+        relation: rel,
+        objectType: organizationObject,
+        objectId: orgId,
+      }
 
-  return useSWR(
-    `${datumAPIUrl}/v1/account/access`,
-    async (url) => {
+      const updatedHeaders: HeadersInit = {
+        'content-type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      }
+
       return (
         await fetch(url, {
           method: 'POST',
-          headers: headers,
-          body: JSON.stringify(payload),
+          headers: updatedHeaders,
+          body: JSON.stringify(updatedPayload),
           credentials: 'include',
         })
       ).json()
@@ -73,4 +76,6 @@ export function useCheckPermissions(session: Session | null, relation: string) {
       revalidateIfStale: false,
     },
   )
+
+  return { data, error, isLoading }
 }

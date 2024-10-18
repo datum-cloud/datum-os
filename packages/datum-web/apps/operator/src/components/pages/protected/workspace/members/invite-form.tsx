@@ -190,10 +190,11 @@ const InviteForm = ({ inviteAdmins, refetchInvites }: InviteFormProps) => {
                         <SelectContent>
                           {Object.entries(InviteRole)
                             .reverse()
-                            .filter(([key]) => !key.includes('USER'))
                             .filter(([key]) => {
+                              if (key === 'USER') return false
+
                               if (!inviteAdmins) {
-                                return !key.includes('ADMIN')
+                                return key !== 'ADMIN' && key !== 'OWNER'
                               }
 
                               return true
