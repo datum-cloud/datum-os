@@ -25,8 +25,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@repo/ui/tabs'
 import { useToast } from '@repo/ui/use-toast'
 
 import PageTitle from '@/components/page-title'
-import { Error } from '@/components/shared/error/error'
-import { Loading } from '@/components/shared/loading/loading'
 import Search from '@/components/shared/table-search/table-search'
 import {
   canDeleteRelation,
@@ -77,10 +75,7 @@ const MembersPage: React.FC = () => {
   )
 
   // Check if the user can invite admins or only members
-  const { data: inviteAdminPermissions } = useCheckPermissions(
-    session,
-    canInviteAdminsRelation,
-  )
+  const { data: invitationPermissions } = useCheckPermissions(session, canInviteAdminsRelation)
 
   const invites = useMemo(() => {
     return (invitesData?.invites?.edges
@@ -268,7 +263,7 @@ const MembersPage: React.FC = () => {
         <TabsContent value="invites">
           <div className={wrapper()}>
             <InviteForm
-              inviteAdmins={inviteAdminPermissions?.allowed}
+              inviteAdmins={invitationPermissions?.allowed}
               refetchInvites={refetchInvites}
             />
             <InviteTable invites={invites} handleDelete={handleDeleteInvite} />

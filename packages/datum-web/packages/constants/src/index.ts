@@ -23,6 +23,7 @@ export const SERVICE_APP_ROUTES = {
   contactListMembers: `${SERVICE_REST_API}/v1/contacts/lists/[id]/members`,
   forgotPassword: `${SERVICE_REST_API}/v1/forgot-password`,
   resetPassword: `${SERVICE_REST_API}/v1/password-reset`,
+  accountAccess: `${process.env.API_REST_URL}/v1/account/access`,
 }
 
 export const OPERATOR_APP_ROUTES = {
@@ -75,6 +76,7 @@ export const OPERATOR_API_ROUTES = {
   forgotPassword: '/api/auth/forgot-password',
   resetPassword: '/api/auth/password-reset',
   upload: '/api/auth/upload',
+  permissions: '/api/auth/permissions',
 }
 
 export const OPERATOR_FILES = {

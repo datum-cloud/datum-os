@@ -126,6 +126,7 @@ export const USER_FILTERS: Record<string, Datum.Filter> = {
     options: [
       { key: 'Admin', value: 'ADMIN' },
       { key: 'Member', value: 'MEMBER' },
+      { key: 'Owner', value: 'OWNER' },
     ],
   },
   status: {

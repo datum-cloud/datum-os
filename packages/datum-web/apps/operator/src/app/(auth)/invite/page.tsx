@@ -11,7 +11,6 @@ import { Logo } from '@repo/ui/logo'
 import { useAcceptWorkspaceInvite } from '../../../lib/user'
 
 const AcceptInvite: React.FC = () => {
-  console.log('HIT INVITATION PAGE')
   const searchParams = useSearchParams()
   const { data: session, update } = useSession()
   const { push } = useRouter()
