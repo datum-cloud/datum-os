@@ -1,36 +1,43 @@
 import { NextResponse } from 'next/server'
+
+import { HttpStatus, SERVICE_APP_ROUTES } from '@repo/constants'
+
 import { auth } from '@/lib/auth/auth'
 import { setSessionCookie } from '@/lib/auth/utils/set-session-cookie'
+import { handleError, handleResponseError } from '@/utils/requests'
 
-export async function POST(request: Request) {
-  const bodyData = await request.json()
-  const cookies = request.headers.get('cookie')
-  const session = await auth()
-  const token = session?.user?.accessToken
+export async function POST(request: Request): Promise<NextResponse> {
+  try {
+    const session = await auth()
+    const token = session?.user?.accessToken
+    const bodyData = await request.json()
+    const cookies = request.headers.get('cookie')
 
-  const headers: HeadersInit = {
-    'content-type': 'application/json',
-    Authorization: `Bearer ${token}`,
-  }
-  if (cookies) {
-    headers['cookie'] = cookies
-  }
+    const headers: HeadersInit = {
+      'content-type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    }
+    if (cookies) {
+      headers['cookie'] = cookies
+    }
 
-  const fData = await fetch(`${process.env.API_REST_URL}/v1/switch`, {
-    method: 'POST',
-    headers,
-    body: JSON.stringify(bodyData),
-    credentials: 'include',
-  })
+    const response = await fetch(SERVICE_APP_ROUTES.switchWorkspace, {
+      method: 'POST',
+      headers,
+      body: JSON.stringify(bodyData),
+      credentials: 'include',
+    })
 
-  const fetchedData = await fData.json()
+    if (!response.ok) {
+      return handleResponseError(response, 'Failed to switch workspace')
+    }
 
-  if (fData.ok) {
-    setSessionCookie(fetchedData.session)
-    return NextResponse.json(fetchedData, { status: 200 })
-  }
+    const data = await response.json()
+    setSessionCookie(data.session)
 
-  if (fData.status !== 201) {
-    return NextResponse.json(fetchedData, { status: fData.status })
+    return NextResponse.json(data, { status: HttpStatus.Ok })
+  } catch (error: any) {
+    console.error('Failed to switch workspace', error)
+    return handleError(error, 'Failed to switch workspace')
   }
 }

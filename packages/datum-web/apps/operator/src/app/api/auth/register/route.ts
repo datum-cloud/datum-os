@@ -1,21 +1,35 @@
 import { NextResponse } from 'next/server'
 
-export async function POST(request: Request) {
-  const bodyData = await request.json()
+import { HttpStatus, SERVICE_APP_ROUTES } from '@repo/constants'
 
-  const fData = await fetch(`${process.env.API_REST_URL}/v1/register`, {
-    method: 'POST',
-    headers: {
-      'content-type': 'application/json',
-    },
-    body: JSON.stringify(bodyData),
-  })
+import { handleError, handleResponseError } from '@/utils/requests'
 
-  if (fData.ok) {
-    return NextResponse.json(await fData.json(), { status: 200 })
-  }
+export async function POST(request: Request): Promise<NextResponse> {
+  try {
+    const bodyData = await request.json()
 
-  if (fData.status !== 201) {
-    return NextResponse.json(await fData.json(), { status: fData.status })
+    const response = await fetch(SERVICE_APP_ROUTES.register, {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json',
+      },
+      body: JSON.stringify(bodyData),
+    })
+
+    if (!response.ok) {
+      const error = await handleResponseError(
+        response,
+        'Failed to register user',
+      )
+
+      return error
+    }
+
+    const data = await response.json()
+
+    return NextResponse.json(data, { status: HttpStatus.Ok })
+  } catch (error: any) {
+    console.error('Failed to register user', error)
+    return handleError(error, 'Failed to register user')
   }
 }

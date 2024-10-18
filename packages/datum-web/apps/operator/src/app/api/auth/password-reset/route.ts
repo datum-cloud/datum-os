@@ -17,12 +17,19 @@ export async function POST(request: Request): Promise<NextResponse> {
     })
 
     if (!response.ok) {
-      await handleResponseError(response, 'Failed to reset password')
+      const error = await handleResponseError(
+        response,
+        'Failed to reset password',
+      )
+
+      return error
     }
 
     const data = await response.json()
+
     return NextResponse.json(data, { status: HttpStatus.Ok })
   } catch (error: any) {
+    console.error('Failed to reset password', error)
     return handleError(error, 'Failed to reset password')
   }
 }

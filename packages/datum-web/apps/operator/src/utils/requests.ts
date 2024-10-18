@@ -24,7 +24,10 @@ export async function handleResponseError(
 ) {
   const error = await response.json()
 
-  return NextResponse.json({ message, error }, { status: response.status })
+  return NextResponse.json(
+    { message: error?.error || message },
+    { status: response.status },
+  )
 }
 
 export function handleError(
@@ -33,6 +36,7 @@ export function handleError(
   message: string = 'Internal Server Error',
 ) {
   console.error(log, error)
+
   return NextResponse.json(
     { message, error: error.message },
     { status: HttpStatus.InternalServerError },

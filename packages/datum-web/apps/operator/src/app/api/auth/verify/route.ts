@@ -1,17 +1,39 @@
-import { type NextRequest, NextResponse } from 'next/server'
+import { NextResponse } from 'next/server'
 
-export async function GET(request: NextRequest) {
-  const searchParams = request.nextUrl.searchParams
-  const token = searchParams.get('token')
-  const fData = await fetch(
-    `${process.env.API_REST_URL}/v1/verify?token=${token}`,
-  )
+import { HttpStatus, SERVICE_APP_ROUTES } from '@repo/constants'
 
-  if (fData.ok) {
-    return NextResponse.json(await fData.json(), { status: 200 })
-  }
+import { handleError, handleResponseError } from '@/utils/requests'
 
-  if (fData.status !== 200) {
-    return NextResponse.json(await fData.json(), { status: fData.status })
+export async function GET(request: Request): Promise<NextResponse> {
+  try {
+    const url = new URL(request.url)
+    const token = url.searchParams.get('token')
+
+    if (!token) {
+      return NextResponse.json(
+        { error: 'Token is required' },
+        { status: HttpStatus.BadRequest },
+      )
+    }
+
+    const response = await fetch(
+      `${SERVICE_APP_ROUTES.verify}?token=${token}`,
+      {
+        method: 'GET',
+        headers: {
+          'content-type': 'application/json',
+        },
+      },
+    )
+
+    if (!response.ok) {
+      return handleResponseError(response, 'Failed to verify token')
+    }
+
+    const data = await response.json()
+    return NextResponse.json(data, { status: HttpStatus.Ok })
+  } catch (error: any) {
+    console.error('Failed to verify token', error)
+    return handleError(error, 'Failed to verify token')
   }
 }
