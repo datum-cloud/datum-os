@@ -3,34 +3,44 @@
 import { Filter, X } from 'lucide-react'
 import React from 'react'
 
+import { Datum } from '@repo/types'
 import { Button } from '@repo/ui/button'
-import { Form, useForm, zodResolver } from '@repo/ui/form'
+import type { ColumnFiltersState } from '@repo/ui/data-table'
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from '@repo/ui/dialog'
+import { Form, useForm, zodResolver } from '@repo/ui/form'
+import { Input } from '@repo/ui/input'
 import { Panel } from '@repo/ui/panel'
-import type { ColumnFiltersState } from '@repo/ui/data-table'
+import { Popover, PopoverContent, PopoverTrigger } from '@repo/ui/popover'
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@repo/ui/dropdown-menu'
-import { Datum } from '@repo/types'
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@repo/ui/select'
+
 import { FilterFormSchema, FilterInput } from '@/utils/schemas'
 
 import { filterDialogStyles } from './filter-dialog.styles'
 
 type FilterDialogProps = {
+  groupTitle: string
   onFilter(input: ColumnFiltersState): void
-  entityFilters: Record<string, Datum.Filter>
+  filterList: Record<string, Datum.FilterMenuItem>
 }
 
-const FilterUserDialog = ({ onFilter, entityFilters }: FilterDialogProps) => {
+const FilterUserDialog = ({
+  groupTitle,
+  onFilter,
+  filterList,
+}: FilterDialogProps) => {
   const [open, setOpen] = React.useState(false)
   const { column, dialogContent, filterContainer, filterTitle } =
     filterDialogStyles()
@@ -38,7 +48,7 @@ const FilterUserDialog = ({ onFilter, entityFilters }: FilterDialogProps) => {
     resolver: zodResolver(FilterFormSchema),
     mode: 'onChange',
     defaultValues: {
-      filters: {},
+      filters: {}, // Record<string, { operator: Datum.OperatorType, value: any }>
     },
   })
 
@@ -46,14 +56,19 @@ const FilterUserDialog = ({ onFilter, entityFilters }: FilterDialogProps) => {
 
   const { filters } = watch()
 
-  function formatFilters(filters: FilterInput['filters']) {
-    return Object.entries(filters).map(([field, { value }]) => ({
+  function formatFilters(input: FilterInput['filters']) {
+    return Object.entries(input).map(([field, { operator, value }]) => ({
       id: field,
-      value: value.value,
+      operator,
+      value,
     }))
   }
 
-  function handleFilter(field: string, operator: Datum.OPERATOR, value: any) {
+  function handleFilter(
+    field: string,
+    operator: Datum.OperatorType,
+    value: any,
+  ) {
     setValue(`filters.${field}`, { operator, value })
   }
 
@@ -80,6 +95,7 @@ const FilterUserDialog = ({ onFilter, entityFilters }: FilterDialogProps) => {
       <DialogContent className="max-w-[80vw] xl:max-w-6xl">
         <DialogHeader>
           <DialogTitle />
+          <DialogDescription />
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={handleSubmit(onSubmit)} className={dialogContent()}>
@@ -90,23 +106,25 @@ const FilterUserDialog = ({ onFilter, entityFilters }: FilterDialogProps) => {
                   <div className="w-full flex flex-wrap gap-2">
                     {Object.keys(filters).length > 0 ? (
                       Object.entries(filters).map(
-                        ([field, { value }], index) => {
-                          const details = entityFilters[field]
+                        ([field, { operator, value }], index) => {
+                          const details = filterList[field]
 
                           if (!details) return null
 
-                          const { title, options } = details
-                          const valueKey = options?.find(
-                            ({ value: optionValue }) =>
-                              value.value === optionValue,
-                          )?.key
+                          const currentOperator = details.operators.find(
+                            (op) => op.key === operator,
+                          )
+                          const valueKey =
+                            currentOperator?.options?.find(
+                              ({ value: optionValue }) => value === optionValue,
+                            )?.key || value
 
                           return (
                             <div
-                              key={`${valueKey}-${index}`}
+                              key={`${value}-${index}`}
                               className="flex flex-row items-center gap-1 border rounded border-blackberry-600 dark:border-peat-800 text-body-xs px-2 py-1"
                             >
-                              {title}: {valueKey}
+                              {currentOperator?.title || field}: {valueKey}
                               <Button
                                 variant="blackberryXs"
                                 size="xs"
@@ -130,55 +148,119 @@ const FilterUserDialog = ({ onFilter, entityFilters }: FilterDialogProps) => {
             </Panel>
             <div className={filterContainer()}>
               <div className={column()}>
-                <h4 className={filterTitle()}>Users</h4>
+                <h4 className={filterTitle()}>{groupTitle}</h4>
                 <div className="flex flex-col gap-1 justify-start items-start">
-                  {Object.entries(entityFilters).map(
-                    ([key, details], index) => {
-                      const filterValue = Object.keys(filters).find(
-                        (field) => field === key,
-                      )
-                      const hasValue = filterValue !== undefined
-                      const { icon: Icon, operator, options } = details
+                  {Object.entries(filterList).map(([key, details], index) => {
+                    const isFilterApplied = filters[key] !== undefined
+                    const filterValue = filters[key]?.value
+                    const { icon: Icon, operators } = details
+                    const operator =
+                      operators.find(
+                        (op) => op.key === filters[key]?.operator,
+                      ) || operators[0]
+                    const operatorOptions = operator?.options
+                    const title = filterList[key].title || key
 
-                      return (
-                        <DropdownMenu key={index}>
-                          <DropdownMenuTrigger className="flex flex-row items-center justify-start gap-2">
-                            <div className="relative w-6">
-                              {hasValue && (
-                                <div className="absolute -top-0.5 left-3 h-2 w-2 shrink-0 rounded-full bg-sunglow-900" />
-                              )}
-                              {
-                                <Icon
-                                  size={18}
-                                  className="text-blackberry-400"
-                                />
+                    return (
+                      <Popover key={index}>
+                        <PopoverTrigger className="flex flex-row items-center justify-start gap-2">
+                          <div className="relative w-6">
+                            {isFilterApplied && (
+                              <div className="absolute -top-0.5 left-3 h-2 w-2 shrink-0 rounded-full bg-sunglow-900" />
+                            )}
+                            {<Icon size={18} className="text-blackberry-400" />}
+                          </div>
+                          {title}
+                        </PopoverTrigger>
+                        <PopoverContent
+                          align="start"
+                          side="bottom"
+                          className="p-1 w-full"
+                        >
+                          <div className="flex gap-4 items-center justify-start p-3 cursor-pointer">
+                            <Select
+                              onValueChange={(value) => {
+                                handleFilter(
+                                  key,
+                                  value as Datum.OperatorType,
+                                  undefined,
+                                )
+                              }}
+                              defaultValue={
+                                filters[key]?.operator || operators[0].key
                               }
-                            </div>
-                            {details.title}
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent
-                            align="start"
-                            side="bottom"
-                            className="p-1"
-                          >
-                            {options &&
-                              options.length > 1 &&
-                              options.map((option, index) => (
-                                <DropdownMenuItem
-                                  key={option.key}
-                                  className="p-3 cursor-pointer hover:bg-winter-sky-800 dark:hover:bg-peat-800"
-                                  onClick={() =>
-                                    handleFilter(key, operator, option)
-                                  }
+                            >
+                              <SelectTrigger
+                                className="min-w-48"
+                                onClick={(e) => e.stopPropagation()}
+                              >
+                                <SelectValue placeholder="Select..." />
+                              </SelectTrigger>
+                              <SelectContent>
+                                {operators.map((op) => (
+                                  <SelectItem
+                                    key={op.key}
+                                    value={op.key}
+                                    className="cursor-pointer"
+                                    onClick={(e) => e.stopPropagation()}
+                                  >
+                                    {op.title}
+                                  </SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+
+                            {operatorOptions && operatorOptions.length > 0 ? (
+                              <Select
+                                onValueChange={(value) => {
+                                  handleFilter(key, operator.key, value)
+                                }}
+                                defaultValue={filterValue}
+                              >
+                                <SelectTrigger
+                                  className="min-w-48"
+                                  onClick={(e) => e.stopPropagation()}
                                 >
-                                  {option.key}
-                                </DropdownMenuItem>
-                              ))}
-                          </DropdownMenuContent>
-                        </DropdownMenu>
-                      )
-                    },
-                  )}
+                                  <SelectValue placeholder="Select..." />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  {operatorOptions.map((option) => (
+                                    <SelectItem
+                                      key={option.value}
+                                      value={option.value}
+                                      className="cursor-pointer"
+                                      onClick={(e) => e.stopPropagation()}
+                                    >
+                                      {option.key}
+                                    </SelectItem>
+                                  ))}
+                                </SelectContent>
+                              </Select>
+                            ) : (
+                              <Input
+                                onChange={(e) => {
+                                  handleFilter(
+                                    key,
+                                    operator.key,
+                                    e.target.value,
+                                  )
+                                  return e.target.value
+                                }}
+                                value={
+                                  !operatorOptions ||
+                                  operatorOptions.length === 0
+                                    ? filterValue || ''
+                                    : ''
+                                }
+                                className="h-10 text-body-sm min-w-48"
+                                onClick={(e) => e.stopPropagation()}
+                              />
+                            )}
+                          </div>
+                        </PopoverContent>
+                      </Popover>
+                    )
+                  })}
                 </div>
               </div>
             </div>

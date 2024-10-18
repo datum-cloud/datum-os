@@ -12,6 +12,7 @@ import {
   Dialog,
   DialogClose,
   DialogContent,
+  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
@@ -122,6 +123,7 @@ const ListsFormDialog = ({ list, open, setOpen }: ListDialogFormProps) => {
       <DialogContent>
         <DialogHeader>
           <DialogTitle>{isNew ? 'Add a list' : 'Edit list info'}</DialogTitle>
+          <DialogDescription />
           <DialogClose onClick={handleCancel} />
         </DialogHeader>
         {isSubmitting || isSubmitted ? (

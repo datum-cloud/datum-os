@@ -12,7 +12,6 @@ import {
   LineChart,
   Lock,
   LogOut,
-  LucideProps,
   Mail,
   MailCheck,
   MapPin,
@@ -39,48 +38,98 @@ const BOOLEAN_OPTIONS: Datum.FilterOption[] = [
   },
 ]
 
-export const CONTACT_FILTERS: Record<string, Datum.Filter> = {
+export const CONTACT_FILTERS: Record<string, Datum.FilterMenuItem> = {
   fullName: {
     icon: User,
-    title: 'Has a name',
-    operator: 'empty',
-    options: BOOLEAN_OPTIONS,
+    title: 'Full Name',
+    operators: [
+      {
+        key: 'empty',
+        title: 'Has a name',
+        options: BOOLEAN_OPTIONS,
+      },
+      {
+        key: 'contains',
+        title: 'Name contains',
+      },
+    ],
   },
   address: {
     icon: MapPin,
-    title: 'Has an address',
-    operator: 'empty',
-    options: BOOLEAN_OPTIONS,
+    title: 'Address',
+    operators: [
+      {
+        key: 'empty',
+        title: 'Has an address',
+        options: BOOLEAN_OPTIONS,
+      },
+      {
+        key: 'contains',
+        title: 'Address contains',
+      },
+    ],
   },
   email: {
     icon: Mail,
-    title: 'Has an email',
-    operator: 'empty',
-    options: BOOLEAN_OPTIONS,
+    title: 'Email',
+    operators: [
+      {
+        key: 'empty',
+        title: 'Has an email',
+        options: BOOLEAN_OPTIONS,
+      },
+      {
+        key: 'contains',
+        title: 'Email contains',
+      },
+    ],
   },
   phoneNumber: {
     icon: Phone,
-    title: 'Has a phone number',
-    operator: 'empty',
-    options: BOOLEAN_OPTIONS,
+    title: 'Phone Number',
+    operators: [
+      {
+        key: 'empty',
+        title: 'Has a phone number',
+        options: BOOLEAN_OPTIONS,
+      },
+      {
+        key: 'contains',
+        title: 'Phone number contains',
+      },
+    ],
   },
   status: {
     icon: LogOut,
     title: 'Contact Status',
-    operator: 'equals',
-    options: [
-      { key: 'Active', value: 'ACTIVE' },
-      { key: 'Inactive', value: 'INACTIVE' },
-      { key: 'Onboarding', value: 'ONBOARDING' },
-      { key: 'Suspended', value: 'SUSPENDED' },
-      { key: 'Deactivated', value: 'DEACTIVATED' },
+    operators: [
+      {
+        key: 'enum',
+        title: 'Contact status is',
+        options: [
+          { key: 'Active', value: 'ACTIVE' },
+          { key: 'Inactive', value: 'INACTIVE' },
+          { key: 'Onboarding', value: 'ONBOARDING' },
+          { key: 'Suspended', value: 'SUSPENDED' },
+          { key: 'Deactivated', value: 'DEACTIVATED' },
+        ],
+      },
     ],
   },
   company: {
     icon: Factory,
-    title: 'Has a company',
-    operator: 'empty',
-    options: BOOLEAN_OPTIONS,
+    title: 'Company',
+    operators: [
+      {
+        key: 'empty',
+        title: 'Has a company',
+        options: BOOLEAN_OPTIONS,
+      },
+      {
+        key: 'contains',
+        title: 'Company contains',
+      },
+    ],
   },
   //   source: {
   //     icon: GanttChartSquare,
@@ -94,57 +143,108 @@ export const CONTACT_FILTERS: Record<string, Datum.Filter> = {
   //   },
 }
 
-export const USER_FILTERS: Record<string, Datum.Filter> = {
+export const USER_FILTERS: Record<string, Datum.FilterMenuItem> = {
   firstName: {
     icon: User,
-    title: 'Has a first name',
-    operator: 'empty',
-    options: BOOLEAN_OPTIONS,
+    title: 'First Name',
+    operators: [
+      {
+        key: 'empty',
+        title: 'Has a first name',
+        options: BOOLEAN_OPTIONS,
+      },
+      {
+        key: 'contains',
+        title: 'First name contains',
+      },
+    ],
   },
   lastName: {
     icon: User,
-    title: 'Has a last name',
-    operator: 'empty',
-    options: BOOLEAN_OPTIONS,
+    title: 'Last Name',
+    operators: [
+      {
+        key: 'empty',
+        title: 'Has a last name',
+        options: BOOLEAN_OPTIONS,
+      },
+      {
+        key: 'contains',
+        title: 'Last name contains',
+      },
+    ],
   },
   email: {
     icon: Mail,
-    title: 'Has an email',
-    operator: 'empty',
-    options: BOOLEAN_OPTIONS,
+    title: 'Email',
+    operators: [
+      {
+        key: 'empty',
+        title: 'Has an email',
+        options: BOOLEAN_OPTIONS,
+      },
+      {
+        key: 'contains',
+        title: 'Email contains',
+      },
+    ],
   },
   logins: {
     icon: Hash,
-    title: 'Number of logins',
-    operator: 'empty',
-    options: BOOLEAN_OPTIONS,
+    title: 'Logins',
+    operators: [
+      {
+        key: 'empty',
+        title: 'Number of logins',
+        options: BOOLEAN_OPTIONS,
+      },
+    ],
   },
   role: {
     icon: UserCheck,
     title: 'Role',
-    operator: 'equals',
-    options: [
-      { key: 'Admin', value: 'ADMIN' },
-      { key: 'Member', value: 'MEMBER' },
+    operators: [
+      {
+        key: 'enum',
+        title: 'Role',
+        options: [
+          { key: 'Admin', value: 'ADMIN' },
+          { key: 'Member', value: 'MEMBER' },
+        ],
+      },
     ],
   },
   status: {
     icon: UserCheck,
     title: 'User Status',
-    operator: 'equals',
-    options: [
-      { key: 'Active', value: 'ACTIVE' },
-      { key: 'Inactive', value: 'INACTIVE' },
-      { key: 'Onboarding', value: 'ONBOARDING' },
-      { key: 'Suspended', value: 'SUSPENDED' },
-      { key: 'Deactivated', value: 'DEACTIVATED' },
+    operators: [
+      {
+        key: 'enum',
+        title: 'User Status',
+        options: [
+          { key: 'Active', value: 'ACTIVE' },
+          { key: 'Inactive', value: 'INACTIVE' },
+          { key: 'Onboarding', value: 'ONBOARDING' },
+          { key: 'Suspended', value: 'SUSPENDED' },
+          { key: 'Deactivated', value: 'DEACTIVATED' },
+        ],
+      },
     ],
   },
   provider: {
     icon: Factory,
-    title: 'Has a provider',
-    operator: 'empty',
-    options: BOOLEAN_OPTIONS,
+    title: 'Provider',
+    operators: [
+      {
+        key: 'empty',
+        title: 'Has a provider',
+        options: BOOLEAN_OPTIONS,
+      },
+      {
+        key: 'contains',
+        title: 'Provider contains',
+      },
+    ],
   },
 }
 

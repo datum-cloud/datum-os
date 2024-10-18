@@ -1,25 +1,27 @@
 'use client'
 
+import { CheckCircle, Search } from 'lucide-react'
 import { useSession } from 'next-auth/react'
+import { useState } from 'react'
+
 import { pluralize } from '@repo/common/text'
+import { Datum } from '@repo/types'
+import { Button } from '@repo/ui/button'
 import {
   Dialog,
   DialogClose,
   DialogContent,
+  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
 } from '@repo/ui/dialog'
-import { Datum } from '@repo/types'
-import { createListMembers } from '@/query/lists'
-
-import { useAsyncFn } from '@/hooks/useAsyncFn'
-import { Loading } from '@/components/shared/loading/loading'
-import ListContactsTable from '@/components/pages/protected/workspace/marketing/list/list-contacts-table'
-import { Button } from '@repo/ui/button'
-import { useState } from 'react'
-import { CheckCircle, Search } from 'lucide-react'
 import { DebouncedInput } from '@repo/ui/input'
+
+import ListContactsTable from '@/components/pages/protected/workspace/marketing/list/list-contacts-table'
+import { Loading } from '@/components/shared/loading/loading'
+import { useAsyncFn } from '@/hooks/useAsyncFn'
+import { createListMembers } from '@/query/lists'
 
 type ListDialogFormProps = {
   listId: Datum.ListId
@@ -60,6 +62,7 @@ const ListsAddContactsDialog = ({
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Add a contact</DialogTitle>
+          <DialogDescription />
           <DialogClose onClick={handleCancel} />
         </DialogHeader>
         {loading && <Loading className="min-h-96" />}

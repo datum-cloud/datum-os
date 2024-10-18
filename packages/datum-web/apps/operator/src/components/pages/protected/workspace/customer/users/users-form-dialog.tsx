@@ -14,6 +14,7 @@ import {
   Dialog,
   DialogClose,
   DialogContent,
+  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
@@ -142,6 +143,7 @@ const UsersFormDialog: React.FC<UsersDialogFormProps> = ({
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Invite Users</DialogTitle>
+          <DialogDescription />
           <DialogClose onClick={handleCancel} />
         </DialogHeader>
         {fetching && <Loading className="min-h-96" />}
